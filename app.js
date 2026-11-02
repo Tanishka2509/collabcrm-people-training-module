@@ -334,6 +334,7 @@ const state = {
 document.addEventListener('DOMContentLoaded', () => {
   initSidebar();
   initClockWidget();
+  renderPortalNotifications();
   setAppRole('admin'); // Start in Admin Role
   switchToEmployees();
 });
@@ -1745,8 +1746,13 @@ function renderProgressTable() {
         <td>${tStatusPill}</td>
         <td>${subPill}</td>
         <td>${certPill}</td>
-        <td>
-          <button class="btn-table-action primary" onclick="openProgressDetails('${a.id}')">View Details</button>
+        <td style="text-align: center; white-space: nowrap;">
+          <button type="button" class="btn-progress-action-icon" onclick="openProgressDetails('${a.id}')" title="View Progress Details" aria-label="View Progress Details">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </button>
         </td>
       </tr>
     `;
@@ -2307,7 +2313,148 @@ function closeCertPreviewModal() {
 
 window.closeCertPreviewModal = closeCertPreviewModal;
 
-// Action 3: Issue Certificate (Separate from Generation)
+// ==========================================================================
+// CollabCRM Portal Notifications System (Screenshot 4)
+// ==========================================================================
+let portalNotifications = [
+  {
+    id: 'notif_1',
+    title: 'Certificate Issued & Available',
+    message: 'Certificate TRN-2026-001 for "Modern Frontend Architecture" was issued to Isha Patel.',
+    time: '2 hours ago',
+    unread: false,
+    icon: '📜',
+    iconBg: '#ecfdf5',
+    iconColor: '#059669',
+    certId: 'cert_1'
+  },
+  {
+    id: 'notif_2',
+    title: 'Training Module Assigned',
+    message: 'Assigned "Microservices with Go & Docker" to engineering cohort.',
+    time: '1 day ago',
+    unread: false,
+    icon: '📋',
+    iconBg: '#eff6ff',
+    iconColor: '#2563eb'
+  }
+];
+
+function renderPortalNotifications() {
+  const listEl = document.getElementById('portalNotifList');
+  const badgeEl = document.getElementById('portalNotifUnreadBadge');
+  const dotWrap = document.getElementById('headerNotifDotWrap');
+  if (!listEl) return;
+
+  const unreadCount = portalNotifications.filter(n => n.unread).length;
+  if (badgeEl) badgeEl.textContent = `${unreadCount} New`;
+  if (dotWrap) dotWrap.style.display = unreadCount > 0 ? 'block' : 'none';
+
+  if (portalNotifications.length === 0) {
+    listEl.innerHTML = `<div style="padding: 24px; text-align: center; color: #64748b; font-size: 12px;">No notifications yet.</div>`;
+    return;
+  }
+
+  let html = '';
+  portalNotifications.forEach(n => {
+    html += `
+      <div class="portal-notif-item ${n.unread ? 'unread' : ''}" onclick="handleNotificationClick('${n.id}')">
+        <div class="portal-notif-icon" style="background: ${n.iconBg}; color: ${n.iconColor};">
+          ${n.icon}
+        </div>
+        <div class="portal-notif-body">
+          <div class="portal-notif-title">${escapeHtml(n.title)}</div>
+          <div class="portal-notif-msg">${escapeHtml(n.message)}</div>
+          <div class="portal-notif-time">${escapeHtml(n.time)}</div>
+        </div>
+      </div>
+    `;
+  });
+  listEl.innerHTML = html;
+}
+
+window.renderPortalNotifications = renderPortalNotifications;
+
+function togglePortalNotificationsDropdown() {
+  const dd = document.getElementById('portalNotificationsDropdown');
+  if (!dd) return;
+  const isHidden = (dd.style.display === 'none' || !dd.style.display);
+  dd.style.display = isHidden ? 'block' : 'none';
+  if (isHidden) renderPortalNotifications();
+}
+
+window.togglePortalNotificationsDropdown = togglePortalNotificationsDropdown;
+
+function clearAllPortalNotifications() {
+  portalNotifications.forEach(n => n.unread = false);
+  renderPortalNotifications();
+}
+
+window.clearAllPortalNotifications = clearAllPortalNotifications;
+
+function handleNotificationClick(id) {
+  const notif = portalNotifications.find(n => n.id === id);
+  if (notif) {
+    notif.unread = false;
+    renderPortalNotifications();
+    if (notif.certId) {
+      previewCertificate(notif.certId);
+      const dd = document.getElementById('portalNotificationsDropdown');
+      if (dd) dd.style.display = 'none';
+    }
+  }
+}
+
+window.handleNotificationClick = handleNotificationClick;
+
+// Modal functions for Dual-Notification
+let lastIssuedCertId = null;
+
+function showCertIssuedNotificationModal(cert, emp, prog) {
+  lastIssuedCertId = cert.id;
+  const modal = document.getElementById('certIssuedNotificationModal');
+  const certNoEl = document.getElementById('certIssuedModalCertNo');
+  const recipEl = document.getElementById('certIssuedModalRecipient');
+  const dateEl = document.getElementById('certIssuedModalDate');
+  const emailTextEl = document.getElementById('certIssuedEmailText');
+  const portalTextEl = document.getElementById('certIssuedPortalText');
+  const subEl = document.getElementById('certIssuedModalSubtitle');
+
+  if (certNoEl) certNoEl.textContent = cert.certificateNo;
+  if (recipEl) recipEl.textContent = `${emp.name} (${emp.email})`;
+  if (dateEl) dateEl.textContent = cert.issueDate || new Date().toISOString().split('T')[0];
+  if (emailTextEl) {
+    emailTextEl.innerHTML = `Official certificate notification email with signed PDF attachment delivered to <strong>${escapeHtml(emp.email)}</strong>.`;
+  }
+  if (portalTextEl) {
+    portalTextEl.innerHTML = `In-app alert published to <strong>${escapeHtml(emp.name)}</strong>'s CollabCRM portal feed & system notification tray.`;
+  }
+  if (subEl) {
+    subEl.textContent = `Credential ${cert.certificateNo} for "${prog ? prog.title : 'Programme'}" successfully dispatched.`;
+  }
+
+  if (modal) modal.style.display = 'flex';
+}
+
+window.showCertIssuedNotificationModal = showCertIssuedNotificationModal;
+
+function closeCertIssuedModal() {
+  const modal = document.getElementById('certIssuedNotificationModal');
+  if (modal) modal.style.display = 'none';
+}
+
+window.closeCertIssuedModal = closeCertIssuedModal;
+
+function viewIssuedCertFromModal() {
+  closeCertIssuedModal();
+  if (lastIssuedCertId) {
+    previewCertificate(lastIssuedCertId);
+  }
+}
+
+window.viewIssuedCertFromModal = viewIssuedCertFromModal;
+
+// Action 3: Issue Certificate (Separate from Generation - Email & Portal Notified)
 function issueCertificate(certId) {
   if (trainingConfigData?.certificates?.enabled === false) {
     alert('Certificate Issuance is currently disabled in Training Config.');
@@ -2317,12 +2464,31 @@ function issueCertificate(certId) {
   if (!cert) return;
   const emp = state.employees.find(e => e.id === cert.employeeId);
   const a = state.assignments.find(asn => asn.id === cert.assignmentId);
+  const prog = a ? state.programs.find(p => p.id === a.programId) : null;
 
   cert.status = 'issued';
+  cert.issueDate = new Date().toISOString().split('T')[0];
   if (a) a.certificateStatus = 'issued';
 
-  logAudit('Issued Certificate', `${cert.certificateNo}`, `Delivered credential to ${emp.name}`);
-  alert(`Certificate ${cert.certificateNo} has been officially ISSUED to ${emp.name} and published to their employee portal!`);
+  // 1. Audit Trail Logging
+  logAudit('Issued Certificate', `${cert.certificateNo}`, `Delivered credential to ${emp.name} via Email (${emp.email}) and CollabCRM Portal`);
+
+  // 2. CollabCRM Portal Notification
+  portalNotifications.unshift({
+    id: 'notif_' + Date.now(),
+    title: 'Certificate Issued & Dispatched',
+    message: `Certificate ${cert.certificateNo} for "${prog ? prog.title : 'Training'}" issued to ${emp.name}. Notification email delivered to ${emp.email}.`,
+    time: 'Just now',
+    unread: true,
+    icon: '📜',
+    iconBg: '#ecfdf5',
+    iconColor: '#059669',
+    certId: cert.id
+  });
+  renderPortalNotifications();
+
+  // 3. Dual-Notification Dispatch Confirmation Modal
+  showCertIssuedNotificationModal(cert, emp, prog);
 
   closeCertPreviewModal();
   renderCertificatesTable();
@@ -3042,6 +3208,17 @@ function switchTrainingConfigTab(tabId) {
     if (btn) btn.classList.toggle('active', t === tabId);
     if (section) section.classList.toggle('active', t === tabId);
   });
+
+  const tabNames = {
+    general: 'General Settings',
+    categories: 'Category Rules',
+    assignments: 'Assignment Policies',
+    completion: 'Completion & Passing Criteria',
+    certificates: 'Certificate Templates',
+    notifications: 'Notifications & Reminders'
+  };
+  const bc = document.getElementById('tcfgActiveBreadcrumb');
+  if (bc) bc.textContent = `Training Config › ${tabNames[tabId] || tabId}`;
 }
 
 // Populate and Initialize Screen

@@ -91,16 +91,35 @@
         </button>
 
         <!-- Notifications (Bell) Button with Red Ping Dot -->
-        <button type="button" class="header-icon-box" title="Notifications" aria-label="Notifications">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-          </svg>
-          <span class="header-badge-dot-wrap">
-            <span class="header-badge-ping"></span>
-            <span class="header-badge-dot"></span>
-          </span>
-        </button>
+        <div style="position: relative;">
+          <button type="button" class="header-icon-box" id="headerNotificationsBtn" onclick="togglePortalNotificationsDropdown()" title="CollabCRM Notifications" aria-label="Notifications">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+            <span class="header-badge-dot-wrap" id="headerNotifDotWrap">
+              <span class="header-badge-ping"></span>
+              <span class="header-badge-dot"></span>
+            </span>
+          </button>
+
+          <!-- Portal Notifications Dropdown -->
+          <div id="portalNotificationsDropdown" class="portal-notifications-dropdown" style="display: none;">
+            <div class="portal-notif-header">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-weight: 700; font-size: 13.5px; color: #0f172a;">CollabCRM Portal Notifications</span>
+                <span class="portal-notif-count-badge" id="portalNotifUnreadBadge">2 New</span>
+              </div>
+              <p style="font-size: 11.5px; color: #64748b; margin: 3px 0 0 0;">Certificate alerts, email dispatches & compliance logs</p>
+            </div>
+            <div class="portal-notif-list" id="portalNotifList">
+              <!-- Dynamically populated via renderPortalNotifications() in app.js -->
+            </div>
+            <div class="portal-notif-footer">
+              <button type="button" class="portal-notif-clear-btn" onclick="clearAllPortalNotifications()">Mark all as read</button>
+            </div>
+          </div>
+        </div>
 
         <!-- User Profile Avatar (Circular photo only) -->
         <div class="header-avatar-btn" title="Isha Patel">
@@ -196,6 +215,7 @@
           <div class="emp-screen-container">
             <!-- Top Breadcrumb -->
             <div class="emp-breadcrumbs">
+              <span class="crumb-link" onclick="switchToEmployees()" title="CollabCRM People">CollabCRM People</span>
               <span class="emp-crumb-chevron">›</span>
               <span class="emp-crumb-active">Employees</span>
             </div>
@@ -781,11 +801,11 @@
           <div class="training-top-header" style="padding: 20px 24px 12px 24px;">
             <div class="training-title-meta">
               <div class="training-breadcrumbs">
-                <span>CollabCRM People</span>
-                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                <span class="active-crumb">Training Module</span>
-                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                <span id="currentActiveTabLabel" style="color: #64748b; font-weight: 500;">Dashboard</span>
+                <span class="crumb-link" onclick="switchToEmployees()" title="Go to CollabCRM People">CollabCRM People</span>
+                <span class="crumb-separator">›</span>
+                <span class="crumb-link" onclick="switchToTraining(); switchTrainingTab('dashboard');" title="Go to Training Module">Training Module</span>
+                <span class="crumb-separator">›</span>
+                <span class="active-crumb" id="currentActiveTabLabel">Dashboard</span>
               </div>
               <div class="training-title-row">
                 <div class="training-icon-badge">
@@ -848,10 +868,6 @@
               <button class="training-subnav-btn" id="tabBtnReports" onclick="switchTrainingTab('reports')">
                 <span>📑 Reports</span>
               </button>
-            </div>
-            
-            <div style="font-size: 12px; color: #64748b; font-weight: 500;" id="portalScopeTag">
-              Access: <strong id="portalScopeRoleName" style="color:#1e293b;">Admin (All Records)</strong>
             </div>
           </div>
 
@@ -1219,9 +1235,6 @@
                     <h2 class="crm-table-title">Certificate Management</h2>
                     <span class="crm-table-badge-count" id="certCountBadge">0 Certificates</span>
                   </div>
-                  <div style="font-size:12px; color:#64748b;">
-                    Note: Certificate generation and issuance are strictly separate actions.
-                  </div>
                   <div class="crm-table-controls">
                     <select class="crm-select-filter" id="filterCertStatus" onchange="renderCertificatesTable()">
                       <option value="all">All Records</option>
@@ -1384,11 +1397,11 @@
             <div class="tcfg-header">
               <div>
                 <div class="tcfg-breadcrumbs">
-                  <span class="crumb-link" onclick="switchToEmployees()">CollabCRM People</span>
+                  <span class="crumb-link" onclick="switchToEmployees()" title="Go to CollabCRM People">CollabCRM People</span>
                   <span>›</span>
-                  <span class="crumb-link" onclick="openConfigPanel()">Config</span>
+                  <span class="crumb-link" onclick="switchToTraining(); switchTrainingTab('dashboard');" title="Go to Training Module">Training Module</span>
                   <span>›</span>
-                  <span class="crumb-current">Training Config</span>
+                  <span class="crumb-current" id="tcfgActiveBreadcrumb">Training Config › General Settings</span>
                 </div>
                 <div class="tcfg-title-row">
                   <div class="tcfg-icon-box">
@@ -2812,12 +2825,86 @@
     </div>
   </div>
 
+  <!-- ============================================== -->
+  <!-- MODAL: CERTIFICATE ISSUED DUAL-NOTIFICATION    -->
+  <!-- ============================================== -->
+  <div class="crm-modal-backdrop" id="certIssuedNotificationModal" style="display: none; align-items: center; justify-content: center; z-index: 10000; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);">
+    <div class="crm-modal" style="max-width: 520px; width: 92%; border-radius: 14px; overflow: hidden; padding: 0; background: #ffffff; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);">
+      <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 22px 24px; color: #ffffff; text-align: center; position: relative;">
+        <button type="button" onclick="closeCertIssuedModal()" style="position: absolute; top: 14px; right: 14px; background: rgba(255,255,255,0.2); color: #fff; border: none; width: 28px; height: 28px; border-radius: 50%; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;">&times;</button>
+        <div style="width: 50px; height: 50px; background: rgba(255,255,255,0.22); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px auto; font-size: 24px;">
+          📜
+        </div>
+        <h2 style="font-size: 18px; font-weight: 700; margin: 0 0 4px 0; color: #ffffff;">Certificate Officially Issued!</h2>
+        <p style="font-size: 12.5px; margin: 0; color: rgba(255,255,255,0.92);" id="certIssuedModalSubtitle">Credential signed and dispatched across both Email & CollabCRM Portal.</p>
+      </div>
+
+      <div style="padding: 20px 22px;">
+        <!-- Dual Notification Cards -->
+        <div style="display: flex; flex-direction: column; gap: 11px; margin-bottom: 18px;">
+          <!-- 1. Email Notification Card -->
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 13px 15px; display: flex; align-items: flex-start; gap: 12px;">
+            <div style="width: 36px; height: 36px; border-radius: 8px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;">
+              📧
+            </div>
+            <div style="flex: 1;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <strong style="font-size: 13px; color: #0f172a;">Email Notification Dispatched</strong>
+                <span style="font-size: 10.5px; background: #dcfce7; color: #15803d; padding: 2px 8px; border-radius: 10px; font-weight: 700;">Delivered</span>
+              </div>
+              <p style="font-size: 12px; color: #475569; margin: 4px 0 0 0; line-height: 1.4;" id="certIssuedEmailText">
+                Official certificate notification email with verified PDF attachment dispatched to learner.
+              </p>
+            </div>
+          </div>
+
+          <!-- 2. Portal Notification Card -->
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 13px 15px; display: flex; align-items: flex-start; gap: 12px;">
+            <div style="width: 36px; height: 36px; border-radius: 8px; background: #f5f3ff; color: #7c3aed; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;">
+              🔔
+            </div>
+            <div style="flex: 1;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <strong style="font-size: 13px; color: #0f172a;">CollabCRM Portal Notification</strong>
+                <span style="font-size: 10.5px; background: #ede9fe; color: #6d28d9; padding: 2px 8px; border-radius: 10px; font-weight: 700;">Published</span>
+              </div>
+              <p style="font-size: 12px; color: #475569; margin: 4px 0 0 0; line-height: 1.4;" id="certIssuedPortalText">
+                Alert pushed to learner portal and system notification tray with instant credential download.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certificate Details Snippet -->
+        <div style="background: #f1f5f9; border-radius: 8px; padding: 12px 14px; font-size: 12px; color: #334155; margin-bottom: 18px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+            <span style="color: #64748b;">Certificate No:</span>
+            <strong id="certIssuedModalCertNo" style="color: #0f172a;">TRN-2026-001</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+            <span style="color: #64748b;">Recipient:</span>
+            <strong id="certIssuedModalRecipient" style="color: #0f172a;">Rihan R.</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: #64748b;">Issued Date:</span>
+            <strong id="certIssuedModalDate" style="color: #0f172a;">02-Nov-2026</strong>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+          <button type="button" class="btn-table-action" onclick="closeCertIssuedModal()">Close</button>
+          <button type="button" class="btn-primary-action" id="btnCertIssuedPreview" onclick="viewIssuedCertFromModal()">👁 View Certificate</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Floating Toast Notification -->
   <div id="tcfgToast" class="tcfg-toast">
     <span id="tcfgToastIcon" style="font-size: 16px;">✓</span>
     <span id="tcfgToastMsg">Configuration saved successfully!</span>
   </div>
 
-  <script src="app.js?t=1730545500"></script>
+  <script src="app.js?t=1730552000"></script>
 </body>
 </html>
