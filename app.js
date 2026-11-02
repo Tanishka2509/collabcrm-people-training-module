@@ -1,6 +1,11 @@
 // ==========================================================================
 // CollabCRM People & Training Module Application Logic
+// Supports 2 User Roles:
+// 1. Admin / HR / Reporting Manager (Isha Patel)
+// 2. Employee (Rihan R.)
 // ==========================================================================
+
+let currentRole = 'admin'; // 'admin' | 'employee'
 
 document.addEventListener('DOMContentLoaded', () => {
   initNavigation();
@@ -8,7 +13,120 @@ document.addEventListener('DOMContentLoaded', () => {
   initAttendanceScope();
   initClockWidget();
   initTrainingModule();
+  initEmployeeTabs();
+  setAppRole('admin'); // default to Admin / HR / RM
 });
+
+// Role Switcher Management
+function setAppRole(role) {
+  currentRole = role;
+
+  const btnAdmin = document.getElementById('btnRoleAdmin');
+  const btnEmployee = document.getElementById('btnRoleEmployee');
+  const headerAvatar = document.getElementById('headerUserAvatar');
+  const headerName = document.getElementById('headerUserName');
+  const headerRole = document.getElementById('headerUserRole');
+  const greetingName = document.getElementById('greetingNameDisplay');
+  const greetingRole = document.getElementById('greetingRoleDisplay');
+  const feedCommentAvatar = document.getElementById('feedCommentAvatar');
+
+  // Training Module Role Elements
+  const adminHeaderActions = document.getElementById('adminHeaderActions');
+  const employeeHeaderActions = document.getElementById('employeeHeaderActions');
+  const adminKpiRow = document.getElementById('adminKpiRow');
+  const employeeKpiRow = document.getElementById('employeeKpiRow');
+  const adminContentCard = document.getElementById('adminContentCard');
+  const employeeContentCard = document.getElementById('employeeContentCard');
+  const trainingHeading = document.getElementById('trainingHeading');
+  const trainingSubHeading = document.getElementById('trainingSubHeading');
+
+  // Dashboard Stats Elements
+  const attendanceTitle = document.getElementById('attendanceCardTitle');
+  const kpiCheckedIn = document.getElementById('kpiCheckedInVal');
+  const kpiPresentlyIn = document.getElementById('kpiPresentlyInVal');
+  const kpiPresentlyOut = document.getElementById('kpiPresentlyOutVal');
+  const chartTitle = document.getElementById('employeesChartTitle');
+  const donutCenterCount = document.getElementById('donutCenterCount');
+  const donutCenterSub = document.getElementById('donutCenterSub');
+
+  if (role === 'admin') {
+    // Buttons state
+    if (btnAdmin) btnAdmin.classList.add('active');
+    if (btnEmployee) btnEmployee.classList.remove('active');
+
+    // Header Profile
+    if (headerAvatar) headerAvatar.src = 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120';
+    if (headerName) headerName.textContent = 'Isha Patel';
+    if (headerRole) headerRole.textContent = 'Admin / HR / RM';
+    if (feedCommentAvatar) feedCommentAvatar.src = 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120';
+
+    // Greeting
+    if (greetingName) greetingName.textContent = 'Hello, Isha Patel';
+    if (greetingRole) greetingRole.textContent = 'Good Afternoon • HR & People Operations';
+
+    // Dashboard Organization Stats
+    if (attendanceTitle) attendanceTitle.textContent = 'Organization Attendance';
+    if (kpiCheckedIn) kpiCheckedIn.innerHTML = '<span class="val-active">1</span> <span class="val-total">/156</span>';
+    if (kpiPresentlyIn) kpiPresentlyIn.innerHTML = '<span class="val-active">1</span> <span class="val-total">/1</span>';
+    if (kpiPresentlyOut) kpiPresentlyOut.innerHTML = '<span class="val-active">0</span> <span class="val-total">/1</span>';
+    if (chartTitle) chartTitle.textContent = 'Employees';
+    if (donutCenterCount) donutCenterCount.textContent = '156';
+    if (donutCenterSub) donutCenterSub.textContent = 'Total Employees';
+
+    // Training Module Admin View
+    if (trainingHeading) trainingHeading.textContent = 'Training & Skill Development';
+    if (trainingSubHeading) trainingSubHeading.textContent = 'Manage employee learning paths, courses, assessments, and certifications across all business units.';
+    if (adminHeaderActions) adminHeaderActions.style.display = 'block';
+    if (employeeHeaderActions) employeeHeaderActions.style.display = 'none';
+    if (adminKpiRow) adminKpiRow.style.display = 'grid';
+    if (employeeKpiRow) employeeKpiRow.style.display = 'none';
+    if (adminContentCard) adminContentCard.style.display = 'block';
+    if (employeeContentCard) employeeContentCard.style.display = 'none';
+
+  } else {
+    // Buttons state
+    if (btnAdmin) btnAdmin.classList.remove('active');
+    if (btnEmployee) btnEmployee.classList.add('active');
+
+    // Header Profile
+    if (headerAvatar) headerAvatar.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120';
+    if (headerName) headerName.textContent = 'Rihan R.';
+    if (headerRole) headerRole.textContent = 'Employee (Eng)';
+    if (feedCommentAvatar) feedCommentAvatar.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120';
+
+    // Greeting
+    if (greetingName) greetingName.textContent = 'Hello, Rihan R.';
+    if (greetingRole) greetingRole.textContent = 'Good Afternoon • Software Engineering';
+
+    // Dashboard Personal Stats
+    if (attendanceTitle) attendanceTitle.textContent = 'My Attendance & Work Status';
+    if (kpiCheckedIn) kpiCheckedIn.innerHTML = '<span class="val-active">1</span> <span class="val-total">/1 (Today)</span>';
+    if (kpiPresentlyIn) kpiPresentlyIn.innerHTML = '<span class="val-active">1</span> <span class="val-total">/1 (On Duty)</span>';
+    if (kpiPresentlyOut) kpiPresentlyOut.innerHTML = '<span class="val-active">0</span> <span class="val-total">/0</span>';
+    if (chartTitle) chartTitle.textContent = 'Department Breakdown';
+    if (donutCenterCount) donutCenterCount.textContent = '34';
+    if (donutCenterSub) donutCenterSub.textContent = 'Engineering Team';
+
+    // Training Module Employee View
+    if (trainingHeading) trainingHeading.textContent = 'My Learning & Training Hub';
+    if (trainingSubHeading) trainingSubHeading.textContent = 'Access your enrolled programs, complete mandatory compliance courses, and download certificates.';
+    if (adminHeaderActions) adminHeaderActions.style.display = 'none';
+    if (employeeHeaderActions) employeeHeaderActions.style.display = 'block';
+    if (adminKpiRow) adminKpiRow.style.display = 'none';
+    if (employeeKpiRow) employeeKpiRow.style.display = 'grid';
+    if (adminContentCard) adminContentCard.style.display = 'none';
+    if (employeeContentCard) employeeContentCard.style.display = 'block';
+  }
+}
+
+window.setAppRole = setAppRole;
+
+function toggleRoleQuickMenu() {
+  const nextRole = currentRole === 'admin' ? 'employee' : 'admin';
+  setAppRole(nextRole);
+}
+
+window.toggleRoleQuickMenu = toggleRoleQuickMenu;
 
 // Navigation Handling (Dashboard <-> Training Module)
 function initNavigation() {
@@ -27,7 +145,6 @@ function initNavigation() {
       } else if (tab === 'dashboard') {
         switchView('dashboard');
       } else {
-        // Provide friendly feedback for previewing other modules
         switchView('dashboard');
       }
     });
@@ -93,7 +210,7 @@ function initAttendanceScope() {
   });
 }
 
-// Clock Widget State & Action
+// Clock In / Out Logic
 let isClockedIn = true;
 function toggleClockStatus() {
   const btn = document.getElementById('btnClockOut');
@@ -123,7 +240,6 @@ function toggleClockStatus() {
 window.toggleClockStatus = toggleClockStatus;
 
 function refreshClockTime() {
-  const now = new Date();
   const gross = document.getElementById('todayGross');
   const effective = document.getElementById('todayEffective');
   if (gross && effective) {
@@ -139,11 +255,7 @@ function toggleAccordion(header) {
   header.classList.toggle('active');
   const body = header.nextElementSibling;
   if (body) {
-    if (header.classList.contains('active')) {
-      body.style.display = 'block';
-    } else {
-      body.style.display = 'none';
-    }
+    body.style.display = header.classList.contains('active') ? 'block' : 'none';
   }
 }
 
@@ -154,12 +266,7 @@ function toggleReaction(btn) {
   btn.classList.toggle('liked');
   const card = btn.closest('.feed-card');
   const counter = card.querySelector('.like-counter');
-  
-  if (btn.classList.contains('liked')) {
-    counter.textContent = '👍 1';
-  } else {
-    counter.textContent = '👍 0';
-  }
+  counter.textContent = btn.classList.contains('liked') ? '👍 1' : '👍 0';
 }
 
 window.toggleReaction = toggleReaction;
@@ -167,9 +274,7 @@ window.toggleReaction = toggleReaction;
 function focusComment(btn) {
   const card = btn.closest('.feed-card');
   const input = card.querySelector('.comment-field');
-  if (input) {
-    input.focus();
-  }
+  if (input) input.focus();
 }
 
 window.focusComment = focusComment;
@@ -178,11 +283,11 @@ function handleCommentSubmit(e, input) {
   if (e.key === 'Enter' && input.value.trim() !== '') {
     const text = input.value.trim();
     const card = input.closest('.feed-card');
+    const authorName = currentRole === 'admin' ? 'Isha Patel' : 'Rihan R.';
     
-    // Create new comment element
     const commentItem = document.createElement('div');
     commentItem.style.cssText = 'display:flex; align-items:center; gap:8px; font-size:11.5px; background:#f8fafc; padding:6px 10px; border-radius:6px; margin-top:6px; border:1px solid #edf2f7;';
-    commentItem.innerHTML = `<strong>Isha Patel:</strong> <span>${escapeHtml(text)}</span>`;
+    commentItem.innerHTML = `<strong>${authorName}:</strong> <span>${escapeHtml(text)}</span>`;
     
     card.insertBefore(commentItem, input.parentElement);
     input.value = '';
@@ -195,13 +300,18 @@ function createNewPost() {
   const text = prompt('Share an update with your organization:');
   if (text && text.trim()) {
     const feedStream = document.getElementById('feedStream');
+    const authorName = currentRole === 'admin' ? 'Isha Patel' : 'Rihan R.';
+    const avatar = currentRole === 'admin' 
+      ? 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120'
+      : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120';
+    
     const newCard = document.createElement('article');
     newCard.className = 'feed-card';
     newCard.innerHTML = `
       <div class="feed-card-header">
-        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120" class="comment-user-avatar" style="width:28px; height:28px;" />
+        <img src="${avatar}" class="comment-user-avatar" style="width:28px; height:28px;" />
         <div class="feed-author-meta">
-          <div class="feed-author-name">Isha Patel</div>
+          <div class="feed-author-name">${authorName}</div>
           <div class="feed-timestamp">Just now</div>
         </div>
       </div>
@@ -222,7 +332,7 @@ function createNewPost() {
         </div>
       </div>
       <div class="comment-input-box">
-        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120" class="comment-user-avatar" />
+        <img src="${avatar}" class="comment-user-avatar" />
         <input type="text" class="comment-field" placeholder="Write a comment" onkeydown="handleCommentSubmit(event, this)" />
       </div>
     `;
@@ -232,9 +342,9 @@ function createNewPost() {
 
 window.createNewPost = createNewPost;
 
-// Training Module Interactions & Filtering
+// Training Module Admin Filter Logic
 function initTrainingModule() {
-  const tabs = document.querySelectorAll('.training-tab-btn');
+  const tabs = document.querySelectorAll('#adminContentCard .training-tab-btn');
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       tabs.forEach(t => t.classList.remove('active'));
@@ -244,10 +354,20 @@ function initTrainingModule() {
   });
 }
 
+function initEmployeeTabs() {
+  const empTabs = document.querySelectorAll('#employeeContentCard .training-tab-btn');
+  empTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      empTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    });
+  });
+}
+
 function filterTrainingPrograms() {
   const query = (document.getElementById('trainingSearchInput')?.value || '').toLowerCase();
   const dept = document.getElementById('departmentFilter')?.value || 'all';
-  const cards = document.querySelectorAll('.program-card');
+  const cards = document.querySelectorAll('#programsGrid .program-card');
 
   cards.forEach(card => {
     const title = card.querySelector('.program-title')?.textContent.toLowerCase() || '';
@@ -257,17 +377,13 @@ function filterTrainingPrograms() {
     const matchesSearch = title.includes(query) || desc.includes(query);
     const matchesDept = dept === 'all' || category === dept;
 
-    if (matchesSearch && matchesDept) {
-      card.style.display = 'flex';
-    } else {
-      card.style.display = 'none';
-    }
+    card.style.display = (matchesSearch && matchesDept) ? 'flex' : 'none';
   });
 }
 
 window.filterTrainingPrograms = filterTrainingPrograms;
 
-// Modal for Creating Training Programs
+// Admin Modal: Create New Training Program
 function openNewProgramModal() {
   const modal = document.getElementById('newProgramModal');
   if (modal) modal.classList.add('open');
@@ -281,7 +397,7 @@ function closeNewProgramModal() {
 function submitNewProgram() {
   const title = document.getElementById('newProgTitle')?.value.trim();
   const dept = document.getElementById('newProgDept')?.value || 'engineering';
-  const hours = document.getElementById('newProgHours')?.value || '12';
+  const hours = document.getElementById('newProgHours')?.value || '16';
   const trainer = document.getElementById('newProgTrainer')?.value.trim() || 'Isha Patel';
   const desc = document.getElementById('newProgDesc')?.value.trim() || 'Comprehensive skill development program tailored for organizational excellence.';
 
@@ -313,7 +429,7 @@ function submitNewProgram() {
       </span>
       <span class="meta-chip">
         <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
-        1 Enrolled
+        0 Enrolled
       </span>
     </div>
     <div class="progress-section">
@@ -330,7 +446,10 @@ function submitNewProgram() {
         <div class="trainer-avatar bg-amber">${initials}</div>
         <span class="trainer-name">Lead: ${escapeHtml(trainer)}</span>
       </div>
-      <button class="btn-sm-outline" onclick="alert('Program ${escapeHtml(title)} active')">Manage</button>
+      <div class="program-btn-group">
+        <button class="btn-sm-primary" onclick="openAssignModal('${escapeHtml(title)}')">Assign</button>
+        <button class="btn-sm-outline" onclick="openTraineeRosterModal('${escapeHtml(title)}')">Manage</button>
+      </div>
     </div>
   `;
 
@@ -343,6 +462,113 @@ function submitNewProgram() {
 window.openNewProgramModal = openNewProgramModal;
 window.closeNewProgramModal = closeNewProgramModal;
 window.submitNewProgram = submitNewProgram;
+
+// Admin Modal: Assign Trainees
+function openAssignModal(courseTitle) {
+  const modal = document.getElementById('assignModal');
+  const title = document.getElementById('assignModalTitle');
+  if (title) title.textContent = `Assign Employees to "${courseTitle}"`;
+  if (modal) modal.classList.add('open');
+}
+
+function closeAssignModal() {
+  const modal = document.getElementById('assignModal');
+  if (modal) modal.classList.remove('open');
+}
+
+function confirmAssignTrainees() {
+  alert('Selected employees have been assigned and notified via email/Slack!');
+  closeAssignModal();
+}
+
+window.openAssignModal = openAssignModal;
+window.closeAssignModal = closeAssignModal;
+window.confirmAssignTrainees = confirmAssignTrainees;
+
+// Admin Modal: Trainee Roster
+function openTraineeRosterModal() {
+  const modal = document.getElementById('rosterModal');
+  if (modal) modal.classList.add('open');
+}
+
+function closeRosterModal() {
+  const modal = document.getElementById('rosterModal');
+  if (modal) modal.classList.remove('open');
+}
+
+window.openTraineeRosterModal = openTraineeRosterModal;
+window.closeRosterModal = closeRosterModal;
+
+// Employee Modal: Course Player
+function openCoursePlayer(courseTitle, currentProgress) {
+  const modal = document.getElementById('playerModal');
+  const title = document.getElementById('playerCourseTitle');
+  if (title) title.textContent = courseTitle;
+  if (modal) modal.classList.add('open');
+}
+
+function closeCoursePlayer() {
+  const modal = document.getElementById('playerModal');
+  if (modal) modal.classList.remove('open');
+}
+
+function completeCurrentLesson() {
+  alert('Lesson marked complete! Your progress has updated to 85%.');
+  closeCoursePlayer();
+}
+
+window.openCoursePlayer = openCoursePlayer;
+window.closeCoursePlayer = closeCoursePlayer;
+window.completeCurrentLesson = completeCurrentLesson;
+
+// Employee Modal: Certificate Viewer
+function openCertificateModal(courseName, recipientName, date) {
+  const modal = document.getElementById('certificateModal');
+  const certCourse = document.getElementById('certCourse');
+  const certRecipient = document.getElementById('certRecipient');
+  const certDate = document.getElementById('certDate');
+
+  if (certCourse) certCourse.textContent = courseName;
+  if (certRecipient) certRecipient.textContent = recipientName || 'Rihan R.';
+  if (certDate) certDate.textContent = `Date: ${date || '24-Oct-2026'}`;
+
+  if (modal) modal.classList.add('open');
+}
+
+function closeCertificateModal() {
+  const modal = document.getElementById('certificateModal');
+  if (modal) modal.classList.remove('open');
+}
+
+window.openCertificateModal = openCertificateModal;
+window.closeCertificateModal = closeCertificateModal;
+
+// Employee Modal: Request Training
+function openRequestTrainingModal() {
+  const modal = document.getElementById('requestModal');
+  if (modal) modal.classList.add('open');
+}
+
+function closeRequestTrainingModal() {
+  const modal = document.getElementById('requestModal');
+  if (modal) modal.classList.remove('open');
+}
+
+function submitTrainingRequest() {
+  const topic = document.getElementById('reqCourseTitle')?.value.trim();
+  if (!topic) {
+    alert('Please enter a course topic.');
+    return;
+  }
+  alert(`Training request for "${topic}" submitted to HR / Reporting Manager!`);
+  closeRequestTrainingModal();
+  document.getElementById('reqCourseTitle').value = '';
+  document.getElementById('reqJustification').value = '';
+}
+
+window.openRequestTrainingModal = openRequestTrainingModal;
+window.closeRequestTrainingModal = closeRequestTrainingModal;
+window.submitTrainingRequest = submitTrainingRequest;
 
 function escapeHtml(str) {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');

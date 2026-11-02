@@ -116,6 +116,62 @@ body {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
 }
 
+/* Role Selector in Header Center */
+.header-center-role {
+  display: flex;
+  align-items: center;
+}
+
+.role-selector-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #f8fafc;
+  padding: 3px 6px;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+}
+
+.role-selector-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  margin-left: 4px;
+}
+
+.role-selector-pill {
+  display: flex;
+  background-color: #e2e8f0;
+  border-radius: 16px;
+  padding: 2px;
+}
+
+.role-pill-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  padding: 4px 12px;
+  border-radius: 14px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.role-pill-btn:hover {
+  color: #0f172a;
+}
+
+.role-pill-btn.active {
+  background-color: #ffffff;
+  color: var(--crm-primary-blue);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
 .header-right {
   display: flex;
   align-items: center;
@@ -190,7 +246,18 @@ body {
 }
 
 .user-profile-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   margin-left: 4px;
+  cursor: pointer;
+  padding: 3px 6px;
+  border-radius: 8px;
+  transition: background-color 0.15s ease;
+}
+
+.user-profile-header:hover {
+  background-color: #f8fafc;
 }
 
 .user-avatar {
@@ -199,7 +266,24 @@ body {
   border-radius: 50%;
   object-fit: cover;
   border: 1.5px solid #e2e8f0;
-  cursor: pointer;
+}
+
+.user-profile-meta-header {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-header-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.2;
+}
+
+.user-header-role {
+  font-size: 10px;
+  font-weight: 600;
+  color: #2563eb;
 }
 
 /* ==========================================================================
@@ -288,8 +372,7 @@ body {
 }
 
 .sidebar-nav.collapsed .nav-arrow,
-.sidebar-nav.collapsed .nav-badge-plus,
-.sidebar-nav.collapsed .new-module-badge {
+.sidebar-nav.collapsed .nav-badge-plus {
   display: none !important;
 }
 
@@ -329,32 +412,6 @@ body {
   background-color: var(--crm-sidebar-active);
   font-weight: 600;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-}
-
-/* ==========================================================================
-   🌟 NEW MODULE HIGHLIGHT: TRAINING MODULE
-   ========================================================================== */
-.nav-item-new-module {
-  position: relative;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  margin: 2px 0;
-}
-
-.nav-item-new-module:hover {
-  background: rgba(255, 255, 255, 0.22);
-  border-color: rgba(255, 255, 255, 0.4);
-}
-
-.new-module-badge {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: #ffffff;
-  font-size: 9px;
-  font-weight: 800;
-  padding: 2px 6px;
-  border-radius: 4px;
-  letter-spacing: 0.05em;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
 /* Sidebar Footer */
@@ -1551,7 +1608,9 @@ body {
 }
 
 .text-green { color: #059669; }
+.text-red { color: #ef4444; }
 .text-neutral { color: #64748b; }
+.font-semibold { font-weight: 600; }
 
 /* Content Card */
 .training-content-card {
@@ -1780,6 +1839,28 @@ body {
   color: #475569;
 }
 
+.program-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-sm-primary {
+  background: #2563eb;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.btn-sm-primary:hover {
+  background-color: #1d4ed8;
+}
+
 .btn-sm-outline {
   background: #ffffff;
   border: 1px solid #cbd5e1;
@@ -1797,8 +1878,17 @@ body {
   color: #0f172a;
 }
 
+.badge-verified-cert {
+  font-size: 11px;
+  font-weight: 700;
+  color: #059669;
+  background-color: #ecfdf5;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
 /* ==========================================================================
-   Modal Styles
+   Modals & Expanded Components
    ========================================================================== */
 .modal-backdrop {
   display: none;
@@ -1812,6 +1902,7 @@ body {
   z-index: 1000;
   align-items: center;
   justify-content: center;
+  padding: 16px;
 }
 
 .modal-backdrop.open {
@@ -1822,12 +1913,16 @@ body {
   background: #ffffff;
   border-radius: var(--radius-lg);
   width: 100%;
-  max-width: 500px;
+  max-width: 520px;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   animation: modalIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-dialog.modal-large {
+  max-width: 760px;
 }
 
 @keyframes modalIn {
@@ -1849,6 +1944,12 @@ body {
   color: #0f172a;
 }
 
+.modal-subtitle {
+  font-size: 12.5px;
+  color: #64748b;
+  margin-bottom: 12px;
+}
+
 .modal-close-btn {
   background: transparent;
   border: none;
@@ -1862,6 +1963,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 14px;
+  max-height: 75vh;
+  overflow-y: auto;
 }
 
 .form-group {
@@ -1916,6 +2019,230 @@ body {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+}
+
+/* Assign Trainees List */
+.assign-selection-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.assign-checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.assign-checkbox-item:hover {
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.emp-row-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.emp-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.emp-dept {
+  font-size: 11px;
+  color: #64748b;
+}
+
+/* Roster Table */
+.roster-table-wrapper {
+  overflow-x: auto;
+}
+
+.roster-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.roster-table th {
+  background-color: #f8fafc;
+  color: #475569;
+  font-weight: 600;
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.roster-table td {
+  padding: 12px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.prog-pill-fill {
+  display: inline-block;
+  width: 60px;
+  height: 6px;
+  background: #f1f5f9;
+  border-radius: 3px;
+  overflow: hidden;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+.prog-pill-fill span {
+  display: block;
+  height: 100%;
+  background: #2563eb;
+  border-radius: 3px;
+}
+
+.btn-table-action {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-table-action:hover {
+  background-color: #f1f5f9;
+}
+
+/* Course Player */
+.course-player-body {
+  display: flex;
+  gap: 16px;
+}
+
+.player-video-box {
+  flex: 1.6;
+  background: #0f172a;
+  border-radius: 8px;
+  min-height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  text-align: center;
+  padding: 20px;
+}
+
+.player-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.player-placeholder h4 {
+  font-size: 14px;
+  color: #f8fafc;
+}
+
+.player-placeholder p {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.player-syllabus-box {
+  flex: 1;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px;
+  background: #f8fafc;
+}
+
+.syllabus-heading {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.syllabus-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.syllabus-item {
+  padding: 6px 8px;
+  border-radius: 4px;
+}
+
+.syllabus-item.done { color: #166534; background: #dcfce7; }
+.syllabus-item.current { color: #1e40af; background: #dbeafe; font-weight: 600; }
+.syllabus-item.pending { color: #64748b; }
+
+/* Certificate Card */
+.cert-display-card {
+  background: #ffffff;
+  border: 8px double #cbd5e1;
+  padding: 24px;
+  text-align: center;
+  border-radius: 8px;
+}
+
+.cert-brand-tag {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #2563eb;
+}
+
+.cert-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #0f172a;
+  margin: 10px 0;
+}
+
+.cert-text {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.cert-recipient {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1e3a8a;
+  margin: 8px 0;
+}
+
+.cert-course {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 8px 0 16px 0;
+}
+
+.cert-footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 16px;
+  font-size: 11px;
+  color: #64748b;
+  text-align: left;
+}
+
+.sig-line {
+  font-family: cursive;
+  font-size: 18px;
+  color: #1e293b;
 }
 
 /* Responsive adjustments */
