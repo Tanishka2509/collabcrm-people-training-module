@@ -129,48 +129,102 @@ function toggleRoleQuickMenu() {
 window.toggleRoleQuickMenu = toggleRoleQuickMenu;
 
 // Navigation Handling (Dashboard <-> Training Module)
-function initNavigation() {
-  const navItems = document.querySelectorAll('.nav-item');
-  
-  navItems.forEach(item => {
-    item.addEventListener('click', (e) => {
-      e.preventDefault();
-      const tab = item.getAttribute('data-tab');
-      
-      navItems.forEach(n => n.classList.remove('active'));
-      item.classList.add('active');
-
-      if (tab === 'training') {
-        switchView('training');
-      } else if (tab === 'dashboard') {
-        switchView('dashboard');
-      } else {
-        switchView('dashboard');
-      }
-    });
-  });
-}
-
-function switchView(viewName) {
+function switchToDashboard() {
   const dashboardView = document.getElementById('viewDashboard');
   const trainingView = document.getElementById('viewTraining');
-  const navDashboard = document.getElementById('navDashboard');
-  const navTraining = document.getElementById('navTraining');
+  const menuDashboard = document.getElementById('menuDashboard');
+  const menuTraining = document.getElementById('menuTraining');
+  const dashboardInner = document.getElementById('dashboardInner');
+  const trainingInner = document.getElementById('trainingInner');
 
-  if (viewName === 'training') {
-    dashboardView.classList.remove('active');
-    trainingView.classList.add('active');
-    if (navDashboard) navDashboard.classList.remove('active');
-    if (navTraining) navTraining.classList.add('active');
-  } else {
-    trainingView.classList.remove('active');
-    dashboardView.classList.add('active');
-    if (navTraining) navTraining.classList.remove('active');
-    if (navDashboard) navDashboard.classList.add('active');
+  if (dashboardView) dashboardView.classList.add('active');
+  if (trainingView) trainingView.classList.remove('active');
+
+  if (menuDashboard) menuDashboard.classList.add('active');
+  if (menuTraining) menuTraining.classList.remove('active');
+
+  if (dashboardInner) {
+    dashboardInner.className = 'bg-indigo-600 text-white flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
+    const iconSpan = dashboardInner.querySelector('.icon-grid-01');
+    if (iconSpan) iconSpan.className = 'text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-grid-01';
+  }
+  if (trainingInner) {
+    trainingInner.className = 'text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
+    const iconSpan = trainingInner.querySelector('.icon-training');
+    if (iconSpan) iconSpan.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training';
+  }
+
+  closeSidebarFlyout();
+}
+
+function switchToTraining() {
+  const dashboardView = document.getElementById('viewDashboard');
+  const trainingView = document.getElementById('viewTraining');
+  const menuDashboard = document.getElementById('menuDashboard');
+  const menuTraining = document.getElementById('menuTraining');
+  const dashboardInner = document.getElementById('dashboardInner');
+  const trainingInner = document.getElementById('trainingInner');
+
+  if (dashboardView) dashboardView.classList.remove('active');
+  if (trainingView) trainingView.classList.add('active');
+
+  if (menuDashboard) menuDashboard.classList.remove('active');
+  if (menuTraining) menuTraining.classList.add('active');
+
+  if (dashboardInner) {
+    dashboardInner.className = 'text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
+    const iconSpan = dashboardInner.querySelector('.icon-grid-01');
+    if (iconSpan) iconSpan.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-grid-01';
+  }
+  if (trainingInner) {
+    trainingInner.className = 'bg-indigo-600 text-white flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
+    const iconSpan = trainingInner.querySelector('.icon-training');
+    if (iconSpan) iconSpan.className = 'text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training';
+  }
+
+  closeSidebarFlyout();
+}
+
+function openFlyout(menuTitle) {
+  const flyout = document.getElementById('sidebarFlyout');
+  const header = document.getElementById('flyoutHeaderTitle');
+  const list = document.getElementById('flyoutSublist');
+  if (!flyout) return;
+
+  if (header) header.textContent = menuTitle.toLowerCase();
+  
+  const subItems = {
+    'Employees': ['Directory', 'Organization Chart', 'Onboarding & Exit', 'Birthdays & Anniversaries'],
+    'My Team': ['Team Overview', 'Direct Reports', 'Timesheets & Approvals', 'Team Goals'],
+    'Organization': ['Company Structure', 'Branches & Locations', 'Designations & Grades', 'Announcements'],
+    'Config': ['Company Settings', 'Attendance Policies', 'Leave Types', 'Role Permissions'],
+    'Payroll Corner': ['Salary Slips', 'Tax Declarations (Form 16)', 'Loan Requests', 'Reimbursements']
+  };
+
+  if (list && subItems[menuTitle]) {
+    list.innerHTML = subItems[menuTitle].map(sub => 
+      `<li class="py-1.5 px-2 hover:bg-gray-200 rounded cursor-pointer text-sm text-gray-700"><a href="#${encodeURIComponent(sub)}" onclick="event.preventDefault();">${sub}</a></li>`
+    ).join('');
+  }
+
+  flyout.style.width = '240px';
+}
+
+function closeSidebarFlyout() {
+  const flyout = document.getElementById('sidebarFlyout');
+  if (flyout) {
+    flyout.style.width = '0px';
   }
 }
 
-window.switchView = switchView;
+window.switchToDashboard = switchToDashboard;
+window.switchToTraining = switchToTraining;
+window.openFlyout = openFlyout;
+window.closeSidebarFlyout = closeSidebarFlyout;
+
+function initNavigation() {
+  // Navigation initialized with direct handlers
+}
 
 // Sidebar Collapse / Expand Toggle
 function initSidebar() {
