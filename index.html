@@ -110,11 +110,6 @@
         <!-- Preserved DOM Hooks for JS compatibility without affecting UI -->
         <span id="headerUserName" style="display:none;">Isha Patel</span>
         <span id="headerUserRole" style="display:none;">Admin / Head of People</span>
-        <div style="display:none;">
-          <button id="btnRoleAdmin" onclick="setAppRole('admin')"></button>
-          <button id="btnRoleHR" onclick="setAppRole('hr')"></button>
-          <button id="btnRoleManager" onclick="setAppRole('manager')"></button>
-        </div>
       </div>
     </header>
 
@@ -806,16 +801,25 @@
               </div>
             </div>
 
-            <!-- Top Actions -->
-            <div class="training-header-actions">
-              <button class="btn-secondary-action" onclick="openAuditTrailModal()" title="View System Audit Trail">
-                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                <span>Audit Trail</span>
-              </button>
-              <button class="btn-primary-action" id="btnHeaderPrimaryAction" onclick="handlePrimaryAction()">
-                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                <span id="btnHeaderPrimaryText">+ New Training Program</span>
-              </button>
+            <!-- User Role Switcher Section (Admin / HR / Reporting Manager / Employee) -->
+            <div class="user-role-section" id="userRoleSection">
+              <span class="user-role-label">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                Role:
+              </span>
+              <div class="user-role-segmented">
+                <button type="button" class="role-pill-btn active" id="btnRoleAdmin" onclick="setAppRole('admin')">Admin</button>
+                <button type="button" class="role-pill-btn" id="btnRoleHR" onclick="setAppRole('hr')">HR</button>
+                <button type="button" class="role-pill-btn" id="btnRoleManager" onclick="setAppRole('manager')">Reporting Manager</button>
+                <button type="button" class="role-pill-btn" id="btnRoleEmployee" onclick="setAppRole('employee')">Employee</button>
+              </div>
+              <div class="user-role-details-badge">
+                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120" class="user-role-persona-avatar" id="rolePersonaAvatar" alt="Avatar" />
+                <div class="user-role-persona-info">
+                  <span class="user-role-persona-name" id="rolePersonaName">Isha Patel</span>
+                  <span class="user-role-persona-scope" id="rolePersonaScope">Head of People • Full Access</span>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -866,106 +870,122 @@
             <!-- SECTION 1: DASHBOARD (10 STATS ON REAL DATA)   -->
             <!-- ============================================== -->
             <div class="training-tab-view" id="sectionDashboard">
-              <!-- 10 KPI Cards Grid -->
-              <div class="kpi-grid-10">
-                <!-- 1. Total Trainings -->
-                <div class="kpi-stat-card card-blue" onclick="switchTrainingTab('programs')" style="cursor: pointer;" title="Total created trainings in system">
-                  <div class="kpi-stat-top">
-                    <span class="kpi-stat-title">Total Trainings</span>
-                    <span class="kpi-stat-icon" style="background:#eff6ff; color:#2563eb;">📚</span>
+              <!-- 4 Main KPIs In a Line (Screenshot 2) -->
+              <div class="kpi-grid-4">
+                <!-- 1. Total Catalog Trainings -->
+                <div class="kpi-stat-card-main card-blue" onclick="switchTrainingTab('programs')" title="View All Training Programmes">
+                  <div class="kpi-stat-main-top">
+                    <span class="kpi-stat-main-title">Total Programmes</span>
+                    <span class="kpi-stat-main-icon" style="background:#eff6ff; color:#2563eb;">📚</span>
                   </div>
-                  <div class="kpi-stat-val" id="kpiTotalTrainings">0</div>
-                  <span class="kpi-stat-sub">All catalog courses</span>
+                  <div class="kpi-stat-main-val" id="kpiTotalTrainings">6</div>
+                  <div class="kpi-stat-main-chips">
+                    <span class="kpi-stat-mini-pill" style="background:#f0fdf4; color:#166534;"><span id="kpiPublishedTrainings">4</span> Published</span>
+                    <span class="kpi-stat-mini-pill" style="background:#fffbeb; color:#b45309;"><span id="kpiDraftTrainings">1</span> Draft</span>
+                  </div>
                 </div>
 
-                <!-- 2. Published Trainings -->
-                <div class="kpi-stat-card card-emerald" onclick="switchTrainingTab('programs')" style="cursor: pointer;" title="Active published courses available for enrollment">
-                  <div class="kpi-stat-top">
-                    <span class="kpi-stat-title">Published Trainings</span>
-                    <span class="kpi-stat-icon" style="background:#f0fdf4; color:#059669;">✓</span>
+                <!-- 2. Total Assignments -->
+                <div class="kpi-stat-card-main card-indigo" onclick="switchTrainingTab('assignments')" title="View All Learner Assignments">
+                  <div class="kpi-stat-main-top">
+                    <span class="kpi-stat-main-title">Total Assignments</span>
+                    <span class="kpi-stat-main-icon" style="background:#e0e7ff; color:#4338ca;">👥</span>
                   </div>
-                  <div class="kpi-stat-val" id="kpiPublishedTrainings">0</div>
-                  <span class="kpi-stat-sub">Active & Enrollable</span>
+                  <div class="kpi-stat-main-val" id="kpiTotalAssignments">9</div>
+                  <div class="kpi-stat-main-chips">
+                    <span class="kpi-stat-mini-pill" style="background:#f5f3ff; color:#6d28d9;"><span id="kpiInProgress">3</span> In Progress</span>
+                    <span class="kpi-stat-mini-pill" style="background:#f1f5f9; color:#475569;"><span id="kpiNotStarted">1</span> Not Started</span>
+                  </div>
                 </div>
 
-                <!-- 3. Draft Trainings -->
-                <div class="kpi-stat-card card-amber" onclick="switchTrainingTab('programs')" style="cursor: pointer;" title="Draft programs undergoing syllabus formulation">
-                  <div class="kpi-stat-top">
-                    <span class="kpi-stat-title">Draft Trainings</span>
-                    <span class="kpi-stat-icon" style="background:#fffbeb; color:#d97706;">📝</span>
+                <!-- 3. Completed & Passed -->
+                <div class="kpi-stat-card-main card-emerald" onclick="switchTrainingTab('progress')" title="View Employee Completion Progress">
+                  <div class="kpi-stat-main-top">
+                    <span class="kpi-stat-main-title">Completion Rate</span>
+                    <span class="kpi-stat-main-icon" style="background:#ecfdf5; color:#059669;">🏆</span>
                   </div>
-                  <div class="kpi-stat-val" id="kpiDraftTrainings">0</div>
-                  <span class="kpi-stat-sub">Under preparation</span>
+                  <div class="kpi-stat-main-val" id="kpiCompletionRate">67%</div>
+                  <div class="kpi-stat-main-chips">
+                    <span class="kpi-stat-mini-pill" style="background:#dcfce7; color:#15803d;"><span id="kpiCompleted">2</span> Approved</span>
+                    <span class="kpi-stat-mini-pill" style="background:#fef2f2; color:#be123c;"><span id="kpiSubmittedReview">2</span> Under Review</span>
+                  </div>
                 </div>
 
-                <!-- 4. Total Employee Assignments -->
-                <div class="kpi-stat-card card-indigo" onclick="switchTrainingTab('assignments')" style="cursor: pointer;" title="Total active and historical assignments">
-                  <div class="kpi-stat-top">
-                    <span class="kpi-stat-title">Total Assignments</span>
-                    <span class="kpi-stat-icon" style="background:#e0e7ff; color:#4338ca;">👥</span>
+                <!-- 4. Certificates & Compliance -->
+                <div class="kpi-stat-card-main card-amber" onclick="switchTrainingTab('certificates')" title="View Issued Certificates & Compliance">
+                  <div class="kpi-stat-main-top">
+                    <span class="kpi-stat-main-title">Certificates Issued</span>
+                    <span class="kpi-stat-main-icon" style="background:#fff7ed; color:#ea580c;">📜</span>
                   </div>
-                  <div class="kpi-stat-val" id="kpiTotalAssignments">0</div>
-                  <span class="kpi-stat-sub" id="kpiTotalAssignmentsSub">Across all staff</span>
+                  <div class="kpi-stat-main-val" id="kpiCertificatesIssued">1</div>
+                  <div class="kpi-stat-main-chips">
+                    <span class="kpi-stat-mini-pill" style="background:#fee2e2; color:#b91c1c;">⚠️ <span id="kpiOverdue">1</span> Overdue</span>
+                    <span class="kpi-stat-mini-pill" style="background:#f0fdf4; color:#15803d;">100% Verified</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Graphical Visualizations Grid (Logically Correct based on real system state) -->
+              <div class="dash-visuals-grid">
+                <!-- Visual 1: Learner Training Status Breakdown Donut Chart -->
+                <div class="dash-chart-card">
+                  <div class="dash-chart-header">
+                    <div>
+                      <h3 class="dash-chart-title">Learner Lifecycle Distribution</h3>
+                      <p class="dash-chart-subtitle">Real-time breakdown of current assignments by lifecycle status</p>
+                    </div>
+                    <span style="font-size: 11px; font-weight: 700; color: #4f46e5; background: #eef2ff; padding: 4px 8px; border-radius: 6px;">Live Metrics</span>
+                  </div>
+                  <div style="display: flex; align-items: center; justify-content: space-around; gap: 20px; flex-wrap: wrap; padding: 10px 0;">
+                    <div style="position: relative; width: 140px; height: 140px;">
+                      <svg viewBox="0 0 36 36" style="width: 100%; height: 100%; transform: rotate(-90deg);" id="dashDonutSvg">
+                        <circle cx="18" cy="18" r="15.9155" fill="transparent" stroke="#f1f5f9" stroke-width="4.2"></circle>
+                        <circle cx="18" cy="18" r="15.9155" fill="transparent" stroke="#10b981" stroke-width="4.2" stroke-dasharray="22.2 77.8" stroke-dashoffset="0" id="dashDonutCompleted"></circle>
+                        <circle cx="18" cy="18" r="15.9155" fill="transparent" stroke="#7c3aed" stroke-width="4.2" stroke-dasharray="33.3 66.7" stroke-dashoffset="-22.2" id="dashDonutInProgress"></circle>
+                        <circle cx="18" cy="18" r="15.9155" fill="transparent" stroke="#f43f5e" stroke-width="4.2" stroke-dasharray="22.2 77.8" stroke-dashoffset="-55.5" id="dashDonutReview"></circle>
+                        <circle cx="18" cy="18" r="15.9155" fill="transparent" stroke="#94a3b8" stroke-width="4.2" stroke-dasharray="11.1 88.9" stroke-dashoffset="-77.7" id="dashDonutNotStarted"></circle>
+                        <circle cx="18" cy="18" r="15.9155" fill="transparent" stroke="#ef4444" stroke-width="4.2" stroke-dasharray="11.1 88.9" stroke-dashoffset="-88.8" id="dashDonutOverdue"></circle>
+                      </svg>
+                      <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                        <span style="font-size: 20px; font-weight: 800; color: #0f172a;" id="dashDonutTotal">9</span>
+                        <span style="font-size: 10px; color: #64748b; font-weight: 600; text-transform: uppercase;">Learners</span>
+                      </div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; min-width: 170px;">
+                      <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #10b981;"></span>Completed & Approved</span>
+                        <strong style="color: #0f172a;" id="dashLegendCompleted">2 (22%)</strong>
+                      </div>
+                      <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #7c3aed;"></span>In Progress</span>
+                        <strong style="color: #0f172a;" id="dashLegendInProgress">3 (33%)</strong>
+                      </div>
+                      <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #f43f5e;"></span>Under Evaluation</span>
+                        <strong style="color: #0f172a;" id="dashLegendReview">2 (22%)</strong>
+                      </div>
+                      <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #ef4444;"></span>Overdue</span>
+                        <strong style="color: #ef4444;" id="dashLegendOverdue">1 (11%)</strong>
+                      </div>
+                      <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #94a3b8;"></span>Not Started</span>
+                        <strong style="color: #0f172a;" id="dashLegendNotStarted">1 (11%)</strong>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                <!-- 5. Not Started -->
-                <div class="kpi-stat-card card-teal" onclick="switchTrainingTab('progress')" style="cursor: pointer;" title="Learners who have not yet commenced training">
-                  <div class="kpi-stat-top">
-                    <span class="kpi-stat-title">Not Started</span>
-                    <span class="kpi-stat-icon" style="background:#f1f5f9; color:#475569;">○</span>
+                <!-- Visual 2: Department Participation & Assessment Quality -->
+                <div class="dash-chart-card">
+                  <div class="dash-chart-header">
+                    <div>
+                      <h3 class="dash-chart-title">Cohort Participation & Completion</h3>
+                      <p class="dash-chart-subtitle">Progress distribution and average scores by department</p>
+                    </div>
+                    <span style="font-size: 11px; font-weight: 700; color: #059669; background: #ecfdf5; padding: 4px 8px; border-radius: 6px;">Target: 80%</span>
                   </div>
-                  <div class="kpi-stat-val" id="kpiNotStarted">0</div>
-                  <span class="kpi-stat-sub">0% progress</span>
-                </div>
-
-                <!-- 6. In Progress -->
-                <div class="kpi-stat-card card-purple" onclick="switchTrainingTab('progress')" style="cursor: pointer;" title="Learners actively engaged in training modules">
-                  <div class="kpi-stat-top">
-                    <span class="kpi-stat-title">In Progress</span>
-                    <span class="kpi-stat-icon" style="background:#f5f3ff; color:#7c3aed;">⏳</span>
-                  </div>
-                  <div class="kpi-stat-val" id="kpiInProgress">0</div>
-                  <span class="kpi-stat-sub">Actively learning</span>
-                </div>
-
-                <!-- 7. Submitted for Review -->
-                <div class="kpi-stat-card card-rose" onclick="switchTrainingTab('reviews')" style="cursor: pointer;" title="Completed assignments awaiting manager/HR evaluation">
-                  <div class="kpi-stat-top">
-                    <span class="kpi-stat-title">Submitted for Review</span>
-                    <span class="kpi-stat-icon" style="background:#fef2f2; color:#e11d48;">⚖️</span>
-                  </div>
-                  <div class="kpi-stat-val" id="kpiSubmittedReview">0</div>
-                  <span class="kpi-stat-sub" style="color:#e11d48; font-weight:600;">Action Required</span>
-                </div>
-
-                <!-- 8. Completed -->
-                <div class="kpi-stat-card card-green" onclick="switchTrainingTab('progress')" style="cursor: pointer;" title="Successfully approved and finished programs">
-                  <div class="kpi-stat-top">
-                    <span class="kpi-stat-title">Completed</span>
-                    <span class="kpi-stat-icon" style="background:#ecfdf5; color:#10b981;">🏆</span>
-                  </div>
-                  <div class="kpi-stat-val" id="kpiCompleted">0</div>
-                  <span class="kpi-stat-sub">Passed & Approved</span>
-                </div>
-
-                <!-- 9. Overdue -->
-                <div class="kpi-stat-card card-red" onclick="switchTrainingTab('assignments')" style="cursor: pointer;" title="Assignments exceeding their configured due date">
-                  <div class="kpi-stat-top">
-                    <span class="kpi-stat-title">Overdue</span>
-                    <span class="kpi-stat-icon" style="background:#fee2e2; color:#ef4444;">⚠️</span>
-                  </div>
-                  <div class="kpi-stat-val" id="kpiOverdue" style="color:#ef4444;">0</div>
-                  <span class="kpi-stat-sub" style="color:#ef4444;">Past due date</span>
-                </div>
-
-                <!-- 10. Certificates Issued -->
-                <div class="kpi-stat-card card-orange" onclick="switchTrainingTab('certificates')" style="cursor: pointer;" title="Total certificates officially issued to employees">
-                  <div class="kpi-stat-top">
-                    <span class="kpi-stat-title">Certificates Issued</span>
-                    <span class="kpi-stat-icon" style="background:#fff7ed; color:#ea580c;">📜</span>
-                  </div>
-                  <div class="kpi-stat-val" id="kpiCertificatesIssued">0</div>
-                  <span class="kpi-stat-sub">Officially certified</span>
+                  <div id="dashboardDeptProgressList" style="display: flex; flex-direction: column; gap: 14px;"></div>
                 </div>
               </div>
 
@@ -983,24 +1003,41 @@
                   <div id="dashboardReviewsPreview"></div>
                 </div>
 
-                <!-- Department Participation Overview -->
+                <!-- Quick Training Tips / Policy Widget -->
                 <div class="card p-4" style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:18px;">
-                  <h3 style="font-size:14px; font-weight:700; color:#0f172a; margin-bottom:4px;">Cohort Participation</h3>
-                  <p style="font-size:12px; color:#64748b; margin-bottom:14px;">Completion rates across business units.</p>
-                  <div id="dashboardDeptProgressList" style="display:flex; flex-direction:column; gap:12px;"></div>
+                  <h3 style="font-size:14px; font-weight:700; color:#0f172a; margin-bottom:4px;">Governance & Policy</h3>
+                  <p style="font-size:12px; color:#64748b; margin-bottom:14px;">Active compliance configuration summary.</p>
+                  <div style="display: flex; flex-direction: column; gap: 10px; font-size: 12.5px;">
+                    <div style="display: flex; justify-content: space-between; padding-bottom: 8px; border-bottom: 1px solid #f1f5f9;">
+                      <span style="color: #64748b;">Default Due Window:</span>
+                      <strong style="color: #0f172a;">14 Days</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding-bottom: 8px; border-bottom: 1px solid #f1f5f9;">
+                      <span style="color: #64748b;">Assessment Pass Threshold:</span>
+                      <strong style="color: #166534;">80% Minimum</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding-bottom: 8px; border-bottom: 1px solid #f1f5f9;">
+                      <span style="color: #64748b;">Evidence Attachment:</span>
+                      <strong style="color: #0f172a;">Mandatory</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                      <span style="color: #64748b;">Certificate Template:</span>
+                      <strong style="color: #4f46e5;">Modern Tech (TRN)</strong>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
             <!-- ============================================== -->
-            <!-- SECTION 2: TRAINING MANAGEMENT (PROGRAMS)      -->
+            <!-- SECTION 2: TRAINING MANAGEMENT (PROGRAMS TABLE)-->
             <!-- ============================================== -->
             <div class="training-tab-view" id="sectionPrograms" style="display: none;">
               <div class="crm-table-container">
                 <div class="crm-table-header-bar">
                   <div class="crm-table-title-group">
                     <h2 class="crm-table-title">Training Programme Library</h2>
-                    <span class="crm-table-badge-count" id="programsCountBadge">6 Programs</span>
+                    <span class="crm-table-badge-count" id="programsCountBadge">6 Programmes</span>
                   </div>
                   <div class="crm-table-controls">
                     <div style="display:flex; background:#e2e8f0; padding:2px; border-radius:6px;">
@@ -1013,7 +1050,25 @@
                     <button class="btn-primary-action" onclick="openCreateProgramModal()">+ Create Programme</button>
                   </div>
                 </div>
-                <div class="programs-grid-container" id="programCardsGrid" style="padding: 18px;"></div>
+
+                <div class="crm-table-responsive" style="padding: 0;">
+                  <table class="crm-data-table" id="programsTable" style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                      <tr>
+                        <th style="width: 32%; text-align: left; padding: 12px 16px;">Programme Details</th>
+                        <th style="width: 18%; text-align: left; padding: 12px 16px;">Duration & Resources</th>
+                        <th style="width: 20%; text-align: left; padding: 12px 16px;">Cohort Completion</th>
+                        <th style="width: 10%; text-align: left; padding: 12px 16px;">Status</th>
+                        <th style="width: 20%; text-align: right; padding: 12px 16px;">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="programsTableBody">
+                      <!-- Populated via renderProgramsList() in app.js -->
+                    </tbody>
+                  </table>
+                </div>
+                <!-- Hidden fallback container for backwards compatibility -->
+                <div id="programCardsGrid" style="display:none;"></div>
               </div>
             </div>
 

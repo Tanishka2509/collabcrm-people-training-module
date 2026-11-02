@@ -338,13 +338,18 @@ document.addEventListener('DOMContentLoaded', () => {
   switchToEmployees();
 });
 
-// App Role Switcher (Admin vs HR vs Reporting Manager)
+// App Role Switcher (Admin vs HR vs Reporting Manager vs Employee)
 function setAppRole(role) {
   state.currentRole = role;
 
   const btnAdmin = document.getElementById('btnRoleAdmin');
   const btnHR = document.getElementById('btnRoleHR');
   const btnManager = document.getElementById('btnRoleManager');
+  const btnEmployee = document.getElementById('btnRoleEmployee');
+
+  const rolePersonaAvatar = document.getElementById('rolePersonaAvatar');
+  const rolePersonaName = document.getElementById('rolePersonaName');
+  const rolePersonaScope = document.getElementById('rolePersonaScope');
 
   const headerAvatar = document.getElementById('headerUserAvatar');
   const headerName = document.getElementById('headerUserName');
@@ -358,32 +363,58 @@ function setAppRole(role) {
   if (btnAdmin) btnAdmin.classList.toggle('active', role === 'admin');
   if (btnHR) btnHR.classList.toggle('active', role === 'hr');
   if (btnManager) btnManager.classList.toggle('active', role === 'manager');
+  if (btnEmployee) btnEmployee.classList.toggle('active', role === 'employee');
 
   if (role === 'admin') {
-    if (headerAvatar) headerAvatar.src = 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120';
+    const avatar = 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120';
+    if (headerAvatar) headerAvatar.src = avatar;
+    if (rolePersonaAvatar) rolePersonaAvatar.src = avatar;
     if (headerName) headerName.textContent = 'Isha Patel';
+    if (rolePersonaName) rolePersonaName.textContent = 'Isha Patel';
     if (headerRole) headerRole.textContent = 'Admin / Head of People';
+    if (rolePersonaScope) rolePersonaScope.textContent = 'Head of People • Full Access';
     if (portalScopeRoleName) portalScopeRoleName.textContent = 'Admin (Full Access & All Records)';
     if (rolePortalSubtitle) rolePortalSubtitle.textContent = 'Admin Portal • Full access to create, assign, evaluate, certify, and configure training across all business units.';
     if (hierarchyBanner) hierarchyBanner.style.display = 'none';
     if (optAssignDeptRadio) optAssignDeptRadio.style.display = 'flex';
   } else if (role === 'hr') {
-    if (headerAvatar) headerAvatar.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120';
+    const avatar = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120';
+    if (headerAvatar) headerAvatar.src = avatar;
+    if (rolePersonaAvatar) rolePersonaAvatar.src = avatar;
     if (headerName) headerName.textContent = 'Shivam Sharma';
+    if (rolePersonaName) rolePersonaName.textContent = 'Shivam Sharma';
     if (headerRole) headerRole.textContent = 'HR Operations';
+    if (rolePersonaScope) rolePersonaScope.textContent = 'HR Operations • Company-Wide';
     if (portalScopeRoleName) portalScopeRoleName.textContent = 'HR Operations (Company-Wide Programmes & Assignments)';
     if (rolePortalSubtitle) rolePortalSubtitle.textContent = 'HR Portal • Create programmes, assign to employees and departments, monitor progress, review submissions, and manage certificates.';
     if (hierarchyBanner) hierarchyBanner.style.display = 'none';
     if (optAssignDeptRadio) optAssignDeptRadio.style.display = 'flex';
-  } else {
+  } else if (role === 'manager') {
     // Reporting Manager (Ashish Kumar - Engineering Technical Lead)
-    if (headerAvatar) headerAvatar.src = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120';
+    const avatar = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120';
+    if (headerAvatar) headerAvatar.src = avatar;
+    if (rolePersonaAvatar) rolePersonaAvatar.src = avatar;
     if (headerName) headerName.textContent = 'Ashish Kumar';
+    if (rolePersonaName) rolePersonaName.textContent = 'Ashish Kumar';
     if (headerRole) headerRole.textContent = 'Reporting Manager (Eng)';
+    if (rolePersonaScope) rolePersonaScope.textContent = 'Engineering Lead • Direct Reports Scope';
     if (portalScopeRoleName) portalScopeRoleName.textContent = 'Reporting Manager (Engineering Hierarchy Only)';
     if (rolePortalSubtitle) rolePortalSubtitle.textContent = 'Reporting Manager Portal • Scoped strictly to team members within your authorized reporting hierarchy.';
     if (hierarchyBanner) hierarchyBanner.style.display = 'flex';
     if (optAssignDeptRadio) optAssignDeptRadio.style.display = 'none'; // RM can only assign to direct reports
+  } else {
+    // Employee Role (Rihan R. - Software Engineer Learner)
+    const avatar = 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120';
+    if (headerAvatar) headerAvatar.src = avatar;
+    if (rolePersonaAvatar) rolePersonaAvatar.src = avatar;
+    if (headerName) headerName.textContent = 'Rihan R.';
+    if (rolePersonaName) rolePersonaName.textContent = 'Rihan R.';
+    if (headerRole) headerRole.textContent = 'Software Engineer (Learner)';
+    if (rolePersonaScope) rolePersonaScope.textContent = 'Engineering • Learner Portal';
+    if (portalScopeRoleName) portalScopeRoleName.textContent = 'Employee Learner (My Enrolled Trainings & Progress)';
+    if (rolePortalSubtitle) rolePortalSubtitle.textContent = 'Employee Portal • View your assigned programmes, track module progress, submit capstone evidence, and access certified credentials.';
+    if (hierarchyBanner) hierarchyBanner.style.display = 'none';
+    if (optAssignDeptRadio) optAssignDeptRadio.style.display = 'none';
   }
 
   // Re-render active sub-tab view with role scoping applied
@@ -664,12 +695,19 @@ function getScopedAssignments() {
       return emp && emp.managerId === state.currentManagerId;
     });
   }
+  if (state.currentRole === 'employee') {
+    // Scoped strictly to logged-in employee (Rihan R. - EMP-004)
+    return state.assignments.filter(a => a.employeeId === 'EMP-004');
+  }
   return state.assignments;
 }
 
 function getScopedEmployees() {
   if (state.currentRole === 'manager') {
     return state.employees.filter(e => e.managerId === state.currentManagerId);
+  }
+  if (state.currentRole === 'employee') {
+    return state.employees.filter(e => e.id === 'EMP-004');
   }
   return state.employees;
 }
@@ -687,7 +725,7 @@ function updatePendingReviewsBadge() {
 }
 
 // ==========================================================================
-// SECTION 1: TRAINING DASHBOARD (10 STATS ON REAL RECORDS)
+// SECTION 1: TRAINING DASHBOARD (4 MAIN KPIS + GRAPHICAL VISUALIZATIONS)
 // ==========================================================================
 function renderDashboard() {
   const scopedAssignments = getScopedAssignments();
@@ -709,15 +747,19 @@ function renderDashboard() {
       const emp = state.employees.find(e => e.id === c.employeeId);
       return emp && emp.managerId === state.currentManagerId && c.status === 'issued';
     }).length;
+  } else if (state.currentRole === 'employee') {
+    certsIssuedCount = state.certificates.filter(c => c.employeeId === 'EMP-004' && c.status === 'issued').length;
   } else {
     certsIssuedCount = state.certificates.filter(c => c.status === 'issued').length;
   }
 
-  // Populate the 10 exact KPI metrics
+  // Populate the 4 Main KPI metrics
   const setElText = (id, val) => {
     const el = document.getElementById(id);
     if (el) el.textContent = val;
   };
+
+  const completionRate = totalAssignments > 0 ? Math.round((completed / totalAssignments) * 100) : 0;
 
   setElText('kpiTotalTrainings', totalPrograms);
   setElText('kpiPublishedTrainings', publishedPrograms);
@@ -729,10 +771,39 @@ function renderDashboard() {
   setElText('kpiCompleted', completed);
   setElText('kpiOverdue', overdue);
   setElText('kpiCertificatesIssued', certsIssuedCount);
+  setElText('kpiCompletionRate', `${completionRate}%`);
 
-  const subAsn = document.getElementById('kpiTotalAssignmentsSub');
-  if (subAsn) {
-    subAsn.textContent = state.currentRole === 'manager' ? 'In Your Team' : 'Across all staff';
+  // Donut SVG Calculations (Real data)
+  const donutTotal = document.getElementById('dashDonutTotal');
+  if (donutTotal) donutTotal.textContent = totalAssignments;
+
+  if (totalAssignments > 0) {
+    const pctComp = (completed / totalAssignments) * 100;
+    const pctInProg = (inProgress / totalAssignments) * 100;
+    const pctRev = (submittedReview / totalAssignments) * 100;
+    const pctNot = (notStarted / totalAssignments) * 100;
+    const pctOvd = (overdue / totalAssignments) * 100;
+
+    let offset = 0;
+    const setRing = (id, pct) => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.setAttribute('stroke-dasharray', `${pct.toFixed(1)} ${(100 - pct).toFixed(1)}`);
+        el.setAttribute('stroke-dashoffset', `${(-offset).toFixed(1)}`);
+        offset += pct;
+      }
+    };
+    setRing('dashDonutCompleted', pctComp);
+    setRing('dashDonutInProgress', pctInProg);
+    setRing('dashDonutReview', pctRev);
+    setRing('dashDonutNotStarted', pctNot);
+    setRing('dashDonutOverdue', pctOvd);
+
+    setElText('dashLegendCompleted', `${completed} (${Math.round(pctComp)}%)`);
+    setElText('dashLegendInProgress', `${inProgress} (${Math.round(pctInProg)}%)`);
+    setElText('dashLegendReview', `${submittedReview} (${Math.round(pctRev)}%)`);
+    setElText('dashLegendNotStarted', `${notStarted} (${Math.round(pctNot)}%)`);
+    setElText('dashLegendOverdue', `${overdue} (${Math.round(pctOvd)}%)`);
   }
 
   // Dashboard Submissions Awaiting Review Preview
@@ -774,7 +845,7 @@ function renderDashboard() {
     const depts = ['Engineering', 'Recruitment & HR', 'People Operations', 'Sales & BD'];
     let deptHtml = '';
     depts.forEach(d => {
-      const deptAsns = state.assignments.filter(a => {
+      const deptAsns = scopedAssignments.filter(a => {
         const emp = state.employees.find(e => e.id === a.employeeId);
         return emp && emp.dept === d;
       });
@@ -798,7 +869,7 @@ function renderDashboard() {
 }
 
 // ==========================================================================
-// SECTION 2: TRAINING MANAGEMENT (PROGRAMMES CATALOG & BUILDER)
+// SECTION 2: TRAINING MANAGEMENT (PROGRAMMES CATALOG IN TABLE FORMAT)
 // ==========================================================================
 function filterProgramsTab(status) {
   state.programFilterStatus = status;
@@ -820,11 +891,10 @@ function filterProgramsTab(status) {
 window.filterProgramsTab = filterProgramsTab;
 
 function renderProgramsList() {
+  const tbody = document.getElementById('programsTableBody');
   const grid = document.getElementById('programCardsGrid');
   const countBadge = document.getElementById('programsCountBadge');
   const query = (document.getElementById('searchProgramsInput')?.value || '').toLowerCase();
-
-  if (!grid) return;
 
   let filtered = state.programs.filter(p => {
     const matchesStatus = (state.programFilterStatus === 'all') || (p.status === state.programFilterStatus);
@@ -835,16 +905,21 @@ function renderProgramsList() {
   if (countBadge) countBadge.textContent = `${filtered.length} Programmes`;
 
   if (filtered.length === 0) {
-    grid.innerHTML = `
-      <div style="grid-column: 1 / -1; padding: 40px; text-align: center; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; color: #64748b;">
-        <p style="font-weight: 600; font-size: 14px;">No training programmes found matching criteria.</p>
-        <button class="btn-primary-action" style="margin-top: 10px;" onclick="openCreateProgramModal()">+ Create New Programme</button>
-      </div>
-    `;
+    if (tbody) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="5" style="padding: 40px; text-align: center; background: #f8fafc; color: #64748b;">
+            <p style="font-weight: 600; font-size: 14px; margin-bottom: 8px;">No training programmes found matching criteria.</p>
+            <button class="btn-primary-action" onclick="openCreateProgramModal()">+ Create New Programme</button>
+          </td>
+        </tr>
+      `;
+    }
+    if (grid) grid.innerHTML = '';
     return;
   }
 
-  let html = '';
+  let tableHtml = '';
   filtered.forEach(p => {
     const enrolledCount = state.assignments.filter(a => a.programId === p.id).length;
     const completedCount = state.assignments.filter(a => a.programId === p.id && a.trainingStatus === 'completed').length;
@@ -856,51 +931,44 @@ function renderProgramsList() {
     else if (p.status === 'draft') statusPill = '<span class="status-pill status-changes">Draft</span>';
     else statusPill = '<span class="status-pill status-notstarted">Archived</span>';
 
-    const diffBadge = p.difficulty === 'Advanced' ? 'style="background:#fef2f2; color:#b91c1c;"' : (p.difficulty === 'Beginner' ? 'style="background:#f0fdf4; color:#166534;"' : 'style="background:#eff6ff; color:#1d4ed8;"');
+    const diffBadge = p.difficulty === 'Advanced' 
+      ? 'style="background:#fef2f2; color:#b91c1c;"' 
+      : (p.difficulty === 'Beginner' ? 'style="background:#f0fdf4; color:#166534;"' : 'style="background:#eff6ff; color:#1d4ed8;"');
 
-    html += `
-      <div class="program-card" style="display: flex; flex-direction: column; justify-content: space-between;">
-        <div>
-          <div class="program-card-top">
+    tableHtml += `
+      <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s ease;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
+        <td style="padding: 14px 16px; vertical-align: top;">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
             <span class="badge-dept badge-blue">${escapeHtml(p.dept)}</span>
-            <div style="display: flex; gap: 6px;">
-              <span class="status-pill" ${diffBadge}>${p.difficulty}</span>
-              ${statusPill}
-            </div>
+            <span class="status-pill" ${diffBadge}>${p.difficulty}</span>
           </div>
-          <h3 class="program-title" style="margin-top: 8px;">${escapeHtml(p.title)}</h3>
-          <p class="program-desc">${escapeHtml(p.learningObjectives || 'Comprehensive professional training curriculum.')}</p>
-          
-          <div class="program-meta-chips" style="margin: 12px 0;">
-            <span class="meta-chip">
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-              ${p.durationHours} hrs
-            </span>
-            <span class="meta-chip">
-              📑 ${(p.resources || []).length} Resources (${mandatoryCount} Mandatory)
-            </span>
-            <span class="meta-chip">
-              👥 ${enrolledCount} Enrolled
-            </span>
+          <div style="font-weight: 700; font-size: 14px; color: #0f172a; margin-bottom: 4px;">${escapeHtml(p.title)}</div>
+          <p style="font-size: 12px; color: #64748b; line-height: 1.4; margin: 0; max-width: 440px;">
+            ${escapeHtml(p.learningObjectives || 'Comprehensive professional training curriculum.')}
+          </p>
+        </td>
+        <td style="padding: 14px 16px; vertical-align: top; white-space: nowrap;">
+          <div style="font-weight: 700; font-size: 13px; color: #0f172a;">⏱️ ${p.durationHours} hrs</div>
+          <div style="font-size: 12px; color: #64748b; margin-top: 4px;">📑 ${(p.resources || []).length} Modules</div>
+          <div style="font-size: 11px; color: #059669; font-weight: 600; margin-top: 2px;">✓ ${mandatoryCount} Mandatory</div>
+        </td>
+        <td style="padding: 14px 16px; vertical-align: top; min-width: 170px;">
+          <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px;">
+            <span style="color: #64748b; font-weight: 500;">👥 ${enrolledCount} Enrolled</span>
+            <strong style="color: #0f172a;">${progressPct}%</strong>
           </div>
-
-          <div class="progress-section">
-            <div class="progress-label-row">
-              <span>Cohort Completion</span>
-              <span class="progress-percent">${progressPct}%</span>
-            </div>
-            <div class="progress-bar-track">
-              <div class="progress-bar-fill bg-blue" style="width: ${progressPct}%;"></div>
-            </div>
+          <div style="height: 7px; background: #e2e8f0; border-radius: 4px; overflow: hidden; width: 100%;">
+            <div style="width: ${progressPct}%; height: 100%; background: #2563eb; border-radius: 4px;"></div>
           </div>
-        </div>
-
-        <div class="program-footer" style="margin-top: 16px; border-top: 1px solid #f1f5f9; padding-top: 12px; display: flex; justify-content: space-between; align-items: center;">
-          <div style="display: flex; gap: 6px;">
+          <div style="font-size: 11px; color: #64748b; margin-top: 4px;">${completedCount} completed</div>
+        </td>
+        <td style="padding: 14px 16px; vertical-align: top;">
+          ${statusPill}
+        </td>
+        <td style="padding: 14px 16px; vertical-align: top; text-align: right;">
+          <div style="display: inline-flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end;">
             <button class="btn-table-action" onclick="previewProgram('${p.id}')">Preview</button>
             <button class="btn-table-action" onclick="openEditProgramModal('${p.id}')">Edit</button>
-          </div>
-          <div style="display: flex; gap: 6px;">
             ${p.status === 'published' 
               ? `<button class="btn-table-action primary" onclick="openAssignWithProgram('${p.id}')">Assign</button>`
               : ''}
@@ -911,12 +979,13 @@ function renderProgramsList() {
               ${p.status === 'archived' ? 'Restore' : 'Archive'}
             </button>
           </div>
-        </div>
-      </div>
+        </td>
+      </tr>
     `;
   });
 
-  grid.innerHTML = html;
+  if (tbody) tbody.innerHTML = tableHtml;
+  if (grid) grid.innerHTML = '';
 }
 
 window.renderProgramsList = renderProgramsList;

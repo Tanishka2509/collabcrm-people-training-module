@@ -4017,22 +4017,46 @@ body, button, input, select, textarea {
 .config-item-training {
   display: flex !important;
   align-items: center;
-  padding: 6px 0 !important;
-  border-radius: 0;
+  padding: 8px 12px !important;
+  border-radius: 6px;
   cursor: pointer;
   transition: all 0.15s ease;
   user-select: none;
   background-color: transparent !important;
-  color: #4f46e5 !important;
+  color: #0f172a !important;
   font-weight: 600 !important;
-  font-size: 15px !important;
+  font-size: 14.5px !important;
+  text-decoration: none !important;
   margin: 0 !important;
 }
 
 .config-item-training:hover {
-  background-color: transparent !important;
-  color: #4338ca !important;
-  text-decoration: underline;
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+  text-decoration: none !important;
+}
+
+/* Button style for Preview Certificate Template (Screenshot 1) */
+.btn-outline-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1e293b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.btn-outline-secondary:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: #0f172a;
 }
 
 /* ==========================================================================
@@ -4559,5 +4583,252 @@ body, button, input, select, textarea {
   border-color: #cbd5e1;
 }
 
+/* ==========================================================================
+   Main 4 KPIs In a Line (Screenshot 2)
+   ========================================================================== */
+.kpi-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
 
+@media (max-width: 1024px) {
+  .kpi-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
+@media (max-width: 640px) {
+  .kpi-grid-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.kpi-stat-card-main {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px 20px;
+  position: relative;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border-top: 4px solid transparent;
+}
+
+.kpi-stat-card-main:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.kpi-stat-card-main.card-blue { border-top-color: #2563eb; }
+.kpi-stat-card-main.card-indigo { border-top-color: #4f46e5; }
+.kpi-stat-card-main.card-emerald { border-top-color: #10b981; }
+.kpi-stat-card-main.card-amber { border-top-color: #f59e0b; }
+
+.kpi-stat-main-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.kpi-stat-main-title {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.kpi-stat-main-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.kpi-stat-main-val {
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.kpi-stat-main-chips {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  color: #64748b;
+}
+
+.kpi-stat-mini-pill {
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Dashboard Graphical Visualizations */
+.dash-visuals-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 1024px) {
+  .dash-visuals-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.dash-chart-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.dash-chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.dash-chart-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.dash-chart-subtitle {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+/* User Role Section */
+.user-role-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 6px 14px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.user-role-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #475569;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.user-role-segmented {
+  display: flex;
+  background: #f1f5f9;
+  padding: 3px;
+  border-radius: 8px;
+  gap: 3px;
+}
+
+.role-pill-btn {
+  background: transparent;
+  border: none;
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.role-pill-btn:hover {
+  color: #0f172a;
+}
+
+.role-pill-btn.active {
+  background: #4f46e5;
+  color: #ffffff;
+  box-shadow: 0 1px 3px rgba(79, 70, 229, 0.3);
+}
+
+.user-role-details-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 12px;
+  border-left: 1px solid #e2e8f0;
+}
+
+.user-role-persona-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-role-persona-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-role-persona-name {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+.user-role-persona-scope {
+  font-size: 11px;
+  color: #64748b;
+  line-height: 1.2;
+}
+
+/* ==========================================================================
+   Training Programme Library (Screenshot 4: Remove scroll & Sans-Serif only)
+   ========================================================================== */
+#sectionPrograms,
+#sectionPrograms * {
+  font-family: sans-serif !important;
+}
+
+#sectionPrograms .crm-table-container {
+  overflow: visible !important;
+}
+
+#sectionPrograms .crm-table-responsive {
+  overflow: visible !important;
+  overflow-x: visible !important;
+}
+
+#programsTable {
+  width: 100% !important;
+  table-layout: auto;
+  border-collapse: collapse;
+  font-family: sans-serif !important;
+}
+
+#programsTable th,
+#programsTable td {
+  font-family: sans-serif !important;
+}
