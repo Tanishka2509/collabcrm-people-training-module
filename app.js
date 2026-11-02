@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initTrainingModule();
   initEmployeeTabs();
   setAppRole('admin'); // default to Admin / HR / RM
+  switchToTraining();
 });
 
 // Role Switcher Management
@@ -128,9 +129,9 @@ function toggleRoleQuickMenu() {
 
 window.toggleRoleQuickMenu = toggleRoleQuickMenu;
 
-// Navigation Handling for the 3 Core Modules: Employees, Training, Config
+// Navigation Handling for the 3 CollabCRM Modules: Employees, Training, Config
 function switchToEmployees() {
-  const viewEmployees = document.getElementById('viewDashboard');
+  const viewDashboard = document.getElementById('viewDashboard');
   const viewTraining = document.getElementById('viewTraining');
   const viewConfig = document.getElementById('viewConfig');
 
@@ -142,7 +143,7 @@ function switchToEmployees() {
   const trainingInner = document.getElementById('trainingInner');
   const configInner = document.getElementById('configInner');
 
-  if (viewEmployees) { viewEmployees.style.display = 'block'; viewEmployees.classList.add('active'); }
+  if (viewDashboard) { viewDashboard.style.display = 'block'; viewDashboard.classList.add('active'); }
   if (viewTraining) { viewTraining.style.display = 'none'; viewTraining.classList.remove('active'); }
   if (viewConfig) { viewConfig.style.display = 'none'; viewConfig.classList.remove('active'); }
 
@@ -151,26 +152,26 @@ function switchToEmployees() {
   if (menuConfig) menuConfig.classList.remove('active');
 
   if (employeesInner) {
-    employeesInner.className = 'bg-indigo-600 text-white flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
-    const iconSpan = employeesInner.querySelector('.icon-users-02');
-    if (iconSpan) iconSpan.className = 'text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-users-02';
+    employeesInner.className = 'bg-indigo-600 text-white relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
+    const icon = employeesInner.querySelector('.icon-users-02');
+    if (icon) icon.className = 'text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-users-02';
   }
   if (trainingInner) {
     trainingInner.className = 'text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
-    const iconSpan = trainingInner.querySelector('.icon-training');
-    if (iconSpan) iconSpan.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training';
+    const icon = trainingInner.querySelector('.icon-training');
+    if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training';
   }
   if (configInner) {
-    configInner.className = 'text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
-    const iconSpan = configInner.querySelector('.icon-settings-02');
-    if (iconSpan) iconSpan.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-settings-02';
+    configInner.className = 'text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
+    const icon = configInner.querySelector('.icon-settings-02');
+    if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-settings-02';
   }
 
   closeSidebarFlyout();
 }
 
 function switchToTraining() {
-  const viewEmployees = document.getElementById('viewDashboard');
+  const viewDashboard = document.getElementById('viewDashboard');
   const viewTraining = document.getElementById('viewTraining');
   const viewConfig = document.getElementById('viewConfig');
 
@@ -182,7 +183,7 @@ function switchToTraining() {
   const trainingInner = document.getElementById('trainingInner');
   const configInner = document.getElementById('configInner');
 
-  if (viewEmployees) { viewEmployees.style.display = 'none'; viewEmployees.classList.remove('active'); }
+  if (viewDashboard) { viewDashboard.style.display = 'none'; viewDashboard.classList.remove('active'); }
   if (viewTraining) { viewTraining.style.display = 'block'; viewTraining.classList.add('active'); }
   if (viewConfig) { viewConfig.style.display = 'none'; viewConfig.classList.remove('active'); }
 
@@ -191,26 +192,26 @@ function switchToTraining() {
   if (menuConfig) menuConfig.classList.remove('active');
 
   if (employeesInner) {
-    employeesInner.className = 'text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
-    const iconSpan = employeesInner.querySelector('.icon-users-02');
-    if (iconSpan) iconSpan.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-users-02';
+    employeesInner.className = 'text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
+    const icon = employeesInner.querySelector('.icon-users-02');
+    if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-users-02';
   }
   if (trainingInner) {
     trainingInner.className = 'bg-indigo-600 text-white flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
-    const iconSpan = trainingInner.querySelector('.icon-training');
-    if (iconSpan) iconSpan.className = 'text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training';
+    const icon = trainingInner.querySelector('.icon-training');
+    if (icon) icon.className = 'text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training';
   }
   if (configInner) {
-    configInner.className = 'text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
-    const iconSpan = configInner.querySelector('.icon-settings-02');
-    if (iconSpan) iconSpan.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-settings-02';
+    configInner.className = 'text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
+    const icon = configInner.querySelector('.icon-settings-02');
+    if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-settings-02';
   }
 
   closeSidebarFlyout();
 }
 
 function switchToConfig() {
-  const viewEmployees = document.getElementById('viewDashboard');
+  const viewDashboard = document.getElementById('viewDashboard');
   const viewTraining = document.getElementById('viewTraining');
   const viewConfig = document.getElementById('viewConfig');
 
@@ -222,7 +223,7 @@ function switchToConfig() {
   const trainingInner = document.getElementById('trainingInner');
   const configInner = document.getElementById('configInner');
 
-  if (viewEmployees) { viewEmployees.style.display = 'none'; viewEmployees.classList.remove('active'); }
+  if (viewDashboard) { viewDashboard.style.display = 'none'; viewDashboard.classList.remove('active'); }
   if (viewTraining) { viewTraining.style.display = 'none'; viewTraining.classList.remove('active'); }
   if (viewConfig) { viewConfig.style.display = 'block'; viewConfig.classList.add('active'); }
 
@@ -231,25 +232,23 @@ function switchToConfig() {
   if (menuConfig) menuConfig.classList.add('active');
 
   if (employeesInner) {
-    employeesInner.className = 'text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
-    const iconSpan = employeesInner.querySelector('.icon-users-02');
-    if (iconSpan) iconSpan.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-users-02';
+    employeesInner.className = 'text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
+    const icon = employeesInner.querySelector('.icon-users-02');
+    if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-users-02';
   }
   if (trainingInner) {
     trainingInner.className = 'text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
-    const iconSpan = trainingInner.querySelector('.icon-training');
-    if (iconSpan) iconSpan.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training';
+    const icon = trainingInner.querySelector('.icon-training');
+    if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training';
   }
   if (configInner) {
-    configInner.className = 'bg-indigo-600 text-white flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
-    const iconSpan = configInner.querySelector('.icon-settings-02');
-    if (iconSpan) iconSpan.className = 'text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-settings-02';
+    configInner.className = 'bg-indigo-600 text-white relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
+    const icon = configInner.querySelector('.icon-settings-02');
+    if (icon) icon.className = 'text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-settings-02';
   }
 
   closeSidebarFlyout();
 }
-
-const switchToDashboard = switchToEmployees;
 
 function openFlyout(menuTitle) {
   const flyout = document.getElementById('sidebarFlyout');
@@ -261,13 +260,12 @@ function openFlyout(menuTitle) {
   
   const subItems = {
     'Employees': ['Directory', 'Organization Chart', 'Onboarding & Exit', 'Birthdays & Anniversaries'],
-    'Training': ['Active Programs', 'Compliance & Mandatory', 'Trainee Roster', 'Certificates'],
-    'Config': ['Company Settings', 'Attendance Policies', 'Leave Types', 'Role Permissions']
+    'Config': ['Company Settings', 'Attendance Policies', 'Leave Types', 'Role Permissions', 'Training Automation']
   };
 
   if (list && subItems[menuTitle]) {
     list.innerHTML = subItems[menuTitle].map(sub => 
-      `<li class="py-1.5 px-2 hover:bg-gray-200 rounded cursor-pointer text-sm text-gray-700"><a href="#${encodeURIComponent(sub)}" onclick="event.preventDefault();">${sub}</a></li>`
+      `<li class="py-1.5 px-2 hover:bg-gray-200 rounded cursor-pointer text-sm text-gray-700"><a href="#${encodeURIComponent(sub)}" onclick="event.preventDefault(); alert('${menuTitle}: ${sub}');">${sub}</a></li>`
     ).join('');
   }
 
@@ -282,7 +280,7 @@ function closeSidebarFlyout() {
 }
 
 window.switchToEmployees = switchToEmployees;
-window.switchToDashboard = switchToDashboard;
+window.switchToDashboard = switchToEmployees;
 window.switchToTraining = switchToTraining;
 window.switchToConfig = switchToConfig;
 window.openFlyout = openFlyout;

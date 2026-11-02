@@ -116,23 +116,20 @@
         <nav class="py-5 px-2 overflow-y-auto overflow-x-hidden sidebar-container 2xl:h-[calc(100vh-116px)] 2xl-to-xl:h-[calc(100vh-108px)] h-[calc(100vh-108px)]">
           <ul role="list" class="space-y-3 sidebar-container" id="sidebarList">
             <!-- 1. Employees -->
-            <li title="Employees" class="relative group cursor-pointer sidebar-nav-li active" id="menuEmployees" onclick="switchToEmployees()">
-              <div class="-my-1">
-                <div class="bg-indigo-600 text-white flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap" id="employeesInner">
-                  <a class="flex w-full items-center gap-x-3 2xl:p-3 2xl-to-xl:p-2 p-2" href="/people/collabcrm-demo-account/employees" onclick="event.preventDefault(); switchToEmployees();">
-                    <span class="text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-users-02"></span>
-                    <p class="nav-text">Employees</p>
-                  </a>
-                </div>
+            <li title="Employees" class="relative group cursor-pointer sidebar-nav-li" id="menuEmployees" onclick="switchToEmployees()">
+              <div class="text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap" id="employeesInner">
+                <span class="text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-users-02"></span>
+                <p class="nav-text">Employees</p>
+                <span class="icon-chevron-right block ml-auto text-xl text-indigo-300" onclick="event.stopPropagation(); openFlyout('Employees');"></span>
               </div>
             </li>
 
-            <!-- 2. Training (Strictly between Employees and Config, with no NEW badge) -->
-            <li title="Training" class="relative group cursor-pointer sidebar-nav-li" id="menuTraining" onclick="switchToTraining()">
+            <!-- 2. Training (Active Module) -->
+            <li title="Training" class="relative group cursor-pointer sidebar-nav-li active" id="menuTraining" onclick="switchToTraining()">
               <div class="-my-1">
-                <div class="text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap" id="trainingInner">
-                  <a class="flex w-full items-center gap-x-3 2xl:p-3 2xl-to-xl:p-2 p-2" href="/people/collabcrm-demo-account/training" onclick="event.preventDefault(); switchToTraining();">
-                    <span class="text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training"></span>
+                <div class="bg-indigo-600 text-white flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap" id="trainingInner">
+                  <a class="flex w-full items-center gap-x-3 2xl:p-3 2xl-to-xl:p-2 p-2" href="#" onclick="event.preventDefault(); switchToTraining();">
+                    <span class="text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training"></span>
                     <p class="nav-text">Training</p>
                   </a>
                 </div>
@@ -141,13 +138,10 @@
 
             <!-- 3. Config -->
             <li title="Config" class="relative group cursor-pointer sidebar-nav-li" id="menuConfig" onclick="switchToConfig()">
-              <div class="-my-1">
-                <div class="text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap" id="configInner">
-                  <a class="flex w-full items-center gap-x-3 2xl:p-3 2xl-to-xl:p-2 p-2" href="/people/collabcrm-demo-account/config" onclick="event.preventDefault(); switchToConfig();">
-                    <span class="text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-settings-02"></span>
-                    <p class="nav-text">Config</p>
-                  </a>
-                </div>
+              <div class="text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap" id="configInner">
+                <span class="text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-settings-02"></span>
+                <p class="nav-text">Config</p>
+                <span class="icon-chevron-right block ml-auto text-xl text-indigo-300" onclick="event.stopPropagation(); openFlyout('Config');"></span>
               </div>
             </li>
           </ul>
@@ -187,7 +181,7 @@
         <!-- ============================================== -->
         <!-- VIEW 1: MAIN DASHBOARD VIEW                    -->
         <!-- ============================================== -->
-        <div class="dashboard-view active" id="viewDashboard">
+        <div class="dashboard-view" id="viewDashboard" style="display: none;">
           <div class="dashboard-inner-container">
             <!-- Left & Center Widgets Area -->
             <div class="dashboard-main-column">
@@ -758,7 +752,7 @@
         <!-- ============================================== -->
         <!-- VIEW 2: DEDICATED TRAINING MODULE VIEW         -->
         <!-- ============================================== -->
-        <div class="training-view" id="viewTraining">
+        <div class="training-view active" id="viewTraining" style="display: block;">
           <div class="training-container">
             <!-- Training Header & Controls -->
             <div class="training-top-header">
