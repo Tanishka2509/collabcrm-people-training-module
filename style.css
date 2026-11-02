@@ -699,6 +699,9 @@ body {
 .config-panel-item:hover .icon-plus-square {
   color: #4f46e5;
 }
+
+.flyout-subitem a {
+  display: block;
   padding: 6px 10px;
   border-radius: 6px;
   font-size: 13px;
@@ -3811,21 +3814,22 @@ body {
 .config-item-training {
   display: flex !important;
   align-items: center;
-  padding: 10px 14px;
-  border-radius: 8px;
+  padding: 6px 0 !important;
+  border-radius: 0;
   cursor: pointer;
   transition: all 0.15s ease;
   user-select: none;
-  background-color: transparent;
+  background-color: transparent !important;
   color: #4f46e5 !important;
   font-weight: 600 !important;
   font-size: 15px !important;
-  margin-top: 4px;
+  margin: 0 !important;
 }
 
 .config-item-training:hover {
-  background-color: #f5f3ff;
+  background-color: transparent !important;
   color: #4338ca !important;
+  text-decoration: underline;
 }
 
 /* ==========================================================================

@@ -2561,6 +2561,7 @@ function toggleClockStatus() {
   const btn = document.getElementById('btnClockOut');
   const outTime = document.getElementById('todayOutTime');
   const inTime = document.getElementById('todayInTime');
+  if (!btn || !outTime || !inTime) return;
 
   if (isClockedIn) {
     const now = new Date();
