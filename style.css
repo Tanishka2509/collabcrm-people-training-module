@@ -588,26 +588,104 @@ body {
   justify-content: center;
 }
 
-/* Sidebar Flyout Submenu Panel */
-.sidebar-flyout-panel {
+/* CollabCRM Config Slide-out Side Panel (Exact match to screenshot) */
+.config-side-panel {
+  position: absolute;
+  top: 0;
+  left: 220px;
+  width: 0;
+  height: 100%;
+  background-color: #ffffff;
+  border-right: 1px solid #e5e7eb;
+  box-shadow: 6px 0 24px rgba(0, 0, 0, 0.09);
+  overflow: hidden;
   transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  border-right: 1px solid #e2e8f0;
-  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.08);
+  z-index: 60;
+  white-space: nowrap;
 }
 
-.sidebar-flyout-panel.open {
-  width: 240px !important;
+.config-side-panel.open {
+  width: 250px;
 }
 
-.flyout-sublist {
-  list-style: none;
+.config-panel-inner {
+  width: 250px;
+  padding: 24px 22px;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  overflow-y: auto;
 }
 
-.flyout-subitem a {
-  display: block;
+.config-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 26px;
+}
+
+.config-panel-title {
+  font-size: 19px;
+  font-weight: 700;
+  color: #111827;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.config-panel-close {
+  background: transparent;
+  border: none;
+  color: #4b5563;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+
+.config-panel-close:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.config-panel-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.config-panel-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #27303f;
+  cursor: pointer;
+  transition: color 0.15s ease;
+  user-select: none;
+  padding: 2px 0;
+}
+
+.config-panel-item:hover {
+  color: #4f46e5;
+}
+
+.config-panel-item .icon-plus-square {
+  width: 17px;
+  height: 17px;
+  color: #1f2937;
+  transition: all 0.15s ease;
+}
+
+.config-panel-item:hover .icon-plus-square {
+  color: #4f46e5;
+}
   padding: 6px 10px;
   border-radius: 6px;
   font-size: 13px;

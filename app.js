@@ -206,42 +206,74 @@ function switchToTraining() {
   }
 }
 
-function switchToConfig() {
-  const viewDashboard = document.getElementById('viewDashboard');
-  const viewTraining = document.getElementById('viewTraining');
-  const viewConfig = document.getElementById('viewConfig');
-
-  const menuEmployees = document.getElementById('menuEmployees');
-  const menuTraining = document.getElementById('menuTraining');
+function openConfigPanel() {
+  const panel = document.getElementById('configSidePanel');
   const menuConfig = document.getElementById('menuConfig');
-
-  const employeesInner = document.getElementById('employeesInner');
-  const trainingInner = document.getElementById('trainingInner');
   const configInner = document.getElementById('configInner');
+  const menuTraining = document.getElementById('menuTraining');
+  const menuEmployees = document.getElementById('menuEmployees');
+  const trainingInner = document.getElementById('trainingInner');
+  const employeesInner = document.getElementById('employeesInner');
 
-  if (viewDashboard) { viewDashboard.style.display = 'none'; viewDashboard.classList.remove('active'); }
-  if (viewTraining) { viewTraining.style.display = 'none'; viewTraining.classList.remove('active'); }
-  if (viewConfig) { viewConfig.style.display = 'block'; viewConfig.classList.add('active'); }
+  if (panel) {
+    panel.classList.add('open');
+  }
 
-  if (menuEmployees) menuEmployees.classList.remove('active');
-  if (menuTraining) menuTraining.classList.remove('active');
   if (menuConfig) menuConfig.classList.add('active');
-
-  if (employeesInner) {
-    employeesInner.className = 'text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
-    const icon = employeesInner.querySelector('.icon-users-02');
-    if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-users-02';
-  }
-  if (trainingInner) {
-    trainingInner.className = 'text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
-    const icon = trainingInner.querySelector('.icon-training');
-    if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training';
-  }
   if (configInner) {
     configInner.className = 'bg-indigo-600 text-white relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
     const icon = configInner.querySelector('.icon-settings-02');
     if (icon) icon.className = 'text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-settings-02';
   }
+
+  if (menuTraining) menuTraining.classList.remove('active');
+  if (trainingInner) {
+    trainingInner.className = 'text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
+    const icon = trainingInner.querySelector('.icon-training');
+    if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training';
+  }
+
+  if (menuEmployees) menuEmployees.classList.remove('active');
+  if (employeesInner) {
+    employeesInner.className = 'text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
+    const icon = employeesInner.querySelector('.icon-users-02');
+    if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-users-02';
+  }
+}
+
+function closeConfigPanel() {
+  const panel = document.getElementById('configSidePanel');
+  const menuConfig = document.getElementById('menuConfig');
+  const configInner = document.getElementById('configInner');
+
+  if (panel) {
+    panel.classList.remove('open');
+  }
+
+  if (menuConfig) menuConfig.classList.remove('active');
+  if (configInner) {
+    configInner.className = 'text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
+    const icon = configInner.querySelector('.icon-settings-02');
+    if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-settings-02';
+  }
+}
+
+function toggleConfigPanel() {
+  const panel = document.getElementById('configSidePanel');
+  if (panel && panel.classList.contains('open')) {
+    closeConfigPanel();
+    switchToTraining();
+  } else {
+    openConfigPanel();
+  }
+}
+
+function openConfigOption(optionName) {
+  alert('Config › ' + optionName);
+}
+
+function switchToConfig() {
+  toggleConfigPanel();
 }
 
 function switchToDashboard() {
@@ -252,42 +284,12 @@ window.switchToEmployees = switchToEmployees;
 window.switchToTraining = switchToTraining;
 window.switchToConfig = switchToConfig;
 window.switchToDashboard = switchToDashboard;
+window.toggleConfigPanel = toggleConfigPanel;
+window.openConfigPanel = openConfigPanel;
+window.closeConfigPanel = closeConfigPanel;
+window.openConfigOption = openConfigOption;
 
-function openFlyout(menuTitle) {
-  const flyout = document.getElementById('sidebarFlyout');
-  const header = document.getElementById('flyoutHeaderTitle');
-  const list = document.getElementById('flyoutSublist');
-  if (!flyout) return;
 
-  if (header) header.textContent = menuTitle.toLowerCase();
-
-  const subItems = {
-    'Employees': ['Directory', 'Organization Chart', 'Onboarding & Exit', 'Birthdays & Anniversaries'],
-    'Config': ['Company Settings', 'Attendance Policies', 'Leave Types', 'Role Permissions', 'Training Automation']
-  };
-
-  if (list && subItems[menuTitle]) {
-    list.innerHTML = subItems[menuTitle].map(sub =>
-      `<li class="py-1.5 px-2 hover:bg-gray-200 rounded cursor-pointer text-sm text-gray-700"><a href="#${encodeURIComponent(sub)}" onclick="event.preventDefault(); alert('${menuTitle}: ${sub}');">${sub}</a></li>`
-    ).join('');
-  }
-
-  flyout.style.width = '240px';
-}
-
-function closeSidebarFlyout() {
-  const flyout = document.getElementById('sidebarFlyout');
-  if (flyout) {
-    flyout.style.width = '0px';
-  }
-}
-
-window.switchToEmployees = switchToEmployees;
-window.switchToDashboard = switchToEmployees;
-window.switchToTraining = switchToTraining;
-window.switchToConfig = switchToConfig;
-window.openFlyout = openFlyout;
-window.closeSidebarFlyout = closeSidebarFlyout;
 
 function initNavigation() {
   // Navigation initialized with direct handlers
