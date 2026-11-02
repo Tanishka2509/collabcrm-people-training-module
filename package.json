@@ -1,0 +1,14 @@
+{
+  "name": "collabcrm-training-module",
+  "version": "1.0.0",
+  "description": "CollabCRM People - Training Module & Core System",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["collabcrm", "training", "hr", "crm"],
+  "author": "Tanishka2509",
+  "license": "MIT"
+}
