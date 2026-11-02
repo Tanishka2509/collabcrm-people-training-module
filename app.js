@@ -4171,12 +4171,12 @@ const ROLES_DATA = [
   {
     id: 'role_6',
     no: 6,
-    name: 'Administrator',
+    name: 'Admin/HR',
     status: 'Active',
-    employeesCount: 48,
-    remarks: 'Manages system configurations, user roles, and ensures the smooth functioning of the system.',
-    lastModifiedByName: '-',
-    lastModifiedDate: '',
+    employeesCount: 50,
+    remarks: 'Manages system configurations, user roles, employee records, organization policies, and ensures smooth functioning of the system.',
+    lastModifiedByName: 'Isha Patel',
+    lastModifiedDate: '14-Aug-2026, 03:01 PM',
     createdByName: 'System',
     createdDate: '12-Jun-2025, 12:27 PM'
   },
@@ -4219,18 +4219,6 @@ const ROLES_DATA = [
   {
     id: 'role_10',
     no: 10,
-    name: 'HR',
-    status: 'Active',
-    employeesCount: 2,
-    remarks: 'Manages employee records, organization policies, holidays, recruitment process etc within the system.',
-    lastModifiedByName: 'Isha Patel',
-    lastModifiedDate: '14-Aug-2026, 03:01 PM',
-    createdByName: 'System',
-    createdDate: '12-Jun-2025, 12:27 PM'
-  },
-  {
-    id: 'role_11',
-    no: 11,
     name: 'Recruiter',
     status: 'Active',
     employeesCount: 1,
@@ -4241,8 +4229,8 @@ const ROLES_DATA = [
     createdDate: '12-Jun-2025, 12:27 PM'
   },
   {
-    id: 'role_12',
-    no: 12,
+    id: 'role_11',
+    no: 11,
     name: 'BDM',
     status: 'Active',
     employeesCount: 0,
@@ -4438,6 +4426,48 @@ function openRolePermissions(roleId) {
 }
 
 window.openRolePermissions = openRolePermissions;
+
+function toggleRoleSelectorDropdown(e) {
+  if (e) e.stopPropagation();
+  const menu = document.getElementById('roleSelectorDropdownMenu');
+  if (!menu) return;
+  const isHidden = menu.style.display === 'none' || !menu.style.display;
+  if (isHidden) {
+    let itemsHtml = '';
+    ROLES_DATA.forEach(r => {
+      const isSelected = r.id === activeSelectedRoleId;
+      itemsHtml += `
+        <div onclick="selectRoleFromDropdown('${r.id}')" style="padding: 8px 14px; font-size: 12.5px; color: ${isSelected ? '#2563eb' : '#1e293b'}; font-weight: ${isSelected ? '700' : '500'}; background: ${isSelected ? '#eff6ff' : 'transparent'}; cursor: pointer; display: flex; align-items: center; justify-content: space-between;" onmouseover="if(!${isSelected}) this.style.background='#f8fafc'" onmouseout="if(!${isSelected}) this.style.background='transparent'">
+          <span>${escapeHtml(r.name)}</span>
+          ${isSelected ? '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#2563eb" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>' : ''}
+        </div>
+      `;
+    });
+    menu.innerHTML = itemsHtml;
+    menu.style.display = 'block';
+  } else {
+    menu.style.display = 'none';
+  }
+}
+
+function selectRoleFromDropdown(roleId) {
+  const menu = document.getElementById('roleSelectorDropdownMenu');
+  if (menu) menu.style.display = 'none';
+  openRolePermissions(roleId);
+}
+
+document.addEventListener('click', function(e) {
+  const menu = document.getElementById('roleSelectorDropdownMenu');
+  const btn = document.getElementById('permRoleBreadcrumbDropdown');
+  if (menu && menu.style.display === 'block') {
+    if (!menu.contains(e.target) && !btn?.contains(e.target)) {
+      menu.style.display = 'none';
+    }
+  }
+});
+
+window.toggleRoleSelectorDropdown = toggleRoleSelectorDropdown;
+window.selectRoleFromDropdown = selectRoleFromDropdown;
 
 function togglePermGroupCollapse(groupId) {
   collapsedPermGroups[groupId] = !collapsedPermGroups[groupId];
