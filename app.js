@@ -129,42 +129,34 @@ function toggleRoleQuickMenu() {
 
 window.toggleRoleQuickMenu = toggleRoleQuickMenu;
 
-// Navigation Handling for the 3 CollabCRM Modules: Employees, Training, Config
-function switchToEmployees() {
+// Navigation Handling for CollabCRM People & Training Module
+function switchToDashboard() {
   const viewDashboard = document.getElementById('viewDashboard');
   const viewTraining = document.getElementById('viewTraining');
   const viewConfig = document.getElementById('viewConfig');
 
-  const menuEmployees = document.getElementById('menuEmployees');
+  const menuDashboard = document.getElementById('menuDashboard');
   const menuTraining = document.getElementById('menuTraining');
-  const menuConfig = document.getElementById('menuConfig');
 
-  const employeesInner = document.getElementById('employeesInner');
+  const dashboardInner = document.getElementById('dashboardInner');
   const trainingInner = document.getElementById('trainingInner');
-  const configInner = document.getElementById('configInner');
 
   if (viewDashboard) { viewDashboard.style.display = 'block'; viewDashboard.classList.add('active'); }
   if (viewTraining) { viewTraining.style.display = 'none'; viewTraining.classList.remove('active'); }
   if (viewConfig) { viewConfig.style.display = 'none'; viewConfig.classList.remove('active'); }
 
-  if (menuEmployees) menuEmployees.classList.add('active');
+  if (menuDashboard) menuDashboard.classList.add('active');
   if (menuTraining) menuTraining.classList.remove('active');
-  if (menuConfig) menuConfig.classList.remove('active');
 
-  if (employeesInner) {
-    employeesInner.className = 'bg-indigo-600 text-white relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
-    const icon = employeesInner.querySelector('.icon-users-02');
-    if (icon) icon.className = 'text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-users-02';
+  if (dashboardInner) {
+    dashboardInner.className = 'bg-indigo-600 text-white flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
+    const icon = dashboardInner.querySelector('.icon-grid-01');
+    if (icon) icon.className = 'text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-grid-01';
   }
   if (trainingInner) {
     trainingInner.className = 'text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
     const icon = trainingInner.querySelector('.icon-training');
     if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training';
-  }
-  if (configInner) {
-    configInner.className = 'text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
-    const icon = configInner.querySelector('.icon-settings-02');
-    if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-settings-02';
   }
 
   closeSidebarFlyout();
@@ -175,79 +167,39 @@ function switchToTraining() {
   const viewTraining = document.getElementById('viewTraining');
   const viewConfig = document.getElementById('viewConfig');
 
-  const menuEmployees = document.getElementById('menuEmployees');
+  const menuDashboard = document.getElementById('menuDashboard');
   const menuTraining = document.getElementById('menuTraining');
-  const menuConfig = document.getElementById('menuConfig');
 
-  const employeesInner = document.getElementById('employeesInner');
+  const dashboardInner = document.getElementById('dashboardInner');
   const trainingInner = document.getElementById('trainingInner');
-  const configInner = document.getElementById('configInner');
 
   if (viewDashboard) { viewDashboard.style.display = 'none'; viewDashboard.classList.remove('active'); }
   if (viewTraining) { viewTraining.style.display = 'block'; viewTraining.classList.add('active'); }
   if (viewConfig) { viewConfig.style.display = 'none'; viewConfig.classList.remove('active'); }
 
-  if (menuEmployees) menuEmployees.classList.remove('active');
+  if (menuDashboard) menuDashboard.classList.remove('active');
   if (menuTraining) menuTraining.classList.add('active');
-  if (menuConfig) menuConfig.classList.remove('active');
 
-  if (employeesInner) {
-    employeesInner.className = 'text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
-    const icon = employeesInner.querySelector('.icon-users-02');
-    if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-users-02';
+  if (dashboardInner) {
+    dashboardInner.className = 'text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
+    const icon = dashboardInner.querySelector('.icon-grid-01');
+    if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-grid-01';
   }
   if (trainingInner) {
     trainingInner.className = 'bg-indigo-600 text-white flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
     const icon = trainingInner.querySelector('.icon-training');
     if (icon) icon.className = 'text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training';
   }
-  if (configInner) {
-    configInner.className = 'text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
-    const icon = configInner.querySelector('.icon-settings-02');
-    if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-settings-02';
-  }
 
   closeSidebarFlyout();
 }
 
+function switchToEmployees() {
+  openFlyout('Employees');
+}
+
 function switchToConfig() {
-  const viewDashboard = document.getElementById('viewDashboard');
-  const viewTraining = document.getElementById('viewTraining');
-  const viewConfig = document.getElementById('viewConfig');
-
-  const menuEmployees = document.getElementById('menuEmployees');
-  const menuTraining = document.getElementById('menuTraining');
-  const menuConfig = document.getElementById('menuConfig');
-
-  const employeesInner = document.getElementById('employeesInner');
-  const trainingInner = document.getElementById('trainingInner');
-  const configInner = document.getElementById('configInner');
-
-  if (viewDashboard) { viewDashboard.style.display = 'none'; viewDashboard.classList.remove('active'); }
-  if (viewTraining) { viewTraining.style.display = 'none'; viewTraining.classList.remove('active'); }
-  if (viewConfig) { viewConfig.style.display = 'block'; viewConfig.classList.add('active'); }
-
-  if (menuEmployees) menuEmployees.classList.remove('active');
-  if (menuTraining) menuTraining.classList.remove('active');
-  if (menuConfig) menuConfig.classList.add('active');
-
-  if (employeesInner) {
-    employeesInner.className = 'text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
-    const icon = employeesInner.querySelector('.icon-users-02');
-    if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-users-02';
-  }
-  if (trainingInner) {
-    trainingInner.className = 'text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
-    const icon = trainingInner.querySelector('.icon-training');
-    if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training';
-  }
-  if (configInner) {
-    configInner.className = 'bg-indigo-600 text-white relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
-    const icon = configInner.querySelector('.icon-settings-02');
-    if (icon) icon.className = 'text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-settings-02';
-  }
-
-  closeSidebarFlyout();
+  openFlyout('Config');
 }
 
 function openFlyout(menuTitle) {
@@ -257,14 +209,14 @@ function openFlyout(menuTitle) {
   if (!flyout) return;
 
   if (header) header.textContent = menuTitle.toLowerCase();
-  
+
   const subItems = {
     'Employees': ['Directory', 'Organization Chart', 'Onboarding & Exit', 'Birthdays & Anniversaries'],
     'Config': ['Company Settings', 'Attendance Policies', 'Leave Types', 'Role Permissions', 'Training Automation']
   };
 
   if (list && subItems[menuTitle]) {
-    list.innerHTML = subItems[menuTitle].map(sub => 
+    list.innerHTML = subItems[menuTitle].map(sub =>
       `<li class="py-1.5 px-2 hover:bg-gray-200 rounded cursor-pointer text-sm text-gray-700"><a href="#${encodeURIComponent(sub)}" onclick="event.preventDefault(); alert('${menuTitle}: ${sub}');">${sub}</a></li>`
     ).join('');
   }
@@ -402,11 +354,11 @@ function handleCommentSubmit(e, input) {
     const text = input.value.trim();
     const card = input.closest('.feed-card');
     const authorName = currentRole === 'admin' ? 'Isha Patel' : 'Rihan R.';
-    
+
     const commentItem = document.createElement('div');
     commentItem.style.cssText = 'display:flex; align-items:center; gap:8px; font-size:11.5px; background:#f8fafc; padding:6px 10px; border-radius:6px; margin-top:6px; border:1px solid #edf2f7;';
     commentItem.innerHTML = `<strong>${authorName}:</strong> <span>${escapeHtml(text)}</span>`;
-    
+
     card.insertBefore(commentItem, input.parentElement);
     input.value = '';
   }
@@ -419,10 +371,10 @@ function createNewPost() {
   if (text && text.trim()) {
     const feedStream = document.getElementById('feedStream');
     const authorName = currentRole === 'admin' ? 'Isha Patel' : 'Rihan R.';
-    const avatar = currentRole === 'admin' 
+    const avatar = currentRole === 'admin'
       ? 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120'
       : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120';
-    
+
     const newCard = document.createElement('article');
     newCard.className = 'feed-card';
     newCard.innerHTML = `
