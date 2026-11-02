@@ -926,8 +926,19 @@
               </button>
             </div>
             
-            <div style="font-size: 12px; color: #64748b; font-weight: 500;" id="portalScopeTag">
-              Access: <strong id="portalScopeRoleName" style="color:#1e293b;">Admin (All Records)</strong>
+            <!-- Scope & Role Selector Pill (Admin vs HR) -->
+            <div class="portal-role-container" style="display: flex; align-items: center; gap: 8px;">
+              <span class="portal-role-label" style="font-size: 11px; font-weight: 700; color: #64748b; letter-spacing: 0.04em;">PORTAL ROLE:</span>
+              <div class="role-selector-pill" style="display: inline-flex; background-color: #e2e8f0; border-radius: 16px; padding: 2px;">
+                <button class="role-pill-btn active" id="btnRoleAdmin" onclick="setAppRole('admin')" title="Admin: Full Access across all organization records and departments">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2l3 7h7l-5.5 4.5 2 7-6.5-4.5-6.5 4.5 2-7-5.5-4.5h7z"></path></svg>
+                  <span>Admin</span>
+                </button>
+                <button class="role-pill-btn" id="btnRoleHR" onclick="setAppRole('hr')" title="HR: Manage programs, assign to departments/employees, monitor progress">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+                  <span>HR</span>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -1093,7 +1104,22 @@
                     <button class="btn-primary-action" onclick="openCreateProgramModal()">+ Create Programme</button>
                   </div>
                 </div>
-                <div class="programs-grid-container" id="programCardsGrid" style="padding: 18px;"></div>
+                <div class="crm-table-responsive">
+                  <table class="crm-table" id="programsTable">
+                    <thead>
+                      <tr>
+                        <th>Programme Title & Curriculum</th>
+                        <th>Department</th>
+                        <th>Difficulty</th>
+                        <th>Duration & Resources</th>
+                        <th>Cohort Progress</th>
+                        <th>Status</th>
+                        <th style="text-align: right;">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody id="programsTableBody"></tbody>
+                  </table>
+                </div>
               </div>
             </div>
 

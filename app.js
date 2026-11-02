@@ -808,11 +808,11 @@ function filterProgramsTab(status) {
 window.filterProgramsTab = filterProgramsTab;
 
 function renderProgramsList() {
-  const grid = document.getElementById('programCardsGrid');
+  const tbody = document.getElementById('programsTableBody') || document.getElementById('programCardsGrid');
   const countBadge = document.getElementById('programsCountBadge');
   const query = (document.getElementById('searchProgramsInput')?.value || '').toLowerCase();
 
-  if (!grid) return;
+  if (!tbody) return;
 
   let filtered = state.programs.filter(p => {
     const matchesStatus = (state.programFilterStatus === 'all') || (p.status === state.programFilterStatus);
@@ -823,11 +823,13 @@ function renderProgramsList() {
   if (countBadge) countBadge.textContent = `${filtered.length} Programmes`;
 
   if (filtered.length === 0) {
-    grid.innerHTML = `
-      <div style="grid-column: 1 / -1; padding: 40px; text-align: center; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; color: #64748b;">
-        <p style="font-weight: 600; font-size: 14px;">No training programmes found matching criteria.</p>
-        <button class="btn-primary-action" style="margin-top: 10px;" onclick="openCreateProgramModal()">+ Create New Programme</button>
-      </div>
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="7" style="text-align: center; padding: 36px; color: #64748b;">
+          <p style="font-weight: 600; font-size: 14px;">No training programmes found matching criteria.</p>
+          <button class="btn-primary-action" style="margin-top: 10px;" onclick="openCreateProgramModal()">+ Create New Programme</button>
+        </td>
+      </tr>
     `;
     return;
   }
@@ -847,48 +849,45 @@ function renderProgramsList() {
     const diffBadge = p.difficulty === 'Advanced' ? 'style="background:#fef2f2; color:#b91c1c;"' : (p.difficulty === 'Beginner' ? 'style="background:#f0fdf4; color:#166534;"' : 'style="background:#eff6ff; color:#1d4ed8;"');
 
     html += `
-      <div class="program-card" style="display: flex; flex-direction: column; justify-content: space-between;">
-        <div>
-          <div class="program-card-top">
-            <span class="badge-dept badge-blue">${escapeHtml(p.dept)}</span>
-            <div style="display: flex; gap: 6px;">
-              <span class="status-pill" ${diffBadge}>${p.difficulty}</span>
-              ${statusPill}
+      <tr>
+        <td>
+          <div style="font-weight: 700; color: #0f172a; font-size: 13.5px; margin-bottom: 2px;">
+            ${escapeHtml(p.title)}
+          </div>
+          <div style="font-size: 12px; color: #64748b; line-height: 1.4; max-width: 440px;">
+            ${escapeHtml(p.learningObjectives || 'Comprehensive professional training curriculum.')}
+          </div>
+        </td>
+        <td>
+          <span class="badge-dept badge-blue">${escapeHtml(p.dept)}</span>
+        </td>
+        <td>
+          <span class="status-pill" ${diffBadge}>${p.difficulty}</span>
+        </td>
+        <td>
+          <div style="font-weight: 600; color: #334155; font-size: 12.5px;">${p.durationHours} hrs</div>
+          <span style="font-size: 11px; color: #64748b;">📑 ${(p.resources || []).length} Resources (${mandatoryCount} Mandatory)</span>
+        </td>
+        <td>
+          <div class="cell-prog-wrap" style="min-width: 130px;">
+            <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 3px;">
+              <span style="color: #64748b;">👥 ${enrolledCount} Enrolled</span>
+              <span style="font-weight: 700; color: #0f172a;">${progressPct}%</span>
+            </div>
+            <div class="cell-prog-track">
+              <div class="cell-prog-bar bg-blue" style="width: ${progressPct}%;"></div>
             </div>
           </div>
-          <h3 class="program-title" style="margin-top: 8px;">${escapeHtml(p.title)}</h3>
-          <p class="program-desc">${escapeHtml(p.learningObjectives || 'Comprehensive professional training curriculum.')}</p>
-          
-          <div class="program-meta-chips" style="margin: 12px 0;">
-            <span class="meta-chip">
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-              ${p.durationHours} hrs
-            </span>
-            <span class="meta-chip">
-              📑 ${(p.resources || []).length} Resources (${mandatoryCount} Mandatory)
-            </span>
-            <span class="meta-chip">
-              👥 ${enrolledCount} Enrolled
-            </span>
-          </div>
-
-          <div class="progress-section">
-            <div class="progress-label-row">
-              <span>Cohort Completion</span>
-              <span class="progress-percent">${progressPct}%</span>
-            </div>
-            <div class="progress-bar-track">
-              <div class="progress-bar-fill bg-blue" style="width: ${progressPct}%;"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="program-footer" style="margin-top: 16px; border-top: 1px solid #f1f5f9; padding-top: 12px; display: flex; justify-content: space-between; align-items: center;">
-          <div style="display: flex; gap: 6px;">
-            <button class="btn-table-action" onclick="previewProgram('${p.id}')">Preview</button>
-            <button class="btn-table-action" onclick="openEditProgramModal('${p.id}')">Edit</button>
-          </div>
-          <div style="display: flex; gap: 6px;">
+        </td>
+        <td>
+          ${statusPill}
+        </td>
+        <td style="text-align: right;">
+          <div style="display: inline-flex; align-items: center; gap: 6px; justify-content: flex-end;">
+            <button class="btn-table-action view-btn" onclick="previewProgram('${p.id}')" title="View Details">
+              <span class="icon-eye"></span> View Details
+            </button>
+            <button class="btn-table-action" onclick="openEditProgramModal('${p.id}')" title="Edit Programme">Edit</button>
             ${p.status === 'published' 
               ? `<button class="btn-table-action primary" onclick="openAssignWithProgram('${p.id}')">Assign</button>`
               : ''}
@@ -899,12 +898,12 @@ function renderProgramsList() {
               ${p.status === 'archived' ? 'Restore' : 'Archive'}
             </button>
           </div>
-        </div>
-      </div>
+        </td>
+      </tr>
     `;
   });
 
-  grid.innerHTML = html;
+  tbody.innerHTML = html;
 }
 
 window.renderProgramsList = renderProgramsList;
@@ -1456,7 +1455,9 @@ function renderAssignmentsTable() {
         </td>
         <td>
           <div style="display: flex; gap: 6px;">
-            <button class="btn-table-action" onclick="openProgressDetails('${a.id}')">View Details</button>
+            <button class="btn-table-action view-btn" onclick="openProgressDetails('${a.id}')" title="View Details">
+              <span class="icon-eye"></span> View Details
+            </button>
             <button class="btn-table-action" onclick="alert('Reminder notification dispatched to ${escapeHtml(emp.name)}!')">Remind</button>
           </div>
         </td>
@@ -1562,7 +1563,9 @@ function renderProgressTable() {
         <td>${subPill}</td>
         <td>${certPill}</td>
         <td>
-          <button class="btn-table-action primary" onclick="openProgressDetails('${a.id}')">View Details</button>
+          <button class="btn-table-action view-btn" onclick="openProgressDetails('${a.id}')" title="View Details">
+            <span class="icon-eye"></span> View Details
+          </button>
         </td>
       </tr>
     `;
@@ -1742,8 +1745,8 @@ function renderReviewQueue() {
         </td>
         <td>${statusPill}</td>
         <td>
-          <button class="btn-table-action primary" onclick="openReviewModal('${a.id}')">
-            ${a.submissionStatus === 'submitted' ? 'Review & Decide' : 'Re-evaluate'}
+          <button class="btn-table-action view-btn" onclick="openReviewModal('${a.id}')" title="View Details & Evaluate">
+            <span class="icon-eye"></span> View Details
           </button>
         </td>
       </tr>
@@ -1970,6 +1973,9 @@ function renderCertificatesTable() {
     if (a.certificateStatus === 'eligible') {
       statusPill = '<span class="status-pill status-eligible">Eligible (Not Generated)</span>';
       actionButtons = `
+        <button class="btn-table-action view-btn" onclick="openProgressDetails('${a.id}')" title="View Details">
+          <span class="icon-eye"></span> View Details
+        </button>
         <button class="btn-table-action primary" onclick="generateCertificate('${a.id}')">
           ⚙️ Generate Certificate
         </button>
@@ -1977,7 +1983,9 @@ function renderCertificatesTable() {
     } else if (a.certificateStatus === 'generated') {
       statusPill = '<span class="status-pill status-generated">Generated (Awaiting Issuance)</span>';
       actionButtons = `
-        <button class="btn-table-action" onclick="previewCertificate('${cert ? cert.id : ''}')">Preview</button>
+        <button class="btn-table-action view-btn" onclick="previewCertificate('${cert ? cert.id : ''}')" title="View Details">
+          <span class="icon-eye"></span> View Details
+        </button>
         <button class="btn-table-action success" onclick="issueCertificate('${cert ? cert.id : ''}')">
           📜 Issue Certificate
         </button>
@@ -1985,7 +1993,9 @@ function renderCertificatesTable() {
     } else if (a.certificateStatus === 'issued') {
       statusPill = '<span class="status-pill status-issued">Issued & Active</span>';
       actionButtons = `
-        <button class="btn-table-action" onclick="previewCertificate('${cert ? cert.id : ''}')">Preview</button>
+        <button class="btn-table-action view-btn" onclick="previewCertificate('${cert ? cert.id : ''}')" title="View Details">
+          <span class="icon-eye"></span> View Details
+        </button>
         <button class="btn-table-action" onclick="openReissueModal('${cert ? cert.id : ''}')">Reissue</button>
       `;
     }
@@ -2224,6 +2234,7 @@ function renderReportsView() {
         <th>Overdue</th>
         <th>Average Score</th>
         <th>Certificates</th>
+        <th>Action</th>
       </tr>
     `;
 
@@ -2245,6 +2256,11 @@ function renderReportsView() {
           <td><span style="color:${od > 0 ? '#b91c1c' : '#64748b'}; font-weight:${od > 0 ? '700' : '400'};">${od}</span></td>
           <td>92%</td>
           <td>${certCount} Issued</td>
+          <td>
+            <button class="btn-table-action view-btn" onclick="openProgressDetails('${asns[0] ? asns[0].id : ''}')" title="View Details">
+              <span class="icon-eye"></span> View Details
+            </button>
+          </td>
         </tr>
       `;
     });
@@ -2316,6 +2332,7 @@ function renderReportsView() {
         <th>Days Left</th>
         <th>Current Progress</th>
         <th>Type</th>
+        <th>Action</th>
       </tr>
     `;
 
@@ -2332,6 +2349,11 @@ function renderReportsView() {
           <td><span style="color:#d97706; font-weight:700;">12 Days</span></td>
           <td>${a.progress}%</td>
           <td>${a.mandatory ? '<span class="status-pill status-mandatory">Mandatory</span>' : '<span class="status-pill status-optional">Elective</span>'}</td>
+          <td>
+            <button class="btn-table-action view-btn" onclick="openProgressDetails('${a.id}')" title="View Details">
+              <span class="icon-eye"></span> View Details
+            </button>
+          </td>
         </tr>
       `;
     });
@@ -2370,7 +2392,14 @@ function renderReportsView() {
           <td><span style="color:#ef4444; font-weight:700;">${a.dueDate}</span></td>
           <td><span style="color:#ef4444; font-weight:800;">+8 Days</span></td>
           <td><span class="status-pill status-overdue">Escalated</span></td>
-          <td><button class="btn-table-action danger" onclick="alert('Formal escalation notification dispatched to ${escapeHtml(emp.name)}!')">Send Notice</button></td>
+          <td>
+            <div style="display: flex; gap: 6px;">
+              <button class="btn-table-action view-btn" onclick="openProgressDetails('${a.id}')" title="View Details">
+                <span class="icon-eye"></span> View Details
+              </button>
+              <button class="btn-table-action danger" onclick="alert('Formal escalation notification dispatched to ${escapeHtml(emp.name)}!')">Notice</button>
+            </div>
+          </td>
         </tr>
       `;
     });
