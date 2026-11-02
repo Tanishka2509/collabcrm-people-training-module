@@ -17,93 +17,175 @@
   <div class="app-layout">
     <!-- Top Header -->
     <header class="app-header">
-      <div class="header-left">
-        <button class="icon-btn app-launcher-btn" title="App Launcher">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-            <circle cx="5" cy="5" r="2"></circle><circle cx="12" cy="5" r="2"></circle><circle cx="19" cy="5" r="2"></circle>
-            <circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle>
-            <circle cx="5" cy="19" r="2"></circle><circle cx="12" cy="19" r="2"></circle><circle cx="19" cy="19" r="2"></circle>
-          </svg>
-        </button>
-
-        <div class="brand-container">
-          <div class="brand-logo">
-            <svg width="24" height="24" viewBox="0 0 28 28" fill="none">
-              <path d="M14 3L23.5 8.5V19.5L14 25L4.5 19.5V8.5L14 3Z" fill="url(#brandGrad)" />
-              <path d="M14 8L19.5 11.2V17.8L14 21L8.5 17.8V11.2L14 8Z" fill="#ffffff" />
-              <defs>
-                <linearGradient id="brandGrad" x1="4.5" y1="3" x2="23.5" y2="25" gradientUnits="userSpaceOnUse">
-                  <stop stop-color="#3b82f6" />
-                  <stop offset="0.5" stop-color="#f59e0b" />
-                  <stop offset="1" stop-color="#ef4444" />
-                </linearGradient>
-              </defs>
-            </svg>
+      <div class="flex items-center relative w-full">
+        <div class="absolute top-0 right-0 2xl:h-[60px] 2xl-to-xl:h-[52px] h-[52px] border-4 border-b-0 border-indigo-200 transition-all duration-300 ease-in-out after:content-[&quot;&quot;] after:absolute after:bottom-0 after:left-0 after:h-[3px] after:bg-indigo-200 w-[210px] after:w-[146px] opacity-0"></div>
+        <div class="relative group/main">
+          <div class="flex items-center justify-center box-border 2xl:h-[60px] 2xl-to-xl:h-[52px] h-[52px] w-[65px] cursor-pointer border-r-[1px] border-gray-200 pl-2.5 pr-3 py-3">
+            <img src="/assets/dots-grid-c03c1262.svg" alt="No icon available" class="w-5 h-5 opacity-100">
           </div>
-          <span class="brand-title">CollabCRM <span class="brand-sub">People</span></span>
-          <span class="beta-badge">BETA</span>
-        </div>
-      </div>
-
-      <!-- Header Center: Role Switcher Pill -->
-      <div class="header-center-role">
-        <div class="role-selector-container">
-          <span class="role-selector-label">Portal Role:</span>
-          <div class="role-selector-pill">
-            <button class="role-pill-btn active" id="btnRoleAdmin" onclick="setAppRole('admin')" title="Admin: Full access to all trainings, assignments, reviews, certificates and config">
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2l3 7h7l-5.5 4.5 2 7-6.5-4.5-6.5 4.5 2-7-5.5-4.5h7z"></path></svg>
-              <span>Admin</span>
-            </button>
-            <button class="role-pill-btn" id="btnRoleHR" onclick="setAppRole('hr')" title="HR: Manage programs, assign to departments/employees, monitor progress, review & issue certificates">
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
-              <span>HR</span>
-            </button>
-            <button class="role-pill-btn" id="btnRoleManager" onclick="setAppRole('manager')" title="Reporting Manager: Strictly scoped to direct reports within reporting hierarchy">
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" y1="8" x2="19" y2="14"></line><line x1="22" y1="11" x2="16" y2="11"></line></svg>
-              <span>Reporting Manager</span>
-            </button>
+          <div class="absolute bg-white top-full rounded-br-xl left-0 border-r shadow-xl border-text-gray-100 overflow-hidden transition-opacity-only group-hover/main:transition-opacity group-hover/main:duration-500 group-hover/main:opacity-100 group-hover/main:h-auto 2xl:group-hover/main:p-4 2xl-to-xl:group-hover/main:p-3 group-hover/main:p-3 group-hover/main:w-[332px] max-h-[calc(100vh-70px)] overflow-y-auto opacity-0 h-0 w-0">
+            <div class="w-full">
+              <h2 class="text-gray-500 2xl:text-base 2xl-to-xl:text-sm text-sm font-semibold">All Apps</h2>
+              <p class="text-gray-500 2xl:text-sm 2xl-to-xl:text-xs text-xs font-normal mt-2">Switch between multiple apps seamlessly using this menu.</p>
+            </div>
+            <ul class="2xl:mt-4 2xl-to-xl:mt-3 mt-3 2xl:space-y-1.5 2xl-to-xl:space-y-1 space-y-1">
+              <li class="cursor-pointer hover:bg-gray-100 rounded-md group bg-gray-100">
+                <a href="https://beta-app.collabcrm.com/people/collabcrm-demo-account/dashboard?domain=collabcrm.com" class="flex justify-between w-full items-start 2xl:py-2.5 2xl-to-xl:py-2 py-2 2xl:px-2 2xl-to-xl:px-1.5 px-1.5">
+                  <div class="flex items-start gap-3">
+                    <span class="flex justify-center items-center h-6 w-6"><i class="stroke-current group-hover:text-black 2xl:text-xl 2xl-to-xl:text-base text-base text-black icon-users-02"></i></span>
+                    <div class="group-hover:text-black font-semibold 2xl:text-base 2xl-to-xl:text-sm text-sm text-black">People</div>
+                  </div>
+                  <div class="flex justify-center items-center h-6 w-6"><span class="icon-check text-indigo-700 text-xl"></span></div>
+                </a>
+              </li>
+              <li class="cursor-pointer hover:bg-gray-100 rounded-md group bg-white">
+                <a href="https://beta-app.collabcrm.com/payroll/collabcrm-demo-account/dashboard?domain=collabcrm.com" class="flex justify-between w-full items-start 2xl:py-2.5 2xl-to-xl:py-2 py-2 2xl:px-2 2xl-to-xl:px-1.5 px-1.5">
+                  <div class="flex items-start gap-3">
+                    <span class="flex justify-center items-center h-6 w-6"><i class="stroke-current group-hover:text-black 2xl:text-xl 2xl-to-xl:text-base text-base text-gray-500 icon-currency-rupee"></i></span>
+                    <div class="group-hover:text-black font-semibold 2xl:text-base 2xl-to-xl:text-sm text-sm text-gray-500">Payroll</div>
+                  </div>
+                  <div class="flex justify-center items-center h-6 w-6 transition-all duration-100 group-hover:opacity-100 opacity-0"><span class="icon-link-external-02 text-indigo-700 text-lg block"></span></div>
+                </a>
+              </li>
+              <li class="cursor-pointer hover:bg-gray-100 rounded-md group bg-white">
+                <a href="https://beta-app.collabcrm.com/recruitment/collabcrm-demo-account/dashboard?domain=collabcrm.com" class="flex justify-between w-full items-start 2xl:py-2.5 2xl-to-xl:py-2 py-2 2xl:px-2 2xl-to-xl:px-1.5 px-1.5">
+                  <div class="flex items-start gap-3">
+                    <span class="flex justify-center items-center h-6 w-6"><i class="stroke-current group-hover:text-black 2xl:text-xl 2xl-to-xl:text-base text-base text-gray-500 icon-jobs"></i></span>
+                    <div class="group-hover:text-black font-semibold 2xl:text-base 2xl-to-xl:text-sm text-sm text-gray-500">Recruitment</div>
+                  </div>
+                  <div class="flex justify-center items-center h-6 w-6 transition-all duration-100 group-hover:opacity-100 opacity-0"><span class="icon-link-external-02 text-indigo-700 text-lg block"></span></div>
+                </a>
+              </li>
+              <li class="cursor-pointer hover:bg-gray-100 rounded-md group bg-white">
+                <a href="https://beta-app.collabcrm.com/sales-crm/collabcrm-demo-account/dashboard?domain=collabcrm.com" class="flex justify-between w-full items-start 2xl:py-2.5 2xl-to-xl:py-2 py-2 2xl:px-2 2xl-to-xl:px-1.5 px-1.5">
+                  <div class="flex items-start gap-3">
+                    <span class="flex justify-center items-center h-6 w-6"><i class="stroke-current group-hover:text-black 2xl:text-xl 2xl-to-xl:text-base text-base text-gray-500 icon-deals"></i></span>
+                    <div class="group-hover:text-black font-semibold 2xl:text-base 2xl-to-xl:text-sm text-sm text-gray-500">CRM &amp; Invoice</div>
+                  </div>
+                  <div class="flex justify-center items-center h-6 w-6 transition-all duration-100 group-hover:opacity-100 opacity-0"><span class="icon-link-external-02 text-indigo-700 text-lg block"></span></div>
+                </a>
+              </li>
+              <li class="cursor-pointer hover:bg-gray-100 rounded-md group bg-white">
+                <a href="https://beta-app.collabcrm.com/project-management/collabcrm-demo-account/dashboard?domain=collabcrm.com" class="flex justify-between w-full items-start 2xl:py-2.5 2xl-to-xl:py-2 py-2 2xl:px-2 2xl-to-xl:px-1.5 px-1.5">
+                  <div class="flex items-start gap-3">
+                    <span class="flex justify-center items-center h-6 w-6"><i class="stroke-current group-hover:text-black 2xl:text-xl 2xl-to-xl:text-base text-base text-gray-500 icon-layers-three-02"></i></span>
+                    <div class="group-hover:text-black font-semibold 2xl:text-base 2xl-to-xl:text-sm text-sm text-gray-500">Project Management</div>
+                  </div>
+                  <div class="flex justify-center items-center h-6 w-6 transition-all duration-100 group-hover:opacity-100 opacity-0"><span class="icon-link-external-02 text-indigo-700 text-lg block"></span></div>
+                </a>
+              </li>
+              <li class="cursor-pointer hover:bg-gray-100 rounded-md group bg-white">
+                <a href="https://beta-app.collabcrm.com/reports/collabcrm-demo-account/dashboard?domain=collabcrm.com" class="flex justify-between w-full items-start 2xl:py-2.5 2xl-to-xl:py-2 py-2 2xl:px-2 2xl-to-xl:px-1.5 px-1.5">
+                  <div class="flex items-start gap-3">
+                    <span class="flex justify-center items-center h-6 w-6"><i class="stroke-current group-hover:text-black 2xl:text-xl 2xl-to-xl:text-base text-base text-gray-500 icon-bar-chart-square-01"></i></span>
+                    <div class="group-hover:text-black font-semibold 2xl:text-base 2xl-to-xl:text-sm text-sm text-gray-500">Reports</div>
+                  </div>
+                  <div class="flex justify-center items-center h-6 w-6 transition-all duration-100 group-hover:opacity-100 opacity-0"><span class="icon-link-external-02 text-indigo-700 text-lg block"></span></div>
+                </a>
+              </li>
+              <div class="border -mx-4"></div>
+              <li class="cursor-pointer hover:bg-gray-100 rounded-md group bg-white">
+                <a href="https://beta-app.collabcrm.com/administration/collabcrm-demo-account/dashboard?domain=collabcrm.com" class="flex justify-between w-full items-start 2xl:py-2.5 2xl-to-xl:py-2 py-2 2xl:px-2 2xl-to-xl:px-1.5 px-1.5">
+                  <div class="flex items-start gap-3">
+                    <span class="flex justify-center items-center h-6 w-6"><i class="stroke-current group-hover:text-black 2xl:text-xl 2xl-to-xl:text-base text-base text-gray-500 icon-administration"></i></span>
+                    <div class="group-hover:text-black font-semibold 2xl:text-base 2xl-to-xl:text-sm text-sm text-gray-500">Administration</div>
+                  </div>
+                  <div class="flex justify-center items-center h-6 w-6 transition-all duration-100 group-hover:opacity-100 opacity-0"><span class="icon-link-external-02 text-indigo-700 text-lg block"></span></div>
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
-      </div>
-
-      <div class="header-right">
-        <div class="header-search-wrapper">
-          <button class="search-trigger-btn" title="Search">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-          </button>
-        </div>
-
-        <button class="new-action-btn">
-          <span>New</span>
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
-        </button>
-
-        <button class="icon-btn notif-btn" title="Notifications">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-          </svg>
-          <span class="red-dot"></span>
-        </button>
-
-        <button class="icon-btn chat-btn" title="Messages">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-          </svg>
-          <span class="red-dot"></span>
-        </button>
-
-        <!-- Dynamic User Profile Header -->
-        <div class="user-profile-header" id="userProfileHeader" onclick="toggleRoleQuickMenu()">
-          <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120" alt="Isha Patel" class="user-avatar" id="headerUserAvatar" />
-          <div class="user-profile-meta-header">
-            <span class="user-header-name" id="headerUserName">Isha Patel</span>
-            <span class="user-header-role" id="headerUserRole">Admin / HR</span>
+        <div class="2xl:px-6 2xl-to-xl:px-4 2xl-to-xl:pr-2 px-4 pr-2 flex items-center w-full justify-between">
+          <div class="flex items-center gap-x-11">
+            <div class="flex items-center">
+              <img src="/assets/logo-e97b90af.svg" alt="people" class="h-5">
+              <span class="ml-2 text-gray-500 2xl:text-base 2xl-to-xl:text-sm text-sm font-normal leading-tight capitalize w-full">people</span>
+            </div>
+            <div class="border-[#f7c40c] bg-[#f7c40c] text-white font-extrabold 2xl:py-2 2xl-to-xl:py-1 py-1 2xl:h-10 2xl-to-xl:h-8 h-8 px-4 rounded-lg 2xl:text-base 2xl-to-xl:text-sm text-sm flex items-center justify-center">BETA</div>
+          </div>
+          <div class="flex items-center justify-center gap-3 2xl-to-xl:gap-3 2xl:gap-4">
+            <button type="button" id="searchKey" aria-label="Open command palette" title="Click to open global search bar (Ctrl/Cmd K)" class="group relative inline-flex items-center justify-center rounded-lg border border-indigo-200 bg-indigo-50 font-semibold text-indigo-700 transition-colors hover:border-indigo-300 2xl:h-10 2xl-to-xl:h-8 h-8 2xl:min-w-10 2xl-to-xl:min-w-8 min-w-8 2xl:px-3 2xl-to-xl:px-2.5 px-2.5">
+              <span class="inline-flex items-center justify-center transition-opacity group-hover:pointer-events-none group-hover:opacity-0">
+                <span class="icon-search-md text-base"></span>
+              </span>
+              <span class="pointer-events-none absolute inset-0 flex items-center justify-center gap-0.5 text-[11px] font-medium leading-none text-indigo-700 opacity-0 transition-opacity group-hover:opacity-100">
+                <span class="icon-command text-xs"></span><span>K</span>
+              </span>
+            </button>
+            <div class="relative">
+              <div>
+                <button type="submit" class="outline-none font-semibold rounded-lg disabled:cursor-not-allowed border disabled:opacity-100 focus-visible:border-indigo-300 focus-visible:shadow-outline-purple hover:opacity-90 border-indigo-200 bg-indigo-50 text-indigo-700 2xl:py-2.5 2xl-to-xl:py-1 py-1 2xl:px-4 2xl-to-xl:px-3 px-3 2xl:h-10 2xl-to-xl:h-8 h-8 2xl:text-sm 2xl-to-xl:text-xs text-xs">
+                  <div class="flex items-center justify-center gap-2">
+                    <div class="flex items-center gap-2"><p>New</p><span class="icon-chevron-down block text-xl"></span></div>
+                  </div>
+                </button>
+                <div class="transition-opacity duration-500 scale-0 relative z-50 opacity-0">
+                  <div class="absolute right-0 z-10 mt-1.5 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
+                    <div class="2xl:text-sm 2xl-to-xl:text-xs text-xs whitespace-nowrap hover:bg-gray-100"><a class="flex gap-2 items-center px-4 py-2 2xl:text-sm 2xl-to-xl:text-xs text-xs whitespace-nowrap" href="/people/collabcrm-demo-account/employee/add"><span class="icon-plus"></span>Add Employee</a></div>
+                    <div class="2xl:text-sm 2xl-to-xl:text-xs text-xs whitespace-nowrap hover:bg-gray-100"><a class="flex gap-2 items-center px-4 py-2 2xl:text-sm 2xl-to-xl:text-xs text-xs whitespace-nowrap" href="/people/collabcrm-demo-account/asset/asset-list/add"><span class="icon-plus"></span>Add Asset</a></div>
+                    <div class="2xl:text-sm 2xl-to-xl:text-xs text-xs whitespace-nowrap hover:bg-gray-100"><a class="flex gap-2 items-center px-4 py-2 2xl:text-sm 2xl-to-xl:text-xs text-xs whitespace-nowrap" href="/people/collabcrm-demo-account/leaves?click=add-leave&amp;tab=Self"><span class="icon-plus"></span>Apply Leave</a></div>
+                    <div class="2xl:text-sm 2xl-to-xl:text-xs text-xs whitespace-nowrap hover:bg-gray-100"><a class="flex gap-2 items-center px-4 py-2 2xl:text-sm 2xl-to-xl:text-xs text-xs whitespace-nowrap" href="/people/collabcrm-demo-account/work-from-home?click=add-wfh&amp;tab=Self"><span class="icon-plus"></span>Apply WFH</a></div>
+                    <div class="2xl:text-sm 2xl-to-xl:text-xs text-xs whitespace-nowrap hover:bg-gray-100"><a class="flex gap-2 items-center px-4 py-2 2xl:text-sm 2xl-to-xl:text-xs text-xs whitespace-nowrap" href="/people/collabcrm-demo-account/department?click=add-department"><span class="icon-plus"></span>Add Department</a></div>
+                    <div class="2xl:text-sm 2xl-to-xl:text-xs text-xs whitespace-nowrap hover:bg-gray-100"><a class="flex gap-2 items-center px-4 py-2 2xl:text-sm 2xl-to-xl:text-xs text-xs whitespace-nowrap" href="/people/collabcrm-demo-account/designation?click=add-designation"><span class="icon-plus"></span>Add Designation</a></div>
+                    <div class="2xl:text-sm 2xl-to-xl:text-xs text-xs whitespace-nowrap hover:bg-gray-100"><a class="flex gap-2 items-center px-4 py-2 2xl:text-sm 2xl-to-xl:text-xs text-xs whitespace-nowrap" href="/people/collabcrm-demo-account/holiday?click=add-holiday"><span class="icon-plus"></span>Add Holiday</a></div>
+                    <div class="2xl:text-sm 2xl-to-xl:text-xs text-xs whitespace-nowrap hover:bg-gray-100"><a class="flex gap-2 items-center px-4 py-2 2xl:text-sm 2xl-to-xl:text-xs text-xs whitespace-nowrap" href="/people/collabcrm-demo-account/documents?click=add-document"><span class="icon-plus"></span>Add Org. Document</a></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="relative box-border">
+              <div class="flex items-center justify-center relative gap-3 2xl-to-xl:gap-3 2xl:gap-4">
+                <div class="flex gap-3 2xl-to-xl:gap-3 2xl:gap-4 relative z-2">
+                  <div class="cursor-pointer">
+                    <a href="/people/collabcrm-demo-account/my-todo/wfh-requests">
+                      <div title="Todo List" class="2xl:size-10 2xl-to-xl:size-8 size-8 2xl:p-2.5 2xl-to-xl:p-1 p-1 2xl:text-sm 2xl-to-xl:text-xs text-xs rounded-lg bg-white border border-gray-200 relative flex items-center justify-center">
+                        <span class="icon-check-square text-gray-500 2xl:text-xl 2xl-to-xl:text-base text-base"></span>
+                        <div class="absolute -top-1.5 -right-1.5 flex 2xl:size-4 2xl-to-xl:size-3 size-3 bg-error-100 rounded-full items-center justify-center">
+                          <span class="relative flex 2xl:size-2 2xl-to-xl:size-1.5 size-1.5">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-error-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full 2xl:size-2 2xl-to-xl:size-1.5 size-1.5 bg-error-500"></span>
+                          </span>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="cursor-pointer">
+                    <a href="/people/collabcrm-demo-account/notifications/all?page=1">
+                      <div title="Notifications" class="2xl:size-10 2xl-to-xl:size-8 size-8 2xl:p-2.5 2xl-to-xl:p-1 p-1 2xl:text-sm 2xl-to-xl:text-xs text-xs rounded-lg bg-white border border-gray-200 relative flex items-center justify-center">
+                        <span class="icon-bell-01 text-gray-500 2xl:text-xl 2xl-to-xl:text-base text-base"></span>
+                        <div class="absolute -top-1.5 -right-1.5 flex 2xl:size-4 2xl-to-xl:size-3 size-3 bg-error-100 rounded-full items-center justify-center">
+                          <span class="relative flex 2xl:size-2 2xl-to-xl:size-1.5 size-1.5">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-error-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full 2xl:size-2 2xl-to-xl:size-1.5 size-1.5 bg-error-500"></span>
+                          </span>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+                <div class="relative z-1">
+                  <div>
+                    <button class="flex items-center 2xl:text-sm 2xl-to-xl:text-xs text-xs" title="Isha Patel" data-tooltip-id="header-profile-info-tooltip">
+                      <span class="sr-only">Open user menu</span>
+                      <div class="rounded-full overflow-hidden 2xl:size-10 2xl-to-xl:size-8 size-8">
+                        <img id="headerUserAvatar" src="https://beta-media.collabcrm.com/secure/collabcrm-demo-account/acaf7fd7-d2c5-4933-ac95-1f5bc1f0080d/people/employees/employee-1766148684X6N.png?Expires=1793684812&amp;Key-Pair-Id=K1PTSOTP8EGO06&amp;Signature=d8orrnX1vTokj9P43JkoQHAOStrV8O0JwzMpDa-dizqY3eQY84sw7HMHmLYHnT8gfXfyNMJltwD3PBm-2u6rckq-eJo5nG85VB6bqmmSCr5G3Hu03gO5Nsxo8dNYA7fV2yzJQ4xVjPotIf1y6FzIZqAMcXDg73JQsCYBg62JZt2BNof0B7V4wd7s7OnaQ6TP6WC0FTzOA6Kdly61YV-eMupBOnrOd8gSAf5J1E~Lh2F9TtWZwv88vZRUdkTbHt3DEahWmMH9VRi3U6xek1N6-1QI2OryAMhKw-g641IR8wMf0pRUDK6f8COPdXZQqc5IN5ncnGDfsDpW6MYpw8X4VQ__" class="rounded-full object-cover 2xl:size-10 2xl-to-xl:size-8 size-8" alt="Isha Patel" title="Isha Patel" onerror="this.src='https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120'">
+                      </div>
+                    </button>
+                    <div class="transition-opacity duration-500 scale-0 relative z-50 opacity-0">
+                      <div class="absolute right-0 z-10 mt-1.5 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
+                        <div class="2xl:text-sm 2xl-to-xl:text-xs text-xs whitespace-nowrap hover:bg-gray-100"><a class="w-full block px-4 py-2" href="/people/collabcrm-demo-account/employee-detail/41efe93a-cb37-4852-ac7d-001036d9e8e9/general-info" target="_self">My Profile</a></div>
+                        <div class="2xl:text-sm 2xl-to-xl:text-xs text-xs whitespace-nowrap hover:bg-gray-100"><a class="w-full block px-4 py-2" href="/project-management/collabcrm-demo-account/my-work-log" target="_blank">My Work Log</a></div>
+                        <div class="2xl:text-sm 2xl-to-xl:text-xs text-xs whitespace-nowrap hover:bg-gray-100"><a class="w-full block px-4 py-2" href="/people/collabcrm-demo-account/preferences/edit" target="_self">Preferences</a></div>
+                        <div class="2xl:text-sm 2xl-to-xl:text-xs text-xs whitespace-nowrap hover:bg-gray-100"><a class="w-full block px-4 py-2" href="/people/collabcrm-demo-account/change-password" target="_self">Change Password</a></div>
+                        <div class="2xl:text-sm 2xl-to-xl:text-xs text-xs whitespace-nowrap hover:bg-gray-100"><a class="w-full block px-4 py-2" href="/people/collabcrm-demo-account/support-tickets/my-tickets" target="_self">Support Tickets</a></div>
+                        <div class="2xl:text-sm 2xl-to-xl:text-xs text-xs whitespace-nowrap hover:bg-gray-100"><button type="button" class="outline-none rounded-lg disabled:cursor-not-allowed border disabled:opacity-100 focus-visible:border-indigo-300 focus-visible:shadow-outline-purple hover:opacity-90 disabled:bg-indigo-200 border-transparent bg-indigo-600 w-full text-left px-4 2xl:py-2 2xl-to-xl:py-1.5 py-1.5 !bg-white text-black 2xl:text-sm 2xl-to-xl:text-xs text-xs font-normal flex justify-start hover:!bg-gray-100"><div class="flex items-center justify-center gap-2">Logout</div></button></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
