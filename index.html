@@ -121,14 +121,41 @@
           </div>
         </div>
 
-        <!-- User Profile Avatar (Circular photo only) -->
-        <div class="header-avatar-btn" title="Isha Patel">
-          <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&amp;fit=crop&amp;q=80&amp;w=120" alt="Isha Patel" class="header-avatar-img" id="headerUserAvatar" />
+        <!-- User Role Selection Pill (Screenshot 1 Format) -->
+        <div class="user-role-selector-wrap" id="userRoleSelectorContainer">
+          <button type="button" class="user-role-pill-btn" id="headerUserRolePill" onclick="toggleUserRoleDropdown(event)" title="Switch Active User &amp; Role">
+            <span class="user-role-pill-avatar" id="headerUserAvatarBadge" style="background: #f59e0b;">AB</span>
+            <span class="user-role-pill-info">
+              <span class="user-role-pill-name" id="headerUserNameDisplay">Aryan Bhardwaj</span>
+              <span class="user-role-pill-role" id="headerUserRoleDisplay">Employee • IT - Project</span>
+            </span>
+            <svg class="user-role-pill-chevron" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+
+          <!-- User Role Dropdown Menu (Exact match of Screenshot 1) -->
+          <div class="user-role-dropdown" id="userRoleDropdownMenu" style="display: none;">
+            <div class="user-role-dropdown-header">
+              <div class="user-role-dropdown-title">Switch Active User &amp; Role</div>
+              <div class="user-role-dropdown-desc">Test permissions across Admin, HR, Manager &amp; Employee roles.</div>
+            </div>
+            <div class="user-role-dropdown-list" id="userRoleDropdownList">
+              <!-- Rendered dynamically via renderUserRoleDropdown() in app.js -->
+            </div>
+            <div class="user-role-dropdown-footer">
+              <button type="button" class="user-role-reset-btn" onclick="resetDemoData()">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+                Reset Demo Data
+              </button>
+            </div>
+          </div>
         </div>
 
-        <!-- Preserved DOM Hooks for JS compatibility without affecting UI -->
-        <span id="headerUserName" style="display:none;">Isha Patel</span>
-        <span id="headerUserRole" style="display:none;">Admin / Head of People</span>
+        <!-- Preserved DOM Hooks for backward compatibility -->
+        <span id="headerUserName" style="display:none;">Aryan Bhardwaj</span>
+        <span id="headerUserRole" style="display:none;">Employee</span>
+        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&amp;fit=crop&amp;q=80&amp;w=120" alt="Avatar" id="headerUserAvatar" style="display:none;" />
       </div>
     </header>
 

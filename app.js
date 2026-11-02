@@ -974,18 +974,21 @@ function renderProgramsList() {
         <td style="padding: 14px 16px; vertical-align: top;">
           ${statusPill}
         </td>
-        <td style="padding: 14px 16px; vertical-align: top; text-align: right;">
-          <div style="display: inline-flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end;">
-            <button class="btn-table-action" onclick="previewProgram('${p.id}')">Preview</button>
-            <button class="btn-table-action" onclick="openEditProgramModal('${p.id}')">Edit</button>
-            ${p.status === 'published' 
-              ? `<button class="btn-table-action primary" onclick="openAssignWithProgram('${p.id}')">Assign</button>`
-              : ''}
-            <button class="btn-table-action" onclick="togglePublishProgram('${p.id}')">
-              ${p.status === 'published' ? 'Unpublish' : 'Publish'}
+        <td style="padding: 14px 16px; vertical-align: middle; text-align: right; white-space: nowrap;">
+          <div style="display: inline-flex; align-items: center; gap: 8px; justify-content: flex-end;">
+            <button type="button" class="emp-action-icon" onclick="previewProgram('${p.id}')" title="Preview Programme" aria-label="Preview">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
             </button>
-            <button class="btn-table-action danger" onclick="toggleArchiveProgram('${p.id}')">
-              ${p.status === 'archived' ? 'Restore' : 'Archive'}
+            <button type="button" class="emp-action-icon" onclick="openEditProgramModal('${p.id}')" title="Edit Programme" aria-label="Edit">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+            </button>
+            ${p.status === 'published' 
+              ? `<button type="button" class="emp-action-icon" onclick="openAssignWithProgram('${p.id}')" title="Assign Programme" aria-label="Assign" style="color: #2563eb;">
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+                </button>`
+              : ''}
+            <button type="button" class="emp-action-icon" onclick="toggleArchiveProgram('${p.id}')" title="${p.status === 'archived' ? 'Restore Programme' : 'Archive Programme'}" aria-label="Archive" style="color: #94a3b8;">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
             </button>
           </div>
         </td>
@@ -4682,5 +4685,154 @@ function renderRolePermissionsTable() {
 
 window.renderRolePermissionsTable = renderRolePermissionsTable;
 window.filterRolePermissionsTable = renderRolePermissionsTable;
+
+// =============================================================================
+// USER ROLE SELECTION SYSTEM (SCREENSHOT 1 FORMAT)
+// =============================================================================
+const DEMO_USERS = [
+  {
+    id: 'usr_admin',
+    name: 'Ishdeep Anand',
+    title: 'SVP • Management',
+    role: 'Admin',
+    badgeBg: '#f3e8ff',
+    badgeColor: '#7e22ce',
+    avatarInitials: 'IA',
+    avatarBg: '#8b5cf6'
+  },
+  {
+    id: 'usr_hr',
+    name: 'Sanjana Ghosh',
+    title: 'Executive • IT - Project',
+    role: 'HR',
+    badgeBg: '#fce7f3',
+    badgeColor: '#be185d',
+    avatarInitials: 'SG',
+    avatarBg: '#ec4899'
+  },
+  {
+    id: 'usr_emp',
+    name: 'Aryan Bhardwaj',
+    title: 'Executive • IT - Project',
+    role: 'Employee',
+    badgeBg: '#f1f5f9',
+    badgeColor: '#475569',
+    avatarInitials: 'AB',
+    avatarBg: '#f59e0b'
+  },
+  {
+    id: 'usr_mgr1',
+    name: 'Megha Salunkhe',
+    title: 'Sr. Executive • IT - Project',
+    role: 'Reporting Manager',
+    badgeBg: '#e0f2fe',
+    badgeColor: '#0284c7',
+    avatarInitials: 'MS',
+    avatarBg: '#0ea5e9'
+  },
+  {
+    id: 'usr_mgr2',
+    name: 'Kunal Barve',
+    title: 'Team Leader • IT - Project',
+    role: 'Reporting Manager',
+    badgeBg: '#e0f2fe',
+    badgeColor: '#0284c7',
+    avatarInitials: 'KB',
+    avatarBg: '#0284c7'
+  }
+];
+
+let activeDemoUser = DEMO_USERS[2]; // Aryan Bhardwaj default as per Screenshot 1
+
+function renderUserRolePill() {
+  const badgeEl = document.getElementById('headerUserAvatarBadge');
+  const nameEl = document.getElementById('headerUserNameDisplay');
+  const roleEl = document.getElementById('headerUserRoleDisplay');
+  const hookName = document.getElementById('headerUserName');
+  const hookRole = document.getElementById('headerUserRole');
+
+  if (badgeEl) {
+    badgeEl.textContent = activeDemoUser.avatarInitials;
+    badgeEl.style.background = activeDemoUser.avatarBg;
+  }
+  if (nameEl) nameEl.textContent = activeDemoUser.name;
+  if (roleEl) roleEl.textContent = `${activeDemoUser.role} • IT - Project`;
+  if (hookName) hookName.textContent = activeDemoUser.name;
+  if (hookRole) hookRole.textContent = activeDemoUser.role;
+}
+
+function renderUserRoleDropdown() {
+  const list = document.getElementById('userRoleDropdownList');
+  if (!list) return;
+
+  let html = '';
+  DEMO_USERS.forEach(u => {
+    const isSelected = u.id === activeDemoUser.id;
+    html += `
+      <div class="user-role-item ${isSelected ? 'selected' : ''}" onclick="switchActiveUser('${u.id}')">
+        <div>
+          <div class="user-role-item-name">${escapeHtml(u.name)}</div>
+          <div class="user-role-item-sub">${escapeHtml(u.title)}</div>
+        </div>
+        <span class="user-role-badge-pill" style="background: ${u.badgeBg}; color: ${u.badgeColor};">
+          ${escapeHtml(u.role)}
+        </span>
+      </div>
+    `;
+  });
+
+  list.innerHTML = html;
+}
+
+function toggleUserRoleDropdown(e) {
+  if (e) e.stopPropagation();
+  const menu = document.getElementById('userRoleDropdownMenu');
+  if (!menu) return;
+  const isHidden = menu.style.display === 'none' || !menu.style.display;
+  if (isHidden) {
+    renderUserRoleDropdown();
+    menu.style.display = 'block';
+  } else {
+    menu.style.display = 'none';
+  }
+}
+
+function switchActiveUser(userId) {
+  const found = DEMO_USERS.find(u => u.id === userId);
+  if (found) {
+    activeDemoUser = found;
+    renderUserRolePill();
+    renderUserRoleDropdown();
+    const menu = document.getElementById('userRoleDropdownMenu');
+    if (menu) menu.style.display = 'none';
+    showConfigToast(`Switched active user to ${found.name} (${found.role})`);
+  }
+}
+
+function resetDemoData() {
+  activeDemoUser = DEMO_USERS[2];
+  renderUserRolePill();
+  renderUserRoleDropdown();
+  const menu = document.getElementById('userRoleDropdownMenu');
+  if (menu) menu.style.display = 'none';
+  showConfigToast('Demo data reset to factory state.');
+}
+
+document.addEventListener('click', function(e) {
+  const menu = document.getElementById('userRoleDropdownMenu');
+  const btn = document.getElementById('headerUserRolePill');
+  if (menu && menu.style.display === 'block') {
+    if (!menu.contains(e.target) && !btn?.contains(e.target)) {
+      menu.style.display = 'none';
+    }
+  }
+});
+
+// Initialize on load
+renderUserRolePill();
+
+window.toggleUserRoleDropdown = toggleUserRoleDropdown;
+window.switchActiveUser = switchActiveUser;
+window.resetDemoData = resetDemoData;
 
 
