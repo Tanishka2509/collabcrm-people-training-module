@@ -1913,7 +1913,6 @@ body, button, input, select, textarea {
 .text-green { color: #059669; }
 .text-red { color: #ef4444; }
 .text-neutral { color: #64748b; }
-.font-semibold { font-weight: 600; }
 
 /* Content Card */
 .training-content-card {
@@ -2225,7 +2224,8 @@ body, button, input, select, textarea {
 }
 
 .modal-dialog.modal-large {
-  max-width: 760px;
+  max-width: 800px;
+  width: 92%;
 }
 
 @keyframes modalIn {
@@ -2407,19 +2407,6 @@ body, button, input, select, textarea {
   border-radius: 3px;
 }
 
-.btn-table-action {
-  background: #ffffff;
-  border: 1px solid #cbd5e1;
-  border-radius: 4px;
-  padding: 3px 8px;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.btn-table-action:hover {
-  background-color: #f1f5f9;
-}
 
 /* Course Player */
 .course-player-body {
@@ -3104,10 +3091,6 @@ body, button, input, select, textarea {
   width: 95%;
 }
 
-.modal-dialog.modal-large {
-  max-width: 800px;
-  width: 92%;
-}
 
 /* Certificate Preview Ornament (Section 6) */
 .cert-printable-container {
