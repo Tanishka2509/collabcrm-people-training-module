@@ -196,6 +196,13 @@
               <li class="config-panel-item" onclick="openConfigOption('Form Customisation')">
                 <span>Form Customisation</span>
               </li>
+              <li class="config-panel-item" id="configItemTraining" onclick="openTrainingConfig()" style="color: #4f46e5; font-weight: 700;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span class="icon-training" style="font-size: 16px; color: #4f46e5;"></span>
+                  <span>Training Config</span>
+                </div>
+                <span class="icon-chevron-right" style="font-size: 14px; color: #4f46e5;"></span>
+              </li>
             </ul>
           </div>
         </div>
@@ -1325,6 +1332,921 @@
                 </div>
               </div>
             </div>
+        <!-- ============================================== -->
+        <!-- VIEW 4: DEDICATED TRAINING CONFIGURATION VIEW  -->
+        <!-- ============================================== -->
+        <div class="training-config-view" id="viewTrainingConfig" style="display: none;">
+          <div class="training-config-container">
+            <!-- Header with Title, Breadcrumbs, Action Buttons -->
+            <div class="tcfg-header">
+              <div>
+                <div class="tcfg-breadcrumbs">
+                  <span class="crumb-link" onclick="switchToEmployees()">CollabCRM People</span>
+                  <span>›</span>
+                  <span class="crumb-link" onclick="openConfigPanel()">Config</span>
+                  <span>›</span>
+                  <span class="crumb-current">Training Config</span>
+                </div>
+                <div class="tcfg-title-row">
+                  <div class="tcfg-icon-box">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2">
+                      <path d="M12 2l3 7h7l-5.5 4.5 2 7-6.5-4.5-6.5 4.5 2-7-5.5-4.5h7z"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h1 class="tcfg-title">Training Config</h1>
+                    <p class="tcfg-subtitle">Centrally configure system rules, categories, assignment logic, assessment thresholds, and notification workflows.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="tcfg-header-actions">
+                <button type="button" class="btn-outline-secondary" onclick="openConfigAuditModal()" title="View configuration change history">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  <span>Audit History</span>
+                </button>
+                <button type="button" class="btn-outline-secondary" onclick="resetCurrentConfigTab()" title="Reset this tab to default values">
+                  <span>Reset to Default</span>
+                </button>
+                <button type="button" class="btn-primary-action" id="btnSaveConfig" onclick="saveCurrentConfigTab()">
+                  <span id="saveConfigSpinner" class="spinner-small" style="display:none; margin-right: 6px;"></span>
+                  <span id="saveConfigBtnText">Save Changes</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Permission Notice Banner for Non-Admin/Non-HR Roles -->
+            <div id="tcfgPermissionNotice" class="tcfg-alert-banner tcfg-alert-warning" style="display: none;">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              <div>
+                <strong>Access Restricted (View-Only Mode)</strong>: Only Admin and authorized HR roles can modify system configuration. Your current role is <strong>Reporting Manager</strong>. Changes cannot be saved.
+              </div>
+            </div>
+
+            <!-- 6 Internal Tabs Navigation Bar -->
+            <div class="tcfg-tabs-nav">
+              <button type="button" class="tcfg-tab-btn active" id="tcfgTabBtn_general" onclick="switchTrainingConfigTab('general')">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                <span>General Settings</span>
+              </button>
+              <button type="button" class="tcfg-tab-btn" id="tcfgTabBtn_categories" onclick="switchTrainingConfigTab('categories')">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                <span>Categories</span>
+                <span class="tcfg-tab-badge" id="tcfgBadgeCategoriesCount">9</span>
+              </button>
+              <button type="button" class="tcfg-tab-btn" id="tcfgTabBtn_assignments" onclick="switchTrainingConfigTab('assignments')">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" y1="8" x2="19" y2="14"></line><line x1="22" y1="11" x2="16" y2="11"></line></svg>
+                <span>Assignment Settings</span>
+              </button>
+              <button type="button" class="tcfg-tab-btn" id="tcfgTabBtn_completion" onclick="switchTrainingConfigTab('completion')">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                <span>Completion & Assessment</span>
+              </button>
+              <button type="button" class="tcfg-tab-btn" id="tcfgTabBtn_certificates" onclick="switchTrainingConfigTab('certificates')">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"></circle><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path></svg>
+                <span>Certificate Settings</span>
+              </button>
+              <button type="button" class="tcfg-tab-btn" id="tcfgTabBtn_notifications" onclick="switchTrainingConfigTab('notifications')">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                <span>Notifications & Reminders</span>
+                <span class="tcfg-tab-badge">9</span>
+              </button>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- TAB 1: GENERAL SETTINGS                        -->
+            <!-- ============================================== -->
+            <div class="tcfg-section active" id="tcfgSection_general">
+              <div class="tcfg-card">
+                <div class="tcfg-card-header">
+                  <div>
+                    <h3 class="tcfg-card-title">Module Access & Permissions</h3>
+                    <p class="tcfg-card-subtitle">Control portal visibility, course authoring, and preview capabilities.</p>
+                  </div>
+                </div>
+
+                <!-- 1. Enable / Disable Training Module -->
+                <div class="tcfg-setting-row">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_gen_module_enabled">Enable / Disable Training Module</label>
+                    <p class="tcfg-setting-desc">Master switch to enable or disable the entire Training module access for employees across the portal.</p>
+                  </div>
+                  <div class="tcfg-setting-control">
+                    <label class="crm-toggle">
+                      <input type="checkbox" id="cfg_gen_module_enabled" onchange="markConfigDirty()" />
+                      <span class="crm-toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- 2. Allow Training Creation -->
+                <div class="tcfg-setting-row">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_gen_allow_creation">Allow Training Creation</label>
+                    <p class="tcfg-setting-desc">Permit authorized roles to author and create new training programs, curriculum modules, and lesson plans.</p>
+                  </div>
+                  <div class="tcfg-setting-control">
+                    <label class="crm-toggle">
+                      <input type="checkbox" id="cfg_gen_allow_creation" onchange="markConfigDirty()" />
+                      <span class="crm-toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- 3. Allow Training Editing -->
+                <div class="tcfg-setting-row">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_gen_allow_editing">Allow Training Editing</label>
+                    <p class="tcfg-setting-desc">Allow modification of existing published and draft training programs, resources, and requirements.</p>
+                  </div>
+                  <div class="tcfg-setting-control">
+                    <label class="crm-toggle">
+                      <input type="checkbox" id="cfg_gen_allow_editing" onchange="markConfigDirty()" />
+                      <span class="crm-toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- 4. Allow Training Archiving -->
+                <div class="tcfg-setting-row">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_gen_allow_archiving">Allow Training Archiving</label>
+                    <p class="tcfg-setting-desc">Enable archiving of obsolete or retired training courses without deleting past compliance and audit records.</p>
+                  </div>
+                  <div class="tcfg-setting-control">
+                    <label class="crm-toggle">
+                      <input type="checkbox" id="cfg_gen_allow_archiving" onchange="markConfigDirty()" />
+                      <span class="crm-toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- 5. Enable Training Preview -->
+                <div class="tcfg-setting-row">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_gen_enable_preview">Enable Training Preview</label>
+                    <p class="tcfg-setting-desc">Allow creators and reviewers to preview interactive course modules from the learner's perspective before publishing.</p>
+                  </div>
+                  <div class="tcfg-setting-control">
+                    <label class="crm-toggle">
+                      <input type="checkbox" id="cfg_gen_enable_preview" onchange="markConfigDirty()" />
+                      <span class="crm-toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tcfg-card">
+                <div class="tcfg-card-header">
+                  <div>
+                    <h3 class="tcfg-card-title">Default Course Parameters & Content Types</h3>
+                    <p class="tcfg-card-subtitle">Set pre-filled defaults and allowed content attachment formats for authoring.</p>
+                  </div>
+                </div>
+
+                <!-- 6. Default Training Status -->
+                <div class="tcfg-setting-row">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_gen_default_status">Default Training Status</label>
+                    <p class="tcfg-setting-desc">The initial lifecycle status assigned when a new training curriculum is first drafted.</p>
+                  </div>
+                  <div class="tcfg-setting-control">
+                    <select class="tcfg-select" id="cfg_gen_default_status" onchange="markConfigDirty()">
+                      <option value="Draft">Draft</option>
+                      <option value="Published">Published</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- 7. Default Training Type -->
+                <div class="tcfg-setting-row">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_gen_default_type">Default Training Type</label>
+                    <p class="tcfg-setting-desc">Baseline requirement classification pre-selected when authoring a new course.</p>
+                  </div>
+                  <div class="tcfg-setting-control">
+                    <select class="tcfg-select" id="cfg_gen_default_type" onchange="markConfigDirty()">
+                      <option value="Mandatory">Mandatory</option>
+                      <option value="Optional">Optional</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- 8. Supported Learning Resource Types -->
+                <div class="tcfg-setting-row" style="flex-direction: column; gap: 8px;">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label">Supported Learning Resource Types</label>
+                    <p class="tcfg-setting-desc">Select permitted digital asset formats and external links that instructors can attach to coursework.</p>
+                  </div>
+                  <div class="tcfg-badge-selector" id="cfg_gen_resource_types">
+                    <!-- Populated dynamically via JS -->
+                  </div>
+                </div>
+
+                <!-- 9. Default Training Duration -->
+                <div class="tcfg-setting-row">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label">Default Training Duration</label>
+                    <p class="tcfg-setting-desc">Estimated baseline duration pre-filled when creating new training modules.</p>
+                  </div>
+                  <div class="tcfg-setting-control" style="gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 4px;">
+                      <input type="number" id="cfg_gen_duration_hours" min="0" max="100" class="tcfg-input tcfg-input-number" onchange="markConfigDirty()" />
+                      <span style="font-size: 12px; color: #64748b; font-weight: 500;">Hours</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 4px;">
+                      <input type="number" id="cfg_gen_duration_minutes" min="0" max="59" step="5" class="tcfg-input tcfg-input-number" onchange="markConfigDirty()" />
+                      <span style="font-size: 12px; color: #64748b; font-weight: 500;">Mins</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- TAB 2: TRAINING CATEGORIES                     -->
+            <!-- ============================================== -->
+            <div class="tcfg-section" id="tcfgSection_categories">
+              <div class="tcfg-card">
+                <div class="tcfg-card-header">
+                  <div>
+                    <h3 class="tcfg-card-title">Training Categories</h3>
+                    <p class="tcfg-card-subtitle">Organize and classify learning curricula across departments, technical fields, and leadership levels.</p>
+                  </div>
+                  <button type="button" class="btn-primary-action" onclick="openAddCategoryModal()">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    <span>Add Category</span>
+                  </button>
+                </div>
+
+                <div style="overflow-x: auto;">
+                  <table class="tcfg-table" id="tcfgCategoriesTable">
+                    <thead>
+                      <tr>
+                        <th>Category Name</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Created By</th>
+                        <th>Created Date</th>
+                        <th style="text-align: right;">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tcfgCategoriesTableBody">
+                      <!-- Populated via JS -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- TAB 3: ASSIGNMENT SETTINGS                     -->
+            <!-- ============================================== -->
+            <div class="tcfg-section" id="tcfgSection_assignments">
+              <div class="tcfg-card">
+                <div class="tcfg-card-header">
+                  <div>
+                    <h3 class="tcfg-card-title">Enrollment & Assignment Scopes</h3>
+                    <p class="tcfg-card-subtitle">Configure which distribution channels and roles can assign training programs.</p>
+                  </div>
+                </div>
+
+                <!-- 1. Enable Individual Assignment -->
+                <div class="tcfg-setting-row">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_asgn_enable_individual">Enable Individual Assignment</label>
+                    <p class="tcfg-setting-desc">Allow assigning trainings to specific individual employees across departments.</p>
+                  </div>
+                  <div class="tcfg-setting-control">
+                    <label class="crm-toggle">
+                      <input type="checkbox" id="cfg_asgn_enable_individual" onchange="markConfigDirty()" />
+                      <span class="crm-toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- 2. Enable Bulk Employee Assignment -->
+                <div class="tcfg-setting-row">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_asgn_enable_bulk">Enable Bulk Employee Assignment</label>
+                    <p class="tcfg-setting-desc">Allow assigning trainings to multiple selected employees simultaneously via multi-select or filter criteria.</p>
+                  </div>
+                  <div class="tcfg-setting-control">
+                    <label class="crm-toggle">
+                      <input type="checkbox" id="cfg_asgn_enable_bulk" onchange="markConfigDirty()" />
+                      <span class="crm-toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- 3. Enable Department-Based Assignment -->
+                <div class="tcfg-setting-row">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_asgn_enable_dept">Enable Department-Based Assignment</label>
+                    <p class="tcfg-setting-desc">Automatically or manually assign trainings to entire departments (e.g. Engineering, Sales, HR).</p>
+                  </div>
+                  <div class="tcfg-setting-control">
+                    <label class="crm-toggle">
+                      <input type="checkbox" id="cfg_asgn_enable_dept" onchange="markConfigDirty()" />
+                      <span class="crm-toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- 4. Allow Reporting Manager Assignment -->
+                <div class="tcfg-setting-row">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_asgn_allow_rm">Allow Reporting Manager Assignment</label>
+                    <p class="tcfg-setting-desc">Permit reporting managers to assign relevant trainings directly to their hierarchy's direct reports.</p>
+                  </div>
+                  <div class="tcfg-setting-control">
+                    <label class="crm-toggle">
+                      <input type="checkbox" id="cfg_asgn_allow_rm" onchange="markConfigDirty()" />
+                      <span class="crm-toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tcfg-card">
+                <div class="tcfg-card-header">
+                  <div>
+                    <h3 class="tcfg-card-title">Due Periods & Guardrails</h3>
+                    <p class="tcfg-card-subtitle">Set default timelines, duplicate assignment protection, and alerts.</p>
+                  </div>
+                </div>
+
+                <!-- 5. Default Assignment Type -->
+                <div class="tcfg-setting-row">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_asgn_default_type">Default Assignment Type</label>
+                    <p class="tcfg-setting-desc">Baseline requirement classification assigned when enrolling employees.</p>
+                  </div>
+                  <div class="tcfg-setting-control">
+                    <select class="tcfg-select" id="cfg_asgn_default_type" onchange="markConfigDirty()">
+                      <option value="Mandatory">Mandatory</option>
+                      <option value="Optional">Optional</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- 6. Default Due Period -->
+                <div class="tcfg-setting-row">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_asgn_due_days">Default Due Period</label>
+                    <p class="tcfg-setting-desc">Standard timeframe given to employees to complete the training after enrollment date.</p>
+                  </div>
+                  <div class="tcfg-setting-control" style="gap: 6px;">
+                    <input type="number" id="cfg_asgn_due_days" min="1" max="365" class="tcfg-input tcfg-input-number" onchange="markConfigDirty()" />
+                    <span style="font-size: 13px; color: #64748b;">Days</span>
+                  </div>
+                </div>
+
+                <!-- 7. Allow Due Date Modification -->
+                <div class="tcfg-setting-row">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_asgn_allow_due_edit">Allow Due Date Modification</label>
+                    <p class="tcfg-setting-desc">Permit HR and managers to adjust or extend individual employee assignment due dates.</p>
+                  </div>
+                  <div class="tcfg-setting-control">
+                    <label class="crm-toggle">
+                      <input type="checkbox" id="cfg_asgn_allow_due_edit" onchange="markConfigDirty()" />
+                      <span class="crm-toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- 8. Prevent Duplicate Active Assignments -->
+                <div class="tcfg-setting-row">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_asgn_prevent_duplicates">Prevent Duplicate Active Assignments</label>
+                    <p class="tcfg-setting-desc">Blocks enrolling an employee in the same training if an active, uncompleted assignment already exists.</p>
+                  </div>
+                  <div class="tcfg-setting-control">
+                    <label class="crm-toggle">
+                      <input type="checkbox" id="cfg_asgn_prevent_duplicates" onchange="markConfigDirty()" />
+                      <span class="crm-toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- 9. Notify Employee After Assignment -->
+                <div class="tcfg-setting-row">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_asgn_notify_employee">Notify Employee After Assignment</label>
+                    <p class="tcfg-setting-desc">Automatically trigger in-app alerts and notifications to the employee upon new training enrollment.</p>
+                  </div>
+                  <div class="tcfg-setting-control">
+                    <label class="crm-toggle">
+                      <input type="checkbox" id="cfg_asgn_notify_employee" onchange="markConfigDirty()" />
+                      <span class="crm-toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- TAB 4: COMPLETION & ASSESSMENT                 -->
+            <!-- ============================================== -->
+            <div class="tcfg-section" id="tcfgSection_completion">
+              <!-- Warning Banner if Reviewer Approval is Disabled -->
+              <div id="cfg_comp_approval_warning" class="tcfg-alert-banner tcfg-alert-warning" style="display: none;">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                <div>
+                  <strong>Notice on Auto-Approval</strong>: "Reviewer Approval Required" is currently disabled. Training completion will not require reviewer approval and will auto-certify upon submission!
+                </div>
+              </div>
+
+              <div class="tcfg-card">
+                <div class="tcfg-card-header">
+                  <div>
+                    <h3 class="tcfg-card-title">Submission & Verification Rules</h3>
+                    <p class="tcfg-card-subtitle">Set mandatory criteria required before an employee can mark coursework complete.</p>
+                  </div>
+                </div>
+
+                <!-- 1. Mandatory Resource Completion Required -->
+                <div class="tcfg-setting-row">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_comp_mandatory_resources">Mandatory Resource Completion Required</label>
+                    <p class="tcfg-setting-desc">Requires the employee to review and complete all required learning resources before submitting.</p>
+                  </div>
+                  <div class="tcfg-setting-control">
+                    <label class="crm-toggle">
+                      <input type="checkbox" id="cfg_comp_mandatory_resources" onchange="markConfigDirty()" />
+                      <span class="crm-toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- 2. Optional Resources Block Submission -->
+                <div class="tcfg-setting-row">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_comp_optional_blocks">Optional Resources Block Submission</label>
+                    <p class="tcfg-setting-desc">When enabled, even optional resources must be marked complete before submission is allowed.</p>
+                  </div>
+                  <div class="tcfg-setting-control">
+                    <label class="crm-toggle">
+                      <input type="checkbox" id="cfg_comp_optional_blocks" onchange="markConfigDirty()" />
+                      <span class="crm-toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- 3. Employee Remarks Required -->
+                <div class="tcfg-setting-row">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_comp_remarks_required">Employee Remarks Required</label>
+                    <p class="tcfg-setting-desc">Require learners to input final reflection or submission notes upon completing the coursework.</p>
+                  </div>
+                  <div class="tcfg-setting-control">
+                    <label class="crm-toggle">
+                      <input type="checkbox" id="cfg_comp_remarks_required" onchange="markConfigDirty()" />
+                      <span class="crm-toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- 4. Supporting Evidence Enabled -->
+                <div class="tcfg-setting-row">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_comp_evidence_enabled">Supporting Evidence Enabled</label>
+                    <p class="tcfg-setting-desc">Permit employees to upload project files, PDFs, or screenshots as proof of completion.</p>
+                  </div>
+                  <div class="tcfg-setting-control">
+                    <label class="crm-toggle">
+                      <input type="checkbox" id="cfg_comp_evidence_enabled" onchange="toggleEvidenceFields(); markConfigDirty();" />
+                      <span class="crm-toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- 5. Supporting Evidence Mandatory (Conditional) -->
+                <div class="tcfg-setting-row" id="row_comp_evidence_mandatory">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_comp_evidence_mandatory">Supporting Evidence Mandatory</label>
+                    <p class="tcfg-setting-desc">Require file upload before the training can be marked complete.</p>
+                  </div>
+                  <div class="tcfg-setting-control">
+                    <label class="crm-toggle">
+                      <input type="checkbox" id="cfg_comp_evidence_mandatory" onchange="markConfigDirty()" />
+                      <span class="crm-toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- 10. Reviewer Approval Required -->
+                <div class="tcfg-setting-row">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_comp_approval_required">Reviewer Approval Required</label>
+                    <p class="tcfg-setting-desc">Requires HR or Reporting Manager review and sign-off before training status is officially marked Completed.</p>
+                  </div>
+                  <div class="tcfg-setting-control">
+                    <label class="crm-toggle">
+                      <input type="checkbox" id="cfg_comp_approval_required" onchange="toggleApprovalWarning(); markConfigDirty();" />
+                      <span class="crm-toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tcfg-card">
+                <div class="tcfg-card-header">
+                  <div>
+                    <h3 class="tcfg-card-title">Knowledge Assessment & Retakes</h3>
+                    <p class="tcfg-card-subtitle">Manage examination prerequisites, score thresholds, and attempt limits.</p>
+                  </div>
+                </div>
+
+                <!-- 6. Assessment Required -->
+                <div class="tcfg-setting-row">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_comp_assessment_required">Assessment Required</label>
+                    <p class="tcfg-setting-desc">Require passing a quiz or knowledge check assessment to qualify for completion.</p>
+                  </div>
+                  <div class="tcfg-setting-control">
+                    <label class="crm-toggle">
+                      <input type="checkbox" id="cfg_comp_assessment_required" onchange="toggleAssessmentFields(); markConfigDirty();" />
+                      <span class="crm-toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- 7. Passing Score (Conditional) -->
+                <div class="tcfg-setting-row" id="row_comp_passing_score">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_comp_passing_score">Passing Score (%)</label>
+                    <p class="tcfg-setting-desc">Minimum test percentage required to pass the assessment (1 - 100%).</p>
+                  </div>
+                  <div class="tcfg-setting-control" style="gap: 6px;">
+                    <input type="number" id="cfg_comp_passing_score" min="1" max="100" class="tcfg-input tcfg-input-number" onchange="markConfigDirty()" />
+                    <span style="font-size: 13px; color: #64748b;">%</span>
+                  </div>
+                </div>
+
+                <!-- 8. Maximum Assessment Attempts (Conditional) -->
+                <div class="tcfg-setting-row" id="row_comp_max_attempts">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_comp_max_attempts">Maximum Assessment Attempts</label>
+                    <p class="tcfg-setting-desc">Number of times an employee can attempt the assessment before failing.</p>
+                  </div>
+                  <div class="tcfg-setting-control" style="gap: 6px;">
+                    <input type="number" id="cfg_comp_max_attempts" min="1" max="20" class="tcfg-input tcfg-input-number" onchange="markConfigDirty()" />
+                    <span style="font-size: 13px; color: #64748b;">Attempts</span>
+                  </div>
+                </div>
+
+                <!-- 9. Allow Assessment Retakes (Conditional) -->
+                <div class="tcfg-setting-row" id="row_comp_allow_retakes">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_comp_allow_retakes">Allow Assessment Retakes</label>
+                    <p class="tcfg-setting-desc">Allow retaking the assessment if the initial attempt score is below the passing threshold.</p>
+                  </div>
+                  <div class="tcfg-setting-control">
+                    <label class="crm-toggle">
+                      <input type="checkbox" id="cfg_comp_allow_retakes" onchange="markConfigDirty()" />
+                      <span class="crm-toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- TAB 5: CERTIFICATE SETTINGS                    -->
+            <!-- ============================================== -->
+            <div class="tcfg-section" id="tcfgSection_certificates">
+              <!-- Business Rule Callout Note -->
+              <div class="tcfg-alert-banner tcfg-alert-info">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                <div>
+                  <strong>Important Business Rule</strong>: Certificate generation and certificate issuance are separate operations. These settings configure certificate templates, serial formats, and validity rules only. They do not automatically generate or issue certificates.
+                </div>
+              </div>
+
+              <div class="tcfg-card">
+                <div class="tcfg-card-header">
+                  <div>
+                    <h3 class="tcfg-card-title">Certificate Generation Master Control</h3>
+                    <p class="tcfg-card-subtitle">Enable or disable digital certificate issuance across all programs.</p>
+                  </div>
+                  <button type="button" class="btn-outline-secondary" onclick="openCertificatePreviewModal()">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    <span>Preview Certificate Template</span>
+                  </button>
+                </div>
+
+                <!-- 1. Enable Certificate Generation -->
+                <div class="tcfg-setting-row">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_cert_enabled">Enable Certificate Generation</label>
+                    <p class="tcfg-setting-desc">Master switch allowing automated or manual certificate generation upon training completion.</p>
+                  </div>
+                  <div class="tcfg-setting-control">
+                    <label class="crm-toggle">
+                      <input type="checkbox" id="cfg_cert_enabled" onchange="toggleCertificateFields(); markConfigDirty();" />
+                      <span class="crm-toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Certificate-Specific Configuration Container (Conditional) -->
+              <div id="cfg_cert_details_container">
+                <div class="tcfg-card">
+                  <div class="tcfg-card-header">
+                    <div>
+                      <h3 class="tcfg-card-title">Template & Credential Numbering</h3>
+                      <p class="tcfg-card-subtitle">Define certificate visual design and unique sequential identification scheme.</p>
+                    </div>
+                  </div>
+
+                  <!-- 2. Certificate Template -->
+                  <div class="tcfg-setting-row">
+                    <div class="tcfg-setting-info">
+                      <label class="tcfg-setting-label" for="cfg_cert_template">Certificate Template</label>
+                      <p class="tcfg-setting-desc">Choose the visual layout and style used for generating certificates.</p>
+                    </div>
+                    <div class="tcfg-setting-control">
+                      <select class="tcfg-select" id="cfg_cert_template" onchange="markConfigDirty()">
+                        <option value="Modern Gradient">Modern Gradient (Recommended)</option>
+                        <option value="Classic Corporate">Classic Corporate</option>
+                        <option value="Executive Gold">Executive Gold</option>
+                        <option value="Minimalist Tech">Minimalist Tech</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <!-- 3. Certificate ID Prefix -->
+                  <div class="tcfg-setting-row">
+                    <div class="tcfg-setting-info">
+                      <label class="tcfg-setting-label" for="cfg_cert_id_prefix">Certificate ID Prefix</label>
+                      <p class="tcfg-setting-desc">Prefix used for generating unique serial numbers (e.g. TRN-2026-00421).</p>
+                    </div>
+                    <div class="tcfg-setting-control">
+                      <input type="text" id="cfg_cert_id_prefix" class="tcfg-input" style="max-width: 140px; font-weight: 700; text-transform: uppercase;" onchange="markConfigDirty()" />
+                    </div>
+                  </div>
+
+                  <!-- 4. Certificate Numbering -->
+                  <div class="tcfg-setting-row">
+                    <div class="tcfg-setting-info">
+                      <label class="tcfg-setting-label">Certificate Numbering</label>
+                      <p class="tcfg-setting-desc">Standardized sequential formatting ensuring uniqueness and fraud prevention.</p>
+                    </div>
+                    <div class="tcfg-setting-control">
+                      <span style="font-size: 13px; font-weight: 600; color: #4338ca; background: #eef2ff; padding: 4px 10px; border-radius: 6px; border: 1px solid #c7d2fe;">Sequential Unique Numbering (e.g. TRN-00001)</span>
+                    </div>
+                  </div>
+
+                  <!-- 5. Company Logo -->
+                  <div class="tcfg-setting-row">
+                    <div class="tcfg-setting-info">
+                      <label class="tcfg-setting-label">Company Logo</label>
+                      <p class="tcfg-setting-desc">Brand logo displayed at the header of generated certificates.</p>
+                    </div>
+                    <div class="tcfg-setting-control" style="gap: 10px;">
+                      <img id="cfg_cert_logo_preview" src="assets/logo-e97b90af.svg" alt="Company Logo" style="height: 24px; border: 1px solid #e2e8f0; padding: 2px 6px; border-radius: 4px;" />
+                      <input type="file" id="cfg_cert_logo_upload" accept="image/*" style="font-size: 11px; max-width: 180px;" onchange="handleCertLogoUpload(event)" />
+                    </div>
+                  </div>
+
+                  <!-- 6. Company Name -->
+                  <div class="tcfg-setting-row">
+                    <div class="tcfg-setting-info">
+                      <label class="tcfg-setting-label" for="cfg_cert_company_name">Company Name</label>
+                      <p class="tcfg-setting-desc">Organization name printed on the certificate credential.</p>
+                    </div>
+                    <div class="tcfg-setting-control">
+                      <input type="text" id="cfg_cert_company_name" class="tcfg-input" onchange="markConfigDirty()" />
+                    </div>
+                  </div>
+
+                  <!-- 7. Authorized Signatory Name -->
+                  <div class="tcfg-setting-row">
+                    <div class="tcfg-setting-info">
+                      <label class="tcfg-setting-label" for="cfg_cert_signatory_name">Authorized Signatory Name</label>
+                      <p class="tcfg-setting-desc">Name of executive or HR head signing the certificate.</p>
+                    </div>
+                    <div class="tcfg-setting-control">
+                      <input type="text" id="cfg_cert_signatory_name" class="tcfg-input" onchange="markConfigDirty()" />
+                    </div>
+                  </div>
+
+                  <!-- 8. Authorized Signatory Designation -->
+                  <div class="tcfg-setting-row">
+                    <div class="tcfg-setting-info">
+                      <label class="tcfg-setting-label" for="cfg_cert_signatory_title">Authorized Signatory Designation</label>
+                      <p class="tcfg-setting-desc">Official title printed below the authorized signature.</p>
+                    </div>
+                    <div class="tcfg-setting-control">
+                      <input type="text" id="cfg_cert_signatory_title" class="tcfg-input" style="min-width: 240px;" onchange="markConfigDirty()" />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="tcfg-card">
+                  <div class="tcfg-card-header">
+                    <div>
+                      <h3 class="tcfg-card-title">Validity & Verification Policies</h3>
+                      <p class="tcfg-card-subtitle">Manage expiration lifecycles, authenticity checks, and reissue rules.</p>
+                    </div>
+                  </div>
+
+                  <!-- 9. Certificate Validity -->
+                  <div class="tcfg-setting-row">
+                    <div class="tcfg-setting-info">
+                      <label class="tcfg-setting-label" for="cfg_cert_validity_type">Certificate Validity</label>
+                      <p class="tcfg-setting-desc">Whether the credential remains permanently valid or expires after a defined time.</p>
+                    </div>
+                    <div class="tcfg-setting-control">
+                      <select class="tcfg-select" id="cfg_cert_validity_type" onchange="toggleCertValidityFields(); markConfigDirty();">
+                        <option value="Fixed Duration">Fixed Duration</option>
+                        <option value="Lifetime">Lifetime</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <!-- 10. Validity Duration (Conditional) -->
+                  <div class="tcfg-setting-row" id="row_cert_validity_duration">
+                    <div class="tcfg-setting-info">
+                      <label class="tcfg-setting-label" for="cfg_cert_validity_months">Validity Duration (Months)</label>
+                      <p class="tcfg-setting-desc">Duration before the certificate expires and requires refresher training.</p>
+                    </div>
+                    <div class="tcfg-setting-control" style="gap: 6px;">
+                      <input type="number" id="cfg_cert_validity_months" min="1" max="120" class="tcfg-input tcfg-input-number" onchange="markConfigDirty()" />
+                      <span style="font-size: 13px; color: #64748b;">Months</span>
+                    </div>
+                  </div>
+
+                  <!-- 11. Enable Certificate Expiry Notifications -->
+                  <div class="tcfg-setting-row">
+                    <div class="tcfg-setting-info">
+                      <label class="tcfg-setting-label" for="cfg_cert_expiry_notif">Enable Certificate Expiry Notifications</label>
+                      <p class="tcfg-setting-desc">Send alerts to employees and HR prior to certificate expiration.</p>
+                    </div>
+                    <div class="tcfg-setting-control">
+                      <label class="crm-toggle">
+                        <input type="checkbox" id="cfg_cert_expiry_notif" onchange="markConfigDirty()" />
+                        <span class="crm-toggle-slider"></span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- 12. Enable Certificate Verification -->
+                  <div class="tcfg-setting-row">
+                    <div class="tcfg-setting-info">
+                      <label class="tcfg-setting-label" for="cfg_cert_verification_enabled">Enable Certificate Verification</label>
+                      <p class="tcfg-setting-desc">Include a secure verification link / QR code on the certificate for third-party authenticity checks.</p>
+                    </div>
+                    <div class="tcfg-setting-control">
+                      <label class="crm-toggle">
+                        <input type="checkbox" id="cfg_cert_verification_enabled" onchange="markConfigDirty()" />
+                        <span class="crm-toggle-slider"></span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- 13. Allow Certificate Reissue -->
+                  <div class="tcfg-setting-row">
+                    <div class="tcfg-setting-info">
+                      <label class="tcfg-setting-label" for="cfg_cert_allow_reissue">Allow Certificate Reissue</label>
+                      <p class="tcfg-setting-desc">Permit HR administrators to reissue credentials in case of name changes or technical corrections.</p>
+                    </div>
+                    <div class="tcfg-setting-control">
+                      <label class="crm-toggle">
+                        <input type="checkbox" id="cfg_cert_allow_reissue" onchange="markConfigDirty()" />
+                        <span class="crm-toggle-slider"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- TAB 6: NOTIFICATIONS & REMINDERS               -->
+            <!-- ============================================== -->
+            <div class="tcfg-section" id="tcfgSection_notifications">
+              <div class="tcfg-card">
+                <div class="tcfg-card-header">
+                  <div>
+                    <h3 class="tcfg-card-title">Notification Matrix</h3>
+                    <p class="tcfg-card-subtitle">Configure delivery channels and recipients for each lifecycle event.</p>
+                  </div>
+                </div>
+
+                <div style="overflow-x: auto;">
+                  <table class="tcfg-table" id="tcfgNotificationsTable">
+                    <thead>
+                      <tr>
+                        <th>Notification Event</th>
+                        <th style="text-align: center;">Employee</th>
+                        <th style="text-align: center;">Reporting Manager</th>
+                        <th style="text-align: center;">HR / Admin</th>
+                        <th style="text-align: center;">In-App Notification</th>
+                        <th style="text-align: center;">Email Notification</th>
+                        <th style="text-align: center;">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tcfgNotificationsTableBody">
+                      <!-- Populated dynamically via JS -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="tcfg-card">
+                <div class="tcfg-card-header">
+                  <div>
+                    <h3 class="tcfg-card-title">Automated Reminder Policies</h3>
+                    <p class="tcfg-card-subtitle">Set periodic nudges for pending, overdue, and expiring credentials.</p>
+                  </div>
+                </div>
+
+                <!-- 1. Enable Due Date Reminders -->
+                <div class="tcfg-setting-row">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_rem_due_date_enabled">Enable Due Date Reminders</label>
+                    <p class="tcfg-setting-desc">Send reminder notifications to learners approaching their deadline.</p>
+                  </div>
+                  <div class="tcfg-setting-control">
+                    <label class="crm-toggle">
+                      <input type="checkbox" id="cfg_rem_due_date_enabled" onchange="toggleReminderFields(); markConfigDirty();" />
+                      <span class="crm-toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Days Before Due Date (Conditional) -->
+                <div class="tcfg-setting-row" id="row_rem_due_days">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_rem_due_days_before">Days Before Due Date</label>
+                    <p class="tcfg-setting-desc">Number of days prior to the deadline when the upcoming due reminder triggers.</p>
+                  </div>
+                  <div class="tcfg-setting-control" style="gap: 6px;">
+                    <input type="number" id="cfg_rem_due_days_before" min="1" max="60" class="tcfg-input tcfg-input-number" onchange="markConfigDirty()" />
+                    <span style="font-size: 13px; color: #64748b;">Days</span>
+                  </div>
+                </div>
+
+                <!-- 2. Enable Overdue Reminders -->
+                <div class="tcfg-setting-row">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_rem_overdue_enabled">Enable Overdue Reminders</label>
+                    <p class="tcfg-setting-desc">Send recurrent follow-up reminders when an assignment passes its deadline without submission.</p>
+                  </div>
+                  <div class="tcfg-setting-control">
+                    <label class="crm-toggle">
+                      <input type="checkbox" id="cfg_rem_overdue_enabled" onchange="toggleReminderFields(); markConfigDirty();" />
+                      <span class="crm-toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Overdue Reminder Frequency (Conditional) -->
+                <div class="tcfg-setting-row" id="row_rem_overdue_freq">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_rem_overdue_frequency">Overdue Reminder Frequency</label>
+                    <p class="tcfg-setting-desc">How often the system re-triggers overdue reminder notifications.</p>
+                  </div>
+                  <div class="tcfg-setting-control">
+                    <select class="tcfg-select" id="cfg_rem_overdue_frequency" onchange="markConfigDirty()">
+                      <option value="Every 2 Days">Every 2 Days</option>
+                      <option value="Every 3 Days">Every 3 Days</option>
+                      <option value="Weekly on Monday">Weekly on Monday</option>
+                      <option value="Bi-weekly">Bi-weekly</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- 3. Enable Certificate Expiry Reminders -->
+                <div class="tcfg-setting-row">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_rem_cert_expiry_enabled">Enable Certificate Expiry Reminders</label>
+                    <p class="tcfg-setting-desc">Alert employee and manager when an issued credential validity window is nearing expiration.</p>
+                  </div>
+                  <div class="tcfg-setting-control">
+                    <label class="crm-toggle">
+                      <input type="checkbox" id="cfg_rem_cert_expiry_enabled" onchange="toggleReminderFields(); markConfigDirty();" />
+                      <span class="crm-toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Certificate Expiry Reminder Period (Conditional) -->
+                <div class="tcfg-setting-row" id="row_rem_cert_expiry_days">
+                  <div class="tcfg-setting-info">
+                    <label class="tcfg-setting-label" for="cfg_rem_cert_expiry_days">Certificate Expiry Reminder Period</label>
+                    <p class="tcfg-setting-desc">Days prior to certificate expiration to send renewal reminder.</p>
+                  </div>
+                  <div class="tcfg-setting-control" style="gap: 6px;">
+                    <input type="number" id="cfg_rem_cert_expiry_days" min="1" max="180" class="tcfg-input tcfg-input-number" onchange="markConfigDirty()" />
+                    <span style="font-size: 13px; color: #64748b;">Days</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </main>
@@ -1734,8 +2656,130 @@
         <button class="btn-secondary-action" onclick="closeAuditTrailModal()">Close</button>
       </div>
     </div>
+  <!-- ======================================================== -->
+  <!-- MODAL: ADD / EDIT TRAINING CATEGORY                      -->
+  <!-- ======================================================== -->
+  <div class="modal-backdrop" id="modalCategoryForm">
+    <div class="modal-dialog" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalCategoryTitle">Add Training Category</h3>
+        <button class="modal-close-btn" onclick="closeCategoryModal()">✕</button>
+      </div>
+      <div class="modal-body" style="padding: 20px;">
+        <input type="hidden" id="tcfg_cat_id" value="" />
+        <div style="margin-bottom: 16px;">
+          <label style="display: block; font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 6px;">Category Name <span style="color: #ef4444;">*</span></label>
+          <input type="text" id="tcfg_cat_name" class="tcfg-input" style="width: 100%; box-sizing: border-box;" placeholder="e.g. Artificial Intelligence & ML" />
+          <p id="tcfg_cat_name_error" style="color: #ef4444; font-size: 12px; margin-top: 4px; display: none;"></p>
+        </div>
+        <div style="margin-bottom: 16px;">
+          <label style="display: block; font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 6px;">Description</label>
+          <textarea id="tcfg_cat_desc" class="tcfg-input" rows="3" style="width: 100%; box-sizing: border-box; resize: vertical;" placeholder="Describe the scope, objectives, and target departments for this category..."></textarea>
+        </div>
+        <div style="margin-bottom: 10px;">
+          <label style="display: block; font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 6px;">Status</label>
+          <select id="tcfg_cat_status" class="tcfg-select" style="width: 100%; box-sizing: border-box;">
+            <option value="Active">Active (Available for new trainings)</option>
+            <option value="Inactive">Inactive (Archived)</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 10px; padding: 14px 20px;">
+        <button type="button" class="btn-secondary-action" onclick="closeCategoryModal()">Cancel</button>
+        <button type="button" class="btn-primary-action" id="btnSaveCategory" onclick="saveCategoryModal()">Save Category</button>
+      </div>
+    </div>
   </div>
 
-  <script src="app.js?t=1730544800"></script>
+  <!-- ======================================================== -->
+  <!-- MODAL: CERTIFICATE TEMPLATE PREVIEW                      -->
+  <!-- ======================================================== -->
+  <div class="modal-backdrop" id="modalCertConfigPreview">
+    <div class="modal-dialog modal-large" style="max-width: 780px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Live Certificate Template Preview</h3>
+        <button class="modal-close-btn" onclick="closeCertificatePreviewModal()">✕</button>
+      </div>
+      <div class="modal-body" style="padding: 24px; background: #f1f5f9; display: flex; justify-content: center;">
+        <div id="certPreviewCanvas" style="width: 100%; max-width: 700px; background: #ffffff; border: 8px double #cbd5e1; border-radius: 8px; padding: 36px 44px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); position: relative; text-align: center;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; border-bottom: 2px solid #f1f5f9; padding-bottom: 14px;">
+            <img id="certPrevLogo" src="assets/logo-e97b90af.svg" alt="Company Logo" style="height: 28px;" />
+            <div style="text-align: right;">
+              <span style="font-size: 11px; font-weight: 700; color: #64748b; letter-spacing: 0.5px; text-transform: uppercase;">Credential ID</span>
+              <div id="certPrevId" style="font-family: monospace; font-size: 13px; font-weight: 700; color: #1e293b;">TRN-2026-00421</div>
+            </div>
+          </div>
+          <div style="font-size: 12px; font-weight: 700; letter-spacing: 2.5px; color: #6366f1; text-transform: uppercase; margin-bottom: 8px;">Certificate of Completion</div>
+          <h2 style="font-size: 26px; font-weight: 800; color: #0f172a; margin: 0 0 14px 0; font-family: 'Plus Jakarta Sans', serif;">THIS IS PRESENTED TO</h2>
+          <div style="font-size: 24px; font-weight: 700; color: #4338ca; border-bottom: 1.5px solid #e2e8f0; display: inline-block; padding: 0 32px 6px 32px; margin-bottom: 16px;">Jane Doe</div>
+          <p style="font-size: 13px; color: #475569; max-width: 500px; margin: 0 auto 20px auto; line-height: 1.6;">
+            for successfully fulfilling all curriculum requirements, continuous coursework assessments, and compliance standards for
+          </p>
+          <div style="font-size: 18px; font-weight: 700; color: #0f172a; margin-bottom: 8px;">Advanced Enterprise Leadership & Compliance</div>
+          <div style="font-size: 12px; color: #64748b; margin-bottom: 30px;">Awarded on November 02, 2026 • Valid for <span id="certPrevValidity">12 Months</span></div>
+          
+          <div style="display: flex; align-items: flex-end; justify-content: space-between; padding-top: 18px; border-top: 1px solid #e2e8f0;">
+            <div style="text-align: left;">
+              <div style="font-family: 'Caveat', cursive, sans-serif; font-size: 24px; color: #1e293b; font-style: italic;" id="certPrevSign">Isha Patel</div>
+              <div style="border-top: 1.5px solid #94a3b8; width: 160px; padding-top: 4px;">
+                <div style="font-size: 12px; font-weight: 700; color: #1e293b;" id="certPrevSignName">Isha Patel</div>
+                <div style="font-size: 11px; color: #64748b;" id="certPrevSignTitle">Head of People & Org Development</div>
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+              <div style="width: 52px; height: 52px; border: 2px dashed #6366f1; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #4338ca; font-weight: 800; font-size: 10px; background: #eef2ff;">VERIFIED</div>
+              <span style="font-size: 10px; color: #64748b; margin-top: 4px;" id="certPrevOrg">CollabCRM Inc.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 12px; color: #64748b;">This template preview demonstrates how credentials are formatted using your active settings.</span>
+        <button type="button" class="btn-secondary-action" onclick="closeCertificatePreviewModal()">Close Preview</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: CONFIGURATION AUDIT HISTORY                       -->
+  <!-- ======================================================== -->
+  <div class="modal-backdrop" id="modalConfigAudit">
+    <div class="modal-dialog modal-large" style="max-width: 820px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Training Configuration Audit History</h3>
+        <button class="modal-close-btn" onclick="closeConfigAuditModal()">✕</button>
+      </div>
+      <div class="modal-body" style="padding: 20px; max-height: 70vh; overflow-y: auto;">
+        <p style="font-size: 12.5px; color: #64748b; margin-bottom: 14px;">Historical log of configuration modifications, user attribution, and parameter changes.</p>
+        <div class="crm-table-responsive">
+          <table class="tcfg-table">
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Author</th>
+                <th>Role</th>
+                <th>Configuration Tab</th>
+                <th>Summary of Changes</th>
+              </tr>
+            </thead>
+            <tbody id="tcfgAuditTableBody">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary-action" onclick="closeConfigAuditModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Toast Notification -->
+  <div id="tcfgToast" class="tcfg-toast">
+    <span id="tcfgToastIcon" style="font-size: 16px;">✓</span>
+    <span id="tcfgToastMsg">Configuration saved successfully!</span>
+  </div>
+
+  <script src="app.js?t=1730545500"></script>
 </body>
 </html>

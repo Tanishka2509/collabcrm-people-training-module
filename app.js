@@ -388,6 +388,9 @@ function setAppRole(role) {
 
   // Re-render active sub-tab view with role scoping applied
   renderActiveSubTab();
+  if (typeof updateTrainingConfigPermissions === 'function') {
+    updateTrainingConfigPermissions();
+  }
 }
 
 window.setAppRole = setAppRole;
@@ -409,6 +412,8 @@ function switchToEmployees() {
   if (viewDashboard) { viewDashboard.style.display = 'block'; viewDashboard.classList.add('active'); }
   if (viewTraining) { viewTraining.style.display = 'none'; viewTraining.classList.remove('active'); }
   if (viewConfig) { viewConfig.style.display = 'none'; viewConfig.classList.remove('active'); }
+  const viewTrainingConfig = document.getElementById('viewTrainingConfig');
+  if (viewTrainingConfig) { viewTrainingConfig.style.display = 'none'; viewTrainingConfig.classList.remove('active'); }
 
   if (menuEmployees) menuEmployees.classList.add('active');
   if (menuTraining) menuTraining.classList.remove('active');
@@ -447,6 +452,8 @@ function switchToTraining() {
   if (viewDashboard) { viewDashboard.style.display = 'none'; viewDashboard.classList.remove('active'); }
   if (viewTraining) { viewTraining.style.display = 'block'; viewTraining.classList.add('active'); }
   if (viewConfig) { viewConfig.style.display = 'none'; viewConfig.classList.remove('active'); }
+  const viewTrainingConfig = document.getElementById('viewTrainingConfig');
+  if (viewTrainingConfig) { viewTrainingConfig.style.display = 'none'; viewTrainingConfig.classList.remove('active'); }
 
   if (menuEmployees) menuEmployees.classList.remove('active');
   if (menuTraining) menuTraining.classList.add('active');
@@ -2583,3 +2590,1069 @@ function escapeHtml(str) {
   if (!str) return '';
   return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
+
+// ==========================================================================
+// CollabCRM People - Training Configuration Module (6 Dedicated Tabs)
+// ==========================================================================
+
+const DEFAULT_TRAINING_CONFIG = {
+  general: {
+    moduleEnabled: true,
+    allowCreation: true,
+    allowEditing: true,
+    allowArchiving: true,
+    enablePreview: true,
+    defaultStatus: 'Draft',
+    defaultType: 'Self-Paced',
+    resourceTypes: [
+      'YouTube Video',
+      'External Course Link',
+      'Website Link',
+      'Uploaded Video',
+      'PDF',
+      'Document',
+      'Other URL'
+    ],
+    durationHours: 4,
+    durationMinutes: 30
+  },
+  categories: [
+    { id: 'CAT-001', name: 'Engineering & Architecture', desc: 'Software engineering, distributed systems, clean code, cloud infrastructure, and CI/CD.', status: 'Active', createdBy: 'Isha Patel', createdDate: '2026-01-15' },
+    { id: 'CAT-002', name: 'Sales & Business Development', desc: 'Enterprise deal closing, client discovery, objection handling, and CRM pipeline governance.', status: 'Active', createdBy: 'Isha Patel', createdDate: '2026-01-15' },
+    { id: 'CAT-003', name: 'Recruitment & HR Operations', desc: 'Candidate sourcing, interview compliance, ATS workflows, onboarding, and payroll.', status: 'Active', createdBy: 'Shivam Sharma', createdDate: '2026-02-01' },
+    { id: 'CAT-004', name: 'Security, Privacy & Compliance', desc: 'GDPR, SOC 2 Type II, secure coding standards, data retention policies, and credential security.', status: 'Active', createdBy: 'Isha Patel', createdDate: '2026-02-10' },
+    { id: 'CAT-005', name: 'Leadership & Management', desc: '1-on-1 coaching, agile performance reviews, cross-functional alignment, and conflict resolution.', status: 'Active', createdBy: 'Isha Patel', createdDate: '2026-02-20' },
+    { id: 'CAT-006', name: 'Product Design & UX', desc: 'Design systems, user accessibility WCAG 2.1, Figma component libraries, and usability testing.', status: 'Active', createdBy: 'Shivam Sharma', createdDate: '2026-03-01' },
+    { id: 'CAT-007', name: 'Customer Success & Support', desc: 'SLA management, escalation resolution, client onboarding, and proactive churn mitigation.', status: 'Active', createdBy: 'Shivam Sharma', createdDate: '2026-03-15' },
+    { id: 'CAT-008', name: 'DevOps & Cloud Operations', desc: 'Kubernetes orchestration, Terraform infrastructure-as-code, and incident on-call response.', status: 'Active', createdBy: 'Ashish Kumar', createdDate: '2026-04-01' },
+    { id: 'CAT-009', name: 'Artificial Intelligence & ML', desc: 'LLM prompt engineering, fine-tuning, RAG pipelines, model evaluation, and ethical AI safeguards.', status: 'Active', createdBy: 'Isha Patel', createdDate: '2026-04-18' }
+  ],
+  assignments: {
+    enableIndividual: true,
+    enableBulk: true,
+    enableDept: true,
+    allowReportingManager: true,
+    defaultType: 'Mandatory',
+    dueDays: 14,
+    allowDueEdit: true,
+    preventDuplicates: true,
+    notifyEmployee: true
+  },
+  completion: {
+    mandatoryResources: true,
+    optionalBlocks: false,
+    remarksRequired: true,
+    evidenceEnabled: true,
+    evidenceMandatory: true,
+    approvalRequired: true,
+    assessmentRequired: true,
+    passingScore: 80,
+    maxAttempts: 3,
+    allowRetakes: true
+  },
+  certificates: {
+    enabled: true,
+    template: 'Modern Tech (Navy / Slate Indigo)',
+    idPrefix: 'TRN',
+    companyName: 'CollabCRM Technologies Inc.',
+    signatoryName: 'Isha Patel',
+    signatoryTitle: 'Head of People & Org Development',
+    validityType: 'Fixed Duration',
+    validityMonths: 12,
+    expiryNotification: true,
+    verificationEnabled: true,
+    allowReissue: true,
+    logoUrl: 'assets/logo-e97b90af.svg'
+  },
+  notifications: {
+    matrix: [
+      { id: 'notif_1', event: 'New Training Assigned', employee: true, manager: true, hr: false, inApp: true, email: true, status: true },
+      { id: 'notif_2', event: 'Training Due Date Approaching', employee: true, manager: true, hr: false, inApp: true, email: true, status: true },
+      { id: 'notif_3', event: 'Training Overdue', employee: true, manager: true, hr: true, inApp: true, email: true, status: true },
+      { id: 'notif_4', event: 'Training Completion Submitted', employee: true, manager: true, hr: false, inApp: true, email: true, status: true },
+      { id: 'notif_5', event: 'Completion Approved / Rejected', employee: true, manager: false, hr: true, inApp: true, email: true, status: true },
+      { id: 'notif_6', event: 'Assessment Passed', employee: true, manager: true, hr: false, inApp: true, email: true, status: true },
+      { id: 'notif_7', event: 'Assessment Failed', employee: true, manager: true, hr: false, inApp: true, email: true, status: true },
+      { id: 'notif_8', event: 'Certificate Issued', employee: true, manager: false, hr: true, inApp: true, email: true, status: true },
+      { id: 'notif_9', event: 'Certificate Expiring Soon', employee: true, manager: true, hr: true, inApp: true, email: true, status: true }
+    ],
+    dueDateEnabled: true,
+    dueDaysBefore: 3,
+    overdueEnabled: true,
+    overdueFrequency: 'Every 2 Days',
+    certExpiryEnabled: true,
+    certExpiryDays: 30
+  }
+};
+
+const DEFAULT_CONFIG_AUDIT = [
+  {
+    timestamp: '2026-11-01 10:30 AM',
+    author: 'Isha Patel',
+    role: 'Admin / Head of People',
+    tab: 'General Settings',
+    summary: 'Initial module rollout: Enabled modules, set default duration to 4h 30m.'
+  },
+  {
+    timestamp: '2026-11-01 11:15 AM',
+    author: 'Isha Patel',
+    role: 'Admin / Head of People',
+    tab: 'Assignment Settings',
+    summary: 'Configured default mandatory assignment window to 14 days and allowed RM assignment.'
+  },
+  {
+    timestamp: '2026-11-01 02:45 PM',
+    author: 'Shivam Sharma',
+    role: 'HR Operations',
+    tab: 'Certificate Settings',
+    summary: 'Standardized Modern Tech certificate template and prefix TRN with 12 months validity.'
+  }
+];
+
+let trainingConfigData = loadTrainingConfig();
+let activeTrainingConfigTab = 'general';
+let editingCategoryId = null;
+let toastTimer = null;
+
+function loadTrainingConfig() {
+  try {
+    const raw = localStorage.getItem('collabcrm_training_config');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      return {
+        general: { ...DEFAULT_TRAINING_CONFIG.general, ...(parsed.general || {}) },
+        categories: Array.isArray(parsed.categories) ? parsed.categories : [...DEFAULT_TRAINING_CONFIG.categories],
+        assignments: { ...DEFAULT_TRAINING_CONFIG.assignments, ...(parsed.assignments || {}) },
+        completion: { ...DEFAULT_TRAINING_CONFIG.completion, ...(parsed.completion || {}) },
+        certificates: { ...DEFAULT_TRAINING_CONFIG.certificates, ...(parsed.certificates || {}) },
+        notifications: {
+          ...DEFAULT_TRAINING_CONFIG.notifications,
+          ...(parsed.notifications || {}),
+          matrix: Array.isArray(parsed.notifications?.matrix) ? parsed.notifications.matrix : [...DEFAULT_TRAINING_CONFIG.notifications.matrix]
+        }
+      };
+    }
+  } catch (err) {
+    console.error('Failed to load training config:', err);
+  }
+  return JSON.parse(JSON.stringify(DEFAULT_TRAINING_CONFIG));
+}
+
+function loadConfigAudit() {
+  try {
+    const raw = localStorage.getItem('collabcrm_training_config_audit');
+    if (raw) return JSON.parse(raw);
+  } catch (err) {}
+  return [...DEFAULT_CONFIG_AUDIT];
+}
+
+function appendConfigAudit(tab, summary) {
+  const audits = loadConfigAudit();
+  const actor = state.currentRole === 'admin' ? 'Isha Patel' : (state.currentRole === 'hr' ? 'Shivam Sharma' : 'Ashish Kumar');
+  const roleName = state.currentRole === 'admin' ? 'Admin / Head of People' : (state.currentRole === 'hr' ? 'HR Operations' : 'Reporting Manager');
+  const now = new Date();
+  const timeStr = now.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' }) + ' ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  audits.unshift({
+    timestamp: timeStr,
+    author: actor,
+    role: roleName,
+    tab: tab,
+    summary: summary
+  });
+  try {
+    localStorage.setItem('collabcrm_training_config_audit', JSON.stringify(audits));
+  } catch (e) {}
+}
+
+// Module View Switching
+function switchToTrainingConfig() {
+  const viewDashboard = document.getElementById('viewDashboard');
+  const viewTraining = document.getElementById('viewTraining');
+  const viewConfig = document.getElementById('viewConfig');
+  const viewTrainingConfig = document.getElementById('viewTrainingConfig');
+
+  const menuEmployees = document.getElementById('menuEmployees');
+  const menuTraining = document.getElementById('menuTraining');
+  const menuConfig = document.getElementById('menuConfig');
+
+  const employeesInner = document.getElementById('employeesInner');
+  const trainingInner = document.getElementById('trainingInner');
+  const configInner = document.getElementById('configInner');
+
+  if (viewDashboard) { viewDashboard.style.display = 'none'; viewDashboard.classList.remove('active'); }
+  if (viewTraining) { viewTraining.style.display = 'none'; viewTraining.classList.remove('active'); }
+  if (viewConfig) { viewConfig.style.display = 'none'; viewConfig.classList.remove('active'); }
+  if (viewTrainingConfig) { viewTrainingConfig.style.display = 'block'; viewTrainingConfig.classList.add('active'); }
+
+  if (menuEmployees) menuEmployees.classList.remove('active');
+  if (menuTraining) menuTraining.classList.remove('active');
+  if (menuConfig) menuConfig.classList.add('active');
+
+  if (employeesInner) {
+    employeesInner.className = 'text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
+    const icon = employeesInner.querySelector('.icon-users-02');
+    if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-users-02';
+  }
+  if (trainingInner) {
+    trainingInner.className = 'text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
+    const icon = trainingInner.querySelector('.icon-training');
+    if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training';
+  }
+  if (configInner) {
+    configInner.className = 'bg-indigo-600 text-white relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
+    const icon = configInner.querySelector('.icon-settings-02');
+    if (icon) icon.className = 'text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-settings-02';
+  }
+
+  initTrainingConfigScreen();
+}
+
+function openTrainingConfig() {
+  closeConfigPanel();
+  switchToTrainingConfig();
+}
+
+// 6 Internal Tabs Switching
+function switchTrainingConfigTab(tabId) {
+  activeTrainingConfigTab = tabId;
+  const tabs = ['general', 'categories', 'assignments', 'completion', 'certificates', 'notifications'];
+  tabs.forEach(t => {
+    const btn = document.getElementById(`tcfgTabBtn_${t}`);
+    const section = document.getElementById(`tcfgSection_${t}`);
+    if (btn) btn.classList.toggle('active', t === tabId);
+    if (section) section.classList.toggle('active', t === tabId);
+  });
+}
+
+// Populate and Initialize Screen
+function initTrainingConfigScreen() {
+  trainingConfigData = loadTrainingConfig();
+  updateTrainingConfigPermissions();
+
+  // Tab 1: General
+  const g = trainingConfigData.general;
+  const elGenMod = document.getElementById('cfg_gen_module_enabled');
+  const elGenCre = document.getElementById('cfg_gen_allow_creation');
+  const elGenEdi = document.getElementById('cfg_gen_allow_editing');
+  const elGenArc = document.getElementById('cfg_gen_allow_archiving');
+  const elGenPre = document.getElementById('cfg_gen_enable_preview');
+  const elGenStat = document.getElementById('cfg_gen_default_status');
+  const elGenTyp = document.getElementById('cfg_gen_default_type');
+  const elGenH = document.getElementById('cfg_gen_duration_hours');
+  const elGenM = document.getElementById('cfg_gen_duration_minutes');
+
+  if (elGenMod) elGenMod.checked = !!g.moduleEnabled;
+  if (elGenCre) elGenCre.checked = !!g.allowCreation;
+  if (elGenEdi) elGenEdi.checked = !!g.allowEditing;
+  if (elGenArc) elGenArc.checked = !!g.allowArchiving;
+  if (elGenPre) elGenPre.checked = !!g.enablePreview;
+  if (elGenStat) elGenStat.value = g.defaultStatus || 'Draft';
+  if (elGenTyp) elGenTyp.value = g.defaultType || 'Self-Paced';
+  if (elGenH) elGenH.value = g.durationHours ?? 4;
+  if (elGenM) elGenM.value = g.durationMinutes ?? 30;
+  renderResourceTypeBadges();
+
+  // Tab 2: Categories
+  renderCategoriesTable();
+
+  // Tab 3: Assignments
+  const a = trainingConfigData.assignments;
+  const elAsgnInd = document.getElementById('cfg_asgn_enable_individual');
+  const elAsgnBlk = document.getElementById('cfg_asgn_enable_bulk');
+  const elAsgnDpt = document.getElementById('cfg_asgn_enable_dept');
+  const elAsgnRm = document.getElementById('cfg_asgn_allow_rm');
+  const elAsgnTyp = document.getElementById('cfg_asgn_default_type');
+  const elAsgnDue = document.getElementById('cfg_asgn_due_days');
+  const elAsgnDueEd = document.getElementById('cfg_asgn_allow_due_edit');
+  const elAsgnDup = document.getElementById('cfg_asgn_prevent_duplicates');
+  const elAsgnNot = document.getElementById('cfg_asgn_notify_employee');
+
+  if (elAsgnInd) elAsgnInd.checked = !!a.enableIndividual;
+  if (elAsgnBlk) elAsgnBlk.checked = !!a.enableBulk;
+  if (elAsgnDpt) elAsgnDpt.checked = !!a.enableDept;
+  if (elAsgnRm) elAsgnRm.checked = !!a.allowReportingManager;
+  if (elAsgnTyp) elAsgnTyp.value = a.defaultType || 'Mandatory';
+  if (elAsgnDue) elAsgnDue.value = a.dueDays ?? 14;
+  if (elAsgnDueEd) elAsgnDueEd.checked = !!a.allowDueEdit;
+  if (elAsgnDup) elAsgnDup.checked = !!a.preventDuplicates;
+  if (elAsgnNot) elAsgnNot.checked = !!a.notifyEmployee;
+
+  // Tab 4: Completion & Assessment
+  const c = trainingConfigData.completion;
+  const elCompMan = document.getElementById('cfg_comp_mandatory_resources');
+  const elCompOpt = document.getElementById('cfg_comp_optional_blocks');
+  const elCompRem = document.getElementById('cfg_comp_remarks_required');
+  const elCompEvEn = document.getElementById('cfg_comp_evidence_enabled');
+  const elCompEvMan = document.getElementById('cfg_comp_evidence_mandatory');
+  const elCompApp = document.getElementById('cfg_comp_approval_required');
+  const elCompAss = document.getElementById('cfg_comp_assessment_required');
+  const elCompScr = document.getElementById('cfg_comp_passing_score');
+  const elCompAtt = document.getElementById('cfg_comp_max_attempts');
+  const elCompRet = document.getElementById('cfg_comp_allow_retakes');
+
+  if (elCompMan) elCompMan.checked = !!c.mandatoryResources;
+  if (elCompOpt) elCompOpt.checked = !!c.optionalBlocks;
+  if (elCompRem) elCompRem.checked = !!c.remarksRequired;
+  if (elCompEvEn) elCompEvEn.checked = !!c.evidenceEnabled;
+  if (elCompEvMan) elCompEvMan.checked = !!c.evidenceMandatory;
+  if (elCompApp) elCompApp.checked = !!c.approvalRequired;
+  if (elCompAss) elCompAss.checked = !!c.assessmentRequired;
+  if (elCompScr) elCompScr.value = c.passingScore ?? 80;
+  if (elCompAtt) elCompAtt.value = c.maxAttempts ?? 3;
+  if (elCompRet) elCompRet.checked = !!c.allowRetakes;
+
+  toggleEvidenceFields();
+  toggleApprovalWarning();
+  toggleAssessmentFields();
+
+  // Tab 5: Certificates
+  const cr = trainingConfigData.certificates;
+  const elCertEn = document.getElementById('cfg_cert_enabled');
+  const elCertTpl = document.getElementById('cfg_cert_template');
+  const elCertPfx = document.getElementById('cfg_cert_id_prefix');
+  const elCertCmp = document.getElementById('cfg_cert_company_name');
+  const elCertSign = document.getElementById('cfg_cert_signatory_name');
+  const elCertTtl = document.getElementById('cfg_cert_signatory_title');
+  const elCertValT = document.getElementById('cfg_cert_validity_type');
+  const elCertValM = document.getElementById('cfg_cert_validity_months');
+  const elCertExp = document.getElementById('cfg_cert_expiry_notif');
+  const elCertVer = document.getElementById('cfg_cert_verification_enabled');
+  const elCertRei = document.getElementById('cfg_cert_allow_reissue');
+  const elCertLogo = document.getElementById('cfg_cert_logo_preview');
+
+  if (elCertEn) elCertEn.checked = !!cr.enabled;
+  if (elCertTpl) elCertTpl.value = cr.template || 'Modern Tech (Navy / Slate Indigo)';
+  if (elCertPfx) elCertPfx.value = cr.idPrefix || 'TRN';
+  if (elCertCmp) elCertCmp.value = cr.companyName || 'CollabCRM Technologies Inc.';
+  if (elCertSign) elCertSign.value = cr.signatoryName || 'Isha Patel';
+  if (elCertTtl) elCertTtl.value = cr.signatoryTitle || 'Head of People & Org Development';
+  if (elCertValT) elCertValT.value = cr.validityType || 'Fixed Duration';
+  if (elCertValM) elCertValM.value = cr.validityMonths ?? 12;
+  if (elCertExp) elCertExp.checked = !!cr.expiryNotification;
+  if (elCertVer) elCertVer.checked = !!cr.verificationEnabled;
+  if (elCertRei) elCertRei.checked = !!cr.allowReissue;
+  if (elCertLogo && cr.logoUrl) elCertLogo.src = cr.logoUrl;
+
+  toggleCertificateFields();
+  toggleCertValidityFields();
+
+  // Tab 6: Notifications & Reminders
+  renderNotificationsTable();
+  const n = trainingConfigData.notifications;
+  const elRemDueEn = document.getElementById('cfg_rem_due_date_enabled');
+  const elRemDueD = document.getElementById('cfg_rem_due_days_before');
+  const elRemOvdEn = document.getElementById('cfg_rem_overdue_enabled');
+  const elRemOvdF = document.getElementById('cfg_rem_overdue_frequency');
+  const elRemExpEn = document.getElementById('cfg_rem_cert_expiry_enabled');
+  const elRemExpD = document.getElementById('cfg_rem_cert_expiry_days');
+
+  if (elRemDueEn) elRemDueEn.checked = !!n.dueDateEnabled;
+  if (elRemDueD) elRemDueD.value = n.dueDaysBefore ?? 3;
+  if (elRemOvdEn) elRemOvdEn.checked = !!n.overdueEnabled;
+  if (elRemOvdF) elRemOvdF.value = n.overdueFrequency || 'Every 2 Days';
+  if (elRemExpEn) elRemExpEn.checked = !!n.certExpiryEnabled;
+  if (elRemExpD) elRemExpD.value = n.certExpiryDays ?? 30;
+
+  toggleReminderFields();
+}
+
+// Role Permissions Logic
+function updateTrainingConfigPermissions() {
+  const isManager = state.currentRole === 'manager';
+  const notice = document.getElementById('tcfgPermissionNotice');
+  const btnSave = document.getElementById('btnSaveConfig');
+
+  if (notice) notice.style.display = isManager ? 'flex' : 'none';
+  if (btnSave) {
+    if (isManager) {
+      btnSave.style.opacity = '0.5';
+      btnSave.style.cursor = 'not-allowed';
+      btnSave.title = 'View-only for Reporting Managers';
+    } else {
+      btnSave.style.opacity = '1';
+      btnSave.style.cursor = 'pointer';
+      btnSave.title = 'Save Changes';
+    }
+  }
+
+  // Disable inputs if manager
+  const container = document.getElementById('viewTrainingConfig');
+  if (container) {
+    const inputs = container.querySelectorAll('input:not([type="hidden"]), select, textarea');
+    inputs.forEach(input => {
+      // Don't disable close buttons or modals
+      if (!input.closest('.modal-dialog')) {
+        input.disabled = isManager;
+      }
+    });
+  }
+
+  renderCategoriesTable();
+  renderNotificationsTable();
+}
+
+// Resource Types Badges
+const ALL_RESOURCE_TYPES = [
+  'YouTube Video',
+  'External Course Link',
+  'Website Link',
+  'Uploaded Video',
+  'PDF',
+  'Document',
+  'Other URL'
+];
+
+function renderResourceTypeBadges() {
+  const container = document.getElementById('cfg_gen_resource_types');
+  if (!container) return;
+
+  const current = trainingConfigData.general.resourceTypes || [];
+  const isManager = state.currentRole === 'manager';
+
+  container.innerHTML = ALL_RESOURCE_TYPES.map(type => {
+    const sel = current.includes(type);
+    return `
+      <span class="tcfg-res-badge ${sel ? 'selected' : ''}" 
+            onclick="toggleResourceType('${type}')" 
+            style="${isManager ? 'cursor: not-allowed; opacity: 0.8;' : 'cursor: pointer;'}">
+        <span>${sel ? '✓' : '+'}</span>
+        <span>${escapeHtml(type)}</span>
+      </span>
+    `;
+  }).join('');
+}
+
+function toggleResourceType(typeName) {
+  if (state.currentRole === 'manager') return;
+  const current = trainingConfigData.general.resourceTypes || [];
+  const idx = current.indexOf(typeName);
+  if (idx !== -1) {
+    if (current.length <= 1) {
+      showConfigToast('At least one resource type must be supported.', 'error');
+      return;
+    }
+    current.splice(idx, 1);
+  } else {
+    current.push(typeName);
+  }
+  trainingConfigData.general.resourceTypes = current;
+  renderResourceTypeBadges();
+  markConfigDirty();
+}
+
+// Tab 2: Categories Operations
+function renderCategoriesTable() {
+  const tbody = document.getElementById('tcfgCategoriesTableBody');
+  const countBadge = document.getElementById('tcfgBadgeCategoriesCount');
+  if (!tbody) return;
+
+  const cats = trainingConfigData.categories || [];
+  if (countBadge) countBadge.textContent = cats.length;
+
+  if (cats.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #94a3b8; padding: 32px;">No categories configured. Click "Add Category" to create one.</td></tr>`;
+    return;
+  }
+
+  const isManager = state.currentRole === 'manager';
+
+  tbody.innerHTML = cats.map(cat => {
+    const isAct = cat.status === 'Active';
+    const pillClass = isAct ? 'status-badge-active' : 'status-badge-inactive';
+    return `
+      <tr>
+        <td style="font-weight: 600; color: #0f172a;">${escapeHtml(cat.name)}</td>
+        <td style="color: #64748b; font-size: 13px; max-width: 320px;">${escapeHtml(cat.desc || '—')}</td>
+        <td><span class="${pillClass}">${escapeHtml(cat.status)}</span></td>
+        <td style="color: #475569; font-size: 13px;">${escapeHtml(cat.createdBy || 'System')}</td>
+        <td style="color: #64748b; font-size: 13px;">${escapeHtml(cat.createdDate || '—')}</td>
+        <td style="text-align: right; white-space: nowrap;">
+          ${isManager ? '<span style="font-size: 12px; color: #94a3b8;">View only</span>' : `
+            <button type="button" class="tcfg-action-btn" onclick="openEditCategoryModal('${cat.id}')">Edit</button>
+            <button type="button" class="tcfg-action-btn" onclick="toggleCategoryStatus('${cat.id}')">${isAct ? 'Deactivate' : 'Activate'}</button>
+            <button type="button" class="tcfg-action-btn tcfg-action-danger" onclick="deleteCategory('${cat.id}')">Delete</button>
+          `}
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function openAddCategoryModal() {
+  if (state.currentRole === 'manager') {
+    showConfigToast('Reporting Managers have view-only access.', 'error');
+    return;
+  }
+  editingCategoryId = null;
+  const modal = document.getElementById('modalCategoryForm');
+  const title = document.getElementById('modalCategoryTitle');
+  const idInput = document.getElementById('tcfg_cat_id');
+  const nameInput = document.getElementById('tcfg_cat_name');
+  const descInput = document.getElementById('tcfg_cat_desc');
+  const statusSelect = document.getElementById('tcfg_cat_status');
+  const err = document.getElementById('tcfg_cat_name_error');
+
+  if (title) title.textContent = 'Add Training Category';
+  if (idInput) idInput.value = '';
+  if (nameInput) { nameInput.value = ''; nameInput.style.borderColor = '#cbd5e1'; }
+  if (descInput) descInput.value = '';
+  if (statusSelect) statusSelect.value = 'Active';
+  if (err) err.style.display = 'none';
+
+  if (modal) modal.classList.add('open');
+}
+
+function openEditCategoryModal(catId) {
+  if (state.currentRole === 'manager') {
+    showConfigToast('Reporting Managers have view-only access.', 'error');
+    return;
+  }
+  const cat = (trainingConfigData.categories || []).find(c => c.id === catId);
+  if (!cat) return;
+
+  editingCategoryId = catId;
+  const modal = document.getElementById('modalCategoryForm');
+  const title = document.getElementById('modalCategoryTitle');
+  const idInput = document.getElementById('tcfg_cat_id');
+  const nameInput = document.getElementById('tcfg_cat_name');
+  const descInput = document.getElementById('tcfg_cat_desc');
+  const statusSelect = document.getElementById('tcfg_cat_status');
+  const err = document.getElementById('tcfg_cat_name_error');
+
+  if (title) title.textContent = 'Edit Training Category';
+  if (idInput) idInput.value = cat.id;
+  if (nameInput) { nameInput.value = cat.name; nameInput.style.borderColor = '#cbd5e1'; }
+  if (descInput) descInput.value = cat.desc || '';
+  if (statusSelect) statusSelect.value = cat.status || 'Active';
+  if (err) err.style.display = 'none';
+
+  if (modal) modal.classList.add('open');
+}
+
+function closeCategoryModal() {
+  const modal = document.getElementById('modalCategoryForm');
+  if (modal) modal.classList.remove('open');
+  editingCategoryId = null;
+}
+
+function saveCategoryModal() {
+  if (state.currentRole === 'manager') {
+    showConfigToast('Access Denied: View-only mode for Reporting Managers.', 'error');
+    return;
+  }
+  const nameInput = document.getElementById('tcfg_cat_name');
+  const descInput = document.getElementById('tcfg_cat_desc');
+  const statusSelect = document.getElementById('tcfg_cat_status');
+  const err = document.getElementById('tcfg_cat_name_error');
+
+  const name = nameInput ? nameInput.value.trim() : '';
+  const desc = descInput ? descInput.value.trim() : '';
+  const status = statusSelect ? statusSelect.value : 'Active';
+
+  if (!name) {
+    if (err) { err.textContent = 'Category name is required.'; err.style.display = 'block'; }
+    if (nameInput) nameInput.style.borderColor = '#ef4444';
+    return;
+  }
+
+  const isDuplicate = (trainingConfigData.categories || []).some(c => 
+    c.id !== editingCategoryId && c.name.toLowerCase() === name.toLowerCase()
+  );
+  if (isDuplicate) {
+    if (err) { err.textContent = 'A category with this name already exists.'; err.style.display = 'block'; }
+    if (nameInput) nameInput.style.borderColor = '#ef4444';
+    return;
+  }
+
+  const actor = state.currentRole === 'admin' ? 'Isha Patel' : 'Shivam Sharma';
+  const today = new Date().toISOString().split('T')[0];
+
+  if (editingCategoryId) {
+    const idx = trainingConfigData.categories.findIndex(c => c.id === editingCategoryId);
+    if (idx !== -1) {
+      trainingConfigData.categories[idx].name = name;
+      trainingConfigData.categories[idx].desc = desc;
+      trainingConfigData.categories[idx].status = status;
+      appendConfigAudit('Categories', `Updated category "${name}" (Status: ${status}).`);
+    }
+  } else {
+    const newId = 'CAT-' + (Date.now().toString().slice(-4));
+    trainingConfigData.categories.push({
+      id: newId,
+      name: name,
+      desc: desc,
+      status: status,
+      createdBy: actor,
+      createdDate: today
+    });
+    appendConfigAudit('Categories', `Created new category "${name}" (ID: ${newId}, Status: ${status}).`);
+  }
+
+  try {
+    localStorage.setItem('collabcrm_training_config', JSON.stringify(trainingConfigData));
+  } catch (e) {}
+
+  renderCategoriesTable();
+  closeCategoryModal();
+  showConfigToast(editingCategoryId ? 'Category updated successfully!' : 'Category created successfully!', 'success');
+}
+
+function toggleCategoryStatus(catId) {
+  if (state.currentRole === 'manager') {
+    showConfigToast('Reporting Managers have view-only access.', 'error');
+    return;
+  }
+  const cat = (trainingConfigData.categories || []).find(c => c.id === catId);
+  if (!cat) return;
+
+  cat.status = cat.status === 'Active' ? 'Inactive' : 'Active';
+  appendConfigAudit('Categories', `Toggled category "${cat.name}" status to ${cat.status}.`);
+  try {
+    localStorage.setItem('collabcrm_training_config', JSON.stringify(trainingConfigData));
+  } catch (e) {}
+
+  renderCategoriesTable();
+  showConfigToast(`Category "${cat.name}" is now ${cat.status}.`, 'success');
+}
+
+function deleteCategory(catId) {
+  if (state.currentRole === 'manager') {
+    showConfigToast('Reporting Managers have view-only access.', 'error');
+    return;
+  }
+  const cat = (trainingConfigData.categories || []).find(c => c.id === catId);
+  if (!cat) return;
+
+  // Protect categories associated with courses
+  const inUse = (state.programs || []).some(p => 
+    (p.dept && p.dept.toLowerCase() === cat.name.toLowerCase()) ||
+    (p.title && p.title.toLowerCase().includes(cat.name.toLowerCase()))
+  );
+
+  if (inUse) {
+    alert(`Cannot Delete Category\n\n"${cat.name}" is currently associated with active training curricula. To preserve course historical data, set its status to Inactive instead.`);
+    return;
+  }
+
+  if (!confirm(`Are you sure you want to permanently delete category "${cat.name}"?`)) {
+    return;
+  }
+
+  trainingConfigData.categories = trainingConfigData.categories.filter(c => c.id !== catId);
+  appendConfigAudit('Categories', `Deleted category "${cat.name}" (${catId}).`);
+  try {
+    localStorage.setItem('collabcrm_training_config', JSON.stringify(trainingConfigData));
+  } catch (e) {}
+
+  renderCategoriesTable();
+  showConfigToast(`Category "${cat.name}" deleted.`, 'success');
+}
+
+// Conditionals for Tab 4 & Tab 5 & Tab 6
+function toggleEvidenceFields() {
+  const en = document.getElementById('cfg_comp_evidence_enabled')?.checked;
+  const row = document.getElementById('row_comp_evidence_mandatory');
+  if (row) row.style.display = en ? 'flex' : 'none';
+}
+
+function toggleApprovalWarning() {
+  const app = document.getElementById('cfg_comp_approval_required')?.checked;
+  const warn = document.getElementById('cfg_comp_approval_warning');
+  if (warn) warn.style.display = app ? 'flex' : 'none';
+}
+
+function toggleAssessmentFields() {
+  const req = document.getElementById('cfg_comp_assessment_required')?.checked;
+  const rScore = document.getElementById('row_comp_passing_score');
+  const rAtt = document.getElementById('row_comp_max_attempts');
+  const rRet = document.getElementById('row_comp_allow_retakes');
+  if (rScore) rScore.style.display = req ? 'flex' : 'none';
+  if (rAtt) rAtt.style.display = req ? 'flex' : 'none';
+  if (rRet) rRet.style.display = req ? 'flex' : 'none';
+}
+
+function toggleCertificateFields() {
+  const en = document.getElementById('cfg_cert_enabled')?.checked;
+  const container = document.getElementById('cfg_cert_details_container');
+  if (container) container.style.display = en ? 'block' : 'none';
+}
+
+function toggleCertValidityFields() {
+  const type = document.getElementById('cfg_cert_validity_type')?.value;
+  const row = document.getElementById('row_cert_validity_duration');
+  if (row) row.style.display = type === 'Fixed Duration' ? 'flex' : 'none';
+}
+
+function toggleReminderFields() {
+  const due = document.getElementById('cfg_rem_due_date_enabled')?.checked;
+  const rDue = document.getElementById('row_rem_due_days');
+  if (rDue) rDue.style.display = due ? 'flex' : 'none';
+
+  const ovd = document.getElementById('cfg_rem_overdue_enabled')?.checked;
+  const rOvd = document.getElementById('row_rem_overdue_freq');
+  if (rOvd) rOvd.style.display = ovd ? 'flex' : 'none';
+
+  const exp = document.getElementById('cfg_rem_cert_expiry_enabled')?.checked;
+  const rExp = document.getElementById('row_rem_cert_expiry_days');
+  if (rExp) rExp.style.display = exp ? 'flex' : 'none';
+}
+
+// Certificate Live Preview Modal
+function openCertificatePreviewModal() {
+  const modal = document.getElementById('modalCertConfigPreview');
+  if (!modal) return;
+
+  const prefix = (document.getElementById('cfg_cert_id_prefix')?.value || 'TRN').trim();
+  const valType = document.getElementById('cfg_cert_validity_type')?.value || 'Fixed Duration';
+  const valMonths = document.getElementById('cfg_cert_validity_months')?.value || 12;
+  const signName = document.getElementById('cfg_cert_signatory_name')?.value || 'Isha Patel';
+  const signTitle = document.getElementById('cfg_cert_signatory_title')?.value || 'Head of People & Org Development';
+  const compName = document.getElementById('cfg_cert_company_name')?.value || 'CollabCRM Inc.';
+
+  const idEl = document.getElementById('certPrevId');
+  const valEl = document.getElementById('certPrevValidity');
+  const signEl = document.getElementById('certPrevSign');
+  const signNameEl = document.getElementById('certPrevSignName');
+  const signTitleEl = document.getElementById('certPrevSignTitle');
+  const orgEl = document.getElementById('certPrevOrg');
+
+  if (idEl) idEl.textContent = `${prefix}-2026-00421`;
+  if (valEl) valEl.textContent = valType === 'Lifetime (No Expiry)' ? 'Lifetime (No Expiry)' : `${valMonths} Months`;
+  if (signEl) signEl.textContent = signName;
+  if (signNameEl) signNameEl.textContent = signName;
+  if (signTitleEl) signTitleEl.textContent = signTitle;
+  if (orgEl) orgEl.textContent = compName;
+
+  modal.classList.add('open');
+}
+
+function closeCertificatePreviewModal() {
+  const modal = document.getElementById('modalCertConfigPreview');
+  if (modal) modal.classList.remove('open');
+}
+
+function handleCertLogoUpload(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const url = e.target.result;
+    trainingConfigData.certificates.logoUrl = url;
+    const preview = document.getElementById('cfg_cert_logo_preview');
+    const modalLogo = document.getElementById('certPrevLogo');
+    if (preview) preview.src = url;
+    if (modalLogo) modalLogo.src = url;
+    markConfigDirty();
+    showConfigToast('Company logo updated.', 'success');
+  };
+  reader.readAsDataURL(file);
+}
+
+// Tab 6: Notifications Matrix
+function renderNotificationsTable() {
+  const tbody = document.getElementById('tcfgNotificationsTableBody');
+  if (!tbody) return;
+
+  const matrix = trainingConfigData.notifications.matrix || [];
+  const isManager = state.currentRole === 'manager';
+
+  tbody.innerHTML = matrix.map(item => {
+    return `
+      <tr>
+        <td style="font-weight: 600; color: #1e293b; font-size: 13px;">${escapeHtml(item.event)}</td>
+        <td style="text-align: center;">
+          <input type="checkbox" ${item.employee ? 'checked' : ''} ${isManager ? 'disabled' : ''} onchange="updateNotifEvent('${item.id}', 'employee', this.checked)" />
+        </td>
+        <td style="text-align: center;">
+          <input type="checkbox" ${item.manager ? 'checked' : ''} ${isManager ? 'disabled' : ''} onchange="updateNotifEvent('${item.id}', 'manager', this.checked)" />
+        </td>
+        <td style="text-align: center;">
+          <input type="checkbox" ${item.hr ? 'checked' : ''} ${isManager ? 'disabled' : ''} onchange="updateNotifEvent('${item.id}', 'hr', this.checked)" />
+        </td>
+        <td style="text-align: center;">
+          <input type="checkbox" ${item.inApp ? 'checked' : ''} ${isManager ? 'disabled' : ''} onchange="updateNotifEvent('${item.id}', 'inApp', this.checked)" />
+        </td>
+        <td style="text-align: center;">
+          <input type="checkbox" ${item.email ? 'checked' : ''} ${isManager ? 'disabled' : ''} onchange="updateNotifEvent('${item.id}', 'email', this.checked)" />
+        </td>
+        <td style="text-align: center;">
+          <label class="crm-toggle" style="transform: scale(0.85);">
+            <input type="checkbox" ${item.status ? 'checked' : ''} ${isManager ? 'disabled' : ''} onchange="updateNotifEvent('${item.id}', 'status', this.checked)" />
+            <span class="crm-toggle-slider"></span>
+          </label>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function updateNotifEvent(id, field, value) {
+  if (state.currentRole === 'manager') return;
+  const item = (trainingConfigData.notifications.matrix || []).find(m => m.id === id);
+  if (item) {
+    item[field] = value;
+    markConfigDirty();
+  }
+}
+
+// Audit Modal
+function openConfigAuditModal() {
+  const tbody = document.getElementById('tcfgAuditTableBody');
+  const modal = document.getElementById('modalConfigAudit');
+  if (!modal) return;
+
+  const audits = loadConfigAudit();
+  if (tbody) {
+    if (audits.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #94a3b8; padding: 24px;">No audit records found.</td></tr>`;
+    } else {
+      tbody.innerHTML = audits.map(a => `
+        <tr>
+          <td style="white-space: nowrap; font-family: monospace; font-size: 11.5px; color: #64748b;">${escapeHtml(a.timestamp)}</td>
+          <td style="font-weight: 600; color: #0f172a;">${escapeHtml(a.author)}</td>
+          <td><span style="display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 11px; font-weight: 500; background: #f1f5f9; color: #475569;">${escapeHtml(a.role)}</span></td>
+          <td style="font-weight: 600; color: #4f46e5;">${escapeHtml(a.tab)}</td>
+          <td style="color: #334155; font-size: 12.5px;">${escapeHtml(a.summary)}</td>
+        </tr>
+      `).join('');
+    }
+  }
+  modal.classList.add('open');
+}
+
+function closeConfigAuditModal() {
+  const modal = document.getElementById('modalConfigAudit');
+  if (modal) modal.classList.remove('open');
+}
+
+// Save Current Configuration Tab
+function saveCurrentConfigTab() {
+  if (state.currentRole === 'manager') {
+    showConfigToast('Access Denied: Reporting Managers have read-only access to Training Config.', 'error');
+    return;
+  }
+
+  // Validate active tab
+  if (activeTrainingConfigTab === 'general') {
+    const hours = parseInt(document.getElementById('cfg_gen_duration_hours').value, 10);
+    const mins = parseInt(document.getElementById('cfg_gen_duration_minutes').value, 10);
+    if (isNaN(hours) || hours < 0) {
+      showConfigToast('Invalid default duration hours. Must be 0 or greater.', 'error');
+      return;
+    }
+    if (isNaN(mins) || mins < 0 || mins > 59) {
+      showConfigToast('Invalid default duration minutes. Must be between 0 and 59.', 'error');
+      return;
+    }
+    if (!trainingConfigData.general.resourceTypes || trainingConfigData.general.resourceTypes.length === 0) {
+      showConfigToast('Please select at least one supported resource type.', 'error');
+      return;
+    }
+    trainingConfigData.general.moduleEnabled = document.getElementById('cfg_gen_module_enabled').checked;
+    trainingConfigData.general.allowCreation = document.getElementById('cfg_gen_allow_creation').checked;
+    trainingConfigData.general.allowEditing = document.getElementById('cfg_gen_allow_editing').checked;
+    trainingConfigData.general.allowArchiving = document.getElementById('cfg_gen_allow_archiving').checked;
+    trainingConfigData.general.enablePreview = document.getElementById('cfg_gen_enable_preview').checked;
+    trainingConfigData.general.defaultStatus = document.getElementById('cfg_gen_default_status').value;
+    trainingConfigData.general.defaultType = document.getElementById('cfg_gen_default_type').value;
+    trainingConfigData.general.durationHours = hours;
+    trainingConfigData.general.durationMinutes = mins;
+
+    appendConfigAudit('General Settings', `Updated rules: Default status "${trainingConfigData.general.defaultStatus}", duration ${hours}h ${mins}m, ${trainingConfigData.general.resourceTypes.length} resource types enabled.`);
+  } else if (activeTrainingConfigTab === 'categories') {
+    appendConfigAudit('Categories', `Confirmed active taxonomy of ${trainingConfigData.categories.length} training categories.`);
+  } else if (activeTrainingConfigTab === 'assignments') {
+    const dueDays = parseInt(document.getElementById('cfg_asgn_due_days').value, 10);
+    if (isNaN(dueDays) || dueDays < 1) {
+      showConfigToast('Due window must be at least 1 day.', 'error');
+      return;
+    }
+    trainingConfigData.assignments.enableIndividual = document.getElementById('cfg_asgn_enable_individual').checked;
+    trainingConfigData.assignments.enableBulk = document.getElementById('cfg_asgn_enable_bulk').checked;
+    trainingConfigData.assignments.enableDept = document.getElementById('cfg_asgn_enable_dept').checked;
+    trainingConfigData.assignments.allowReportingManager = document.getElementById('cfg_asgn_allow_rm').checked;
+    trainingConfigData.assignments.defaultType = document.getElementById('cfg_asgn_default_type').value;
+    trainingConfigData.assignments.dueDays = dueDays;
+    trainingConfigData.assignments.allowDueEdit = document.getElementById('cfg_asgn_allow_due_edit').checked;
+    trainingConfigData.assignments.preventDuplicates = document.getElementById('cfg_asgn_prevent_duplicates').checked;
+    trainingConfigData.assignments.notifyEmployee = document.getElementById('cfg_asgn_notify_employee').checked;
+
+    appendConfigAudit('Assignment Settings', `Saved assignment policies: Default type "${trainingConfigData.assignments.defaultType}", default due window ${dueDays} days.`);
+  } else if (activeTrainingConfigTab === 'completion') {
+    const passScore = parseInt(document.getElementById('cfg_comp_passing_score').value, 10);
+    const maxAttempts = parseInt(document.getElementById('cfg_comp_max_attempts').value, 10);
+    if (document.getElementById('cfg_comp_assessment_required').checked) {
+      if (isNaN(passScore) || passScore < 1 || passScore > 100) {
+        showConfigToast('Assessment passing score must be between 1% and 100%.', 'error');
+        return;
+      }
+      if (isNaN(maxAttempts) || maxAttempts < 1) {
+        showConfigToast('Maximum attempts must be at least 1.', 'error');
+        return;
+      }
+    }
+    trainingConfigData.completion.mandatoryResources = document.getElementById('cfg_comp_mandatory_resources').checked;
+    trainingConfigData.completion.optionalBlocks = document.getElementById('cfg_comp_optional_blocks').checked;
+    trainingConfigData.completion.remarksRequired = document.getElementById('cfg_comp_remarks_required').checked;
+    trainingConfigData.completion.evidenceEnabled = document.getElementById('cfg_comp_evidence_enabled').checked;
+    trainingConfigData.completion.evidenceMandatory = document.getElementById('cfg_comp_evidence_mandatory').checked;
+    trainingConfigData.completion.approvalRequired = document.getElementById('cfg_comp_approval_required').checked;
+    trainingConfigData.completion.assessmentRequired = document.getElementById('cfg_comp_assessment_required').checked;
+    trainingConfigData.completion.passingScore = passScore || 80;
+    trainingConfigData.completion.maxAttempts = maxAttempts || 3;
+    trainingConfigData.completion.allowRetakes = document.getElementById('cfg_comp_allow_retakes').checked;
+
+    appendConfigAudit('Completion & Assessment', `Saved completion rules: Passing score ${trainingConfigData.completion.passingScore}%, Manager approval: ${trainingConfigData.completion.approvalRequired ? 'Required' : 'Disabled'}.`);
+  } else if (activeTrainingConfigTab === 'certificates') {
+    const prefix = document.getElementById('cfg_cert_id_prefix').value.trim();
+    if (!prefix) {
+      showConfigToast('Certificate Credential ID prefix cannot be blank.', 'error');
+      return;
+    }
+    const valMonths = parseInt(document.getElementById('cfg_cert_validity_months').value, 10);
+    if (document.getElementById('cfg_cert_validity_type').value === 'Fixed Duration' && (isNaN(valMonths) || valMonths < 1)) {
+      showConfigToast('Certificate validity period must be at least 1 month.', 'error');
+      return;
+    }
+    trainingConfigData.certificates.enabled = document.getElementById('cfg_cert_enabled').checked;
+    trainingConfigData.certificates.template = document.getElementById('cfg_cert_template').value;
+    trainingConfigData.certificates.idPrefix = prefix.toUpperCase();
+    trainingConfigData.certificates.companyName = document.getElementById('cfg_cert_company_name').value.trim();
+    trainingConfigData.certificates.signatoryName = document.getElementById('cfg_cert_signatory_name').value.trim();
+    trainingConfigData.certificates.signatoryTitle = document.getElementById('cfg_cert_signatory_title').value.trim();
+    trainingConfigData.certificates.validityType = document.getElementById('cfg_cert_validity_type').value;
+    trainingConfigData.certificates.validityMonths = valMonths || 12;
+    trainingConfigData.certificates.expiryNotification = document.getElementById('cfg_cert_expiry_notif').checked;
+    trainingConfigData.certificates.verificationEnabled = document.getElementById('cfg_cert_verification_enabled').checked;
+    trainingConfigData.certificates.allowReissue = document.getElementById('cfg_cert_allow_reissue').checked;
+
+    appendConfigAudit('Certificate Settings', `Saved certificate settings: Prefix "${trainingConfigData.certificates.idPrefix}", Validity "${trainingConfigData.certificates.validityType}".`);
+  } else if (activeTrainingConfigTab === 'notifications') {
+    const dueDays = parseInt(document.getElementById('cfg_rem_due_days_before').value, 10);
+    const expDays = parseInt(document.getElementById('cfg_rem_cert_expiry_days').value, 10);
+    if (document.getElementById('cfg_rem_due_date_enabled').checked && (isNaN(dueDays) || dueDays < 1)) {
+      showConfigToast('Due date reminder period must be at least 1 day.', 'error');
+      return;
+    }
+    if (document.getElementById('cfg_rem_cert_expiry_enabled').checked && (isNaN(expDays) || expDays < 1)) {
+      showConfigToast('Certificate expiry reminder period must be at least 1 day.', 'error');
+      return;
+    }
+    trainingConfigData.notifications.dueDateEnabled = document.getElementById('cfg_rem_due_date_enabled').checked;
+    trainingConfigData.notifications.dueDaysBefore = dueDays || 3;
+    trainingConfigData.notifications.overdueEnabled = document.getElementById('cfg_rem_overdue_enabled').checked;
+    trainingConfigData.notifications.overdueFrequency = document.getElementById('cfg_rem_overdue_frequency').value;
+    trainingConfigData.notifications.certExpiryEnabled = document.getElementById('cfg_rem_cert_expiry_enabled').checked;
+    trainingConfigData.notifications.certExpiryDays = expDays || 30;
+
+    appendConfigAudit('Notifications & Reminders', `Saved notification rules: Overdue frequency "${trainingConfigData.notifications.overdueFrequency}".`);
+  }
+
+  try {
+    localStorage.setItem('collabcrm_training_config', JSON.stringify(trainingConfigData));
+  } catch (err) {
+    console.error('Failed to save training config:', err);
+  }
+
+  const spinner = document.getElementById('saveConfigSpinner');
+  const btnText = document.getElementById('saveConfigBtnText');
+  const btn = document.getElementById('btnSaveConfig');
+  if (spinner) spinner.style.display = 'inline-block';
+  if (btnText) btnText.textContent = 'Saving...';
+  if (btn) btn.disabled = true;
+
+  setTimeout(() => {
+    if (spinner) spinner.style.display = 'none';
+    if (btnText) btnText.textContent = 'Save Changes';
+    if (btn) btn.disabled = false;
+    showConfigToast('Configuration saved successfully!', 'success');
+  }, 300);
+}
+
+// Reset Current Tab
+function resetCurrentConfigTab() {
+  if (state.currentRole === 'manager') {
+    showConfigToast('Access Denied: Reporting Managers cannot reset configuration.', 'error');
+    return;
+  }
+  const tabNames = {
+    general: 'General Settings',
+    categories: 'Training Categories',
+    assignments: 'Assignment Settings',
+    completion: 'Completion & Assessment',
+    certificates: 'Certificate Settings',
+    notifications: 'Notifications & Reminders'
+  };
+  const currentTabName = tabNames[activeTrainingConfigTab] || 'current tab';
+  if (!confirm(`Are you sure you want to reset "${currentTabName}" back to default system values?`)) {
+    return;
+  }
+
+  if (activeTrainingConfigTab === 'categories') {
+    trainingConfigData.categories = JSON.parse(JSON.stringify(DEFAULT_TRAINING_CONFIG.categories));
+  } else {
+    trainingConfigData[activeTrainingConfigTab] = JSON.parse(JSON.stringify(DEFAULT_TRAINING_CONFIG[activeTrainingConfigTab]));
+  }
+
+  try {
+    localStorage.setItem('collabcrm_training_config', JSON.stringify(trainingConfigData));
+  } catch (e) {}
+
+  appendConfigAudit(currentTabName, `Reset ${currentTabName} to default system configuration.`);
+  initTrainingConfigScreen();
+  showConfigToast(`"${currentTabName}" restored to default settings.`, 'success');
+}
+
+// Toast & Dirty State
+function markConfigDirty() {
+  // Visual hint if needed
+}
+
+function showConfigToast(msg, type = 'success') {
+  const toast = document.getElementById('tcfgToast');
+  const icon = document.getElementById('tcfgToastIcon');
+  const text = document.getElementById('tcfgToastMsg');
+  if (!toast) return;
+
+  if (icon) icon.textContent = type === 'error' ? '⚠️' : '✓';
+  if (text) text.textContent = msg;
+
+  toast.className = 'tcfg-toast show ' + type;
+
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.className = 'tcfg-toast';
+  }, 3200);
+}
+
+// Expose all functions to window
+window.openTrainingConfig = openTrainingConfig;
+window.switchToTrainingConfig = switchToTrainingConfig;
+window.initTrainingConfigScreen = initTrainingConfigScreen;
+window.switchTrainingConfigTab = switchTrainingConfigTab;
+window.toggleResourceType = toggleResourceType;
+window.openAddCategoryModal = openAddCategoryModal;
+window.openEditCategoryModal = openEditCategoryModal;
+window.closeCategoryModal = closeCategoryModal;
+window.saveCategoryModal = saveCategoryModal;
+window.toggleCategoryStatus = toggleCategoryStatus;
+window.deleteCategory = deleteCategory;
+window.toggleEvidenceFields = toggleEvidenceFields;
+window.toggleApprovalWarning = toggleApprovalWarning;
+window.toggleAssessmentFields = toggleAssessmentFields;
+window.toggleCertificateFields = toggleCertificateFields;
+window.toggleCertValidityFields = toggleCertValidityFields;
+window.openCertificatePreviewModal = openCertificatePreviewModal;
+window.closeCertificatePreviewModal = closeCertificatePreviewModal;
+window.handleCertLogoUpload = handleCertLogoUpload;
+window.updateNotifEvent = updateNotifEvent;
+window.toggleReminderFields = toggleReminderFields;
+window.saveCurrentConfigTab = saveCurrentConfigTab;
+window.resetCurrentConfigTab = resetCurrentConfigTab;
+window.openConfigAuditModal = openConfigAuditModal;
+window.closeConfigAuditModal = closeConfigAuditModal;
+window.showConfigToast = showConfigToast;
+window.markConfigDirty = markConfigDirty;
+window.updateTrainingConfigPermissions = updateTrainingConfigPermissions;
+
