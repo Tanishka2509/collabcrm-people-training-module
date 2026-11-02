@@ -1348,14 +1348,8 @@
                 </div>
               </div>
               <div class="tcfg-header-actions">
-                <button type="button" class="btn-outline-secondary" onclick="openConfigAuditModal()" title="View configuration change history">
-                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                  <span>Audit History</span>
-                </button>
-                <button type="button" class="btn-outline-secondary" onclick="resetCurrentConfigTab()" title="Reset this tab to default values">
-                  <span>Reset to Default</span>
-                </button>
-                <button type="button" class="btn-primary-action" id="btnSaveConfig" onclick="saveCurrentConfigTab()">
+                <button type="button" class="tcfg-btn-secondary" onclick="resetCurrentConfigTab()" title="Reset this tab to default values">Reset to Default</button>
+                <button type="button" class="tcfg-btn-primary" id="btnSaveConfig" onclick="saveCurrentConfigTab()">
                   <span id="saveConfigSpinner" class="spinner-small" style="display:none; margin-right: 6px;"></span>
                   <span id="saveConfigBtnText">Save Changes</span>
                 </button>

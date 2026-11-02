@@ -42,8 +42,8 @@
   padding: 0;
 }
 
-body {
-  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+body, button, input, select, textarea {
+  font-family: sans-serif !important;
   color: var(--text-primary);
   background-color: var(--bg-page);
   line-height: 1.5;
@@ -3213,12 +3213,20 @@ body {
   background-color: #f8fafc;
   overflow-y: auto;
   height: 100%;
+  width: 100%;
 }
 
 .training-config-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 24px 28px 60px 28px;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 20px 28px 60px 28px;
+  box-sizing: border-box;
+}
+
+.training-config-view,
+.training-config-view * {
+  font-family: sans-serif !important;
 }
 
 .tcfg-header {
@@ -3292,21 +3300,88 @@ body {
 .tcfg-header-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
-/* Tabs Bar */
+/* Secondary and Primary button formats matching Cancel and Apply in screenshot */
+.tcfg-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 8px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: all 0.15s ease;
+  font-family: sans-serif !important;
+  line-height: 1.5;
+}
+
+.tcfg-btn-secondary:hover {
+  background: #f8fafc;
+  border-color: #9ca3af;
+  color: #1e293b;
+}
+
+.tcfg-btn-secondary:active {
+  background: #f1f5f9;
+}
+
+.tcfg-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #4f46e5;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 8px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(79, 70, 229, 0.3);
+  transition: all 0.15s ease;
+  font-family: sans-serif !important;
+  line-height: 1.5;
+}
+
+.tcfg-btn-primary:hover {
+  background: #4338ca;
+  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.4);
+}
+
+.tcfg-btn-primary:active {
+  background: #3730a3;
+}
+
+/* Tabs Bar (No scrollbar, clean wrapping, sans-serif) */
 .tcfg-tabs-nav {
   display: flex;
   align-items: center;
-  gap: 4px;
+  flex-wrap: wrap;
+  gap: 6px;
   background: #ffffff;
-  padding: 6px;
+  padding: 6px 10px;
   border-radius: 10px;
   border: 1px solid #e2e8f0;
   margin-bottom: 24px;
-  overflow-x: auto;
+  overflow: hidden !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.tcfg-tabs-nav::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 .tcfg-tab-btn {
@@ -3795,6 +3870,47 @@ body {
   background: #f8fafc;
   border-color: #94a3b8;
   color: #0f172a;
+}
+
+/* Action Icon Buttons (Categories Table) */
+.tcfg-action-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin-left: 6px;
+  padding: 0;
+}
+
+.tcfg-action-icon-btn:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #1e293b;
+}
+
+.tcfg-action-icon-btn.btn-edit:hover {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #2563eb;
+}
+
+.tcfg-action-icon-btn.btn-toggle:hover {
+  background: #fefce8;
+  border-color: #fde047;
+  color: #ca8a04;
+}
+
+.tcfg-action-icon-btn.btn-delete:hover {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #dc2626;
 }
 
 .tcfg-action-danger {
