@@ -929,7 +929,7 @@ function renderProgramsList() {
   }
 
   let tableHtml = '';
-  filtered.forEach(p => {
+  filtered.forEach((p, idx) => {
     const enrolledCount = state.assignments.filter(a => a.programId === p.id).length;
     const completedCount = state.assignments.filter(a => a.programId === p.id && a.trainingStatus === 'completed').length;
     const progressPct = enrolledCount > 0 ? Math.round((completedCount / enrolledCount) * 100) : 0;
@@ -945,23 +945,24 @@ function renderProgramsList() {
       : (p.difficulty === 'Beginner' ? 'style="background:#f0fdf4; color:#166534;"' : 'style="background:#eff6ff; color:#1d4ed8;"');
 
     tableHtml += `
-      <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s ease;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
-        <td style="padding: 14px 16px; vertical-align: top;">
+      <tr style="border-bottom: 1px solid #e2e8f0; transition: background 0.15s ease;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
+        <td style="padding: 14px 12px; text-align: center; color: #64748b; font-size: 12px; border-right: 1px solid #f1f5f9; vertical-align: middle;">${idx + 1}</td>
+        <td style="padding: 14px 16px; vertical-align: top; border-right: 1px solid #f1f5f9;">
           <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
             <span class="badge-dept badge-blue">${escapeHtml(p.dept)}</span>
             <span class="status-pill" ${diffBadge}>${p.difficulty}</span>
           </div>
-          <div style="font-weight: 700; font-size: 14px; color: #0f172a; margin-bottom: 4px;">${escapeHtml(p.title)}</div>
+          <div style="font-weight: 700; font-size: 13.5px; color: #0f172a; margin-bottom: 4px;">${escapeHtml(p.title)}</div>
           <p style="font-size: 12px; color: #64748b; line-height: 1.4; margin: 0; max-width: 440px;">
             ${escapeHtml(p.learningObjectives || 'Comprehensive professional training curriculum.')}
           </p>
         </td>
-        <td style="padding: 14px 16px; vertical-align: top; white-space: nowrap;">
+        <td style="padding: 14px 16px; vertical-align: top; white-space: nowrap; border-right: 1px solid #f1f5f9;">
           <div style="font-weight: 700; font-size: 13px; color: #0f172a;">⏱️ ${p.durationHours} hrs</div>
           <div style="font-size: 12px; color: #64748b; margin-top: 4px;">📑 ${(p.resources || []).length} Modules</div>
           <div style="font-size: 11px; color: #059669; font-weight: 600; margin-top: 2px;">✓ ${mandatoryCount} Mandatory</div>
         </td>
-        <td style="padding: 14px 16px; vertical-align: top; min-width: 170px;">
+        <td style="padding: 14px 16px; vertical-align: top; min-width: 170px; border-right: 1px solid #f1f5f9;">
           <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px;">
             <span style="color: #64748b; font-weight: 500;">👥 ${enrolledCount} Enrolled</span>
             <strong style="color: #0f172a;">${progressPct}%</strong>
@@ -971,24 +972,22 @@ function renderProgramsList() {
           </div>
           <div style="font-size: 11px; color: #64748b; margin-top: 4px;">${completedCount} completed</div>
         </td>
-        <td style="padding: 14px 16px; vertical-align: top;">
+        <td style="padding: 14px 14px; vertical-align: middle; text-align: center; border-right: 1px solid #f1f5f9;">
           ${statusPill}
         </td>
-        <td style="padding: 14px 16px; vertical-align: middle; text-align: right; white-space: nowrap;">
-          <div style="display: inline-flex; align-items: center; gap: 8px; justify-content: flex-end;">
-            <button type="button" class="emp-action-icon" onclick="previewProgram('${p.id}')" title="Preview Programme" aria-label="Preview">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        <td style="padding: 14px 16px; vertical-align: middle; text-align: center; white-space: nowrap;">
+          <div style="display: inline-flex; align-items: center; justify-content: center; gap: 14px;">
+            <button type="button" class="emp-action-icon" onclick="previewProgram('${p.id}')" title="View Programme" aria-label="View" style="background: none; border: none; padding: 4px; color: #64748b; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px;">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#64748b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
             </button>
-            <button type="button" class="emp-action-icon" onclick="openEditProgramModal('${p.id}')" title="Edit Programme" aria-label="Edit">
-              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-            </button>
-            ${p.status === 'published' 
-              ? `<button type="button" class="emp-action-icon" onclick="openAssignWithProgram('${p.id}')" title="Assign Programme" aria-label="Assign" style="color: #2563eb;">
-                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
-                </button>`
-              : ''}
-            <button type="button" class="emp-action-icon" onclick="toggleArchiveProgram('${p.id}')" title="${p.status === 'archived' ? 'Restore Programme' : 'Archive Programme'}" aria-label="Archive" style="color: #94a3b8;">
-              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            <button type="button" class="emp-action-icon" onclick="openEditProgramModal('${p.id}')" title="Edit Programme" aria-label="Edit" style="background: none; border: none; padding: 4px; color: #64748b; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px;">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#64748b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 20h9"></path>
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+              </svg>
             </button>
           </div>
         </td>
