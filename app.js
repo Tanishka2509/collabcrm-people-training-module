@@ -437,6 +437,11 @@ function switchToEmployees() {
 }
 
 function switchToTraining() {
+  if (trainingConfigData && trainingConfigData.general && trainingConfigData.general.moduleEnabled === false) {
+    alert('Training Module is currently disabled in System Configuration. Enable it under Config → Training Config.');
+    return;
+  }
+
   const viewDashboard = document.getElementById('viewDashboard');
   const viewTraining = document.getElementById('viewTraining');
   const viewConfig = document.getElementById('viewConfig');
@@ -918,13 +923,17 @@ window.renderProgramsList = renderProgramsList;
 
 // Program Form Builder & Multi-Resource Manager
 function openCreateProgramModal() {
+  if (trainingConfigData && trainingConfigData.general && trainingConfigData.general.allowCreation === false) {
+    alert('Training Creation is currently disabled in Training Config.');
+    return;
+  }
   document.getElementById('editingProgramId').value = '';
   document.getElementById('programFormModalTitle').textContent = 'Create New Training Programme';
   document.getElementById('progTitleInput').value = '';
   document.getElementById('progDeptInput').value = 'Engineering';
   document.getElementById('progDifficultyInput').value = 'Intermediate';
-  document.getElementById('progDurationInput').value = '16';
-  document.getElementById('progPassScoreInput').value = '80';
+  document.getElementById('progDurationInput').value = (trainingConfigData?.general?.durationHours) || '16';
+  document.getElementById('progPassScoreInput').value = (trainingConfigData?.completion?.passingScore) || '80';
   document.getElementById('progObjectivesInput').value = '';
   document.getElementById('progCriteriaInput').value = 'Complete 100% mandatory modules + achieve >= 80% on assessment';
 
@@ -940,6 +949,10 @@ function openCreateProgramModal() {
 window.openCreateProgramModal = openCreateProgramModal;
 
 function openEditProgramModal(progId) {
+  if (trainingConfigData && trainingConfigData.general && trainingConfigData.general.allowEditing === false) {
+    alert('Training Editing is currently disabled in Training Config.');
+    return;
+  }
   const p = state.programs.find(prog => prog.id === progId);
   if (!p) return;
 
@@ -1089,6 +1102,10 @@ function togglePublishProgram(progId) {
 window.togglePublishProgram = togglePublishProgram;
 
 function toggleArchiveProgram(progId) {
+  if (trainingConfigData && trainingConfigData.general && trainingConfigData.general.allowArchiving === false) {
+    alert('Training Archiving is currently disabled in Training Config.');
+    return;
+  }
   const p = state.programs.find(prog => prog.id === progId);
   if (!p) return;
   p.status = (p.status === 'archived') ? 'draft' : 'archived';
@@ -1102,6 +1119,10 @@ window.toggleArchiveProgram = toggleArchiveProgram;
 // Program Preview Modal
 let previewActiveProgId = null;
 function previewProgram(progId) {
+  if (trainingConfigData && trainingConfigData.general && trainingConfigData.general.enablePreview === false) {
+    alert('Training Preview is currently disabled in Training Config.');
+    return;
+  }
   const p = state.programs.find(prog => prog.id === progId);
   if (!p) return;
   previewActiveProgId = progId;
@@ -1188,6 +1209,21 @@ function openAssignWithProgram(progId) {
 window.openAssignWithProgram = openAssignWithProgram;
 
 function openAssignTrainingModal(preselectedProgId = null) {
+  if (state.currentRole === 'manager' && trainingConfigData?.assignments?.allowReportingManager === false) {
+    alert('Reporting Managers are not permitted to assign training per Training Config policy.');
+    return;
+  }
+
+  const asg = trainingConfigData?.assignments || {};
+  const allowInd = asg.enableIndividual !== false;
+  const allowBulk = asg.enableBulk !== false;
+  const allowDept = asg.enableDept !== false;
+
+  if (!allowInd && !allowBulk && !allowDept) {
+    alert('All training assignment modes are currently disabled in Training Config.');
+    return;
+  }
+
   const modal = document.getElementById('assignTrainingModal');
   const progSelect = document.getElementById('assignSelectProgram');
   const empSelect = document.getElementById('assignSelectEmployee');
@@ -1228,16 +1264,58 @@ function openAssignTrainingModal(preselectedProgId = null) {
     multiContainer.appendChild(lbl);
   });
 
-  // Default Dates
+  // Dates and allowDueEdit enforcement
   const today = new Date().toISOString().split('T')[0];
-  const nextMonth = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+  const dueDays = parseInt(asg.dueDays, 10) || 14;
+  const calculatedDue = new Date(Date.now() + dueDays * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
   if (dateInput) dateInput.value = today;
-  if (dueInput) dueInput.value = nextMonth;
+  if (dueInput) {
+    dueInput.value = calculatedDue;
+    if (asg.allowDueEdit === false) {
+      dueInput.readOnly = true;
+      dueInput.style.backgroundColor = '#f1f5f9';
+      dueInput.style.cursor = 'not-allowed';
+      dueInput.title = 'Due Date editing disabled by Training Config';
+    } else {
+      dueInput.readOnly = false;
+      dueInput.style.backgroundColor = '#ffffff';
+      dueInput.style.cursor = 'text';
+      dueInput.title = '';
+    }
+  }
 
-  // Reset to Individual
+  // Enforce mode toggles
   const radioInd = document.querySelector('input[name="assignMode"][value="individual"]');
-  if (radioInd) radioInd.checked = true;
-  toggleAssignMode('individual');
+  const radioMul = document.querySelector('input[name="assignMode"][value="multiple"]');
+  const radioDep = document.querySelector('input[name="assignMode"][value="department"]');
+
+  if (radioInd) {
+    radioInd.disabled = !allowInd;
+    if (radioInd.closest('label')) {
+      radioInd.closest('label').style.opacity = allowInd ? '1' : '0.4';
+      radioInd.closest('label').style.cursor = allowInd ? 'pointer' : 'not-allowed';
+    }
+  }
+  if (radioMul) {
+    radioMul.disabled = !allowBulk;
+    if (radioMul.closest('label')) {
+      radioMul.closest('label').style.opacity = allowBulk ? '1' : '0.4';
+      radioMul.closest('label').style.cursor = allowBulk ? 'pointer' : 'not-allowed';
+    }
+  }
+  if (radioDep) {
+    radioDep.disabled = !allowDept;
+    if (radioDep.closest('label')) {
+      radioDep.closest('label').style.opacity = allowDept ? '1' : '0.4';
+      radioDep.closest('label').style.cursor = allowDept ? 'pointer' : 'not-allowed';
+    }
+  }
+
+  let chosenMode = allowInd ? 'individual' : (allowBulk ? 'multiple' : 'department');
+  if (radioInd && allowInd) radioInd.checked = true;
+  else if (radioMul && allowBulk) radioMul.checked = true;
+  else if (radioDep && allowDept) radioDep.checked = true;
+  toggleAssignMode(chosenMode);
 
   checkAssignDuplicates();
   modal.classList.add('open');
@@ -1275,6 +1353,13 @@ function checkAssignDuplicates() {
   const mode = document.querySelector('input[name="assignMode"]:checked')?.value || 'individual';
   const warningBox = document.getElementById('assignDuplicateWarning');
   const btnConfirm = document.getElementById('btnConfirmAssign');
+
+  // If preventDuplicates toggle is OFF, bypass duplicate check!
+  if (trainingConfigData?.assignments?.preventDuplicates === false) {
+    if (warningBox) warningBox.style.display = 'none';
+    if (btnConfirm) btnConfirm.disabled = false;
+    return false;
+  }
 
   let targetEmpIds = [];
   if (mode === 'individual') {
@@ -1314,6 +1399,26 @@ function checkAssignDuplicates() {
 window.checkAssignDuplicates = checkAssignDuplicates;
 
 function confirmTrainingAssignment() {
+  if (state.currentRole === 'manager' && trainingConfigData?.assignments?.allowReportingManager === false) {
+    alert('Reporting Managers are not permitted to assign training per Training Config policy.');
+    return;
+  }
+
+  const mode = document.querySelector('input[name="assignMode"]:checked')?.value || 'individual';
+  const asg = trainingConfigData?.assignments || {};
+  if (mode === 'individual' && asg.enableIndividual === false) {
+    alert('Individual training assignment is disabled in Training Config.');
+    return;
+  }
+  if (mode === 'multiple' && asg.enableBulk === false) {
+    alert('Multiple employee (bulk) training assignment is disabled in Training Config.');
+    return;
+  }
+  if (mode === 'department' && asg.enableDept === false) {
+    alert('Department-wide training assignment is disabled in Training Config.');
+    return;
+  }
+
   const isDuplicate = checkAssignDuplicates();
   if (isDuplicate) {
     alert('Cannot proceed: Active duplicate assignment detected. Please deselect already assigned employees.');
@@ -1321,7 +1426,6 @@ function confirmTrainingAssignment() {
   }
 
   const progId = document.getElementById('assignSelectProgram').value;
-  const mode = document.querySelector('input[name="assignMode"]:checked').value;
   const assignedDate = document.getElementById('assignDateInput').value;
   const dueDate = document.getElementById('assignDueDateInput').value;
   const mandatory = document.getElementById('assignIsMandatory').checked;
@@ -1377,6 +1481,10 @@ function confirmTrainingAssignment() {
       ]
     });
   });
+
+  if (asg.notifyEmployee !== false) {
+    logAudit('Notification Sent', `${prog ? prog.title : progId}`, `Assignment notification dispatched to ${targetEmpIds.length} employee(s).`);
+  }
 
   logAudit('Training Assigned', `${prog ? prog.title : progId}`, `Assigned to ${targetEmpIds.length} employee(s)`);
   alert(`Successfully assigned "${prog ? prog.title : 'Programme'}" to ${targetEmpIds.length} employee(s)!`);
@@ -1854,6 +1962,17 @@ window.closeReviewModal = closeReviewModal;
 
 // 3 Review Actions: Approve, Request Changes (mandatory feedback), Reject (mandatory feedback)
 function handleReviewAction(action) {
+  const comp = trainingConfigData?.completion || {};
+
+  if (comp.approvalRequired === false) {
+    alert('Submission approval is currently disabled in Training Config (Auto-approval active).');
+  }
+
+  if (action === 'request_changes' && comp.allowRetakes === false) {
+    alert('Learner revisions / retakes are currently disabled in Training Config.');
+    return;
+  }
+
   const asnId = document.getElementById('reviewAssignmentId').value;
   const feedback = document.getElementById('reviewerFeedbackInput').value.trim();
   const validationMsg = document.getElementById('feedbackValidationMsg');
@@ -1863,6 +1982,17 @@ function handleReviewAction(action) {
   const emp = state.employees.find(e => e.id === a.employeeId);
   const prog = state.programs.find(p => p.id === a.programId);
   const reviewerName = state.currentRole === 'admin' ? 'Isha Patel (Admin)' : (state.currentRole === 'hr' ? 'Shivam Sharma (HR)' : 'Ashish Kumar (Manager)');
+
+  if (action === 'approve') {
+    if (comp.evidenceEnabled !== false && comp.evidenceMandatory === true && !a.submissionEvidence) {
+      alert('Cannot approve: Verification evidence document is mandatory per Training Config, but none was submitted.');
+      return;
+    }
+    if (comp.remarksRequired === true && (!a.submissionRemarks || !a.submissionRemarks.trim())) {
+      alert('Cannot approve: Learner remarks are required per Training Config.');
+      return;
+    }
+  }
 
   // Enforce mandatory feedback for Request Changes and Reject
   if ((action === 'request_changes' || action === 'reject') && !feedback) {
@@ -2034,6 +2164,10 @@ window.renderCertificatesTable = renderCertificatesTable;
 
 // Action 1: Generate Certificate (Separate from Issuance)
 function generateCertificate(asnId) {
+  if (trainingConfigData?.certificates?.enabled === false) {
+    alert('Certificate Generation is currently disabled in Training Config.');
+    return;
+  }
   const a = state.assignments.find(asn => asn.id === asnId);
   if (!a) return;
   const emp = state.employees.find(e => e.id === a.employeeId);
@@ -2106,6 +2240,10 @@ window.closeCertPreviewModal = closeCertPreviewModal;
 
 // Action 3: Issue Certificate (Separate from Generation)
 function issueCertificate(certId) {
+  if (trainingConfigData?.certificates?.enabled === false) {
+    alert('Certificate Issuance is currently disabled in Training Config.');
+    return;
+  }
   const cert = state.certificates.find(c => c.id === certId);
   if (!cert) return;
   const emp = state.employees.find(e => e.id === cert.employeeId);
@@ -2141,6 +2279,10 @@ window.printCertificate = printCertificate;
 
 // Manage Reissues
 function openReissueModal(certId) {
+  if (trainingConfigData?.certificates?.allowReissue === false) {
+    alert('Certificate reissuance is currently disabled in Training Config.');
+    return;
+  }
   const cert = state.certificates.find(c => c.id === certId);
   if (!cert) return;
   document.getElementById('reissueCertId').value = cert.id;
@@ -2157,6 +2299,10 @@ function closeReissueModal() {
 window.closeReissueModal = closeReissueModal;
 
 function confirmReissueCertificate() {
+  if (trainingConfigData?.certificates?.allowReissue === false) {
+    alert('Certificate reissuance is currently disabled in Training Config.');
+    return;
+  }
   const certId = document.getElementById('reissueCertId').value;
   const reason = document.getElementById('reissueReasonSelect').value;
   const notes = document.getElementById('reissueNotesInput').value.trim();
@@ -2604,7 +2750,7 @@ const DEFAULT_TRAINING_CONFIG = {
     allowArchiving: true,
     enablePreview: true,
     defaultStatus: 'Draft',
-    defaultType: 'Self-Paced',
+    defaultType: 'Mandatory',
     resourceTypes: [
       'YouTube Video',
       'External Course Link',
@@ -2720,6 +2866,10 @@ function loadTrainingConfig() {
     const raw = localStorage.getItem('collabcrm_training_config');
     if (raw) {
       const parsed = JSON.parse(raw);
+      // Normalize general.defaultType if invalid or 'Self-Paced'
+      if (parsed.general && parsed.general.defaultType !== 'Mandatory' && parsed.general.defaultType !== 'Optional') {
+        parsed.general.defaultType = 'Mandatory';
+      }
       return {
         general: { ...DEFAULT_TRAINING_CONFIG.general, ...(parsed.general || {}) },
         categories: Array.isArray(parsed.categories) ? parsed.categories : [...DEFAULT_TRAINING_CONFIG.categories],
@@ -2848,7 +2998,7 @@ function initTrainingConfigScreen() {
   if (elGenArc) elGenArc.checked = !!g.allowArchiving;
   if (elGenPre) elGenPre.checked = !!g.enablePreview;
   if (elGenStat) elGenStat.value = g.defaultStatus || 'Draft';
-  if (elGenTyp) elGenTyp.value = g.defaultType || 'Self-Paced';
+  if (elGenTyp) elGenTyp.value = (g.defaultType === 'Optional') ? 'Optional' : 'Mandatory';
   if (elGenH) elGenH.value = g.durationHours ?? 4;
   if (elGenM) elGenM.value = g.durationMinutes ?? 30;
   renderResourceTypeBadges();

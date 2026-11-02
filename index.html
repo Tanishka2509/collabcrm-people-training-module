@@ -1525,19 +1525,19 @@
                 </div>
 
                 <!-- 9. Default Training Duration -->
-                <div class="tcfg-setting-row">
+                <div class="tcfg-setting-row tcfg-setting-stacked">
                   <div class="tcfg-setting-info">
                     <label class="tcfg-setting-label">Default Training Duration <span class="tcfg-req-star">*</span></label>
                     <p class="tcfg-setting-desc">Estimated baseline duration pre-filled when creating new training modules.</p>
                   </div>
-                  <div class="tcfg-setting-control" style="gap: 8px;">
-                    <div style="display: flex; align-items: center; gap: 4px;">
-                      <input type="number" id="cfg_gen_duration_hours" min="0" max="100" class="tcfg-input tcfg-input-number" onchange="markConfigDirty()" />
-                      <span style="font-size: 12px; color: #64748b; font-weight: 500;">Hours</span>
+                  <div class="tcfg-duration-wrapper">
+                    <div class="tcfg-duration-box">
+                      <input type="number" id="cfg_gen_duration_hours" min="0" max="100" class="tcfg-input-duration" onchange="markConfigDirty()" placeholder="0" />
+                      <span class="tcfg-duration-unit">Hours</span>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 4px;">
-                      <input type="number" id="cfg_gen_duration_minutes" min="0" max="59" step="5" class="tcfg-input tcfg-input-number" onchange="markConfigDirty()" />
-                      <span style="font-size: 12px; color: #64748b; font-weight: 500;">Mins</span>
+                    <div class="tcfg-duration-box">
+                      <input type="number" id="cfg_gen_duration_minutes" min="0" max="59" step="5" class="tcfg-input-duration" onchange="markConfigDirty()" placeholder="0" />
+                      <span class="tcfg-duration-unit">Mins</span>
                     </div>
                   </div>
                 </div>
