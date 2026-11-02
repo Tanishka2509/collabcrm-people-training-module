@@ -169,21 +169,21 @@
       <aside class="sidebar-wrapper relative" id="sidebarNav">
         <nav class="py-5 px-2 overflow-y-auto overflow-x-hidden sidebar-container 2xl:h-[calc(100vh-116px)] 2xl-to-xl:h-[calc(100vh-108px)] h-[calc(100vh-108px)]">
           <ul role="list" class="space-y-3 sidebar-container" id="sidebarList">
-            <!-- 1. Employees (Active by default as per Screenshot 2) -->
-            <li title="Employees" class="relative group cursor-pointer sidebar-nav-li active" id="menuEmployees" onclick="switchToEmployees()">
-              <div class="bg-indigo-600 text-white relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap" id="employeesInner">
-                <span class="text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-users-02"></span>
+            <!-- 1. Employees (Inactive by default) -->
+            <li title="Employees" class="relative group cursor-pointer sidebar-nav-li" id="menuEmployees" onclick="switchToEmployees()">
+              <div class="text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap" id="employeesInner">
+                <span class="text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-users-02"></span>
                 <p class="nav-text text-white" style="color: #ffffff !important; text-decoration: none !important;">Employees</p>
                 <span class="icon-chevron-right block ml-auto text-xl text-indigo-300"></span>
               </div>
             </li>
 
-            <!-- 2. Training (Not selected by default) -->
-            <li title="Training" class="relative group cursor-pointer sidebar-nav-li" id="menuTraining" onclick="switchToTraining()">
+            <!-- 2. Training (Active by default) -->
+            <li title="Training" class="relative group cursor-pointer sidebar-nav-li active" id="menuTraining" onclick="switchToTraining()">
               <div class="-my-1">
-                <div class="text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap" id="trainingInner">
+                <div class="bg-indigo-600 text-white flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap" id="trainingInner">
                   <div class="flex w-full items-center gap-x-3 2xl:p-3 2xl-to-xl:p-2 p-2 cursor-pointer" style="text-decoration: none !important;">
-                    <span class="text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training"></span>
+                    <span class="text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training"></span>
                     <p class="nav-text text-white" style="color: #ffffff !important; text-decoration: none !important; font-weight: 600; font-size: 14px;">Training</p>
                   </div>
                 </div>
@@ -238,10 +238,10 @@
 
       <!-- Content Area -->
       <main class="content-viewport">
-                <!-- ============================================== -->
+        <!-- ============================================== -->
         <!-- VIEW 1: EMPLOYEES LISTING (SCREENSHOT 2)       -->
         <!-- ============================================== -->
-        <div class="dashboard-view active" id="viewDashboard" style="display: block;">
+        <div class="dashboard-view" id="viewDashboard" style="display: none;">
           <div class="emp-screen-container">
             <!-- Top Breadcrumb -->
             <div class="emp-breadcrumbs">
@@ -825,7 +825,7 @@
         <!-- ============================================== -->
         <!-- VIEW 2: DEDICATED TRAINING MODULE VIEW         -->
         <!-- ============================================== -->
-        <div class="training-view" id="viewTraining" style="display: none;">
+        <div class="training-view" id="viewTraining" style="display: block;">
 
           <!-- Top Breadcrumb & Title Area -->
           <div class="training-top-header" style="padding: 20px 24px 12px 24px;">
@@ -916,13 +916,15 @@
             <!-- SECTION 1: DASHBOARD (10 STATS ON REAL DATA)   -->
             <!-- ============================================== -->
             <div class="training-tab-view" id="sectionDashboard">
-              <!-- 4 Main KPIs In a Line (Screenshot 2) -->
-              <div class="kpi-grid-4">
+              <!-- 4 Main KPIs In a Line (Format of Screenshot 2 with Details of Screenshot 1) -->
+              <div class="kpi-grid-4" style="margin-bottom: 24px;">
                 <!-- 1. Total Catalog Trainings -->
-                <div class="kpi-stat-card-main card-blue" onclick="switchTrainingTab('programs')" title="View All Training Programmes">
+                <div class="kpi-stat-card-main" onclick="switchTrainingTab('programs')" style="cursor: pointer;" title="View All Training Programmes">
                   <div class="kpi-stat-main-top">
-                    <span class="kpi-stat-main-title">Total Programmes</span>
-                    <span class="kpi-stat-main-icon" style="background:#eff6ff; color:#2563eb;">📚</span>
+                    <span class="kpi-stat-main-title">TOTAL PROGRAMMES</span>
+                    <span class="emp-kpi-icon-pill" title="View Programmes">
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </span>
                   </div>
                   <div class="kpi-stat-main-val" id="kpiTotalTrainings">6</div>
                   <div class="kpi-stat-main-chips">
@@ -932,10 +934,12 @@
                 </div>
 
                 <!-- 2. Total Assignments -->
-                <div class="kpi-stat-card-main card-indigo" onclick="switchTrainingTab('assignments')" title="View All Learner Assignments">
+                <div class="kpi-stat-card-main" onclick="switchTrainingTab('assignments')" style="cursor: pointer;" title="View All Learner Assignments">
                   <div class="kpi-stat-main-top">
-                    <span class="kpi-stat-main-title">Total Assignments</span>
-                    <span class="kpi-stat-main-icon" style="background:#e0e7ff; color:#4338ca;">👥</span>
+                    <span class="kpi-stat-main-title">TOTAL ASSIGNMENTS</span>
+                    <span class="emp-kpi-icon-pill" title="View Assignments">
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </span>
                   </div>
                   <div class="kpi-stat-main-val" id="kpiTotalAssignments">9</div>
                   <div class="kpi-stat-main-chips">
@@ -945,12 +949,14 @@
                 </div>
 
                 <!-- 3. Completed & Passed -->
-                <div class="kpi-stat-card-main card-emerald" onclick="switchTrainingTab('progress')" title="View Employee Completion Progress">
+                <div class="kpi-stat-card-main" onclick="switchTrainingTab('progress')" style="cursor: pointer;" title="View Employee Completion Progress">
                   <div class="kpi-stat-main-top">
-                    <span class="kpi-stat-main-title">Completion Rate</span>
-                    <span class="kpi-stat-main-icon" style="background:#ecfdf5; color:#059669;">🏆</span>
+                    <span class="kpi-stat-main-title">COMPLETION RATE</span>
+                    <span class="emp-kpi-icon-pill" title="View Completion Progress">
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </span>
                   </div>
-                  <div class="kpi-stat-main-val" id="kpiCompletionRate">67%</div>
+                  <div class="kpi-stat-main-val" id="kpiCompletionRate">22%</div>
                   <div class="kpi-stat-main-chips">
                     <span class="kpi-stat-mini-pill" style="background:#dcfce7; color:#15803d;"><span id="kpiCompleted">2</span> Approved</span>
                     <span class="kpi-stat-mini-pill" style="background:#fef2f2; color:#be123c;"><span id="kpiSubmittedReview">2</span> Under Review</span>
@@ -958,10 +964,12 @@
                 </div>
 
                 <!-- 4. Certificates & Compliance -->
-                <div class="kpi-stat-card-main card-amber" onclick="switchTrainingTab('certificates')" title="View Issued Certificates &amp; Compliance">
+                <div class="kpi-stat-card-main" onclick="switchTrainingTab('certificates')" style="cursor: pointer;" title="View Issued Certificates &amp; Compliance">
                   <div class="kpi-stat-main-top">
-                    <span class="kpi-stat-main-title">Certificates Issued</span>
-                    <span class="kpi-stat-main-icon" style="background:#fff7ed; color:#ea580c;">📜</span>
+                    <span class="kpi-stat-main-title">CERTIFICATES ISSUED</span>
+                    <span class="emp-kpi-icon-pill" title="View Certificates">
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </span>
                   </div>
                   <div class="kpi-stat-main-val" id="kpiCertificatesIssued">1</div>
                   <div class="kpi-stat-main-chips">
@@ -1026,7 +1034,7 @@
                 <div class="dash-chart-card">
                   <div class="dash-chart-header">
                     <div>
-                      <h3 class="dash-chart-title">Cohort Participation &amp; Completion</h3>
+                      <h3 class="dash-chart-title">Participation and Completion</h3>
                       <p class="dash-chart-subtitle">Progress distribution and average scores by department</p>
                     </div>
                     <span style="font-size: 11px; font-weight: 700; color: #059669; background: #ecfdf5; padding: 4px 8px; border-radius: 6px;">Target: 80%</span>

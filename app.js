@@ -336,7 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initClockWidget();
   renderPortalNotifications();
   setAppRole('admin'); // Start in Admin Role
-  switchToEmployees();
+  switchToTraining();
 });
 
 // App Role Switcher (Admin vs HR vs Reporting Manager vs Employee)

@@ -4591,24 +4591,22 @@ body, button, input, select, textarea {
 .kpi-stat-card-main {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 16px 20px;
+  border-radius: 8px;
+  padding: 14px 16px;
   position: relative;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  transition: all 0.15s ease;
   cursor: pointer;
-  border-top: 4px solid transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 104px;
 }
 
 .kpi-stat-card-main:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
 }
-
-.kpi-stat-card-main.card-blue { border-top-color: #2563eb; }
-.kpi-stat-card-main.card-indigo { border-top-color: #4f46e5; }
-.kpi-stat-card-main.card-emerald { border-top-color: #10b981; }
-.kpi-stat-card-main.card-amber { border-top-color: #f59e0b; }
 
 .kpi-stat-main-top {
   display: flex;
