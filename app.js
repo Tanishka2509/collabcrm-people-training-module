@@ -446,6 +446,10 @@ function switchToEmployees() {
   if (viewConfig) { viewConfig.style.display = 'none'; viewConfig.classList.remove('active'); }
   const viewTrainingConfig = document.getElementById('viewTrainingConfig');
   if (viewTrainingConfig) { viewTrainingConfig.style.display = 'none'; viewTrainingConfig.classList.remove('active'); }
+  const viewRoles = document.getElementById('viewRoles');
+  if (viewRoles) { viewRoles.style.display = 'none'; viewRoles.classList.remove('active'); }
+  const viewRolePermissions = document.getElementById('viewRolePermissions');
+  if (viewRolePermissions) { viewRolePermissions.style.display = 'none'; viewRolePermissions.classList.remove('active'); }
 
   if (menuEmployees) menuEmployees.classList.add('active');
   if (menuTraining) menuTraining.classList.remove('active');
@@ -491,6 +495,10 @@ function switchToTraining() {
   if (viewConfig) { viewConfig.style.display = 'none'; viewConfig.classList.remove('active'); }
   const viewTrainingConfig = document.getElementById('viewTrainingConfig');
   if (viewTrainingConfig) { viewTrainingConfig.style.display = 'none'; viewTrainingConfig.classList.remove('active'); }
+  const viewRoles = document.getElementById('viewRoles');
+  if (viewRoles) { viewRoles.style.display = 'none'; viewRoles.classList.remove('active'); }
+  const viewRolePermissions = document.getElementById('viewRolePermissions');
+  if (viewRolePermissions) { viewRolePermissions.style.display = 'none'; viewRolePermissions.classList.remove('active'); }
 
   if (menuEmployees) menuEmployees.classList.remove('active');
   if (menuTraining) menuTraining.classList.add('active');
@@ -3169,6 +3177,10 @@ function switchToTrainingConfig() {
   if (viewTraining) { viewTraining.style.display = 'none'; viewTraining.classList.remove('active'); }
   if (viewConfig) { viewConfig.style.display = 'none'; viewConfig.classList.remove('active'); }
   if (viewTrainingConfig) { viewTrainingConfig.style.display = 'block'; viewTrainingConfig.classList.add('active'); }
+  const viewRoles = document.getElementById('viewRoles');
+  if (viewRoles) { viewRoles.style.display = 'none'; viewRoles.classList.remove('active'); }
+  const viewRolePermissions = document.getElementById('viewRolePermissions');
+  if (viewRolePermissions) { viewRolePermissions.style.display = 'none'; viewRolePermissions.classList.remove('active'); }
 
   if (menuEmployees) menuEmployees.classList.remove('active');
   if (menuTraining) menuTraining.classList.remove('active');
@@ -4091,4 +4103,554 @@ window.closeConfigAuditModal = closeConfigAuditModal;
 window.showConfigToast = showConfigToast;
 window.markConfigDirty = markConfigDirty;
 window.updateTrainingConfigPermissions = updateTrainingConfigPermissions;
+
+// ==========================================================================
+// SYSTEM ROLES & PERMISSIONS MODULE (Screenshots 2, 3, 4)
+// ==========================================================================
+const ROLES_DATA = [
+  {
+    id: 'role_1',
+    no: 1,
+    name: 'Sr. Business Analyst',
+    status: 'Active',
+    employeesCount: 1,
+    remarks: '-',
+    lastModifiedByName: 'Isha Patel',
+    lastModifiedDate: '05-Mar-2026, 05:41 PM',
+    createdByName: 'Isha Patel',
+    createdDate: '11-Dec-2025, 04:58 PM'
+  },
+  {
+    id: 'role_2',
+    no: 2,
+    name: 'Senior Recruiter',
+    status: 'Active',
+    employeesCount: 0,
+    remarks: '-',
+    lastModifiedByName: 'Isha Patel',
+    lastModifiedDate: '02-Sep-2026, 04:44 PM',
+    createdByName: 'Isha Patel',
+    createdDate: '10-Dec-2025, 05:47 PM'
+  },
+  {
+    id: 'role_3',
+    no: 3,
+    name: 'CEO',
+    status: 'Active',
+    employeesCount: 0,
+    remarks: 'Head of the company',
+    lastModifiedByName: 'Isha Patel',
+    lastModifiedDate: '30-Aug-2026, 05:05 AM',
+    createdByName: 'Isha Patel',
+    createdDate: '21-Aug-2025, 12:05 PM'
+  },
+  {
+    id: 'role_4',
+    no: 4,
+    name: 'Project Manager',
+    status: 'Active',
+    employeesCount: 25,
+    remarks: '-',
+    lastModifiedByName: 'Prashant Kumar',
+    lastModifiedDate: '07-Apr-2026, 06:27 PM',
+    createdByName: 'Isha Patel',
+    createdDate: '12-Jun-2025, 03:51 PM'
+  },
+  {
+    id: 'role_5',
+    no: 5,
+    name: 'BDE',
+    status: 'Active',
+    employeesCount: 1,
+    remarks: 'Responsible for generating leads, qualifying prospects, and managing the initial stages of the sales pipeline. The BDE engages with potential clients, maintains client databases, and schedules meetings or follow-ups to progress deals.',
+    lastModifiedByName: 'Isha Patel',
+    lastModifiedDate: '03-Feb-2026, 12:32 PM',
+    createdByName: 'System',
+    createdDate: '12-Jun-2025, 12:27 PM'
+  },
+  {
+    id: 'role_6',
+    no: 6,
+    name: 'Administrator',
+    status: 'Active',
+    employeesCount: 48,
+    remarks: 'Manages system configurations, user roles, and ensures the smooth functioning of the system.',
+    lastModifiedByName: '-',
+    lastModifiedDate: '',
+    createdByName: 'System',
+    createdDate: '12-Jun-2025, 12:27 PM'
+  },
+  {
+    id: 'role_7',
+    no: 7,
+    name: 'Employee',
+    status: 'Active',
+    employeesCount: 51,
+    remarks: 'Accesses and inputs data, uses the system features to perform daily tasks and manage personal information.',
+    lastModifiedByName: 'Isha Patel',
+    lastModifiedDate: '12-Feb-2026, 02:21 PM',
+    createdByName: 'System',
+    createdDate: '12-Jun-2025, 12:27 PM'
+  },
+  {
+    id: 'role_8',
+    no: 8,
+    name: 'Team leader',
+    status: 'Active',
+    employeesCount: 20,
+    remarks: 'Manages team activities, monitors progress, and uses the system for task delegation and performance tracking.',
+    lastModifiedByName: 'Isha Patel',
+    lastModifiedDate: '25-Mar-2026, 12:39 PM',
+    createdByName: 'System',
+    createdDate: '12-Jun-2025, 12:27 PM'
+  },
+  {
+    id: 'role_9',
+    no: 9,
+    name: 'Management',
+    status: 'Active',
+    employeesCount: 7,
+    remarks: 'Oversees strategic direction, uses the system for high-level decision-making, financial planning, and performance analysis.',
+    lastModifiedByName: '-',
+    lastModifiedDate: '',
+    createdByName: 'System',
+    createdDate: '12-Jun-2025, 12:27 PM'
+  },
+  {
+    id: 'role_10',
+    no: 10,
+    name: 'HR',
+    status: 'Active',
+    employeesCount: 2,
+    remarks: 'Manages employee records, organization policies, holidays, recruitment process etc within the system.',
+    lastModifiedByName: 'Isha Patel',
+    lastModifiedDate: '14-Aug-2026, 03:01 PM',
+    createdByName: 'System',
+    createdDate: '12-Jun-2025, 12:27 PM'
+  },
+  {
+    id: 'role_11',
+    no: 11,
+    name: 'Recruiter',
+    status: 'Active',
+    employeesCount: 1,
+    remarks: 'Manages job postings, candidate updates, and interview scheduling for their assigned candidates. Responsible for job configurations and viewing their own interview schedules and timeline activities.',
+    lastModifiedByName: 'Nikita Mehta',
+    lastModifiedDate: '07-Oct-2025, 06:18 PM',
+    createdByName: 'System',
+    createdDate: '12-Jun-2025, 12:27 PM'
+  },
+  {
+    id: 'role_12',
+    no: 12,
+    name: 'BDM',
+    status: 'Active',
+    employeesCount: 0,
+    remarks: 'Oversees the sales cycle from lead acquisition to deal closure, ensuring revenue targets are met. Manages client relationships, coordinates with sales and product teams, handles negotiations, and analyzes market trends to develop strategies for growth.',
+    lastModifiedByName: 'Isha Patel',
+    lastModifiedDate: '25-Sep-2025, 11:56 AM',
+    createdByName: 'System',
+    createdDate: '12-Jun-2025, 12:27 PM'
+  }
+];
+
+let activeSelectedRoleId = 'role_1';
+let collapsedPermGroups = {};
+
+// Default role permissions database
+const ROLE_PERMISSIONS_STATE = {};
+
+function initRolePermissionsData() {
+  ROLES_DATA.forEach(r => {
+    if (!ROLE_PERMISSIONS_STATE[r.id]) {
+      ROLE_PERMISSIONS_STATE[r.id] = {
+        'client_interview_rep': { view: false, default: false, add: false, edit: false, delete: false },
+        'revenue_summary_rep': { view: false, default: false, add: false, edit: false, delete: false },
+        'projects': { view: false, default: false, add: false, edit: false, delete: false },
+        'proj_fixed_cost': { view: false, default: false, add: false, edit: false, delete: false },
+        'proj_hirebase': { view: false, default: false, add: false, edit: false, delete: false },
+        'proj_hourly': { view: false, default: false, add: false, edit: false, delete: false },
+        'proj_timesheet': { view: false, default: false, add: false, edit: false, delete: false },
+        'proj_timespent': { view: false, default: false, add: false, edit: false, delete: false },
+        'proj_resource_alloc': { view: false, default: false, add: false, edit: false, delete: false },
+        'recruitment': { view: false, default: false, add: false, edit: false, delete: false },
+        'rec_open_pos': { view: false, default: false, add: false, edit: false, delete: false },
+        'rec_efficiency': { view: false, default: false, add: false, edit: false, delete: false },
+        'payroll': { view: false, default: false, add: false, edit: false, delete: false },
+        'pay_salary': { view: false, default: false, add: false, edit: false, delete: false },
+        'pay_run': { view: false, default: false, add: false, edit: false, delete: false },
+        'pay_expense': { view: false, default: false, add: false, edit: false, delete: false },
+        'pay_loans': { view: false, default: false, add: false, edit: false, delete: false },
+        'pay_config': { view: false, default: false, add: false, edit: false, delete: false },
+        // Training Module Permissions (Added after Payroll)
+        'training_module': { view: true, default: true, add: true, edit: true, delete: true },
+        'trn_programs': { view: true, default: false, add: true, edit: true, delete: true },
+        'trn_assignments': { view: true, default: false, add: true, edit: true, delete: true },
+        'trn_progress': { view: true, default: false, add: false, edit: true, delete: false },
+        'trn_reviews': { view: true, default: false, add: true, edit: true, delete: false },
+        'trn_certificates': { view: true, default: false, add: true, edit: true, delete: true },
+        'trn_reports': { view: true, default: false, add: false, edit: false, delete: false },
+        // Notification Matrix from 1st Screenshot
+        'trn_notif_section': { view: true, default: false, add: false, edit: false, delete: false },
+        'notif_assigned': { view: true, inApp: true, email: true, default: false },
+        'notif_approaching': { view: true, inApp: true, email: true, default: false },
+        'notif_overdue': { view: true, inApp: true, email: true, default: false },
+        'notif_submitted': { view: true, inApp: true, email: true, default: false },
+        'notif_approved': { view: true, inApp: true, email: true, default: false },
+        'notif_passed': { view: true, inApp: true, email: true, default: false },
+        'notif_failed': { view: true, inApp: true, email: true, default: false },
+        'notif_cert_issued': { view: true, inApp: true, email: true, default: false },
+        'notif_cert_expiring': { view: true, inApp: true, email: true, default: false }
+      };
+    }
+  });
+}
+
+initRolePermissionsData();
+
+function renderRolesTable() {
+  const tbody = document.getElementById('rolesTableBody');
+  const countBadge = document.getElementById('rolesCountBadge');
+  const query = (document.getElementById('searchRolesInput')?.value || '').toLowerCase();
+  if (!tbody) return;
+
+  const filtered = ROLES_DATA.filter(r => {
+    return r.name.toLowerCase().includes(query) || (r.remarks || '').toLowerCase().includes(query);
+  });
+
+  if (countBadge) countBadge.textContent = `${filtered.length} Roles`;
+
+  let html = '';
+  filtered.forEach(r => {
+    html += `
+      <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s ease;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
+        <td style="padding: 14px; text-align: center; color: #64748b;">${r.no}</td>
+        <td style="padding: 14px; font-weight: 600; color: #0f172a;">${escapeHtml(r.name)}</td>
+        <td style="padding: 14px;">
+          <span style="background: #f0fdf4; color: #166534; font-size: 11px; padding: 2px 8px; border-radius: 12px; font-weight: 600;">Active</span>
+        </td>
+        <td style="padding: 14px; text-align: center; font-weight: 600; color: #334155;">${r.employeesCount}</td>
+        <td style="padding: 14px; color: #64748b; font-size: 12px; max-width: 320px; line-height: 1.4;">
+          ${escapeHtml(r.remarks)}
+        </td>
+        <td style="padding: 14px; color: #334155; font-size: 12px;">
+          <div style="font-weight: 500;">${escapeHtml(r.lastModifiedByName)}</div>
+          <div style="color: #94a3b8; font-size: 11px;">${escapeHtml(r.lastModifiedDate)}</div>
+        </td>
+        <td style="padding: 14px; color: #334155; font-size: 12px;">
+          <div style="font-weight: 500;">${escapeHtml(r.createdByName)}</div>
+          <div style="color: #94a3b8; font-size: 11px;">${escapeHtml(r.createdDate)}</div>
+        </td>
+        <td style="padding: 14px; text-align: right; white-space: nowrap;">
+          <div style="display: inline-flex; align-items: center; gap: 6px;">
+            <button type="button" class="emp-action-icon" onclick="openRolePermissions('${r.id}')" title="View & Configure Permissions (Screenshot 4)" style="color: #4f46e5; padding: 5px; background: #eff6ff; border-radius: 4px;">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </button>
+            <button type="button" class="emp-action-icon" onclick="openRolePermissions('${r.id}')" title="Edit Role" style="color: #64748b; padding: 5px;">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+            </button>
+            <button type="button" class="emp-action-icon" onclick="alert('System protected: Cannot delete this assigned role.')" title="Delete Role" style="color: #94a3b8; padding: 5px;">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `;
+  });
+
+  tbody.innerHTML = html;
+}
+
+window.renderRolesTable = renderRolesTable;
+
+function openRolesModule() {
+  closeConfigPanel();
+  const viewDashboard = document.getElementById('viewDashboard');
+  const viewTraining = document.getElementById('viewTraining');
+  const viewConfig = document.getElementById('viewConfig');
+  const viewTrainingConfig = document.getElementById('viewTrainingConfig');
+  const viewRoles = document.getElementById('viewRoles');
+  const viewRolePermissions = document.getElementById('viewRolePermissions');
+
+  if (viewDashboard) viewDashboard.style.display = 'none';
+  if (viewTraining) viewTraining.style.display = 'none';
+  if (viewConfig) viewConfig.style.display = 'none';
+  if (viewTrainingConfig) viewTrainingConfig.style.display = 'none';
+  if (viewRolePermissions) viewRolePermissions.style.display = 'none';
+  if (viewRoles) {
+    viewRoles.style.display = 'block';
+    viewRoles.classList.add('active');
+  }
+
+  const menuConfig = document.getElementById('menuConfig');
+  const menuEmployees = document.getElementById('menuEmployees');
+  const menuTraining = document.getElementById('menuTraining');
+  if (menuConfig) menuConfig.classList.add('active');
+  if (menuEmployees) menuEmployees.classList.remove('active');
+  if (menuTraining) menuTraining.classList.remove('active');
+
+  renderRolesTable();
+}
+
+window.openRolesModule = openRolesModule;
+
+function openRolePermissions(roleId) {
+  activeSelectedRoleId = roleId || 'role_1';
+  const role = ROLES_DATA.find(r => r.id === activeSelectedRoleId) || ROLES_DATA[0];
+
+  const viewDashboard = document.getElementById('viewDashboard');
+  const viewTraining = document.getElementById('viewTraining');
+  const viewConfig = document.getElementById('viewConfig');
+  const viewTrainingConfig = document.getElementById('viewTrainingConfig');
+  const viewRoles = document.getElementById('viewRoles');
+  const viewRolePermissions = document.getElementById('viewRolePermissions');
+
+  if (viewDashboard) viewDashboard.style.display = 'none';
+  if (viewTraining) viewTraining.style.display = 'none';
+  if (viewConfig) viewConfig.style.display = 'none';
+  if (viewTrainingConfig) viewTrainingConfig.style.display = 'none';
+  if (viewRoles) viewRoles.style.display = 'none';
+  if (viewRolePermissions) {
+    viewRolePermissions.style.display = 'block';
+    viewRolePermissions.classList.add('active');
+  }
+
+  // Populate metadata
+  const titleEl = document.getElementById('permRoleTitle');
+  const bcNameEl = document.getElementById('permRoleBreadcrumbName');
+  const empEl = document.getElementById('permRoleAssignedEmp');
+  const remarksEl = document.getElementById('permRoleRemarks');
+  const createdNameEl = document.getElementById('permRoleCreatedByName');
+  const createdDateEl = document.getElementById('permRoleCreatedByDate');
+  const modNameEl = document.getElementById('permRoleLastModByName');
+  const modDateEl = document.getElementById('permRoleLastModByDate');
+
+  if (titleEl) titleEl.textContent = role.name;
+  if (bcNameEl) bcNameEl.textContent = role.name;
+  if (empEl) empEl.textContent = role.employeesCount;
+  if (remarksEl) remarksEl.textContent = role.remarks;
+  if (createdNameEl) createdNameEl.textContent = role.createdByName;
+  if (createdDateEl) createdDateEl.textContent = role.createdDate;
+  if (modNameEl) modNameEl.textContent = role.lastModifiedByName;
+  if (modDateEl) modDateEl.textContent = role.lastModifiedDate || '-';
+
+  renderRolePermissionsTable();
+}
+
+window.openRolePermissions = openRolePermissions;
+
+function togglePermGroupCollapse(groupId) {
+  collapsedPermGroups[groupId] = !collapsedPermGroups[groupId];
+  renderRolePermissionsTable();
+}
+
+window.togglePermGroupCollapse = togglePermGroupCollapse;
+
+function toggleRolePerm(permKey, field, val) {
+  if (!ROLE_PERMISSIONS_STATE[activeSelectedRoleId]) {
+    ROLE_PERMISSIONS_STATE[activeSelectedRoleId] = {};
+  }
+  if (!ROLE_PERMISSIONS_STATE[activeSelectedRoleId][permKey]) {
+    ROLE_PERMISSIONS_STATE[activeSelectedRoleId][permKey] = {};
+  }
+  ROLE_PERMISSIONS_STATE[activeSelectedRoleId][permKey][field] = val;
+}
+
+window.toggleRolePerm = toggleRolePerm;
+
+function toggleRolePermDefault(permKey) {
+  if (!ROLE_PERMISSIONS_STATE[activeSelectedRoleId]) {
+    ROLE_PERMISSIONS_STATE[activeSelectedRoleId] = {};
+  }
+  if (!ROLE_PERMISSIONS_STATE[activeSelectedRoleId][permKey]) {
+    ROLE_PERMISSIONS_STATE[activeSelectedRoleId][permKey] = {};
+  }
+  const current = ROLE_PERMISSIONS_STATE[activeSelectedRoleId][permKey].default;
+  ROLE_PERMISSIONS_STATE[activeSelectedRoleId][permKey].default = !current;
+  renderRolePermissionsTable();
+}
+
+window.toggleRolePermDefault = toggleRolePermDefault;
+
+function saveRolePermissions() {
+  const role = ROLES_DATA.find(r => r.id === activeSelectedRoleId);
+  const roleName = role ? role.name : 'Role';
+  showConfigToast(`Permissions and notification rules for "${roleName}" saved successfully!`);
+}
+
+window.saveRolePermissions = saveRolePermissions;
+
+function renderRolePermissionsTable() {
+  const tbody = document.getElementById('rolePermissionsTableBody');
+  const filterQuery = (document.getElementById('searchPermModuleInput')?.value || '').toLowerCase();
+  if (!tbody) return;
+
+  const perms = ROLE_PERMISSIONS_STATE[activeSelectedRoleId] || {};
+
+  // Permissions Tree Schema (Exact match of Screenshot 4, with Training Module & 1st Screenshot Details right after Payroll)
+  const rows = [
+    { id: 'client_interview_rep', type: 'single', name: 'Client Interview Result Report', hasInfo: true },
+    { id: 'revenue_summary_rep', type: 'single', name: 'Revenue Summary Report', hasInfo: true },
+    
+    // Group: Projects
+    { id: 'projects', type: 'parent', name: 'Projects', hasInfo: false },
+    { id: 'proj_fixed_cost', parent: 'projects', type: 'child', name: 'Fixed Cost Report', hasInfo: true },
+    { id: 'proj_hirebase', parent: 'projects', type: 'child', name: 'Hirebase Report', hasInfo: true },
+    { id: 'proj_hourly', parent: 'projects', type: 'child', name: 'Hourly Report', hasInfo: true },
+    { id: 'proj_timesheet', parent: 'projects', type: 'child', name: 'Timesheet Report', hasInfo: true },
+    { id: 'proj_timespent', parent: 'projects', type: 'child', name: 'Timespent Report', hasInfo: true },
+    { id: 'proj_resource_alloc', parent: 'projects', type: 'child', name: 'Resource Allocation Report', hasInfo: true },
+
+    // Group: Recruitment
+    { id: 'recruitment', type: 'parent', name: 'Recruitment', hasInfo: false },
+    { id: 'rec_open_pos', parent: 'recruitment', type: 'child', name: 'Open Position Summary', hasInfo: false },
+    { id: 'rec_efficiency', parent: 'recruitment', type: 'child', name: 'Recruiter Efficiency Report', hasInfo: false },
+
+    // Group: Payroll
+    { id: 'payroll', type: 'parent', name: 'Payroll', hasInfo: false },
+    { id: 'pay_salary', parent: 'payroll', type: 'child', name: 'Salary and Taxation', hasInfo: true, hasActions: true },
+    { id: 'pay_run', parent: 'payroll', type: 'child', name: 'Run Payroll', hasInfo: true, hasActions: true },
+    { id: 'pay_expense', parent: 'payroll', type: 'child', name: 'Expense & Reimbursement', hasInfo: true, hasActions: true },
+    { id: 'pay_loans', parent: 'payroll', type: 'child', name: 'Loans & Advances', hasInfo: true, hasActions: true },
+    { id: 'pay_config', parent: 'payroll', type: 'child', name: 'Configuration', hasInfo: true, hasActions: true },
+
+    // =========================================================================
+    // AFTER PAYROLL: TRAINING MODULE (Screenshots 1 & 4)
+    // =========================================================================
+    { id: 'training_module', type: 'parent', name: 'Training Module', hasInfo: true, isTraining: true },
+    { id: 'trn_programs', parent: 'training_module', type: 'child', name: 'Training Programs Library', hasInfo: true, hasActions: true },
+    { id: 'trn_assignments', parent: 'training_module', type: 'child', name: 'Training Assignments', hasInfo: true, hasActions: true },
+    { id: 'trn_progress', parent: 'training_module', type: 'child', name: 'Employee Progress Tracking', hasInfo: true, hasActions: true },
+    { id: 'trn_reviews', parent: 'training_module', type: 'child', name: 'Training Reviews & Evaluations', hasInfo: true, hasActions: true },
+    { id: 'trn_certificates', parent: 'training_module', type: 'child', name: 'Certificate Generation & Issuance', hasInfo: true, hasActions: true },
+    { id: 'trn_reports', parent: 'training_module', type: 'child', name: 'Training Analytics & Reports', hasInfo: true, hasActions: true },
+    
+    // Sub-group: 1st Screenshot Notification Matrix Details
+    { id: 'trn_notif_section', parent: 'training_module', type: 'subparent', name: 'Training Notification & Lifecycle Events (From Notification Matrix)', hasInfo: true },
+    { id: 'notif_assigned', parent: 'training_module', subparent: 'trn_notif_section', type: 'child', name: 'New Training Assigned Notification', hasInfo: true, isNotif: true },
+    { id: 'notif_approaching', parent: 'training_module', subparent: 'trn_notif_section', type: 'child', name: 'Training Due Date Approaching Notification', hasInfo: true, isNotif: true },
+    { id: 'notif_overdue', parent: 'training_module', subparent: 'trn_notif_section', type: 'child', name: 'Training Overdue Notification', hasInfo: true, isNotif: true },
+    { id: 'notif_submitted', parent: 'training_module', subparent: 'trn_notif_section', type: 'child', name: 'Training Completion Submitted Notification', hasInfo: true, isNotif: true },
+    { id: 'notif_approved', parent: 'training_module', subparent: 'trn_notif_section', type: 'child', name: 'Completion Approved / Rejected Notification', hasInfo: true, isNotif: true },
+    { id: 'notif_passed', parent: 'training_module', subparent: 'trn_notif_section', type: 'child', name: 'Assessment Passed Notification', hasInfo: true, isNotif: true },
+    { id: 'notif_failed', parent: 'training_module', subparent: 'trn_notif_section', type: 'child', name: 'Assessment Failed Notification', hasInfo: true, isNotif: true },
+    { id: 'notif_cert_issued', parent: 'training_module', subparent: 'trn_notif_section', type: 'child', name: 'Certificate Issued Notification', hasInfo: true, isNotif: true },
+    { id: 'notif_cert_expiring', parent: 'training_module', subparent: 'trn_notif_section', type: 'child', name: 'Certificate Expiring Soon Notification', hasInfo: true, isNotif: true }
+  ];
+
+  let html = '';
+
+  rows.forEach(item => {
+    // If filtering
+    if (filterQuery && !item.name.toLowerCase().includes(filterQuery)) {
+      return;
+    }
+
+    // Check if collapsed
+    if (item.parent && collapsedPermGroups[item.parent]) {
+      return;
+    }
+    if (item.subparent && collapsedPermGroups[item.subparent]) {
+      return;
+    }
+
+    const p = perms[item.id] || { view: false, default: false, add: false, edit: false, delete: false };
+
+    if (item.type === 'parent') {
+      const isCollapsed = !!collapsedPermGroups[item.id];
+      const highlight = item.isTraining ? 'background: #f0f7ff; border-top: 2px solid #3b82f6;' : 'background: #f8fafc;';
+      html += `
+        <tr class="perm-row-parent" style="${highlight}">
+          <td style="padding: 12px 16px;">
+            <div style="display: flex; align-items: center;">
+              <button type="button" class="perm-collapse-btn" onclick="togglePermGroupCollapse('${item.id}')">${isCollapsed ? '+' : '–'}</button>
+              <span style="font-weight: 700; color: #0f172a; font-size: 13px;">${escapeHtml(item.name)}</span>
+              ${item.hasInfo ? '<span class="perm-info-icon" title="Core module capabilities and lifecycle rules">ⓘ</span>' : ''}
+              ${item.isTraining ? '<span style="font-size: 10px; background: #dbeafe; color: #1e40af; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 700;">Added per Screenshot 4</span>' : ''}
+            </div>
+          </td>
+          <td colspan="3" style="padding: 10px 12px; text-align: center; border-left: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0;">
+            <div style="display: flex; justify-content: space-around; align-items: center;">
+              <label class="crm-toggle" style="margin: 0;">
+                <input type="checkbox" ${p.view ? 'checked' : ''} onchange="toggleRolePerm('${item.id}', 'view', this.checked)" />
+                <span class="crm-toggle-slider"></span>
+              </label>
+              <span class="perm-radio-circle ${p.default ? 'active' : ''}" onclick="toggleRolePermDefault('${item.id}')" title="Set as default landing view"></span>
+              <span style="color: #94a3b8; font-weight: 600;">–</span>
+            </div>
+          </td>
+          <td style="padding: 10px 14px; text-align: center; border-right: 1px solid #e2e8f0;">
+            <input type="checkbox" class="perm-check-input" ${p.add ? 'checked' : ''} onchange="toggleRolePerm('${item.id}', 'add', this.checked)" />
+          </td>
+          <td style="padding: 10px 14px; text-align: center; border-right: 1px solid #e2e8f0;">
+            <input type="checkbox" class="perm-check-input" ${p.edit ? 'checked' : ''} onchange="toggleRolePerm('${item.id}', 'edit', this.checked)" />
+          </td>
+          <td style="padding: 10px 14px; text-align: center;">
+            <input type="checkbox" class="perm-check-input" ${p.delete ? 'checked' : ''} onchange="toggleRolePerm('${item.id}', 'delete', this.checked)" />
+          </td>
+        </tr>
+      `;
+    } else if (item.type === 'subparent') {
+      const isCollapsed = !!collapsedPermGroups[item.id];
+      html += `
+        <tr style="background: #f1f5f9; font-weight: 600;">
+          <td style="padding: 10px 16px 10px 32px;">
+            <div style="display: flex; align-items: center;">
+              <button type="button" class="perm-collapse-btn" onclick="togglePermGroupCollapse('${item.id}')" style="width: 16px; height: 16px; font-size: 10px;">${isCollapsed ? '+' : '–'}</button>
+              <span style="color: #1e293b; font-size: 12.5px;">${escapeHtml(item.name)}</span>
+              <span class="perm-info-icon" title="Lifecycle events from Notification Matrix (Screenshot 1)">ⓘ</span>
+            </div>
+          </td>
+          <td colspan="3" style="text-align: center; border-left: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0;">
+            <span style="font-size: 11px; color: #64748b; font-weight: 500;">Delivery & In-App / Email Controls</span>
+          </td>
+          <td style="text-align: center; color: #94a3b8; border-right: 1px solid #e2e8f0;">–</td>
+          <td style="text-align: center; color: #94a3b8; border-right: 1px solid #e2e8f0;">–</td>
+          <td style="text-align: center; color: #94a3b8;">–</td>
+        </tr>
+      `;
+    } else {
+      // Child or single row
+      const indent = item.subparent ? 'padding-left: 54px;' : (item.parent ? 'padding-left: 36px;' : 'padding-left: 16px;');
+      const isNotif = item.isNotif;
+      html += `
+        <tr class="perm-row-child" style="border-bottom: 1px solid #f1f5f9;">
+          <td style="padding: 11px 16px; ${indent}">
+            <div style="display: flex; align-items: center;">
+              ${item.parent ? '<span class="perm-tree-indent">↳</span>' : ''}
+              <span style="color: #334155; font-size: 12.5px;">${escapeHtml(item.name)}</span>
+              ${item.hasInfo ? '<span class="perm-info-icon" title="Detailed rule specifications">ⓘ</span>' : ''}
+              ${isNotif ? '<span style="font-size: 10px; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; padding: 1px 6px; border-radius: 4px; margin-left: 6px; font-weight: 600;">In-App & Email</span>' : ''}
+            </div>
+          </td>
+          <td colspan="3" style="padding: 8px 12px; text-align: center; border-left: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0;">
+            <div style="display: flex; justify-content: space-around; align-items: center;">
+              <label class="crm-toggle" style="margin: 0;">
+                <input type="checkbox" ${p.view ? 'checked' : ''} onchange="toggleRolePerm('${item.id}', 'view', this.checked)" />
+                <span class="crm-toggle-slider"></span>
+              </label>
+              <span class="perm-radio-circle ${p.default ? 'active' : ''}" onclick="toggleRolePermDefault('${item.id}')" title="Default view indicator"></span>
+              <span style="color: #94a3b8; font-weight: 600;">–</span>
+            </div>
+          </td>
+          <td style="padding: 8px 14px; text-align: center; border-right: 1px solid #e2e8f0;">
+            ${(item.hasActions || p.add !== undefined) && !isNotif ? `<input type="checkbox" class="perm-check-input" ${p.add ? 'checked' : ''} onchange="toggleRolePerm('${item.id}', 'add', this.checked)" />` : '<span style="color:#94a3b8;">–</span>'}
+          </td>
+          <td style="padding: 8px 14px; text-align: center; border-right: 1px solid #e2e8f0;">
+            ${(item.hasActions || p.edit !== undefined) && !isNotif ? `<input type="checkbox" class="perm-check-input" ${p.edit ? 'checked' : ''} onchange="toggleRolePerm('${item.id}', 'edit', this.checked)" />` : '<span style="color:#94a3b8;">–</span>'}
+          </td>
+          <td style="padding: 8px 14px; text-align: center;">
+            ${(item.hasActions || p.delete !== undefined) && !isNotif ? `<input type="checkbox" class="perm-check-input" ${p.delete ? 'checked' : ''} onchange="toggleRolePerm('${item.id}', 'delete', this.checked)" />` : '<span style="color:#94a3b8;">–</span>'}
+          </td>
+        </tr>
+      `;
+    }
+  });
+
+  tbody.innerHTML = html;
+}
+
+window.renderRolePermissionsTable = renderRolePermissionsTable;
+window.filterRolePermissionsTable = renderRolePermissionsTable;
+
 
