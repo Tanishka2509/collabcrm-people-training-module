@@ -2454,3 +2454,17 @@ body {
     display: none;
   }
 }
+
+/* Config View Styling */
+.config-view {
+  flex: 1;
+  background-color: var(--bg-page);
+  overflow-y: auto;
+  height: calc(100vh - 56px);
+}
+
+.config-inner-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}

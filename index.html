@@ -115,135 +115,39 @@
       <aside class="sidebar-wrapper relative" id="sidebarNav">
         <nav class="py-5 px-2 overflow-y-auto overflow-x-hidden sidebar-container 2xl:h-[calc(100vh-116px)] 2xl-to-xl:h-[calc(100vh-108px)] h-[calc(100vh-108px)]">
           <ul role="list" class="space-y-3 sidebar-container" id="sidebarList">
-            <!-- 1. Dashboard -->
-            <li title="Dashboard" class="relative group cursor-pointer sidebar-nav-li active" id="menuDashboard" onclick="switchToDashboard()">
+            <!-- 1. Employees -->
+            <li title="Employees" class="relative group cursor-pointer sidebar-nav-li active" id="menuEmployees" onclick="switchToEmployees()">
               <div class="-my-1">
-                <div class="bg-indigo-600 text-white flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap" id="dashboardInner">
-                  <a class="flex w-full items-center gap-x-3 2xl:p-3 2xl-to-xl:p-2 p-2" href="/people/collabcrm-demo-account/dashboard" onclick="event.preventDefault(); switchToDashboard();">
-                    <span class="text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-grid-01"></span>
-                    <p>Dashboard</p>
+                <div class="bg-indigo-600 text-white flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap" id="employeesInner">
+                  <a class="flex w-full items-center gap-x-3 2xl:p-3 2xl-to-xl:p-2 p-2" href="/people/collabcrm-demo-account/employees" onclick="event.preventDefault(); switchToEmployees();">
+                    <span class="text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-users-02"></span>
+                    <p class="nav-text">Employees</p>
                   </a>
                 </div>
               </div>
             </li>
 
-            <!-- 2. Employees -->
-            <li title="Employees" class="relative group cursor-pointer sidebar-nav-li" id="menuEmployees" onclick="openFlyout('Employees')">
-              <div class="text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap">
-                <span class="text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-users-02"></span>
-                <p>Employees</p>
-                <span class="icon-chevron-right block ml-auto text-xl text-indigo-300"></span>
-              </div>
-            </li>
-
-            <!-- 3. My Team -->
-            <li title="My Team" class="relative group cursor-pointer sidebar-nav-li" id="menuMyTeam" onclick="openFlyout('My Team')">
-              <div class="text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap">
-                <span class="text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-group2"></span>
-                <p>My Team</p>
-                <span class="icon-chevron-right block ml-auto text-xl text-indigo-300"></span>
-              </div>
-            </li>
-
-            <!-- 4. Attendance -->
-            <li title="Attendance" class="relative group cursor-pointer sidebar-nav-li" id="menuAttendance">
-              <div class="-my-1">
-                <div class="text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap">
-                  <a class="flex w-full items-center gap-x-3 2xl:p-3 2xl-to-xl:p-2 p-2" href="/people/collabcrm-demo-account/attendance" onclick="event.preventDefault();">
-                    <span class="text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-calendar-check-02"></span>
-                    <p>Attendance</p>
-                  </a>
-                </div>
-              </div>
-            </li>
-
-            <!-- 5. Leaves -->
-            <li title="Leaves" class="relative group cursor-pointer sidebar-nav-li" id="menuLeaves">
-              <div class="-my-1">
-                <div class="text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap">
-                  <a class="flex w-full items-center gap-x-3 2xl:p-3 2xl-to-xl:p-2 p-2" href="/people/collabcrm-demo-account/leaves" onclick="event.preventDefault();">
-                    <span class="text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-user-right-01"></span>
-                    <p>Leaves</p>
-                  </a>
-                  <a title="Apply Leave" class="icon-plus-square block ml-auto text-xl 2xl:p-3 2xl-to-xl:p-2 p-2 text-indigo-300" href="/people/collabcrm-demo-account/leaves/add" onclick="event.preventDefault(); alert('Apply Leave form');"></a>
-                </div>
-              </div>
-            </li>
-
-            <!-- 6. WFH -->
-            <li title="WFH" class="relative group cursor-pointer sidebar-nav-li" id="menuWFH">
-              <div class="-my-1">
-                <div class="text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap">
-                  <a class="flex w-full items-center gap-x-3 2xl:p-3 2xl-to-xl:p-2 p-2" href="/people/collabcrm-demo-account/work-from-home" onclick="event.preventDefault();">
-                    <span class="text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-home-04"></span>
-                    <p>WFH</p>
-                  </a>
-                  <a title="Apply WFH" class="icon-plus-square block ml-auto text-xl 2xl:p-3 2xl-to-xl:p-2 p-2 text-indigo-300" href="/people/collabcrm-demo-account/work-from-home/add" onclick="event.preventDefault(); alert('Apply WFH form');"></a>
-                </div>
-              </div>
-            </li>
-
-            <!-- 7. Asset -->
-            <li title="Asset" class="relative group cursor-pointer sidebar-nav-li" id="menuAsset">
-              <div class="-my-1">
-                <div class="text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap">
-                  <a class="flex w-full items-center gap-x-3 2xl:p-3 2xl-to-xl:p-2 p-2" href="/people/collabcrm-demo-account/asset/asset-overview" onclick="event.preventDefault();">
-                    <span class="text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-monitor-05"></span>
-                    <p>Asset</p>
-                  </a>
-                  <a title="Add Asset" class="icon-plus-square block ml-auto text-xl 2xl:p-3 2xl-to-xl:p-2 p-2 text-indigo-300" href="/people/collabcrm-demo-account/asset/asset-list/add" onclick="event.preventDefault(); alert('Add Asset form');"></a>
-                </div>
-              </div>
-            </li>
-
-            <!-- 8. Skill Matrix -->
-            <li title="Skill Matrix" class="relative group cursor-pointer sidebar-nav-li" id="menuSkillMatrix">
-              <div class="-my-1">
-                <div class="text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap">
-                  <a class="flex w-full items-center gap-x-3 2xl:p-3 2xl-to-xl:p-2 p-2" href="/people/collabcrm-demo-account/skill-matrix" onclick="event.preventDefault();">
-                    <span class="text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-skill-matrix"></span>
-                    <p>Skill Matrix</p>
-                  </a>
-                </div>
-              </div>
-            </li>
-
-            <!-- 🌟 9. Training Module (Strictly below Skill Matrix and above Organization) -->
+            <!-- 2. Training (Strictly between Employees and Config, with no NEW badge) -->
             <li title="Training" class="relative group cursor-pointer sidebar-nav-li" id="menuTraining" onclick="switchToTraining()">
               <div class="-my-1">
                 <div class="text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap" id="trainingInner">
                   <a class="flex w-full items-center gap-x-3 2xl:p-3 2xl-to-xl:p-2 p-2" href="/people/collabcrm-demo-account/training" onclick="event.preventDefault(); switchToTraining();">
                     <span class="text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training"></span>
-                    <p>Training</p>
+                    <p class="nav-text">Training</p>
                   </a>
                 </div>
               </div>
             </li>
 
-            <!-- 10. Organization -->
-            <li title="Organization" class="relative group cursor-pointer sidebar-nav-li" id="menuOrganization" onclick="openFlyout('Organization')">
-              <div class="text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap">
-                <span class="text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-building-06"></span>
-                <p>Organization</p>
-                <span class="icon-chevron-right block ml-auto text-xl text-indigo-300"></span>
-              </div>
-            </li>
-
-            <!-- 11. Config -->
-            <li title="Config" class="relative group cursor-pointer sidebar-nav-li" id="menuConfig" onclick="openFlyout('Config')">
-              <div class="text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap">
-                <span class="text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-settings-02"></span>
-                <p>Config</p>
-                <span class="icon-chevron-right block ml-auto text-xl text-indigo-300"></span>
-              </div>
-            </li>
-
-            <!-- 12. Payroll Corner -->
-            <li title="Payroll Corner" class="relative group cursor-pointer sidebar-nav-li" id="menuPayroll" onclick="openFlyout('Payroll Corner')">
-              <div class="text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap">
-                <span class="text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-coins-hand"></span>
-                <p>Payroll Corner</p>
-                <span class="icon-chevron-right block ml-auto text-xl text-indigo-300"></span>
+            <!-- 3. Config -->
+            <li title="Config" class="relative group cursor-pointer sidebar-nav-li" id="menuConfig" onclick="switchToConfig()">
+              <div class="-my-1">
+                <div class="text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap" id="configInner">
+                  <a class="flex w-full items-center gap-x-3 2xl:p-3 2xl-to-xl:p-2 p-2" href="/people/collabcrm-demo-account/config" onclick="event.preventDefault(); switchToConfig();">
+                    <span class="text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-settings-02"></span>
+                    <p class="nav-text">Config</p>
+                  </a>
+                </div>
               </div>
             </li>
           </ul>
@@ -1261,6 +1165,90 @@
                       <span class="badge-verified-cert">📜 Certificate #CRM-8924</span>
                     </div>
                     <button class="btn-sm-outline" onclick="openCertificateModal('Enterprise CRM Communication & Client Delight', 'Rihan R.', '24-Oct-2026')">View Certificate</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+        <!-- ============================================== -->
+        <!-- VIEW 3: CONFIGURATION / SETTINGS VIEW          -->
+        <!-- ============================================== -->
+        <div class="config-view" id="viewConfig" style="display: none;">
+          <div class="config-inner-container p-6 overflow-y-auto max-w-7xl mx-auto">
+            <!-- Header -->
+            <div class="flex items-center justify-between pb-6 border-b border-gray-200">
+              <div>
+                <div class="flex items-center gap-2 text-xs text-gray-500 mb-1">
+                  <span>CollabCRM People</span>
+                  <span>›</span>
+                  <span class="text-indigo-600 font-medium">System Configuration</span>
+                </div>
+                <h1 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                  <span class="icon-settings-02 w-6 h-6 text-indigo-600"></span>
+                  Config & People Settings
+                </h1>
+                <p class="text-sm text-gray-500 mt-1">Manage training compliance policies, role permissions, notification preferences, and system automation.</p>
+              </div>
+              <button class="btn-primary-action" onclick="alert('Configuration settings saved successfully!')">Save Changes</button>
+            </div>
+
+            <!-- Settings Grid -->
+            <div class="config-cards-grid mt-6" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 20px;">
+              <!-- Card 1: Training Compliance Rules -->
+              <div class="card p-5 rounded-lg border border-gray-200 bg-white shadow-sm">
+                <h3 class="text-base font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                  <span class="icon-training w-5 h-5 text-indigo-600"></span>
+                  Training & Compliance Rules
+                </h3>
+                <div class="space-y-4 text-sm" style="display: flex; flex-direction: column; gap: 14px;">
+                  <div>
+                    <label class="block font-medium text-gray-700 mb-1">Mandatory Compliance Recurrence</label>
+                    <select class="form-select w-full" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px;">
+                      <option>Quarterly (Every 3 Months)</option>
+                      <option selected>Semi-Annual (Every 6 Months)</option>
+                      <option>Annual (Every 12 Months)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block font-medium text-gray-700 mb-1">Passing Assessment Score (%)</label>
+                    <input type="number" value="80" class="form-input w-full" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px;" />
+                  </div>
+                  <div class="flex items-center justify-between pt-2">
+                    <span class="text-gray-700 font-medium">Auto-issue Certificate on completion</span>
+                    <input type="checkbox" checked style="width: 18px; height: 18px; accent-color: #4f46e5;" />
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-gray-700 font-medium">Send reminder emails to overdue learners</span>
+                    <input type="checkbox" checked style="width: 18px; height: 18px; accent-color: #4f46e5;" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 2: Roles & Permissions -->
+              <div class="card p-5 rounded-lg border border-gray-200 bg-white shadow-sm">
+                <h3 class="text-base font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                  <span class="icon-users-02 w-5 h-5 text-indigo-600"></span>
+                  Role & Access Control
+                </h3>
+                <div class="space-y-4 text-sm" style="display: flex; flex-direction: column; gap: 14px;">
+                  <div>
+                    <label class="block font-medium text-gray-700 mb-1">Default Landing Module</label>
+                    <select class="form-select w-full" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px;">
+                      <option selected>Employees (Overview Dashboard)</option>
+                      <option>Training & Skill Development</option>
+                      <option>Config</option>
+                    </select>
+                  </div>
+                  <div class="flex items-center justify-between pt-2">
+                    <span class="text-gray-700 font-medium">Allow Employees to Request External Trainings</span>
+                    <input type="checkbox" checked style="width: 18px; height: 18px; accent-color: #4f46e5;" />
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-gray-700 font-medium">Managers can approve team learning budgets</span>
+                    <input type="checkbox" checked style="width: 18px; height: 18px; accent-color: #4f46e5;" />
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-gray-700 font-medium">Enable Role Quick-Switcher in Header</span>
+                    <input type="checkbox" checked style="width: 18px; height: 18px; accent-color: #4f46e5;" />
                   </div>
                 </div>
               </div>

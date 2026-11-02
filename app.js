@@ -128,62 +128,128 @@ function toggleRoleQuickMenu() {
 
 window.toggleRoleQuickMenu = toggleRoleQuickMenu;
 
-// Navigation Handling (Dashboard <-> Training Module)
-function switchToDashboard() {
-  const dashboardView = document.getElementById('viewDashboard');
-  const trainingView = document.getElementById('viewTraining');
-  const menuDashboard = document.getElementById('menuDashboard');
+// Navigation Handling for the 3 Core Modules: Employees, Training, Config
+function switchToEmployees() {
+  const viewEmployees = document.getElementById('viewDashboard');
+  const viewTraining = document.getElementById('viewTraining');
+  const viewConfig = document.getElementById('viewConfig');
+
+  const menuEmployees = document.getElementById('menuEmployees');
   const menuTraining = document.getElementById('menuTraining');
-  const dashboardInner = document.getElementById('dashboardInner');
+  const menuConfig = document.getElementById('menuConfig');
+
+  const employeesInner = document.getElementById('employeesInner');
   const trainingInner = document.getElementById('trainingInner');
+  const configInner = document.getElementById('configInner');
 
-  if (dashboardView) dashboardView.classList.add('active');
-  if (trainingView) trainingView.classList.remove('active');
+  if (viewEmployees) { viewEmployees.style.display = 'block'; viewEmployees.classList.add('active'); }
+  if (viewTraining) { viewTraining.style.display = 'none'; viewTraining.classList.remove('active'); }
+  if (viewConfig) { viewConfig.style.display = 'none'; viewConfig.classList.remove('active'); }
 
-  if (menuDashboard) menuDashboard.classList.add('active');
+  if (menuEmployees) menuEmployees.classList.add('active');
   if (menuTraining) menuTraining.classList.remove('active');
+  if (menuConfig) menuConfig.classList.remove('active');
 
-  if (dashboardInner) {
-    dashboardInner.className = 'bg-indigo-600 text-white flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
-    const iconSpan = dashboardInner.querySelector('.icon-grid-01');
-    if (iconSpan) iconSpan.className = 'text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-grid-01';
+  if (employeesInner) {
+    employeesInner.className = 'bg-indigo-600 text-white flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
+    const iconSpan = employeesInner.querySelector('.icon-users-02');
+    if (iconSpan) iconSpan.className = 'text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-users-02';
   }
   if (trainingInner) {
     trainingInner.className = 'text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
     const iconSpan = trainingInner.querySelector('.icon-training');
     if (iconSpan) iconSpan.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training';
   }
+  if (configInner) {
+    configInner.className = 'text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
+    const iconSpan = configInner.querySelector('.icon-settings-02');
+    if (iconSpan) iconSpan.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-settings-02';
+  }
 
   closeSidebarFlyout();
 }
 
 function switchToTraining() {
-  const dashboardView = document.getElementById('viewDashboard');
-  const trainingView = document.getElementById('viewTraining');
-  const menuDashboard = document.getElementById('menuDashboard');
+  const viewEmployees = document.getElementById('viewDashboard');
+  const viewTraining = document.getElementById('viewTraining');
+  const viewConfig = document.getElementById('viewConfig');
+
+  const menuEmployees = document.getElementById('menuEmployees');
   const menuTraining = document.getElementById('menuTraining');
-  const dashboardInner = document.getElementById('dashboardInner');
+  const menuConfig = document.getElementById('menuConfig');
+
+  const employeesInner = document.getElementById('employeesInner');
   const trainingInner = document.getElementById('trainingInner');
+  const configInner = document.getElementById('configInner');
 
-  if (dashboardView) dashboardView.classList.remove('active');
-  if (trainingView) trainingView.classList.add('active');
+  if (viewEmployees) { viewEmployees.style.display = 'none'; viewEmployees.classList.remove('active'); }
+  if (viewTraining) { viewTraining.style.display = 'block'; viewTraining.classList.add('active'); }
+  if (viewConfig) { viewConfig.style.display = 'none'; viewConfig.classList.remove('active'); }
 
-  if (menuDashboard) menuDashboard.classList.remove('active');
+  if (menuEmployees) menuEmployees.classList.remove('active');
   if (menuTraining) menuTraining.classList.add('active');
+  if (menuConfig) menuConfig.classList.remove('active');
 
-  if (dashboardInner) {
-    dashboardInner.className = 'text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
-    const iconSpan = dashboardInner.querySelector('.icon-grid-01');
-    if (iconSpan) iconSpan.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-grid-01';
+  if (employeesInner) {
+    employeesInner.className = 'text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
+    const iconSpan = employeesInner.querySelector('.icon-users-02');
+    if (iconSpan) iconSpan.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-users-02';
   }
   if (trainingInner) {
     trainingInner.className = 'bg-indigo-600 text-white flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
     const iconSpan = trainingInner.querySelector('.icon-training');
     if (iconSpan) iconSpan.className = 'text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training';
   }
+  if (configInner) {
+    configInner.className = 'text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
+    const iconSpan = configInner.querySelector('.icon-settings-02');
+    if (iconSpan) iconSpan.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-settings-02';
+  }
 
   closeSidebarFlyout();
 }
+
+function switchToConfig() {
+  const viewEmployees = document.getElementById('viewDashboard');
+  const viewTraining = document.getElementById('viewTraining');
+  const viewConfig = document.getElementById('viewConfig');
+
+  const menuEmployees = document.getElementById('menuEmployees');
+  const menuTraining = document.getElementById('menuTraining');
+  const menuConfig = document.getElementById('menuConfig');
+
+  const employeesInner = document.getElementById('employeesInner');
+  const trainingInner = document.getElementById('trainingInner');
+  const configInner = document.getElementById('configInner');
+
+  if (viewEmployees) { viewEmployees.style.display = 'none'; viewEmployees.classList.remove('active'); }
+  if (viewTraining) { viewTraining.style.display = 'none'; viewTraining.classList.remove('active'); }
+  if (viewConfig) { viewConfig.style.display = 'block'; viewConfig.classList.add('active'); }
+
+  if (menuEmployees) menuEmployees.classList.remove('active');
+  if (menuTraining) menuTraining.classList.remove('active');
+  if (menuConfig) menuConfig.classList.add('active');
+
+  if (employeesInner) {
+    employeesInner.className = 'text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
+    const iconSpan = employeesInner.querySelector('.icon-users-02');
+    if (iconSpan) iconSpan.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-users-02';
+  }
+  if (trainingInner) {
+    trainingInner.className = 'text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
+    const iconSpan = trainingInner.querySelector('.icon-training');
+    if (iconSpan) iconSpan.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training';
+  }
+  if (configInner) {
+    configInner.className = 'bg-indigo-600 text-white flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
+    const iconSpan = configInner.querySelector('.icon-settings-02');
+    if (iconSpan) iconSpan.className = 'text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-settings-02';
+  }
+
+  closeSidebarFlyout();
+}
+
+const switchToDashboard = switchToEmployees;
 
 function openFlyout(menuTitle) {
   const flyout = document.getElementById('sidebarFlyout');
@@ -195,10 +261,8 @@ function openFlyout(menuTitle) {
   
   const subItems = {
     'Employees': ['Directory', 'Organization Chart', 'Onboarding & Exit', 'Birthdays & Anniversaries'],
-    'My Team': ['Team Overview', 'Direct Reports', 'Timesheets & Approvals', 'Team Goals'],
-    'Organization': ['Company Structure', 'Branches & Locations', 'Designations & Grades', 'Announcements'],
-    'Config': ['Company Settings', 'Attendance Policies', 'Leave Types', 'Role Permissions'],
-    'Payroll Corner': ['Salary Slips', 'Tax Declarations (Form 16)', 'Loan Requests', 'Reimbursements']
+    'Training': ['Active Programs', 'Compliance & Mandatory', 'Trainee Roster', 'Certificates'],
+    'Config': ['Company Settings', 'Attendance Policies', 'Leave Types', 'Role Permissions']
   };
 
   if (list && subItems[menuTitle]) {
@@ -217,8 +281,10 @@ function closeSidebarFlyout() {
   }
 }
 
+window.switchToEmployees = switchToEmployees;
 window.switchToDashboard = switchToDashboard;
 window.switchToTraining = switchToTraining;
+window.switchToConfig = switchToConfig;
 window.openFlyout = openFlyout;
 window.closeSidebarFlyout = closeSidebarFlyout;
 
