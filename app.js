@@ -335,7 +335,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSidebar();
   initClockWidget();
   setAppRole('admin'); // Start in Admin Role
-  switchToTraining();
+  switchToEmployees();
 });
 
 // App Role Switcher (Admin vs HR vs Reporting Manager)
