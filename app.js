@@ -5825,7 +5825,7 @@ function renderEmployeeTrainingsList() {
 
   // 1. Status Filter
   if (state.empActiveFilter && state.empActiveFilter !== 'all') {
-    list = list.filter(t => t.status === state.empActiveFilter);
+    list = list.filter(t => normalizeStatus(t.trainingStatus || t.status) === state.empActiveFilter);
   }
 
   // 2. Category Filter
@@ -5835,23 +5835,28 @@ function renderEmployeeTrainingsList() {
 
   // 3. Search Query
   if (query) {
-    list = list.filter(t =>
-      (t.title && t.title.toLowerCase().includes(query)) ||
-      (t.category && t.category.toLowerCase().includes(query)) ||
-      (t.shortDesc && t.shortDesc.toLowerCase().includes(query)) ||
-      (t.assignedBy && t.assignedBy.toLowerCase().includes(query))
-    );
+    list = list.filter(t => {
+      const title = (t.trainingName || t.title || '').toLowerCase();
+      const cat = (t.category || '').toLowerCase();
+      const desc = (t.shortDescription || t.shortDesc || t.description || '').toLowerCase();
+      const by = (t.assignedBy || '').toLowerCase();
+      return title.includes(query) || cat.includes(query) || desc.includes(query) || by.includes(query);
+    });
   }
 
   // 4. Sorting
   if (sortOrder === 'due_soonest') {
     list.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
   } else if (sortOrder === 'progress_desc') {
-    list.sort((a, b) => (b.progressPercent || 0) - (a.progressPercent || 0));
+    list.sort((a, b) => {
+      const pB = b.completionPercentage !== undefined ? b.completionPercentage : (b.progressPercent || 0);
+      const pA = a.completionPercentage !== undefined ? a.completionPercentage : (a.progressPercent || 0);
+      return pB - pA;
+    });
   } else if (sortOrder === 'recently_assigned') {
     list.sort((a, b) => new Date(b.assignedDate) - new Date(a.assignedDate));
   } else if (sortOrder === 'name_asc') {
-    list.sort((a, b) => a.title.localeCompare(b.title));
+    list.sort((a, b) => (a.trainingName || a.title || '').localeCompare(b.trainingName || b.title || ''));
   }
 
   if (list.length === 0) {
@@ -5867,7 +5872,8 @@ function renderEmployeeTrainingsList() {
   }
 
   const getStatusBadge = (status) => {
-    switch (status) {
+    const s = normalizeStatus(status);
+    switch (s) {
       case 'Completed':
         return '<span style="background: #dcfce7; color: #15803d; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; border: 1px solid #bbf7d0;">✓ Completed</span>';
       case 'In Progress':
@@ -5885,9 +5891,13 @@ function renderEmployeeTrainingsList() {
 
   let html = '';
   list.forEach(t => {
-    const isMandatory = t.isMandatory !== false;
-    const prog = t.progressPercent || 0;
+    const isMandatory = t.isMandatory !== undefined ? t.isMandatory : (t.mandatory !== false);
+    const prog = t.completionPercentage !== undefined ? t.completionPercentage : (t.progressPercent || 0);
     const progColor = prog === 100 ? '#10b981' : prog > 0 ? '#4f46e5' : '#94a3b8';
+    const title = t.trainingName || t.title || 'Training Program';
+    const shortDesc = t.shortDescription || t.shortDesc || t.description || 'Comprehensive training curriculum.';
+    const statusText = normalizeStatus(t.trainingStatus || t.status);
+    const duration = t.expectedDuration || (t.durationHours ? t.durationHours + ' hrs' : '4 hrs');
 
     html += `
       <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); transition: border-color 0.2s ease;">
@@ -5906,17 +5916,17 @@ function renderEmployeeTrainingsList() {
             <span style="font-size: 12px; color: #64748b;">
               Due: <strong style="color: #0f172a;">${escapeHtml(t.dueDate || '15-Nov-2026')}</strong>
             </span>
-            ${getStatusBadge(t.status)}
+            ${getStatusBadge(statusText)}
           </div>
         </div>
 
         <!-- Title & Description -->
         <div>
           <h4 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0 0 4px 0;">
-            ${escapeHtml(t.title)}
+            ${escapeHtml(title)}
           </h4>
           <p style="font-size: 13px; color: #475569; margin: 0; line-height: 1.5;">
-            ${escapeHtml(t.shortDesc || t.description || 'Comprehensive training curriculum.')}
+            ${escapeHtml(shortDesc)}
           </p>
         </div>
 
@@ -5925,7 +5935,7 @@ function renderEmployeeTrainingsList() {
           <div style="display: flex; align-items: center; gap: 18px; font-size: 12px; color: #64748b; flex-wrap: wrap;">
             <span>Assigned By: <strong style="color: #334155;">${escapeHtml(t.assignedBy || 'Megha Salunkhe')}</strong></span>
             <span>Assigned: <strong style="color: #334155;">${escapeHtml(t.assignedDate || '01-Nov-2026')}</strong></span>
-            <span>Duration: <strong style="color: #334155;">${escapeHtml(t.durationHours || 4)} hrs</strong></span>
+            <span>Duration: <strong style="color: #334155;">${escapeHtml(duration)}</strong></span>
           </div>
 
           <!-- Progress & Action -->
@@ -5938,7 +5948,7 @@ function renderEmployeeTrainingsList() {
             </div>
 
             <button type="button" class="btn-primary-action" onclick="openEmployeeTrainingDetail('${t.id}')" style="padding: 7px 14px; font-size: 12px; font-weight: 600;">
-              ${t.status === 'Completed' ? 'View Details' : t.progressPercent > 0 ? 'Continue Training →' : 'Start Training →'}
+              ${statusText === 'Completed' ? 'View Details' : prog > 0 ? 'Continue Training →' : 'Start Training →'}
             </button>
           </div>
         </div>
@@ -5977,6 +5987,13 @@ function openEmployeeTrainingDetail(trainingId) {
 
   state.empCurrentTrainingId = trainingId;
 
+  const title = t.trainingName || t.title || 'Training Program';
+  const shortDesc = t.shortDescription || t.shortDesc || t.description || '';
+  const statusText = normalizeStatus(t.trainingStatus || t.status);
+  const isMandatory = t.isMandatory !== undefined ? t.isMandatory : (t.mandatory !== false);
+  const duration = t.expectedDuration || (t.durationHours ? t.durationHours + ' Hours' : '4 Hours');
+  const difficulty = t.difficultyLevel || t.difficulty || 'Intermediate';
+
   // Header Details
   const elTitle = document.getElementById('empModalTrainingTitle');
   const elCategory = document.getElementById('empModalCategoryBadge');
@@ -5984,14 +6001,14 @@ function openEmployeeTrainingDetail(trainingId) {
   const elStatus = document.getElementById('empModalStatusBadge');
   const elDue = document.getElementById('empModalDueDateText');
 
-  if (elTitle) elTitle.textContent = t.title;
+  if (elTitle) elTitle.textContent = title;
   if (elCategory) elCategory.textContent = t.category || 'General';
   if (elMandatory) {
-    elMandatory.textContent = t.isMandatory !== false ? 'Mandatory' : 'Optional';
-    elMandatory.style.background = t.isMandatory !== false ? '#fee2e2' : '#f1f5f9';
-    elMandatory.style.color = t.isMandatory !== false ? '#991b1b' : '#475569';
+    elMandatory.textContent = isMandatory ? 'Mandatory' : 'Optional';
+    elMandatory.style.background = isMandatory ? '#fee2e2' : '#f1f5f9';
+    elMandatory.style.color = isMandatory ? '#991b1b' : '#475569';
   }
-  if (elStatus) elStatus.textContent = t.status;
+  if (elStatus) elStatus.textContent = statusText;
   if (elDue) elDue.textContent = `Due Date: ${t.dueDate} • Assigned By: ${t.assignedBy || 'Megha Salunkhe'}`;
 
   // Tab 1: Overview & Objectives
@@ -6003,11 +6020,20 @@ function openEmployeeTrainingDetail(trainingId) {
   const elAssignedBy = document.getElementById('empModalAssignedByText');
   const elAssignedDate = document.getElementById('empModalAssignedDateText');
 
-  if (elDesc) elDesc.textContent = t.description || t.shortDesc;
-  if (elDiff) elDiff.textContent = t.difficulty || 'Intermediate';
-  if (elDur) elDur.textContent = `${t.durationHours || 4} Hours`;
+  if (elDesc) elDesc.textContent = shortDesc;
+  if (elDiff) elDiff.textContent = difficulty;
+  if (elDur) elDur.textContent = duration;
   if (elAssignedBy) elAssignedBy.textContent = t.assignedBy || 'Megha Salunkhe';
   if (elAssignedDate) elAssignedDate.textContent = t.assignedDate || '01-Nov-2026';
+
+  if (elObjList) {
+    const objs = t.learningObjectives || ['Master platform architecture and workflows.', 'Implement role-based controls and security policies.', 'Pass capstone assessment with required threshold.'];
+    elObjList.innerHTML = Array.isArray(objs) ? objs.map(o => `<li>${escapeHtml(o)}</li>`).join('') : `<li>${escapeHtml(objs)}</li>`;
+  }
+  if (elOutcomesList) {
+    const outcomes = t.expectedOutcomes || ['Proficiency in operational execution.', 'Compliance certification issued in CollabCRM registry.', 'Enhanced domain capabilities for project delivery.'];
+    elOutcomesList.innerHTML = Array.isArray(outcomes) ? outcomes.map(o => `<li>${escapeHtml(o)}</li>`).join('') : `<li>${escapeHtml(outcomes)}</li>`;
+  }
 
   if (elObjList) {
     const objs = t.learningObjectives || ['Master platform architecture and workflows.', 'Implement role-based controls and security policies.', 'Pass capstone assessment with required threshold.'];
@@ -6078,7 +6104,7 @@ function renderEmpModalResources(t) {
   if (!container) return;
 
   const resources = t.resources || [];
-  const mandatory = resources.filter(r => r.mandatory !== false);
+  const mandatory = resources.filter(r => r.isMandatory !== undefined ? r.isMandatory : (r.mandatory !== false));
   const completedMandatory = mandatory.filter(r => r.isCompleted);
   const pct = mandatory.length ? Math.round((completedMandatory.length / mandatory.length) * 100) : 100;
 
@@ -6099,7 +6125,8 @@ function renderEmpModalResources(t) {
       case 'video': return '📹 Uploaded Video';
       case 'pdf': return '📄 PDF Document';
       case 'document': return '📝 Document';
-      case 'external_course': return '🎓 External Course Link';
+      case 'external_course':
+      case 'external_link': return '🎓 External Course Link';
       case 'website': return '🌐 Website Link';
       default: return '🔗 Digital Resource';
     }
@@ -6108,7 +6135,8 @@ function renderEmpModalResources(t) {
   let html = '';
   resources.forEach(r => {
     const isDone = !!r.isCompleted;
-    const isMand = r.mandatory !== false;
+    const isMand = r.isMandatory !== undefined ? r.isMandatory : (r.mandatory !== false);
+    const durationText = r.duration || (r.durationMinutes ? r.durationMinutes + ' mins' : '20 mins');
 
     html += `
       <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
@@ -6127,7 +6155,7 @@ function renderEmpModalResources(t) {
             }
           </div>
           <h5 style="font-size: 14px; font-weight: 700; color: #0f172a; margin: 0 0 3px 0;">${escapeHtml(r.title)}</h5>
-          <p style="font-size: 12px; color: #64748b; margin: 0;">${escapeHtml(r.description || 'Estimated time: ' + (r.durationMinutes || 20) + ' mins')}</p>
+          <p style="font-size: 12px; color: #64748b; margin: 0;">${escapeHtml(r.description || 'Estimated time: ' + durationText)}</p>
         </div>
 
         <div style="display: flex; align-items: center; gap: 10px;">
@@ -6205,6 +6233,7 @@ function openEmployeeResourceViewer(trainingId, resourceId) {
   state.empCurrentTrainingId = trainingId;
   state.empCurrentResourceId = resourceId;
 
+  const title = t.trainingName || t.title || 'Training Program';
   const elTitle = document.getElementById('empViewerTitle');
   const elSubtitle = document.getElementById('empViewerSubtitle');
   const elIcon = document.getElementById('empViewerTypeIcon');
@@ -6212,7 +6241,7 @@ function openEmployeeResourceViewer(trainingId, resourceId) {
   const btnComplete = document.getElementById('btnEmpViewerMarkComplete');
 
   if (elTitle) elTitle.textContent = r.title;
-  if (elSubtitle) elSubtitle.textContent = `${t.title} • ${r.durationMinutes || 20} mins expected`;
+  if (elSubtitle) elSubtitle.textContent = `${title} • ${r.duration || (r.durationMinutes + ' mins') || '20 mins'} expected`;
   if (elIcon) elIcon.textContent = r.type === 'youtube' ? '🎬' : r.type === 'pdf' ? '📄' : '📺';
 
   if (btnComplete) {
@@ -6221,7 +6250,7 @@ function openEmployeeResourceViewer(trainingId, resourceId) {
 
   if (body) {
     if (r.type === 'youtube') {
-      const vidId = r.url.includes('v=') ? r.url.split('v=')[1].split('&')[0] : 'dQw4w9WgXcQ';
+      const vidId = r.url.includes('v=') ? r.url.split('v=')[1].split('&')[0] : '996OiexHze0';
       body.innerHTML = `
         <div style="width: 100%; height: 100%; min-height: 440px; display: flex; align-items: center; justify-content: center;">
           <iframe width="100%" height="440" src="https://www.youtube-nocookie.com/embed/${vidId}?autoplay=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border: none;"></iframe>
@@ -6299,8 +6328,13 @@ function renderEmpModalAssessment(t) {
   }
 
   const a = t.assessment;
-  const isPassed = !!a.isPassed;
-  const remaining = Math.max(0, (a.maxAttempts || 3) - (a.attemptsCount || 0));
+  const isPassed = !!(a.passed !== undefined ? a.passed : a.isPassed);
+  const attemptsCount = a.attemptsUsed !== undefined ? a.attemptsUsed : (a.attemptsCount || 0);
+  const maxAttempts = a.maxAttempts || 3;
+  const remaining = Math.max(0, maxAttempts - attemptsCount);
+  const aTitle = a.name || a.title || 'Knowledge Assessment';
+  const aPassing = a.passingScore || 80;
+  const bestScore = a.bestScore || (isPassed ? 100 : 75);
 
   if (badge) {
     badge.textContent = isPassed ? 'Passed ✓' : remaining > 0 ? 'Available' : 'Attempts Exhausted';
@@ -6312,11 +6346,11 @@ function renderEmpModalAssessment(t) {
     <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px; margin-bottom: 18px;">
       <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 10px;">
         <div>
-          <h4 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0;">${escapeHtml(a.title || 'Knowledge Assessment')}</h4>
-          <p style="font-size: 12.5px; color: #64748b; margin: 3px 0 0 0;">Passing Score: <strong>${a.passingScore || 80}%</strong> • Available Attempts: <strong>${remaining} of ${a.maxAttempts || 3}</strong></p>
+          <h4 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0;">${escapeHtml(aTitle)}</h4>
+          <p style="font-size: 12.5px; color: #64748b; margin: 3px 0 0 0;">Passing Score: <strong>${aPassing}%</strong> • Available Attempts: <strong>${remaining} of ${maxAttempts}</strong></p>
         </div>
         ${isPassed
-          ? `<span style="background: #dcfce7; color: #15803d; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 12px;">✓ Passed (Score: ${a.bestScore || 100}%)</span>`
+          ? `<span style="background: #dcfce7; color: #15803d; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 12px;">✓ Passed (Score: ${bestScore}%)</span>`
           : `<span style="background: #fef3c7; color: #b45309; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 12px;">Passing Required</span>`
         }
       </div>
@@ -6325,12 +6359,13 @@ function renderEmpModalAssessment(t) {
   `;
 
   // Previous attempts log
-  if (a.attemptsHistory && a.attemptsHistory.length > 0) {
+  const attemptsHistory = a.previousAttempts || a.attemptsHistory || [];
+  if (attemptsHistory.length > 0) {
     html += `
       <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; margin-bottom: 18px;">
         <h5 style="font-size: 12.5px; font-weight: 700; color: #0f172a; margin: 0 0 8px 0;">Previous Assessment Attempts</h5>
         <div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px;">
-          ${a.attemptsHistory.map(att => `
+          ${attemptsHistory.map(att => `
             <div style="display: flex; align-items: center; justify-content: space-between; padding: 6px 10px; background: #f8fafc; border-radius: 4px;">
               <span>Attempt #${att.attemptNumber} (${att.submissionDate || '02-Nov-2026'})</span>
               <span style="font-weight: 700; color: ${att.passed ? '#15803d' : '#b91c1c'};">Score: ${att.score}% — ${att.passed ? 'Passed ✓' : 'Failed'}</span>
@@ -6349,7 +6384,7 @@ function renderEmpModalAssessment(t) {
         ${questions.map((q, qIdx) => `
           <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px;">
             <p style="font-size: 13.5px; font-weight: 600; color: #0f172a; margin: 0 0 10px 0;">
-              Q${qIdx + 1}. ${escapeHtml(q.question)}
+              Q${qIdx + 1}. ${escapeHtml(q.text || q.question)}
             </p>
             <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
               ${(q.options || []).map((opt, optIdx) => `
@@ -6421,10 +6456,10 @@ async function submitEmployeeAssessment(trainingId) {
       if (result.passed) {
         showConfigToast(`Assessment Passed! Score: ${result.score}% ✓`);
       } else {
-        showConfigToast(`Score: ${result.score}% (Passing: ${result.passingScore}%). Remaining attempts: ${result.remainingAttempts}`);
+        showConfigToast(`Score: ${result.score}% (Passing: ${result.passingScore || 80}%). Remaining attempts: ${result.attemptsRemaining}`);
       }
     } else {
-      showConfigToast(result.error || 'Failed to submit assessment.');
+      showConfigToast(result.error || result.message || 'Failed to submit assessment.');
     }
   } catch (err) {
     console.error('Error submitting assessment:', err);
@@ -6442,10 +6477,13 @@ function renderEmpModalSubmission(t) {
   const feedbackBanner = document.getElementById('empModalReviewFeedbackBanner');
   const remarksInput = document.getElementById('empSubmissionRemarksInput');
   const submitBtn = document.getElementById('btnEmpModalSubmitReview');
+  const statusText = normalizeStatus(t.trainingStatus || t.status);
 
   // Review Feedback Banner Rendering (Spec Sec 10)
   if (feedbackBanner) {
-    if (t.status === 'Changes Requested') {
+    if (statusText === 'Changes Requested') {
+      const reviewerName = t.review?.reviewerName || t.reviewerName || 'Megha Salunkhe';
+      const feedbackNotes = t.review?.feedbackNotes || t.reviewerFeedback || 'Please attach your staging deployment log and expand your implementation remarks.';
       feedbackBanner.style.display = 'block';
       feedbackBanner.innerHTML = `
         <div style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 14px 18px; color: #92400e;">
@@ -6453,15 +6491,16 @@ function renderEmpModalSubmission(t) {
             <strong style="font-size: 13.5px; display: flex; align-items: center; gap: 6px;">
               <span>⚠️</span> Changes Requested by Reviewer
             </strong>
-            <span style="font-size: 11.5px; color: #b45309;">Reviewer: ${escapeHtml(t.reviewerName || 'Megha Salunkhe')}</span>
+            <span style="font-size: 11.5px; color: #b45309;">Reviewer: ${escapeHtml(reviewerName)}</span>
           </div>
           <p style="font-size: 13px; margin: 0 0 8px 0; line-height: 1.5;">
-            "${escapeHtml(t.reviewerFeedback || 'Please attach your staging deployment log and expand your implementation remarks.')}"
+            "${escapeHtml(feedbackNotes)}"
           </p>
           <span style="font-size: 11.5px; font-weight: 600; color: #b45309;">You may update remarks and evidence below, then click "Resubmit for Review".</span>
         </div>
       `;
-    } else if (t.status === 'Completed') {
+    } else if (statusText === 'Completed') {
+      const reviewerName = t.review?.reviewerName || t.reviewerName || 'Megha Salunkhe';
       feedbackBanner.style.display = 'block';
       feedbackBanner.innerHTML = `
         <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 14px 18px; color: #166534;">
@@ -6469,11 +6508,11 @@ function renderEmpModalSubmission(t) {
             <span>✓</span> Training Approved &amp; Certified
           </strong>
           <p style="font-size: 12.5px; margin: 4px 0 0 0;">
-            Approved by <strong>${escapeHtml(t.reviewerName || 'Megha Salunkhe')}</strong> on ${escapeHtml(t.completionDate || '02-Nov-2026')}. Official Certificate issued in your CollabCRM portal.
+            Approved by <strong>${escapeHtml(reviewerName)}</strong> on ${escapeHtml(t.completionDate || '02-Nov-2026')}. Official Certificate issued in your CollabCRM portal.
           </p>
         </div>
       `;
-    } else if (t.status === 'Submitted for Review') {
+    } else if (statusText === 'Submitted for Review') {
       feedbackBanner.style.display = 'block';
       feedbackBanner.innerHTML = `
         <div style="background: #f5f3ff; border: 1px solid #ddd6fe; border-radius: 8px; padding: 14px 18px; color: #5b21b6;">
@@ -6481,7 +6520,7 @@ function renderEmpModalSubmission(t) {
             <span>⏳</span> Submitted for Review
           </strong>
           <p style="font-size: 12.5px; margin: 4px 0 0 0;">
-            Submitted on ${escapeHtml(t.submissionDate || '02-Nov-2026')}. Evaluation currently in progress by ${escapeHtml(t.assignedBy || 'Megha Salunkhe')}. Ordinary editing is locked while under review.
+            Submitted on ${escapeHtml(t.submission?.submittedAt || t.submissionDate || '02-Nov-2026')}. Evaluation currently in progress by ${escapeHtml(t.assignedBy || 'Megha Salunkhe')}. Ordinary editing is locked while under review.
           </p>
         </div>
       `;
@@ -6493,13 +6532,13 @@ function renderEmpModalSubmission(t) {
 
   // Pre-fill remarks if available
   if (remarksInput) {
-    remarksInput.value = t.submissionRemarks || '';
-    remarksInput.disabled = (t.status === 'Submitted for Review' || t.status === 'Completed');
+    remarksInput.value = t.submission?.completionRemarks || t.submissionRemarks || '';
+    remarksInput.disabled = (statusText === 'Submitted for Review' || statusText === 'Completed');
   }
 
   if (submitBtn) {
-    submitBtn.textContent = t.status === 'Changes Requested' ? 'Resubmit for Review ↻' : 'Submit for Review ✓';
-    submitBtn.style.display = (t.status === 'Submitted for Review' || t.status === 'Completed') ? 'none' : 'inline-block';
+    submitBtn.textContent = statusText === 'Changes Requested' ? 'Resubmit for Review ↻' : 'Submit for Review ✓';
+    submitBtn.style.display = (statusText === 'Submitted for Review' || statusText === 'Completed') ? 'none' : 'inline-block';
   }
 
   validateEmpSubmissionReadiness();
