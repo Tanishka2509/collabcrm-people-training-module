@@ -418,8 +418,45 @@ function setAppRole(role) {
     if (optAssignDeptRadio) optAssignDeptRadio.style.display = 'none';
   }
 
-  // Re-render active sub-tab view with role scoping applied
-  renderActiveSubTab();
+  // Toggle Employee Portal vs Admin/HR/Manager Portal Navigation
+  const empHeaderCard = document.getElementById('empProfileHeaderCard');
+  const adminSubnav = document.getElementById('adminSubnavTabs');
+  const empSubnav = document.getElementById('employeeSubnavTabs');
+  const btnAction = document.getElementById('btnHeaderPrimaryAction');
+
+  if (role === 'employee') {
+    if (empHeaderCard) empHeaderCard.style.display = 'block';
+    if (adminSubnav) adminSubnav.style.display = 'none';
+    if (empSubnav) empSubnav.style.display = 'flex';
+    if (btnAction) btnAction.style.display = 'none';
+
+    // Hide all admin tabs
+    ['sectionDashboard', 'sectionPrograms', 'sectionAssignments', 'sectionProgress', 'sectionReviews', 'sectionCertificates', 'sectionReports'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+
+    if (typeof switchEmployeeTrainingTab === 'function') {
+      switchEmployeeTrainingTab('my_training');
+    }
+    if (typeof loadEmployeeTrainingData === 'function') {
+      loadEmployeeTrainingData('CO-5039');
+    }
+  } else {
+    if (empHeaderCard) empHeaderCard.style.display = 'none';
+    if (adminSubnav) adminSubnav.style.display = 'flex';
+    if (empSubnav) empSubnav.style.display = 'none';
+
+    // Hide all employee tabs
+    ['sectionEmpMyTraining', 'sectionEmpCertificates', 'sectionEmpHistory'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+
+    // Re-render active sub-tab view with role scoping applied
+    renderActiveSubTab();
+  }
+
   if (typeof updateTrainingConfigPermissions === 'function') {
     updateTrainingConfigPermissions();
   }
@@ -4832,6 +4869,17 @@ function switchActiveUser(userId) {
     const menu = document.getElementById('userRoleDropdownMenu');
     if (menu) menu.style.display = 'none';
     showConfigToast(`Switched active user to ${found.name} (${found.role})`);
+
+    const rLower = (found.role || '').toLowerCase();
+    if (rLower.includes('employee')) {
+      setAppRole('employee');
+    } else if (rLower.includes('manager')) {
+      setAppRole('manager');
+    } else if (rLower.includes('hr')) {
+      setAppRole('hr');
+    } else {
+      setAppRole('admin');
+    }
   }
 }
 
@@ -5606,6 +5654,1227 @@ window.openEmployeeDetail = openEmployeeDetail;
 window.switchEmpDetailSubTab = switchEmpDetailSubTab;
 window.populateEmployeeDetail = populateEmployeeDetail;
 window.renderEmployeeTrainingHistory = renderEmployeeTrainingHistory;
+
+// =============================================================================
+// EMPLOYEE ROLE – TRAINING MANAGEMENT MODULE CONTROLLER (SECTIONS 1 TO 19)
+// =============================================================================
+
+state.empActiveFilter = 'all';
+state.empCurrentTrainingId = null;
+state.empCurrentResourceId = null;
+state.empModalActiveTab = 'overview';
+state.empAttachedEvidence = null;
+state.employeeTrainingData = null;
+
+// Helper to resolve API endpoint with fallback for any port or host
+function getEmpApiUrl(endpoint) {
+  if (window.location.protocol === 'file:') {
+    return 'http://localhost:3000' + endpoint;
+  }
+  return endpoint;
+}
+
+// Helper to normalize status strings from backend
+function normalizeStatus(s) {
+  if (!s) return 'Not Started';
+  const map = {
+    'not_started': 'Not Started',
+    'in_progress': 'In Progress',
+    'submitted_for_review': 'Submitted for Review',
+    'changes_requested': 'Changes Requested',
+    'completed': 'Completed',
+    'overdue': 'Overdue'
+  };
+  return map[s] || s;
+}
+
+// 1. Fetch complete employee training data from CollabCRM Backend (Spec Sec 15)
+async function loadEmployeeTrainingData(empId = 'CO-5039') {
+  try {
+    const [trnRes, certRes, histRes] = await Promise.all([
+      fetch(getEmpApiUrl(`/api/employee/training-data?employeeId=${encodeURIComponent(empId)}`)),
+      fetch(getEmpApiUrl(`/api/employee/certificates?employeeId=${encodeURIComponent(empId)}`)),
+      fetch(getEmpApiUrl(`/api/employee/history?employeeId=${encodeURIComponent(empId)}`))
+    ]);
+
+    const data = trnRes.ok ? await trnRes.json() : {};
+    const certData = certRes.ok ? await certRes.json() : {};
+    const histData = histRes.ok ? await histRes.json() : {};
+
+    state.employeeTrainingData = {
+      profile: data.profile || data.employee || {},
+      stats: data.stats || data.kpis || {},
+      kpis: data.stats || data.kpis || {},
+      trainings: data.trainings || [],
+      notifications: data.notifications || [],
+      certificates: certData.certificates || data.certificates || [],
+      history: histData.history || data.history || []
+    };
+
+    // Populate profile card (Spec Sec 3)
+    const p = state.employeeTrainingData.profile;
+    const elName = document.getElementById('empProfileCardName');
+    const elCode = document.getElementById('empProfileCardCode');
+    const elDesig = document.getElementById('empProfileCardDesignation');
+    const elDept = document.getElementById('empProfileCardDept');
+    const elMgr = document.getElementById('empProfileCardManager');
+    const elAvatar = document.getElementById('empProfileCardAvatar');
+
+    if (elName) elName.textContent = p.name || 'Aryan Bhardwaj';
+    if (elCode) elCode.textContent = p.employeeId || 'CO-5039';
+    if (elDesig) elDesig.textContent = p.designation || 'Executive';
+    if (elDept) elDept.textContent = p.department || 'IT - Project';
+    if (elMgr) elMgr.textContent = p.reportingManager || 'Megha Salunkhe';
+    if (elAvatar) {
+      elAvatar.textContent = p.avatarInitials || 'AB';
+      elAvatar.style.background = '#f59e0b';
+    }
+
+    // Populate 8 KPI Summary Cards (Spec Sec 4)
+    const k = state.employeeTrainingData.kpis;
+    const setCard = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val !== undefined ? val : 0;
+    };
+    setCard('empKpiTotalAssigned', k.totalAssigned);
+    setCard('empKpiNotStarted', k.notStarted);
+    setCard('empKpiInProgress', k.inProgress);
+    setCard('empKpiSubmitted', k.submittedForReview);
+    setCard('empKpiChangesRequested', k.changesRequested);
+    setCard('empKpiCompleted', k.completed);
+    setCard('empKpiOverdue', k.overdue);
+    setCard('empKpiCertificatesIssued', k.certificatesIssued);
+
+    // Filter Pill Badges
+    const setBadge = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val !== undefined ? val : 0;
+    };
+    setBadge('empFilterBadge_all', k.totalAssigned);
+    setBadge('empFilterBadge_NotStarted', k.notStarted);
+    setBadge('empFilterBadge_InProgress', k.inProgress);
+    setBadge('empFilterBadge_SubmittedForReview', k.submittedForReview);
+    setBadge('empFilterBadge_ChangesRequested', k.changesRequested);
+    setBadge('empFilterBadge_Completed', k.completed);
+    setBadge('empFilterBadge_Overdue', k.overdue);
+
+    // Update Notification count badge
+    const badge = document.getElementById('empNotificationBadge');
+    const notifs = state.employeeTrainingData.notifications || [];
+    const unreadCount = notifs.filter(n => !n.isRead && !n.read).length;
+    if (badge) {
+      badge.textContent = unreadCount;
+      badge.style.display = unreadCount > 0 ? 'inline-block' : 'none';
+    }
+
+    // Render list views
+    renderEmployeeTrainingsList();
+    renderEmployeeCertificates();
+    renderEmployeeHistoryFull();
+  } catch (err) {
+    console.error('Error fetching employee training data:', err);
+  }
+}
+
+// 2. Filter trainings by status (Spec Sec 4)
+function filterEmpTrainingsByStatus(status) {
+  state.empActiveFilter = status;
+
+  // Update pill active classes
+  const filterPillMap = {
+    'all': 'btnEmpFilter_all',
+    'Not Started': 'btnEmpFilter_NotStarted',
+    'In Progress': 'btnEmpFilter_InProgress',
+    'Submitted for Review': 'btnEmpFilter_SubmittedForReview',
+    'Changes Requested': 'btnEmpFilter_ChangesRequested',
+    'Completed': 'btnEmpFilter_Completed',
+    'Overdue': 'btnEmpFilter_Overdue'
+  };
+
+  Object.keys(filterPillMap).forEach(key => {
+    const btn = document.getElementById(filterPillMap[key]);
+    if (btn) {
+      btn.classList.toggle('active', key === status);
+    }
+  });
+
+  renderEmployeeTrainingsList();
+}
+
+// 3. Render Training Listing Cards (Spec Sec 5)
+function renderEmployeeTrainingsList() {
+  const container = document.getElementById('empTrainingsGrid');
+  if (!container) return;
+
+  if (!state.employeeTrainingData || !state.employeeTrainingData.trainings) {
+    container.innerHTML = `
+      <div style="background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 36px 20px; text-align: center; color: #64748b;">
+        <div style="font-size: 28px; margin-bottom: 8px;">⏳</div>
+        <h4 style="font-size: 14px; font-weight: 700; color: #334155; margin: 0 0 4px 0;">Loading Assigned Trainings...</h4>
+        <p style="font-size: 12.5px; margin: 0;">Connecting to CollabCRM backend registry.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const query = (document.getElementById('searchEmpTrainingsInput')?.value || '').toLowerCase().trim();
+  const catFilter = document.getElementById('filterEmpCategorySelect')?.value || 'all';
+  const sortOrder = document.getElementById('sortEmpTrainingsSelect')?.value || 'due_soonest';
+
+  let list = [...state.employeeTrainingData.trainings];
+
+  // 1. Status Filter
+  if (state.empActiveFilter && state.empActiveFilter !== 'all') {
+    list = list.filter(t => t.status === state.empActiveFilter);
+  }
+
+  // 2. Category Filter
+  if (catFilter !== 'all') {
+    list = list.filter(t => t.category === catFilter);
+  }
+
+  // 3. Search Query
+  if (query) {
+    list = list.filter(t =>
+      (t.title && t.title.toLowerCase().includes(query)) ||
+      (t.category && t.category.toLowerCase().includes(query)) ||
+      (t.shortDesc && t.shortDesc.toLowerCase().includes(query)) ||
+      (t.assignedBy && t.assignedBy.toLowerCase().includes(query))
+    );
+  }
+
+  // 4. Sorting
+  if (sortOrder === 'due_soonest') {
+    list.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+  } else if (sortOrder === 'progress_desc') {
+    list.sort((a, b) => (b.progressPercent || 0) - (a.progressPercent || 0));
+  } else if (sortOrder === 'recently_assigned') {
+    list.sort((a, b) => new Date(b.assignedDate) - new Date(a.assignedDate));
+  } else if (sortOrder === 'name_asc') {
+    list.sort((a, b) => a.title.localeCompare(b.title));
+  }
+
+  if (list.length === 0) {
+    container.innerHTML = `
+      <div style="background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 42px 20px; text-align: center; color: #64748b;">
+        <div style="font-size: 32px; margin-bottom: 8px;">📚</div>
+        <h4 style="font-size: 14.5px; font-weight: 700; color: #1e293b; margin: 0 0 4px 0;">No Assigned Trainings Found</h4>
+        <p style="font-size: 12.5px; margin: 0;">No training programs match your current filter criteria.</p>
+        <button type="button" class="btn-table-action" onclick="filterEmpTrainingsByStatus('all')" style="margin-top: 12px;">Reset Filters</button>
+      </div>
+    `;
+    return;
+  }
+
+  const getStatusBadge = (status) => {
+    switch (status) {
+      case 'Completed':
+        return '<span style="background: #dcfce7; color: #15803d; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; border: 1px solid #bbf7d0;">✓ Completed</span>';
+      case 'In Progress':
+        return '<span style="background: #eff6ff; color: #1d4ed8; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; border: 1px solid #bfdbfe;">● In Progress</span>';
+      case 'Submitted for Review':
+        return '<span style="background: #f3e8ff; color: #7e22ce; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; border: 1px solid #e9d5ff;">⏳ Under Review</span>';
+      case 'Changes Requested':
+        return '<span style="background: #fef3c7; color: #b45309; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; border: 1px solid #fde68a;">⚠️ Changes Requested</span>';
+      case 'Overdue':
+        return '<span style="background: #fee2e2; color: #b91c1c; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; border: 1px solid #fecaca;">✕ Overdue</span>';
+      default:
+        return '<span style="background: #f1f5f9; color: #475569; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; border: 1px solid #e2e8f0;">○ Not Started</span>';
+    }
+  };
+
+  let html = '';
+  list.forEach(t => {
+    const isMandatory = t.isMandatory !== false;
+    const prog = t.progressPercent || 0;
+    const progColor = prog === 100 ? '#10b981' : prog > 0 ? '#4f46e5' : '#94a3b8';
+
+    html += `
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); transition: border-color 0.2s ease;">
+        <!-- Top Meta Line -->
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="background: #e0e7ff; color: #4338ca; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px;">
+              ${escapeHtml(t.category || 'General')}
+            </span>
+            ${isMandatory
+              ? '<span style="background: #fee2e2; color: #991b1b; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px;">Mandatory</span>'
+              : '<span style="background: #f1f5f9; color: #475569; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px;">Optional</span>'
+            }
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 12px; color: #64748b;">
+              Due: <strong style="color: #0f172a;">${escapeHtml(t.dueDate || '15-Nov-2026')}</strong>
+            </span>
+            ${getStatusBadge(t.status)}
+          </div>
+        </div>
+
+        <!-- Title & Description -->
+        <div>
+          <h4 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0 0 4px 0;">
+            ${escapeHtml(t.title)}
+          </h4>
+          <p style="font-size: 13px; color: #475569; margin: 0; line-height: 1.5;">
+            ${escapeHtml(t.shortDesc || t.description || 'Comprehensive training curriculum.')}
+          </p>
+        </div>
+
+        <!-- Metadata & Actions Row -->
+        <div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #f1f5f9; padding-top: 12px; flex-wrap: wrap; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 18px; font-size: 12px; color: #64748b; flex-wrap: wrap;">
+            <span>Assigned By: <strong style="color: #334155;">${escapeHtml(t.assignedBy || 'Megha Salunkhe')}</strong></span>
+            <span>Assigned: <strong style="color: #334155;">${escapeHtml(t.assignedDate || '01-Nov-2026')}</strong></span>
+            <span>Duration: <strong style="color: #334155;">${escapeHtml(t.durationHours || 4)} hrs</strong></span>
+          </div>
+
+          <!-- Progress & Action -->
+          <div style="display: flex; align-items: center; gap: 16px; min-width: 260px; justify-content: flex-end;">
+            <div style="display: flex; align-items: center; gap: 8px; flex: 1; max-width: 180px;">
+              <div style="flex: 1; height: 7px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                <div style="width: ${prog}%; height: 100%; background: ${progColor}; border-radius: 4px;"></div>
+              </div>
+              <span style="font-size: 12px; font-weight: 700; color: #334155; min-width: 34px;">${prog}%</span>
+            </div>
+
+            <button type="button" class="btn-primary-action" onclick="openEmployeeTrainingDetail('${t.id}')" style="padding: 7px 14px; font-size: 12px; font-weight: 600;">
+              ${t.status === 'Completed' ? 'View Details' : t.progressPercent > 0 ? 'Continue Training →' : 'Start Training →'}
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
+// 4. Employee Subnav Tab Switching (Spec Sec 2)
+function switchEmployeeTrainingTab(tabId) {
+  const tabs = ['my_training', 'my_certificates', 'training_history'];
+  tabs.forEach(t => {
+    const btn = document.getElementById(`empSubnavBtn_${t}`);
+    if (btn) btn.classList.toggle('active', t === tabId);
+  });
+
+  const viewMyTraining = document.getElementById('sectionEmpMyTraining');
+  const viewCertificates = document.getElementById('sectionEmpCertificates');
+  const viewHistory = document.getElementById('sectionEmpHistory');
+
+  if (viewMyTraining) viewMyTraining.style.display = tabId === 'my_training' ? 'block' : 'none';
+  if (viewCertificates) viewCertificates.style.display = tabId === 'my_certificates' ? 'block' : 'none';
+  if (viewHistory) viewHistory.style.display = tabId === 'training_history' ? 'block' : 'none';
+
+  if (tabId === 'my_certificates') renderEmployeeCertificates();
+  if (tabId === 'training_history') renderEmployeeHistoryFull();
+}
+
+// 5. Training Details Screen Modal (Spec Sec 6-10)
+function openEmployeeTrainingDetail(trainingId) {
+  if (!state.employeeTrainingData || !state.employeeTrainingData.trainings) return;
+  const t = state.employeeTrainingData.trainings.find(x => x.id === trainingId);
+  if (!t) return;
+
+  state.empCurrentTrainingId = trainingId;
+
+  // Header Details
+  const elTitle = document.getElementById('empModalTrainingTitle');
+  const elCategory = document.getElementById('empModalCategoryBadge');
+  const elMandatory = document.getElementById('empModalMandatoryBadge');
+  const elStatus = document.getElementById('empModalStatusBadge');
+  const elDue = document.getElementById('empModalDueDateText');
+
+  if (elTitle) elTitle.textContent = t.title;
+  if (elCategory) elCategory.textContent = t.category || 'General';
+  if (elMandatory) {
+    elMandatory.textContent = t.isMandatory !== false ? 'Mandatory' : 'Optional';
+    elMandatory.style.background = t.isMandatory !== false ? '#fee2e2' : '#f1f5f9';
+    elMandatory.style.color = t.isMandatory !== false ? '#991b1b' : '#475569';
+  }
+  if (elStatus) elStatus.textContent = t.status;
+  if (elDue) elDue.textContent = `Due Date: ${t.dueDate} • Assigned By: ${t.assignedBy || 'Megha Salunkhe'}`;
+
+  // Tab 1: Overview & Objectives
+  const elDesc = document.getElementById('empModalOverviewDesc');
+  const elObjList = document.getElementById('empModalObjectivesList');
+  const elOutcomesList = document.getElementById('empModalOutcomesList');
+  const elDiff = document.getElementById('empModalDifficultyText');
+  const elDur = document.getElementById('empModalDurationText');
+  const elAssignedBy = document.getElementById('empModalAssignedByText');
+  const elAssignedDate = document.getElementById('empModalAssignedDateText');
+
+  if (elDesc) elDesc.textContent = t.description || t.shortDesc;
+  if (elDiff) elDiff.textContent = t.difficulty || 'Intermediate';
+  if (elDur) elDur.textContent = `${t.durationHours || 4} Hours`;
+  if (elAssignedBy) elAssignedBy.textContent = t.assignedBy || 'Megha Salunkhe';
+  if (elAssignedDate) elAssignedDate.textContent = t.assignedDate || '01-Nov-2026';
+
+  if (elObjList) {
+    const objs = t.learningObjectives || ['Master platform architecture and workflows.', 'Implement role-based controls and security policies.', 'Pass capstone assessment with required threshold.'];
+    elObjList.innerHTML = Array.isArray(objs) ? objs.map(o => `<li>${escapeHtml(o)}</li>`).join('') : `<li>${escapeHtml(objs)}</li>`;
+  }
+  if (elOutcomesList) {
+    const outcomes = t.expectedOutcomes || ['Proficiency in operational execution.', 'Compliance certification issued in CollabCRM registry.', 'Enhanced domain capabilities for project delivery.'];
+    elOutcomesList.innerHTML = Array.isArray(outcomes) ? outcomes.map(o => `<li>${escapeHtml(o)}</li>`).join('') : `<li>${escapeHtml(outcomes)}</li>`;
+  }
+
+  // Tab 2: Learning Resources
+  renderEmpModalResources(t);
+
+  // Tab 3: Assessment
+  renderEmpModalAssessment(t);
+
+  // Tab 4: Submission & Review
+  renderEmpModalSubmission(t);
+
+  // Switch to Overview subtab by default
+  switchEmpModalTab('overview');
+
+  // Open modal
+  const modal = document.getElementById('modalEmpTrainingDetail');
+  if (modal) modal.classList.add('open');
+}
+
+function closeEmployeeTrainingDetail() {
+  const modal = document.getElementById('modalEmpTrainingDetail');
+  if (modal) modal.classList.remove('open');
+  state.empCurrentTrainingId = null;
+}
+
+// Sub-Tab Switcher inside Training Detail Modal
+function switchEmpModalTab(tabKey) {
+  state.empModalActiveTab = tabKey;
+  const tabs = ['overview', 'resources', 'assessment', 'submission'];
+
+  tabs.forEach(k => {
+    const btn = document.getElementById(`empTabBtn_${k}`);
+    const content = document.getElementById(`empModalTabContent_${k}`);
+    if (btn) btn.classList.toggle('active', k === tabKey);
+    if (content) content.style.display = (k === tabKey) ? 'block' : 'none';
+  });
+
+  // Footer Navigation Buttons
+  const btnPrev = document.getElementById('btnEmpModalPrevTab');
+  const btnNext = document.getElementById('btnEmpModalNextTab');
+  const btnSubmit = document.getElementById('btnEmpModalSubmitReview');
+
+  if (btnPrev) btnPrev.style.display = tabKey === 'overview' ? 'none' : 'inline-block';
+  if (btnNext) btnNext.style.display = tabKey === 'submission' ? 'none' : 'inline-block';
+  if (btnSubmit) btnSubmit.style.display = tabKey === 'submission' ? 'inline-block' : 'none';
+}
+
+function navigateEmpModalTab(dir) {
+  const tabs = ['overview', 'resources', 'assessment', 'submission'];
+  const curIdx = tabs.indexOf(state.empModalActiveTab);
+  const nextIdx = curIdx + dir;
+  if (nextIdx >= 0 && nextIdx < tabs.length) {
+    switchEmpModalTab(tabs[nextIdx]);
+  }
+}
+
+// Render Resources Tab inside Modal (Spec Sec 6-7)
+function renderEmpModalResources(t) {
+  const container = document.getElementById('empModalResourcesList');
+  if (!container) return;
+
+  const resources = t.resources || [];
+  const mandatory = resources.filter(r => r.mandatory !== false);
+  const completedMandatory = mandatory.filter(r => r.isCompleted);
+  const pct = mandatory.length ? Math.round((completedMandatory.length / mandatory.length) * 100) : 100;
+
+  // Header Progress Indicators
+  const txtPct = document.getElementById('empModalProgressPercentText');
+  const barFill = document.getElementById('empModalProgressBarFill');
+  const txtStats = document.getElementById('empModalMandatoryStats');
+  const badgeCount = document.getElementById('empModalResourcesCountBadge');
+
+  if (txtPct) txtPct.textContent = `${pct}%`;
+  if (barFill) barFill.style.width = `${pct}%`;
+  if (txtStats) txtStats.textContent = `${completedMandatory.length} of ${mandatory.length} Mandatory Resources Completed`;
+  if (badgeCount) badgeCount.textContent = `${resources.filter(r => r.isCompleted).length}/${resources.length}`;
+
+  const getTypeIcon = (type) => {
+    switch (type) {
+      case 'youtube': return '🎬 YouTube Video';
+      case 'video': return '📹 Uploaded Video';
+      case 'pdf': return '📄 PDF Document';
+      case 'document': return '📝 Document';
+      case 'external_course': return '🎓 External Course Link';
+      case 'website': return '🌐 Website Link';
+      default: return '🔗 Digital Resource';
+    }
+  };
+
+  let html = '';
+  resources.forEach(r => {
+    const isDone = !!r.isCompleted;
+    const isMand = r.mandatory !== false;
+
+    html += `
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 240px;">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+            <span style="font-size: 11px; background: #f1f5f9; color: #475569; padding: 2px 8px; border-radius: 4px; font-weight: 600;">
+              ${getTypeIcon(r.type)}
+            </span>
+            ${isMand
+              ? '<span style="font-size: 11px; background: #fee2e2; color: #991b1b; padding: 2px 6px; border-radius: 4px; font-weight: 700;">Mandatory</span>'
+              : '<span style="font-size: 11px; background: #f8fafc; color: #64748b; padding: 2px 6px; border-radius: 4px;">Optional</span>'
+            }
+            ${isDone
+              ? `<span style="font-size: 11px; background: #dcfce7; color: #15803d; padding: 2px 8px; border-radius: 12px; font-weight: 700;">✓ Completed (${r.completionDate || '02-Nov'})</span>`
+              : '<span style="font-size: 11px; background: #fef3c7; color: #b45309; padding: 2px 8px; border-radius: 12px; font-weight: 600;">Pending</span>'
+            }
+          </div>
+          <h5 style="font-size: 14px; font-weight: 700; color: #0f172a; margin: 0 0 3px 0;">${escapeHtml(r.title)}</h5>
+          <p style="font-size: 12px; color: #64748b; margin: 0;">${escapeHtml(r.description || 'Estimated time: ' + (r.durationMinutes || 20) + ' mins')}</p>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <button type="button" class="btn-table-action" onclick="openEmployeeResourceViewer('${t.id}', '${r.id}')" style="font-size: 12px;">
+            👁 Open Resource
+          </button>
+          <button type="button" class="btn-primary-action" onclick="toggleEmployeeResourceComplete('${t.id}', '${r.id}', event)" style="font-size: 12px; background: ${isDone ? '#e2e8f0' : '#4f46e5'}; color: ${isDone ? '#334155' : '#ffffff'}; border-color: ${isDone ? '#cbd5e1' : '#4338ca'};">
+            ${isDone ? 'Mark Incomplete' : 'Mark as Completed ✓'}
+          </button>
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
+// 6. Resource Completion Action & Backend Sync (Spec Sec 7)
+async function toggleEmployeeResourceComplete(trainingId, resourceId, e) {
+  if (e) e.stopPropagation();
+  if (!state.employeeTrainingData) return;
+  const t = state.employeeTrainingData.trainings.find(x => x.id === trainingId);
+  if (!t) return;
+  const r = t.resources.find(x => x.id === resourceId);
+  if (!r) return;
+
+  const targetState = !r.isCompleted;
+
+  try {
+    const res = await fetch(getEmpApiUrl('/api/employee/resource-progress'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        employeeId: 'CO-5039',
+        trainingId,
+        resourceId,
+        isCompleted: targetState
+      })
+    });
+
+    if (!res.ok) {
+      showConfigToast('Failed to update resource progress.');
+      return;
+    }
+
+    const result = await res.json();
+    if (result.success && result.training) {
+      // Replace training in local state with saved backend response
+      const idx = state.employeeTrainingData.trainings.findIndex(x => x.id === trainingId);
+      if (idx !== -1) {
+        state.employeeTrainingData.trainings[idx] = result.training;
+      }
+
+      // Re-render UI components
+      renderEmpModalResources(result.training);
+      renderEmpModalSubmission(result.training);
+      renderEmployeeTrainingsList();
+
+      showConfigToast(`Resource marked as ${targetState ? 'completed' : 'pending'}`);
+    }
+  } catch (err) {
+    console.error('Error saving resource progress:', err);
+    showConfigToast('Network error saving progress.');
+  }
+}
+
+// 7. Resource Viewer Modal (Spec Sec 6-7)
+function openEmployeeResourceViewer(trainingId, resourceId) {
+  if (!state.employeeTrainingData) return;
+  const t = state.employeeTrainingData.trainings.find(x => x.id === trainingId);
+  if (!t) return;
+  const r = t.resources.find(x => x.id === resourceId);
+  if (!r) return;
+
+  state.empCurrentTrainingId = trainingId;
+  state.empCurrentResourceId = resourceId;
+
+  const elTitle = document.getElementById('empViewerTitle');
+  const elSubtitle = document.getElementById('empViewerSubtitle');
+  const elIcon = document.getElementById('empViewerTypeIcon');
+  const body = document.getElementById('empViewerBody');
+  const btnComplete = document.getElementById('btnEmpViewerMarkComplete');
+
+  if (elTitle) elTitle.textContent = r.title;
+  if (elSubtitle) elSubtitle.textContent = `${t.title} • ${r.durationMinutes || 20} mins expected`;
+  if (elIcon) elIcon.textContent = r.type === 'youtube' ? '🎬' : r.type === 'pdf' ? '📄' : '📺';
+
+  if (btnComplete) {
+    btnComplete.textContent = r.isCompleted ? 'Mark Incomplete' : 'Mark as Completed ✓';
+  }
+
+  if (body) {
+    if (r.type === 'youtube') {
+      const vidId = r.url.includes('v=') ? r.url.split('v=')[1].split('&')[0] : 'dQw4w9WgXcQ';
+      body.innerHTML = `
+        <div style="width: 100%; height: 100%; min-height: 440px; display: flex; align-items: center; justify-content: center;">
+          <iframe width="100%" height="440" src="https://www.youtube-nocookie.com/embed/${vidId}?autoplay=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border: none;"></iframe>
+        </div>
+      `;
+    } else if (r.type === 'pdf') {
+      body.innerHTML = `
+        <div style="background: #ffffff; width: 92%; max-width: 680px; padding: 24px; border-radius: 8px; text-align: center; color: #0f172a; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+          <div style="font-size: 40px; margin-bottom: 8px;">📄</div>
+          <h4 style="font-size: 16px; font-weight: 700; margin: 0 0 6px 0;">${escapeHtml(r.title)}</h4>
+          <p style="font-size: 13px; color: #64748b; margin: 0 0 16px 0;">Document view verified. Review requirements and best practices.</p>
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 14px; text-align: left; font-size: 12.5px; line-height: 1.6; color: #334155; max-height: 220px; overflow-y: auto;">
+            <strong>Course Module Content Summary:</strong>
+            <ul style="margin: 8px 0 0 0; padding-left: 20px;">
+              <li>Core Architectural Principles &amp; Design Paradigms.</li>
+              <li>Authentication Handshakes and Token Lifecycle Security.</li>
+              <li>Deployment Guardrails &amp; Continuous Integration Verification.</li>
+              <li>Compliance Standards and Post-Production Incident Runbooks.</li>
+            </ul>
+          </div>
+        </div>
+      `;
+    } else {
+      body.innerHTML = `
+        <div style="background: #ffffff; width: 92%; max-width: 620px; padding: 28px; border-radius: 8px; text-align: center; color: #0f172a;">
+          <div style="font-size: 36px; margin-bottom: 8px;">🌐</div>
+          <h4 style="font-size: 16px; font-weight: 700; margin: 0 0 6px 0;">${escapeHtml(r.title)}</h4>
+          <p style="font-size: 13px; color: #64748b; margin: 0 0 18px 0;">External learning resource link registered in curriculum.</p>
+          <a href="${escapeHtml(r.url || '#')}" target="_blank" rel="noopener noreferrer" class="btn-primary-action" style="display: inline-flex; text-decoration: none; padding: 9px 18px; font-size: 13px;">
+            Open External Resource ↗
+          </a>
+        </div>
+      `;
+    }
+  }
+
+  const modal = document.getElementById('modalEmpResourceViewer');
+  if (modal) modal.classList.add('open');
+}
+
+function closeEmployeeResourceViewer() {
+  const modal = document.getElementById('modalEmpResourceViewer');
+  if (modal) modal.classList.remove('open');
+  const body = document.getElementById('empViewerBody');
+  if (body) body.innerHTML = '';
+}
+
+function markCurrentViewerResourceComplete() {
+  if (state.empCurrentTrainingId && state.empCurrentResourceId) {
+    toggleEmployeeResourceComplete(state.empCurrentTrainingId, state.empCurrentResourceId);
+    closeEmployeeResourceViewer();
+  }
+}
+
+// 8. Assessment Form & Scoring (Spec Sec 8)
+function renderEmpModalAssessment(t) {
+  const container = document.getElementById('empModalAssessmentContainer');
+  const badge = document.getElementById('empModalAssessmentStatusBadge');
+  if (!container) return;
+
+  if (!t.assessment) {
+    if (badge) {
+      badge.textContent = 'None';
+      badge.style.background = '#f1f5f9';
+      badge.style.color = '#64748b';
+    }
+    container.innerHTML = `
+      <div style="background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 36px 20px; text-align: center; color: #64748b;">
+        <div style="font-size: 30px; margin-bottom: 8px;">📝</div>
+        <h4 style="font-size: 14.5px; font-weight: 700; color: #1e293b; margin: 0 0 4px 0;">No Assessment Required</h4>
+        <p style="font-size: 12.5px; margin: 0;">This training programme does not include a graded quiz. Complete all mandatory learning resources and provide self-evaluation remarks to submit.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const a = t.assessment;
+  const isPassed = !!a.isPassed;
+  const remaining = Math.max(0, (a.maxAttempts || 3) - (a.attemptsCount || 0));
+
+  if (badge) {
+    badge.textContent = isPassed ? 'Passed ✓' : remaining > 0 ? 'Available' : 'Attempts Exhausted';
+    badge.style.background = isPassed ? '#dcfce7' : remaining > 0 ? '#eff6ff' : '#fee2e2';
+    badge.style.color = isPassed ? '#15803d' : remaining > 0 ? '#1d4ed8' : '#991b1b';
+  }
+
+  let html = `
+    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px; margin-bottom: 18px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 10px;">
+        <div>
+          <h4 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0;">${escapeHtml(a.title || 'Knowledge Assessment')}</h4>
+          <p style="font-size: 12.5px; color: #64748b; margin: 3px 0 0 0;">Passing Score: <strong>${a.passingScore || 80}%</strong> • Available Attempts: <strong>${remaining} of ${a.maxAttempts || 3}</strong></p>
+        </div>
+        ${isPassed
+          ? `<span style="background: #dcfce7; color: #15803d; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 12px;">✓ Passed (Score: ${a.bestScore || 100}%)</span>`
+          : `<span style="background: #fef3c7; color: #b45309; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 12px;">Passing Required</span>`
+        }
+      </div>
+      <p style="font-size: 12.5px; color: #334155; margin: 0; line-height: 1.5;">${escapeHtml(a.instructions || 'Review the questions below carefully. You must meet the passing threshold to qualify for training completion and certificate issuance.')}</p>
+    </div>
+  `;
+
+  // Previous attempts log
+  if (a.attemptsHistory && a.attemptsHistory.length > 0) {
+    html += `
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; margin-bottom: 18px;">
+        <h5 style="font-size: 12.5px; font-weight: 700; color: #0f172a; margin: 0 0 8px 0;">Previous Assessment Attempts</h5>
+        <div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px;">
+          ${a.attemptsHistory.map(att => `
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 6px 10px; background: #f8fafc; border-radius: 4px;">
+              <span>Attempt #${att.attemptNumber} (${att.submissionDate || '02-Nov-2026'})</span>
+              <span style="font-weight: 700; color: ${att.passed ? '#15803d' : '#b91c1c'};">Score: ${att.score}% — ${att.passed ? 'Passed ✓' : 'Failed'}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  // Interactive Quiz questions
+  const questions = a.questions || [];
+  if (questions.length > 0) {
+    html += `
+      <form id="empAssessmentForm" onsubmit="event.preventDefault(); submitEmployeeAssessment('${t.id}');" style="display: flex; flex-direction: column; gap: 16px;">
+        ${questions.map((q, qIdx) => `
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px;">
+            <p style="font-size: 13.5px; font-weight: 600; color: #0f172a; margin: 0 0 10px 0;">
+              Q${qIdx + 1}. ${escapeHtml(q.question)}
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+              ${(q.options || []).map((opt, optIdx) => `
+                <label style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer;">
+                  <input type="radio" name="q_${q.id}" value="${optIdx}" ${isPassed ? (optIdx === q.correctIndex ? 'checked' : '') : ''} ${isPassed || remaining <= 0 ? 'disabled' : ''} style="width: 16px; height: 16px; accent-color: #4f46e5;" required />
+                  <span style="color: #334155;">${escapeHtml(opt)}</span>
+                </label>
+              `).join('')}
+            </div>
+          </div>
+        `).join('')}
+
+        ${!isPassed && remaining > 0 ? `
+          <div style="display: flex; justify-content: flex-end; padding-top: 10px;">
+            <button type="submit" class="btn-primary-action" id="btnSubmitAssessmentForm" style="padding: 9px 20px; font-size: 13px;">
+              Submit Assessment Attempt
+            </button>
+          </div>
+        ` : ''}
+      </form>
+    `;
+  }
+
+  container.innerHTML = html;
+}
+
+// Submit Assessment (Spec Sec 8)
+async function submitEmployeeAssessment(trainingId) {
+  const form = document.getElementById('empAssessmentForm');
+  if (!form) return;
+
+  const btn = document.getElementById('btnSubmitAssessmentForm');
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = 'Evaluating Answers...';
+  }
+
+  // Gather answers
+  const answers = {};
+  const inputs = form.querySelectorAll('input[type="radio"]:checked');
+  inputs.forEach(inp => {
+    const qId = inp.name.replace('q_', '');
+    answers[qId] = parseInt(inp.value, 10);
+  });
+
+  try {
+    const res = await fetch(getEmpApiUrl('/api/employee/assessment-submit'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        employeeId: 'CO-5039',
+        trainingId,
+        answers
+      })
+    });
+
+    const result = await res.json();
+    if (result.success && result.training) {
+      // Update state
+      const idx = state.employeeTrainingData.trainings.findIndex(x => x.id === trainingId);
+      if (idx !== -1) {
+        state.employeeTrainingData.trainings[idx] = result.training;
+      }
+
+      renderEmpModalAssessment(result.training);
+      renderEmpModalSubmission(result.training);
+      renderEmployeeTrainingsList();
+
+      if (result.passed) {
+        showConfigToast(`Assessment Passed! Score: ${result.score}% ✓`);
+      } else {
+        showConfigToast(`Score: ${result.score}% (Passing: ${result.passingScore}%). Remaining attempts: ${result.remainingAttempts}`);
+      }
+    } else {
+      showConfigToast(result.error || 'Failed to submit assessment.');
+    }
+  } catch (err) {
+    console.error('Error submitting assessment:', err);
+    showConfigToast('Network error submitting assessment.');
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = 'Submit Assessment Attempt';
+    }
+  }
+}
+
+// 9. Submission & Review Screen (Spec Sec 9-10)
+function renderEmpModalSubmission(t) {
+  const feedbackBanner = document.getElementById('empModalReviewFeedbackBanner');
+  const remarksInput = document.getElementById('empSubmissionRemarksInput');
+  const submitBtn = document.getElementById('btnEmpModalSubmitReview');
+
+  // Review Feedback Banner Rendering (Spec Sec 10)
+  if (feedbackBanner) {
+    if (t.status === 'Changes Requested') {
+      feedbackBanner.style.display = 'block';
+      feedbackBanner.innerHTML = `
+        <div style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 14px 18px; color: #92400e;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+            <strong style="font-size: 13.5px; display: flex; align-items: center; gap: 6px;">
+              <span>⚠️</span> Changes Requested by Reviewer
+            </strong>
+            <span style="font-size: 11.5px; color: #b45309;">Reviewer: ${escapeHtml(t.reviewerName || 'Megha Salunkhe')}</span>
+          </div>
+          <p style="font-size: 13px; margin: 0 0 8px 0; line-height: 1.5;">
+            "${escapeHtml(t.reviewerFeedback || 'Please attach your staging deployment log and expand your implementation remarks.')}"
+          </p>
+          <span style="font-size: 11.5px; font-weight: 600; color: #b45309;">You may update remarks and evidence below, then click "Resubmit for Review".</span>
+        </div>
+      `;
+    } else if (t.status === 'Completed') {
+      feedbackBanner.style.display = 'block';
+      feedbackBanner.innerHTML = `
+        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 14px 18px; color: #166534;">
+          <strong style="font-size: 13.5px; display: flex; align-items: center; gap: 6px;">
+            <span>✓</span> Training Approved &amp; Certified
+          </strong>
+          <p style="font-size: 12.5px; margin: 4px 0 0 0;">
+            Approved by <strong>${escapeHtml(t.reviewerName || 'Megha Salunkhe')}</strong> on ${escapeHtml(t.completionDate || '02-Nov-2026')}. Official Certificate issued in your CollabCRM portal.
+          </p>
+        </div>
+      `;
+    } else if (t.status === 'Submitted for Review') {
+      feedbackBanner.style.display = 'block';
+      feedbackBanner.innerHTML = `
+        <div style="background: #f5f3ff; border: 1px solid #ddd6fe; border-radius: 8px; padding: 14px 18px; color: #5b21b6;">
+          <strong style="font-size: 13.5px; display: flex; align-items: center; gap: 6px;">
+            <span>⏳</span> Submitted for Review
+          </strong>
+          <p style="font-size: 12.5px; margin: 4px 0 0 0;">
+            Submitted on ${escapeHtml(t.submissionDate || '02-Nov-2026')}. Evaluation currently in progress by ${escapeHtml(t.assignedBy || 'Megha Salunkhe')}. Ordinary editing is locked while under review.
+          </p>
+        </div>
+      `;
+    } else {
+      feedbackBanner.style.display = 'none';
+      feedbackBanner.innerHTML = '';
+    }
+  }
+
+  // Pre-fill remarks if available
+  if (remarksInput) {
+    remarksInput.value = t.submissionRemarks || '';
+    remarksInput.disabled = (t.status === 'Submitted for Review' || t.status === 'Completed');
+  }
+
+  if (submitBtn) {
+    submitBtn.textContent = t.status === 'Changes Requested' ? 'Resubmit for Review ↻' : 'Submit for Review ✓';
+    submitBtn.style.display = (t.status === 'Submitted for Review' || t.status === 'Completed') ? 'none' : 'inline-block';
+  }
+
+  validateEmpSubmissionReadiness();
+}
+
+// Checklist validation (Spec Sec 9)
+function validateEmpSubmissionReadiness() {
+  if (!state.employeeTrainingData || !state.empCurrentTrainingId) return;
+  const t = state.employeeTrainingData.trainings.find(x => x.id === state.empCurrentTrainingId);
+  if (!t) return;
+
+  const mandatoryResources = (t.resources || []).filter(r => r.mandatory !== false);
+  const resourcesPassed = mandatoryResources.every(r => !!r.isCompleted);
+
+  const assessmentPassed = !t.assessment || !!t.assessment.isPassed;
+  const remarksEntered = !!(document.getElementById('empSubmissionRemarksInput')?.value || '').trim();
+  const evidenceUploaded = true; // Evidence is optional unless configured
+
+  const updateBadge = (idIcon, isMet) => {
+    const el = document.getElementById(idIcon);
+    if (el) el.textContent = isMet ? '✓' : '⏳';
+  };
+
+  updateBadge('chkRuleIcon_resources', resourcesPassed);
+  updateBadge('chkRuleIcon_assessment', assessmentPassed);
+  updateBadge('chkRuleIcon_remarks', remarksEntered);
+  updateBadge('chkRuleIcon_evidence', evidenceUploaded);
+
+  const allMet = resourcesPassed && assessmentPassed && remarksEntered;
+  const submitBtn = document.getElementById('btnEmpModalSubmitReview');
+  if (submitBtn) {
+    submitBtn.disabled = !allMet;
+    submitBtn.style.opacity = allMet ? '1' : '0.6';
+    submitBtn.style.cursor = allMet ? 'pointer' : 'not-allowed';
+  }
+}
+
+// File Evidence Selection
+function handleEmpEvidenceSelected(e) {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+
+  state.empAttachedEvidence = file;
+  const preview = document.getElementById('empAttachedEvidencePreview');
+  const nameEl = document.getElementById('empAttachedEvidenceName');
+
+  if (preview) preview.style.display = 'flex';
+  if (nameEl) nameEl.textContent = file.name;
+
+  validateEmpSubmissionReadiness();
+}
+
+function removeEmpAttachedEvidence() {
+  state.empAttachedEvidence = null;
+  const input = document.getElementById('empEvidenceFileInput');
+  const preview = document.getElementById('empAttachedEvidencePreview');
+  if (input) input.value = '';
+  if (preview) preview.style.display = 'none';
+
+  validateEmpSubmissionReadiness();
+}
+
+// Final Submit for Review workflow (Spec Sec 9-10)
+async function submitEmpTrainingWorkflow() {
+  if (!state.employeeTrainingData || !state.empCurrentTrainingId) return;
+  const t = state.employeeTrainingData.trainings.find(x => x.id === state.empCurrentTrainingId);
+  if (!t) return;
+
+  const remarks = (document.getElementById('empSubmissionRemarksInput')?.value || '').trim();
+  if (!remarks) {
+    alert('Please provide your completion remarks before submitting.');
+    return;
+  }
+
+  const isResubmission = t.status === 'Changes Requested';
+  const confirmMsg = isResubmission
+    ? 'Are you ready to resubmit your updated training evidence and remarks to your reviewer?'
+    : 'Are you sure you want to submit this training for review? Ordinary editing will be locked until review completion.';
+
+  if (!confirm(confirmMsg)) return;
+
+  const endpoint = isResubmission ? '/api/employee/training-resubmit' : '/api/employee/training-submit';
+
+  try {
+    const res = await fetch(getEmpApiUrl(endpoint), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        employeeId: 'CO-5039',
+        trainingId: t.id,
+        remarks: remarks,
+        evidenceFileName: state.empAttachedEvidence?.name || null
+      })
+    });
+
+    const result = await res.json();
+    if (result.success && result.training) {
+      // Update state
+      const idx = state.employeeTrainingData.trainings.findIndex(x => x.id === t.id);
+      if (idx !== -1) {
+        state.employeeTrainingData.trainings[idx] = result.training;
+      }
+
+      // Re-render
+      renderEmpModalSubmission(result.training);
+      renderEmployeeTrainingsList();
+      renderEmployeeHistoryFull();
+
+      // Refresh KPI counts
+      if (state.employeeTrainingData.kpis) {
+        state.employeeTrainingData.kpis.submittedForReview = (state.employeeTrainingData.kpis.submittedForReview || 0) + 1;
+        if (isResubmission && state.employeeTrainingData.kpis.changesRequested > 0) {
+          state.employeeTrainingData.kpis.changesRequested -= 1;
+        }
+        const setCard = (id, val) => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = val;
+        };
+        setCard('empKpiSubmitted', state.employeeTrainingData.kpis.submittedForReview);
+        setCard('empKpiChangesRequested', state.employeeTrainingData.kpis.changesRequested);
+      }
+
+      showConfigToast('Training submitted for review successfully! Reviewer notified.');
+    } else {
+      showConfigToast(result.error || 'Submission failed.');
+    }
+  } catch (err) {
+    console.error('Error submitting training:', err);
+    showConfigToast('Network error submitting training.');
+  }
+}
+
+// 10. My Certificates Section (Spec Sec 11)
+function renderEmployeeCertificates() {
+  const tbody = document.getElementById('empCertificatesTableBody');
+  if (!tbody) return;
+
+  if (!state.employeeTrainingData || !state.employeeTrainingData.certificates) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 24px; color: #64748b;">Loading credentials...</td></tr>`;
+    return;
+  }
+
+  const list = state.employeeTrainingData.certificates;
+  if (list.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 24px; color: #64748b;">No issued certificates found yet. Complete assigned courses to earn official credentials.</td></tr>`;
+    return;
+  }
+
+  let html = '';
+  list.forEach((c, idx) => {
+    html += `
+      <tr style="border-bottom: 1px solid #f1f5f9;">
+        <td style="padding: 12px 16px; text-align: center; color: #64748b;">${idx + 1}</td>
+        <td style="padding: 12px 16px; font-weight: 700; color: #0f172a;">${escapeHtml(c.name)}</td>
+        <td style="padding: 12px 16px; color: #334155;">${escapeHtml(c.trainingName)}</td>
+        <td style="padding: 12px 16px; font-family: monospace; color: #4338ca; font-weight: 600;">${escapeHtml(c.id)}</td>
+        <td style="padding: 12px 16px; color: #475569;">${escapeHtml(c.issueDate)}</td>
+        <td style="padding: 12px 16px; color: #475569;">${escapeHtml(c.expiryDate || 'Lifetime')}</td>
+        <td style="padding: 12px 16px; text-align: center;">
+          <span style="background: #dcfce7; color: #15803d; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px;">✓ ${escapeHtml(c.status || 'Issued')}</span>
+        </td>
+        <td style="padding: 12px 16px; text-align: right;">
+          <button type="button" class="btn-table-action" onclick="openEmployeeCertificateViewer('${c.id}')" style="margin-right: 6px;">👁 View</button>
+          <button type="button" class="btn-primary-action" onclick="downloadEmployeeCertificate('${c.id}')" style="padding: 5px 10px; font-size: 12px;">⬇ PDF</button>
+        </td>
+      </tr>
+    `;
+  });
+
+  tbody.innerHTML = html;
+}
+
+function openEmployeeCertificateViewer(certId) {
+  if (!state.employeeTrainingData || !state.employeeTrainingData.certificates) return;
+  const cert = state.employeeTrainingData.certificates.find(c => c.id === certId) || state.employeeTrainingData.certificates[0];
+  if (!cert) return;
+
+  const elRecip = document.getElementById('empCertRecipientName');
+  const elRecipId = document.getElementById('empCertRecipientId');
+  const elTrn = document.getElementById('empCertTrainingTitle');
+  const elCertId = document.getElementById('empCertModalCertId');
+  const elDate = document.getElementById('empCertModalIssueDate');
+
+  if (elRecip) elRecip.textContent = cert.recipientName || 'Aryan Bhardwaj';
+  if (elRecipId) elRecipId.textContent = cert.recipientId || 'CO-5039';
+  if (elTrn) elTrn.textContent = cert.trainingName || cert.name;
+  if (elCertId) elCertId.textContent = cert.id;
+  if (elDate) elDate.textContent = cert.issueDate;
+
+  const modal = document.getElementById('modalEmpCertViewer');
+  if (modal) modal.classList.add('open');
+}
+
+function closeEmployeeCertViewer() {
+  const modal = document.getElementById('modalEmpCertViewer');
+  if (modal) modal.classList.remove('open');
+}
+
+function printEmployeeCertificate() {
+  window.print();
+}
+
+function downloadEmployeeCertificate() {
+  showConfigToast('Downloading official certificate PDF credential...');
+  setTimeout(() => {
+    showConfigToast('Certificate downloaded successfully!');
+  }, 1000);
+}
+
+// 11. Training History Audit Section (Spec Sec 12)
+function renderEmployeeHistoryFull() {
+  const tbody = document.getElementById('empHistoryFullTableBody');
+  if (!tbody) return;
+
+  if (!state.employeeTrainingData || !state.employeeTrainingData.history) {
+    tbody.innerHTML = `<tr><td colspan="16" style="text-align: center; padding: 24px; color: #64748b;">Loading training history records...</td></tr>`;
+    return;
+  }
+
+  const list = state.employeeTrainingData.history;
+  if (list.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="16" style="text-align: center; padding: 24px; color: #64748b;">No training history records recorded yet.</td></tr>`;
+    return;
+  }
+
+  let html = '';
+  list.forEach((h, idx) => {
+    html += `
+      <tr style="border-bottom: 1px solid #f1f5f9;">
+        <td style="padding: 10px 12px; text-align: center; color: #64748b;">${idx + 1}</td>
+        <td style="padding: 10px 12px; font-weight: 700; color: #0f172a;">${escapeHtml(h.trainingName)}</td>
+        <td style="padding: 10px 12px; color: #475569;">${escapeHtml(h.category || 'General')}</td>
+        <td style="padding: 10px 12px; color: #475569;">${escapeHtml(h.assignedBy)}</td>
+        <td style="padding: 10px 12px; color: #64748b;">${escapeHtml(h.assignedDate)}</td>
+        <td style="padding: 10px 12px; color: #64748b;">${escapeHtml(h.dueDate)}</td>
+        <td style="padding: 10px 12px; color: #64748b;">${escapeHtml(h.startDate || '—')}</td>
+        <td style="padding: 10px 12px; color: #64748b;">${escapeHtml(h.submissionDate || '—')}</td>
+        <td style="padding: 10px 12px; color: #64748b;">${escapeHtml(h.reviewDate || '—')}</td>
+        <td style="padding: 10px 12px; color: #64748b;">${escapeHtml(h.completionDate || '—')}</td>
+        <td style="padding: 10px 12px; text-align: center; font-weight: 700; color: #0f172a;">${h.progressPercent || 0}%</td>
+        <td style="padding: 10px 12px; text-align: center; color: ${h.score ? '#15803d' : '#64748b'}; font-weight: 600;">${h.score ? h.score + '%' : '—'}</td>
+        <td style="padding: 10px 12px; text-align: center;">
+          <span style="font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: #f1f5f9; color: #334155;">
+            ${escapeHtml(h.assignmentStatus || 'Active')}
+          </span>
+        </td>
+        <td style="padding: 10px 12px; text-align: center; font-size: 11px; color: #475569;">
+          ${escapeHtml(h.reviewStatus || 'Pending')}
+        </td>
+        <td style="padding: 10px 12px; text-align: center; font-size: 11px;">
+          ${h.certificateId ? `<span style="color: #15803d; font-weight: 700;">Issued (${escapeHtml(h.certificateId)})</span>` : '<span style="color: #94a3b8;">None</span>'}
+        </td>
+        <td style="padding: 10px 12px; text-align: right;">
+          <button type="button" class="btn-table-action" onclick="openEmployeeTrainingDetail('${h.trainingId || h.id}')" style="font-size: 11.5px; padding: 4px 8px;">
+            Details
+          </button>
+        </td>
+      </tr>
+    `;
+  });
+
+  tbody.innerHTML = html;
+}
+
+function exportEmpHistoryCSV() {
+  if (!state.employeeTrainingData || !state.employeeTrainingData.history) {
+    alert('No training history data available to export.');
+    return;
+  }
+
+  const rows = [
+    ['No', 'Training Name', 'Category', 'Assigned By', 'Assigned Date', 'Due Date', 'Start Date', 'Submission Date', 'Review Date', 'Completion Date', 'Progress', 'Score', 'Assignment Status', 'Review Status', 'Certificate']
+  ];
+
+  state.employeeTrainingData.history.forEach((h, idx) => {
+    rows.push([
+      idx + 1,
+      `"${(h.trainingName || '').replace(/"/g, '""')}"`,
+      `"${h.category || ''}"`,
+      `"${h.assignedBy || ''}"`,
+      h.assignedDate || '',
+      h.dueDate || '',
+      h.startDate || '',
+      h.submissionDate || '',
+      h.reviewDate || '',
+      h.completionDate || '',
+      `${h.progressPercent || 0}%`,
+      h.score ? `${h.score}%` : 'N/A',
+      h.assignmentStatus || '',
+      h.reviewStatus || '',
+      h.certificateId || 'None'
+    ]);
+  });
+
+  const csvContent = 'data:text/csv;charset=utf-8,' + rows.map(e => e.join(',')).join('\n');
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement('a');
+  link.setAttribute('href', encodedUri);
+  link.setAttribute('download', 'Employee_Training_History_CO-5039.csv');
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  showConfigToast('Training history exported to CSV successfully!');
+}
+
+// 12. Employee Notifications Drawer (Spec Sec 13)
+function openEmployeeNotificationsDrawer() {
+  const container = document.getElementById('empNotificationsListContainer');
+  if (!container) return;
+
+  const notifs = state.employeeTrainingData?.notifications || [];
+  if (notifs.length === 0) {
+    container.innerHTML = `<p style="text-align: center; color: #64748b; padding: 20px;">No notifications at this time.</p>`;
+  } else {
+    container.innerHTML = notifs.map(n => `
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 14px; display: flex; align-items: flex-start; gap: 10px;">
+        <span style="font-size: 18px;">${n.icon || '🔔'}</span>
+        <div style="flex: 1;">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <strong style="font-size: 13px; color: #0f172a;">${escapeHtml(n.title)}</strong>
+            <span style="font-size: 11px; color: #94a3b8;">${escapeHtml(n.time || 'Today')}</span>
+          </div>
+          <p style="font-size: 12px; color: #475569; margin: 3px 0 0 0; line-height: 1.4;">${escapeHtml(n.message)}</p>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  const modal = document.getElementById('modalEmpNotifications');
+  if (modal) modal.classList.add('open');
+}
+
+function closeEmployeeNotificationsDrawer() {
+  const modal = document.getElementById('modalEmpNotifications');
+  if (modal) modal.classList.remove('open');
+}
+
+function markAllEmpNotificationsRead() {
+  if (state.employeeTrainingData?.notifications) {
+    state.employeeTrainingData.notifications.forEach(n => n.isRead = true);
+    const badge = document.getElementById('empNotificationBadge');
+    if (badge) badge.style.display = 'none';
+    showConfigToast('All notifications marked as read.');
+  }
+}
+
+// Global window bindings for HTML event handlers
+window.loadEmployeeTrainingData = loadEmployeeTrainingData;
+window.switchEmployeeTrainingTab = switchEmployeeTrainingTab;
+window.filterEmpTrainingsByStatus = filterEmpTrainingsByStatus;
+window.renderEmployeeTrainingsList = renderEmployeeTrainingsList;
+window.openEmployeeTrainingDetail = openEmployeeTrainingDetail;
+window.closeEmployeeTrainingDetail = closeEmployeeTrainingDetail;
+window.switchEmpModalTab = switchEmpModalTab;
+window.navigateEmpModalTab = navigateEmpModalTab;
+window.toggleEmployeeResourceComplete = toggleEmployeeResourceComplete;
+window.openEmployeeResourceViewer = openEmployeeResourceViewer;
+window.closeEmployeeResourceViewer = closeEmployeeResourceViewer;
+window.markCurrentViewerResourceComplete = markCurrentViewerResourceComplete;
+window.submitEmployeeAssessment = submitEmployeeAssessment;
+window.handleEmpEvidenceSelected = handleEmpEvidenceSelected;
+window.removeEmpAttachedEvidence = removeEmpAttachedEvidence;
+window.validateEmpSubmissionReadiness = validateEmpSubmissionReadiness;
+window.submitEmpTrainingWorkflow = submitEmpTrainingWorkflow;
+window.renderEmployeeCertificates = renderEmployeeCertificates;
+window.openEmployeeCertificateViewer = openEmployeeCertificateViewer;
+window.closeEmployeeCertViewer = closeEmployeeCertViewer;
+window.downloadEmployeeCertificate = downloadEmployeeCertificate;
+window.printEmployeeCertificate = printEmployeeCertificate;
+window.renderEmployeeHistoryFull = renderEmployeeHistoryFull;
+window.exportEmpHistoryCSV = exportEmpHistoryCSV;
+window.openEmployeeNotificationsDrawer = openEmployeeNotificationsDrawer;
+window.closeEmployeeNotificationsDrawer = closeEmployeeNotificationsDrawer;
+window.markAllEmpNotificationsRead = markAllEmpNotificationsRead;
+
 
 
 

@@ -853,9 +853,42 @@
 
           </div>
 
-          <!-- Sticky Sub-Navigation Tabs Bar (7 Sections) -->
+          <!-- Employee Profile Information Card (Displayed strictly when Employee Role is active - Spec Section 3) -->
+          <div class="emp-profile-header-card" id="empProfileHeaderCard" style="display: none; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 20px; margin-bottom: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+              <div style="display: flex; align-items: center; gap: 14px;">
+                <div id="empPortalAvatarCircle" style="width: 46px; height: 46px; border-radius: 50%; background: #f59e0b; color: #ffffff; font-weight: 700; font-size: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
+                  AB
+                </div>
+                <div>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <h2 style="font-size: 16px; font-weight: 700; color: #0f172a; margin: 0;" id="empPortalName">Aryan Bhardwaj</h2>
+                    <span style="background: #f1f5f9; color: #475569; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px;" id="empPortalId">CO-5039</span>
+                    <span style="background: #eff6ff; color: #2563eb; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px;">Employee Portal</span>
+                  </div>
+                  <div style="font-size: 12px; color: #64748b; margin-top: 3px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                    <span>Designation: <strong style="color: #1e293b;" id="empPortalDesig">Executive</strong></span>
+                    <span>•</span>
+                    <span>Department: <strong style="color: #1e293b;" id="empPortalDept">IT - Project</strong></span>
+                    <span>•</span>
+                    <span>Reporting Manager: <strong style="color: #1e293b;" id="empPortalManager">Megha Salunkhe (Sr. Executive)</strong></span>
+                  </div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <button type="button" class="btn-table-action" onclick="toggleEmpNotificationsModal()" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; font-size: 12px; font-weight: 600; position: relative; border-radius: 6px;">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                  <span>Notifications</span>
+                  <span id="empNotifUnreadCountBadge" style="background: #ef4444; color: #ffffff; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 10px;">2</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sticky Sub-Navigation Tabs Bar (Dual Mode: Admin/HR vs Employee) -->
           <div class="training-subnav-bar">
-            <div class="training-subnav-tabs">
+            <!-- Admin / HR / Reporting Manager Sub-Navigation Tabs (7 Sections) -->
+            <div class="training-subnav-tabs" id="adminSubnavTabs">
               <button class="training-subnav-btn active" id="tabBtnDashboard" onclick="switchTrainingTab('dashboard')">
                 <span>📊 Dashboard</span>
               </button>
@@ -877,6 +910,19 @@
               </button>
               <button class="training-subnav-btn" id="tabBtnReports" onclick="switchTrainingTab('reports')">
                 <span>📑 Reports</span>
+              </button>
+            </div>
+
+            <!-- Employee Role Sub-Navigation Tabs (Spec Section 2: My Training, My Certificates, Training History) -->
+            <div class="training-subnav-tabs" id="employeeSubnavTabs" style="display: none;">
+              <button class="training-subnav-btn active" id="tabBtnEmpMyTraining" onclick="switchEmployeeTrainingTab('my_training')">
+                <span>📚 My Training</span>
+              </button>
+              <button class="training-subnav-btn" id="tabBtnEmpCertificates" onclick="switchEmployeeTrainingTab('my_certificates')">
+                <span>🎓 My Certificates</span>
+              </button>
+              <button class="training-subnav-btn" id="tabBtnEmpHistory" onclick="switchEmployeeTrainingTab('training_history')">
+                <span>📜 Training History</span>
               </button>
             </div>
           </div>
@@ -1365,6 +1411,223 @@
                   <table class="crm-table" id="reportContentTable">
                     <thead id="reportTableHead"></thead>
                     <tbody id="reportTableBody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- ======================================================== -->
+            <!-- SECTION EMP 1: MY TRAINING (SPEC SECTIONS 4 & 5)         -->
+            <!-- ======================================================== -->
+            <div class="training-tab-view" id="sectionEmpMyTraining" style="display: none;">
+              <!-- 8 Summary Metric Cards (Spec Section 4) -->
+              <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px;">
+                <!-- 1. Total Assigned -->
+                <div class="kpi-stat-card-main" onclick="filterEmpTrainingsByStatus('all')" style="cursor: pointer; padding: 14px 18px;" title="View All Assigned Trainings">
+                  <div class="kpi-stat-main-top">
+                    <span class="kpi-stat-main-title">TOTAL ASSIGNED</span>
+                    <span class="emp-kpi-icon-pill">📚</span>
+                  </div>
+                  <div class="kpi-stat-main-val" id="empKpiTotalAssigned">6</div>
+                  <div style="font-size: 11.5px; color: #64748b; margin-top: 4px;">Assigned to your account</div>
+                </div>
+
+                <!-- 2. Not Started -->
+                <div class="kpi-stat-card-main" onclick="filterEmpTrainingsByStatus('not_started')" style="cursor: pointer; padding: 14px 18px;" title="Filter Not Started">
+                  <div class="kpi-stat-main-top">
+                    <span class="kpi-stat-main-title">NOT STARTED</span>
+                    <span class="emp-kpi-icon-pill">⏳</span>
+                  </div>
+                  <div class="kpi-stat-main-val" id="empKpiNotStarted" style="color: #64748b;">1</div>
+                  <div style="font-size: 11.5px; color: #64748b; margin-top: 4px;">Awaiting start</div>
+                </div>
+
+                <!-- 3. In Progress -->
+                <div class="kpi-stat-card-main" onclick="filterEmpTrainingsByStatus('in_progress')" style="cursor: pointer; padding: 14px 18px;" title="Filter In Progress">
+                  <div class="kpi-stat-main-top">
+                    <span class="kpi-stat-main-title">IN PROGRESS</span>
+                    <span class="emp-kpi-icon-pill">⚡</span>
+                  </div>
+                  <div class="kpi-stat-main-val" id="empKpiInProgress" style="color: #2563eb;">1</div>
+                  <div style="font-size: 11.5px; color: #64748b; margin-top: 4px;">Active modules in progress</div>
+                </div>
+
+                <!-- 4. Submitted for Review -->
+                <div class="kpi-stat-card-main" onclick="filterEmpTrainingsByStatus('submitted_for_review')" style="cursor: pointer; padding: 14px 18px;" title="Filter Submitted for Review">
+                  <div class="kpi-stat-main-top">
+                    <span class="kpi-stat-main-title">SUBMITTED FOR REVIEW</span>
+                    <span class="emp-kpi-icon-pill">📤</span>
+                  </div>
+                  <div class="kpi-stat-main-val" id="empKpiSubmitted" style="color: #7c3aed;">1</div>
+                  <div style="font-size: 11.5px; color: #64748b; margin-top: 4px;">Under manager evaluation</div>
+                </div>
+
+                <!-- 5. Changes Requested -->
+                <div class="kpi-stat-card-main" onclick="filterEmpTrainingsByStatus('changes_requested')" style="cursor: pointer; padding: 14px 18px; border-left: 3px solid #d97706;" title="Filter Changes Requested">
+                  <div class="kpi-stat-main-top">
+                    <span class="kpi-stat-main-title" style="color: #b45309;">CHANGES REQUESTED</span>
+                    <span class="emp-kpi-icon-pill">⚠️</span>
+                  </div>
+                  <div class="kpi-stat-main-val" id="empKpiChangesReq" style="color: #d97706;">1</div>
+                  <div style="font-size: 11.5px; color: #b45309; margin-top: 4px;">Action required from you</div>
+                </div>
+
+                <!-- 6. Completed -->
+                <div class="kpi-stat-card-main" onclick="filterEmpTrainingsByStatus('completed')" style="cursor: pointer; padding: 14px 18px; border-left: 3px solid #16a34a;" title="Filter Completed">
+                  <div class="kpi-stat-main-top">
+                    <span class="kpi-stat-main-title" style="color: #166534;">COMPLETED</span>
+                    <span class="emp-kpi-icon-pill">✓</span>
+                  </div>
+                  <div class="kpi-stat-main-val" id="empKpiCompleted" style="color: #166534;">1</div>
+                  <div style="font-size: 11.5px; color: #166534; margin-top: 4px;">Passed &amp; Approved</div>
+                </div>
+
+                <!-- 7. Overdue -->
+                <div class="kpi-stat-card-main" onclick="filterEmpTrainingsByStatus('overdue')" style="cursor: pointer; padding: 14px 18px; border-left: 3px solid #dc2626;" title="Filter Overdue">
+                  <div class="kpi-stat-main-top">
+                    <span class="kpi-stat-main-title" style="color: #991b1b;">OVERDUE</span>
+                    <span class="emp-kpi-icon-pill">🚨</span>
+                  </div>
+                  <div class="kpi-stat-main-val" id="empKpiOverdue" style="color: #dc2626;">1</div>
+                  <div style="font-size: 11.5px; color: #991b1b; margin-top: 4px;">Past statutory due date</div>
+                </div>
+
+                <!-- 8. Certificates Issued -->
+                <div class="kpi-stat-card-main" onclick="switchEmployeeTrainingTab('my_certificates')" style="cursor: pointer; padding: 14px 18px; border-left: 3px solid #0284c7;" title="View My Certificates">
+                  <div class="kpi-stat-main-top">
+                    <span class="kpi-stat-main-title" style="color: #0369a1;">CERTIFICATES ISSUED</span>
+                    <span class="emp-kpi-icon-pill">🎓</span>
+                  </div>
+                  <div class="kpi-stat-main-val" id="empKpiCertsIssued" style="color: #0284c7;">1</div>
+                  <div style="font-size: 11.5px; color: #0369a1; margin-top: 4px;">Verified credentials issued</div>
+                </div>
+              </div>
+
+              <!-- Filter Pills & Search/Sort Bar (Spec Section 4 & 5) -->
+              <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 18px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 12px; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px;">
+                  <!-- Filter Pills -->
+                  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button type="button" class="emp-filter-pill active" id="empFilterBtn_all" onclick="filterEmpTrainingsByStatus('all')">All Trainings</button>
+                    <button type="button" class="emp-filter-pill" id="empFilterBtn_not_started" onclick="filterEmpTrainingsByStatus('not_started')">Not Started</button>
+                    <button type="button" class="emp-filter-pill" id="empFilterBtn_in_progress" onclick="filterEmpTrainingsByStatus('in_progress')">In Progress</button>
+                    <button type="button" class="emp-filter-pill" id="empFilterBtn_submitted_for_review" onclick="filterEmpTrainingsByStatus('submitted_for_review')">Submitted for Review</button>
+                    <button type="button" class="emp-filter-pill" id="empFilterBtn_changes_requested" onclick="filterEmpTrainingsByStatus('changes_requested')">Changes Requested</button>
+                    <button type="button" class="emp-filter-pill" id="empFilterBtn_completed" onclick="filterEmpTrainingsByStatus('completed')">Completed</button>
+                    <button type="button" class="emp-filter-pill" id="empFilterBtn_overdue" onclick="filterEmpTrainingsByStatus('overdue')">Overdue</button>
+                  </div>
+                </div>
+
+                <!-- Search and Sorting Controls -->
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
+                  <div style="display: flex; align-items: center; gap: 8px; flex: 1; max-width: 440px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 7px 12px;">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#94a3b8" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" id="searchEmpTrainingsInput" oninput="renderEmployeeTrainingsList()" placeholder="Search your assigned trainings by title, category, or reviewer..." style="border: none; background: transparent; outline: none; font-size: 13px; width: 100%; color: #1e293b;" />
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <select id="filterEmpCategorySelect" onchange="renderEmployeeTrainingsList()" style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 7px 12px; font-size: 12.5px; color: #334155; outline: none;">
+                      <option value="all">All Categories</option>
+                      <option value="Technical Architecture">Technical Architecture</option>
+                      <option value="Governance &amp; Compliance">Governance &amp; Compliance</option>
+                      <option value="Product &amp; Platform">Product &amp; Platform</option>
+                      <option value="Support &amp; Operations">Support &amp; Operations</option>
+                    </select>
+                    <select id="sortEmpTrainingsSelect" onchange="renderEmployeeTrainingsList()" style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 7px 12px; font-size: 12.5px; color: #334155; outline: none;">
+                      <option value="due_soonest">Sort by: Due Date (Soonest)</option>
+                      <option value="progress_desc">Sort by: Progress (High to Low)</option>
+                      <option value="recently_assigned">Sort by: Recently Assigned</option>
+                      <option value="name_asc">Sort by: Training Name (A-Z)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Training Cards Listing (Spec Section 5) -->
+              <div id="empTrainingsGrid" style="display: flex; flex-direction: column; gap: 14px;">
+                <!-- Populated dynamically via renderEmployeeTrainingsList() in app.js -->
+              </div>
+            </div>
+
+            <!-- ======================================================== -->
+            <!-- SECTION EMP 2: MY CERTIFICATES (SPEC SECTION 11)         -->
+            <!-- ======================================================== -->
+            <div class="training-tab-view" id="sectionEmpCertificates" style="display: none;">
+              <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+                <div style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+                  <div>
+                    <h3 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0;">My Issued Certificates &amp; Credentials</h3>
+                    <p style="font-size: 12.5px; color: #64748b; margin: 2px 0 0 0;">Official credentials and digitally verified certificates issued upon successful training completion and reviewer approval.</p>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="background: #f0fdf4; color: #166534; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 12px; border: 1px solid #bbf7d0;">
+                      ✓ Verified Credentials Only
+                    </span>
+                  </div>
+                </div>
+
+                <div class="crm-table-responsive">
+                  <table class="crm-table" style="width: 100%; border-collapse: collapse; font-size: 12.5px;">
+                    <thead>
+                      <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; color: #64748b; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; text-align: left;">
+                        <th style="padding: 12px 16px; width: 45px; text-align: center;">No.</th>
+                        <th style="padding: 12px 16px;">Certificate Name</th>
+                        <th style="padding: 12px 16px;">Training Name</th>
+                        <th style="padding: 12px 16px;">Certificate ID</th>
+                        <th style="padding: 12px 16px;">Issue Date</th>
+                        <th style="padding: 12px 16px;">Expiry Date</th>
+                        <th style="padding: 12px 16px; text-align: center;">Status</th>
+                        <th style="padding: 12px 16px; text-align: right;">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="empCertificatesTableBody">
+                      <!-- Populated dynamically via renderEmployeeCertificates() in app.js -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- ======================================================== -->
+            <!-- SECTION EMP 3: TRAINING HISTORY (SPEC SECTION 12)        -->
+            <!-- ======================================================== -->
+            <div class="training-tab-view" id="sectionEmpHistory" style="display: none;">
+              <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+                <div style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+                  <div>
+                    <h3 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0;">Comprehensive Training History</h3>
+                    <p style="font-size: 12.5px; color: #64748b; margin: 2px 0 0 0;">Complete historical audit log of all training programmes assigned, progress, assessment scores, review feedback, and certificate issuance.</p>
+                  </div>
+                  <button type="button" class="btn-export-csv" onclick="exportEmpHistoryCSV()">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    <span>Export History CSV</span>
+                  </button>
+                </div>
+
+                <div class="crm-table-responsive" style="overflow-x: auto;">
+                  <table class="crm-table" style="width: 100%; min-width: 1200px; border-collapse: collapse; font-size: 12px;">
+                    <thead>
+                      <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; color: #64748b; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.05em; text-align: left;">
+                        <th style="padding: 10px 12px; width: 40px; text-align: center;">No.</th>
+                        <th style="padding: 10px 12px; width: 18%;">Training Name</th>
+                        <th style="padding: 10px 12px;">Category</th>
+                        <th style="padding: 10px 12px;">Assigned By</th>
+                        <th style="padding: 10px 12px;">Assigned Date</th>
+                        <th style="padding: 10px 12px;">Due Date</th>
+                        <th style="padding: 10px 12px;">Start Date</th>
+                        <th style="padding: 10px 12px;">Submission Date</th>
+                        <th style="padding: 10px 12px;">Review Date</th>
+                        <th style="padding: 10px 12px;">Completion Date</th>
+                        <th style="padding: 10px 12px; text-align: center;">Progress</th>
+                        <th style="padding: 10px 12px; text-align: center;">Score</th>
+                        <th style="padding: 10px 12px; text-align: center;">Assignment Status</th>
+                        <th style="padding: 10px 12px; text-align: center;">Review Status</th>
+                        <th style="padding: 10px 12px; text-align: center;">Certificate</th>
+                        <th style="padding: 10px 12px; text-align: right;">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="empHistoryFullTableBody">
+                      <!-- Populated dynamically via renderEmployeeHistoryFull() in app.js -->
+                    </tbody>
                   </table>
                 </div>
               </div>
@@ -3453,6 +3716,305 @@
           <button type="button" class="btn-table-action" onclick="closeCertIssuedModal()">Close</button>
           <button type="button" class="btn-primary-action" id="btnCertIssuedPreview" onclick="viewIssuedCertFromModal()">👁 View Certificate</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: EMPLOYEE TRAINING DETAILS (SPEC SEC 6-10) -->
+  <!-- ============================================== -->
+  <div class="modal-backdrop" id="modalEmpTrainingDetail" style="z-index: 9999;">
+    <div class="modal-dialog modal-large" style="max-width: 960px; width: 94%; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden;">
+      <!-- Modal Header -->
+      <div class="modal-header" style="padding: 16px 22px; background: #ffffff; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;">
+        <div style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0;">
+          <div style="width: 40px; height: 40px; border-radius: 8px; background: #e0e7ff; color: #4338ca; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;">
+            🎓
+          </div>
+          <div style="min-width: 0;">
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <h3 id="empModalTrainingTitle" style="font-size: 16px; font-weight: 700; color: #0f172a; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Training Title</h3>
+              <span id="empModalMandatoryBadge" class="badge-tag" style="background: #fee2e2; color: #991b1b; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px;">Mandatory</span>
+              <span id="empModalCategoryBadge" class="badge-tag" style="background: #e0e7ff; color: #3730a3; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px;">Category</span>
+              <span id="empModalStatusBadge" class="badge-tag" style="background: #f1f5f9; color: #475569; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px;">Status</span>
+            </div>
+            <p id="empModalDueDateText" style="font-size: 12px; color: #64748b; margin: 3px 0 0 0;">Due Date: 15-Nov-2026 • Assigned By: Megha Salunkhe</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn" onclick="closeEmployeeTrainingDetail()" style="background: none; border: none; font-size: 22px; color: #64748b; cursor: pointer; padding: 4px 8px;">&times;</button>
+      </div>
+
+      <!-- Modal Tabs Navigation -->
+      <div style="display: flex; gap: 4px; padding: 0 20px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; flex-shrink: 0; overflow-x: auto;">
+        <button type="button" class="training-subnav-btn active" id="empTabBtn_overview" onclick="switchEmpModalTab('overview')" style="border-radius: 0; border-bottom: 2px solid transparent; font-size: 13px; padding: 10px 16px;">
+          1. Overview &amp; Objectives
+        </button>
+        <button type="button" class="training-subnav-btn" id="empTabBtn_resources" onclick="switchEmpModalTab('resources')" style="border-radius: 0; border-bottom: 2px solid transparent; font-size: 13px; padding: 10px 16px;">
+          2. Learning Resources <span id="empModalResourcesCountBadge" style="background: #e2e8f0; color: #334155; font-size: 11px; padding: 2px 6px; border-radius: 10px; margin-left: 6px;">0/0</span>
+        </button>
+        <button type="button" class="training-subnav-btn" id="empTabBtn_assessment" onclick="switchEmpModalTab('assessment')" style="border-radius: 0; border-bottom: 2px solid transparent; font-size: 13px; padding: 10px 16px;">
+          3. Assessment <span id="empModalAssessmentStatusBadge" style="background: #e2e8f0; color: #334155; font-size: 11px; padding: 2px 6px; border-radius: 10px; margin-left: 6px;">Available</span>
+        </button>
+        <button type="button" class="training-subnav-btn" id="empTabBtn_submission" onclick="switchEmpModalTab('submission')" style="border-radius: 0; border-bottom: 2px solid transparent; font-size: 13px; padding: 10px 16px;">
+          4. Submission &amp; Feedback
+        </button>
+      </div>
+
+      <!-- Modal Body (Scrollable) -->
+      <div style="flex: 1; overflow-y: auto; padding: 20px 24px; background: #ffffff;">
+        <!-- TAB 1: OVERVIEW & OBJECTIVES -->
+        <div id="empModalTabContent_overview" class="emp-modal-tab-content">
+          <div style="display: flex; flex-direction: column; gap: 18px;">
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px;">
+              <h4 style="font-size: 13px; font-weight: 700; color: #0f172a; margin: 0 0 8px 0; text-transform: uppercase; letter-spacing: 0.05em;">Course Summary</h4>
+              <p id="empModalOverviewDesc" style="font-size: 13.5px; color: #334155; line-height: 1.6; margin: 0;">Detailed description here.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+              <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px;">
+                <h4 style="font-size: 13px; font-weight: 700; color: #0f172a; margin: 0 0 10px 0; display: flex; align-items: center; gap: 6px;">
+                  <span style="color: #4f46e5;">🎯</span> Learning Objectives
+                </h4>
+                <ul id="empModalObjectivesList" style="margin: 0; padding-left: 20px; font-size: 13px; color: #475569; display: flex; flex-direction: column; gap: 6px;">
+                  <!-- Filled via JS -->
+                </ul>
+              </div>
+
+              <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px;">
+                <h4 style="font-size: 13px; font-weight: 700; color: #0f172a; margin: 0 0 10px 0; display: flex; align-items: center; gap: 6px;">
+                  <span style="color: #10b981;">🚀</span> Expected Outcomes
+                </h4>
+                <ul id="empModalOutcomesList" style="margin: 0; padding-left: 20px; font-size: 13px; color: #475569; display: flex; flex-direction: column; gap: 6px;">
+                  <!-- Filled via JS -->
+                </ul>
+              </div>
+            </div>
+
+            <!-- Parameters Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px;">
+              <div>
+                <span style="font-size: 11px; color: #64748b; text-transform: uppercase;">Difficulty Level</span>
+                <p id="empModalDifficultyText" style="font-size: 13px; font-weight: 700; color: #0f172a; margin: 2px 0 0 0;">Intermediate</p>
+              </div>
+              <div>
+                <span style="font-size: 11px; color: #64748b; text-transform: uppercase;">Estimated Duration</span>
+                <p id="empModalDurationText" style="font-size: 13px; font-weight: 700; color: #0f172a; margin: 2px 0 0 0;">3h 30m</p>
+              </div>
+              <div>
+                <span style="font-size: 11px; color: #64748b; text-transform: uppercase;">Assigned By</span>
+                <p id="empModalAssignedByText" style="font-size: 13px; font-weight: 700; color: #0f172a; margin: 2px 0 0 0;">Megha Salunkhe</p>
+              </div>
+              <div>
+                <span style="font-size: 11px; color: #64748b; text-transform: uppercase;">Enrollment Date</span>
+                <p id="empModalAssignedDateText" style="font-size: 13px; font-weight: 700; color: #0f172a; margin: 2px 0 0 0;">01-Nov-2026</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: LEARNING RESOURCES (SPEC SEC 6-7) -->
+        <div id="empModalTabContent_resources" class="emp-modal-tab-content" style="display: none;">
+          <!-- Progress Bar Header -->
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 18px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+              <div>
+                <strong style="font-size: 13px; color: #0f172a;">Mandatory Learning Progress</strong>
+                <span style="font-size: 12px; color: #64748b; margin-left: 8px;">(Completed Mandatory / Total Mandatory × 100)</span>
+              </div>
+              <span id="empModalProgressPercentText" style="font-size: 15px; font-weight: 800; color: #4f46e5;">0%</span>
+            </div>
+            <div style="width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+              <div id="empModalProgressBarFill" style="width: 0%; height: 100%; background: linear-gradient(90deg, #4f46e5, #6366f1); border-radius: 4px; transition: width 0.3s ease;"></div>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 6px; font-size: 11.5px; color: #64748b;">
+              <span id="empModalMandatoryStats">0 of 0 Mandatory Resources Completed</span>
+              <span>All progress is verified and synchronized with CollabCRM Backend</span>
+            </div>
+          </div>
+
+          <!-- Resources List Container -->
+          <div id="empModalResourcesList" style="display: flex; flex-direction: column; gap: 12px;">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+
+        <!-- TAB 3: ASSESSMENT (SPEC SEC 8) -->
+        <div id="empModalTabContent_assessment" class="emp-modal-tab-content" style="display: none;">
+          <div id="empModalAssessmentContainer">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+
+        <!-- TAB 4: SUBMISSION & REVIEW (SPEC SEC 9-10) -->
+        <div id="empModalTabContent_submission" class="emp-modal-tab-content" style="display: none;">
+          <!-- Review Feedback Banner if Changes Requested or Approved or Rejected -->
+          <div id="empModalReviewFeedbackBanner" style="display: none; margin-bottom: 18px;"></div>
+
+          <!-- Requirements Checklist -->
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 18px;">
+            <h4 style="font-size: 13px; font-weight: 700; color: #0f172a; margin: 0 0 12px 0;">Submission Readiness Checklist</h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; font-size: 12.5px;">
+              <div id="chkRule_resources" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px;">
+                <span id="chkRuleIcon_resources">⚪</span>
+                <span>Mandatory Resources</span>
+              </div>
+              <div id="chkRule_assessment" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px;">
+                <span id="chkRuleIcon_assessment">⚪</span>
+                <span>Assessment Passed</span>
+              </div>
+              <div id="chkRule_remarks" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px;">
+                <span id="chkRuleIcon_remarks">⚪</span>
+                <span>Completion Remarks</span>
+              </div>
+              <div id="chkRule_evidence" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px;">
+                <span id="chkRuleIcon_evidence">⚪</span>
+                <span>Evidence Upload</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Remarks & Evidence Form -->
+          <div id="empSubmissionFormFields" style="display: flex; flex-direction: column; gap: 14px;">
+            <div>
+              <label style="display: block; font-size: 12.5px; font-weight: 600; color: #1e293b; margin-bottom: 5px;">
+                Completion Remarks / Self-Evaluation <span style="color: #ef4444;">*</span>
+              </label>
+              <textarea id="empSubmissionRemarksInput" rows="3" oninput="validateEmpSubmissionReadiness()" placeholder="Summarize your key takeaways, learnings, or implementation steps..." style="width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; outline: none;"></textarea>
+            </div>
+
+            <div>
+              <label style="display: block; font-size: 12.5px; font-weight: 600; color: #1e293b; margin-bottom: 5px;">
+                Supporting Evidence / Project Deliverable (PDF, ZIP, DOCX, Screenshot)
+              </label>
+              <div style="border: 2px dashed #cbd5e1; border-radius: 8px; padding: 18px; text-align: center; background: #f8fafc; cursor: pointer;" onclick="document.getElementById('empEvidenceFileInput').click()">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#64748b" stroke-width="1.8" style="margin: 0 auto 6px auto;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                <p style="font-size: 12.5px; font-weight: 600; color: #334155; margin: 0;">Click or drag file here to attach supporting evidence</p>
+                <p style="font-size: 11px; color: #64748b; margin: 3px 0 0 0;">Max file size: 25MB • Supported formats: PDF, DOCX, PNG, ZIP</p>
+                <input type="file" id="empEvidenceFileInput" onchange="handleEmpEvidenceSelected(event)" style="display: none;" />
+              </div>
+              <div id="empAttachedEvidencePreview" style="display: none; align-items: center; justify-content: space-between; margin-top: 8px; padding: 8px 12px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px;">
+                <span id="empAttachedEvidenceName" style="font-size: 12px; font-weight: 600; color: #1e40af;">evidence.pdf</span>
+                <button type="button" onclick="removeEmpAttachedEvidence()" style="background: none; border: none; color: #ef4444; font-size: 14px; cursor: pointer;">✕ Remove</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer" style="padding: 14px 22px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;">
+        <button type="button" class="btn-table-action" onclick="closeEmployeeTrainingDetail()">Close</button>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <button type="button" class="btn-table-action" id="btnEmpModalPrevTab" onclick="navigateEmpModalTab(-1)">← Previous</button>
+          <button type="button" class="btn-primary-action" id="btnEmpModalNextTab" onclick="navigateEmpModalTab(1)">Next →</button>
+          <button type="button" class="btn-primary-action" id="btnEmpModalSubmitReview" onclick="submitEmpTrainingWorkflow()" style="display: none; background: #16a34a; border-color: #15803d;">
+            Submit for Review ✓
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: RESOURCE VIEWER MODAL (SPEC SEC 6-7)   -->
+  <!-- ============================================== -->
+  <div class="modal-backdrop" id="modalEmpResourceViewer" style="z-index: 10001;">
+    <div class="modal-dialog modal-large" style="max-width: 880px; width: 94%; max-height: 88vh; display: flex; flex-direction: column; overflow: hidden;">
+      <div class="modal-header" style="padding: 14px 20px; background: #0f172a; color: #ffffff; border-bottom: 1px solid #334155; display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span id="empViewerTypeIcon" style="font-size: 18px;">📺</span>
+          <div>
+            <h3 id="empViewerTitle" style="font-size: 14.5px; font-weight: 700; color: #ffffff; margin: 0;">Resource Title</h3>
+            <p id="empViewerSubtitle" style="font-size: 11.5px; color: #94a3b8; margin: 2px 0 0 0;">Interactive Learning Material</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeEmployeeResourceViewer()" style="background: none; border: none; font-size: 22px; color: #94a3b8; cursor: pointer;">&times;</button>
+      </div>
+      <div id="empViewerBody" style="flex: 1; overflow-y: auto; background: #0b0f19; min-height: 440px; display: flex; align-items: center; justify-content: center; position: relative;">
+        <!-- Embedded viewer dynamically loaded via JS -->
+      </div>
+      <div class="modal-footer" style="padding: 12px 20px; background: #1e293b; border-top: 1px solid #334155; display: flex; align-items: center; justify-content: space-between;">
+        <span style="font-size: 12px; color: #94a3b8;">Opening a resource does not automatically complete it. Use the completion button to track progress.</span>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <button type="button" class="btn-table-action" onclick="closeEmployeeResourceViewer()" style="color: #cbd5e1; border-color: #475569; background: #334155;">Close Viewer</button>
+          <button type="button" class="btn-primary-action" id="btnEmpViewerMarkComplete" onclick="markCurrentViewerResourceComplete()">
+            Mark as Completed ✓
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: CERTIFICATE VIEWER & DOWNLOAD (SEC 11) -->
+  <!-- ============================================== -->
+  <div class="modal-backdrop" id="modalEmpCertViewer" style="z-index: 10002;">
+    <div class="modal-dialog" style="max-width: 820px; width: 94%; max-height: 92vh; display: flex; flex-direction: column; overflow: hidden;">
+      <div class="modal-header" style="padding: 14px 20px; background: #ffffff; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+        <div>
+          <h3 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0;">Verified Credential &amp; Certificate</h3>
+          <p id="empCertViewerSubtitle" style="font-size: 12px; color: #64748b; margin: 2px 0 0 0;">Official CollabCRM Issued Certificate</p>
+        </div>
+        <button type="button" onclick="closeEmployeeCertViewer()" style="background: none; border: none; font-size: 22px; color: #64748b; cursor: pointer;">&times;</button>
+      </div>
+      <div style="flex: 1; overflow-y: auto; padding: 24px; background: #f8fafc; display: flex; align-items: center; justify-content: center;">
+        <div id="empCertificatePrintableArea" style="width: 100%; max-width: 720px; background: #ffffff; border: 12px solid #1e293b; border-image: linear-gradient(135deg, #1e293b, #4338ca) 30; padding: 36px 40px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; position: relative;">
+          <!-- Watermark -->
+          <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0.03; font-size: 100px; font-weight: 900; pointer-events: none; user-select: none;">
+            COLLAB CRM
+          </div>
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: #64748b; margin-bottom: 8px;">CollabCRM People Learning &amp; Development</div>
+          <h2 style="font-family: Georgia, serif; font-size: 28px; color: #0f172a; margin: 0 0 6px 0; letter-spacing: 0.02em;">Certificate of Completion</h2>
+          <p style="font-size: 12.5px; color: #64748b; margin: 0 0 20px 0;">This is to officially certify that</p>
+          <div id="empCertRecipientName" style="font-family: Georgia, serif; font-size: 24px; font-weight: 700; color: #4338ca; border-bottom: 2px solid #cbd5e1; display: inline-block; padding: 0 30px 6px 30px; margin-bottom: 12px;">Aryan Bhardwaj</div>
+          <p style="font-size: 12.5px; color: #64748b; margin: 0 0 10px 0;">Employee ID: <strong id="empCertRecipientId" style="color: #0f172a;">CO-5039</strong></p>
+          <p style="font-size: 13.5px; color: #334155; line-height: 1.6; max-width: 580px; margin: 0 auto 20px auto;">
+            has successfully fulfilled all curriculum requirements, passed comprehensive assessments, and achieved mastery in the training program:
+          </p>
+          <h3 id="empCertTrainingTitle" style="font-size: 18px; font-weight: 800; color: #0f172a; margin: 0 0 24px 0;">Cloud Architecture &amp; Microservices Security</h3>
+          <div style="display: flex; justify-content: space-between; align-items: flex-end; padding-top: 20px; border-top: 1px dashed #cbd5e1;">
+            <div style="text-align: left;">
+              <span style="font-size: 11px; color: #64748b; display: block;">Certificate ID: <strong id="empCertModalCertId" style="color: #0f172a;">TRN-2026-001</strong></span>
+              <span style="font-size: 11px; color: #64748b; display: block; margin-top: 3px;">Issued Date: <strong id="empCertModalIssueDate" style="color: #0f172a;">02-Nov-2026</strong></span>
+              <span style="font-size: 11px; color: #16a34a; font-weight: 700; display: block; margin-top: 3px;">✓ Authenticated by Backend Registry</span>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-family: 'Brush Script MT', cursive, sans-serif; font-size: 22px; color: #1e293b; margin-bottom: 2px;">Megha Salunkhe</div>
+              <div style="height: 1px; width: 140px; background: #94a3b8; margin-left: auto;"></div>
+              <span style="font-size: 11px; color: #64748b; display: block; margin-top: 3px;">Authorized Learning Director</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" style="padding: 12px 20px; background: #ffffff; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+        <span style="font-size: 12px; color: #64748b;">Issued credentials remain permanently accessible in your CollabCRM portal history.</span>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <button type="button" class="btn-table-action" onclick="closeEmployeeCertViewer()">Close</button>
+          <button type="button" class="btn-table-action" onclick="printEmployeeCertificate()">🖨️ Print</button>
+          <button type="button" class="btn-primary-action" onclick="downloadEmployeeCertificate()">⬇ Download Certificate (PDF)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: EMPLOYEE NOTIFICATIONS DRAWER (SEC 13)  -->
+  <!-- ============================================== -->
+  <div class="modal-backdrop" id="modalEmpNotifications" style="z-index: 10003;">
+    <div class="modal-dialog" style="max-width: 520px; width: 92%; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden;">
+      <div class="modal-header" style="padding: 14px 20px; background: #ffffff; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 18px;">🔔</span>
+          <h3 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0;">Employee Training Alerts</h3>
+        </div>
+        <button type="button" onclick="closeEmployeeNotificationsDrawer()" style="background: none; border: none; font-size: 22px; color: #64748b; cursor: pointer;">&times;</button>
+      </div>
+      <div id="empNotificationsListContainer" style="flex: 1; overflow-y: auto; padding: 12px 16px; background: #f8fafc; display: flex; flex-direction: column; gap: 10px;">
+        <!-- Filled via JS -->
+      </div>
+      <div class="modal-footer" style="padding: 10px 20px; background: #ffffff; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+        <button type="button" class="btn-table-action" onclick="markAllEmpNotificationsRead()">Mark all as read</button>
+        <button type="button" class="btn-primary-action" onclick="closeEmployeeNotificationsDrawer()">Done</button>
       </div>
     </div>
   </div>
