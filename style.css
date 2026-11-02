@@ -2564,3 +2564,628 @@ body {
   max-width: 1200px;
   margin: 0 auto;
 }
+
+/* ==========================================================================
+   Comprehensive Training Management Module (Sections 1 to 8)
+   Follows exact CollabCRM font, colors, cards, pills & layout
+   ========================================================================== */
+
+/* Sub Navigation Bar */
+.training-subnav-bar {
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.training-subnav-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow-x: auto;
+  padding: 8px 0;
+}
+
+.training-subnav-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: transparent;
+  border: 1px solid transparent;
+  padding: 7px 13px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.training-subnav-btn:hover {
+  background-color: #f1f5f9;
+  color: #1e293b;
+}
+
+.training-subnav-btn.active {
+  background-color: #eff6ff;
+  color: #2563eb;
+  border-color: #bfdbfe;
+  font-weight: 700;
+}
+
+.badge-pending-count {
+  background-color: #ef4444;
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 1px 6px;
+  font-size: 10.5px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* Hierarchy Notice Banner (Reporting Manager) */
+.hierarchy-banner {
+  background-color: #fffbeb;
+  border: 1px solid #fde68a;
+  border-left: 4px solid #f59e0b;
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+  color: #92400e;
+}
+
+.hierarchy-tag {
+  background-color: #f59e0b;
+  color: #ffffff;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+/* 10-Item KPI Dashboard Grid (Section 1) */
+.training-dashboard-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.kpi-grid-10 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+}
+
+@media (max-width: 1400px) {
+  .kpi-grid-10 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .kpi-grid-10 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 580px) {
+  .kpi-grid-10 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.kpi-stat-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.kpi-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+.kpi-stat-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #e2e8f0;
+}
+
+.kpi-stat-card.card-blue::after { background: #3b82f6; }
+.kpi-stat-card.card-green::after { background: #10b981; }
+.kpi-stat-card.card-amber::after { background: #f59e0b; }
+.kpi-stat-card.card-purple::after { background: #8b5cf6; }
+.kpi-stat-card.card-rose::after { background: #f43f5e; }
+.kpi-stat-card.card-teal::after { background: #14b8a6; }
+.kpi-stat-card.card-orange::after { background: #f97316; }
+.kpi-stat-card.card-red::after { background: #ef4444; }
+.kpi-stat-card.card-indigo::after { background: #6366f1; }
+.kpi-stat-card.card-emerald::after { background: #059669; }
+
+.kpi-stat-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.kpi-stat-title {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.kpi-stat-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.kpi-stat-val {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+.kpi-stat-sub {
+  font-size: 11.5px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+/* CollabCRM Table Components (Sections 3, 4, 5, 6, 7) */
+.crm-table-container {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.crm-table-header-bar {
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e2e8f0;
+  background: #fafafa;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.crm-table-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.crm-table-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.crm-table-badge-count {
+  background: #e2e8f0;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 12px;
+}
+
+.crm-table-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.crm-input-search {
+  padding: 6px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 12.5px;
+  outline: none;
+  width: 220px;
+  background: #ffffff;
+  transition: border-color 0.15s ease;
+}
+
+.crm-input-search:focus {
+  border-color: #2563eb;
+}
+
+.crm-select-filter {
+  padding: 6px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 12.5px;
+  background: #ffffff;
+  color: #334155;
+  outline: none;
+}
+
+.crm-table-responsive {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.crm-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  text-align: left;
+}
+
+.crm-table th {
+  background: #f8fafc;
+  padding: 11px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid #e2e8f0;
+  white-space: nowrap;
+}
+
+.crm-table td {
+  padding: 13px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #1e293b;
+  vertical-align: middle;
+}
+
+.crm-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+/* User & Program Cells in Table */
+.cell-user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cell-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.cell-user-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.cell-user-name {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.cell-user-role {
+  font-size: 11px;
+  color: #64748b;
+}
+
+/* Status Pill Badges */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-notstarted { background: #f1f5f9; color: #475569; }
+.status-inprogress { background: #eff6ff; color: #1d4ed8; }
+.status-submitted { background: #fef3c7; color: #b45309; }
+.status-completed { background: #dcfce7; color: #15803d; }
+.status-overdue { background: #fee2e2; color: #b91c1c; font-weight: 700; }
+.status-approved { background: #dcfce7; color: #15803d; }
+.status-rejected { background: #fee2e2; color: #b91c1c; }
+.status-changes { background: #fef3c7; color: #b45309; }
+.status-mandatory { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+.status-optional { background: #f1f5f9; color: #475569; }
+.status-eligible { background: #fef3c7; color: #92400e; }
+.status-generated { background: #e0e7ff; color: #4338ca; }
+.status-issued { background: #dcfce7; color: #166534; font-weight: 700; }
+
+/* Progress Mini Bar */
+.cell-prog-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 110px;
+}
+
+.cell-prog-track {
+  flex: 1;
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.cell-prog-bar {
+  height: 100%;
+  background: #2563eb;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.cell-prog-bar.prog-green { background: #10b981; }
+.cell-prog-bar.prog-amber { background: #f59e0b; }
+.cell-prog-bar.prog-red { background: #ef4444; }
+
+.cell-prog-text {
+  font-size: 11px;
+  font-weight: 600;
+  color: #475569;
+  width: 32px;
+  text-align: right;
+}
+
+/* Action Buttons inside Table */
+.btn-table-action {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-table-action:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+.btn-table-action.primary {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #2563eb;
+}
+
+.btn-table-action.primary:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+.btn-table-action.success {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+  color: #166534;
+}
+
+.btn-table-action.success:hover {
+  background: #166534;
+  border-color: #166534;
+  color: #ffffff;
+}
+
+.btn-table-action.danger {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #991b1b;
+}
+
+/* Resource Manager in Program Modal (Section 2) */
+.resource-manager-box {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 12px;
+  background: #f8fafc;
+}
+
+.resource-row-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+}
+
+.resource-row-item input[type="text"],
+.resource-row-item select {
+  padding: 5px 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 5px;
+  font-size: 12px;
+}
+
+.resource-del-btn {
+  background: #fee2e2;
+  border: none;
+  color: #b91c1c;
+  border-radius: 5px;
+  padding: 5px 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.resource-del-btn:hover {
+  background: #fecaca;
+}
+
+/* Review Evidence Box (Section 5) */
+.evidence-card-box {
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  padding: 14px;
+  margin-top: 10px;
+}
+
+.review-history-log {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.review-history-item {
+  font-size: 12px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #f1f5f9;
+  border-left: 3px solid #64748b;
+}
+
+/* Modal XL & Custom Modals */
+.modal-dialog.modal-xl {
+  max-width: 900px;
+  width: 95%;
+}
+
+.modal-dialog.modal-large {
+  max-width: 800px;
+  width: 92%;
+}
+
+/* Certificate Preview Ornament (Section 6) */
+.cert-printable-container {
+  background: #ffffff;
+  border: 10px double #cbd5e1;
+  padding: 30px;
+  text-align: center;
+  position: relative;
+  border-radius: 6px;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.02);
+}
+
+.cert-seal {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px dashed #f59e0b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin: 0 auto 12px auto;
+  background: #fffbeb;
+}
+
+.cert-org-header {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #2563eb;
+}
+
+.cert-main-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 8px 0;
+  letter-spacing: 0.04em;
+}
+
+.cert-recipient-name {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: #1e3a8a;
+  text-decoration: underline;
+  text-decoration-color: #bfdbfe;
+  margin: 10px 0;
+}
+
+.cert-program-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 8px 0 16px 0;
+}
+
+.cert-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid #e2e8f0;
+  padding-top: 16px;
+  margin-top: 20px;
+  font-size: 11.5px;
+  color: #64748b;
+  text-align: left;
+}
+
+/* Reports Specific Layout (Section 7) */
+.reports-kpi-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.btn-export-csv {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-export-csv:hover {
+  background: #f8fafc;
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
