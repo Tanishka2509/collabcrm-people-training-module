@@ -3496,7 +3496,14 @@ body, button, input, select, textarea {
   color: #1e293b;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
+}
+
+.tcfg-req-star {
+  color: #ef4444 !important;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1;
 }
 
 .tcfg-setting-desc {

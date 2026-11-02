@@ -3528,9 +3528,27 @@ function saveCurrentConfigTab() {
     appendConfigAudit('Completion & Assessment', `Saved completion rules: Passing score ${trainingConfigData.completion.passingScore}%, Manager approval: ${trainingConfigData.completion.approvalRequired ? 'Required' : 'Disabled'}.`);
   } else if (activeTrainingConfigTab === 'certificates') {
     const prefix = document.getElementById('cfg_cert_id_prefix').value.trim();
-    if (!prefix) {
-      showConfigToast('Certificate Credential ID prefix cannot be blank.', 'error');
-      return;
+    const compName = document.getElementById('cfg_cert_company_name').value.trim();
+    const signName = document.getElementById('cfg_cert_signatory_name').value.trim();
+    const signTitle = document.getElementById('cfg_cert_signatory_title').value.trim();
+
+    if (document.getElementById('cfg_cert_enabled').checked) {
+      if (!prefix) {
+        showConfigToast('Certificate Credential ID prefix is required.', 'error');
+        return;
+      }
+      if (!compName) {
+        showConfigToast('Company Name is required.', 'error');
+        return;
+      }
+      if (!signName) {
+        showConfigToast('Authorized Signatory Name is required.', 'error');
+        return;
+      }
+      if (!signTitle) {
+        showConfigToast('Authorized Signatory Designation is required.', 'error');
+        return;
+      }
     }
     const valMonths = parseInt(document.getElementById('cfg_cert_validity_months').value, 10);
     if (document.getElementById('cfg_cert_validity_type').value === 'Fixed Duration' && (isNaN(valMonths) || valMonths < 1)) {
@@ -3540,9 +3558,9 @@ function saveCurrentConfigTab() {
     trainingConfigData.certificates.enabled = document.getElementById('cfg_cert_enabled').checked;
     trainingConfigData.certificates.template = document.getElementById('cfg_cert_template').value;
     trainingConfigData.certificates.idPrefix = prefix.toUpperCase();
-    trainingConfigData.certificates.companyName = document.getElementById('cfg_cert_company_name').value.trim();
-    trainingConfigData.certificates.signatoryName = document.getElementById('cfg_cert_signatory_name').value.trim();
-    trainingConfigData.certificates.signatoryTitle = document.getElementById('cfg_cert_signatory_title').value.trim();
+    trainingConfigData.certificates.companyName = compName;
+    trainingConfigData.certificates.signatoryName = signName;
+    trainingConfigData.certificates.signatoryTitle = signTitle;
     trainingConfigData.certificates.validityType = document.getElementById('cfg_cert_validity_type').value;
     trainingConfigData.certificates.validityMonths = valMonths || 12;
     trainingConfigData.certificates.expiryNotification = document.getElementById('cfg_cert_expiry_notif').checked;
