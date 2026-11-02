@@ -115,155 +115,36 @@
       <aside class="sidebar-wrapper relative" id="sidebarNav">
         <nav class="py-5 px-2 overflow-y-auto overflow-x-hidden sidebar-container 2xl:h-[calc(100vh-116px)] 2xl-to-xl:h-[calc(100vh-108px)] h-[calc(100vh-108px)]">
           <ul role="list" class="space-y-3 sidebar-container" id="sidebarList">
-            <!-- 1. Dashboard -->
-            <li title="Dashboard" class="relative group cursor-pointer sidebar-nav-li active" id="menuDashboard" onclick="switchToDashboard()">
-              <div class="-my-1">
-                <div class="bg-indigo-600 text-white flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap" id="dashboardInner">
-                  <a class="flex w-full items-center gap-x-3 2xl:p-3 2xl-to-xl:p-2 p-2" href="/people/collabcrm-demo-account/dashboard" onclick="event.preventDefault(); switchToDashboard();">
-                    <span class="text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-grid-01"></span>
-                    <p class="nav-text">Dashboard</p>
-                  </a>
-                </div>
-              </div>
-            </li>
-
-            <!-- 2. Employees -->
-            <li title="Employees" class="relative group cursor-pointer sidebar-nav-li" id="menuEmployees" onclick="openFlyout('Employees')">
-              <div class="text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap">
+            <!-- 1. Employees -->
+            <li title="Employees" class="relative group cursor-pointer sidebar-nav-li" id="menuEmployees" onclick="switchToEmployees()">
+              <div class="text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap" id="employeesInner">
                 <span class="text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-users-02"></span>
-                <p class="nav-text">Employees</p>
+                <p class="nav-text text-white" style="color: #ffffff !important; text-decoration: none !important;">Employees</p>
                 <span class="icon-chevron-right block ml-auto text-xl text-indigo-300"></span>
               </div>
             </li>
 
-            <!-- 3. My Team -->
-            <li title="My Team" class="relative group cursor-pointer sidebar-nav-li" id="menuMyTeam" onclick="openFlyout('My Team')">
-              <div class="text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap">
-                <span class="text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-group2"></span>
-                <p class="nav-text">My Team</p>
-                <span class="icon-chevron-right block ml-auto text-xl text-indigo-300"></span>
-              </div>
-            </li>
-
-            <!-- 4. Attendance -->
-            <li title="Attendance" class="relative group cursor-pointer sidebar-nav-li" id="menuAttendance">
+            <!-- 2. Training (Active Module - Same white color code, no underline) -->
+            <li title="Training" class="relative group cursor-pointer sidebar-nav-li active" id="menuTraining" onclick="switchToTraining()">
               <div class="-my-1">
-                <div class="text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap">
-                  <a class="flex w-full items-center gap-x-3 2xl:p-3 2xl-to-xl:p-2 p-2" href="/people/collabcrm-demo-account/attendance" onclick="event.preventDefault();">
-                    <span class="text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-calendar-check-02"></span>
-                    <p class="nav-text">Attendance</p>
-                  </a>
+                <div class="bg-indigo-600 text-white flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap" id="trainingInner">
+                  <div class="flex w-full items-center gap-x-3 2xl:p-3 2xl-to-xl:p-2 p-2 cursor-pointer" style="text-decoration: none !important;">
+                    <span class="text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training"></span>
+                    <p class="nav-text text-white" style="color: #ffffff !important; text-decoration: none !important; font-weight: 600; font-size: 14px;">Training</p>
+                  </div>
                 </div>
               </div>
             </li>
 
-            <!-- 5. Leaves -->
-            <li title="Leaves" class="relative group cursor-pointer sidebar-nav-li" id="menuLeaves">
-              <div class="-my-1">
-                <div class="text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap">
-                  <a class="flex w-full items-center gap-x-3 2xl:p-3 2xl-to-xl:p-2 p-2" href="/people/collabcrm-demo-account/leaves" onclick="event.preventDefault();">
-                    <span class="text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-user-right-01"></span>
-                    <p class="nav-text">Leaves</p>
-                  </a>
-                  <a title="Apply Leave" class="icon-plus-square block ml-auto text-xl 2xl:p-3 2xl-to-xl:p-2 p-2 text-indigo-300" href="/people/collabcrm-demo-account/leaves/add" onclick="event.preventDefault(); alert('Apply Leave');"></a>
-                </div>
-              </div>
-            </li>
-
-            <!-- 6. WFH -->
-            <li title="WFH" class="relative group cursor-pointer sidebar-nav-li" id="menuWFH">
-              <div class="-my-1">
-                <div class="text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap">
-                  <a class="flex w-full items-center gap-x-3 2xl:p-3 2xl-to-xl:p-2 p-2" href="/people/collabcrm-demo-account/work-from-home" onclick="event.preventDefault();">
-                    <span class="text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-home-04"></span>
-                    <p class="nav-text">WFH</p>
-                  </a>
-                  <a title="Apply WFH" class="icon-plus-square block ml-auto text-xl 2xl:p-3 2xl-to-xl:p-2 p-2 text-indigo-300" href="/people/collabcrm-demo-account/work-from-home/add" onclick="event.preventDefault(); alert('Apply WFH');"></a>
-                </div>
-              </div>
-            </li>
-
-            <!-- 7. Asset -->
-            <li title="Asset" class="relative group cursor-pointer sidebar-nav-li" id="menuAsset">
-              <div class="-my-1">
-                <div class="text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap">
-                  <a class="flex w-full items-center gap-x-3 2xl:p-3 2xl-to-xl:p-2 p-2" href="/people/collabcrm-demo-account/asset/asset-overview" onclick="event.preventDefault();">
-                    <span class="text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-monitor-05"></span>
-                    <p class="nav-text">Asset</p>
-                  </a>
-                  <a title="Add Asset" class="icon-plus-square block ml-auto text-xl 2xl:p-3 2xl-to-xl:p-2 p-2 text-indigo-300" href="/people/collabcrm-demo-account/asset/asset-list/add" onclick="event.preventDefault(); alert('Add Asset');"></a>
-                </div>
-              </div>
-            </li>
-
-            <!-- 8. Skill Matrix -->
-            <li title="Skill Matrix" class="relative group cursor-pointer sidebar-nav-li" id="menuSkillMatrix">
-              <div class="-my-1">
-                <div class="text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap">
-                  <a class="flex w-full items-center gap-x-3 2xl:p-3 2xl-to-xl:p-2 p-2" href="/people/collabcrm-demo-account/skill-matrix" onclick="event.preventDefault();">
-                    <span class="text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-skill-matrix"></span>
-                    <p class="nav-text">Skill Matrix</p>
-                  </a>
-                </div>
-              </div>
-            </li>
-
-            <!-- 🌟 9. Training Module (Strictly below Skill Matrix & above Organization) -->
-            <li title="Training" class="relative group cursor-pointer sidebar-nav-li" id="menuTraining" onclick="switchToTraining()">
-              <div class="-my-1">
-                <div class="text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap" id="trainingInner">
-                  <a class="flex w-full items-center gap-x-3 2xl:p-3 2xl-to-xl:p-2 p-2" href="/people/collabcrm-demo-account/training" onclick="event.preventDefault(); switchToTraining();">
-                    <span class="text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training"></span>
-                    <p class="nav-text">Training</p>
-                  </a>
-                </div>
-              </div>
-            </li>
-
-            <!-- 10. Organization -->
-            <li title="Organization" class="relative group cursor-pointer sidebar-nav-li" id="menuOrganization" onclick="openFlyout('Organization')">
-              <div class="text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap">
-                <span class="text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-building-06"></span>
-                <p class="nav-text">Organization</p>
-                <span class="icon-chevron-right block ml-auto text-xl text-indigo-300"></span>
-              </div>
-            </li>
-
-            <!-- 11. Config -->
-            <li title="Config" class="relative group cursor-pointer sidebar-nav-li" id="menuConfig" onclick="openFlyout('Config')">
+            <!-- 3. Config -->
+            <li title="Config" class="relative group cursor-pointer sidebar-nav-li" id="menuConfig" onclick="switchToConfig()">
               <div class="text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap" id="configInner">
                 <span class="text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-settings-02"></span>
-                <p class="nav-text">Config</p>
-                <span class="icon-chevron-right block ml-auto text-xl text-indigo-300"></span>
-              </div>
-            </li>
-
-            <!-- 12. Payroll Corner -->
-            <li title="Payroll Corner" class="relative group cursor-pointer sidebar-nav-li" id="menuPayroll" onclick="openFlyout('Payroll Corner')">
-              <div class="text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap">
-                <span class="text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-coins-hand"></span>
-                <p class="nav-text">Payroll Corner</p>
+                <p class="nav-text text-white" style="color: #ffffff !important; text-decoration: none !important;">Config</p>
                 <span class="icon-chevron-right block ml-auto text-xl text-indigo-300"></span>
               </div>
             </li>
           </ul>
-
-          <!-- Slide-out Flyout Submenu Panel (Exact CollabCRM classes & specs) -->
-          <div class="z-[51] bg-gray-50 absolute top-0 duration-300 overflow-hidden shadow-md whitespace-nowrap w-[0px] left-[220px] 2xl:h-[calc(100vh-60px)] 2xl-to-xl:h-[calc(100vh-52px)] h-[calc(100vh-52px)]" id="sidebarFlyout">
-            <div class="absolute 2xl-to-xl:top-4 top-4 2xl:right-8 2xl-to-xl:right-3.5 right-3.5 flex justify-end w-full">
-              <div role="button" class="relative rounded-lg p-1 hover:bg-gray-200" onclick="closeSidebarFlyout()">
-                <span class="relative icon icon-x-close flex text-lg text-gray-600 cursor-pointer"></span>
-              </div>
-            </div>
-            <div class="2xl:p-5 2xl-to-xl:p-3 p-3 2xl:h-[calc(100vh-60px)] 2xl-to-xl:h-[calc(100vh-52px)] h-[calc(100vh-52px)] overflow-auto">
-              <h3 class="text-black font-medium 2xl:text-base 2xl-to-xl:text-sm text-sm capitalize" id="flyoutHeaderTitle">employees</h3>
-              <ul class="mt-4" id="flyoutSublist">
-                <li class="py-1.5 px-2 hover:bg-gray-200 rounded cursor-pointer text-sm text-gray-700"><a href="#dir" onclick="event.preventDefault();">Directory</a></li>
-                <li class="py-1.5 px-2 hover:bg-gray-200 rounded cursor-pointer text-sm text-gray-700"><a href="#chart" onclick="event.preventDefault();">Organization Chart</a></li>
-                <li class="py-1.5 px-2 hover:bg-gray-200 rounded cursor-pointer text-sm text-gray-700"><a href="#onboard" onclick="event.preventDefault();">Onboarding & Exit</a></li>
-              </ul>
-            </div>
-          </div>
         </nav>
 
         <!-- Sidebar Collapse Footer -->

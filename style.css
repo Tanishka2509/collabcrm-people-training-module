@@ -450,14 +450,32 @@ body {
   list-style: none;
 }
 
+.sidebar-nav-li a,
+.sidebar-nav-li a:visited,
+.sidebar-nav-li a:hover,
+.sidebar-nav-li a:active,
+.sidebar-nav-li p,
+.sidebar-nav-li .nav-text {
+  color: #ffffff !important;
+  text-decoration: none !important;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5rem;
+}
+
+.sidebar-nav-li.active .nav-text,
+.sidebar-nav-li.active span {
+  color: #ffffff !important;
+}
+
 .nav-item-inner {
   transition: all 0.15s ease;
   user-select: none;
 }
 
 .nav-item-inner a {
-  text-decoration: none;
-  color: inherit;
+  text-decoration: none !important;
+  color: #ffffff !important;
 }
 
 /* CollabCRM Icon Classes - Powered by CSS Masks for Dynamic currentColor Support */
