@@ -450,6 +450,8 @@ function switchToEmployees() {
   if (viewRoles) { viewRoles.style.display = 'none'; viewRoles.classList.remove('active'); }
   const viewRolePermissions = document.getElementById('viewRolePermissions');
   if (viewRolePermissions) { viewRolePermissions.style.display = 'none'; viewRolePermissions.classList.remove('active'); }
+  const viewEmployeeDetail = document.getElementById('viewEmployeeDetail');
+  if (viewEmployeeDetail) { viewEmployeeDetail.style.display = 'none'; viewEmployeeDetail.classList.remove('active'); }
 
   if (menuEmployees) menuEmployees.classList.add('active');
   if (menuTraining) menuTraining.classList.remove('active');
@@ -499,6 +501,8 @@ function switchToTraining() {
   if (viewRoles) { viewRoles.style.display = 'none'; viewRoles.classList.remove('active'); }
   const viewRolePermissions = document.getElementById('viewRolePermissions');
   if (viewRolePermissions) { viewRolePermissions.style.display = 'none'; viewRolePermissions.classList.remove('active'); }
+  const viewEmployeeDetail = document.getElementById('viewEmployeeDetail');
+  if (viewEmployeeDetail) { viewEmployeeDetail.style.display = 'none'; viewEmployeeDetail.classList.remove('active'); }
 
   if (menuEmployees) menuEmployees.classList.remove('active');
   if (menuTraining) menuTraining.classList.add('active');
@@ -3183,6 +3187,8 @@ function switchToTrainingConfig() {
   if (viewRoles) { viewRoles.style.display = 'none'; viewRoles.classList.remove('active'); }
   const viewRolePermissions = document.getElementById('viewRolePermissions');
   if (viewRolePermissions) { viewRolePermissions.style.display = 'none'; viewRolePermissions.classList.remove('active'); }
+  const viewEmployeeDetail = document.getElementById('viewEmployeeDetail');
+  if (viewEmployeeDetail) { viewEmployeeDetail.style.display = 'none'; viewEmployeeDetail.classList.remove('active'); }
 
   if (menuEmployees) menuEmployees.classList.remove('active');
   if (menuTraining) menuTraining.classList.remove('active');
@@ -3776,10 +3782,27 @@ function handleCertLogoUpload(event) {
     if (preview) preview.src = url;
     if (modalLogo) modalLogo.src = url;
     markConfigDirty();
-    showConfigToast('Company logo updated.', 'success');
+    showConfigToast('Company logo updated successfully.', 'success');
   };
   reader.readAsDataURL(file);
 }
+
+function resetCertLogoToDefault() {
+  const defaultUrl = 'assets/logo-e97b90af.svg';
+  if (trainingConfigData && trainingConfigData.certificates) {
+    trainingConfigData.certificates.logoUrl = defaultUrl;
+  }
+  const preview = document.getElementById('cfg_cert_logo_preview');
+  const modalLogo = document.getElementById('certPrevLogo');
+  if (preview) preview.src = defaultUrl;
+  if (modalLogo) modalLogo.src = defaultUrl;
+  const fileInput = document.getElementById('cfg_cert_logo_upload');
+  if (fileInput) fileInput.value = '';
+  markConfigDirty();
+  showConfigToast('Company logo reset to default CollabCRM logo.', 'info');
+}
+
+window.resetCertLogoToDefault = resetCertLogoToDefault;
 
 // Tab 6: Notifications Matrix
 function renderNotificationsTable() {
@@ -4361,12 +4384,14 @@ function openRolesModule() {
   const viewTrainingConfig = document.getElementById('viewTrainingConfig');
   const viewRoles = document.getElementById('viewRoles');
   const viewRolePermissions = document.getElementById('viewRolePermissions');
+  const viewEmployeeDetail = document.getElementById('viewEmployeeDetail');
 
   if (viewDashboard) viewDashboard.style.display = 'none';
   if (viewTraining) viewTraining.style.display = 'none';
   if (viewConfig) viewConfig.style.display = 'none';
   if (viewTrainingConfig) viewTrainingConfig.style.display = 'none';
   if (viewRolePermissions) viewRolePermissions.style.display = 'none';
+  if (viewEmployeeDetail) viewEmployeeDetail.style.display = 'none';
   if (viewRoles) {
     viewRoles.style.display = 'block';
     viewRoles.classList.add('active');
@@ -4394,12 +4419,14 @@ function openRolePermissions(roleId) {
   const viewTrainingConfig = document.getElementById('viewTrainingConfig');
   const viewRoles = document.getElementById('viewRoles');
   const viewRolePermissions = document.getElementById('viewRolePermissions');
+  const viewEmployeeDetail = document.getElementById('viewEmployeeDetail');
 
   if (viewDashboard) viewDashboard.style.display = 'none';
   if (viewTraining) viewTraining.style.display = 'none';
   if (viewConfig) viewConfig.style.display = 'none';
   if (viewTrainingConfig) viewTrainingConfig.style.display = 'none';
   if (viewRoles) viewRoles.style.display = 'none';
+  if (viewEmployeeDetail) viewEmployeeDetail.style.display = 'none';
   if (viewRolePermissions) {
     viewRolePermissions.style.display = 'block';
     viewRolePermissions.classList.add('active');
@@ -4833,5 +4860,752 @@ renderUserRolePill();
 window.toggleUserRoleDropdown = toggleUserRoleDropdown;
 window.switchActiveUser = switchActiveUser;
 window.resetDemoData = resetDemoData;
+
+// ==========================================================================
+// VIEW 7: EMPLOYEE DETAIL SCREEN & TRAINING HISTORY CONTROLLER (SCREENSHOT 3)
+// ==========================================================================
+
+const EMPLOYEES_DETAIL_DATABASE = {
+  'YOP-073': {
+    code: 'YOP-073',
+    name: 'Ishdeep Anand',
+    firstName: 'Ishdeep',
+    lastName: 'Anand',
+    gender: 'Male',
+    dob: '10-May-1990',
+    blood: '-',
+    email: 'ishdeep@maildrop.cc',
+    phone: '+91 9999882892',
+    businessUnit: 'MailDrop',
+    department: 'Management',
+    designation: 'SVP',
+    reportingManager: 'Isha Patel',
+    reportingAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120',
+    empType: 'Technical',
+    biometricId: 'YOP-073',
+    activeShift: 'General Shift - GS (10:00 AM - 07:00 PM)',
+    status: '• Confirmed',
+    roleName: 'Administrator',
+    roleExpiry: '-',
+    roleRemarks: '-',
+    expPrev: '15Y 2M',
+    expCurrent: '20D',
+    about: '-',
+    skills: 'No skills added.',
+    badges: 'No badges received.',
+    seating: '-',
+    extension: '-',
+    initials: 'IA',
+    avatarBg: '#8b5cf6',
+    trainings: [
+      {
+        no: 1,
+        title: 'Enterprise Security & Data Protection Compliance',
+        dept: 'Management',
+        assignedDate: '05-Jan-2026',
+        completionDate: '20-Jan-2026',
+        score: '94%',
+        status: 'Passed',
+        certId: 'TRN-2026-0001'
+      },
+      {
+        no: 2,
+        title: 'Executive Leadership & Strategic Governance',
+        dept: 'Management',
+        assignedDate: '10-Feb-2026',
+        completionDate: '25-Feb-2026',
+        score: '98%',
+        status: 'Passed',
+        certId: 'TRN-2026-0004'
+      },
+      {
+        no: 3,
+        title: 'Cross-Border CRM Regulatory Compliance',
+        dept: 'Management',
+        assignedDate: '15-Mar-2026',
+        completionDate: 'In Progress (65%)',
+        score: '-',
+        status: 'In Progress',
+        certId: null
+      }
+    ]
+  },
+  'COINT-5040': {
+    code: 'COINT-5040',
+    name: 'Sanjana Ghosh',
+    firstName: 'Sanjana',
+    lastName: 'Ghosh',
+    gender: 'Female',
+    dob: '14-Aug-1998',
+    blood: 'B+',
+    email: 'zarahaddad@maildrop.cc',
+    phone: '+1 9005049481',
+    businessUnit: 'MailDrop',
+    department: 'IT - Project',
+    designation: 'Executive',
+    reportingManager: 'Megha Salunkhe',
+    reportingAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120',
+    empType: 'Technical',
+    biometricId: 'COINT-5040',
+    activeShift: 'General Shift - GS (10:00 AM - 07:00 PM)',
+    status: '• Intern',
+    roleName: 'Employee',
+    roleExpiry: '-',
+    roleRemarks: '-',
+    expPrev: '3Y 8M',
+    expCurrent: '6M',
+    about: 'Enthusiastic front-end developer passionate about clean UI and CRM integrations.',
+    skills: 'JavaScript, React, HTML5/CSS3',
+    badges: 'Fast Learner 2026',
+    seating: 'Floor 3, Desk 14',
+    extension: '401',
+    initials: 'SG',
+    avatarBg: '#ef4444',
+    trainings: [
+      {
+        no: 1,
+        title: 'Security Awareness & GDPR Essentials',
+        dept: 'IT - Project',
+        assignedDate: '01-Feb-2026',
+        completionDate: '14-Feb-2026',
+        score: '91%',
+        status: 'Passed',
+        certId: 'TRN-2026-0002'
+      },
+      {
+        no: 2,
+        title: 'CollabCRM Platform Architecture Deep Dive',
+        dept: 'IT - Project',
+        assignedDate: '20-Feb-2026',
+        completionDate: 'In Progress (80%)',
+        score: '-',
+        status: 'In Progress',
+        certId: null
+      }
+    ]
+  },
+  'CO-5039': {
+    code: 'CO-5039',
+    name: 'Aryan Bhardwaj',
+    firstName: 'Aryan',
+    lastName: 'Bhardwaj',
+    gender: 'Male',
+    dob: '22-Nov-1996',
+    blood: 'O+',
+    email: 'calebnguyen@maildrop.cc',
+    phone: '+1 9005048244',
+    businessUnit: 'MailDrop',
+    department: 'IT - Project',
+    designation: 'Executive',
+    reportingManager: 'Megha Salunkhe',
+    reportingAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120',
+    empType: 'Technical',
+    biometricId: 'CO-5039',
+    activeShift: 'General Shift - GS (10:00 AM - 07:00 PM)',
+    status: '• Probation',
+    roleName: 'Employee',
+    roleExpiry: '-',
+    roleRemarks: '-',
+    expPrev: '3Y 11M',
+    expCurrent: '1Y',
+    about: '-',
+    skills: 'Backend APIs, Node.js, SQL',
+    badges: 'No badges received.',
+    seating: 'Floor 3, Desk 18',
+    extension: '402',
+    initials: 'AB',
+    avatarBg: '#f59e0b',
+    trainings: [
+      {
+        no: 1,
+        title: 'API Security & OAuth2 Best Practices',
+        dept: 'IT - Project',
+        assignedDate: '12-Jan-2026',
+        completionDate: '28-Jan-2026',
+        score: '88%',
+        status: 'Passed',
+        certId: 'TRN-2026-0003'
+      }
+    ]
+  },
+  'CO-5038': {
+    code: 'CO-5038',
+    name: 'Megha Salunkhe',
+    firstName: 'Megha',
+    lastName: 'Salunkhe',
+    gender: 'Female',
+    dob: '18-Jan-1994',
+    blood: 'A+',
+    email: 'naomitanaka@maildrop.cc',
+    phone: '+1 9005047007',
+    businessUnit: 'MailDrop',
+    department: 'IT - Project',
+    designation: 'Sr. Executive',
+    reportingManager: 'Kunal Barve',
+    reportingAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120',
+    empType: 'Technical',
+    biometricId: 'CO-5038',
+    activeShift: 'General Shift - GS (10:00 AM - 07:00 PM)',
+    status: '• Confirmed',
+    roleName: 'Team leader',
+    roleExpiry: '-',
+    roleRemarks: '-',
+    expPrev: '5Y 4M',
+    expCurrent: '2Y',
+    about: '-',
+    skills: 'Sprint Management, QA, Testing Automation',
+    badges: 'Quality Champion',
+    seating: 'Floor 3, Desk 05',
+    extension: '403',
+    initials: 'MS',
+    avatarBg: '#10b981',
+    trainings: [
+      {
+        no: 1,
+        title: 'Agile Leadership & Team Orchestration',
+        dept: 'IT - Project',
+        assignedDate: '01-Jan-2026',
+        completionDate: '15-Jan-2026',
+        score: '96%',
+        status: 'Passed',
+        certId: 'TRN-2026-0005'
+      }
+    ]
+  },
+  'CO-5037': {
+    code: 'CO-5037',
+    name: 'Kunal Barve',
+    firstName: 'Kunal',
+    lastName: 'Barve',
+    gender: 'Male',
+    dob: '05-May-1992',
+    blood: 'B+',
+    email: 'jordanellis@maildrop.cc',
+    phone: '+1 9005045770',
+    businessUnit: 'MailDrop',
+    department: 'IT - Project',
+    designation: 'Team leader',
+    reportingManager: 'Ananya Sridhar',
+    reportingAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120',
+    empType: 'Technical',
+    biometricId: 'CO-5037',
+    activeShift: 'General Shift - GS (10:00 AM - 07:00 PM)',
+    status: '• Confirmed',
+    roleName: 'Team leader',
+    roleExpiry: '-',
+    roleRemarks: '-',
+    expPrev: '7Y 10M',
+    expCurrent: '3Y',
+    about: '-',
+    skills: 'System Design, Microservices, DevOps',
+    badges: 'Mentor of the Quarter',
+    seating: 'Floor 3, Desk 01',
+    extension: '404',
+    initials: 'KB',
+    avatarBg: '#3b82f6',
+    trainings: [
+      {
+        no: 1,
+        title: 'Cloud Architecture & Disaster Recovery',
+        dept: 'IT - Project',
+        assignedDate: '10-Nov-2025',
+        completionDate: '30-Nov-2025',
+        score: '92%',
+        status: 'Passed',
+        certId: 'TRN-2026-0006'
+      }
+    ]
+  },
+  'CO-5036': {
+    code: 'CO-5036',
+    name: 'Ananya Sridhar',
+    firstName: 'Ananya',
+    lastName: 'Sridhar',
+    gender: 'Female',
+    dob: '30-Jul-1988',
+    blood: 'O+',
+    email: 'sashapetrov@maildrop.cc',
+    phone: '+1 9005044533',
+    businessUnit: 'MailDrop',
+    department: 'IT - Project',
+    designation: 'Manager',
+    reportingManager: 'Vikram Anand',
+    reportingAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120',
+    empType: 'Technical',
+    biometricId: 'CO-5036',
+    activeShift: 'General Shift - GS (10:00 AM - 07:00 PM)',
+    status: '• Confirmed',
+    roleName: 'Project Manager',
+    roleExpiry: '-',
+    roleRemarks: '-',
+    expPrev: '10Y 2M',
+    expCurrent: '4Y',
+    about: '-',
+    skills: 'Product Management, Budgeting, Agile Delivery',
+    badges: 'Leadership Award 2025',
+    seating: 'Cabin 3B',
+    extension: '405',
+    initials: 'AS',
+    avatarBg: '#475569',
+    trainings: [
+      {
+        no: 1,
+        title: 'Strategic Resource & Capacity Planning',
+        dept: 'IT - Project',
+        assignedDate: '01-Dec-2025',
+        completionDate: '15-Dec-2025',
+        score: '95%',
+        status: 'Passed',
+        certId: 'TRN-2026-0007'
+      }
+    ]
+  },
+  'CO-5035': {
+    code: 'CO-5035',
+    name: 'Vikram Anand',
+    firstName: 'Vikram',
+    lastName: 'Anand',
+    gender: 'Male',
+    dob: '12-Dec-1986',
+    blood: 'AB+',
+    email: 'vikramanand@maildrop.cc',
+    phone: '+1 9005043286',
+    businessUnit: 'MailDrop',
+    department: 'IT - Project',
+    designation: 'AVP',
+    reportingManager: 'Isha Patel',
+    reportingAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120',
+    empType: 'Technical',
+    biometricId: 'CO-5035',
+    activeShift: 'General Shift - GS (10:00 AM - 07:00 PM)',
+    status: '• Confirmed',
+    roleName: 'Management',
+    roleExpiry: '-',
+    roleRemarks: '-',
+    expPrev: '11Y 7M',
+    expCurrent: '5Y',
+    about: '-',
+    skills: 'Executive Management, Global Scale, Technical Strategy',
+    badges: 'Excellence in Innovation',
+    seating: 'Cabin 4A',
+    extension: '406',
+    initials: 'VA',
+    avatarBg: '#6366f1',
+    trainings: [
+      {
+        no: 1,
+        title: 'Enterprise Cyber Defense & Risk Mitigation',
+        dept: 'IT - Project',
+        assignedDate: '05-Jan-2026',
+        completionDate: '22-Jan-2026',
+        score: '99%',
+        status: 'Passed',
+        certId: 'TRN-2026-0008'
+      }
+    ]
+  },
+  'CO-5034': {
+    code: 'CO-5034',
+    name: 'Rahul Khanna',
+    firstName: 'Rahul',
+    lastName: 'Khanna',
+    gender: 'Male',
+    dob: '15-Mar-1997',
+    blood: 'A+',
+    email: 'elliotsharpe@maildrop.cc',
+    phone: '+1 9005042059',
+    businessUnit: 'MailDrop',
+    department: 'CPA Firms',
+    designation: 'Executive',
+    reportingManager: 'Varun Acharya',
+    reportingAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120',
+    empType: 'Technical',
+    biometricId: 'CO-5034',
+    activeShift: 'General Shift - GS (10:00 AM - 07:00 PM)',
+    status: '• Confirmed',
+    roleName: 'Employee',
+    roleExpiry: '-',
+    roleRemarks: '-',
+    expPrev: '4Y',
+    expCurrent: '1Y 6M',
+    about: '-',
+    skills: 'Financial Audit, Tax Compliance, ERP Systems',
+    badges: 'No badges received.',
+    seating: 'Floor 2, Desk 22',
+    extension: '301',
+    initials: 'RK',
+    avatarBg: '#a855f7',
+    trainings: [
+      {
+        no: 1,
+        title: 'CPA Audit Trail Security & Compliance',
+        dept: 'CPA Firms',
+        assignedDate: '15-Jan-2026',
+        completionDate: '30-Jan-2026',
+        score: '93%',
+        status: 'Passed',
+        certId: 'TRN-2026-0009'
+      }
+    ]
+  },
+  'CO-5033': {
+    code: 'CO-5033',
+    name: 'Deepa Ramaswamy',
+    firstName: 'Deepa',
+    lastName: 'Ramaswamy',
+    gender: 'Female',
+    dob: '28-Oct-1997',
+    blood: 'B-',
+    email: 'biancamoreau@maildrop.cc',
+    phone: '+1 9005040822',
+    businessUnit: 'MailDrop',
+    department: 'CPA Firms',
+    designation: 'Executive',
+    reportingManager: 'Varun Acharya',
+    reportingAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120',
+    empType: 'Technical',
+    biometricId: 'CO-5033',
+    activeShift: 'General Shift - GS (10:00 AM - 07:00 PM)',
+    status: '• Probation',
+    roleName: 'Employee',
+    roleExpiry: '-',
+    roleRemarks: '-',
+    expPrev: '3Y 5M',
+    expCurrent: '8M',
+    about: '-',
+    skills: 'Taxation, International Accounting Standards',
+    badges: 'No badges received.',
+    seating: 'Floor 2, Desk 24',
+    extension: '302',
+    initials: 'DR',
+    avatarBg: '#ea580c',
+    trainings: [
+      {
+        no: 1,
+        title: 'International Tax Ethics & Compliance Standards',
+        dept: 'CPA Firms',
+        assignedDate: '10-Feb-2026',
+        completionDate: '24-Feb-2026',
+        score: '90%',
+        status: 'Passed',
+        certId: 'TRN-2026-0010'
+      }
+    ]
+  },
+  'CO-5032': {
+    code: 'CO-5032',
+    name: 'Varun Acharya',
+    firstName: 'Varun',
+    lastName: 'Acharya',
+    gender: 'Male',
+    dob: '19-Sep-1993',
+    blood: 'O+',
+    email: 'trevorlindqvist@maildrop.cc',
+    phone: '+1 9005039565',
+    businessUnit: 'MailDrop',
+    department: 'CPA Firms',
+    designation: 'Sr. Executive',
+    reportingManager: 'Isha Patel',
+    reportingAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120',
+    empType: 'Technical',
+    biometricId: 'CO-5032',
+    activeShift: 'General Shift - GS (10:00 AM - 07:00 PM)',
+    status: '• Confirmed',
+    roleName: 'Team leader',
+    roleExpiry: '-',
+    roleRemarks: '-',
+    expPrev: '5Y 10M',
+    expCurrent: '2Y',
+    about: '-',
+    skills: 'Client Account Management, Statutory Filings',
+    badges: 'Key Contributor',
+    seating: 'Floor 2, Desk 10',
+    extension: '300',
+    initials: 'VA',
+    avatarBg: '#ec4899',
+    trainings: [
+      {
+        no: 1,
+        title: 'Global Accounting Compliance & Statutory Reporting',
+        dept: 'CPA Firms',
+        assignedDate: '01-Nov-2025',
+        completionDate: '18-Nov-2025',
+        score: '96%',
+        status: 'Passed',
+        certId: 'TRN-2026-0011'
+      }
+    ]
+  }
+};
+
+let activeEmployeeDetailCode = 'YOP-073';
+let activeEmpDetailSubTab = 'general';
+
+function populateEmployeeDetail(empCode) {
+  const emp = EMPLOYEES_DETAIL_DATABASE[empCode] || EMPLOYEES_DETAIL_DATABASE['YOP-073'];
+  activeEmployeeDetailCode = emp.code;
+
+  // Left Sidebar
+  const checkinBadge = document.getElementById('empDetailCheckinBadge');
+  const avatarCircle = document.getElementById('empDetailAvatarCircle');
+  const nameEl = document.getElementById('empDetailName');
+  const desigEl = document.getElementById('empDetailDesignation');
+  const deptBadge = document.getElementById('empDetailDeptBadge');
+  const aboutEl = document.getElementById('empDetailAbout');
+  const expPrev = document.getElementById('empDetailExpPrev');
+  const expCurrent = document.getElementById('empDetailExpCurrent');
+  const skillsEl = document.getElementById('empDetailSkills');
+  const badgesEl = document.getElementById('empDetailBadges');
+  const seatingEl = document.getElementById('empDetailSeating');
+  const extEl = document.getElementById('empDetailExtension');
+
+  if (checkinBadge) checkinBadge.textContent = 'YET TO CHECK-IN';
+  if (avatarCircle) {
+    avatarCircle.textContent = emp.initials;
+    avatarCircle.style.background = '#f1f5f9';
+    avatarCircle.style.color = '#475569';
+  }
+  if (nameEl) nameEl.textContent = emp.name;
+  if (desigEl) desigEl.textContent = emp.designation;
+  if (deptBadge) deptBadge.textContent = emp.department;
+  if (aboutEl) aboutEl.textContent = emp.about;
+  if (expPrev) expPrev.textContent = emp.expPrev;
+  if (expCurrent) expCurrent.textContent = emp.expCurrent;
+  if (skillsEl) skillsEl.textContent = emp.skills;
+  if (badgesEl) badgesEl.textContent = emp.badges;
+  if (seatingEl) seatingEl.textContent = emp.seating;
+  if (extEl) extEl.textContent = emp.extension;
+
+  // Top Info Card
+  const topEmail = document.getElementById('empDetailTopEmail');
+  const topCode = document.getElementById('empDetailTopCode');
+  const topMgrName = document.getElementById('empDetailTopMgrName');
+  const topMgrImg = document.getElementById('empDetailTopMgrImg');
+  if (topEmail) topEmail.textContent = emp.email;
+  if (topCode) topCode.textContent = emp.code;
+  if (topMgrName) topMgrName.textContent = emp.reportingManager;
+  if (topMgrImg) topMgrImg.src = emp.reportingAvatar;
+
+  // Personal Information
+  const fName = document.getElementById('empDetailFirstName');
+  const lName = document.getElementById('empDetailLastName');
+  const genderEl = document.getElementById('empDetailGender');
+  const dobEl = document.getElementById('empDetailDob');
+  const bloodEl = document.getElementById('empDetailBlood');
+  if (fName) fName.textContent = emp.firstName;
+  if (lName) lName.textContent = emp.lastName;
+  if (genderEl) genderEl.textContent = emp.gender;
+  if (dobEl) dobEl.textContent = emp.dob;
+  if (bloodEl) bloodEl.textContent = emp.blood;
+
+  // Employee Information
+  const infoBU = document.getElementById('empDetailInfoBU');
+  const infoCode = document.getElementById('empDetailInfoCode');
+  const infoStatus = document.getElementById('empDetailInfoStatus');
+  const infoDept = document.getElementById('empDetailInfoDept');
+  const infoDesig = document.getElementById('empDetailInfoDesig');
+  const infoReporting = document.getElementById('empDetailInfoReporting');
+  const infoType = document.getElementById('empDetailInfoType');
+  const infoBio = document.getElementById('empDetailInfoBiometric');
+  const infoShift = document.getElementById('empDetailInfoShift');
+  if (infoBU) infoBU.textContent = emp.businessUnit;
+  if (infoCode) infoCode.textContent = emp.code;
+  if (infoStatus) infoStatus.textContent = emp.status;
+  if (infoDept) infoDept.textContent = emp.department;
+  if (infoDesig) infoDesig.textContent = emp.designation;
+  if (infoReporting) infoReporting.textContent = emp.reportingManager;
+  if (infoType) infoType.textContent = emp.empType;
+  if (infoBio) infoBio.textContent = emp.biometricId;
+  if (infoShift) infoShift.textContent = emp.activeShift;
+
+  // Employee Role Information
+  const roleName = document.getElementById('empDetailRoleName');
+  const roleExpiry = document.getElementById('empDetailRoleExpiry');
+  const roleRemarks = document.getElementById('empDetailRoleRemarks');
+  if (roleName) roleName.textContent = emp.roleName;
+  if (roleExpiry) roleExpiry.textContent = emp.roleExpiry;
+  if (roleRemarks) roleRemarks.textContent = emp.roleRemarks;
+
+  // Company Contact Information
+  const compEmail = document.getElementById('empDetailCompEmail');
+  const compPhone = document.getElementById('empDetailCompPhone');
+  if (compEmail) compEmail.textContent = emp.email;
+  if (compPhone) compPhone.textContent = emp.phone;
+
+  // Render Training History
+  renderEmployeeTrainingHistory(emp);
+}
+
+function renderEmployeeTrainingHistory(emp) {
+  const tbody = document.getElementById('empDetailTrainingTableBody');
+  const enrolledEl = document.getElementById('empDetailTrnEnrolled');
+  const completedEl = document.getElementById('empDetailTrnCompleted');
+  const inProgEl = document.getElementById('empDetailTrnInProg');
+  const certsEl = document.getElementById('empDetailTrnCerts');
+
+  const trainings = emp.trainings || [];
+  const completedCount = trainings.filter(t => t.status === 'Passed' || t.status === 'Completed').length;
+  const inProgCount = trainings.filter(t => t.status === 'In Progress').length;
+  const certCount = trainings.filter(t => t.certId).length;
+
+  if (enrolledEl) enrolledEl.textContent = trainings.length;
+  if (completedEl) completedEl.textContent = completedCount;
+  if (inProgEl) inProgEl.textContent = inProgCount;
+  if (certsEl) certsEl.textContent = certCount;
+
+  if (!tbody) return;
+
+  if (trainings.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="8" style="padding: 24px; text-align: center; color: #94a3b8; font-size: 13px;">
+          No training history recorded for this employee yet.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  let html = '';
+  trainings.forEach(t => {
+    const isPassed = t.status === 'Passed' || t.status === 'Completed';
+    const statusPill = isPassed
+      ? `<span style="background: #f0fdf4; color: #166534; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; border: 1px solid #bbf7d0;">✓ Passed</span>`
+      : `<span style="background: #eff6ff; color: #1d4ed8; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; border: 1px solid #bfdbfe;">⏳ In Progress</span>`;
+
+    const scoreBadge = t.score !== '-'
+      ? `<span style="font-weight: 700; color: #0f172a; background: #f8fafc; border: 1px solid #e2e8f0; padding: 2px 6px; border-radius: 4px;">${escapeHtml(t.score)}</span>`
+      : `<span style="color: #94a3b8;">-</span>`;
+
+    const certAction = t.certId
+      ? `<button type="button" onclick="previewIssuedCertificate('${t.certId}')" class="btn-table-action" style="padding: 4px 10px; font-size: 11.5px; color: #2563eb; border: 1px solid #bfdbfe; background: #eff6ff; border-radius: 6px; cursor: pointer; font-weight: 600;" title="View Certificate Credential">
+           🎓 ${escapeHtml(t.certId)}
+         </button>`
+      : `<span style="color: #94a3b8; font-size: 12px;">Not Generated</span>`;
+
+    html += `
+      <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s ease;">
+        <td style="padding: 12px 14px; text-align: center; color: #64748b; font-weight: 500;">${t.no}</td>
+        <td style="padding: 12px 14px;">
+          <div style="font-weight: 600; color: #0f172a; font-size: 13px;">${escapeHtml(t.title)}</div>
+        </td>
+        <td style="padding: 12px 14px;">
+          <span style="background: #f1f5f9; color: #334155; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px;">${escapeHtml(t.dept)}</span>
+        </td>
+        <td style="padding: 12px 14px; color: #475569;">${escapeHtml(t.assignedDate)}</td>
+        <td style="padding: 12px 14px; color: #475569;">${escapeHtml(t.completionDate)}</td>
+        <td style="padding: 12px 14px; text-align: center;">${scoreBadge}</td>
+        <td style="padding: 12px 14px; text-align: center;">${statusPill}</td>
+        <td style="padding: 12px 14px; text-align: center;">${certAction}</td>
+      </tr>
+    `;
+  });
+
+  tbody.innerHTML = html;
+}
+
+function switchEmpDetailSubTab(tabName) {
+  activeEmpDetailSubTab = tabName;
+
+  const tabs = {
+    general: document.getElementById('tabNavGeneral'),
+    timeline: document.getElementById('tabNavTimeline'),
+    assets: document.getElementById('tabNavAssets'),
+    performance: document.getElementById('tabNavPerf'),
+    developer: document.getElementById('tabNavDev'),
+    training: document.getElementById('tabNavTraining')
+  };
+
+  Object.keys(tabs).forEach(k => {
+    const btn = tabs[k];
+    if (!btn) return;
+    const isActive = k === tabName;
+    btn.classList.toggle('active', isActive);
+    if (k === 'training') {
+      if (isActive) {
+        btn.style.color = '#0284c7';
+        btn.style.fontWeight = '700';
+        btn.style.borderBottom = '2px solid #0284c7';
+      } else {
+        btn.style.color = '#0284c7';
+        btn.style.fontWeight = '500';
+        btn.style.borderBottom = 'none';
+      }
+    } else {
+      if (isActive) {
+        btn.style.color = '#4f46e5';
+        btn.style.fontWeight = '700';
+        btn.style.borderBottom = '2px solid #4f46e5';
+      } else {
+        btn.style.color = '#64748b';
+        btn.style.fontWeight = '500';
+        btn.style.borderBottom = 'none';
+      }
+    }
+  });
+
+  const bcTab = document.getElementById('empDetailBreadcrumbTab');
+  const panelGen = document.getElementById('empDetailPanelGeneral');
+  const panelTrn = document.getElementById('empDetailPanelTraining');
+  const panelPlc = document.getElementById('empDetailPanelPlaceholder');
+  const plcTitle = document.getElementById('empDetailPlaceholderTitle');
+
+  if (tabName === 'general') {
+    if (bcTab) bcTab.textContent = 'General Info';
+    if (panelGen) panelGen.style.display = 'flex';
+    if (panelTrn) panelTrn.style.display = 'none';
+    if (panelPlc) panelPlc.style.display = 'none';
+  } else if (tabName === 'training') {
+    if (bcTab) bcTab.textContent = 'Training History';
+    if (panelGen) panelGen.style.display = 'none';
+    if (panelTrn) panelTrn.style.display = 'flex';
+    if (panelPlc) panelPlc.style.display = 'none';
+  } else {
+    const titleMap = {
+      timeline: 'Timeline',
+      assets: 'Assets Allocated',
+      performance: 'Performance Review',
+      developer: 'Developer Accounts'
+    };
+    const title = titleMap[tabName] || 'Module Details';
+    if (bcTab) bcTab.textContent = title;
+    if (plcTitle) plcTitle.textContent = title;
+    if (panelGen) panelGen.style.display = 'none';
+    if (panelTrn) panelTrn.style.display = 'none';
+    if (panelPlc) panelPlc.style.display = 'block';
+  }
+}
+
+function openEmployeeDetail(empCode = 'YOP-073') {
+  const viewDashboard = document.getElementById('viewDashboard');
+  const viewTraining = document.getElementById('viewTraining');
+  const viewConfig = document.getElementById('viewConfig');
+  const viewTrainingConfig = document.getElementById('viewTrainingConfig');
+  const viewRoles = document.getElementById('viewRoles');
+  const viewRolePermissions = document.getElementById('viewRolePermissions');
+  const viewEmployeeDetail = document.getElementById('viewEmployeeDetail');
+
+  if (viewDashboard) viewDashboard.style.display = 'none';
+  if (viewTraining) viewTraining.style.display = 'none';
+  if (viewConfig) viewConfig.style.display = 'none';
+  if (viewTrainingConfig) viewTrainingConfig.style.display = 'none';
+  if (viewRoles) viewRoles.style.display = 'none';
+  if (viewRolePermissions) viewRolePermissions.style.display = 'none';
+
+  if (viewEmployeeDetail) {
+    viewEmployeeDetail.style.display = 'block';
+    viewEmployeeDetail.classList.add('active');
+  }
+
+  populateEmployeeDetail(empCode);
+  switchEmpDetailSubTab('general');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+window.openEmployeeDetail = openEmployeeDetail;
+window.switchEmpDetailSubTab = switchEmpDetailSubTab;
+window.populateEmployeeDetail = populateEmployeeDetail;
+window.renderEmployeeTrainingHistory = renderEmployeeTrainingHistory;
+
 
 
