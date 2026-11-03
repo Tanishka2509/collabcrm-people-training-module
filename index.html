@@ -887,41 +887,8 @@
 
           </div>
 
-          <!-- Employee Profile Information Card (Displayed strictly when Employee Role is active - Spec Section 3) -->
-          <div class="emp-profile-header-card" id="empProfileHeaderCard" style="display: none; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 20px; margin-bottom: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
-            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
-              <div style="display: flex; align-items: center; gap: 14px;">
-                <div id="empPortalAvatarCircle" style="width: 46px; height: 46px; border-radius: 50%; background: #f59e0b; color: #ffffff; font-weight: 700; font-size: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
-                  AB
-                </div>
-                <div>
-                  <div style="display: flex; align-items: center; gap: 8px;">
-                    <h2 style="font-size: 16px; font-weight: 700; color: #0f172a; margin: 0;" id="empPortalName">Aryan Bhardwaj</h2>
-                    <span style="background: #f1f5f9; color: #475569; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px;" id="empPortalId">CO-5039</span>
-                    <span style="background: #eff6ff; color: #2563eb; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px;">Employee Portal</span>
-                  </div>
-                  <div style="font-size: 12px; color: #64748b; margin-top: 3px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                    <span>Designation: <strong style="color: #1e293b;" id="empPortalDesig">Business analyst</strong></span>
-                    <span>•</span>
-                    <span>Department: <strong style="color: #1e293b;" id="empPortalDept">Business analyst</strong></span>
-                    <span>•</span>
-                    <span>Reporting Manager: <strong style="color: #1e293b;" id="empPortalManager">Megha Salunkhe (Sr. Executive)</strong></span>
-                  </div>
-                </div>
-              </div>
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <button type="button" class="btn-table-action" onclick="openMyProfile('training')" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; font-size: 12px; font-weight: 600; border-radius: 6px; color: #4f46e5; border-color: #c7d2fe; background: #eef2ff;">
-                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                  <span>My Profile</span>
-                </button>
-                <button type="button" class="btn-table-action" onclick="openEmployeeNotificationsDrawer()" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; font-size: 12px; font-weight: 600; position: relative; border-radius: 6px;">
-                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                  <span>Notifications</span>
-                  <span id="empNotifUnreadCountBadge" style="background: #ef4444; color: #ffffff; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 10px;">2</span>
-                </button>
-              </div>
-            </div>
-          </div>
+          <!-- Employee Profile Information Card (Removed per user request: "no need for this as its the same employee") -->
+          <div id="empProfileHeaderCard" style="display: none !important;"></div>
 
           <!-- Sticky Sub-Navigation Tabs Bar (Replaced by Training Slide-out Side Menu per Screenshot 1) -->
           <div class="training-subnav-bar" style="display: none !important;">
@@ -1762,134 +1729,158 @@
             <!-- SECTION EMP 1: MY TRAINING (SPEC SECTIONS 4 & 5)         -->
             <!-- ======================================================== -->
             <div class="training-tab-view" id="sectionEmpMyTraining" style="display: none;">
-              <!-- 8 Summary Metric Cards (Spec Section 4) -->
-              <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px;">
+              <!-- Main 5 KPIs in ONE single horizontal line (Matching Screenshot 5) -->
+              <div class="emp-kpi-grid-5">
                 <!-- 1. Total Assigned -->
-                <div class="kpi-stat-card-main" onclick="filterEmpTrainingsByStatus('all')" style="cursor: pointer; padding: 14px 18px;" title="View All Assigned Trainings">
-                  <div class="kpi-stat-main-top">
-                    <span class="kpi-stat-main-title">TOTAL ASSIGNED</span>
-                    <span class="emp-kpi-icon-pill">📚</span>
+                <div class="emp-kpi-card" onclick="filterEmpTrainingsByStatus('all')" style="cursor: pointer;" title="All Assigned Trainings">
+                  <span class="emp-kpi-label">Total Assigned</span>
+                  <div class="emp-kpi-val-row">
+                    <span class="emp-kpi-val" id="empKpiTotalAssigned">6</span>
+                    <span class="emp-kpi-icon-pill" title="Assigned Trainings">
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                    </span>
                   </div>
-                  <div class="kpi-stat-main-val" id="empKpiTotalAssigned">6</div>
-                  <div style="font-size: 11.5px; color: #64748b; margin-top: 4px;">Assigned to your account</div>
+                  <span class="emp-kpi-sub">Assigned to your account</span>
                 </div>
 
                 <!-- 2. Not Started -->
-                <div class="kpi-stat-card-main" onclick="filterEmpTrainingsByStatus('not_started')" style="cursor: pointer; padding: 14px 18px;" title="Filter Not Started">
-                  <div class="kpi-stat-main-top">
-                    <span class="kpi-stat-main-title">NOT STARTED</span>
-                    <span class="emp-kpi-icon-pill">⏳</span>
+                <div class="emp-kpi-card" onclick="filterEmpTrainingsByStatus('not_started')" style="cursor: pointer;" title="Filter Not Started">
+                  <span class="emp-kpi-label">Not Started</span>
+                  <div class="emp-kpi-val-row">
+                    <span class="emp-kpi-val" id="empKpiNotStarted" style="color: #64748b;">1</span>
+                    <span class="emp-kpi-icon-pill" title="Awaiting start">
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    </span>
                   </div>
-                  <div class="kpi-stat-main-val" id="empKpiNotStarted" style="color: #64748b;">1</div>
-                  <div style="font-size: 11.5px; color: #64748b; margin-top: 4px;">Awaiting start</div>
+                  <span class="emp-kpi-sub">Awaiting commencement</span>
                 </div>
 
                 <!-- 3. In Progress -->
-                <div class="kpi-stat-card-main" onclick="filterEmpTrainingsByStatus('in_progress')" style="cursor: pointer; padding: 14px 18px;" title="Filter In Progress">
-                  <div class="kpi-stat-main-top">
-                    <span class="kpi-stat-main-title">IN PROGRESS</span>
-                    <span class="emp-kpi-icon-pill">⚡</span>
+                <div class="emp-kpi-card" onclick="filterEmpTrainingsByStatus('in_progress')" style="cursor: pointer;" title="Filter In Progress">
+                  <span class="emp-kpi-label">In Progress</span>
+                  <div class="emp-kpi-val-row">
+                    <span class="emp-kpi-val" id="empKpiInProgress" style="color: #2563eb;">1</span>
+                    <span class="emp-kpi-icon-pill" title="In progress">
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#2563eb" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                    </span>
                   </div>
-                  <div class="kpi-stat-main-val" id="empKpiInProgress" style="color: #2563eb;">1</div>
-                  <div style="font-size: 11.5px; color: #64748b; margin-top: 4px;">Active modules in progress</div>
+                  <span class="emp-kpi-sub">Active modules in progress</span>
                 </div>
 
-                <!-- 4. Submitted for Review -->
-                <div class="kpi-stat-card-main" onclick="filterEmpTrainingsByStatus('submitted_for_review')" style="cursor: pointer; padding: 14px 18px;" title="Filter Submitted for Review">
-                  <div class="kpi-stat-main-top">
-                    <span class="kpi-stat-main-title">SUBMITTED FOR REVIEW</span>
-                    <span class="emp-kpi-icon-pill">📤</span>
+                <!-- 4. Under Review -->
+                <div class="emp-kpi-card" onclick="filterEmpTrainingsByStatus('submitted_for_review')" style="cursor: pointer;" title="Filter Under Review">
+                  <span class="emp-kpi-label">Under Review</span>
+                  <div class="emp-kpi-val-row">
+                    <span class="emp-kpi-val" id="empKpiSubmitted" style="color: #7c3aed;">1</span>
+                    <span class="emp-kpi-icon-pill" title="Under evaluation">
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#7c3aed" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                    </span>
                   </div>
-                  <div class="kpi-stat-main-val" id="empKpiSubmitted" style="color: #7c3aed;">1</div>
-                  <div style="font-size: 11.5px; color: #64748b; margin-top: 4px;">Under manager evaluation</div>
+                  <span class="emp-kpi-sub">Under manager review</span>
                 </div>
 
-                <!-- 5. Changes Requested -->
-                <div class="kpi-stat-card-main" onclick="filterEmpTrainingsByStatus('changes_requested')" style="cursor: pointer; padding: 14px 18px; border-left: 3px solid #d97706;" title="Filter Changes Requested">
-                  <div class="kpi-stat-main-top">
-                    <span class="kpi-stat-main-title" style="color: #b45309;">CHANGES REQUESTED</span>
-                    <span class="emp-kpi-icon-pill">⚠️</span>
+                <!-- 5. Completed -->
+                <div class="emp-kpi-card" onclick="filterEmpTrainingsByStatus('completed')" style="cursor: pointer;" title="Filter Completed">
+                  <span class="emp-kpi-label">Completed</span>
+                  <div class="emp-kpi-val-row">
+                    <span class="emp-kpi-val" id="empKpiCompleted" style="color: #10b981;">1</span>
+                    <span class="emp-kpi-icon-green" title="Completed &amp; Verified">
+                      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </span>
                   </div>
-                  <div class="kpi-stat-main-val" id="empKpiChangesRequested" style="color: #d97706;">1</div>
-                  <div style="font-size: 11.5px; color: #b45309; margin-top: 4px;">Action required from you</div>
-                </div>
-
-                <!-- 6. Completed (Moved to Training History) -->
-                <div class="kpi-stat-card-main" onclick="openMyProfile('training')" style="cursor: pointer; padding: 14px 18px; border-left: 3px solid #16a34a;" title="View Completed Trainings in Training History">
-                  <div class="kpi-stat-main-top">
-                    <span class="kpi-stat-main-title" style="color: #166534;">COMPLETED (IN HISTORY)</span>
-                    <span class="emp-kpi-icon-pill">✓</span>
-                  </div>
-                  <div class="kpi-stat-main-val" id="empKpiCompleted" style="color: #166534;">1</div>
-                  <div style="font-size: 11.5px; color: #166534; margin-top: 4px;">Approved → View in History</div>
-                </div>
-
-                <!-- 7. Overdue -->
-                <div class="kpi-stat-card-main" onclick="filterEmpTrainingsByStatus('overdue')" style="cursor: pointer; padding: 14px 18px; border-left: 3px solid #dc2626;" title="Filter Overdue">
-                  <div class="kpi-stat-main-top">
-                    <span class="kpi-stat-main-title" style="color: #991b1b;">OVERDUE</span>
-                    <span class="emp-kpi-icon-pill">🚨</span>
-                  </div>
-                  <div class="kpi-stat-main-val" id="empKpiOverdue" style="color: #dc2626;">1</div>
-                  <div style="font-size: 11.5px; color: #991b1b; margin-top: 4px;">Past statutory due date</div>
-                </div>
-
-                <!-- 8. Certificates Issued -->
-                <div class="kpi-stat-card-main" onclick="openMyProfile('training')" style="cursor: pointer; padding: 14px 18px; border-left: 3px solid #0284c7;" title="View My Certificates in Profile">
-                  <div class="kpi-stat-main-top">
-                    <span class="kpi-stat-main-title" style="color: #0369a1;">CERTIFICATES ISSUED</span>
-                    <span class="emp-kpi-icon-pill">🎓</span>
-                  </div>
-                  <div class="kpi-stat-main-val" id="empKpiCertificatesIssued" style="color: #0284c7;">1</div>
-                  <div style="font-size: 11.5px; color: #0369a1; margin-top: 4px;">Verified credentials issued</div>
+                  <span class="emp-kpi-sub">Approved &amp; certified</span>
                 </div>
               </div>
 
-              <!-- Filter Pills & Search/Sort Bar (Spec Section 4 & 5) -->
-              <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 18px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
-                <div style="display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 12px; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px;">
-                  <!-- Filter Pills (Active My Training only - Completed trainings move to Training History upon approval) -->
-                  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <button type="button" class="emp-filter-pill active" id="empFilterBtn_all" onclick="filterEmpTrainingsByStatus('all')">All Active Trainings</button>
-                    <button type="button" class="emp-filter-pill" id="empFilterBtn_not_started" onclick="filterEmpTrainingsByStatus('not_started')">Not Started</button>
-                    <button type="button" class="emp-filter-pill" id="empFilterBtn_in_progress" onclick="filterEmpTrainingsByStatus('in_progress')">In Progress</button>
-                    <button type="button" class="emp-filter-pill" id="empFilterBtn_submitted_for_review" onclick="filterEmpTrainingsByStatus('submitted_for_review')">Submitted for Review</button>
-                    <button type="button" class="emp-filter-pill" id="empFilterBtn_changes_requested" onclick="filterEmpTrainingsByStatus('changes_requested')">Changes Requested</button>
-                    <button type="button" class="emp-filter-pill" id="empFilterBtn_overdue" onclick="filterEmpTrainingsByStatus('overdue')">Overdue</button>
+              <!-- Main Trainings Table Container (Matching CollabCRM Portal Table Layout) -->
+              <div class="emp-table-container">
+                <!-- Top Row with Title & Counter Badge -->
+                <div class="emp-table-header">
+                  <div class="emp-title-area">
+                    <h2 class="emp-title">My Training</h2>
+                    <span class="emp-count-badge" id="empTrainingsCountBadge">1 - 5 of 5 Trainings</span>
+                  </div>
+                  <div class="emp-actions-area">
+                    <button type="button" class="emp-icon-action" onclick="renderEmployeeTrainingsList()" title="Refresh Trainings">
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                    </button>
                   </div>
                 </div>
 
-                <!-- Search and Sorting Controls -->
-                <div style="display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
-                  <div style="display: flex; align-items: center; gap: 8px; flex: 1; max-width: 440px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 7px 12px;">
-                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#94a3b8" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                    <input type="text" id="searchEmpTrainingsInput" oninput="renderEmployeeTrainingsList()" placeholder="Search your assigned trainings by title, category, or reviewer..." style="border: none; background: transparent; outline: none; font-size: 13px; width: 100%; color: #1e293b;" />
-                  </div>
-                  <div style="display: flex; align-items: center; gap: 10px;">
-                    <select id="filterEmpCategorySelect" onchange="renderEmployeeTrainingsList()" style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 7px 12px; font-size: 12.5px; color: #334155; outline: none;">
+                <!-- Filter Bar matching Screenshot 5 -->
+                <div class="emp-filter-bar">
+                  <div class="emp-filters-left" style="flex: 1;">
+                    <button type="button" class="emp-filter-calc-btn" title="Calculation Summary">
+                      <span>Σ</span>
+                      <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+
+                    <!-- Filter Results Search Input -->
+                    <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 180px; max-width: 320px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 5px 10px;">
+                      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#94a3b8" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                      <input type="text" id="searchEmpTrainingsInput" oninput="renderEmployeeTrainingsList()" placeholder="Filter Results..." style="border: none; background: transparent; outline: none; font-size: 12.5px; width: 100%; color: #1e293b;" />
+                    </div>
+
+                    <!-- Status Filter Pills -->
+                    <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                      <button type="button" class="emp-filter-pill active" id="empFilterBtn_all" onclick="filterEmpTrainingsByStatus('all')">All</button>
+                      <button type="button" class="emp-filter-pill" id="empFilterBtn_not_started" onclick="filterEmpTrainingsByStatus('not_started')">Not Started</button>
+                      <button type="button" class="emp-filter-pill" id="empFilterBtn_in_progress" onclick="filterEmpTrainingsByStatus('in_progress')">In Progress</button>
+                      <button type="button" class="emp-filter-pill" id="empFilterBtn_submitted_for_review" onclick="filterEmpTrainingsByStatus('submitted_for_review')">Under Review</button>
+                      <button type="button" class="emp-filter-pill" id="empFilterBtn_completed" onclick="filterEmpTrainingsByStatus('completed')">Completed</button>
+                      <button type="button" class="emp-filter-pill" id="empFilterBtn_overdue" onclick="filterEmpTrainingsByStatus('overdue')">Overdue</button>
+                    </div>
+
+                    <!-- Category Select -->
+                    <select id="filterEmpCategorySelect" onchange="renderEmployeeTrainingsList()" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 5px 10px; font-size: 12px; color: #334155; outline: none;">
                       <option value="all">All Categories</option>
                       <option value="Technical Architecture">Technical Architecture</option>
                       <option value="Governance &amp; Compliance">Governance &amp; Compliance</option>
                       <option value="Product &amp; Platform">Product &amp; Platform</option>
                       <option value="Support &amp; Operations">Support &amp; Operations</option>
                       <option value="Professional Skills">Professional Skills</option>
-                      <option value="Recruitment &amp; HR">Recruitment &amp; HR</option>
                       <option value="Engineering">Engineering</option>
-                      <option value="Sales &amp; BD">Sales &amp; BD</option>
                     </select>
-                    <select id="sortEmpTrainingsSelect" onchange="renderEmployeeTrainingsList()" style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 7px 12px; font-size: 12.5px; color: #334155; outline: none;">
+
+                    <!-- Sort Select -->
+                    <select id="sortEmpTrainingsSelect" onchange="renderEmployeeTrainingsList()" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 5px 10px; font-size: 12px; color: #334155; outline: none;">
                       <option value="due_soonest">Sort by: Due Date (Soonest)</option>
                       <option value="progress_desc">Sort by: Progress (High to Low)</option>
                       <option value="recently_assigned">Sort by: Recently Assigned</option>
                       <option value="name_asc">Sort by: Training Name (A-Z)</option>
                     </select>
                   </div>
-                </div>
-              </div>
 
-              <!-- Training Cards Listing (Spec Section 5) -->
-              <div id="empTrainingsGrid" style="display: flex; flex-direction: column; gap: 14px;">
-                <!-- Populated dynamically via renderEmployeeTrainingsList() in app.js -->
+                  <button type="button" class="emp-filter-btn" onclick="renderEmployeeTrainingsList()">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+                    <span>Filter</span>
+                  </button>
+                </div>
+
+                <!-- CollabCRM Portal Trainings Table -->
+                <div class="emp-table-scroll">
+                  <table class="emp-table" id="empTrainingsTable">
+                    <thead>
+                      <tr>
+                        <th style="width: 45px;">No.</th>
+                        <th>Programme Name <span class="emp-sort">⬍</span></th>
+                        <th>Category <span class="emp-sort">⬍</span></th>
+                        <th>Assigned By <span class="emp-sort">⬍</span></th>
+                        <th>Assigned Date <span class="emp-sort">⬍</span></th>
+                        <th>Due Date <span class="emp-sort">⬍</span></th>
+                        <th>Status <span class="emp-sort">⬍</span></th>
+                        <th style="min-width: 130px;">Progress</th>
+                        <th style="text-align: right; width: 110px;">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody id="empTrainingsTableBody">
+                      <!-- Rendered by renderEmployeeTrainingsList() -->
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- Hidden fallback container for compatibility -->
+                <div id="empTrainingsGrid" style="display: none;"></div>
               </div>
             </div>
 

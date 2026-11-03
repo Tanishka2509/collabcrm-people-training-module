@@ -525,6 +525,12 @@ function setAppRole(role) {
     menuConfigEl.style.display = role === 'employee' ? 'none' : '';
   }
 
+  // Remove Employee module from employee user side, keep only training module per user requirement
+  const menuEmployeesEl = document.getElementById('menuEmployees');
+  if (menuEmployeesEl) {
+    menuEmployeesEl.style.display = role === 'employee' ? 'none' : '';
+  }
+
   // Toggle Employee Portal vs Admin/HR/Manager Portal Navigation
   const empHeaderCard = document.getElementById('empProfileHeaderCard');
   const adminSubnav = document.getElementById('adminSubnavTabs');
@@ -534,7 +540,7 @@ function setAppRole(role) {
   const empEmptyState = document.getElementById('sectionEmployeeEmptyState');
 
   if (role === 'employee') {
-    if (empHeaderCard) empHeaderCard.style.display = 'block';
+    if (empHeaderCard) empHeaderCard.style.display = 'none'; // Redundant header removed per user instruction
     if (adminSubnav) adminSubnav.style.display = 'none';
     if (empSubnav) empSubnav.style.display = 'none';
     if (subnavBar) subnavBar.style.display = 'none';
@@ -560,14 +566,10 @@ function setAppRole(role) {
 
     loadEmployeeTrainingData('CO-5039');
 
-    // If user is currently on the all-employees table view, switch to Employee's own My Training or Profile
-    const viewDashboard = document.getElementById('viewDashboard');
-    if (viewDashboard && viewDashboard.style.display === 'block') {
+    // Switch directly to Training module for employee
+    const viewTraining = document.getElementById('viewTraining');
+    if (!viewTraining || viewTraining.style.display !== 'block') {
       switchToTraining();
-    }
-    const viewEmployeeDetail = document.getElementById('viewEmployeeDetail');
-    if (viewEmployeeDetail && viewEmployeeDetail.style.display === 'block') {
-      openEmployeeDetail('CO-5039', activeEmpDetailSubTab || 'general');
     }
   } else {
     if (empHeaderCard) empHeaderCard.style.display = 'none';
@@ -600,9 +602,9 @@ function switchToEmployees() {
   const trainingPanel = document.getElementById('trainingSidePanel');
   if (trainingPanel) trainingPanel.classList.remove('open');
 
-  // Enforce employee-level data access: in Employee role, Employees opens own Profile
+  // Enforce employee role: Employee module removed from employee user side, just keep training module
   if (state.currentRole === 'employee') {
-    openEmployeeDetail('CO-5039', 'general');
+    switchToTraining();
     return;
   }
 
@@ -7842,16 +7844,16 @@ async function loadEmployeeTrainingData(empId = 'CO-5039') {
 function filterEmpTrainingsByStatus(status) {
   state.empActiveFilter = status;
 
-  const filterPillIds = [
+  const filterPillKeys = [
     'all',
     'not_started',
     'in_progress',
     'submitted_for_review',
-    'changes_requested',
+    'completed',
     'overdue'
   ];
 
-  filterPillIds.forEach(key => {
+  filterPillKeys.forEach(key => {
     const btn = document.getElementById(`empFilterBtn_${key}`);
     if (btn) {
       btn.classList.toggle('active', key === status);
@@ -7861,19 +7863,23 @@ function filterEmpTrainingsByStatus(status) {
   renderEmployeeTrainingsList();
 }
 
-// 3. Render Training Listing Cards (Spec Sec 5 — Active My Training only; Completed moves to Training History)
+// 3. Render Training Listing Table (Matching CollabCRM Portal Table Layout per Screenshot 5)
 function renderEmployeeTrainingsList() {
-  const container = document.getElementById('empTrainingsGrid');
-  if (!container) return;
+  const tableBody = document.getElementById('empTrainingsTableBody');
+  const countBadge = document.getElementById('empTrainingsCountBadge');
 
   if (!state.employeeTrainingData || !state.employeeTrainingData.trainings) {
-    container.innerHTML = `
-      <div style="background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 36px 20px; text-align: center; color: #64748b;">
-        <div style="font-size: 28px; margin-bottom: 8px;">⏳</div>
-        <h4 style="font-size: 14px; font-weight: 700; color: #334155; margin: 0 0 4px 0;">Loading Assigned Trainings...</h4>
-        <p style="font-size: 12.5px; margin: 0;">Connecting to CollabCRM backend registry.</p>
-      </div>
-    `;
+    if (tableBody) {
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="9" style="text-align: center; padding: 36px 20px; color: #64748b;">
+            <div style="font-size: 28px; margin-bottom: 8px;">⏳</div>
+            <h4 style="font-size: 14px; font-weight: 700; color: #334155; margin: 0 0 4px 0;">Loading Assigned Trainings...</h4>
+            <p style="font-size: 12.5px; margin: 0;">Connecting to CollabCRM backend registry.</p>
+          </td>
+        </tr>
+      `;
+    }
     return;
   }
 
@@ -7881,8 +7887,9 @@ function renderEmployeeTrainingsList() {
   const catFilter = document.getElementById('filterEmpCategorySelect')?.value || 'all';
   const sortOrder = document.getElementById('sortEmpTrainingsSelect')?.value || 'due_soonest';
 
-  // Active My Training excludes Completed trainings (which live in Training History)
-  let list = state.employeeTrainingData.trainings.filter(t => normalizeStatus(t.trainingStatus || t.status) !== 'Completed');
+  // Base list of all assigned trainings
+  const allTrainings = state.employeeTrainingData.trainings;
+  let list = [...allTrainings];
 
   // 1. Status Filter
   if (state.empActiveFilter && state.empActiveFilter !== 'all') {
@@ -7921,104 +7928,146 @@ function renderEmployeeTrainingsList() {
     list.sort((a, b) => (a.trainingName || a.title || '').localeCompare(b.trainingName || b.title || ''));
   }
 
-  if (list.length === 0) {
-    container.innerHTML = `
-      <div style="background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 42px 20px; text-align: center; color: #64748b;">
-        <div style="font-size: 32px; margin-bottom: 8px;">📚</div>
-        <h4 style="font-size: 14.5px; font-weight: 700; color: #1e293b; margin: 0 0 4px 0;">No Active Trainings Match Filter</h4>
-        <p style="font-size: 12.5px; margin: 0;">Completed and approved trainings are automatically moved to your <a href="javascript:void(0)" onclick="openMyProfile('training')" style="color: #4f46e5; font-weight: 600; text-decoration: underline;">Training History</a>.</p>
-        <button type="button" class="btn-table-action" onclick="filterEmpTrainingsByStatus('all')" style="margin-top: 12px;">Show All Active Trainings</button>
-      </div>
-    `;
-    return;
+  // Update header counter badge (e.g. "1 - 5 of 5 Trainings")
+  if (countBadge) {
+    if (list.length === 0) {
+      countBadge.textContent = `0 of ${allTrainings.length} Trainings`;
+    } else {
+      countBadge.textContent = `1 - ${list.length} of ${list.length} Trainings`;
+    }
   }
 
   const getStatusBadge = (status) => {
     const s = normalizeStatus(status);
     switch (s) {
       case 'Completed':
-        return '<span style="background: #dcfce7; color: #15803d; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; border: 1px solid #bbf7d0;">✓ Completed</span>';
+        return '<span style="background: #dcfce7; color: #15803d; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; border: 1px solid #bbf7d0; display: inline-flex; align-items: center; gap: 4px;">✓ Completed</span>';
       case 'In Progress':
-        return '<span style="background: #eff6ff; color: #1d4ed8; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; border: 1px solid #bfdbfe;">● In Progress</span>';
+        return '<span style="background: #eff6ff; color: #1d4ed8; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; border: 1px solid #bfdbfe; display: inline-flex; align-items: center; gap: 4px;">● In Progress</span>';
       case 'Submitted for Review':
-        return '<span style="background: #f3e8ff; color: #7e22ce; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; border: 1px solid #e9d5ff;">⏳ Under Review</span>';
+        return '<span style="background: #f3e8ff; color: #7e22ce; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; border: 1px solid #e9d5ff; display: inline-flex; align-items: center; gap: 4px;">⏳ Under Review</span>';
       case 'Changes Requested':
-        return '<span style="background: #fef3c7; color: #b45309; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; border: 1px solid #fde68a;">⚠️ Changes Requested</span>';
+        return '<span style="background: #fef3c7; color: #b45309; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; border: 1px solid #fde68a; display: inline-flex; align-items: center; gap: 4px;">⚠️ Changes Requested</span>';
       case 'Overdue':
-        return '<span style="background: #fee2e2; color: #b91c1c; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; border: 1px solid #fecaca;">✕ Overdue</span>';
+        return '<span style="background: #fee2e2; color: #b91c1c; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; border: 1px solid #fecaca; display: inline-flex; align-items: center; gap: 4px;">✕ Overdue</span>';
       default:
-        return '<span style="background: #f1f5f9; color: #475569; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; border: 1px solid #e2e8f0;">○ Not Started</span>';
+        return '<span style="background: #f1f5f9; color: #475569; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; border: 1px solid #e2e8f0; display: inline-flex; align-items: center; gap: 4px;">○ Not Started</span>';
     }
   };
 
-  let html = '';
-  list.forEach(t => {
+  if (!tableBody) return;
+
+  if (list.length === 0) {
+    tableBody.innerHTML = `
+      <tr>
+        <td colspan="9" style="text-align: center; padding: 36px 20px; color: #64748b;">
+          <div style="font-size: 28px; margin-bottom: 6px;">📚</div>
+          <div style="font-weight: 600; color: #1e293b; font-size: 14px;">No Assigned Trainings Match Filter</div>
+          <div style="font-size: 12px; margin-top: 4px;">Try selecting another status or clear the search query.</div>
+          <button type="button" class="emp-btn-primary" onclick="filterEmpTrainingsByStatus('all')" style="margin: 12px auto 0 auto; display: inline-flex;">Show All Assigned Trainings</button>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  let tableHtml = '';
+  list.forEach((t, idx) => {
     const isMandatory = t.isMandatory !== undefined ? t.isMandatory : (t.mandatory !== false);
     const prog = t.completionPercentage !== undefined ? t.completionPercentage : (t.progressPercent || 0);
     const progColor = prog === 100 ? '#10b981' : prog > 0 ? '#4f46e5' : '#94a3b8';
     const title = t.trainingName || t.title || 'Training Program';
-    const shortDesc = t.shortDescription || t.shortDesc || t.description || 'Comprehensive training curriculum.';
     const statusText = normalizeStatus(t.trainingStatus || t.status);
     const duration = t.expectedDuration || (t.durationHours ? t.durationHours + ' hrs' : '4 hrs');
 
-    html += `
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); transition: border-color 0.2s ease;">
-        <!-- Top Meta Line -->
-        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <span style="background: #e0e7ff; color: #4338ca; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px;">
-              ${escapeHtml(t.category || 'General')}
-            </span>
+    // Parse Assigned By details (HR, Admin, or Reporting Manager)
+    let assignedByName = t.assignedBy || 'Megha Salunkhe (Sr. Executive)';
+    let assignedByRole = 'Reporting Manager';
+    let assignedByInitials = 'MS';
+    let assignedByBg = '#0284c7';
+
+    const byLower = assignedByName.toLowerCase();
+    if (byLower.includes('megha') || byLower.includes('reporting') || byLower.includes('executive')) {
+      assignedByName = 'Megha Salunkhe';
+      assignedByRole = 'Reporting Manager';
+      assignedByInitials = 'MS';
+      assignedByBg = '#0284c7';
+    } else if (byLower.includes('ishdeep') || byLower.includes('admin')) {
+      assignedByName = 'Ishdeep Anand';
+      assignedByRole = 'Admin';
+      assignedByInitials = 'IA';
+      assignedByBg = '#8b5cf6';
+    } else if (byLower.includes('isha') || byLower.includes('hr') || byLower.includes('people')) {
+      assignedByName = 'Isha Patel';
+      assignedByRole = 'HR Operations';
+      assignedByInitials = 'IP';
+      assignedByBg = '#10b981';
+    } else {
+      const clean = assignedByName.replace(/\(.*?\)/g, '').trim();
+      const parts = clean.split(' ');
+      assignedByName = clean;
+      assignedByInitials = parts.map(p => p[0]).join('').slice(0, 2).toUpperCase() || 'MG';
+      assignedByRole = 'Management';
+      assignedByBg = '#4f46e5';
+    }
+
+    tableHtml += `
+      <tr>
+        <td style="color: #64748b; font-weight: 500;">${idx + 1}</td>
+        <td>
+          <div style="font-weight: 600; color: #0f172a; font-size: 13px; line-height: 1.35; margin-bottom: 3px;">
+            ${escapeHtml(title)}
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px; font-size: 11px; color: #64748b;">
+            <span>⏱ ${escapeHtml(duration)}</span>
+            <span>•</span>
             ${isMandatory
-              ? '<span style="background: #fee2e2; color: #991b1b; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px;">Mandatory</span>'
-              : '<span style="background: #f1f5f9; color: #475569; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px;">Optional</span>'
+              ? '<span style="background: #fee2e2; color: #991b1b; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 4px;">Mandatory</span>'
+              : '<span style="background: #f1f5f9; color: #475569; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 4px;">Optional</span>'
             }
           </div>
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <span style="font-size: 12px; color: #64748b;">
-              Due: <strong style="color: #0f172a;">${escapeHtml(t.dueDate || '15-Nov-2026')}</strong>
-            </span>
-            ${getStatusBadge(statusText)}
-          </div>
-        </div>
-
-        <!-- Title & Description -->
-        <div>
-          <h4 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0 0 4px 0;">
-            ${escapeHtml(title)}
-          </h4>
-          <p style="font-size: 13px; color: #475569; margin: 0; line-height: 1.5;">
-            ${escapeHtml(shortDesc)}
-          </p>
-        </div>
-
-        <!-- Metadata & Actions Row -->
-        <div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #f1f5f9; padding-top: 12px; flex-wrap: wrap; gap: 12px;">
-          <div style="display: flex; align-items: center; gap: 18px; font-size: 12px; color: #64748b; flex-wrap: wrap;">
-            <span>Assigned By: <strong style="color: #334155;">${escapeHtml(t.assignedBy || 'Megha Salunkhe')}</strong></span>
-            <span>Assigned: <strong style="color: #334155;">${escapeHtml(t.assignedDate || '01-Nov-2026')}</strong></span>
-            <span>Duration: <strong style="color: #334155;">${escapeHtml(duration)}</strong></span>
-          </div>
-
-          <!-- Progress & Action -->
-          <div style="display: flex; align-items: center; gap: 16px; min-width: 260px; justify-content: flex-end;">
-            <div style="display: flex; align-items: center; gap: 8px; flex: 1; max-width: 180px;">
-              <div style="flex: 1; height: 7px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
-                <div style="width: ${prog}%; height: 100%; background: ${progColor}; border-radius: 4px;"></div>
-              </div>
-              <span style="font-size: 12px; font-weight: 700; color: #334155; min-width: 34px;">${prog}%</span>
+        </td>
+        <td>
+          <span class="emp-dept-badge">${escapeHtml(t.category || 'General')}</span>
+        </td>
+        <td>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="emp-avatar-circle" style="background: ${assignedByBg}; width: 26px; height: 26px; font-size: 10.5px; font-weight: 700; color: #fff; flex-shrink: 0;">
+              ${assignedByInitials}
             </div>
-
-            <button type="button" class="btn-primary-action" onclick="openEmployeeTrainingDetail('${t.id}')" style="padding: 7px 14px; font-size: 12px; font-weight: 600;">
-              ${statusText === 'Completed' ? 'View Details' : prog > 0 ? 'Continue Training →' : 'Start Training →'}
-            </button>
+            <div>
+              <div style="font-weight: 600; color: #0f172a; font-size: 12px; line-height: 1.2;">${escapeHtml(assignedByName)}</div>
+              <div style="font-size: 11px; color: #64748b; line-height: 1.2; margin-top: 1px;">${escapeHtml(assignedByRole)}</div>
+            </div>
           </div>
-        </div>
-      </div>
+        </td>
+        <td style="color: #64748b; font-size: 12px; white-space: nowrap;">
+          ${escapeHtml(t.assignedDate || '12-Jan-2026')}
+        </td>
+        <td style="font-weight: 500; color: #1e293b; font-size: 12px; white-space: nowrap;">
+          ${escapeHtml(t.dueDate || '15-Mar-2026')}
+        </td>
+        <td>
+          ${getStatusBadge(statusText)}
+        </td>
+        <td>
+          <div style="display: flex; align-items: center; gap: 8px; width: 100%; min-width: 120px;">
+            <div style="flex: 1; height: 6px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+              <div style="width: ${prog}%; height: 100%; background: ${progColor}; border-radius: 4px;"></div>
+            </div>
+            <span style="font-size: 11.5px; font-weight: 600; color: #334155; min-width: 32px;">${prog}%</span>
+          </div>
+        </td>
+        <td style="text-align: right; white-space: nowrap;">
+          <button type="button" class="emp-kpi-view-btn" onclick="openEmployeeTrainingDetail('${t.id}')" style="background: #2563eb; color: #ffffff; border: none; border-radius: 5px; font-size: 11.5px; font-weight: 600; padding: 5px 12px; cursor: pointer;">
+            ${statusText === 'Completed' ? 'View Details' : prog > 0 ? 'Continue' : 'Start'}
+          </button>
+        </td>
+      </tr>
     `;
   });
 
-  container.innerHTML = html;
+  tableBody.innerHTML = tableHtml;
 }
 
 // 4. Employee Subnav Tab Switching (Spec Sec 2)
