@@ -4073,7 +4073,7 @@ function switchTrainingConfigTab(tabId) {
     assignments: 'Assignment Policies',
     completion: 'Completion & Passing Criteria',
     certificates: 'Certificate Templates',
-    notifications: 'Notifications & Reminders'
+    notifications: 'Notifications'
   };
   const bc = document.getElementById('tcfgActiveBreadcrumb');
   if (bc) bc.textContent = `Training Config › ${tabNames[tabId] || tabId}`;
@@ -4332,28 +4332,28 @@ function renderCategoriesTable() {
         <td style="color: #475569; font-size: 13px;">${escapeHtml(cat.createdBy || 'System')}</td>
         <td style="color: #64748b; font-size: 13px;">${escapeHtml(cat.createdDate || '—')}</td>
         <td style="text-align: right; white-space: nowrap;">
-          ${isManager ? '<span style="font-size: 12px; color: #94a3b8;">View only</span>' : `
-            <div style="display: inline-flex; align-items: center; gap: 6px;">
-              <button type="button" class="emp-action-icon" onclick="openEditCategoryModal('${cat.id}')" title="Edit Category" aria-label="Edit">
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M12 20h9"></path>
-                  <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-                </svg>
-              </button>
-              <button type="button" class="emp-action-icon" onclick="toggleCategoryStatus('${cat.id}')" title="${isAct ? 'Deactivate Category' : 'Activate Category'}" aria-label="${isAct ? 'Deactivate' : 'Activate'}">
-                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                  <circle cx="12" cy="12" r="3"></circle>
-                </svg>
-              </button>
+          <div style="display: inline-flex; align-items: center; gap: 6px;">
+            <button type="button" class="emp-action-icon" onclick="openEditCategoryModal('${cat.id}')" title="Edit Category" aria-label="Edit">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 20h9"></path>
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+              </svg>
+            </button>
+            <button type="button" class="emp-action-icon" onclick="openViewCategoryModal('${cat.id}')" title="View Category Details" aria-label="View">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+            ${isManager ? '' : `
               <button type="button" class="emp-action-icon" onclick="deleteCategory('${cat.id}')" title="Delete Category" aria-label="Delete">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
                   <polyline points="3 6 5 6 21 6"></polyline>
                   <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                 </svg>
               </button>
-            </div>
-          `}
+            `}
+          </div>
         </td>
       </tr>
     `;
@@ -4416,6 +4416,68 @@ function closeCategoryModal() {
   if (modal) modal.classList.remove('open');
   editingCategoryId = null;
 }
+
+let viewingCategoryId = null;
+
+function openViewCategoryModal(catId) {
+  const cat = (trainingConfigData.categories || []).find(c => c.id === catId);
+  if (!cat) return;
+  viewingCategoryId = catId;
+
+  const modal = document.getElementById('modalCategoryView');
+  const nameEl = document.getElementById('viewCatName');
+  const descEl = document.getElementById('viewCatDesc');
+  const statusEl = document.getElementById('viewCatStatusBadge');
+  const createdByEl = document.getElementById('viewCatCreatedBy');
+  const createdDateEl = document.getElementById('viewCatCreatedDate');
+  const countEl = document.getElementById('viewCatProgramCount');
+  const listEl = document.getElementById('viewCatProgramList');
+
+  if (nameEl) nameEl.textContent = cat.name;
+  if (descEl) descEl.textContent = cat.desc || 'No description provided for this category.';
+  if (statusEl) {
+    statusEl.textContent = cat.status || 'Active';
+    statusEl.className = (cat.status === 'Active') ? 'status-badge-active' : 'status-badge-inactive';
+  }
+  if (createdByEl) createdByEl.textContent = cat.createdBy || 'System Admin';
+  if (createdDateEl) createdDateEl.textContent = cat.createdDate || '—';
+
+  // Associated programs
+  const progs = (state.programs || []).filter(p => p.category === cat.name || p.categoryId === cat.id);
+  if (countEl) countEl.textContent = progs.length;
+  if (listEl) {
+    if (progs.length === 0) {
+      listEl.innerHTML = `<span style="font-size: 12px; color: #94a3b8; font-style: italic;">No training programmes linked to this category yet.</span>`;
+    } else {
+      listEl.innerHTML = progs.map(p => `
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 6px 10px; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0; font-size: 12.5px;">
+          <span style="font-weight: 600; color: #0f172a;">${escapeHtml(p.title)}</span>
+          <span style="color: #64748b; font-size: 11.5px;">${p.status || 'Published'}</span>
+        </div>
+      `).join('');
+    }
+  }
+
+  if (modal) modal.classList.add('open');
+}
+
+function closeViewCategoryModal() {
+  const modal = document.getElementById('modalCategoryView');
+  if (modal) modal.classList.remove('open');
+  viewingCategoryId = null;
+}
+
+function editFromViewCategory() {
+  const idToEdit = viewingCategoryId;
+  closeViewCategoryModal();
+  if (idToEdit) {
+    openEditCategoryModal(idToEdit);
+  }
+}
+
+window.openViewCategoryModal = openViewCategoryModal;
+window.closeViewCategoryModal = closeViewCategoryModal;
+window.editFromViewCategory = editFromViewCategory;
 
 function saveCategoryModal() {
   if (state.currentRole === 'manager') {
@@ -4902,7 +4964,7 @@ function resetCurrentConfigTab() {
     assignments: 'Assignment Settings',
     completion: 'Completion & Assessment',
     certificates: 'Certificate Settings',
-    notifications: 'Notifications & Reminders'
+    notifications: 'Notifications'
   };
   const currentTabName = tabNames[activeTrainingConfigTab] || 'current tab';
   if (!confirm(`Are you sure you want to reset "${currentTabName}" back to default system values?`)) {

@@ -146,7 +146,7 @@
             <div class="user-role-dropdown-footer" style="display: flex; flex-direction: column; gap: 6px;">
               <button type="button" class="user-role-reset-btn" onclick="openMyProfile('general')" style="color: #4f46e5; border-color: #c7d2fe; background: #eef2ff;">
                 <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                My Profile &amp; Training History
+                My Profile
               </button>
               <button type="button" class="user-role-reset-btn" onclick="resetDemoData()">
                 <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
@@ -924,7 +924,7 @@
               <div style="display: flex; align-items: center; gap: 10px;">
                 <button type="button" class="btn-table-action" onclick="openMyProfile('training')" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; font-size: 12px; font-weight: 600; border-radius: 6px; color: #4f46e5; border-color: #c7d2fe; background: #eef2ff;">
                   <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                  <span>My Profile &amp; Training History</span>
+                  <span>My Profile</span>
                 </button>
                 <button type="button" class="btn-table-action" onclick="openEmployeeNotificationsDrawer()" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; font-size: 12px; font-weight: 600; position: relative; border-radius: 6px;">
                   <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
@@ -2157,7 +2157,7 @@
               </button>
               <button type="button" class="tcfg-tab-btn" id="tcfgTabBtn_notifications" onclick="switchTrainingConfigTab('notifications')">
                 <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                <span>Notifications &amp; Reminders</span>
+                <span>Notifications</span>
                 <span class="tcfg-tab-badge">9</span>
               </button>
             </div>
@@ -2926,18 +2926,6 @@
                   <div>
                     <h3 class="tcfg-card-title">Automated Reminder Policies</h3>
                     <p class="tcfg-card-subtitle">Set periodic nudges for pending, overdue, and expiring credentials.</p>
-                  </div>
-                </div>
-
-                <!-- Certificate Expiry (Months) & Reminder Frequency (Days) -->
-                <div class="tcfg-setting-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start;">
-                  <div>
-                    <label for="cfg_rem_cert_expiry_months_box" style="display: block; font-size: 11px; font-weight: 700; color: #334155; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 8px;">CERTIFICATE EXPIRY (MONTHS)</label>
-                    <input type="number" id="cfg_rem_cert_expiry_months_box" value="24" min="1" max="120" onchange="markConfigDirty()" style="width: 100%; padding: 10px 14px; font-size: 14px; color: #0f172a; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; outline: none; box-sizing: border-box;" />
-                  </div>
-                  <div>
-                    <label for="cfg_rem_reminder_freq_days_box" style="display: block; font-size: 11px; font-weight: 700; color: #334155; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 8px;">REMINDER FREQUENCY (DAYS)</label>
-                    <input type="number" id="cfg_rem_reminder_freq_days_box" value="7" min="1" max="90" onchange="markConfigDirty()" style="width: 100%; padding: 10px 14px; font-size: 14px; color: #0f172a; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; outline: none; box-sizing: border-box;" />
                   </div>
                 </div>
 
@@ -3728,29 +3716,29 @@
           </div>
 
           <div style="position: relative; z-index: 2;">
-            <div style="font-size: 16px; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase; color: #1e293b; margin-bottom: 4px;">COLLABCRM</div>
-            <div class="cert-org-header" style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: #64748b; margin-bottom: 18px;">CollabCRM People Learning &amp; Development</div>
-            <h2 class="cert-main-title" style="font-family: Georgia, 'Times New Roman', serif; font-size: 29px; font-weight: 700; color: #1e293b; margin: 0 0 8px 0; letter-spacing: 0.08em; text-transform: uppercase;">Certificate of Completion</h2>
-            <p style="font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #64748b; margin: 0 0 22px 0;">This is to officially certify that</p>
-            <h1 class="cert-recipient-name" id="certPreviewRecipientName" style="font-family: Georgia, 'Times New Roman', serif; font-size: 34px; font-weight: 700; color: #1e293b; text-decoration: none; margin: 0 0 8px 0;">Employee Name</h1>
-            <p style="font-size: 12.5px; color: #64748b; margin: 0 0 16px 0;">Employee ID: <strong id="certPreviewEmpCode" style="color: #0f172a;">CO-5039</strong></p>
-            <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 13.5px; color: #475569; line-height: 1.65; max-width: 520px; margin: 0 auto 14px auto;">
+            <div style="font-size: 17px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: #1e293b; margin-bottom: 22px;">COLLABCRM</div>
+            <h2 class="cert-main-title" style="font-family: Georgia, 'Times New Roman', serif; font-size: 30px; font-weight: 700; color: #1e293b; margin: 0; letter-spacing: 0.12em; text-transform: uppercase;">CERTIFICATE OF EXCELLENCE</h2>
+            <div style="font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; color: #64748b; margin: 6px 0 22px 0;">OF APPRECIATION</div>
+            <p style="font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #64748b; margin: 0 0 16px 0;">THIS CERTIFICATE IS PROUDLY PRESENTED TO</p>
+            <h1 class="cert-recipient-name" id="certPreviewRecipientName" style="font-family: Georgia, 'Times New Roman', serif; font-size: 34px; font-weight: 700; color: #1e293b; text-decoration: none; margin: 0 0 6px 0;">Employee Name</h1>
+            <p style="font-size: 12.5px; color: #64748b; margin: 0 0 14px 0;">Employee ID: <strong id="certPreviewEmpCode" style="color: #0f172a;">CO-5039</strong></p>
+            <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 13.5px; color: #475569; line-height: 1.6; max-width: 520px; margin: 0 auto 12px auto;">
               has successfully fulfilled all curriculum requirements, passed comprehensive assessments, and achieved mastery in the training program:
             </p>
-            <h3 class="cert-program-name" id="certPreviewProgramName" style="font-size: 18px; font-weight: 800; color: #0f172a; margin: 0 0 36px 0;">Training Programme Title</h3>
+            <h3 class="cert-program-name" id="certPreviewProgramName" style="font-size: 18px; font-weight: 800; color: #0f172a; margin: 0 0 34px 0;">Training Programme Title</h3>
 
-            <div style="display: flex; justify-content: center; align-items: flex-end; gap: 48px; margin-top: 12px; padding-top: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; padding: 0 36px; margin-top: 14px;">
               <div style="text-align: center; min-width: 175px;">
-                <div style="font-size: 12px; font-weight: 700; color: #0f172a; margin-bottom: 2px;">Certificate ID: <span id="certPreviewNo" style="font-family: monospace;">CCRM-2026-001</span></div>
-                <div style="font-size: 12px; font-weight: 700; color: #0f172a; margin-bottom: 6px;">Issued Date: <span id="certPreviewIssueDate">02-Nov-2026</span></div>
-                <div style="height: 1.5px; background: #2b4c8c; width: 100%; margin-bottom: 5px;"></div>
-                <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #475569; display: block;">DATE OF ISSUE</span>
+                <div style="font-size: 11.5px; font-weight: 600; color: #0f172a; margin-bottom: 2px;">Certificate ID: <span id="certPreviewNo" style="font-family: monospace;">CCRM-2026-001</span></div>
+                <div style="font-size: 11.5px; font-weight: 600; color: #0f172a; margin-bottom: 6px;">Issued Date: <span id="certPreviewIssueDate">02-Nov-2026</span></div>
+                <div style="height: 1.5px; background: #2b4c8c; width: 100%; margin-bottom: 6px;"></div>
+                <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #475569; display: block;">DATE OF ISSUE</span>
                 <span style="font-size: 10px; color: #64748b; display: none;" id="certPreviewExpiry">Valid until 02-Nov-2028</span>
               </div>
-              <div style="text-align: center; min-width: 195px;">
-                <div class="sig-line" id="certPreviewIssuer" style="font-family: 'Brush Script MT', Georgia, serif; font-size: 21px; color: #1e293b; border: none; margin-bottom: 4px; padding: 0;">Megha Salunkhe</div>
-                <div style="height: 1.5px; background: #2b4c8c; width: 100%; margin-bottom: 5px;"></div>
-                <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #475569; display: block; line-height: 1.35;">AUTHORIZED LEARNING DIRECTOR</span>
+              <div style="text-align: center; min-width: 185px;">
+                <div class="sig-line" id="certPreviewIssuer" style="font-family: 'Brush Script MT', Georgia, serif; font-size: 22px; color: #1e293b; border: none; margin-bottom: 4px; padding: 0;">Megha Salunkhe</div>
+                <div style="border-top: 1px dashed #2b4c8c; width: 100%; margin-bottom: 6px;"></div>
+                <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #475569; display: block;">AUTHORIZED SIGNATORY</span>
               </div>
             </div>
           </div>
@@ -3861,6 +3849,54 @@
       <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 10px; padding: 14px 20px;">
         <button type="button" class="btn-secondary-action" onclick="closeCategoryModal()">Cancel</button>
         <button type="button" class="btn-primary-action" id="btnSaveCategory" onclick="saveCategoryModal()">Save Category</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: VIEW TRAINING CATEGORY DETAILS                   -->
+  <!-- ======================================================== -->
+  <div class="modal-backdrop" id="modalCategoryView">
+    <div class="modal-dialog" style="max-width: 540px; width: 92%;">
+      <div class="modal-header" style="display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid #e2e8f0;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <h3 class="modal-title" style="margin: 0; font-size: 16px; font-weight: 700; color: #0f172a;">Training Category Details</h3>
+          <span id="viewCatStatusBadge" class="status-badge-active">Active</span>
+        </div>
+        <button class="modal-close-btn" onclick="closeViewCategoryModal()" style="font-size: 20px; background: none; border: none; cursor: pointer; color: #64748b;">✕</button>
+      </div>
+      <div class="modal-body" style="padding: 22px 24px;">
+        <div style="margin-bottom: 18px;">
+          <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; display: block; margin-bottom: 4px;">Category Name</span>
+          <h4 id="viewCatName" style="font-size: 18px; font-weight: 700; color: #0f172a; margin: 0;">Category Name</h4>
+        </div>
+
+        <div style="margin-bottom: 18px;">
+          <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; display: block; margin-bottom: 4px;">Description</span>
+          <p id="viewCatDesc" style="font-size: 13.5px; color: #334155; line-height: 1.55; margin: 0; background: #f8fafc; padding: 12px 14px; border-radius: 6px; border: 1px solid #e2e8f0;">No description provided.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 18px; padding: 12px 14px; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0;">
+          <div>
+            <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; display: block;">Created By</span>
+            <span id="viewCatCreatedBy" style="font-size: 13px; font-weight: 600; color: #0f172a;">System</span>
+          </div>
+          <div>
+            <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; display: block;">Created Date</span>
+            <span id="viewCatCreatedDate" style="font-size: 13px; font-weight: 600; color: #0f172a;">2026-01-15</span>
+          </div>
+        </div>
+
+        <div>
+          <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; display: block; margin-bottom: 8px;">Associated Training Programmes (<span id="viewCatProgramCount">0</span>)</span>
+          <div id="viewCatProgramList" style="max-height: 140px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px;">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; border-top: 1px solid #e2e8f0;">
+        <button type="button" class="btn-secondary-action" onclick="closeViewCategoryModal()">Close</button>
+        <button type="button" class="btn-primary-action" id="btnEditFromViewCategory" onclick="editFromViewCategory()">✎ Edit Category</button>
       </div>
     </div>
   </div>
@@ -4286,27 +4322,27 @@
           </div>
 
           <div style="position: relative; z-index: 2;">
-            <div style="font-size: 16px; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase; color: #1e293b; margin-bottom: 4px;">COLLABCRM</div>
-            <div style="font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; color: #64748b; margin-bottom: 18px;">CollabCRM People Learning &amp; Development</div>
-            <h2 style="font-family: Georgia, 'Times New Roman', serif; font-size: 29px; font-weight: 700; color: #1e293b; margin: 0 0 8px 0; letter-spacing: 0.08em; text-transform: uppercase;">Certificate of Completion</h2>
-            <p style="font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #64748b; margin: 0 0 22px 0;">This is to officially certify that</p>
-            <div id="empCertRecipientName" style="font-family: Georgia, 'Times New Roman', serif; font-size: 34px; font-weight: 700; color: #1e293b; margin: 0 0 8px 0;">Aryan Bhardwaj</div>
-            <p style="font-size: 12.5px; color: #64748b; margin: 0 0 16px 0;">Employee ID: <strong id="empCertRecipientId" style="color: #0f172a;">CO-5039</strong></p>
-            <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 13.5px; color: #475569; line-height: 1.65; max-width: 520px; margin: 0 auto 14px auto;">
+            <div style="font-size: 17px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: #1e293b; margin-bottom: 22px;">COLLABCRM</div>
+            <h2 style="font-family: Georgia, 'Times New Roman', serif; font-size: 30px; font-weight: 700; color: #1e293b; margin: 0; letter-spacing: 0.12em; text-transform: uppercase;">CERTIFICATE OF EXCELLENCE</h2>
+            <div style="font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; color: #64748b; margin: 6px 0 22px 0;">OF APPRECIATION</div>
+            <p style="font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #64748b; margin: 0 0 16px 0;">THIS CERTIFICATE IS PROUDLY PRESENTED TO</p>
+            <div id="empCertRecipientName" style="font-family: Georgia, 'Times New Roman', serif; font-size: 34px; font-weight: 700; color: #1e293b; margin: 0 0 6px 0;">Aryan Bhardwaj</div>
+            <p style="font-size: 12.5px; color: #64748b; margin: 0 0 14px 0;">Employee ID: <strong id="empCertRecipientId" style="color: #0f172a;">CO-5039</strong></p>
+            <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 13.5px; color: #475569; line-height: 1.6; max-width: 520px; margin: 0 auto 12px auto;">
               has successfully fulfilled all curriculum requirements, passed comprehensive assessments, and achieved mastery in the training program:
             </p>
-            <h3 id="empCertTrainingTitle" style="font-size: 18px; font-weight: 800; color: #0f172a; margin: 0 0 36px 0;">Cloud Architecture &amp; Microservices Security</h3>
-            <div style="display: flex; justify-content: center; align-items: flex-end; gap: 48px; margin-top: 12px; padding-top: 10px;">
+            <h3 id="empCertTrainingTitle" style="font-size: 18px; font-weight: 800; color: #0f172a; margin: 0 0 34px 0;">Cloud Architecture &amp; Microservices Security</h3>
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; padding: 0 36px; margin-top: 14px;">
               <div style="text-align: center; min-width: 175px;">
-                <span style="font-size: 11.5px; color: #475569; display: block;">Certificate ID: <strong id="empCertModalCertId" style="color: #0f172a;">TRN-2026-001</strong></span>
-                <span style="font-size: 11.5px; color: #475569; display: block; margin-top: 3px; margin-bottom: 6px;">Issued Date: <strong id="empCertModalIssueDate" style="color: #0f172a;">02-Nov-2026</strong></span>
-                <div style="height: 1.5px; width: 100%; background: #2b4c8c; margin-bottom: 5px;"></div>
-                <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #475569; display: block;">DATE OF ISSUE</span>
+                <div style="font-size: 11.5px; font-weight: 600; color: #0f172a; margin-bottom: 2px;">Certificate ID: <strong id="empCertModalCertId">TRN-2026-001</strong></div>
+                <div style="font-size: 11.5px; font-weight: 600; color: #0f172a; margin-bottom: 6px;">Issued Date: <strong id="empCertModalIssueDate">02-Nov-2026</strong></div>
+                <div style="height: 1.5px; width: 100%; background: #2b4c8c; margin-bottom: 6px;"></div>
+                <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #475569; display: block;">DATE OF ISSUE</span>
               </div>
-              <div style="text-align: center; min-width: 195px;">
+              <div style="text-align: center; min-width: 185px;">
                 <div style="font-family: 'Brush Script MT', Georgia, cursive, sans-serif; font-size: 22px; color: #1e293b; margin-bottom: 4px;">Megha Salunkhe</div>
-                <div style="height: 1.5px; width: 100%; background: #2b4c8c; margin-bottom: 5px;"></div>
-                <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #475569; display: block;">Authorized Learning Director</span>
+                <div style="border-top: 1px dashed #2b4c8c; width: 100%; margin-bottom: 6px;"></div>
+                <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #475569; display: block;">AUTHORIZED SIGNATORY</span>
               </div>
             </div>
           </div>
