@@ -335,7 +335,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSidebar();
   initClockWidget();
   renderPortalNotifications();
-  setAppRole('employee'); // Start in Employee Role
+  setAppRole('admin'); // Start in Admin Role
   switchToTraining();
 });
 
@@ -4757,7 +4757,7 @@ const DEMO_USERS = [
   }
 ];
 
-let activeDemoUser = DEMO_USERS[0]; // Default to Employee on load
+let activeDemoUser = DEMO_USERS[1]; // Default to Admin (HR / Admin / Reporting Manager)
 
 function renderUserRolePill() {
   const badgeEl = document.getElementById('headerUserAvatarBadge');
@@ -4832,10 +4832,10 @@ function switchActiveUser(userId) {
 }
 
 function resetDemoData() {
-  activeDemoUser = DEMO_USERS[0];
+  activeDemoUser = DEMO_USERS[1];
   renderUserRolePill();
   renderUserRoleDropdown();
-  setAppRole('employee');
+  setAppRole('admin');
   const menu = document.getElementById('userRoleDropdownMenu');
   if (menu) menu.style.display = 'none';
   showConfigToast('Demo data reset to factory state.');
