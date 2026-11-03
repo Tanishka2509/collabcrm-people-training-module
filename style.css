@@ -5265,96 +5265,111 @@ body {
   transition: transform 0.2s ease;
 }
 
-/* User Role Dropdown Menu */
+/* User Role & Profile Dropdown Menu (Screenshot 1 Format) */
 .user-role-dropdown {
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.06);
-  width: 330px;
-  z-index: 1000;
-  padding: 16px 14px 12px 14px;
-  animation: modalIn 0.15s ease-out;
-}
-
-.user-role-dropdown-header {
-  margin-bottom: 12px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #f1f5f9;
-}
-
-.user-role-dropdown-title {
-  font-size: 12px;
-  font-weight: 700;
-  color: #64748b;
-  letter-spacing: 0.02em;
-  margin-bottom: 4px;
-}
-
-.user-role-dropdown-desc {
-  font-size: 11.5px;
-  color: #475569;
-  line-height: 1.4;
-  margin: 0;
-}
-
-.user-role-dropdown-list {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  max-height: 320px;
-  overflow-y: auto;
-}
-
-.user-role-item {
-  padding: 10px 12px;
   border-radius: 8px;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.12), 0 4px 10px -2px rgba(15, 23, 42, 0.06);
+  min-width: 220px;
+  width: max-content;
+  max-width: 270px;
+  z-index: 1500;
+  padding: 6px 0;
+  animation: modalIn 0.12s ease-out;
+}
+
+.profile-menu-link {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  padding: 9px 18px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #0f172a;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  border: 1px solid transparent;
+  gap: 12px;
+  transition: background-color 0.12s ease;
+  line-height: 1.35;
+  text-decoration: none;
+  font-family: inherit;
 }
 
-.user-role-item:hover {
-  background: #f8fafc;
+.profile-menu-link:hover {
+  background-color: #f8fafc;
 }
 
-.user-role-item.selected {
-  background: #eff6ff;
-  border-color: #93c5fd;
+.profile-menu-divider {
+  height: 1px;
+  background: #f1f5f9;
+  margin: 5px 0;
 }
 
-.user-role-item-name {
-  font-size: 13.5px;
+.profile-menu-section-label {
+  padding: 6px 18px 4px 18px;
+  font-size: 10.5px;
   font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.role-switch-item {
+  padding: 7px 18px;
+}
+
+.role-switch-item.active-role {
+  background-color: #f8fafc;
+}
+
+.role-switch-left {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.role-avatar-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.role-switch-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.role-switch-name {
+  font-size: 13px;
+  font-weight: 600;
   color: #0f172a;
-  line-height: 1.3;
+  line-height: 1.25;
 }
 
-.user-role-item-sub {
-  font-size: 11.5px;
-  font-weight: 500;
-  color: #64748b;
-  line-height: 1.3;
-}
-
-.user-role-badge-pill {
+.role-switch-role {
   font-size: 11px;
-  font-weight: 700;
-  padding: 3px 9px;
-  border-radius: 6px;
-  white-space: nowrap;
+  color: #64748b;
+  line-height: 1.25;
 }
 
-.user-role-dropdown-footer {
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px solid #f1f5f9;
+.role-check {
+  color: #2563eb;
+  font-size: 13px;
+  font-weight: 700;
 }
 
 .user-role-reset-btn {

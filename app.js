@@ -6520,26 +6520,79 @@ function renderUserRolePill() {
 }
 
 function renderUserRoleDropdown() {
-  const list = document.getElementById('userRoleDropdownList');
-  if (!list) return;
+  const lists = [
+    document.getElementById('userRoleDropdownList'),
+    document.getElementById('headerMyProfileDropdownList')
+  ].filter(Boolean);
 
-  let html = '';
-  DEMO_USERS.forEach(u => {
-    const isSelected = u.id === activeDemoUser.id;
-    html += `
-      <div class="user-role-item ${isSelected ? 'selected' : ''}" onclick="switchActiveUser('${u.id}')">
-        <div>
-          <div class="user-role-item-name">${escapeHtml(u.name)}</div>
-          <div class="user-role-item-sub">${escapeHtml(u.title)}</div>
+  if (lists.length === 0) return;
+
+  const isMgmt = activeDemoUser.id === 'usr_management';
+  const isEmp = activeDemoUser.id === 'usr_emp';
+
+  const html = `
+    <button type="button" class="profile-menu-link" onclick="closeUserRoleDropdown(); openMyProfile('general');">
+      <span>My Profile</span>
+    </button>
+    <button type="button" class="profile-menu-link" onclick="closeUserRoleDropdown(); showConfigToast('Opening My Work Log...');">
+      <span>My Work Log</span>
+    </button>
+    <button type="button" class="profile-menu-link" onclick="closeUserRoleDropdown(); showConfigToast('Opening Preferences...');">
+      <span>Preferences</span>
+    </button>
+
+    <div class="profile-menu-divider"></div>
+
+    <div class="profile-menu-section-label">Switch User Role</div>
+
+    <button type="button" class="profile-menu-link role-switch-item ${isMgmt ? 'active-role' : ''}" onclick="switchActiveUser('usr_management');">
+      <div class="role-switch-left">
+        <span class="role-avatar-dot" style="background: #8b5cf6;">IA</span>
+        <div class="role-switch-meta">
+          <span class="role-switch-name">Ishdeep Anand</span>
+          <span class="role-switch-role">Admin • Management</span>
         </div>
-        <span class="user-role-badge-pill" style="background: ${u.badgeBg}; color: ${u.badgeColor};">
-          ${escapeHtml(u.role)}
-        </span>
       </div>
-    `;
-  });
+      ${isMgmt ? '<span class="role-check">✓</span>' : ''}
+    </button>
 
-  list.innerHTML = html;
+    <button type="button" class="profile-menu-link role-switch-item ${isEmp ? 'active-role' : ''}" onclick="switchActiveUser('usr_emp');">
+      <div class="role-switch-left">
+        <span class="role-avatar-dot" style="background: #f59e0b;">AB</span>
+        <div class="role-switch-meta">
+          <span class="role-switch-name">Aryan Bhardwaj</span>
+          <span class="role-switch-role">Business analyst • Employee</span>
+        </div>
+      </div>
+      ${isEmp ? '<span class="role-check">✓</span>' : ''}
+    </button>
+
+    <div class="profile-menu-divider"></div>
+
+    <button type="button" class="profile-menu-link" onclick="closeUserRoleDropdown(); showConfigToast('Opening Change Password...');">
+      <span>Change Password</span>
+    </button>
+    <button type="button" class="profile-menu-link" onclick="closeUserRoleDropdown(); showConfigToast('Opening Support Tickets...');">
+      <span>Support Tickets</span>
+    </button>
+    <button type="button" class="profile-menu-link" onclick="closeUserRoleDropdown(); resetDemoData();" style="color: #ef4444;">
+      <span>Reset Demo Data</span>
+    </button>
+    <button type="button" class="profile-menu-link" onclick="closeUserRoleDropdown(); showConfigToast('Session signed out.');">
+      <span>Logout</span>
+    </button>
+  `;
+
+  lists.forEach(el => {
+    el.innerHTML = html;
+  });
+}
+
+function closeUserRoleDropdown() {
+  const menu = document.getElementById('userRoleDropdownMenu');
+  if (menu) menu.style.display = 'none';
+  const profileMenu = document.getElementById('headerMyProfileDropdown');
+  if (profileMenu) profileMenu.style.display = 'none';
 }
 
 function toggleUserRoleDropdown(e) {
@@ -6550,19 +6603,20 @@ function toggleUserRoleDropdown(e) {
   if (isHidden) {
     renderUserRoleDropdown();
     menu.style.display = 'block';
+    const profileMenu = document.getElementById('headerMyProfileDropdown');
+    if (profileMenu) profileMenu.style.display = 'none';
   } else {
     menu.style.display = 'none';
   }
 }
 
 function switchActiveUser(userId) {
-  const found = DEMO_USERS.find(u => u.id === userId);
+  const found = DEMO_USERS.find(u => u.id === userId || (userId === 'CO-5039' && u.id === 'usr_emp') || (userId === 'YOP-073' && u.id === 'usr_management'));
   if (found) {
     activeDemoUser = found;
     renderUserRolePill();
     renderUserRoleDropdown();
-    const menu = document.getElementById('userRoleDropdownMenu');
-    if (menu) menu.style.display = 'none';
+    closeUserRoleDropdown();
     showConfigToast(`Switched active user to ${found.name} (${found.role})`);
 
     const rLower = (found.role || '').toLowerCase();
@@ -6584,17 +6638,23 @@ function resetDemoData() {
   renderUserRolePill();
   renderUserRoleDropdown();
   setAppRole('admin');
-  const menu = document.getElementById('userRoleDropdownMenu');
-  if (menu) menu.style.display = 'none';
+  closeUserRoleDropdown();
   showConfigToast('Demo data reset to factory state.');
 }
 
 document.addEventListener('click', function(e) {
   const menu = document.getElementById('userRoleDropdownMenu');
   const btn = document.getElementById('headerUserRolePill');
+  const profileDd = document.getElementById('headerMyProfileDropdown');
+  const avatarBtn = document.getElementById('headerProfileAvatarBtn');
   if (menu && menu.style.display === 'block') {
     if (!menu.contains(e.target) && !btn?.contains(e.target)) {
       menu.style.display = 'none';
+    }
+  }
+  if (profileDd && profileDd.style.display === 'block') {
+    if (!profileDd.contains(e.target) && !avatarBtn?.contains(e.target)) {
+      profileDd.style.display = 'none';
     }
   }
 });
@@ -6602,6 +6662,8 @@ document.addEventListener('click', function(e) {
 // Initialize on load
 renderUserRolePill();
 
+window.renderUserRoleDropdown = renderUserRoleDropdown;
+window.closeUserRoleDropdown = closeUserRoleDropdown;
 window.toggleUserRoleDropdown = toggleUserRoleDropdown;
 window.switchActiveUser = switchActiveUser;
 window.resetDemoData = resetDemoData;
@@ -7420,7 +7482,14 @@ function toggleMyProfileDropdown(e) {
   const dd = document.getElementById('headerMyProfileDropdown');
   if (!dd) return;
   const isOpen = dd.style.display === 'block';
-  dd.style.display = isOpen ? 'none' : 'block';
+  if (!isOpen) {
+    renderUserRoleDropdown();
+    dd.style.display = 'block';
+    const userMenu = document.getElementById('userRoleDropdownMenu');
+    if (userMenu) userMenu.style.display = 'none';
+  } else {
+    dd.style.display = 'none';
+  }
 }
 
 function closeMyProfileDropdown() {
