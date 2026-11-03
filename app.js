@@ -8223,7 +8223,19 @@ function filterEmpTrainingsByStatus(status) {
   filterPillKeys.forEach(key => {
     const btn = document.getElementById(`empFilterBtn_${key}`);
     if (btn) {
-      btn.classList.toggle('active', key === status);
+      const isActive = key === status;
+      btn.classList.toggle('active', isActive);
+      if (isActive) {
+        btn.style.setProperty('background', '#ffffff', 'important');
+        btn.style.setProperty('color', '#2563eb', 'important');
+        btn.style.setProperty('font-weight', '700', 'important');
+        btn.style.setProperty('box-shadow', '0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04)', 'important');
+      } else {
+        btn.style.setProperty('background', 'transparent', 'important');
+        btn.style.setProperty('color', '#475569', 'important');
+        btn.style.setProperty('font-weight', '500', 'important');
+        btn.style.setProperty('box-shadow', 'none', 'important');
+      }
     }
   });
 
@@ -8626,6 +8638,16 @@ function openEmployeeTrainingDetail(trainingId) {
   if (detailScreen) detailScreen.style.display = 'block';
   if (breadcrumbEl) breadcrumbEl.textContent = title;
 
+  const backLabel = document.getElementById('empDetailBackLabel');
+  const backBtn = document.getElementById('empDetailBackBtn');
+  if (state.empDetailPreviousView === 'employee_profile') {
+    if (backLabel) backLabel.textContent = 'Employee Profile › Training History';
+    if (backBtn) backBtn.textContent = '← Back to Profile';
+  } else {
+    if (backLabel) backLabel.textContent = 'My Training';
+    if (backBtn) backBtn.textContent = '← Back to My Training';
+  }
+
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -8640,6 +8662,7 @@ function closeEmployeeTrainingDetail() {
     if (viewEmployeeDetail) {
       viewEmployeeDetail.style.display = 'block';
       viewEmployeeDetail.classList.add('active');
+      switchEmpDetailSubTab('training');
     }
   } else {
     if (myTrnSection) myTrnSection.style.display = 'block';

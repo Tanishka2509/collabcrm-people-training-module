@@ -11,7 +11,78 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
   
-  <link rel="stylesheet" href="style.css?t=1730570000" />
+  <link rel="stylesheet" href="style.css?v=20261103_final3" />
+
+  <style>
+    /* Bulletproof segmented filter tabs for Employee Training toolbar */
+    .emp-status-tab-group {
+      display: inline-flex !important;
+      align-items: center !important;
+      background: #f1f5f9 !important;
+      padding: 3px !important;
+      border-radius: 8px !important;
+      border: 1px solid #e2e8f0 !important;
+      gap: 2px !important;
+      height: 38px !important;
+      box-sizing: border-box !important;
+    }
+    .emp-status-tab,
+    .emp-filter-pill {
+      all: unset !important;
+      appearance: none !important;
+      -webkit-appearance: none !important;
+      background: transparent !important;
+      border: 0 !important;
+      outline: none !important;
+      border-radius: 6px !important;
+      padding: 0 13px !important;
+      height: 30px !important;
+      line-height: 30px !important;
+      font-size: 12.5px !important;
+      font-weight: 500 !important;
+      color: #475569 !important;
+      cursor: pointer !important;
+      transition: all 0.15s ease !important;
+      white-space: nowrap !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      box-sizing: border-box !important;
+      font-family: inherit !important;
+      user-select: none !important;
+    }
+    .emp-status-tab:hover,
+    .emp-filter-pill:hover {
+      color: #0f172a !important;
+      background: rgba(255, 255, 255, 0.6) !important;
+    }
+    .emp-status-tab.active,
+    .emp-filter-pill.active {
+      background: #ffffff !important;
+      color: #2563eb !important;
+      font-weight: 700 !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+    }
+    .emp-action-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #334155;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      outline: none;
+    }
+    .emp-action-icon:hover {
+      background: #eff6ff !important;
+      color: #2563eb !important;
+      border-color: #bfdbfe !important;
+    }
+  </style>
 </head>
 <body>
   <div class="app-layout">
@@ -1926,15 +1997,15 @@
               <!-- Breadcrumb Navigation -->
               <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
                 <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #64748b;">
-                  <span onclick="closeEmployeeTrainingDetail()" style="cursor: pointer; display: flex; align-items: center; gap: 4px; color: #4f46e5; font-weight: 500;" title="Back to My Training">
+                  <span onclick="closeEmployeeTrainingDetail()" style="cursor: pointer; display: flex; align-items: center; gap: 4px; color: #4f46e5; font-weight: 500;" title="Back">
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                    <span>My Training</span>
+                    <span id="empDetailBackLabel">My Training</span>
                   </span>
                   <span>›</span>
                   <span id="empDetailBreadcrumbTitle" style="font-weight: 600; color: #0f172a;">Training Details</span>
                 </div>
 
-                <button type="button" class="btn-table-action" onclick="closeEmployeeTrainingDetail()" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-size: 12.5px; border-radius: 6px; background: #ffffff; border: 1px solid #cbd5e1; color: #334155; cursor: pointer;">
+                <button type="button" class="btn-table-action" onclick="closeEmployeeTrainingDetail()" id="empDetailBackBtn" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-size: 12.5px; border-radius: 6px; background: #ffffff; border: 1px solid #cbd5e1; color: #334155; cursor: pointer;">
                   ← Back to My Training
                 </button>
               </div>
