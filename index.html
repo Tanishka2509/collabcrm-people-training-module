@@ -1112,7 +1112,7 @@
                 <!-- Header Bar matching Screenshot 3 -->
                 <div class="emp-table-header" style="display: flex; align-items: center; justify-content: space-between; padding: 16px 20px 12px 20px;">
                   <div class="emp-title-area" style="display: flex; align-items: center; gap: 10px;">
-                    <h2 class="emp-title" style="font-size: 18px; font-weight: 700; color: #0f172a; margin: 0;">Training Programes</h2>
+                    <h2 class="emp-title" style="font-size: 18px; font-weight: 700; color: #0f172a; margin: 0;">Training Programmes</h2>
                     <span class="emp-count-badge" id="programsCountBadge" style="background: #eff6ff; color: #2563eb; font-size: 12px; font-weight: 600; padding: 2px 10px; border-radius: 12px; border: 1px solid #bfdbfe;">12 Programmes</span>
                   </div>
                   <div class="emp-actions-area" style="display: flex; align-items: center; gap: 8px;">
@@ -1140,26 +1140,77 @@
                   </div>
                 </div>
 
-                <!-- Full-Width Search & Filter Bar matching Screenshot 3 -->
-                <div style="background: #ffffff; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
-                  <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
-                    <button type="button" class="emp-filter-calc-btn" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 5px 8px; font-size: 13px; font-weight: 700; color: #4f46e5; display: inline-flex; align-items: center; gap: 4px; cursor: pointer;">
-                      <span>Σ</span>
-                      <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                    </button>
-                    <div style="display: flex; align-items: center; gap: 8px; flex: 1;">
-                      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#94a3b8" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                      <input type="text" id="searchProgramsInput" oninput="renderProgramsList()" placeholder="Filter Results..." style="border: none; outline: none; font-size: 13px; width: 100%; color: #1e293b;" />
+                <!-- Full-Width Search & Filter Bar matching Screenshot 4 (Enlarged Section with Σ Filter & Search Popover) -->
+                <div style="background: #ffffff; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
+                  <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 300px;">
+                    <!-- Σ Calculation / Filter Button with Options Dropdown -->
+                    <div style="position: relative;">
+                      <button type="button" class="emp-filter-calc-btn" onclick="toggleProgFilterCalcDropdown(event)" style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; height: 42px; padding: 0 12px; font-size: 14px; font-weight: 700; color: #4f46e5; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;" title="Filter and Search Options">
+                        <span>Σ</span>
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                      </button>
+
+                      <!-- Filter & Search Popover Menu -->
+                      <div id="progFilterCalcDropdown" style="display: none; position: absolute; top: calc(100% + 6px); left: 0; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.14), 0 4px 10px -2px rgba(15, 23, 42, 0.06); width: 270px; padding: 14px; z-index: 1500;">
+                        <div style="font-size: 11px; font-weight: 700; color: #64748b; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 10px;">Filter &amp; Search Options</div>
+
+                        <div style="margin-bottom: 12px;">
+                          <label for="progFilterDeptSelect" style="display: block; font-size: 11.5px; font-weight: 600; color: #334155; margin-bottom: 5px;">Filter by Department</label>
+                          <select id="progFilterDeptSelect" onchange="renderProgramsList()" style="width: 100%; height: 36px; padding: 0 10px; font-size: 12.5px; border: 1px solid #cbd5e1; border-radius: 6px; background: #ffffff; color: #1e293b; outline: none;">
+                            <option value="all">All Departments</option>
+                            <option value="Recruitment &amp; HR">Recruitment &amp; HR</option>
+                            <option value="Engineering">Engineering</option>
+                            <option value="Support &amp; Operations">Support &amp; Operations</option>
+                            <option value="Technical Architecture">Technical Architecture</option>
+                            <option value="Product &amp; Platform">Product &amp; Platform</option>
+                            <option value="Admin">Admin</option>
+                            <option value="Sales &amp; BD">Sales &amp; BD</option>
+                          </select>
+                        </div>
+
+                        <div style="margin-bottom: 12px;">
+                          <div style="font-size: 11.5px; font-weight: 600; color: #334155; margin-bottom: 6px;">Programmes Summary</div>
+                          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px 10px; display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #475569;">
+                            <div style="display: flex; justify-content: space-between;">
+                              <span>Total Programmes:</span>
+                              <strong style="color: #0f172a;" id="progCalcTotal">12</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                              <span>Published:</span>
+                              <strong style="color: #166534;" id="progCalcPublished">8</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                              <span>Draft:</span>
+                              <strong style="color: #b45309;" id="progCalcDraft">3</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                              <span>Archived:</span>
+                              <strong style="color: #64748b;" id="progCalcArchived">1</strong>
+                            </div>
+                          </div>
+                        </div>
+
+                        <button type="button" onclick="resetProgramsFilter(); closeProgFilterCalcDropdown();" style="width: 100%; height: 34px; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 12px; font-weight: 600; color: #334155; cursor: pointer;">
+                          Reset Filters
+                        </button>
+                      </div>
+                    </div>
+
+                    <!-- Enlarged Search Bar Input Container -->
+                    <div style="display: flex; align-items: center; gap: 10px; flex: 1; height: 42px; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 0 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#94a3b8" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                      <input type="text" id="searchProgramsInput" oninput="renderProgramsList()" placeholder="Filter Results..." style="border: none; outline: none; font-size: 13.5px; width: 100%; color: #0f172a; background: transparent;" />
                     </div>
                   </div>
+
                   <div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="display: flex; background: #f1f5f9; padding: 2px; border-radius: 6px;">
-                      <button type="button" class="btn-table-action" style="background: #ffffff; font-size: 12px; font-weight: 600; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer;" id="filterProgAll" onclick="filterProgramsTab('all')">All</button>
-                      <button type="button" class="btn-table-action" style="font-size: 12px; border: none; background: transparent; padding: 5px 12px; cursor: pointer;" id="filterProgPublished" onclick="filterProgramsTab('published')">Published</button>
-                      <button type="button" class="btn-table-action" style="font-size: 12px; border: none; background: transparent; padding: 5px 12px; cursor: pointer;" id="filterProgDraft" onclick="filterProgramsTab('draft')">Draft</button>
-                      <button type="button" class="btn-table-action" style="font-size: 12px; border: none; background: transparent; padding: 5px 12px; cursor: pointer;" id="filterProgArchived" onclick="filterProgramsTab('archived')">Archived</button>
+                    <div style="display: flex; background: #f1f5f9; padding: 3px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                      <button type="button" class="btn-table-action" style="background: #ffffff; font-size: 12px; font-weight: 600; border: none; padding: 6px 14px; border-radius: 6px; cursor: pointer;" id="filterProgAll" onclick="filterProgramsTab('all')">All</button>
+                      <button type="button" class="btn-table-action" style="font-size: 12px; border: none; background: transparent; padding: 6px 14px; cursor: pointer;" id="filterProgPublished" onclick="filterProgramsTab('published')">Published</button>
+                      <button type="button" class="btn-table-action" style="font-size: 12px; border: none; background: transparent; padding: 6px 14px; cursor: pointer;" id="filterProgDraft" onclick="filterProgramsTab('draft')">Draft</button>
+                      <button type="button" class="btn-table-action" style="font-size: 12px; border: none; background: transparent; padding: 6px 14px; cursor: pointer;" id="filterProgArchived" onclick="filterProgramsTab('archived')">Archived</button>
                     </div>
-                    <button type="button" onclick="renderProgramsList()" style="border: 1px solid #cbd5e1; background: #ffffff; color: #4f46e5; font-weight: 600; padding: 6px 14px; border-radius: 6px; display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; cursor: pointer;">
+                    <button type="button" onclick="renderProgramsList()" style="height: 40px; border: 1px solid #cbd5e1; background: #ffffff; color: #4f46e5; font-weight: 600; padding: 0 16px; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
                       <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
                       <span>Filter</span>
                     </button>
@@ -1300,12 +1351,9 @@
 
                   <!-- Card 2: Per-Programme Configuration & Limits -->
                   <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 18px;">
-                    <div style="border-bottom: 1px solid #f1f5f9; padding-bottom: 10px; display: flex; align-items: center; justify-content: space-between;">
-                      <div>
-                        <h3 style="font-size: 14.5px; font-weight: 700; color: #0f172a; margin: 0;">2. Per-Programme Configuration &amp; Limits</h3>
-                        <p style="font-size: 12px; color: #64748b; margin: 2px 0 0 0;">Customize enrollment capacity, due window, assessment attempt limits, certificate expiry, and reminder cadence for this specific programme.</p>
-                      </div>
-                      <span style="font-size: 11px; font-weight: 600; color: #4f46e5; background: #eef2ff; border: 1px solid #c7d2fe; padding: 3px 10px; border-radius: 12px;">Programme-Level Rules</span>
+                    <div style="border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
+                      <h3 style="font-size: 14.5px; font-weight: 700; color: #0f172a; margin: 0;">2. Per-Programme Configuration &amp; Limits</h3>
+                      <p style="font-size: 12px; color: #64748b; margin: 2px 0 0 0;">Customize enrollment capacity, due window, assessment attempt limits, certificate expiry, and reminder cadence for this specific programme.</p>
                     </div>
 
                     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;">

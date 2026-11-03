@@ -3070,12 +3070,12 @@ body {
 .resource-row-item {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  padding: 8px 10px;
-  margin-bottom: 8px;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
 }
 
 .resource-row-item input[type="text"],
@@ -3699,32 +3699,35 @@ body {
 }
 
 .tcfg-duration-wrapper {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: auto;
+  max-width: 340px;
 }
 
 .tcfg-duration-box {
   display: flex;
-  align-items: stretch;
-  gap: 0;
+  align-items: center;
+  justify-content: space-between;
   background: #ffffff;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #cbd5e1;
   border-radius: 8px;
-  padding: 0;
-  height: 40px;
-  overflow: hidden;
+  padding: 0 14px;
+  height: 42px;
+  width: 150px;
+  min-width: 130px;
   transition: all 0.15s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
 .tcfg-duration-box:hover {
-  border-color: #cbd5e1;
+  border-color: #94a3b8;
 }
 
 .tcfg-duration-box:focus-within {
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
 }
 
 .tcfg-input-duration {
@@ -3732,27 +3735,28 @@ body {
   width: 100%;
   border: none !important;
   outline: none !important;
-  background: #f8fafc !important;
+  background: transparent !important;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 700;
   color: #0f172a;
-  text-align: left;
-  padding: 0 14px !important;
-  font-family: sans-serif !important;
+  text-align: center;
+  padding: 0 4px !important;
+  font-family: inherit !important;
 }
 
 .tcfg-duration-unit {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  padding: 0 16px;
-  background: #f1f5f9;
-  border-left: 1px solid #e2e8f0;
-  font-size: 12.5px;
-  font-weight: 600;
-  color: #475569;
-  min-width: 72px;
+  justify-content: flex-end;
+  padding: 0;
+  background: transparent;
+  border-left: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: #64748b;
+  min-width: auto;
   user-select: none;
+  pointer-events: none;
 }
 
 /* Resource Types Badge Selector */
@@ -5209,21 +5213,20 @@ body {
 }
 
 .user-role-pill-btn {
-  background: #ffffff;
-  border: 1.5px solid #1e293b;
+  background: transparent;
+  border: none;
   border-radius: 9px;
-  padding: 4px 10px;
+  padding: 4px 8px;
   display: flex;
   align-items: center;
   gap: 10px;
   cursor: pointer;
   transition: all 0.15s ease;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: none;
 }
 
 .user-role-pill-btn:hover {
-  background: #f8fafc;
-  border-color: #0f172a;
+  background: #f1f5f9;
 }
 
 .user-role-pill-avatar {

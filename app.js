@@ -1200,16 +1200,53 @@ function filterProgramsTab(status) {
 
 window.filterProgramsTab = filterProgramsTab;
 
+function toggleProgFilterCalcDropdown(e) {
+  if (e) e.stopPropagation();
+  const dd = document.getElementById('progFilterCalcDropdown');
+  if (!dd) return;
+  const isShown = dd.style.display === 'block';
+  dd.style.display = isShown ? 'none' : 'block';
+}
+
+function closeProgFilterCalcDropdown() {
+  const dd = document.getElementById('progFilterCalcDropdown');
+  if (dd) dd.style.display = 'none';
+}
+
+function resetProgramsFilter() {
+  const searchInput = document.getElementById('searchProgramsInput');
+  if (searchInput) searchInput.value = '';
+  const deptSelect = document.getElementById('progFilterDeptSelect');
+  if (deptSelect) deptSelect.value = 'all';
+  filterProgramsTab('all');
+}
+
+window.toggleProgFilterCalcDropdown = toggleProgFilterCalcDropdown;
+window.closeProgFilterCalcDropdown = closeProgFilterCalcDropdown;
+window.resetProgramsFilter = resetProgramsFilter;
+
 function renderProgramsList() {
   const tbody = document.getElementById('programsTableBody');
   const grid = document.getElementById('programCardsGrid');
   const countBadge = document.getElementById('programsCountBadge');
   const query = (document.getElementById('searchProgramsInput')?.value || '').toLowerCase();
+  const deptFilter = document.getElementById('progFilterDeptSelect')?.value || 'all';
+
+  // Update calculation counts in the Σ dropdown
+  const total = state.programs.length;
+  const published = state.programs.filter(p => p.status === 'published').length;
+  const draft = state.programs.filter(p => p.status === 'draft').length;
+  const archived = state.programs.filter(p => p.status === 'archived').length;
+  if (document.getElementById('progCalcTotal')) document.getElementById('progCalcTotal').textContent = total;
+  if (document.getElementById('progCalcPublished')) document.getElementById('progCalcPublished').textContent = published;
+  if (document.getElementById('progCalcDraft')) document.getElementById('progCalcDraft').textContent = draft;
+  if (document.getElementById('progCalcArchived')) document.getElementById('progCalcArchived').textContent = archived;
 
   let filtered = state.programs.filter(p => {
     const matchesStatus = (state.programFilterStatus === 'all') || (p.status === state.programFilterStatus);
+    const matchesDept = (deptFilter === 'all') || (p.dept === deptFilter);
     const matchesQuery = p.title.toLowerCase().includes(query) || p.dept.toLowerCase().includes(query) || (p.learningObjectives || '').toLowerCase().includes(query);
-    return matchesStatus && matchesQuery;
+    return matchesStatus && matchesDept && matchesQuery;
   });
 
   if (countBadge) countBadge.textContent = `${filtered.length} Programmes`;
@@ -1433,20 +1470,20 @@ function addResourceRow(existing = null) {
   div.className = 'resource-row-item';
   div.id = rowId;
   div.innerHTML = `
-    <select class="res-type-select" style="width: 130px;">
+    <select class="res-type-select" style="width: 175px; min-width: 175px; height: 38px; padding: 0 10px; font-size: 13px; border: 1px solid #cbd5e1; border-radius: 6px; background: #ffffff; color: #1e293b; outline: none; flex-shrink: 0;">
       <option value="video" ${typeVal === 'video' ? 'selected' : ''}>🎬 Video / YouTube</option>
       <option value="external_course" ${typeVal === 'external_course' ? 'selected' : ''}>🎓 External Course</option>
       <option value="website" ${typeVal === 'website' ? 'selected' : ''}>🌐 Website / Lab</option>
       <option value="pdf" ${typeVal === 'pdf' ? 'selected' : ''}>📄 PDF Document</option>
       <option value="document" ${typeVal === 'document' ? 'selected' : ''}>📝 Word / Doc</option>
     </select>
-    <input type="text" class="res-title-input" placeholder="Resource Title (e.g. System Setup Video)" value="${escapeHtml(titleVal)}" style="flex: 2;" />
-    <input type="text" class="res-url-input" placeholder="URL or Document Link" value="${escapeHtml(urlVal)}" style="flex: 2;" />
-    <label style="display: flex; align-items: center; gap: 4px; font-size: 11.5px; cursor: pointer; white-space: nowrap;">
-      <input type="checkbox" class="res-mandatory-check" ${mandatoryVal ? 'checked' : ''} />
+    <input type="text" class="res-title-input" placeholder="Resource Title (e.g. Module 2: Standard Operations Guide)" value="${escapeHtml(titleVal)}" style="flex: 2; min-width: 160px; height: 38px; padding: 0 12px; font-size: 13px; border: 1px solid #cbd5e1; border-radius: 6px; outline: none; box-sizing: border-box;" />
+    <input type="text" class="res-url-input" placeholder="URL or Document Link" value="${escapeHtml(urlVal)}" style="flex: 2; min-width: 160px; height: 38px; padding: 0 12px; font-size: 13px; border: 1px solid #cbd5e1; border-radius: 6px; outline: none; box-sizing: border-box;" />
+    <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #475569; cursor: pointer; white-space: nowrap; padding: 0 4px; flex-shrink: 0;">
+      <input type="checkbox" class="res-mandatory-check" ${mandatoryVal ? 'checked' : ''} style="width: 15px; height: 15px; cursor: pointer;" />
       <span>Mandatory</span>
     </label>
-    <button type="button" class="resource-del-btn" onclick="document.getElementById('${rowId}').remove()" title="Remove Resource">✕</button>
+    <button type="button" class="resource-del-btn" onclick="document.getElementById('${rowId}').remove()" title="Remove Resource" style="width: 34px; height: 34px; border-radius: 6px; border: 1px solid #fecaca; background: #fee2e2; color: #b91c1c; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">✕</button>
   `;
   container.appendChild(div);
 }
@@ -6534,16 +6571,10 @@ function renderUserRoleDropdown() {
     <button type="button" class="profile-menu-link" onclick="closeUserRoleDropdown(); openMyProfile('general');">
       <span>My Profile</span>
     </button>
-    <button type="button" class="profile-menu-link" onclick="closeUserRoleDropdown(); showConfigToast('Opening My Work Log...');">
-      <span>My Work Log</span>
-    </button>
-    <button type="button" class="profile-menu-link" onclick="closeUserRoleDropdown(); showConfigToast('Opening Preferences...');">
-      <span>Preferences</span>
-    </button>
 
     <div class="profile-menu-divider"></div>
 
-    <div class="profile-menu-section-label">Switch User Role</div>
+    <div class="profile-menu-section-label">SWITCH USER ROLE</div>
 
     <button type="button" class="profile-menu-link role-switch-item ${isMgmt ? 'active-role' : ''}" onclick="switchActiveUser('usr_management');">
       <div class="role-switch-left">
@@ -6569,15 +6600,6 @@ function renderUserRoleDropdown() {
 
     <div class="profile-menu-divider"></div>
 
-    <button type="button" class="profile-menu-link" onclick="closeUserRoleDropdown(); showConfigToast('Opening Change Password...');">
-      <span>Change Password</span>
-    </button>
-    <button type="button" class="profile-menu-link" onclick="closeUserRoleDropdown(); showConfigToast('Opening Support Tickets...');">
-      <span>Support Tickets</span>
-    </button>
-    <button type="button" class="profile-menu-link" onclick="closeUserRoleDropdown(); resetDemoData();" style="color: #ef4444;">
-      <span>Reset Demo Data</span>
-    </button>
     <button type="button" class="profile-menu-link" onclick="closeUserRoleDropdown(); showConfigToast('Session signed out.');">
       <span>Logout</span>
     </button>
@@ -6647,6 +6669,9 @@ document.addEventListener('click', function(e) {
   const btn = document.getElementById('headerUserRolePill');
   const profileDd = document.getElementById('headerMyProfileDropdown');
   const avatarBtn = document.getElementById('headerProfileAvatarBtn');
+  const calcDd = document.getElementById('progFilterCalcDropdown');
+  const calcBtn = document.querySelector('.emp-filter-calc-btn');
+
   if (menu && menu.style.display === 'block') {
     if (!menu.contains(e.target) && !btn?.contains(e.target)) {
       menu.style.display = 'none';
@@ -6655,6 +6680,11 @@ document.addEventListener('click', function(e) {
   if (profileDd && profileDd.style.display === 'block') {
     if (!profileDd.contains(e.target) && !avatarBtn?.contains(e.target)) {
       profileDd.style.display = 'none';
+    }
+  }
+  if (calcDd && calcDd.style.display === 'block') {
+    if (!calcDd.contains(e.target) && !calcBtn?.contains(e.target)) {
+      calcDd.style.display = 'none';
     }
   }
 });
