@@ -1529,6 +1529,14 @@ function previewProgram(progId) {
           <td style="padding: 10px 14px; color: #475569; font-size: 12.5px;">${escapeHtml(a.dueDate)}</td>
           <td style="padding: 10px 14px; font-size: 12.5px; font-weight: 600; color: #2563eb;">${a.progress}%</td>
           <td style="padding: 10px 14px;">${statusLabel}</td>
+          <td style="padding: 10px 14px; text-align: center;">
+            <button type="button" class="emp-action-icon" onclick="openProgressDetails('${a.id}')" title="View Progress &amp; Details" aria-label="View Details" style="display: inline-flex; align-items: center; justify-content: center;">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </td>
         </tr>
       `;
     });
@@ -1544,6 +1552,7 @@ function previewProgram(progId) {
               <th style="padding: 10px 14px;">Due Date</th>
               <th style="padding: 10px 14px;">Progress</th>
               <th style="padding: 10px 14px;">Status</th>
+              <th style="padding: 10px 14px; text-align: center;">Action</th>
             </tr>
           </thead>
           <tbody>${rows}</tbody>
@@ -1805,9 +1814,9 @@ function closeAssignTrainingModal() {
 window.closeAssignTrainingModal = closeAssignTrainingModal;
 
 function toggleAssignMode(mode) {
-  document.getElementById('assignGroupIndividual').style.display = (mode === 'individual') ? 'block' : 'none';
-  document.getElementById('assignGroupMultiple').style.display = (mode === 'multiple') ? 'block' : 'none';
-  document.getElementById('assignGroupDept').style.display = (mode === 'department') ? 'block' : 'none';
+  document.getElementById('assignGroupIndividual').style.display = (mode === 'individual') ? 'flex' : 'none';
+  document.getElementById('assignGroupMultiple').style.display = (mode === 'multiple') ? 'flex' : 'none';
+  document.getElementById('assignGroupDept').style.display = (mode === 'department') ? 'flex' : 'none';
   checkAssignDuplicates();
 }
 
@@ -6984,15 +6993,12 @@ function populateEmployeeDetail(empCode) {
 
   // Contextual Header Buttons for Employee vs Management
   const btnBack = document.getElementById('btnEmpDetailBackOrMyTraining');
-  const btnEditEmp = document.getElementById('btnEmpDetailEditEmployee');
   const btnTrnAction = document.getElementById('btnEmpDetailTrainingAction');
   if (state.currentRole === 'employee') {
     if (btnBack) btnBack.textContent = '← Go to My Training';
-    if (btnEditEmp) btnEditEmp.style.display = 'none';
     if (btnTrnAction) btnTrnAction.textContent = 'Go to My Active Trainings →';
   } else {
     if (btnBack) btnBack.textContent = '← Back to Employees';
-    if (btnEditEmp) btnEditEmp.style.display = 'inline-block';
     if (btnTrnAction) btnTrnAction.textContent = '+ Assign New Training';
   }
 
@@ -7083,10 +7089,10 @@ function renderEmployeeTrainingHistory(emp) {
         <td style="padding: 12px 14px; text-align: center; color: #64748b; font-weight: 500;">${idx + 1}</td>
         <td style="padding: 12px 14px;">
           <div style="font-weight: 600; color: #0f172a; font-size: 13px;">${escapeHtml(title)}</div>
-          <div style="font-size: 11px; color: #64748b; margin-top: 2px;">Assigned by: ${escapeHtml(t.assignedBy || 'Isha Patel (Head of People)')}</div>
+          <div style="font-size: 11px; color: #64748b; margin-top: 2px;">${escapeHtml(category)}</div>
         </td>
         <td style="padding: 12px 14px;">
-          <span style="background: #f1f5f9; color: #334155; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px;">${escapeHtml(category)}</span>
+          <span style="background: #f1f5f9; color: #334155; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px;">${escapeHtml(t.assignedBy || 'Isha Patel (Head of People)')}</span>
         </td>
         <td style="padding: 12px 14px; color: #475569;">${escapeHtml(assignedDate)}</td>
         <td style="padding: 12px 14px; color: #475569;">${escapeHtml(completionDate)}</td>
