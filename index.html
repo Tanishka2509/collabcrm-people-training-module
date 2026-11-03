@@ -1738,7 +1738,7 @@
                     <thead>
                       <tr>
                         <th>Employee Name</th>
-                        <th>Training Program</th>
+                        <th>Programme Name</th>
                         <th>Submission Date</th>
                         <th>Assessment Score</th>
                         <th>Evidence Attached</th>
@@ -1748,6 +1748,66 @@
                     </thead>
                     <tbody id="reviewsTableBody"></tbody>
                   </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- ======================================================== -->
+            <!-- SECTION 5B: TRAINING SUBMISSION REVIEW DETAIL SCREEN    -->
+            <!-- (In-Screen view replacing modal pop-up per user spec)    -->
+            <!-- ======================================================== -->
+            <div class="training-tab-view" id="sectionReviewDetailScreen" style="display: none;">
+              <!-- Breadcrumb Header -->
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #64748b;">
+                  <span onclick="closeReviewDetailScreen()" style="cursor: pointer; display: flex; align-items: center; gap: 4px; color: #4f46e5; font-weight: 500;" title="Back to Review Queue">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    <span>Review Queue</span>
+                  </span>
+                  <span>›</span>
+                  <span id="reviewDetailBreadcrumbName" style="font-weight: 600; color: #0f172a;">Submission Evaluation</span>
+                </div>
+
+                <button type="button" class="btn-table-action" onclick="closeReviewDetailScreen()" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-size: 12.5px; border-radius: 6px; background: #ffffff; border: 1px solid #cbd5e1; color: #334155; cursor: pointer;">
+                  ← Back to Review Queue
+                </button>
+              </div>
+
+              <!-- Main Card Container -->
+              <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); overflow: hidden;">
+                <!-- Header -->
+                <div style="padding: 18px 24px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+                  <div>
+                    <h3 style="font-size: 16px; font-weight: 700; color: #0f172a; margin: 0;">Review Employee Training Submission</h3>
+                    <p style="font-size: 12px; color: #64748b; margin: 3px 0 0 0;">Inspect course deliverables, assessment verification, and issue evaluation decision</p>
+                  </div>
+                  <button type="button" onclick="closeReviewDetailScreen()" style="background: none; border: none; font-size: 20px; color: #64748b; cursor: pointer;" title="Close Screen">&times;</button>
+                </div>
+
+                <!-- Content Area -->
+                <div style="padding: 24px;">
+                  <input type="hidden" id="screenReviewAssignmentId" value="" />
+                  <div id="screenReviewSubmissionDetailsContainer"></div>
+
+                  <!-- Reviewer Feedback -->
+                  <div class="form-group" style="margin-top: 18px;">
+                    <label class="form-label" style="display: flex; justify-content: space-between; font-weight: 600; color: #0f172a; font-size: 13px;">
+                      <span>Reviewer Feedback &amp; Remarks <span style="color: #ef4444;">*</span></span>
+                      <span style="font-size: 11px; color: #64748b; font-weight: normal;">(Mandatory for Request Changes &amp; Rejection)</span>
+                    </label>
+                    <textarea class="form-textarea" id="screenReviewerFeedbackInput" rows="3" placeholder="Provide constructive remarks, commendations, or specific revision requirements for the learner..." style="width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; outline: none; margin-top: 6px;"></textarea>
+                    <div id="screenFeedbackValidationMsg" style="color: #ef4444; font-size: 11.5px; display: none; margin-top: 4px;">Feedback is strictly required when requesting changes or rejecting a submission.</div>
+                  </div>
+                </div>
+
+                <!-- Footer Action Buttons -->
+                <div style="padding: 16px 24px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                  <button type="button" class="btn-table-action" onclick="closeReviewDetailScreen()">Close</button>
+                  <div style="display: flex; gap: 10px;">
+                    <button type="button" class="btn-table-action danger" onclick="handleScreenReviewAction('reject')" style="background: #fef2f2; border-color: #fca5a5; color: #b91c1c; font-weight: 600; padding: 8px 18px; border-radius: 6px; cursor: pointer;">✕ Reject</button>
+                    <button type="button" class="btn-table-action" style="background: #fffbeb; color: #b45309; border-color: #fde68a; font-weight: 600; padding: 8px 18px; border-radius: 6px; cursor: pointer;" onclick="handleScreenReviewAction('request_changes')">✎ Request Changes</button>
+                    <button type="button" class="btn-primary-action" onclick="handleScreenReviewAction('approve')" style="background: #16a34a; border-color: #15803d; color: #ffffff; font-weight: 600; padding: 8px 22px; border-radius: 6px; cursor: pointer;">✓ Approve Submission</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1777,7 +1837,7 @@
                       <tr>
                         <th>Certificate #</th>
                         <th>Employee Name</th>
-                        <th>Training Program</th>
+                        <th>Programme Name</th>
                         <th>Approval Date</th>
                         <th>Status</th>
                         <th>Expiry Date</th>
@@ -4066,7 +4126,7 @@
               <img src="assets/collabcrm-logo.png" alt="CollabCRM" style="width: 26px; height: 26px; object-fit: contain;" />
               <span style="font-family: 'Inter', sans-serif; font-size: 17px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: #1e293b;">COLLABCRM</span>
             </div>
-            <h2 class="cert-main-title" style="font-family: Georgia, 'Times New Roman', serif; font-size: 30px; font-weight: 700; color: #1e293b; margin: 0; letter-spacing: 0.12em; text-transform: uppercase;">CERTIFICATE OF EXCELLENCE</h2>
+            <h2 class="cert-main-title" style="font-family: Georgia, 'Times New Roman', serif; font-size: 20px; font-weight: 700; color: #1e293b; margin: 0; letter-spacing: 0.12em; text-transform: uppercase;">CERTIFICATE OF EXCELLENCE</h2>
             <div style="font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; color: #64748b; margin: 6px 0 22px 0;">OF APPRECIATION</div>
             <p style="font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #64748b; margin: 0 0 16px 0;">THIS CERTIFICATE IS PROUDLY PRESENTED TO</p>
             <h1 class="cert-recipient-name" id="certPreviewRecipientName" style="font-family: Georgia, 'Times New Roman', serif; font-size: 34px; font-weight: 700; color: #1e293b; text-decoration: none; margin: 0 0 6px 0;">Employee Name</h1>
@@ -4093,11 +4153,17 @@
           </div>
         </div>
       </div>
-      <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
-        <button class="btn-secondary-action" onclick="closeCertPreviewModal()">Close</button>
-        <div style="display: flex; gap: 8px;">
-          <button class="btn-table-action" onclick="printCertificate()">🖨️ Print / Save PDF</button>
-          <button class="btn-primary-action" id="btnIssueCertFromModal" onclick="issueCertificateFromModal()" style="display: none;">📜 Issue Certificate to Employee</button>
+      <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 20px;">
+        <span style="font-size: 12px; color: #64748b;">Issued credentials remain permanently accessible in your CollabCRM portal history.</span>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <button type="button" class="btn-table-action" onclick="printCertificate()" title="Print Certificate" style="width: 38px; height: 38px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; padding: 0; cursor: pointer; border: 1px solid #cbd5e1; background: #ffffff;">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          </button>
+          <button type="button" class="btn-primary-action" onclick="printCertificate()" title="Download Certificate (PDF)" style="width: 38px; height: 38px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; padding: 0; background: #2563eb; color: #ffffff; cursor: pointer;">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          </button>
+          <button class="btn-table-action" id="btnReissueCertFromModal" onclick="openReissueModalFromPreview()" style="display: none; height: 38px; padding: 0 14px; font-weight: 600; cursor: pointer; border-radius: 6px;">🔄 Reissue Certificate</button>
+          <button class="btn-primary-action" id="btnIssueCertFromModal" onclick="issueCertificateFromModal()" style="display: none; height: 38px; padding: 0 14px; font-weight: 600; background: #16a34a; border-radius: 6px; cursor: pointer;">📜 Issue Certificate</button>
         </div>
       </div>
     </div>
@@ -4290,7 +4356,7 @@
               <img id="certPrevLogo" src="assets/collabcrm-logo.png" alt="CollabCRM" style="width: 26px; height: 26px; object-fit: contain;" />
               <span id="certPrevOrg" style="font-family: 'Inter', sans-serif; font-size: 17px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: #1e293b;">COLLABCRM</span>
             </div>
-            <h2 class="cert-main-title" style="font-family: Georgia, 'Times New Roman', serif; font-size: 30px; font-weight: 700; color: #1e293b; margin: 0; letter-spacing: 0.12em; text-transform: uppercase;">CERTIFICATE OF EXCELLENCE</h2>
+            <h2 class="cert-main-title" style="font-family: Georgia, 'Times New Roman', serif; font-size: 20px; font-weight: 700; color: #1e293b; margin: 0; letter-spacing: 0.12em; text-transform: uppercase;">CERTIFICATE OF EXCELLENCE</h2>
             <div style="font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; color: #64748b; margin: 6px 0 22px 0;">OF APPRECIATION</div>
             <p style="font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #64748b; margin: 0 0 16px 0;">THIS CERTIFICATE IS PROUDLY PRESENTED TO</p>
             <h1 class="cert-recipient-name" style="font-family: Georgia, 'Times New Roman', serif; font-size: 34px; font-weight: 700; color: #1e293b; text-decoration: none; margin: 0 0 6px 0;">Jane Doe</h1>
@@ -4508,7 +4574,7 @@
               <img src="assets/collabcrm-logo.png" alt="CollabCRM" style="width: 26px; height: 26px; object-fit: contain;" />
               <span style="font-family: 'Inter', sans-serif; font-size: 17px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: #1e293b;">COLLABCRM</span>
             </div>
-            <h2 style="font-family: Georgia, 'Times New Roman', serif; font-size: 30px; font-weight: 700; color: #1e293b; margin: 0; letter-spacing: 0.12em; text-transform: uppercase;">CERTIFICATE OF EXCELLENCE</h2>
+            <h2 style="font-family: Georgia, 'Times New Roman', serif; font-size: 20px; font-weight: 700; color: #1e293b; margin: 0; letter-spacing: 0.12em; text-transform: uppercase;">CERTIFICATE OF EXCELLENCE</h2>
             <div style="font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; color: #64748b; margin: 6px 0 22px 0;">OF APPRECIATION</div>
             <p style="font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #64748b; margin: 0 0 16px 0;">THIS CERTIFICATE IS PROUDLY PRESENTED TO</p>
             <div id="empCertRecipientName" style="font-family: Georgia, 'Times New Roman', serif; font-size: 34px; font-weight: 700; color: #1e293b; margin: 0 0 6px 0;">Aryan Bhardwaj</div>
@@ -4535,10 +4601,13 @@
       </div>
       <div class="modal-footer" style="padding: 12px 20px; background: #ffffff; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
         <span style="font-size: 12px; color: #64748b;">Issued credentials remain permanently accessible in your CollabCRM portal history.</span>
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <button type="button" class="btn-table-action" onclick="closeEmployeeCertViewer()">Close</button>
-          <button type="button" class="btn-table-action" onclick="printEmployeeCertificate()">🖨️ Print</button>
-          <button type="button" class="btn-primary-action" onclick="downloadEmployeeCertificate()">⬇ Download Certificate (PDF)</button>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button type="button" class="btn-table-action" onclick="printEmployeeCertificate()" title="Print Certificate" style="width: 38px; height: 38px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; padding: 0; cursor: pointer; border: 1px solid #cbd5e1; background: #ffffff;">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          </button>
+          <button type="button" class="btn-primary-action" onclick="downloadEmployeeCertificate()" title="Download Certificate (PDF)" style="width: 38px; height: 38px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; padding: 0; background: #2563eb; color: #ffffff; cursor: pointer;">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          </button>
         </div>
       </div>
     </div>

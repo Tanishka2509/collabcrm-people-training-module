@@ -2706,9 +2706,9 @@ function renderReviewQueue() {
           ${a.submissionEvidence ? `<a href="${escapeHtml(a.submissionEvidence)}" target="_blank" style="color: #2563eb; text-decoration: underline; font-size: 11.5px;">📎 View File</a>` : 'No file'}
         </td>
         <td>${statusPill}</td>
-        <td>
-          <button class="btn-table-action primary" onclick="openReviewModal('${a.id}')">
-            ${a.submissionStatus === 'submitted' ? 'Review & Decide' : 'Re-evaluate'}
+        <td style="text-align: center; white-space: nowrap;">
+          <button type="button" class="emp-action-icon" onclick="openReviewDetailScreen('${a.id}')" title="Review & Evaluate Submission" aria-label="Review Submission" style="width: 32px; height: 32px; border-radius: 6px; border: 1px solid #cbd5e1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#eff6ff'; this.style.color='#2563eb'; this.style.borderColor='#bfdbfe';" onmouseout="this.style.background='#ffffff'; this.style.color='#334155'; this.style.borderColor='#cbd5e1';">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
           </button>
         </td>
       </tr>
@@ -2720,7 +2720,7 @@ function renderReviewQueue() {
 
 window.renderReviewQueue = renderReviewQueue;
 
-function openReviewModal(asnId) {
+function openReviewDetailScreen(asnId) {
   const a = state.assignments.find(asn => asn.id === asnId);
   if (!a) return;
   const emp = state.employees.find(e => e.id === a.employeeId);
@@ -2732,66 +2732,76 @@ function openReviewModal(asnId) {
     return;
   }
 
-  document.getElementById('reviewAssignmentId').value = a.id;
-  document.getElementById('reviewerFeedbackInput').value = '';
-  document.getElementById('feedbackValidationMsg').style.display = 'none';
+  const screenAsnId = document.getElementById('screenReviewAssignmentId');
+  const screenFeedback = document.getElementById('screenReviewerFeedbackInput');
+  const screenValidation = document.getElementById('screenFeedbackValidationMsg');
+  const screenBreadcrumb = document.getElementById('reviewDetailBreadcrumbName');
 
-  const container = document.getElementById('reviewSubmissionDetailsContainer');
+  if (screenAsnId) screenAsnId.value = a.id;
+  if (screenFeedback) screenFeedback.value = '';
+  if (screenValidation) screenValidation.style.display = 'none';
+  if (screenBreadcrumb) screenBreadcrumb.textContent = `${emp.name} — ${prog.title}`;
+
+  // Also sync modal inputs for compatibility
+  const modalAsnId = document.getElementById('reviewAssignmentId');
+  const modalFeedback = document.getElementById('reviewerFeedbackInput');
+  if (modalAsnId) modalAsnId.value = a.id;
+  if (modalFeedback) modalFeedback.value = '';
 
   let historyHtml = '';
   (a.reviewHistory || []).forEach(h => {
     historyHtml += `
-      <div class="review-history-item">
-        <strong>${h.action}</strong> by ${escapeHtml(h.user)} (${h.date}):
-        <p style="margin-top: 2px;">${escapeHtml(h.notes)}</p>
+      <div class="review-history-item" style="padding: 10px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 8px;">
+        <strong style="color: #0f172a; font-size: 13px;">${h.action}</strong> by <span style="font-weight: 600;">${escapeHtml(h.user)}</span> <span style="color: #64748b; font-size: 12px;">(${h.date})</span>:
+        <p style="margin: 4px 0 0 0; font-size: 12.5px; color: #334155;">${escapeHtml(h.notes)}</p>
       </div>
     `;
   });
 
-  container.innerHTML = `
-    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 14px;">
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <img src="${emp.avatar}" style="width: 40px; height: 40px; border-radius: 50%;" />
+  const detailHtml = `
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <img src="${emp.avatar}" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover;" />
         <div>
-          <div style="font-weight: 700; font-size: 14px;">${escapeHtml(emp.name)}</div>
+          <div style="font-weight: 700; font-size: 15px; color: #0f172a;">${escapeHtml(emp.name)}</div>
           <div style="font-size: 12px; color: #64748b;">${escapeHtml(emp.dept)} • ${escapeHtml(emp.role)}</div>
         </div>
       </div>
       <div style="text-align: right;">
-        <span style="font-size: 11px; color: #64748b;">Programme:</span>
-        <div style="font-weight: 700; font-size: 13px;">${escapeHtml(prog.title)}</div>
+        <span style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em;">PROGRAMME</span>
+        <div style="font-weight: 700; font-size: 14px; color: #1e3a8a;">${escapeHtml(prog.title)}</div>
       </div>
     </div>
 
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 14px;">
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; padding: 10px; border-radius: 6px;">
-        <span style="font-size: 11px; color: #64748b;">ASSESSMENT SCORE</span>
-        <div style="font-size: 1.4rem; font-weight: 800; color: #166534;">${a.assessmentScore || 85}%</div>
-        <span style="font-size: 10.5px; color: #64748b;">Pass Requirement: ${prog.passScore}%</span>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 16px;">
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
+        <span style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em;">ASSESSMENT SCORE</span>
+        <div style="font-size: 1.5rem; font-weight: 800; color: #166534; margin: 4px 0 2px 0;">${a.assessmentScore || 85}%</div>
+        <span style="font-size: 11px; color: #64748b;">Pass Requirement: ${prog.passScore}%</span>
       </div>
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; padding: 10px; border-radius: 6px;">
-        <span style="font-size: 11px; color: #64748b;">RESOURCES COMPLETED</span>
-        <div style="font-size: 1.4rem; font-weight: 800; color: #2563eb;">${(prog.resources || []).length}/${(prog.resources || []).length}</div>
-        <span style="font-size: 10.5px; color: #166534;">100% Mandatory Done ✓</span>
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
+        <span style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em;">RESOURCES COMPLETED</span>
+        <div style="font-size: 1.5rem; font-weight: 800; color: #2563eb; margin: 4px 0 2px 0;">${(prog.resources || []).length}/${(prog.resources || []).length}</div>
+        <span style="font-size: 11px; color: #166534; font-weight: 600;">100% Mandatory Done ✓</span>
       </div>
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; padding: 10px; border-radius: 6px;">
-        <span style="font-size: 11px; color: #64748b;">SUBMISSION EVIDENCE</span>
-        <div style="margin-top: 4px;">
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
+        <span style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em;">SUBMISSION EVIDENCE</span>
+        <div style="margin-top: 6px;">
           ${a.submissionEvidence 
-            ? `<a href="${escapeHtml(a.submissionEvidence)}" target="_blank" style="font-size: 12px; color: #2563eb; text-decoration: underline; font-weight: 600;">📎 View Proof Document</a>` 
+            ? `<a href="${escapeHtml(a.submissionEvidence)}" target="_blank" style="font-size: 12.5px; color: #2563eb; text-decoration: underline; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">📎 View Proof Document</a>` 
             : '<span style="font-size: 12px; color: #94a3b8;">None Attached</span>'}
         </div>
       </div>
     </div>
 
-    <div class="evidence-card-box">
-      <h4 style="font-size: 12.5px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Learner Submission Remarks</h4>
-      <p style="font-size: 12.5px; color: #334155;">"${escapeHtml(a.submissionRemarks || 'Learner completed all required coursework.')}"</p>
+    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; margin-bottom: 16px;">
+      <h4 style="font-size: 13px; font-weight: 700; color: #0f172a; margin: 0 0 4px 0;">Learner Submission Remarks</h4>
+      <p style="font-size: 13px; color: #334155; margin: 0; line-height: 1.4;">"${escapeHtml(a.submissionRemarks || 'Learner completed all required coursework.')}"</p>
     </div>
 
     ${historyHtml ? `
       <div style="margin-top: 14px;">
-        <h4 style="font-size: 12.5px; font-weight: 700; color: #0f172a; margin-bottom: 6px;">Submission & Review History</h4>
+        <h4 style="font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 8px;">Submission & Review History</h4>
         <div class="review-history-log">
           ${historyHtml}
         </div>
@@ -2799,13 +2809,64 @@ function openReviewModal(asnId) {
     ` : ''}
   `;
 
-  document.getElementById('reviewSubmissionModal').classList.add('open');
+  const screenContainer = document.getElementById('screenReviewSubmissionDetailsContainer');
+  if (screenContainer) screenContainer.innerHTML = detailHtml;
+
+  const modalContainer = document.getElementById('reviewSubmissionDetailsContainer');
+  if (modalContainer) modalContainer.innerHTML = detailHtml;
+
+  // Open IN-SCREEN view (NO POP-UPS per Screenshot 5)
+  const secReviews = document.getElementById('sectionReviews');
+  const secReviewDetail = document.getElementById('sectionReviewDetailScreen');
+  if (secReviews) secReviews.style.display = 'none';
+  if (secReviewDetail) secReviewDetail.style.display = 'block';
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function closeReviewDetailScreen() {
+  const secReviews = document.getElementById('sectionReviews');
+  const secReviewDetail = document.getElementById('sectionReviewDetailScreen');
+  if (secReviewDetail) secReviewDetail.style.display = 'none';
+  if (secReviews) secReviews.style.display = 'block';
+  renderReviewQueue();
+}
+
+function handleScreenReviewAction(action) {
+  const screenFeedback = document.getElementById('screenReviewerFeedbackInput');
+  const modalFeedback = document.getElementById('reviewerFeedbackInput');
+  const screenAsnId = document.getElementById('screenReviewAssignmentId');
+  const modalAsnId = document.getElementById('reviewAssignmentId');
+
+  const fbVal = screenFeedback ? screenFeedback.value.trim() : '';
+  if (modalFeedback) modalFeedback.value = fbVal;
+  if (screenAsnId && modalAsnId) modalAsnId.value = screenAsnId.value;
+
+  if ((action === 'request_changes' || action === 'reject') && !fbVal) {
+    const valMsg = document.getElementById('screenFeedbackValidationMsg');
+    if (valMsg) valMsg.style.display = 'block';
+    if (screenFeedback) screenFeedback.focus();
+    return;
+  }
+
+  handleReviewAction(action);
+  closeReviewDetailScreen();
+}
+
+window.openReviewDetailScreen = openReviewDetailScreen;
+window.closeReviewDetailScreen = closeReviewDetailScreen;
+window.handleScreenReviewAction = handleScreenReviewAction;
+
+function openReviewModal(asnId) {
+  openReviewDetailScreen(asnId);
 }
 
 window.openReviewModal = openReviewModal;
 
 function closeReviewModal() {
-  document.getElementById('reviewSubmissionModal').classList.remove('open');
+  closeReviewDetailScreen();
+  const modal = document.getElementById('reviewSubmissionModal');
+  if (modal) modal.classList.remove('open');
 }
 
 window.closeReviewModal = closeReviewModal;
@@ -3068,23 +3129,23 @@ function renderCertificatesTable() {
     if (a.certificateStatus === 'eligible') {
       statusPill = '<span class="status-pill status-eligible">Eligible (Not Generated)</span>';
       actionButtons = `
-        <button class="btn-table-action primary" onclick="generateCertificate('${a.id}')">
-          ⚙️ Generate Certificate
+        <button type="button" class="emp-action-icon" onclick="previewCertificate('${a.id}')" title="Generate & View Certificate" aria-label="View Certificate" style="width: 32px; height: 32px; border-radius: 6px; border: 1px solid #cbd5e1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#eff6ff'; this.style.color='#2563eb'; this.style.borderColor='#bfdbfe';" onmouseout="this.style.background='#ffffff'; this.style.color='#334155'; this.style.borderColor='#cbd5e1';">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
         </button>
       `;
     } else if (a.certificateStatus === 'generated') {
       statusPill = '<span class="status-pill status-generated">Generated (Awaiting Issuance)</span>';
       actionButtons = `
-        <button class="btn-table-action" onclick="previewCertificate('${cert ? cert.id : ''}')">Preview</button>
-        <button class="btn-table-action success" onclick="issueCertificate('${cert ? cert.id : ''}')">
-          📜 Issue Certificate
+        <button type="button" class="emp-action-icon" onclick="previewCertificate('${cert ? cert.id : a.id}')" title="View Certificate Details & Issue" aria-label="View Certificate" style="width: 32px; height: 32px; border-radius: 6px; border: 1px solid #cbd5e1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#eff6ff'; this.style.color='#2563eb'; this.style.borderColor='#bfdbfe';" onmouseout="this.style.background='#ffffff'; this.style.color='#334155'; this.style.borderColor='#cbd5e1';">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
         </button>
       `;
     } else if (a.certificateStatus === 'issued') {
       statusPill = '<span class="status-pill status-issued">Issued & Active</span>';
       actionButtons = `
-        <button class="btn-table-action" onclick="previewCertificate('${cert ? cert.id : ''}')">Preview</button>
-        <button class="btn-table-action" onclick="openReissueModal('${cert ? cert.id : ''}')">Reissue</button>
+        <button type="button" class="emp-action-icon" onclick="previewCertificate('${cert ? cert.id : a.id}')" title="View Certificate Details & Reissue" aria-label="View Certificate" style="width: 32px; height: 32px; border-radius: 6px; border: 1px solid #cbd5e1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#eff6ff'; this.style.color='#2563eb'; this.style.borderColor='#bfdbfe';" onmouseout="this.style.background='#ffffff'; this.style.color='#334155'; this.style.borderColor='#cbd5e1';">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        </button>
       `;
     }
 
@@ -3169,7 +3230,14 @@ window.generateCertificate = generateCertificate;
 // Action 2: Preview Certificate
 let previewActiveCertId = null;
 function previewCertificate(certId) {
-  const cert = state.certificates.find(c => c.id === certId);
+  let cert = state.certificates.find(c => c.id === certId || c.assignmentId === certId);
+  if (!cert) {
+    const a = state.assignments.find(asn => asn.id === certId || asn.certificateId === certId);
+    if (a && a.certificateStatus === 'eligible') {
+      generateCertificate(a.id);
+      cert = state.certificates.find(c => c.assignmentId === a.id);
+    }
+  }
   if (!cert) return;
   previewActiveCertId = cert.id;
 
@@ -3189,10 +3257,22 @@ function previewCertificate(certId) {
   if (btnIssueFromModal) {
     btnIssueFromModal.style.display = (cert.status === 'generated') ? 'inline-block' : 'none';
   }
+  const btnReissueFromModal = document.getElementById('btnReissueCertFromModal');
+  if (btnReissueFromModal) {
+    btnReissueFromModal.style.display = (cert.status === 'issued') ? 'inline-block' : 'none';
+  }
 
   document.getElementById('certificatePreviewModal').classList.add('open');
 }
 
+function openReissueModalFromPreview() {
+  if (!previewActiveCertId) return;
+  const targetCertId = previewActiveCertId;
+  closeCertPreviewModal();
+  openReissueModal(targetCertId);
+}
+
+window.openReissueModalFromPreview = openReissueModalFromPreview;
 window.previewCertificate = previewCertificate;
 
 function closeCertPreviewModal() {
