@@ -3896,7 +3896,7 @@ const DEFAULT_TRAINING_CONFIG = {
     expiryNotification: true,
     verificationEnabled: true,
     allowReissue: true,
-    logoUrl: 'assets/logo-e97b90af.svg'
+    logoUrl: 'assets/collabcrm-logo.png'
   },
   notifications: {
     matrix: [
@@ -4648,9 +4648,9 @@ function openCertificatePreviewModal() {
   const prefix = (document.getElementById('cfg_cert_id_prefix')?.value || 'TRN').trim();
   const valType = document.getElementById('cfg_cert_validity_type')?.value || 'Fixed Duration';
   const valMonths = document.getElementById('cfg_cert_validity_months')?.value || 12;
-  const signName = document.getElementById('cfg_cert_signatory_name')?.value || 'Isha Patel';
-  const signTitle = document.getElementById('cfg_cert_signatory_title')?.value || 'Head of People & Org Development';
-  const compName = document.getElementById('cfg_cert_company_name')?.value || 'CollabCRM Inc.';
+  const signName = document.getElementById('cfg_cert_signatory_name')?.value || 'Megha Salunkhe';
+  const signTitle = document.getElementById('cfg_cert_signatory_title')?.value || 'Authorized Learning Director';
+  const compName = document.getElementById('cfg_cert_company_name')?.value || 'COLLABCRM';
 
   const idEl = document.getElementById('certPrevId');
   const valEl = document.getElementById('certPrevValidity');
@@ -4693,7 +4693,7 @@ function handleCertLogoUpload(event) {
 }
 
 function resetCertLogoToDefault() {
-  const defaultUrl = 'assets/logo-e97b90af.svg';
+  const defaultUrl = 'assets/collabcrm-logo.png';
   if (trainingConfigData && trainingConfigData.certificates) {
     trainingConfigData.certificates.logoUrl = defaultUrl;
   }
