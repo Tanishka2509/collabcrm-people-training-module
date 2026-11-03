@@ -335,7 +335,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSidebar();
   initClockWidget();
   renderPortalNotifications();
-  setAppRole('admin'); // Start in Admin Role
+  setAppRole('employee'); // Start in Employee Role
   switchToTraining();
 });
 
@@ -966,7 +966,7 @@ function renderProgramsList() {
     if (tbody) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="5" style="padding: 40px; text-align: center; background: #f8fafc; color: #64748b;">
+          <td colspan="8" style="padding: 40px; text-align: center; background: #f8fafc; color: #64748b;">
             <p style="font-weight: 600; font-size: 14px; margin-bottom: 8px;">No training programmes found matching criteria.</p>
             <button class="btn-primary-action" onclick="openCreateProgramModal()">+ Create New Programme</button>
           </td>
@@ -994,49 +994,21 @@ function renderProgramsList() {
       : (p.difficulty === 'Beginner' ? 'style="background:#f0fdf4; color:#166534;"' : 'style="background:#eff6ff; color:#1d4ed8;"');
 
     tableHtml += `
-      <tr style="border-bottom: 1px solid #e2e8f0; transition: background 0.15s ease;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
-        <td style="padding: 14px 12px; text-align: center; color: #64748b; font-size: 12px; border-right: 1px solid #f1f5f9; vertical-align: middle;">${idx + 1}</td>
-        <td style="padding: 14px 16px; vertical-align: top; border-right: 1px solid #f1f5f9;">
-          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-            <span class="badge-dept badge-blue">${escapeHtml(p.dept)}</span>
-            <span class="status-pill" ${diffBadge}>${p.difficulty}</span>
-          </div>
-          <div style="font-weight: 700; font-size: 13.5px; color: #0f172a; margin-bottom: 4px;">${escapeHtml(p.title)}</div>
-          <p style="font-size: 12px; color: #64748b; line-height: 1.4; margin: 0; max-width: 440px;">
-            ${escapeHtml(p.learningObjectives || 'Comprehensive professional training curriculum.')}
-          </p>
-        </td>
-        <td style="padding: 14px 16px; vertical-align: top; white-space: nowrap; border-right: 1px solid #f1f5f9;">
-          <div style="font-weight: 700; font-size: 13px; color: #0f172a;">⏱️ ${p.durationHours} hrs</div>
-          <div style="font-size: 12px; color: #64748b; margin-top: 4px;">📑 ${(p.resources || []).length} Modules</div>
-          <div style="font-size: 11px; color: #059669; font-weight: 600; margin-top: 2px;">✓ ${mandatoryCount} Mandatory</div>
-        </td>
-        <td style="padding: 14px 16px; vertical-align: top; min-width: 170px; border-right: 1px solid #f1f5f9;">
-          <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px;">
-            <span style="color: #64748b; font-weight: 500;">👥 ${enrolledCount} Enrolled</span>
-            <strong style="color: #0f172a;">${progressPct}%</strong>
-          </div>
-          <div style="height: 7px; background: #e2e8f0; border-radius: 4px; overflow: hidden; width: 100%;">
-            <div style="width: ${progressPct}%; height: 100%; background: #2563eb; border-radius: 4px;"></div>
-          </div>
-          <div style="font-size: 11px; color: #64748b; margin-top: 4px;">${completedCount} completed</div>
-        </td>
-        <td style="padding: 14px 14px; vertical-align: middle; text-align: center; border-right: 1px solid #f1f5f9;">
-          ${statusPill}
-        </td>
-        <td style="padding: 14px 16px; vertical-align: middle; text-align: center; white-space: nowrap;">
-          <div style="display: inline-flex; align-items: center; justify-content: center; gap: 14px;">
-            <button type="button" class="emp-action-icon" onclick="previewProgram('${p.id}')" title="View Programme" aria-label="View" style="background: none; border: none; padding: 4px; color: #64748b; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px;">
-              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#64748b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path>
-                <circle cx="12" cy="12" r="3"></circle>
-              </svg>
+      <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s ease;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
+        <td style="padding: 12px 14px; text-align: center; color: #64748b;">${idx + 1}</td>
+        <td style="padding: 12px 14px; font-weight: 600; color: #0f172a;">${escapeHtml(p.title)}</td>
+        <td style="padding: 12px 14px; color: #334155;">${escapeHtml(p.dept)}</td>
+        <td style="padding: 12px 14px;"><span class="status-pill" ${diffBadge}>${escapeHtml(p.difficulty)}</span></td>
+        <td style="padding: 12px 14px; text-align: center; color: #334155;">${p.durationHours} hrs</td>
+        <td style="padding: 12px 14px; text-align: center; color: #334155;">${enrolledCount}</td>
+        <td style="padding: 12px 14px; text-align: center;">${statusPill}</td>
+        <td style="padding: 12px 14px; text-align: center; white-space: nowrap;">
+          <div style="display: inline-flex; align-items: center; gap: 6px;">
+            <button type="button" onclick="previewProgram('${p.id}')" title="View Programme" aria-label="View" style="width: 28px; height: 28px; border: 1px solid #bfdbfe; background: #eff6ff; color: #2563eb; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 0;">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
             </button>
-            <button type="button" class="emp-action-icon" onclick="openEditProgramModal('${p.id}')" title="Edit Programme" aria-label="Edit" style="background: none; border: none; padding: 4px; color: #64748b; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px;">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#64748b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 20h9"></path>
-                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-              </svg>
+            <button type="button" onclick="openEditProgramModal('${p.id}')" title="Edit Programme" aria-label="Edit" style="width: 28px; height: 28px; border: 1px solid #e2e8f0; background: #ffffff; color: #64748b; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 0;">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
             </button>
           </div>
         </td>
@@ -4762,30 +4734,30 @@ window.filterRolePermissionsTable = renderRolePermissionsTable;
 // =============================================================================
 const DEMO_USERS = [
   {
-    id: 'usr_management',
-    name: 'Ishdeep Anand',
-    title: 'SVP • Management (HR / Admin / Reporting Manager)',
-    role: 'HR / Admin / Reporting Manager',
-    dept: 'Management',
-    badgeBg: '#f3e8ff',
-    badgeColor: '#7e22ce',
-    avatarInitials: 'IA',
-    avatarBg: '#8b5cf6'
-  },
-  {
     id: 'usr_emp',
     name: 'Aryan Bhardwaj',
-    title: 'Executive • IT - Project',
+    title: 'Executive',
     role: 'Employee',
-    dept: 'IT - Project',
+    dept: 'Executive',
     badgeBg: '#f1f5f9',
     badgeColor: '#475569',
     avatarInitials: 'AB',
     avatarBg: '#f59e0b'
+  },
+  {
+    id: 'usr_management',
+    name: 'Ishdeep Anand',
+    title: 'SVP',
+    role: 'HR / Admin / Reporting Manager',
+    dept: 'SVP',
+    badgeBg: '#f3e8ff',
+    badgeColor: '#7e22ce',
+    avatarInitials: 'IA',
+    avatarBg: '#8b5cf6'
   }
 ];
 
-let activeDemoUser = DEMO_USERS[0]; // Default to Management (HR / Admin / Reporting Manager)
+let activeDemoUser = DEMO_USERS[0]; // Default to Employee on load
 
 function renderUserRolePill() {
   const badgeEl = document.getElementById('headerUserAvatarBadge');
@@ -4863,7 +4835,7 @@ function resetDemoData() {
   activeDemoUser = DEMO_USERS[0];
   renderUserRolePill();
   renderUserRoleDropdown();
-  setAppRole('admin');
+  setAppRole('employee');
   const menu = document.getElementById('userRoleDropdownMenu');
   if (menu) menu.style.display = 'none';
   showConfigToast('Demo data reset to factory state.');
