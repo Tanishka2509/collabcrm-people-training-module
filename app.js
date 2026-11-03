@@ -16,6 +16,7 @@ const state = {
 
   // 1. Employee Hierarchy Data
   employees: [
+    { id: 'CO-5039', name: 'Aryan Bhardwaj', email: 'calebnguyen@maildrop.cc', role: 'Executive', dept: 'IT - Project', managerId: 'EMP-003', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120' },
     { id: 'EMP-001', name: 'Isha Patel', email: 'isha.patel@collabcrm.com', role: 'Head of People & Admin', dept: 'Recruitment & HR', managerId: null, avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120' },
     { id: 'EMP-002', name: 'Shivam Sharma', email: 'shivam.s@collabcrm.com', role: 'HR Specialist', dept: 'People Operations', managerId: 'EMP-001', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120' },
     { id: 'EMP-003', name: 'Ashish Kumar', email: 'ashish.k@collabcrm.com', role: 'Technical Lead & Reporting Manager', dept: 'Engineering', managerId: 'EMP-001', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120' },
@@ -119,6 +120,96 @@ const state = {
       passScore: 75,
       resources: [
         { id: 'R106-1', title: 'Migration Runbook 2024', type: 'pdf', url: 'https://docs.collabcrm.internal/legacy-migration.pdf', mandatory: true }
+      ]
+    },
+    {
+      id: 'TR-107',
+      title: 'API Security & OAuth2 Best Practices',
+      dept: 'Technical Architecture',
+      difficulty: 'Intermediate',
+      durationHours: 4,
+      status: 'published',
+      learningObjectives: 'Master token-based authentication, RBAC scopes, OAuth2 grant types, and API rate limiting in CollabCRM architecture.',
+      completionReq: 'Complete mandatory modules and score >= 80% on certification assessment.',
+      passScore: 80,
+      resources: [
+        { id: 'res_101_1', title: 'OAuth 2.0 & OpenID Connect Framework Deep Dive', type: 'youtube', url: 'https://www.youtube.com/watch?v=996OiexHze0', mandatory: true },
+        { id: 'res_101_2', title: 'CollabCRM API Security Specifications & Token Policies (PDF)', type: 'pdf', url: 'assets/docs/api_security_spec.pdf', mandatory: true },
+        { id: 'res_101_3', title: 'Interactive OWASP API Vulnerability Simulation Labs', type: 'external_link', url: 'https://owasp.org/www-project-api-security/', mandatory: false },
+        { id: 'res_101_4', title: 'CollabCRM Gateway JWT Validation Middleware Demo', type: 'video', url: 'assets/videos/jwt_middleware_demo.mp4', mandatory: true }
+      ]
+    },
+    {
+      id: 'TR-108',
+      title: 'Security Awareness & GDPR Compliance 2026',
+      dept: 'Governance & Compliance',
+      difficulty: 'Beginner',
+      durationHours: 2,
+      status: 'published',
+      learningObjectives: 'Annual company-wide compliance covering European GDPR regulations, data subject rights, and breach escalation protocols.',
+      completionReq: 'Complete all GDPR modules and achieve 100% on compliance test.',
+      passScore: 100,
+      resources: [
+        { id: 'res_102_1', title: 'GDPR Regulations & Employee Responsibilities', type: 'pdf', url: 'assets/docs/gdpr_compliance.pdf', mandatory: true },
+        { id: 'res_102_2', title: 'Data Privacy Incident Reporting & Escalation Matrix', type: 'pdf', url: 'assets/docs/escalation_matrix.pdf', mandatory: true }
+      ]
+    },
+    {
+      id: 'TR-109',
+      title: 'CollabCRM Platform Architecture Deep Dive',
+      dept: 'Technical Architecture',
+      difficulty: 'Advanced',
+      durationHours: 6,
+      status: 'published',
+      learningObjectives: 'In-depth exploration of CollabCRM multi-tenant database partitioning, Redis caching topologies, and WebSocket streaming.',
+      completionReq: 'Score >= 85% and submit architecture benchmark report.',
+      passScore: 85,
+      resources: [
+        { id: 'res_103_1', title: 'Multi-Tenant Database Sharding Architecture (PDF)', type: 'pdf', url: 'assets/docs/sharding_architecture.pdf', mandatory: true },
+        { id: 'res_103_2', title: 'Redis Cluster Caching Strategies Video', type: 'youtube', url: 'https://www.youtube.com/watch?v=G1rOthIU-uo', mandatory: true }
+      ]
+    },
+    {
+      id: 'TR-110',
+      title: 'Effective Cross-Functional Stakeholder Communication',
+      dept: 'Professional Skills',
+      difficulty: 'Beginner',
+      durationHours: 3,
+      status: 'published',
+      learningObjectives: 'Practical frameworks for managing expectations across sales, engineering, product management, and executive leadership.',
+      completionReq: 'Complete executive briefing resource and submit reflection remarks.',
+      passScore: 80,
+      resources: [
+        { id: 'res_104_1', title: 'The Art of Technical Executive Briefings', type: 'pdf', url: 'assets/docs/executive_briefings.pdf', mandatory: true }
+      ]
+    },
+    {
+      id: 'TR-111',
+      title: 'Q4 2025 Workplace Safety & POSH Re-Certification',
+      dept: 'Governance & Compliance',
+      difficulty: 'Beginner',
+      durationHours: 2,
+      status: 'published',
+      learningObjectives: 'Mandatory workplace safety policies, POSH compliance, and employee grievance redressal mechanisms.',
+      completionReq: 'Complete handbook and emergency response modules.',
+      passScore: 80,
+      resources: [
+        { id: 'res_105_1', title: 'Workplace Conduct & POSH Guidelines Handbook', type: 'pdf', url: 'assets/docs/posh_handbook.pdf', mandatory: true },
+        { id: 'res_105_2', title: 'Employee Emergency Response Video', type: 'video', url: 'assets/videos/emergency_response.mp4', mandatory: true }
+      ]
+    },
+    {
+      id: 'TR-112',
+      title: 'Incident Response & SLA Management',
+      dept: 'Support & Operations',
+      difficulty: 'Intermediate',
+      durationHours: 3,
+      status: 'published',
+      learningObjectives: 'Operational response protocols for high-severity production outages, root cause analyses, and SLA commitments.',
+      completionReq: 'Complete incident SOP and submit post-mortem analysis.',
+      passScore: 80,
+      resources: [
+        { id: 'res_106_1', title: 'Incident Management Operating Procedures', type: 'pdf', url: 'assets/docs/incident_sop.pdf', mandatory: true }
       ]
     }
   ],
@@ -335,6 +426,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initSidebar();
   initClockWidget();
   renderPortalNotifications();
+  state.employeeTrainingData = getFallbackEmployeeData('CO-5039');
+  syncEmployeeTrainingsWithGlobalAssignments();
   setAppRole('admin'); // Start in Admin Role
   switchToEmployees(); // Start with Employees module selected first
 });
@@ -404,18 +497,32 @@ function setAppRole(role) {
     if (hierarchyBanner) hierarchyBanner.style.display = 'flex';
     if (optAssignDeptRadio) optAssignDeptRadio.style.display = 'none'; // RM can only assign to direct reports
   } else {
-    // Employee Role (Rihan R. - Software Engineer Learner)
+    // Employee Role (Aryan Bhardwaj - CO-5039)
     const avatar = 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120';
     if (headerAvatar) headerAvatar.src = avatar;
     if (rolePersonaAvatar) rolePersonaAvatar.src = avatar;
-    if (headerName) headerName.textContent = 'Rihan R.';
-    if (rolePersonaName) rolePersonaName.textContent = 'Rihan R.';
-    if (headerRole) headerRole.textContent = 'Software Engineer (Learner)';
-    if (rolePersonaScope) rolePersonaScope.textContent = 'Engineering • Learner Portal';
+    if (headerName) headerName.textContent = 'Aryan Bhardwaj';
+    if (rolePersonaName) rolePersonaName.textContent = 'Aryan Bhardwaj';
+    if (headerRole) headerRole.textContent = 'Executive (Employee)';
+    if (rolePersonaScope) rolePersonaScope.textContent = 'IT - Project • Learner Portal';
     if (portalScopeRoleName) portalScopeRoleName.textContent = 'Employee Learner (My Enrolled Trainings & Progress)';
-    if (rolePortalSubtitle) rolePortalSubtitle.textContent = 'Employee Portal • View your assigned programmes, track module progress, submit capstone evidence, and access certified credentials.';
+    if (rolePortalSubtitle) rolePortalSubtitle.textContent = 'Employee Portal • View your assigned trainings, track resource progress, pass assessments, submit for review, and access Training History & Certificates.';
     if (hierarchyBanner) hierarchyBanner.style.display = 'none';
     if (optAssignDeptRadio) optAssignDeptRadio.style.display = 'none';
+  }
+
+  // Update Header Profile Avatar Photo
+  const headerProfileImg = document.getElementById('headerProfileAvatarImg');
+  if (headerProfileImg) {
+    headerProfileImg.src = role === 'employee'
+      ? 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120'
+      : 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120';
+  }
+
+  // Hide Config menu for Employee role
+  const menuConfigEl = document.getElementById('menuConfig');
+  if (menuConfigEl) {
+    menuConfigEl.style.display = role === 'employee' ? 'none' : '';
   }
 
   // Toggle Employee Portal vs Admin/HR/Manager Portal Navigation
@@ -427,21 +534,39 @@ function setAppRole(role) {
   const empEmptyState = document.getElementById('sectionEmployeeEmptyState');
 
   if (role === 'employee') {
-    if (empHeaderCard) empHeaderCard.style.display = 'none';
+    if (empHeaderCard) empHeaderCard.style.display = 'block';
     if (adminSubnav) adminSubnav.style.display = 'none';
     if (empSubnav) empSubnav.style.display = 'none';
     if (subnavBar) subnavBar.style.display = 'none';
     if (btnAction) btnAction.style.display = 'none';
     const trainingPanel = document.getElementById('trainingSidePanel');
     if (trainingPanel) trainingPanel.classList.remove('open');
+    const configPanel = document.getElementById('configSidePanel');
+    if (configPanel) configPanel.classList.remove('open');
 
-    // Hide all management and employee tabs
-    ['sectionDashboard', 'sectionPrograms', 'sectionAssignments', 'sectionProgress', 'sectionReviews', 'sectionCertificates', 'sectionReports', 'sectionEmpMyTraining', 'sectionEmpCertificates', 'sectionEmpHistory'].forEach(id => {
+    // Hide all management tabs and empty state; show Employee My Training
+    ['sectionDashboard', 'sectionPrograms', 'sectionAssignments', 'sectionProgress', 'sectionReviews', 'sectionCertificates', 'sectionReports', 'sectionEmpCertificates', 'sectionEmpHistory'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.style.display = 'none';
     });
 
-    if (empEmptyState) empEmptyState.style.display = 'block';
+    if (empEmptyState) empEmptyState.style.display = 'none';
+    const secMyTraining = document.getElementById('sectionEmpMyTraining');
+    if (secMyTraining) secMyTraining.style.display = 'block';
+    const labelEl = document.getElementById('currentActiveTabLabel');
+    if (labelEl) labelEl.textContent = 'My Training';
+
+    loadEmployeeTrainingData('CO-5039');
+
+    // If user is currently on the all-employees table view, switch to Employee's own My Training or Profile
+    const viewDashboard = document.getElementById('viewDashboard');
+    if (viewDashboard && viewDashboard.style.display === 'block') {
+      switchToTraining();
+    }
+    const viewEmployeeDetail = document.getElementById('viewEmployeeDetail');
+    if (viewEmployeeDetail && viewEmployeeDetail.style.display === 'block') {
+      openEmployeeDetail('CO-5039', activeEmpDetailSubTab || 'general');
+    }
   } else {
     if (empHeaderCard) empHeaderCard.style.display = 'none';
     if (subnavBar) subnavBar.style.display = 'none';
@@ -472,6 +597,12 @@ function switchToEmployees() {
   if (configPanel) configPanel.classList.remove('open');
   const trainingPanel = document.getElementById('trainingSidePanel');
   if (trainingPanel) trainingPanel.classList.remove('open');
+
+  // Enforce employee-level data access: in Employee role, Employees opens own Profile
+  if (state.currentRole === 'employee') {
+    openEmployeeDetail('CO-5039', 'general');
+    return;
+  }
 
   const viewDashboard = document.getElementById('viewDashboard');
   const viewTraining = document.getElementById('viewTraining');
@@ -1653,27 +1784,127 @@ function confirmTrainingAssignment() {
   }
 
   const prog = state.programs.find(p => p.id === progId);
+  const assignerName = state.currentRole === 'admin' ? 'Isha Patel (Head of People)' : (state.currentRole === 'hr' ? 'Shivam Sharma (HR)' : 'Ashish Kumar (Manager)');
+
   targetEmpIds.forEach(empId => {
     const newAsnId = `ASN-${String(state.assignments.length + 1).padStart(3, '0')}`;
-    state.assignments.push({
+    const clonedResources = (prog && prog.resources ? prog.resources : []).map((r, idx) => ({
+      id: r.id || `res_${newAsnId}_${idx + 1}`,
+      title: r.title,
+      description: r.description || `Core learning module for ${prog ? prog.title : 'training programme'}.`,
+      type: r.type || 'pdf',
+      url: r.url || '#',
+      isMandatory: r.isMandatory !== undefined ? r.isMandatory : (r.mandatory !== false),
+      mandatory: r.mandatory !== false,
+      duration: r.duration || '25 Mins',
+      isCompleted: false,
+      completionDate: null,
+      completionTimestamp: null
+    }));
+
+    const unifiedRecord = {
       id: newAsnId,
       employeeId: empId,
       programId: progId,
+      trainingName: prog ? prog.title : 'Assigned Training Programme',
+      title: prog ? prog.title : 'Assigned Training Programme',
+      category: prog ? prog.dept : 'General',
+      shortDescription: prog ? prog.learningObjectives : '',
+      isMandatory: mandatory,
+      mandatory: mandatory,
+      assignedBy: assignerName,
       assignedDate: assignedDate,
       dueDate: dueDate,
-      mandatory: mandatory,
+      startDate: null,
       progress: 0,
+      completionPercentage: 0,
       trainingStatus: 'not_started',
+      status: 'Not Started',
       submissionStatus: 'none',
       submissionRemarks: '',
       submissionEvidence: '',
       assessmentScore: null,
       certificateStatus: 'not_eligible',
       certificateId: null,
+      difficultyLevel: prog ? prog.difficulty : 'Intermediate',
+      expectedDuration: prog ? `${prog.durationHours} Hours` : '4 Hours',
+      learningObjectives: prog && prog.learningObjectives ? [prog.learningObjectives, prog.completionReq || 'Complete all mandatory resources and pass the assessment.'] : ['Complete all mandatory resources and pass the assessment.'],
+      expectedOutcomes: ['Verified competency in subject matter and official CollabCRM certification upon approval.'],
+      resources: clonedResources,
+      assessment: {
+        id: `asm_${newAsnId}`,
+        name: `${prog ? prog.title : 'Training'} Certification Assessment`,
+        instructions: `Answer all questions carefully. Achieve at least ${prog && prog.passScore ? prog.passScore : 80}% to pass.`,
+        passingScore: (prog && prog.passScore) ? prog.passScore : 80,
+        maxAttempts: 3,
+        attemptsUsed: 0,
+        passed: false,
+        isPassed: false,
+        previousAttempts: [],
+        questions: [
+          {
+            id: 'q1',
+            text: `What is the primary operational objective of "${prog ? prog.title : 'this programme'}"?`,
+            options: [
+              prog && prog.learningObjectives ? prog.learningObjectives.slice(0, 95) : 'Deliver compliant, high-quality execution aligned with CollabCRM SOPs',
+              'Bypass standard security and review controls for faster deployment',
+              'Deprecate automated testing and manual verification checks',
+              'Store unencrypted credentials in public repositories'
+            ],
+            correctIndex: 0
+          },
+          {
+            id: 'q2',
+            text: 'Which step is required before an assigned training is marked Completed and moved to Training History?',
+            options: [
+              'Only opening the first learning resource',
+              'Completing mandatory resources, passing the assessment, submitting remarks, and receiving reviewer approval',
+              'Skipping assessment and self-approving the record',
+              'Deleting the assignment record after reading the overview'
+            ],
+            correctIndex: 1
+          }
+        ]
+      },
+      submission: {
+        completionRemarks: '',
+        evidenceFiles: [],
+        submittedAt: null,
+        isLocked: false
+      },
+      review: null,
+      certificate: null,
       reviewHistory: [
-        { date: assignedDate, action: 'Assigned', user: state.currentRole === 'admin' ? 'Isha Patel (Admin)' : 'Ashish Kumar (Manager)', notes: 'Assigned training programme.' }
+        { date: assignedDate, action: 'Assigned', user: assignerName, notes: 'Assigned training programme.' }
       ]
-    });
+    };
+
+    state.assignments.unshift(unifiedRecord);
+
+    if (empId === 'CO-5039') {
+      if (!state.employeeTrainingData) {
+        state.employeeTrainingData = getFallbackEmployeeData('CO-5039');
+      }
+      const existingIdx = state.employeeTrainingData.trainings.findIndex(t => t.id === unifiedRecord.id);
+      if (existingIdx === -1) {
+        state.employeeTrainingData.trainings.unshift(unifiedRecord);
+      }
+      state.employeeTrainingData.notifications.unshift({
+        id: `notif_${Date.now()}`,
+        title: 'New Training Assigned',
+        message: `"${unifiedRecord.trainingName}" has been assigned to you by ${assignerName}. Due: ${dueDate}.`,
+        type: 'info',
+        time: 'Just now',
+        trainingId: unifiedRecord.id,
+        read: false
+      });
+      saveEmployeeStoreToLocal();
+      fetch(getEmpApiUrl('/api/employee/assign'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ employeeId: 'CO-5039', training: unifiedRecord })
+      }).catch(() => {});
+    }
   });
 
   if (asg.notifyEmployee !== false) {
@@ -2203,39 +2434,147 @@ function handleReviewAction(action) {
   if (validationMsg) validationMsg.style.display = 'none';
 
   const today = new Date().toISOString().split('T')[0];
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 
   if (action === 'approve') {
     a.submissionStatus = 'approved';
     a.trainingStatus = 'completed';
-    a.certificateStatus = 'eligible'; // Eligible, but NOT auto-generated or auto-issued!
+    a.status = 'Completed';
+    a.progress = 100;
+    a.completionPercentage = 100;
+    a.completionDate = dateStr;
+    a.certificateStatus = 'issued';
+    a.review = {
+      status: 'approved',
+      reviewerName: reviewerName,
+      reviewDate: dateStr,
+      feedback: feedback || 'Submission approved. Meets all training curriculum standards.'
+    };
+    if (!a.certificate) {
+      const certId = a.certificateId || `TRN-2026-${String(Math.floor(1000 + Math.random() * 9000))}`;
+      a.certificateId = certId;
+      a.certificate = {
+        id: certId,
+        certificateNo: certId,
+        name: `${prog ? prog.title : (a.trainingName || 'Training')} Credential`,
+        trainingName: prog ? prog.title : (a.trainingName || 'Training'),
+        issueDate: dateStr,
+        expiryDate: 'Lifetime',
+        status: 'issued',
+        recipientName: emp ? emp.name : 'Aryan Bhardwaj',
+        recipientId: emp ? emp.id : 'CO-5039',
+        issuerName: 'Isha Patel',
+        issuerRole: 'Head of People & Compliance'
+      };
+      if (!state.certificates.some(c => c.id === certId)) {
+        state.certificates.push({
+          id: certId,
+          certificateNo: certId,
+          assignmentId: a.id,
+          employeeId: a.employeeId,
+          programId: a.programId,
+          issueDate: today,
+          expiryDate: 'Lifetime',
+          status: 'issued',
+          reissueCount: 0,
+          issuedBy: reviewerName
+        });
+      }
+    } else {
+      a.certificate.status = 'issued';
+    }
     a.reviewHistory.unshift({
       date: today,
       action: 'Approved Submission',
       user: reviewerName,
       notes: feedback || 'Submission approved. Meets all training curriculum standards.'
     });
-    logAudit('Approved Submission', `${emp.name} - ${prog.title}`, `Evaluator: ${reviewerName}. Marked eligible for certificate.`);
-    alert(`Submission from ${emp.name} approved! Learner is now marked Completed and eligible for certificate generation.`);
+
+    if (a.employeeId === 'CO-5039') {
+      if (state.employeeTrainingData && state.employeeTrainingData.notifications) {
+        state.employeeTrainingData.notifications.unshift({
+          id: `notif_${Date.now()}`,
+          title: 'Training Approved & Moved to History',
+          message: `Your submission for "${a.trainingName || (prog && prog.title)}" was approved by ${reviewerName}. Certificate ${a.certificate.id} issued!`,
+          type: 'success',
+          time: 'Just now',
+          trainingId: a.id,
+          read: false
+        });
+      }
+      saveEmployeeStoreToLocal();
+      fetch(getEmpApiUrl('/api/employee/review-decision'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          employeeId: 'CO-5039',
+          trainingId: a.id,
+          action: 'approve',
+          reviewerName,
+          feedback: a.review.feedback,
+          certificate: a.certificate
+        })
+      }).catch(() => {});
+    }
+
+    logAudit('Approved Submission', `${emp.name} - ${prog.title}`, `Evaluator: ${reviewerName}. Marked Completed and moved to Training History.`);
+    alert(`Submission from ${emp.name} approved! Training is now marked Completed and moved from My Training to Training History.`);
   } else if (action === 'request_changes') {
     a.submissionStatus = 'changes_requested';
-    a.trainingStatus = 'in_progress';
+    a.trainingStatus = 'changes_requested';
+    a.status = 'Changes Requested';
+    if (a.submission) a.submission.isLocked = false;
+    a.review = {
+      status: 'changes_requested',
+      reviewerName: reviewerName,
+      reviewDate: dateStr,
+      feedback: feedback
+    };
     a.reviewHistory.unshift({
       date: today,
       action: 'Requested Changes',
       user: reviewerName,
       notes: feedback
     });
+
+    if (a.employeeId === 'CO-5039') {
+      saveEmployeeStoreToLocal();
+      fetch(getEmpApiUrl('/api/employee/review-decision'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          employeeId: 'CO-5039',
+          trainingId: a.id,
+          action: 'request_changes',
+          reviewerName,
+          feedback
+        })
+      }).catch(() => {});
+    }
+
     logAudit('Requested Changes', `${emp.name} - ${prog.title}`, `Feedback: ${feedback}`);
     alert(`Feedback sent to ${emp.name}. Learner has been requested to submit revisions.`);
   } else if (action === 'reject') {
     a.submissionStatus = 'rejected';
-    a.trainingStatus = 'not_started';
+    a.trainingStatus = 'in_progress';
+    a.status = 'In Progress';
+    if (a.submission) a.submission.isLocked = false;
+    a.review = {
+      status: 'rejected',
+      reviewerName: reviewerName,
+      reviewDate: dateStr,
+      feedback: feedback
+    };
     a.reviewHistory.unshift({
       date: today,
       action: 'Rejected Submission',
       user: reviewerName,
       notes: feedback
     });
+    if (a.employeeId === 'CO-5039') {
+      saveEmployeeStoreToLocal();
+    }
     logAudit('Rejected Submission', `${emp.name} - ${prog.title}`, `Reason: ${feedback}`);
     alert(`Submission rejected for ${emp.name}. Remarks logged.`);
   }
@@ -2244,6 +2583,9 @@ function handleReviewAction(action) {
   renderReviewQueue();
   renderDashboard();
   renderProgressTable();
+  if (state.employeeTrainingData) {
+    renderEmployeeDashboardUI();
+  }
 }
 
 window.handleReviewAction = handleReviewAction;
@@ -5176,6 +5518,11 @@ function switchActiveUser(userId) {
 }
 
 function resetDemoData() {
+  try {
+    localStorage.removeItem(EMP_STORE_LOCAL_KEY);
+  } catch (e) {}
+  state.employeeTrainingData = getFallbackEmployeeData('CO-5039');
+  syncEmployeeTrainingsWithGlobalAssignments();
   activeDemoUser = DEMO_USERS[0];
   renderUserRolePill();
   renderUserRoleDropdown();
@@ -5683,7 +6030,7 @@ let activeEmployeeDetailCode = 'YOP-073';
 let activeEmpDetailSubTab = 'general';
 
 function populateEmployeeDetail(empCode) {
-  const emp = EMPLOYEES_DETAIL_DATABASE[empCode] || EMPLOYEES_DETAIL_DATABASE['YOP-073'];
+  const emp = EMPLOYEES_DETAIL_DATABASE[empCode] || EMPLOYEES_DETAIL_DATABASE['CO-5039'] || EMPLOYEES_DETAIL_DATABASE['YOP-073'];
   activeEmployeeDetailCode = emp.code;
 
   // Left Sidebar
@@ -5693,6 +6040,7 @@ function populateEmployeeDetail(empCode) {
   const desigEl = document.getElementById('empDetailDesignation');
   const deptBadge = document.getElementById('empDetailDeptBadge');
   const aboutEl = document.getElementById('empDetailAbout');
+  const buEl = document.getElementById('empDetailBusinessUnit');
   const expPrev = document.getElementById('empDetailExpPrev');
   const expCurrent = document.getElementById('empDetailExpCurrent');
   const skillsEl = document.getElementById('empDetailSkills');
@@ -5700,19 +6048,48 @@ function populateEmployeeDetail(empCode) {
   const seatingEl = document.getElementById('empDetailSeating');
   const extEl = document.getElementById('empDetailExtension');
 
-  if (checkinBadge) checkinBadge.textContent = 'YET TO CHECK-IN';
+  if (checkinBadge) {
+    checkinBadge.textContent = 'IN';
+    checkinBadge.style.background = '#f0fdf4';
+    checkinBadge.style.borderColor = '#86efac';
+    checkinBadge.style.color = '#16a34a';
+  }
   if (avatarCircle) {
-    avatarCircle.textContent = emp.initials;
-    avatarCircle.style.background = '#f1f5f9';
-    avatarCircle.style.color = '#475569';
+    const empRecord = state.employees.find(e => e.id === emp.code);
+    const photoUrl = emp.avatar || (empRecord && empRecord.avatar) || (emp.code === 'CO-5039' ? 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=240' : null);
+    if (photoUrl) {
+      avatarCircle.innerHTML = `<img src="${photoUrl}" alt="${escapeHtml(emp.name)}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />`;
+    } else {
+      avatarCircle.textContent = emp.initials;
+      avatarCircle.style.background = '#f1f5f9';
+      avatarCircle.style.color = '#475569';
+    }
   }
   if (nameEl) nameEl.textContent = emp.name;
   if (desigEl) desigEl.textContent = emp.designation;
   if (deptBadge) deptBadge.textContent = emp.department;
-  if (aboutEl) aboutEl.textContent = emp.about;
-  if (expPrev) expPrev.textContent = emp.expPrev;
-  if (expCurrent) expCurrent.textContent = emp.expCurrent;
-  if (skillsEl) skillsEl.textContent = emp.skills;
+  if (aboutEl) aboutEl.textContent = emp.about && emp.about !== '-' ? emp.about : 'Yest';
+  if (buEl) {
+    buEl.innerHTML = `<span style="background: #eff6ff; color: #3b49df; border-radius: 4px; font-size: 11px; padding: 2px 5px;">❄️</span> CollabCRM Demo Account`;
+  }
+  if (expPrev) expPrev.textContent = emp.expPrev || '-';
+  if (expCurrent) expCurrent.textContent = emp.expCurrent || '4Y 3M 1D';
+  if (skillsEl) {
+    const skillColors = [
+      { bg: '#ecfdf5', color: '#059669', border: '#a7f3d0' },
+      { bg: '#fffbeb', color: '#d97706', border: '#fde68a' },
+      { bg: '#fef2f2', color: '#dc2626', border: '#fecaca' }
+    ];
+    const defaultSkills = ['Data Mining', 'UI/UX Research and Testing', 'Account Management', 'Analytics', 'Project Management (Agile/Scrum)', 'JAVA Kotlin'];
+    const rawSkills = (emp.skills && emp.skills !== 'No skills added.')
+      ? emp.skills.split(',').map(s => s.trim()).filter(Boolean)
+      : defaultSkills;
+    const mergedSkills = rawSkills.length >= 4 ? rawSkills : [...rawSkills, ...defaultSkills.filter(d => !rawSkills.includes(d))].slice(0, 6);
+    skillsEl.innerHTML = mergedSkills.map((sk, idx) => {
+      const c = skillColors[idx % skillColors.length];
+      return `<span style="background: ${c.bg}; color: ${c.color}; border: 1px solid ${c.border}; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">${escapeHtml(sk)}</span>`;
+    }).join('');
+  }
   if (badgesEl) badgesEl.textContent = emp.badges;
   if (seatingEl) seatingEl.textContent = emp.seating;
   if (extEl) extEl.textContent = emp.extension;
@@ -5749,7 +6126,7 @@ function populateEmployeeDetail(empCode) {
   const infoType = document.getElementById('empDetailInfoType');
   const infoBio = document.getElementById('empDetailInfoBiometric');
   const infoShift = document.getElementById('empDetailInfoShift');
-  if (infoBU) infoBU.textContent = emp.businessUnit;
+  if (infoBU) infoBU.textContent = 'CollabCRM Demo Account';
   if (infoCode) infoCode.textContent = emp.code;
   if (infoStatus) infoStatus.textContent = emp.status;
   if (infoDept) infoDept.textContent = emp.department;
@@ -5773,6 +6150,20 @@ function populateEmployeeDetail(empCode) {
   if (compEmail) compEmail.textContent = emp.email;
   if (compPhone) compPhone.textContent = emp.phone;
 
+  // Contextual Header Buttons for Employee vs Management
+  const btnBack = document.getElementById('btnEmpDetailBackOrMyTraining');
+  const btnEditEmp = document.getElementById('btnEmpDetailEditEmployee');
+  const btnTrnAction = document.getElementById('btnEmpDetailTrainingAction');
+  if (state.currentRole === 'employee') {
+    if (btnBack) btnBack.textContent = '← Go to My Training';
+    if (btnEditEmp) btnEditEmp.style.display = 'none';
+    if (btnTrnAction) btnTrnAction.textContent = 'Go to My Active Trainings →';
+  } else {
+    if (btnBack) btnBack.textContent = '← Back to Employees';
+    if (btnEditEmp) btnEditEmp.style.display = 'inline-block';
+    if (btnTrnAction) btnTrnAction.textContent = '+ Assign New Training';
+  }
+
   // Render Training History
   renderEmployeeTrainingHistory(emp);
 }
@@ -5784,23 +6175,42 @@ function renderEmployeeTrainingHistory(emp) {
   const inProgEl = document.getElementById('empDetailTrnInProg');
   const certsEl = document.getElementById('empDetailTrnCerts');
 
-  const trainings = emp.trainings || [];
-  const completedCount = trainings.filter(t => t.status === 'Passed' || t.status === 'Completed').length;
-  const inProgCount = trainings.filter(t => t.status === 'In Progress').length;
-  const certCount = trainings.filter(t => t.certId).length;
+  // For CO-5039 (and any employee with unified records), use the unified training & assignment store
+  if (!state.employeeTrainingData) {
+    state.employeeTrainingData = getFallbackEmployeeData('CO-5039');
+  }
 
-  if (enrolledEl) enrolledEl.textContent = trainings.length;
+  let allEmpTrainings = [];
+  let completedRecords = [];
+
+  if (emp.code === 'CO-5039' && state.employeeTrainingData && Array.isArray(state.employeeTrainingData.trainings)) {
+    allEmpTrainings = state.employeeTrainingData.trainings;
+    completedRecords = allEmpTrainings.filter(t => normalizeStatus(t.trainingStatus || t.status) === 'Completed');
+  } else {
+    const rawList = emp.trainings || [];
+    allEmpTrainings = rawList;
+    completedRecords = rawList.filter(t => t.status === 'Passed' || t.status === 'Completed' || normalizeStatus(t.trainingStatus || t.status) === 'Completed');
+  }
+
+  const completedCount = completedRecords.length;
+  const inProgCount = allEmpTrainings.filter(t => {
+    const s = normalizeStatus(t.trainingStatus || t.status);
+    return s !== 'Completed' && t.status !== 'Passed';
+  }).length;
+  const certCount = completedRecords.filter(t => (t.certificate && t.certificate.id) || t.certId).length;
+
+  if (enrolledEl) enrolledEl.textContent = allEmpTrainings.length;
   if (completedEl) completedEl.textContent = completedCount;
   if (inProgEl) inProgEl.textContent = inProgCount;
   if (certsEl) certsEl.textContent = certCount;
 
   if (!tbody) return;
 
-  if (trainings.length === 0) {
+  if (completedRecords.length === 0) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="8" style="padding: 24px; text-align: center; color: #94a3b8; font-size: 13px;">
-          No training history recorded for this employee yet.
+        <td colspan="9" style="padding: 28px; text-align: center; color: #94a3b8; font-size: 13px;">
+          No completed training history records found for this employee yet. Active assignments appear under <strong>My Training</strong> until approved by a reviewer.
         </td>
       </tr>
     `;
@@ -5808,36 +6218,57 @@ function renderEmployeeTrainingHistory(emp) {
   }
 
   let html = '';
-  trainings.forEach(t => {
-    const isPassed = t.status === 'Passed' || t.status === 'Completed';
-    const statusPill = isPassed
-      ? `<span style="background: #f0fdf4; color: #166534; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; border: 1px solid #bbf7d0;">✓ Passed</span>`
-      : `<span style="background: #eff6ff; color: #1d4ed8; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; border: 1px solid #bfdbfe;">⏳ In Progress</span>`;
+  completedRecords.forEach((t, idx) => {
+    const recordId = t.id || `EMP-${emp.code}-TRN-${idx + 1}`;
+    const title = t.trainingName || t.title || 'Training Programme';
+    const category = t.category || t.dept || emp.department || 'General';
+    const assignedDate = t.assignedDate || '-';
+    const completionDate = t.completionDate || (t.review && t.review.reviewDate) || t.dueDate || '-';
 
-    const scoreBadge = t.score !== '-'
-      ? `<span style="font-weight: 700; color: #0f172a; background: #f8fafc; border: 1px solid #e2e8f0; padding: 2px 6px; border-radius: 4px;">${escapeHtml(t.score)}</span>`
-      : `<span style="color: #94a3b8;">-</span>`;
+    let scoreVal = t.score || '-';
+    if (t.assessment && t.assessment.previousAttempts && t.assessment.previousAttempts.length > 0) {
+      scoreVal = `${t.assessment.previousAttempts[t.assessment.previousAttempts.length - 1].score}%`;
+    } else if (t.assessmentScore) {
+      scoreVal = `${t.assessmentScore}%`;
+    }
 
-    const certAction = t.certId
-      ? `<button type="button" onclick="previewIssuedCertificate('${t.certId}')" class="btn-table-action" style="padding: 4px 10px; font-size: 11.5px; color: #2563eb; border: 1px solid #bfdbfe; background: #eff6ff; border-radius: 6px; cursor: pointer; font-weight: 600;" title="View Certificate Credential">
-           🎓 ${escapeHtml(t.certId)}
+    const certId = (t.certificate && t.certificate.id) || t.certId || null;
+
+    const statusPill = `<span style="background: #f0fdf4; color: #166534; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; border: 1px solid #bbf7d0;">✓ Completed</span>`;
+
+    const scoreBadge = scoreVal !== '-'
+      ? `<span style="font-weight: 700; color: #0f172a; background: #f8fafc; border: 1px solid #e2e8f0; padding: 2px 6px; border-radius: 4px;">${escapeHtml(String(scoreVal))}</span>`
+      : `<span style="color: #94a3b8;">100%</span>`;
+
+    const certAction = certId
+      ? `<button type="button" onclick="event.stopPropagation(); openEmployeeCertificateViewer('${certId}')" class="btn-table-action" style="padding: 4px 10px; font-size: 11.5px; color: #2563eb; border: 1px solid #bfdbfe; background: #eff6ff; border-radius: 6px; cursor: pointer; font-weight: 600;" title="View Certificate Credential">
+           🎓 ${escapeHtml(certId)}
          </button>`
-      : `<span style="color: #94a3b8; font-size: 12px;">Not Generated</span>`;
+      : `<span style="color: #94a3b8; font-size: 12px;">Issued</span>`;
 
     html += `
-      <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s ease;">
-        <td style="padding: 12px 14px; text-align: center; color: #64748b; font-weight: 500;">${t.no}</td>
+      <tr onclick="openEmployeeTrainingDetail('${recordId}')" style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s ease; cursor: pointer;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'" title="Click to open complete training details, submission, reviewer feedback & certificate">
+        <td style="padding: 12px 14px; text-align: center; color: #64748b; font-weight: 500;">${idx + 1}</td>
         <td style="padding: 12px 14px;">
-          <div style="font-weight: 600; color: #0f172a; font-size: 13px;">${escapeHtml(t.title)}</div>
+          <div style="font-weight: 600; color: #0f172a; font-size: 13px;">${escapeHtml(title)}</div>
+          <div style="font-size: 11px; color: #64748b; margin-top: 2px;">Assigned by: ${escapeHtml(t.assignedBy || 'Isha Patel (Head of People)')}</div>
         </td>
         <td style="padding: 12px 14px;">
-          <span style="background: #f1f5f9; color: #334155; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px;">${escapeHtml(t.dept)}</span>
+          <span style="background: #f1f5f9; color: #334155; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px;">${escapeHtml(category)}</span>
         </td>
-        <td style="padding: 12px 14px; color: #475569;">${escapeHtml(t.assignedDate)}</td>
-        <td style="padding: 12px 14px; color: #475569;">${escapeHtml(t.completionDate)}</td>
+        <td style="padding: 12px 14px; color: #475569;">${escapeHtml(assignedDate)}</td>
+        <td style="padding: 12px 14px; color: #475569;">${escapeHtml(completionDate)}</td>
         <td style="padding: 12px 14px; text-align: center;">${scoreBadge}</td>
         <td style="padding: 12px 14px; text-align: center;">${statusPill}</td>
         <td style="padding: 12px 14px; text-align: center;">${certAction}</td>
+        <td style="padding: 12px 14px; text-align: center; white-space: nowrap;">
+          <button type="button" class="emp-action-icon" onclick="event.stopPropagation(); openEmployeeTrainingDetail('${recordId}')" title="View Complete Training Details" aria-label="View Complete Training Details">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </button>
+        </td>
       </tr>
     `;
   });
@@ -5845,15 +6276,25 @@ function renderEmployeeTrainingHistory(emp) {
   tbody.innerHTML = html;
 }
 
-function switchEmpDetailSubTab(tabName = 'training') {
-  activeEmpDetailSubTab = 'training';
+function switchEmpDetailSubTab(tabName = 'general') {
+  activeEmpDetailSubTab = tabName;
 
-  const btn = document.getElementById('tabNavTraining');
-  if (btn) {
-    btn.classList.add('active');
-    btn.style.color = '#4f46e5';
-    btn.style.fontWeight = '700';
-    btn.style.borderBottom = '2px solid #4f46e5';
+  const btnGen = document.getElementById('tabNavGeneral');
+  const btnTrn = document.getElementById('tabNavTraining');
+
+  if (btnGen) {
+    const isGen = tabName === 'general';
+    btnGen.classList.toggle('active', isGen);
+    btnGen.style.background = isGen ? '#eef2ff' : 'transparent';
+    btnGen.style.color = isGen ? '#3b49df' : '#475569';
+    btnGen.style.fontWeight = isGen ? '600' : '500';
+  }
+  if (btnTrn) {
+    const isTrn = tabName === 'training';
+    btnTrn.classList.toggle('active', isTrn);
+    btnTrn.style.background = isTrn ? '#eef2ff' : 'transparent';
+    btnTrn.style.color = isTrn ? '#3b49df' : '#475569';
+    btnTrn.style.fontWeight = isTrn ? '600' : '500';
   }
 
   const bcTab = document.getElementById('empDetailBreadcrumbTab');
@@ -5861,13 +6302,24 @@ function switchEmpDetailSubTab(tabName = 'training') {
   const panelTrn = document.getElementById('empDetailPanelTraining');
   const panelPlc = document.getElementById('empDetailPanelPlaceholder');
 
-  if (bcTab) bcTab.textContent = 'Training History';
-  if (panelGen) panelGen.style.display = 'none';
-  if (panelTrn) panelTrn.style.display = 'flex';
+  if (bcTab) bcTab.textContent = tabName === 'training' ? 'Training History' : 'General Info';
+  if (panelGen) panelGen.style.display = tabName === 'general' ? 'flex' : 'none';
+  if (panelTrn) {
+    panelTrn.style.display = tabName === 'training' ? 'flex' : 'none';
+    if (tabName === 'training') {
+      const emp = EMPLOYEES_DETAIL_DATABASE[activeEmployeeDetailCode] || EMPLOYEES_DETAIL_DATABASE['CO-5039'];
+      if (emp) renderEmployeeTrainingHistory(emp);
+    }
+  }
   if (panelPlc) panelPlc.style.display = 'none';
 }
 
-function openEmployeeDetail(empCode = 'YOP-073') {
+function openEmployeeDetail(empCode = 'CO-5039', initialTab = 'general') {
+  // Enforce employee-level data access: logged-in employee can only view their own profile
+  if (state.currentRole === 'employee') {
+    empCode = 'CO-5039';
+  }
+
   const viewDashboard = document.getElementById('viewDashboard');
   const viewTraining = document.getElementById('viewTraining');
   const viewConfig = document.getElementById('viewConfig');
@@ -5889,14 +6341,62 @@ function openEmployeeDetail(empCode = 'YOP-073') {
   }
 
   populateEmployeeDetail(empCode);
-  switchEmpDetailSubTab('training');
+  switchEmpDetailSubTab(initialTab || 'general');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+function handleEmpDetailBackOrAction() {
+  if (state.currentRole === 'employee') {
+    switchToTraining();
+  } else {
+    switchToEmployees();
+  }
+}
+
+function handleEmpDetailTrainingHeaderAction() {
+  if (state.currentRole === 'employee') {
+    switchToTraining();
+  } else {
+    openAssignTrainingModal();
+  }
+}
+
+function toggleMyProfileDropdown(e) {
+  if (e) e.stopPropagation();
+  const dd = document.getElementById('headerMyProfileDropdown');
+  if (!dd) return;
+  const isOpen = dd.style.display === 'block';
+  dd.style.display = isOpen ? 'none' : 'block';
+}
+
+function closeMyProfileDropdown() {
+  const dd = document.getElementById('headerMyProfileDropdown');
+  if (dd) dd.style.display = 'none';
+}
+
+function openMyProfile(initialTab = 'general') {
+  closeMyProfileDropdown();
+  const targetCode = state.currentRole === 'employee' ? 'CO-5039' : 'YOP-073';
+  openEmployeeDetail(targetCode, initialTab);
+}
+
+document.addEventListener('click', function(e) {
+  const container = document.getElementById('headerMyProfileContainer');
+  const dd = document.getElementById('headerMyProfileDropdown');
+  if (dd && dd.style.display === 'block' && container && !container.contains(e.target)) {
+    dd.style.display = 'none';
+  }
+});
 
 window.openEmployeeDetail = openEmployeeDetail;
 window.switchEmpDetailSubTab = switchEmpDetailSubTab;
 window.populateEmployeeDetail = populateEmployeeDetail;
 window.renderEmployeeTrainingHistory = renderEmployeeTrainingHistory;
+window.handleEmpDetailBackOrAction = handleEmpDetailBackOrAction;
+window.handleEmpDetailTrainingHeaderAction = handleEmpDetailTrainingHeaderAction;
+window.toggleMyProfileDropdown = toggleMyProfileDropdown;
+window.closeMyProfileDropdown = closeMyProfileDropdown;
+window.openMyProfile = openMyProfile;
 
 // =============================================================================
 // EMPLOYEE ROLE – TRAINING MANAGEMENT MODULE CONTROLLER (SECTIONS 1 TO 19)
@@ -5945,15 +6445,157 @@ function calcEmployeeStatsFromTrainings(trainings = []) {
   };
 }
 
+const EMP_STORE_LOCAL_KEY = 'collabcrm_emp_store_CO_5039_v2';
+
+function mapTrainingTitleToProgramId(title = '') {
+  const t = title.toLowerCase();
+  if (t.includes('api security') || t.includes('oauth2')) return 'TR-107';
+  if (t.includes('gdpr') || t.includes('security awareness')) return 'TR-108';
+  if (t.includes('platform architecture')) return 'TR-109';
+  if (t.includes('stakeholder') || t.includes('cross-functional')) return 'TR-110';
+  if (t.includes('posh') || t.includes('workplace safety')) return 'TR-111';
+  if (t.includes('incident response') || t.includes('sla')) return 'TR-112';
+  const match = state.programs.find(p => p.title.toLowerCase() === t);
+  return match ? match.id : 'TR-107';
+}
+
+function hydrateUnifiedTrainingRecord(t, empId = 'CO-5039') {
+  t.employeeId = t.employeeId || empId;
+  t.programId = t.programId || mapTrainingTitleToProgramId(t.trainingName || t.title || '');
+  t.trainingName = t.trainingName || t.title || 'Training Programme';
+  t.title = t.trainingName;
+  t.mandatory = t.isMandatory !== undefined ? t.isMandatory : (t.mandatory !== false);
+  t.isMandatory = t.mandatory;
+  t.progress = t.completionPercentage !== undefined ? t.completionPercentage : (t.progress || 0);
+  t.completionPercentage = t.progress;
+
+  const norm = normalizeStatus(t.trainingStatus || t.status);
+  if (norm === 'Completed') {
+    t.trainingStatus = 'completed';
+    t.status = 'Completed';
+    t.submissionStatus = 'approved';
+    t.certificateStatus = (t.certificate && t.certificate.status === 'issued') ? 'issued' : 'eligible';
+    if (t.certificate && t.certificate.id) t.certificateId = t.certificate.id;
+  } else if (norm === 'Submitted for Review') {
+    t.trainingStatus = 'submitted_for_review';
+    t.status = 'Submitted for Review';
+    t.submissionStatus = 'submitted';
+  } else if (norm === 'Changes Requested') {
+    t.trainingStatus = 'changes_requested';
+    t.status = 'Changes Requested';
+    t.submissionStatus = 'changes_requested';
+  } else if (norm === 'In Progress') {
+    t.trainingStatus = 'in_progress';
+    t.status = 'In Progress';
+    t.submissionStatus = t.submissionStatus || 'none';
+  } else if (norm === 'Overdue') {
+    t.trainingStatus = 'overdue';
+    t.status = 'Overdue';
+    t.submissionStatus = t.submissionStatus || 'none';
+  } else {
+    t.trainingStatus = 'not_started';
+    t.status = 'Not Started';
+    t.submissionStatus = t.submissionStatus || 'none';
+  }
+
+  if (t.submission) {
+    t.submissionRemarks = t.submission.completionRemarks || t.submissionRemarks || '';
+    if (Array.isArray(t.submission.evidenceFiles) && t.submission.evidenceFiles.length > 0) {
+      t.submissionEvidence = t.submission.evidenceFiles[0];
+    }
+  }
+  if (t.assessment) {
+    if (t.assessment.passed !== undefined) t.assessment.isPassed = t.assessment.passed;
+    if (t.assessment.isPassed !== undefined) t.assessment.passed = t.assessment.isPassed;
+    if (Array.isArray(t.assessment.previousAttempts) && t.assessment.previousAttempts.length > 0) {
+      t.assessmentScore = t.assessment.previousAttempts[t.assessment.previousAttempts.length - 1].score;
+    }
+  }
+  if (!Array.isArray(t.reviewHistory)) {
+    t.reviewHistory = [];
+    if (t.submission && t.submission.submittedAt) {
+      t.reviewHistory.push({
+        date: t.submission.submittedAt,
+        action: 'Submitted for Evaluation',
+        user: 'Aryan Bhardwaj',
+        notes: t.submission.completionRemarks || 'Submitted completed modules and assessment.'
+      });
+    }
+    if (t.review && t.review.reviewDate) {
+      t.reviewHistory.unshift({
+        date: t.review.reviewDate,
+        action: t.review.status === 'approved' ? 'Approved Submission' : 'Requested Changes',
+        user: t.review.reviewerName || 'Reviewer',
+        notes: t.review.feedback || ''
+      });
+    }
+  }
+  return t;
+}
+
+function syncEmployeeTrainingsWithGlobalAssignments() {
+  if (!state.employeeTrainingData || !Array.isArray(state.employeeTrainingData.trainings)) return;
+  state.employeeTrainingData.trainings.forEach(t => {
+    hydrateUnifiedTrainingRecord(t, 'CO-5039');
+    const existingIdx = state.assignments.findIndex(a => a.id === t.id);
+    if (existingIdx !== -1) {
+      if (state.assignments[existingIdx] !== t) {
+        Object.assign(t, state.assignments[existingIdx]);
+        state.assignments[existingIdx] = t;
+      }
+    } else {
+      state.assignments.unshift(t);
+    }
+    if (t.certificate && t.certificate.id && !state.certificates.some(c => c.id === t.certificate.id)) {
+      state.certificates.push({
+        id: t.certificate.id,
+        certificateNo: t.certificate.certificateNo || t.certificate.id,
+        assignmentId: t.id,
+        employeeId: 'CO-5039',
+        programId: t.programId,
+        issueDate: t.certificate.issueDate || '26-Jan-2026',
+        expiryDate: t.certificate.expiryDate || 'Lifetime',
+        status: 'issued',
+        reissueCount: 0,
+        issuedBy: t.certificate.issuerName || 'Isha Patel (Head of People)'
+      });
+    }
+  });
+  updatePendingReviewsBadge();
+}
+
+function saveEmployeeStoreToLocal() {
+  if (!state.employeeTrainingData) return;
+  syncEmployeeTrainingsWithGlobalAssignments();
+  try {
+    localStorage.setItem(EMP_STORE_LOCAL_KEY, JSON.stringify({
+      profile: state.employeeTrainingData.profile,
+      trainings: state.employeeTrainingData.trainings,
+      notifications: state.employeeTrainingData.notifications
+    }));
+  } catch (e) {
+    console.warn('Unable to save employee training store to localStorage:', e);
+  }
+}
+
 // Master helper: Get fallback employee data
 function getFallbackEmployeeData(empId = 'CO-5039') {
-  const store = (window.DEFAULT_EMPLOYEE_STORE && window.DEFAULT_EMPLOYEE_STORE[empId]) || {};
+  let saved = null;
+  if (empId === 'CO-5039') {
+    try {
+      const raw = localStorage.getItem(EMP_STORE_LOCAL_KEY);
+      if (raw) saved = JSON.parse(raw);
+    } catch (e) {}
+  }
+  const store = saved || (window.DEFAULT_EMPLOYEE_STORE && window.DEFAULT_EMPLOYEE_STORE[empId]) || {};
   const trainings = JSON.parse(JSON.stringify(store.trainings || []));
+  trainings.forEach(t => hydrateUnifiedTrainingRecord(t, empId));
   const stats = calcEmployeeStatsFromTrainings(trainings);
   const certs = trainings
     .filter(t => t.certificate && t.certificate.status === 'issued')
     .map(t => ({
       ...t.certificate,
+      name: t.certificate.name || `${t.trainingName} Credential`,
       trainingName: t.trainingName,
       category: t.category,
       assignedBy: t.assignedBy
@@ -5963,9 +6605,12 @@ function getFallbackEmployeeData(empId = 'CO-5039') {
     let scoreStr = '-';
     if (t.assessment && t.assessment.previousAttempts && t.assessment.previousAttempts.length > 0) {
       scoreStr = `${t.assessment.previousAttempts[t.assessment.previousAttempts.length - 1].score}%`;
+    } else if (t.assessmentScore) {
+      scoreStr = `${t.assessmentScore}%`;
     }
     return {
       id: t.id,
+      trainingId: t.id,
       trainingName: t.trainingName,
       category: t.category,
       assignedBy: t.assignedBy,
@@ -5974,11 +6619,14 @@ function getFallbackEmployeeData(empId = 'CO-5039') {
       startDate: t.startDate || '-',
       submissionDate: (t.submission && t.submission.submittedAt) ? t.submission.submittedAt : '-',
       reviewDate: (t.review && t.review.reviewDate) ? t.review.reviewDate : '-',
-      completionDate: (t.trainingStatus === 'completed' && t.review) ? (t.review.reviewDate || t.dueDate) : '-',
+      completionDate: (t.trainingStatus === 'completed' && t.review) ? (t.review.reviewDate || t.completionDate || t.dueDate) : (t.completionDate || '-'),
       progress: t.completionPercentage,
+      progressPercent: t.completionPercentage,
+      score: scoreStr.replace('%', ''),
       assessmentScore: scoreStr,
-      assignmentStatus: t.trainingStatus,
+      assignmentStatus: normalizeStatus(t.trainingStatus || t.status),
       reviewStatus: t.review ? t.review.status : 'not_submitted',
+      certificateId: (t.certificate && t.certificate.status === 'issued') ? t.certificate.id : null,
       certificateStatus: (t.certificate && t.certificate.status === 'issued') ? 'Issued' : 'Not Issued'
     };
   });
@@ -5998,11 +6646,51 @@ function getFallbackEmployeeData(empId = 'CO-5039') {
 function renderEmployeeDashboardUI() {
   if (!state.employeeTrainingData) return;
 
-  // Recalculate live stats
+  syncEmployeeTrainingsWithGlobalAssignments();
+
+  // Recalculate live stats, certificates, and history from the unified trainings array
   const trainings = state.employeeTrainingData.trainings || [];
   const k = calcEmployeeStatsFromTrainings(trainings);
   state.employeeTrainingData.stats = k;
   state.employeeTrainingData.kpis = k;
+  state.employeeTrainingData.certificates = trainings
+    .filter(t => t.certificate && t.certificate.status === 'issued')
+    .map(t => ({
+      ...t.certificate,
+      name: t.certificate.name || `${t.trainingName} Credential`,
+      trainingName: t.trainingName,
+      category: t.category,
+      assignedBy: t.assignedBy
+    }));
+  state.employeeTrainingData.history = trainings.map(t => {
+    let scoreNum = null;
+    if (t.assessment && t.assessment.previousAttempts && t.assessment.previousAttempts.length > 0) {
+      scoreNum = t.assessment.previousAttempts[t.assessment.previousAttempts.length - 1].score;
+    } else if (t.assessmentScore) {
+      scoreNum = t.assessmentScore;
+    }
+    return {
+      id: t.id,
+      trainingId: t.id,
+      trainingName: t.trainingName,
+      category: t.category,
+      assignedBy: t.assignedBy,
+      assignedDate: t.assignedDate,
+      dueDate: t.dueDate,
+      startDate: t.startDate || '—',
+      submissionDate: (t.submission && t.submission.submittedAt) ? t.submission.submittedAt : '—',
+      reviewDate: (t.review && t.review.reviewDate) ? t.review.reviewDate : '—',
+      completionDate: (normalizeStatus(t.trainingStatus || t.status) === 'Completed') ? (t.completionDate || (t.review && t.review.reviewDate) || t.dueDate) : '—',
+      progress: t.completionPercentage,
+      progressPercent: t.completionPercentage !== undefined ? t.completionPercentage : (t.progress || 0),
+      score: scoreNum,
+      assessmentScore: scoreNum ? `${scoreNum}%` : '—',
+      assignmentStatus: normalizeStatus(t.trainingStatus || t.status),
+      reviewStatus: t.review ? t.review.status : 'Pending',
+      certificateId: (t.certificate && t.certificate.id) ? t.certificate.id : null,
+      certificateStatus: (t.certificate && t.certificate.status === 'issued') ? 'Issued' : 'None'
+    };
+  });
 
   // Populate profile card (Spec Sec 3)
   const p = state.employeeTrainingData.profile || {};
@@ -6014,7 +6702,7 @@ function renderEmployeeDashboardUI() {
   const elAvatar = document.getElementById('empProfileCardAvatar');
 
   if (elName) elName.textContent = p.name || 'Aryan Bhardwaj';
-  if (elCode) elCode.textContent = p.employeeId || 'CO-5039';
+  if (elCode) elCode.textContent = p.employeeId || p.id || 'CO-5039';
   if (elDesig) elDesig.textContent = p.designation || 'Executive';
   if (elDept) elDept.textContent = p.department || 'IT - Project';
   if (elMgr) elMgr.textContent = p.reportingManager || 'Megha Salunkhe';
@@ -6037,19 +6725,6 @@ function renderEmployeeDashboardUI() {
   setCard('empKpiOverdue', k.overdue);
   setCard('empKpiCertificatesIssued', k.certificatesIssued);
 
-  // Filter Pill Badges
-  const setBadge = (id, val) => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = val !== undefined ? val : 0;
-  };
-  setBadge('empFilterBadge_all', k.totalAssigned);
-  setBadge('empFilterBadge_NotStarted', k.notStarted);
-  setBadge('empFilterBadge_InProgress', k.inProgress);
-  setBadge('empFilterBadge_SubmittedForReview', k.submittedForReview);
-  setBadge('empFilterBadge_ChangesRequested', k.changesRequested);
-  setBadge('empFilterBadge_Completed', k.completed);
-  setBadge('empFilterBadge_Overdue', k.overdue);
-
   // Update Notification count badge
   const badge = document.getElementById('empNotificationBadge');
   const notifs = state.employeeTrainingData.notifications || [];
@@ -6063,41 +6738,44 @@ function renderEmployeeDashboardUI() {
   renderEmployeeTrainingsList();
   renderEmployeeCertificates();
   renderEmployeeHistoryFull();
+
+  // Also refresh Employee Detail Training History if currently viewing CO-5039
+  const viewEmployeeDetail = document.getElementById('viewEmployeeDetail');
+  if (viewEmployeeDetail && viewEmployeeDetail.style.display === 'block' && activeEmployeeDetailCode === 'CO-5039') {
+    const emp = EMPLOYEES_DETAIL_DATABASE['CO-5039'];
+    if (emp) renderEmployeeTrainingHistory(emp);
+  }
 }
 
 // 1. Fetch complete employee training data with fallback resilience (Spec Sec 15)
 async function loadEmployeeTrainingData(empId = 'CO-5039') {
-  // Always initialize default store immediately to prevent blank delay
   if (!state.employeeTrainingData || !state.employeeTrainingData.trainings || state.employeeTrainingData.trainings.length === 0) {
     state.employeeTrainingData = getFallbackEmployeeData(empId);
+    syncEmployeeTrainingsWithGlobalAssignments();
     renderEmployeeDashboardUI();
   }
 
   try {
-    const [trnRes, certRes, histRes] = await Promise.all([
-      fetch(getEmpApiUrl(`/api/employee/training-data?employeeId=${encodeURIComponent(empId)}`)),
-      fetch(getEmpApiUrl(`/api/employee/certificates?employeeId=${encodeURIComponent(empId)}`)),
-      fetch(getEmpApiUrl(`/api/employee/history?employeeId=${encodeURIComponent(empId)}`))
-    ]);
-
+    const trnRes = await fetch(getEmpApiUrl(`/api/employee/training-data?employeeId=${encodeURIComponent(empId)}`));
     const data = trnRes.ok ? await trnRes.json() : {};
-    const certData = certRes.ok ? await certRes.json() : {};
-    const histData = histRes.ok ? await histRes.json() : {};
 
     if (data && data.trainings && data.trainings.length > 0) {
-      state.employeeTrainingData = {
-        profile: data.profile || data.employee || state.employeeTrainingData.profile,
-        stats: data.stats || data.kpis || state.employeeTrainingData.stats,
-        kpis: data.stats || data.kpis || state.employeeTrainingData.kpis,
-        trainings: data.trainings,
-        notifications: data.notifications || state.employeeTrainingData.notifications,
-        certificates: certData.certificates || state.employeeTrainingData.certificates,
-        history: histData.history || state.employeeTrainingData.history
-      };
+      // Merge server trainings with any locally created/updated assignments so nothing is lost
+      const localMap = new Map((state.employeeTrainingData.trainings || []).map(t => [t.id, t]));
+      data.trainings.forEach(srvT => {
+        if (!localMap.has(srvT.id)) {
+          localMap.set(srvT.id, hydrateUnifiedTrainingRecord(srvT, empId));
+        }
+      });
+      state.employeeTrainingData.trainings = Array.from(localMap.values());
+      if (data.profile || data.employee) {
+        state.employeeTrainingData.profile = data.profile || data.employee;
+      }
+      saveEmployeeStoreToLocal();
       renderEmployeeDashboardUI();
     }
   } catch (err) {
-    console.warn('Backend API sync unavailable, using local client-side state:', err);
+    console.warn('Backend API sync unavailable, using unified client-side state:', err);
     renderEmployeeDashboardUI();
   }
 }
@@ -6106,19 +6784,17 @@ async function loadEmployeeTrainingData(empId = 'CO-5039') {
 function filterEmpTrainingsByStatus(status) {
   state.empActiveFilter = status;
 
-  // Update pill active classes
-  const filterPillMap = {
-    'all': 'btnEmpFilter_all',
-    'Not Started': 'btnEmpFilter_NotStarted',
-    'In Progress': 'btnEmpFilter_InProgress',
-    'Submitted for Review': 'btnEmpFilter_SubmittedForReview',
-    'Changes Requested': 'btnEmpFilter_ChangesRequested',
-    'Completed': 'btnEmpFilter_Completed',
-    'Overdue': 'btnEmpFilter_Overdue'
-  };
+  const filterPillIds = [
+    'all',
+    'not_started',
+    'in_progress',
+    'submitted_for_review',
+    'changes_requested',
+    'overdue'
+  ];
 
-  Object.keys(filterPillMap).forEach(key => {
-    const btn = document.getElementById(filterPillMap[key]);
+  filterPillIds.forEach(key => {
+    const btn = document.getElementById(`empFilterBtn_${key}`);
     if (btn) {
       btn.classList.toggle('active', key === status);
     }
@@ -6127,7 +6803,7 @@ function filterEmpTrainingsByStatus(status) {
   renderEmployeeTrainingsList();
 }
 
-// 3. Render Training Listing Cards (Spec Sec 5)
+// 3. Render Training Listing Cards (Spec Sec 5 — Active My Training only; Completed moves to Training History)
 function renderEmployeeTrainingsList() {
   const container = document.getElementById('empTrainingsGrid');
   if (!container) return;
@@ -6147,11 +6823,13 @@ function renderEmployeeTrainingsList() {
   const catFilter = document.getElementById('filterEmpCategorySelect')?.value || 'all';
   const sortOrder = document.getElementById('sortEmpTrainingsSelect')?.value || 'due_soonest';
 
-  let list = [...state.employeeTrainingData.trainings];
+  // Active My Training excludes Completed trainings (which live in Training History)
+  let list = state.employeeTrainingData.trainings.filter(t => normalizeStatus(t.trainingStatus || t.status) !== 'Completed');
 
   // 1. Status Filter
   if (state.empActiveFilter && state.empActiveFilter !== 'all') {
-    list = list.filter(t => normalizeStatus(t.trainingStatus || t.status) === state.empActiveFilter);
+    const targetNorm = normalizeStatus(state.empActiveFilter);
+    list = list.filter(t => normalizeStatus(t.trainingStatus || t.status) === targetNorm);
   }
 
   // 2. Category Filter
@@ -6189,9 +6867,9 @@ function renderEmployeeTrainingsList() {
     container.innerHTML = `
       <div style="background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 42px 20px; text-align: center; color: #64748b;">
         <div style="font-size: 32px; margin-bottom: 8px;">📚</div>
-        <h4 style="font-size: 14.5px; font-weight: 700; color: #1e293b; margin: 0 0 4px 0;">No Assigned Trainings Found</h4>
-        <p style="font-size: 12.5px; margin: 0;">No training programs match your current filter criteria.</p>
-        <button type="button" class="btn-table-action" onclick="filterEmpTrainingsByStatus('all')" style="margin-top: 12px;">Reset Filters</button>
+        <h4 style="font-size: 14.5px; font-weight: 700; color: #1e293b; margin: 0 0 4px 0;">No Active Trainings Match Filter</h4>
+        <p style="font-size: 12.5px; margin: 0;">Completed and approved trainings are automatically moved to your <a href="javascript:void(0)" onclick="openMyProfile('training')" style="color: #4f46e5; font-weight: 600; text-decoration: underline;">Training History</a>.</p>
+        <button type="button" class="btn-table-action" onclick="filterEmpTrainingsByStatus('all')" style="margin-top: 12px;">Show All Active Trainings</button>
       </div>
     `;
     return;
@@ -6307,8 +6985,76 @@ function switchEmployeeTrainingTab(tabId) {
 
 // 5. Training Details Screen Modal (Spec Sec 6-10)
 function openEmployeeTrainingDetail(trainingId) {
-  if (!state.employeeTrainingData || !state.employeeTrainingData.trainings) return;
-  const t = state.employeeTrainingData.trainings.find(x => x.id === trainingId);
+  if (!state.employeeTrainingData) {
+    state.employeeTrainingData = getFallbackEmployeeData('CO-5039');
+    syncEmployeeTrainingsWithGlobalAssignments();
+  }
+  let t = (state.employeeTrainingData.trainings || []).find(x => x.id === trainingId);
+  if (!t) {
+    t = state.assignments.find(x => x.id === trainingId);
+  }
+  if (!t && trainingId && trainingId.startsWith('EMP-')) {
+    // Fallback for viewing static completed training rows of other employees
+    const parts = trainingId.split('-TRN-');
+    const code = parts[0].replace('EMP-', '');
+    const idx = parseInt(parts[1], 10) - 1;
+    const empObj = EMPLOYEES_DETAIL_DATABASE[code];
+    const row = empObj && empObj.trainings && empObj.trainings[idx];
+    if (row) {
+      t = {
+        id: trainingId,
+        trainingName: row.title,
+        category: row.dept || empObj.department,
+        shortDescription: `Completed curriculum for ${row.title}.`,
+        isMandatory: true,
+        assignedBy: empObj.reportingManager || 'Isha Patel (Head of People)',
+        assignedDate: row.assignedDate,
+        dueDate: row.completionDate,
+        completionDate: row.completionDate,
+        completionPercentage: 100,
+        trainingStatus: 'completed',
+        status: 'Completed',
+        difficultyLevel: 'Intermediate',
+        expectedDuration: '4 Hours',
+        resources: [
+          { id: `${trainingId}_r1`, title: `${row.title} — Core Handbook & Guidelines`, type: 'pdf', isMandatory: true, duration: '45 Mins', url: '#', isCompleted: true, completionDate: row.completionDate }
+        ],
+        assessment: {
+          id: `${trainingId}_asm`,
+          name: `${row.title} Final Assessment`,
+          passingScore: 80,
+          maxAttempts: 3,
+          attemptsUsed: 1,
+          passed: true,
+          isPassed: true,
+          bestScore: parseInt(String(row.score).replace('%', ''), 10) || 95,
+          previousAttempts: [{ attemptNumber: 1, score: parseInt(String(row.score).replace('%', ''), 10) || 95, passed: true, submissionDate: row.completionDate }],
+          questions: []
+        },
+        submission: {
+          completionRemarks: 'Completed all required coursework, practical exercises, and assessment modules.',
+          evidenceFiles: ['verified_completion_evidence.pdf'],
+          submittedAt: row.completionDate,
+          isLocked: true
+        },
+        review: {
+          status: 'approved',
+          reviewerName: empObj.reportingManager || 'Isha Patel (Head of People)',
+          reviewDate: row.completionDate,
+          feedback: 'Approved and verified.'
+        },
+        certificate: row.certId ? {
+          id: row.certId,
+          name: `${row.title} Credential`,
+          trainingName: row.title,
+          issueDate: row.completionDate,
+          status: 'issued',
+          recipientName: empObj.name,
+          recipientId: empObj.code
+        } : null
+      };
+    }
+  }
   if (!t) return;
 
   state.empCurrentTrainingId = trainingId;
@@ -6513,15 +7259,18 @@ function applyLocalResourceCompletion(trainingId, resourceId, targetState) {
   r.completionDate = targetState ? dateStr : null;
   r.completionTimestamp = targetState ? `${dateStr}, ${timeStr}` : null;
 
-  const mandatoryResources = t.resources.filter(x => x.isMandatory);
+  const mandatoryResources = t.resources.filter(x => x.isMandatory !== undefined ? x.isMandatory : (x.mandatory !== false));
   const completedMandatory = mandatoryResources.filter(x => x.isCompleted).length;
   t.completionPercentage = mandatoryResources.length > 0 ? Math.round((completedMandatory / mandatoryResources.length) * 100) : 100;
+  t.progress = t.completionPercentage;
 
-  if (t.trainingStatus === 'not_started' && t.completionPercentage > 0) {
+  if ((t.trainingStatus === 'not_started' || t.status === 'Not Started') && t.completionPercentage > 0) {
     t.trainingStatus = 'in_progress';
+    t.status = 'In Progress';
     t.startDate = dateStr;
   }
 
+  saveEmployeeStoreToLocal();
   renderEmpModalResources(t);
   renderEmpModalSubmission(t);
   renderEmployeeDashboardUI();
@@ -6553,13 +7302,12 @@ async function toggleEmployeeResourceComplete(trainingId, resourceId, e) {
     if (res.ok) {
       const result = await res.json();
       if (result.success && result.training) {
-        const idx = state.employeeTrainingData.trainings.findIndex(x => x.id === trainingId);
-        if (idx !== -1) {
-          state.employeeTrainingData.trainings[idx] = result.training;
-        }
+        Object.assign(t, result.training);
+        hydrateUnifiedTrainingRecord(t, 'CO-5039');
+        saveEmployeeStoreToLocal();
 
-        renderEmpModalResources(result.training);
-        renderEmpModalSubmission(result.training);
+        renderEmpModalResources(t);
+        renderEmpModalSubmission(t);
         renderEmployeeDashboardUI();
 
         showConfigToast(`Resource marked as ${targetState ? 'completed' : 'pending'}`);
@@ -6780,6 +7528,9 @@ function applyLocalAssessmentSubmit(trainingId, answers) {
 
   asm.attemptsUsed = (asm.attemptsUsed || 0) + 1;
   asm.passed = passed;
+  asm.isPassed = passed;
+  asm.bestScore = Math.max(asm.bestScore || 0, score);
+  t.assessmentScore = score;
 
   const now = new Date();
   const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
@@ -6793,6 +7544,7 @@ function applyLocalAssessmentSubmit(trainingId, answers) {
     submissionDate: `${dateStr}, ${timeStr}`
   });
 
+  saveEmployeeStoreToLocal();
   renderEmpModalAssessment(t);
   renderEmpModalSubmission(t);
   renderEmployeeDashboardUI();
@@ -6838,14 +7590,18 @@ async function submitEmployeeAssessment(trainingId) {
     if (res.ok) {
       const result = await res.json();
       if (result.success && result.training) {
-        const idx = state.employeeTrainingData.trainings.findIndex(x => x.id === trainingId);
-        if (idx !== -1) {
-          state.employeeTrainingData.trainings[idx] = result.training;
+        const t = state.employeeTrainingData.trainings.find(x => x.id === trainingId);
+        if (t) {
+          Object.assign(t, result.training);
+          if (t.assessment) {
+            t.assessment.isPassed = t.assessment.passed;
+          }
+          hydrateUnifiedTrainingRecord(t, 'CO-5039');
+          saveEmployeeStoreToLocal();
+          renderEmpModalAssessment(t);
+          renderEmpModalSubmission(t);
+          renderEmployeeDashboardUI();
         }
-
-        renderEmpModalAssessment(result.training);
-        renderEmpModalSubmission(result.training);
-        renderEmployeeDashboardUI();
 
         if (result.passed) {
           showConfigToast(`Assessment Passed! Score: ${result.score}% ✓`);
@@ -6897,16 +7653,28 @@ function renderEmpModalSubmission(t) {
         </div>
       `;
     } else if (statusText === 'Completed') {
-      const reviewerName = t.review?.reviewerName || t.reviewerName || 'Megha Salunkhe';
+      const reviewerName = t.review?.reviewerName || t.reviewerName || 'Isha Patel (Head of People)';
+      const reviewFeedback = t.review?.feedback || t.review?.feedbackNotes || 'All mandatory resources and assessment requirements verified and approved.';
+      const certId = (t.certificate && t.certificate.id) || t.certificateId || 'TRN-2026-0003';
       feedbackBanner.style.display = 'block';
       feedbackBanner.innerHTML = `
         <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 14px 18px; color: #166534;">
-          <strong style="font-size: 13.5px; display: flex; align-items: center; gap: 6px;">
-            <span>✓</span> Training Approved &amp; Certified
-          </strong>
-          <p style="font-size: 12.5px; margin: 4px 0 0 0;">
-            Approved by <strong>${escapeHtml(reviewerName)}</strong> on ${escapeHtml(t.completionDate || '02-Nov-2026')}. Official Certificate issued in your CollabCRM portal.
-          </p>
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+            <div>
+              <strong style="font-size: 13.5px; display: flex; align-items: center; gap: 6px;">
+                <span>✓</span> Training Approved &amp; Certified (Moved to Training History)
+              </strong>
+              <p style="font-size: 12.5px; margin: 4px 0 0 0;">
+                Approved by <strong>${escapeHtml(reviewerName)}</strong> on ${escapeHtml(t.completionDate || (t.review && t.review.reviewDate) || '26-Jan-2026')}.
+              </p>
+              <p style="font-size: 12.5px; margin: 4px 0 0 0; color: #15803d;">
+                <strong>Reviewer Feedback:</strong> "${escapeHtml(reviewFeedback)}"
+              </p>
+            </div>
+            <button type="button" class="btn-primary-action" onclick="openEmployeeCertificateViewer('${escapeHtml(certId)}')" style="padding: 7px 14px; font-size: 12px; background: #16a34a; border-color: #15803d;">
+              🎓 View Certificate (${escapeHtml(certId)})
+            </button>
+          </div>
         </div>
       `;
     } else if (statusText === 'Submitted for Review') {
@@ -6947,10 +7715,10 @@ function validateEmpSubmissionReadiness() {
   const t = state.employeeTrainingData.trainings.find(x => x.id === state.empCurrentTrainingId);
   if (!t) return;
 
-  const mandatoryResources = (t.resources || []).filter(r => r.mandatory !== false);
+  const mandatoryResources = (t.resources || []).filter(r => r.isMandatory !== undefined ? r.isMandatory : (r.mandatory !== false));
   const resourcesPassed = mandatoryResources.every(r => !!r.isCompleted);
 
-  const assessmentPassed = !t.assessment || !!t.assessment.isPassed;
+  const assessmentPassed = !t.assessment || !!(t.assessment.passed !== undefined ? t.assessment.passed : t.assessment.isPassed);
   const remarksEntered = !!(document.getElementById('empSubmissionRemarksInput')?.value || '').trim();
   const evidenceUploaded = true; // Evidence is optional unless configured
 
@@ -7015,12 +7783,24 @@ function applyLocalTrainingSubmission(trainingId, remarks, evidenceFileName) {
 
   t.trainingStatus = 'submitted_for_review';
   t.status = 'Submitted for Review';
+  t.submissionStatus = 'submitted';
+  t.submissionRemarks = remarks;
+  t.submissionEvidence = evidenceFileName || 'completion_attestation.pdf';
+  t.progress = 100;
+  t.completionPercentage = 100;
   t.review = {
     status: 'pending',
     reviewerName: t.assignedBy || 'Megha Salunkhe (Sr. Executive)',
     reviewDate: null,
     feedback: 'Submission received. Awaiting manager review.'
   };
+  if (!Array.isArray(t.reviewHistory)) t.reviewHistory = [];
+  t.reviewHistory.unshift({
+    date: `${dateStr}, ${timeStr}`,
+    action: 'Submitted for Evaluation',
+    user: 'Aryan Bhardwaj',
+    notes: remarks
+  });
 
   state.employeeTrainingData.notifications.unshift({
     id: `notif_${Date.now()}`,
@@ -7032,9 +7812,10 @@ function applyLocalTrainingSubmission(trainingId, remarks, evidenceFileName) {
     read: false
   });
 
+  saveEmployeeStoreToLocal();
   renderEmpModalSubmission(t);
   renderEmployeeDashboardUI();
-  showConfigToast('Training submitted for review successfully! Reviewer notified.');
+  showConfigToast('Training submitted for review! Status is now Under Review until approved by your reviewer.');
 }
 
 // Final Submit for Review workflow (Spec Sec 9-10)
@@ -7049,13 +7830,7 @@ async function submitEmpTrainingWorkflow() {
     return;
   }
 
-  const isResubmission = t.status === 'Changes Requested';
-  const confirmMsg = isResubmission
-    ? 'Are you ready to resubmit your updated training evidence and remarks to your reviewer?'
-    : 'Are you sure you want to submit this training for review? Ordinary editing will be locked until review completion.';
-
-  if (!confirm(confirmMsg)) return;
-
+  const isResubmission = normalizeStatus(t.trainingStatus || t.status) === 'Changes Requested';
   const endpoint = isResubmission ? '/api/employee/training-resubmit' : '/api/employee/training-submit';
   let handled = false;
 
@@ -7067,22 +7842,31 @@ async function submitEmpTrainingWorkflow() {
         employeeId: 'CO-5039',
         trainingId: t.id,
         remarks: remarks,
-        evidenceFileName: state.empAttachedEvidence?.name || null
+        evidenceFiles: state.empAttachedEvidence?.name ? [state.empAttachedEvidence.name] : ['completion_attestation.pdf']
       })
     });
 
     if (res.ok) {
       const result = await res.json();
       if (result.success && result.training) {
-        const idx = state.employeeTrainingData.trainings.findIndex(x => x.id === t.id);
-        if (idx !== -1) {
-          state.employeeTrainingData.trainings[idx] = result.training;
-        }
+        Object.assign(t, result.training);
+        t.submissionStatus = 'submitted';
+        t.submissionRemarks = remarks;
+        t.submissionEvidence = state.empAttachedEvidence?.name || 'completion_attestation.pdf';
+        if (!Array.isArray(t.reviewHistory)) t.reviewHistory = [];
+        t.reviewHistory.unshift({
+          date: t.submission?.submittedAt || 'Today',
+          action: isResubmission ? 'Resubmitted for Evaluation' : 'Submitted for Evaluation',
+          user: 'Aryan Bhardwaj',
+          notes: remarks
+        });
+        hydrateUnifiedTrainingRecord(t, 'CO-5039');
+        saveEmployeeStoreToLocal();
 
-        renderEmpModalSubmission(result.training);
+        renderEmpModalSubmission(t);
         renderEmployeeDashboardUI();
 
-        showConfigToast('Training submitted for review successfully! Reviewer notified.');
+        showConfigToast('Training submitted for review! Status is now Under Review until approved by your reviewer.');
         handled = true;
       }
     }

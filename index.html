@@ -143,12 +143,31 @@
             <div class="user-role-dropdown-list" id="userRoleDropdownList">
               <!-- Rendered dynamically via renderUserRoleDropdown() in app.js -->
             </div>
-            <div class="user-role-dropdown-footer">
+            <div class="user-role-dropdown-footer" style="display: flex; flex-direction: column; gap: 6px;">
+              <button type="button" class="user-role-reset-btn" onclick="openMyProfile('general')" style="color: #4f46e5; border-color: #c7d2fe; background: #eef2ff;">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                My Profile &amp; Training History
+              </button>
               <button type="button" class="user-role-reset-btn" onclick="resetDemoData()">
                 <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
                 Reset Demo Data
               </button>
             </div>
+          </div>
+        </div>
+
+        <!-- Profile Avatar Dropdown Menu (Screenshot 2: My Profile, My Work Log, Preferences, Change Password, Support Tickets, Logout) -->
+        <div style="position: relative;" id="headerMyProfileContainer">
+          <button type="button" id="headerProfileAvatarBtn" onclick="toggleMyProfileDropdown(event)" title="My Profile &amp; Account Menu" style="width: 34px; height: 34px; border-radius: 50%; border: 2px solid #e2e8f0; padding: 0; overflow: hidden; cursor: pointer; background: #8b5cf6; color: #ffffff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center;">
+            <img id="headerProfileMenuAvatarImg" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&amp;fit=crop&amp;q=80&amp;w=120" alt="Profile" style="width: 100%; height: 100%; object-fit: cover;" />
+          </button>
+          <div id="headerMyProfileDropdown" style="display: none; position: absolute; top: calc(100% + 8px); right: 0; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.14), 0 4px 10px -2px rgba(15, 23, 42, 0.06); min-width: 195px; padding: 6px 0; z-index: 1500;">
+            <button type="button" onclick="openMyProfile('general')" style="width: 100%; text-align: left; background: none; border: none; padding: 10px 18px; font-size: 13.5px; font-weight: 500; color: #0f172a; cursor: pointer; display: block;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='none'">My Profile</button>
+            <button type="button" onclick="closeMyProfileDropdown(); showConfigToast('Opening My Work Log...');" style="width: 100%; text-align: left; background: none; border: none; padding: 10px 18px; font-size: 13.5px; font-weight: 500; color: #0f172a; cursor: pointer; display: block;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='none'">My Work Log</button>
+            <button type="button" onclick="closeMyProfileDropdown(); showConfigToast('Opening Preferences...');" style="width: 100%; text-align: left; background: none; border: none; padding: 10px 18px; font-size: 13.5px; font-weight: 500; color: #0f172a; cursor: pointer; display: block;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='none'">Preferences</button>
+            <button type="button" onclick="closeMyProfileDropdown(); showConfigToast('Opening Change Password...');" style="width: 100%; text-align: left; background: none; border: none; padding: 10px 18px; font-size: 13.5px; font-weight: 500; color: #0f172a; cursor: pointer; display: block;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='none'">Change Password</button>
+            <button type="button" onclick="closeMyProfileDropdown(); showConfigToast('Opening Support Tickets...');" style="width: 100%; text-align: left; background: none; border: none; padding: 10px 18px; font-size: 13.5px; font-weight: 500; color: #0f172a; cursor: pointer; display: block;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='none'">Support Tickets</button>
+            <button type="button" onclick="closeMyProfileDropdown(); showConfigToast('Session signed out.');" style="width: 100%; text-align: left; background: none; border: none; padding: 10px 18px; font-size: 13.5px; font-weight: 500; color: #0f172a; cursor: pointer; display: block;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='none'">Logout</button>
           </div>
         </div>
 
@@ -909,7 +928,11 @@
                 </div>
               </div>
               <div style="display: flex; align-items: center; gap: 10px;">
-                <button type="button" class="btn-table-action" onclick="toggleEmpNotificationsModal()" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; font-size: 12px; font-weight: 600; position: relative; border-radius: 6px;">
+                <button type="button" class="btn-table-action" onclick="openMyProfile('training')" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; font-size: 12px; font-weight: 600; border-radius: 6px; color: #4f46e5; border-color: #c7d2fe; background: #eef2ff;">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                  <span>My Profile &amp; Training History</span>
+                </button>
+                <button type="button" class="btn-table-action" onclick="openEmployeeNotificationsDrawer()" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; font-size: 12px; font-weight: 600; position: relative; border-radius: 6px;">
                   <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
                   <span>Notifications</span>
                   <span id="empNotifUnreadCountBadge" style="background: #ef4444; color: #ffffff; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 10px;">2</span>
@@ -1510,18 +1533,18 @@
                     <span class="kpi-stat-main-title" style="color: #b45309;">CHANGES REQUESTED</span>
                     <span class="emp-kpi-icon-pill">⚠️</span>
                   </div>
-                  <div class="kpi-stat-main-val" id="empKpiChangesReq" style="color: #d97706;">1</div>
+                  <div class="kpi-stat-main-val" id="empKpiChangesRequested" style="color: #d97706;">1</div>
                   <div style="font-size: 11.5px; color: #b45309; margin-top: 4px;">Action required from you</div>
                 </div>
 
-                <!-- 6. Completed -->
-                <div class="kpi-stat-card-main" onclick="filterEmpTrainingsByStatus('completed')" style="cursor: pointer; padding: 14px 18px; border-left: 3px solid #16a34a;" title="Filter Completed">
+                <!-- 6. Completed (Moved to Training History) -->
+                <div class="kpi-stat-card-main" onclick="openMyProfile('training')" style="cursor: pointer; padding: 14px 18px; border-left: 3px solid #16a34a;" title="View Completed Trainings in Training History">
                   <div class="kpi-stat-main-top">
-                    <span class="kpi-stat-main-title" style="color: #166534;">COMPLETED</span>
+                    <span class="kpi-stat-main-title" style="color: #166534;">COMPLETED (IN HISTORY)</span>
                     <span class="emp-kpi-icon-pill">✓</span>
                   </div>
                   <div class="kpi-stat-main-val" id="empKpiCompleted" style="color: #166534;">1</div>
-                  <div style="font-size: 11.5px; color: #166534; margin-top: 4px;">Passed &amp; Approved</div>
+                  <div style="font-size: 11.5px; color: #166534; margin-top: 4px;">Approved → View in History</div>
                 </div>
 
                 <!-- 7. Overdue -->
@@ -1535,12 +1558,12 @@
                 </div>
 
                 <!-- 8. Certificates Issued -->
-                <div class="kpi-stat-card-main" onclick="switchEmployeeTrainingTab('my_certificates')" style="cursor: pointer; padding: 14px 18px; border-left: 3px solid #0284c7;" title="View My Certificates">
+                <div class="kpi-stat-card-main" onclick="openMyProfile('training')" style="cursor: pointer; padding: 14px 18px; border-left: 3px solid #0284c7;" title="View My Certificates in Profile">
                   <div class="kpi-stat-main-top">
                     <span class="kpi-stat-main-title" style="color: #0369a1;">CERTIFICATES ISSUED</span>
                     <span class="emp-kpi-icon-pill">🎓</span>
                   </div>
-                  <div class="kpi-stat-main-val" id="empKpiCertsIssued" style="color: #0284c7;">1</div>
+                  <div class="kpi-stat-main-val" id="empKpiCertificatesIssued" style="color: #0284c7;">1</div>
                   <div style="font-size: 11.5px; color: #0369a1; margin-top: 4px;">Verified credentials issued</div>
                 </div>
               </div>
@@ -1548,14 +1571,13 @@
               <!-- Filter Pills & Search/Sort Bar (Spec Section 4 & 5) -->
               <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 18px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
                 <div style="display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 12px; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px;">
-                  <!-- Filter Pills -->
+                  <!-- Filter Pills (Active My Training only - Completed trainings move to Training History upon approval) -->
                   <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <button type="button" class="emp-filter-pill active" id="empFilterBtn_all" onclick="filterEmpTrainingsByStatus('all')">All Trainings</button>
+                    <button type="button" class="emp-filter-pill active" id="empFilterBtn_all" onclick="filterEmpTrainingsByStatus('all')">All Active Trainings</button>
                     <button type="button" class="emp-filter-pill" id="empFilterBtn_not_started" onclick="filterEmpTrainingsByStatus('not_started')">Not Started</button>
                     <button type="button" class="emp-filter-pill" id="empFilterBtn_in_progress" onclick="filterEmpTrainingsByStatus('in_progress')">In Progress</button>
                     <button type="button" class="emp-filter-pill" id="empFilterBtn_submitted_for_review" onclick="filterEmpTrainingsByStatus('submitted_for_review')">Submitted for Review</button>
                     <button type="button" class="emp-filter-pill" id="empFilterBtn_changes_requested" onclick="filterEmpTrainingsByStatus('changes_requested')">Changes Requested</button>
-                    <button type="button" class="emp-filter-pill" id="empFilterBtn_completed" onclick="filterEmpTrainingsByStatus('completed')">Completed</button>
                     <button type="button" class="emp-filter-pill" id="empFilterBtn_overdue" onclick="filterEmpTrainingsByStatus('overdue')">Overdue</button>
                   </div>
                 </div>
@@ -1573,6 +1595,10 @@
                       <option value="Governance &amp; Compliance">Governance &amp; Compliance</option>
                       <option value="Product &amp; Platform">Product &amp; Platform</option>
                       <option value="Support &amp; Operations">Support &amp; Operations</option>
+                      <option value="Professional Skills">Professional Skills</option>
+                      <option value="Recruitment &amp; HR">Recruitment &amp; HR</option>
+                      <option value="Engineering">Engineering</option>
+                      <option value="Sales &amp; BD">Sales &amp; BD</option>
                     </select>
                     <select id="sortEmpTrainingsSelect" onchange="renderEmployeeTrainingsList()" style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 7px 12px; font-size: 12.5px; color: #334155; outline: none;">
                       <option value="due_soonest">Sort by: Due Date (Soonest)</option>
@@ -2923,128 +2949,152 @@
           </div>
         </div>
         <!-- ============================================== -->
-        <!-- VIEW 7: EMPLOYEE DETAIL SCREEN (SCREENSHOT 3)  -->
+        <!-- VIEW 7: EMPLOYEE DETAIL SCREEN (SCREENSHOT 1)  -->
         <!-- ============================================== -->
         <div class="employee-detail-view" id="viewEmployeeDetail" style="display: none; background: #f8fafc; min-height: 100vh;">
-          <!-- Top Breadcrumb & Header Bar -->
-          <div style="background: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between;">
+          <!-- Top Breadcrumb Bar (Exact match of Screenshot 1) -->
+          <div style="background: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between;">
             <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #64748b;">
-              <span class="crumb-link" onclick="switchToEmployees()" title="Home" style="cursor: pointer; display: flex; align-items: center; color: #64748b;">
+              <span class="crumb-link" onclick="handleEmpDetailBackOrAction()" title="Home" style="cursor: pointer; display: flex; align-items: center; color: #64748b;">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
               </span>
               <span style="color: #cbd5e1;">›</span>
-              <span class="crumb-link" onclick="switchToEmployees()" style="cursor: pointer; color: #4f46e5; font-weight: 500;">Employees</span>
+              <span class="crumb-link" onclick="handleEmpDetailBackOrAction()" style="cursor: pointer; color: #64748b; font-weight: 500;">Employees</span>
               <span style="color: #cbd5e1;">›</span>
-              <span class="crumb-link" onclick="openEmployeeDetail(activeEmployeeDetailCode)" style="cursor: pointer; color: #4f46e5; font-weight: 500;">View Employee</span>
+              <span class="crumb-link" onclick="openEmployeeDetail(activeEmployeeDetailCode, activeEmpDetailSubTab)" style="cursor: pointer; color: #64748b; font-weight: 500;">View Employee</span>
               <span style="color: #cbd5e1;">›</span>
-              <span style="color: #0f172a; font-weight: 600;" id="empDetailBreadcrumbTab">Training History</span>
+              <span style="color: #3b49df; font-weight: 600;" id="empDetailBreadcrumbTab">General Info</span>
             </div>
             <div style="display: flex; align-items: center; gap: 10px;">
-              <button type="button" class="btn-primary-action" onclick="alert('Edit Employee modal opened.')" style="padding: 7px 16px; border-radius: 6px; font-weight: 600; font-size: 13px;">
-                Edit Employee
-              </button>
-              <button type="button" onclick="switchToEmployees()" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 13px; color: #64748b; font-weight: 500; cursor: pointer;">
+              <button type="button" id="btnEmpDetailBackOrMyTraining" onclick="handleEmpDetailBackOrAction()" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 5px 12px; font-size: 12.5px; color: #475569; font-weight: 500; cursor: pointer;">
                 ← Back to Employees
               </button>
             </div>
           </div>
 
           <!-- Main Layout: Left Sidebar + Right Content Workspace -->
-          <div style="display: flex; gap: 20px; padding: 20px 24px;">
-            <!-- Left Profile Card (Exact match of Screenshot 3) -->
-            <div style="width: 280px; flex-shrink: 0; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
-              <span style="border: 1px solid #e2e8f0; border-radius: 4px; padding: 3px 8px; font-size: 10.5px; font-weight: 700; color: #64748b; display: inline-block; margin-bottom: 14px;" id="empDetailCheckinBadge">YET TO CHECK-IN</span>
+          <div style="display: flex; gap: 20px; padding: 16px 24px;">
+            <!-- Left Profile Card (Exact match of Screenshot 1) -->
+            <div style="width: 280px; flex-shrink: 0; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+              <span style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 12px; padding: 2px 10px; font-size: 11px; font-weight: 700; color: #16a34a; display: inline-block; margin-bottom: 10px;" id="empDetailCheckinBadge">IN</span>
               
               <div style="text-align: center; margin-bottom: 16px;">
-                <div id="empDetailAvatarCircle" style="width: 84px; height: 84px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 700; color: #475569; margin: 0 auto 10px auto; border: 2px solid #e2e8f0;">
-                  IA
+                <div id="empDetailAvatarCircle" style="width: 116px; height: 116px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 700; color: #475569; margin: 0 auto 12px auto; border: 2px solid #e2e8f0; overflow: hidden;">
+                  AB
                 </div>
-                <h3 style="font-size: 17px; font-weight: 700; color: #0f172a; margin: 0;" id="empDetailName">Ishdeep Anand</h3>
-                <div style="font-size: 12.5px; color: #64748b; margin-top: 2px;" id="empDetailDesignation">SVP</div>
-                <span style="display: inline-block; margin-top: 6px; border: 1px solid #cbd5e1; border-radius: 12px; padding: 2px 10px; font-size: 11px; font-weight: 600; color: #334155;" id="empDetailDeptBadge">Management</span>
+                <h3 style="font-size: 17px; font-weight: 700; color: #0f172a; margin: 0;" id="empDetailName">Aryan Bhardwaj</h3>
+                <div style="font-size: 12.5px; color: #64748b; margin-top: 3px;" id="empDetailDesignation">Executive</div>
+                <span style="display: inline-block; margin-top: 8px; border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 6px; padding: 3px 10px; font-size: 11.5px; font-weight: 600; color: #334155;" id="empDetailDeptBadge">IT - Project</span>
               </div>
 
-              <button type="button" onclick="alert('Password reset link dispatched via email.')" style="border: 1px solid #93c5fd; background: #eff6ff; color: #2563eb; font-size: 12px; font-weight: 600; padding: 7px 12px; border-radius: 6px; width: 100%; margin-bottom: 16px; cursor: pointer;">
+              <button type="button" onclick="showConfigToast('Password reset link dispatched via email.')" style="border: 1px solid #c7d2fe; background: #eff6ff; color: #3b49df; font-size: 12px; font-weight: 600; padding: 7px 12px; border-radius: 6px; width: 100%; margin-bottom: 16px; cursor: pointer;">
                 Send Password to Employee
               </button>
 
-              <div style="border-top: 1px solid #f1f5f9; padding-top: 14px; display: flex; flex-direction: column; gap: 12px; font-size: 12px;">
-                <div>
-                  <span style="font-size: 11px; color: #94a3b8; display: block; font-weight: 600; margin-bottom: 2px;">About Me</span>
-                  <span style="color: #0f172a;" id="empDetailAbout">-</span>
+              <div style="border-top: 1px solid #f1f5f9; padding-top: 14px; display: flex; flex-direction: column; gap: 14px; font-size: 12px;">
+                <div style="padding-bottom: 12px; border-bottom: 1px solid #f1f5f9;">
+                  <span style="font-size: 11px; color: #94a3b8; display: block; font-weight: 500; margin-bottom: 4px;">About Me</span>
+                  <span style="color: #0f172a; font-weight: 600;" id="empDetailAbout">Yest</span>
                 </div>
-                <div>
-                  <span style="font-size: 11px; color: #94a3b8; display: block; font-weight: 600; margin-bottom: 2px;">Business Unit</span>
-                  <span style="color: #0f172a; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;" id="empDetailBusinessUnit">
-                    <span style="background: #0f172a; color: #fff; border-radius: 3px; font-size: 9px; padding: 1px 4px;">🏢</span> MailDrop
+                <div style="padding-bottom: 12px; border-bottom: 1px solid #f1f5f9;">
+                  <span style="font-size: 11px; color: #94a3b8; display: block; font-weight: 500; margin-bottom: 4px;">Business Unit</span>
+                  <span style="color: #0f172a; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;" id="empDetailBusinessUnit">
+                    <span style="background: #eff6ff; color: #3b49df; border-radius: 4px; font-size: 11px; padding: 2px 5px;">❄️</span> CollabCRM Demo Account
                   </span>
                 </div>
-                <div>
-                  <span style="font-size: 11px; color: #94a3b8; display: block; font-weight: 600; margin-bottom: 2px;">Experience</span>
-                  <div style="display: flex; justify-content: space-between; color: #0f172a;">
-                    <span>Previous: <strong id="empDetailExpPrev">15Y 2M</strong></span>
-                    <span>At MailDrop: <strong id="empDetailExpCurrent">20D</strong></span>
+                <div style="padding-bottom: 12px; border-bottom: 1px solid #f1f5f9;">
+                  <span style="font-size: 11px; color: #94a3b8; display: block; font-weight: 500; margin-bottom: 6px;">Experience</span>
+                  <div style="display: flex; justify-content: space-between; color: #334155; margin-bottom: 4px;">
+                    <span>Previous</span>
+                    <strong id="empDetailExpPrev" style="color: #0f172a;">-</strong>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; color: #334155;">
+                    <span>At CollabCRM Demo Account</span>
+                    <strong id="empDetailExpCurrent" style="color: #0f172a;">4Y 3M 1D</strong>
                   </div>
                 </div>
-                <div>
-                  <span style="font-size: 11px; color: #94a3b8; display: block; font-weight: 600; margin-bottom: 2px;">Skills ⓘ</span>
-                  <span style="color: #64748b;" id="empDetailSkills">No skills added.</span>
+                <div style="padding-bottom: 12px; border-bottom: 1px solid #f1f5f9;">
+                  <span style="font-size: 11px; color: #94a3b8; display: block; font-weight: 500; margin-bottom: 6px;">Skills ⓘ</span>
+                  <div style="display: flex; flex-wrap: wrap; gap: 6px;" id="empDetailSkills">
+                    <span style="background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">Data Mining</span>
+                    <span style="background: #fffbeb; color: #d97706; border: 1px solid #fde68a; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">UI/UX Research and Testing</span>
+                    <span style="background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">Account Management</span>
+                    <span style="background: #fffbeb; color: #d97706; border: 1px solid #fde68a; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">Analytics</span>
+                    <span style="background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">Project Management (Agile/Scrum)</span>
+                    <span style="background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">JAVA Kotlin</span>
+                  </div>
                 </div>
-                <div>
-                  <span style="font-size: 11px; color: #94a3b8; display: block; font-weight: 600; margin-bottom: 2px;">Badges Received</span>
-                  <span style="color: #64748b;" id="empDetailBadges">No badges received.</span>
+                <div style="padding-bottom: 12px; border-bottom: 1px solid #f1f5f9;">
+                  <span style="font-size: 11px; color: #94a3b8; display: block; font-weight: 500; margin-bottom: 4px;">Badges Received</span>
+                  <span style="color: #0f172a; font-weight: 500;" id="empDetailBadges">No badges received.</span>
                 </div>
                 <div style="display: flex; justify-content: space-between;">
                   <div>
-                    <span style="font-size: 11px; color: #94a3b8; display: block; font-weight: 600; margin-bottom: 2px;">Seating Location</span>
+                    <span style="font-size: 11px; color: #94a3b8; display: block; font-weight: 500; margin-bottom: 2px;">Seating Location</span>
                     <span style="color: #0f172a;" id="empDetailSeating">-</span>
                   </div>
                   <div>
-                    <span style="font-size: 11px; color: #94a3b8; display: block; font-weight: 600; margin-bottom: 2px;">Extension Number</span>
+                    <span style="font-size: 11px; color: #94a3b8; display: block; font-weight: 500; margin-bottom: 2px;">Extension Number</span>
                     <span style="color: #0f172a;" id="empDetailExtension">-</span>
                   </div>
                 </div>
-              </div>
-
-              <div style="margin-top: 18px; border-top: 1px solid #f1f5f9; padding-top: 14px;">
-                <button type="button" onclick="alert('Give Feedback modal opened.')" style="background: #06b6d4; color: #ffffff; font-weight: 600; font-size: 13px; width: 100%; border-radius: 6px; padding: 9px; border: none; cursor: pointer;">
-                  Give Feedback
-                </button>
               </div>
             </div>
 
             <!-- Right Workspace with Sub-Tabs & Detailed Content -->
             <div style="flex: 1; display: flex; flex-direction: column; gap: 16px;">
-              <!-- Navigation Sub-Tabs: Only Training History with consistent indigo styling -->
-              <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0 16px; display: flex; align-items: center; justify-content: space-between;">
-                <div style="display: flex; gap: 16px;">
-                  <button type="button" class="emp-tab-nav-btn active" id="tabNavTraining" onclick="switchEmpDetailSubTab('training')" style="background: none; border: none; padding: 14px 4px; font-size: 13px; font-weight: 700; color: #4f46e5; border-bottom: 2px solid #4f46e5; cursor: pointer;">
+              <!-- Navigation Sub-Tabs: General Info and Training History + Right Action Buttons (Exact Match to Screenshot 1) -->
+              <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 16px; display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <button type="button" class="emp-tab-nav-btn active" id="tabNavGeneral" onclick="switchEmpDetailSubTab('general')" style="background: #eef2ff; border: none; border-radius: 6px; padding: 8px 14px; font-size: 13px; font-weight: 600; color: #3b49df; cursor: pointer; transition: all 0.15s ease;">
+                    General Info
+                  </button>
+                  <button type="button" class="emp-tab-nav-btn" id="tabNavTraining" onclick="switchEmpDetailSubTab('training')" style="background: transparent; border: none; border-radius: 6px; padding: 8px 14px; font-size: 13px; font-weight: 500; color: #475569; cursor: pointer; transition: all 0.15s ease;">
                     Training History
+                  </button>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <button type="button" id="btnEmpDetailEditEmployee" onclick="showConfigToast('Edit Employee modal opened.')" style="background: #3b49df; color: #ffffff; border: none; padding: 7px 14px; border-radius: 6px; font-weight: 600; font-size: 12.5px; cursor: pointer;">
+                    Edit Employee
+                  </button>
+                  <button type="button" id="btnEmpDetailEditProfile" onclick="showConfigToast('Edit Profile modal opened.')" style="background: #3b49df; color: #ffffff; border: none; padding: 7px 14px; border-radius: 6px; font-weight: 600; font-size: 12.5px; cursor: pointer;">
+                    Edit Profile
+                  </button>
+                  <button type="button" onclick="showConfigToast('More profile options')" style="background: #ffffff; color: #475569; border: 1px solid #e2e8f0; width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: 700;">
+                    ⋮
                   </button>
                 </div>
               </div>
 
-              <!-- Content Tab 1: General Info (Hidden) -->
-              <div id="empDetailPanelGeneral" style="display: none; flex-direction: column; gap: 16px;">
-                <!-- Quick Contact Card -->
-                <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px 20px; display: grid; grid-template-columns: 1.5fr 1fr 1.5fr; gap: 20px;">
-                  <div>
-                    <span style="font-size: 11px; color: #94a3b8; display: block; font-weight: 600; margin-bottom: 4px;">✉ Email Address</span>
-                    <div style="display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: #0f172a;">
-                      <span id="empDetailTopEmail">ishdeep@maildrop.cc</span>
-                      <button type="button" onclick="alert('Email copied to clipboard.')" style="background: none; border: none; cursor: pointer; color: #94a3b8;" title="Copy">📋</button>
+              <!-- Content Tab 1: General Info -->
+              <div id="empDetailPanelGeneral" style="display: flex; flex-direction: column; gap: 16px;">
+                <!-- Quick Contact Card (3-column layout with icon boxes as in Screenshot 1) -->
+                <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0; display: grid; grid-template-columns: 1fr 1fr 1fr;">
+                  <div style="padding: 18px 20px; border-right: 1px solid #f1f5f9; position: relative;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                      <div style="width: 34px; height: 34px; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; color: #475569;">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+                      </div>
+                      <button type="button" onclick="showConfigToast('Email copied to clipboard.')" style="background: none; border: none; cursor: pointer; color: #64748b;" title="Copy Email">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                      </button>
                     </div>
+                    <span style="font-size: 11px; color: #94a3b8; display: block; font-weight: 500; margin-bottom: 3px;">Email Address</span>
+                    <span style="font-size: 13px; font-weight: 600; color: #0f172a;" id="empDetailTopEmail">calebnguyen@maildrop.cc</span>
                   </div>
-                  <div>
-                    <span style="font-size: 11px; color: #94a3b8; display: block; font-weight: 600; margin-bottom: 4px;">👤 Employee Code</span>
-                    <span style="font-size: 13px; font-weight: 700; color: #0f172a;" id="empDetailTopCode">YOP-073</span>
-                  </div>
-                  <div>
-                    <span style="font-size: 11px; color: #94a3b8; display: block; font-weight: 600; margin-bottom: 4px;">Reporting Manager</span>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                      <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&amp;fit=crop&amp;q=80&amp;w=120" style="width: 24px; height: 24px; border-radius: 50%;" alt="Manager" id="empDetailTopMgrImg" />
-                      <span style="font-size: 13px; font-weight: 600; color: #0f172a;" id="empDetailTopMgrName">Isha Patel</span>
+                  <div style="padding: 18px 20px; border-right: 1px solid #f1f5f9;">
+                    <div style="width: 34px; height: 34px; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; color: #475569; margin-bottom: 10px;">
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                     </div>
+                    <span style="font-size: 11px; color: #94a3b8; display: block; font-weight: 500; margin-bottom: 3px;">Employee Code</span>
+                    <span style="font-size: 13px; font-weight: 700; color: #0f172a;" id="empDetailTopCode">CO-5039</span>
+                  </div>
+                  <div style="padding: 18px 20px;">
+                    <div style="margin-bottom: 10px;">
+                      <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&amp;fit=crop&amp;q=80&amp;w=120" style="width: 34px; height: 34px; border-radius: 50%; object-fit: cover;" alt="Manager" id="empDetailTopMgrImg" />
+                    </div>
+                    <span style="font-size: 11px; color: #94a3b8; display: block; font-weight: 500; margin-bottom: 3px;">Reporting Manager</span>
+                    <span style="font-size: 13px; font-weight: 600; color: #0f172a;" id="empDetailTopMgrName">Megha Salunkhe</span>
                   </div>
                 </div>
 
@@ -3184,9 +3234,9 @@
                   <div style="padding: 14px 18px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
                     <div>
                       <h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin: 0;">Employee Training History</h4>
-                      <p style="font-size: 12px; color: #64748b; margin: 2px 0 0 0;">Historical record of assignments, scores, evaluation statuses, and credentials.</p>
+                      <p style="font-size: 12px; color: #64748b; margin: 2px 0 0 0;">Completed and approved training records. Click any record to inspect complete training details, assessment results, reviewer feedback, and certificate.</p>
                     </div>
-                    <button type="button" class="btn-primary-action" onclick="openAssignWithProgram('TR-101')" style="padding: 6px 14px; font-size: 12px; border-radius: 6px;">+ Assign New Training</button>
+                    <button type="button" id="btnEmpDetailTrainingAction" class="btn-primary-action" onclick="handleEmpDetailTrainingHeaderAction()" style="padding: 6px 14px; font-size: 12px; border-radius: 6px;">+ Assign New Training</button>
                   </div>
                   <div style="overflow-x: auto;">
                     <table class="emp-table" style="width: 100%; border-collapse: collapse; font-size: 12.5px;">
@@ -3194,12 +3244,13 @@
                         <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; color: #64748b; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; text-align: left;">
                           <th style="padding: 10px 14px; width: 40px; text-align: center;">No.</th>
                           <th style="padding: 10px 14px;">Programme Title</th>
-                          <th style="padding: 10px 14px;">Department</th>
+                          <th style="padding: 10px 14px;">Category / Dept</th>
                           <th style="padding: 10px 14px;">Assigned Date</th>
                           <th style="padding: 10px 14px;">Completion Date</th>
                           <th style="padding: 10px 14px; text-align: center;">Score</th>
                           <th style="padding: 10px 14px; text-align: center;">Status</th>
                           <th style="padding: 10px 14px; text-align: center;">Certificate</th>
+                          <th style="padding: 10px 14px; text-align: center;">Actions</th>
                         </tr>
                       </thead>
                       <tbody id="empDetailTrainingTableBody">
@@ -3425,6 +3476,7 @@
         <div class="form-group" id="assignGroupDept" style="display: none;">
           <label class="form-label">Select Target Department *</label>
           <select class="form-select" id="assignSelectDept" onchange="checkAssignDuplicates()">
+            <option value="IT - Project">IT - Project (All Members)</option>
             <option value="Engineering">Engineering (All Members)</option>
             <option value="Recruitment &amp; HR">Recruitment &amp; HR (All Members)</option>
             <option value="People Operations">People Operations (All Members)</option>

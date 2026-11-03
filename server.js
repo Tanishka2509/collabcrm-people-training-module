@@ -677,6 +677,8 @@ const server = http.createServer(async (req, res) => {
 
     asm.attemptsUsed = (asm.attemptsUsed || 0) + 1;
     asm.passed = passed;
+    asm.isPassed = passed;
+    asm.bestScore = Math.max(asm.bestScore || 0, score);
 
     const now = new Date();
     const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
@@ -858,6 +860,127 @@ const server = http.createServer(async (req, res) => {
     return sendJson(res, 200, {
       success: true,
       history: history
+    });
+  }
+
+  // 9. POST Assign New Training to Employee Store (Preserves unified record)
+  if (pathname === '/api/employee/assign' && req.method === 'POST') {
+    const body = await parseJsonBody(req);
+    const { employeeId, training } = body;
+    const store = EMPLOYEE_TRAINING_STORE[employeeId || 'CO-5039'] || EMPLOYEE_TRAINING_STORE['CO-5039'];
+    if (!training || !training.id) {
+      return sendJson(res, 400, { success: false, message: 'Invalid training assignment payload' });
+    }
+    const existingIdx = store.trainings.findIndex(t => t.id === training.id);
+    if (existingIdx !== -1) {
+      Object.assign(store.trainings[existingIdx], training);
+    } else {
+      store.trainings.unshift(training);
+    }
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    store.notifications.unshift({
+      id: `notif_${Date.now()}`,
+      title: 'New Training Assigned',
+      message: `"${training.trainingName || training.title}" has been assigned to you. Due Date: ${training.dueDate}.`,
+      type: 'assignment',
+      timestamp: `${dateStr}, ${timeStr}`,
+      trainingId: training.id,
+      read: false
+    });
+    return sendJson(res, 200, {
+      success: true,
+      training: training,
+      stats: calculateEmployeeDashboardStats(store)
+    });
+  }
+
+  // 10. POST Reviewer Decision (In-place transition from My Training to Training History on Approval)
+  if (pathname === '/api/employee/review-decision' && req.method === 'POST') {
+    const body = await parseJsonBody(req);
+    const { employeeId, trainingId, action, reviewerName, feedback, certificate } = body;
+    const store = EMPLOYEE_TRAINING_STORE[employeeId || 'CO-5039'] || EMPLOYEE_TRAINING_STORE['CO-5039'];
+    const training = store.trainings.find(t => t.id === trainingId || t.programId === body.programId);
+    if (!training) {
+      return sendJson(res, 404, { success: false, message: 'Training assignment not found' });
+    }
+
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+    if (action === 'approve') {
+      training.trainingStatus = 'completed';
+      training.status = 'Completed';
+      training.completionPercentage = 100;
+      training.completionDate = dateStr;
+      training.review = {
+        status: 'approved',
+        reviewerName: reviewerName || training.assignedBy || 'Isha Patel (Admin)',
+        reviewDate: `${dateStr}, ${timeStr}`,
+        feedback: feedback || 'Submission approved. All mandatory resources and assessment requirements verified.'
+      };
+      if (certificate) {
+        training.certificate = certificate;
+      } else if (!training.certificate) {
+        training.certificate = {
+          id: `CERT-${new Date().getFullYear()}-${String(Math.floor(1000 + Math.random() * 9000))}`,
+          name: `${training.trainingName} Credential`,
+          trainingName: training.trainingName,
+          issueDate: dateStr,
+          expiryDate: 'Lifetime',
+          status: 'issued',
+          recipientName: store.profile.name,
+          recipientId: store.profile.employeeId,
+          signatoryName: 'Isha Patel',
+          signatoryTitle: 'Head of People & Org Development'
+        };
+      }
+      store.notifications.unshift({
+        id: `notif_${Date.now()}`,
+        title: 'Training Approved & Completed',
+        message: `Your submission for "${training.trainingName}" was approved by ${training.review.reviewerName} and moved to Training History.`,
+        type: 'certificate',
+        timestamp: `${dateStr}, ${timeStr}`,
+        trainingId: training.id,
+        read: false
+      });
+    } else if (action === 'request_changes') {
+      training.trainingStatus = 'changes_requested';
+      training.status = 'Changes Requested';
+      if (training.submission) training.submission.isLocked = false;
+      training.review = {
+        status: 'changes_requested',
+        reviewerName: reviewerName || training.assignedBy || 'Isha Patel (Admin)',
+        reviewDate: `${dateStr}, ${timeStr}`,
+        feedback: feedback || 'Please revise your submission remarks and attach supporting evidence.'
+      };
+      store.notifications.unshift({
+        id: `notif_${Date.now()}`,
+        title: 'Changes Requested on Submission',
+        message: `${training.review.reviewerName} requested updates on "${training.trainingName}": "${training.review.feedback}"`,
+        type: 'warning',
+        timestamp: `${dateStr}, ${timeStr}`,
+        trainingId: training.id,
+        read: false
+      });
+    } else if (action === 'reject') {
+      training.trainingStatus = 'in_progress';
+      training.status = 'In Progress';
+      if (training.submission) training.submission.isLocked = false;
+      training.review = {
+        status: 'rejected',
+        reviewerName: reviewerName || training.assignedBy || 'Isha Patel (Admin)',
+        reviewDate: `${dateStr}, ${timeStr}`,
+        feedback: feedback || 'Submission rejected.'
+      };
+    }
+
+    return sendJson(res, 200, {
+      success: true,
+      training: training,
+      stats: calculateEmployeeDashboardStats(store)
     });
   }
 
