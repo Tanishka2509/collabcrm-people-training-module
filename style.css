@@ -48,6 +48,9 @@ body, button, input, select, textarea {
   background-color: var(--bg-page);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+}
+
+body {
   overflow-x: hidden;
 }
 
@@ -214,15 +217,16 @@ body, button, input, select, textarea {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 32px;
-  width: 32px;
+  height: 34px;
+  width: 34px;
   border-radius: 8px;
   background-color: #ffffff;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #e2e8f0;
   color: #64748b;
   cursor: pointer;
   transition: all 0.15s ease;
   text-decoration: none;
+  overflow: visible !important;
 }
 
 .header-icon-box:hover {
@@ -238,8 +242,10 @@ body, button, input, select, textarea {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 10px;
-  height: 10px;
+  width: 11px;
+  height: 11px;
+  z-index: 5;
+  pointer-events: none;
 }
 
 .header-badge-ping {
@@ -248,19 +254,18 @@ body, button, input, select, textarea {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background-color: #f87171;
-  opacity: 0.75;
-  animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+  background-color: #fca5a5;
+  opacity: 0.65;
 }
 
 .header-badge-dot {
   position: relative;
   display: inline-flex;
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background-color: #ef4444;
-  border: 1px solid #ffffff;
+  box-shadow: 0 0 0 2px #fee2e2;
 }
 
 @keyframes ping {

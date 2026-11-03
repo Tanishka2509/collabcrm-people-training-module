@@ -3010,7 +3010,7 @@ let portalNotifications = [
     title: 'Certificate Issued & Available',
     message: 'Certificate TRN-2026-001 for "Modern Frontend Architecture" was issued to Isha Patel.',
     time: '2 hours ago',
-    unread: false,
+    unread: true,
     icon: '📜',
     iconBg: '#ecfdf5',
     iconColor: '#059669',
@@ -3021,7 +3021,7 @@ let portalNotifications = [
     title: 'Training Module Assigned',
     message: 'Assigned "Microservices with Go & Docker" to engineering cohort.',
     time: '1 day ago',
-    unread: false,
+    unread: true,
     icon: '📋',
     iconBg: '#eff6ff',
     iconColor: '#2563eb'
@@ -3036,7 +3036,7 @@ function renderPortalNotifications() {
 
   const unreadCount = portalNotifications.filter(n => n.unread).length;
   if (badgeEl) badgeEl.textContent = `${unreadCount} New`;
-  if (dotWrap) dotWrap.style.display = unreadCount > 0 ? 'block' : 'none';
+  if (dotWrap) dotWrap.style.display = 'flex';
 
   if (portalNotifications.length === 0) {
     listEl.innerHTML = `<div style="padding: 24px; text-align: center; color: #64748b; font-size: 12px;">No notifications yet.</div>`;
@@ -3684,7 +3684,9 @@ const DEFAULT_TRAINING_CONFIG = {
       'Other URL'
     ],
     durationHours: 4,
-    durationMinutes: 30
+    durationMinutes: 30,
+    certificateExpiryMonths: 24,
+    reminderFrequencyDays: 7
   },
   categories: [
     { id: 'CAT-001', name: 'Engineering & Architecture', desc: 'Software engineering, distributed systems, clean code, cloud infrastructure, and CI/CD.', status: 'Active', createdBy: 'Isha Patel', createdDate: '2026-01-15' },
@@ -3941,6 +3943,16 @@ function initTrainingConfigScreen() {
   if (elGenTyp) elGenTyp.value = (g.defaultType === 'Optional') ? 'Optional' : 'Mandatory';
   if (elGenH) elGenH.value = g.durationHours ?? 4;
   if (elGenM) elGenM.value = g.durationMinutes ?? 30;
+  const certExpVal = g.certificateExpiryMonths ?? 24;
+  const remFreqVal = g.reminderFrequencyDays ?? 7;
+  ['cfg_gen_cert_expiry_months', 'cfg_cert_expiry_months_box', 'cfg_rem_cert_expiry_months_box'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = certExpVal;
+  });
+  ['cfg_gen_reminder_freq_days', 'cfg_cert_reminder_freq_days_box', 'cfg_rem_reminder_freq_days_box'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = remFreqVal;
+  });
   renderResourceTypeBadges();
 
   // Tab 2: Categories
@@ -4587,6 +4599,10 @@ function saveCurrentConfigTab() {
     trainingConfigData.general.defaultType = document.getElementById('cfg_gen_default_type').value;
     trainingConfigData.general.durationHours = hours;
     trainingConfigData.general.durationMinutes = mins;
+    const certExpEl = document.getElementById('cfg_gen_cert_expiry_months');
+    const remFreqEl = document.getElementById('cfg_gen_reminder_freq_days');
+    if (certExpEl) trainingConfigData.general.certificateExpiryMonths = parseInt(certExpEl.value, 10) || 24;
+    if (remFreqEl) trainingConfigData.general.reminderFrequencyDays = parseInt(remFreqEl.value, 10) || 7;
 
     appendConfigAudit('General Settings', `Updated rules: Default status "${trainingConfigData.general.defaultStatus}", duration ${hours}h ${mins}m, ${trainingConfigData.general.resourceTypes.length} resource types enabled.`);
   } else if (activeTrainingConfigTab === 'categories') {
@@ -4812,7 +4828,7 @@ const ROLES_DATA = [
     no: 1,
     name: 'Sr. Business Analyst',
     status: 'Active',
-    employeesCount: 1,
+    employeesCount: 8,
     remarks: '-',
     lastModifiedByName: 'Isha Patel',
     lastModifiedDate: '05-Mar-2026, 05:41 PM',
@@ -4824,7 +4840,7 @@ const ROLES_DATA = [
     no: 2,
     name: 'Senior Recruiter',
     status: 'Active',
-    employeesCount: 0,
+    employeesCount: 5,
     remarks: '-',
     lastModifiedByName: 'Isha Patel',
     lastModifiedDate: '02-Sep-2026, 04:44 PM',
@@ -4836,7 +4852,7 @@ const ROLES_DATA = [
     no: 3,
     name: 'CEO',
     status: 'Active',
-    employeesCount: 0,
+    employeesCount: 3,
     remarks: 'Head of the company',
     lastModifiedByName: 'Isha Patel',
     lastModifiedDate: '30-Aug-2026, 05:05 AM',
@@ -5100,6 +5116,220 @@ const ROLE_EMPLOYEES_DATA = {
       assignedDate: '06-Feb-2026, 03:44 PM',
       lastModifiedByName: '-',
       lastModifiedDate: ''
+    },
+    {
+      no: 2,
+      initials: 'AB',
+      avatarBg: '#f59e0b',
+      name: 'Aryan Bhardwaj (CO-5039)',
+      designation: 'Business analyst',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '12-Feb-2026, 02:21 PM',
+      lastModifiedByName: 'Isha Patel',
+      lastModifiedDate: '18-Mar-2026, 11:15 AM'
+    },
+    {
+      no: 3,
+      initials: 'SG',
+      avatarBg: '#3b82f6',
+      name: 'Sanjana Ghosh (COINT-5040)',
+      designation: 'Sr. Business Analyst',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '15-Jan-2026, 10:12 AM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    },
+    {
+      no: 4,
+      initials: 'MS',
+      avatarBg: '#10b981',
+      name: 'Megha Salunkhe (CO-5038)',
+      designation: 'Sr. Business Analyst',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '20-Jan-2026, 04:30 PM',
+      lastModifiedByName: 'Isha Patel',
+      lastModifiedDate: '04-Mar-2026, 02:10 PM'
+    },
+    {
+      no: 5,
+      initials: 'KB',
+      avatarBg: '#6366f1',
+      name: 'Kunal Barve (CO-5037)',
+      designation: 'Business Analyst',
+      status: 'Probation',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '01-Feb-2026, 09:45 AM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    },
+    {
+      no: 6,
+      initials: 'AS',
+      avatarBg: '#ec4899',
+      name: 'Ananya Sridhar (CO-5036)',
+      designation: 'Sr. Business Analyst',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '08-Feb-2026, 01:20 PM',
+      lastModifiedByName: 'Isha Patel',
+      lastModifiedDate: '22-Mar-2026, 05:05 PM'
+    },
+    {
+      no: 7,
+      initials: 'VA',
+      avatarBg: '#0ea5e9',
+      name: 'Vikram Anand (CO-5035)',
+      designation: 'Business Analyst',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '14-Feb-2026, 11:50 AM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    },
+    {
+      no: 8,
+      initials: 'RK',
+      avatarBg: '#14b8a6',
+      name: 'Rahul Khanna (CO-5034)',
+      designation: 'Sr. Business Analyst',
+      status: 'Probation',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '25-Feb-2026, 04:15 PM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    }
+  ],
+  role_2: [
+    {
+      no: 1,
+      initials: 'NM',
+      avatarBg: '#ec4899',
+      name: 'Nikita Mehta (CO-089)',
+      designation: 'Senior Recruiter',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '10-Jan-2026, 11:30 AM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    },
+    {
+      no: 2,
+      initials: 'RD',
+      avatarBg: '#8b5cf6',
+      name: 'Riya Deshmukh (CO-112)',
+      designation: 'Senior Recruiter',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '18-Jan-2026, 03:20 PM',
+      lastModifiedByName: 'Isha Patel',
+      lastModifiedDate: '12-Mar-2026, 01:40 PM'
+    },
+    {
+      no: 3,
+      initials: 'SK',
+      avatarBg: '#f97316',
+      name: 'Siddharth Kulkarni (CO-119)',
+      designation: 'Talent Acquisition Lead',
+      status: 'Probation',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '04-Feb-2026, 10:05 AM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    },
+    {
+      no: 4,
+      initials: 'PN',
+      avatarBg: '#10b981',
+      name: 'Pooja Nair (CO-124)',
+      designation: 'Senior Recruiter',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '19-Feb-2026, 04:50 PM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    },
+    {
+      no: 5,
+      initials: 'AT',
+      avatarBg: '#3b82f6',
+      name: 'Aditya Tiwari (CO-131)',
+      designation: 'Senior Recruiter',
+      status: 'Probation',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '02-Mar-2026, 12:15 PM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    }
+  ],
+  role_3: [
+    {
+      no: 1,
+      initials: 'IA',
+      avatarBg: '#8b5cf6',
+      name: 'Ishdeep Anand (YOP-073)',
+      designation: 'Admin',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'System',
+      assignedDate: '12-Jun-2025, 12:27 PM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    },
+    {
+      no: 2,
+      initials: 'IP',
+      avatarBg: '#10b981',
+      name: 'Isha Patel (CO-0026)',
+      designation: 'Senior Business Analyst',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'System',
+      assignedDate: '12-Jun-2025, 12:27 PM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    },
+    {
+      no: 3,
+      initials: 'RV',
+      avatarBg: '#3b82f6',
+      name: 'Rajesh Verma (CO-001)',
+      designation: 'Managing Director',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'System',
+      assignedDate: '12-Jun-2025, 12:27 PM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
     }
   ],
   role_4: [
@@ -5116,6 +5346,62 @@ const ROLE_EMPLOYEES_DATA = {
       assignedDate: '12-Jun-2025, 03:51 PM',
       lastModifiedByName: 'Isha Patel',
       lastModifiedDate: '07-Apr-2026, 06:27 PM'
+    },
+    {
+      no: 2,
+      initials: 'AK',
+      avatarBg: '#6366f1',
+      name: 'Ashish Kumar (CO-041)',
+      designation: 'Technical Project Manager',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '19-Jul-2025, 11:20 AM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    },
+    {
+      no: 3,
+      initials: 'NK',
+      avatarBg: '#10b981',
+      name: 'Neha Kapoor (CO-064)',
+      designation: 'Project Manager',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '08-Sep-2025, 02:15 PM',
+      lastModifiedByName: 'Isha Patel',
+      lastModifiedDate: '14-Jan-2026, 04:10 PM'
+    },
+    {
+      no: 4,
+      initials: 'SM',
+      avatarBg: '#f59e0b',
+      name: 'Saurabh Mishra (CO-077)',
+      designation: 'Agile Delivery Manager',
+      status: 'Probation',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '21-Jan-2026, 10:00 AM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    },
+    {
+      no: 5,
+      initials: 'DJ',
+      avatarBg: '#ec4899',
+      name: 'Divya Joshi (CO-093)',
+      designation: 'Project Manager',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '11-Feb-2026, 05:30 PM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
     }
   ],
   role_5: [
@@ -5132,6 +5418,48 @@ const ROLE_EMPLOYEES_DATA = {
       assignedDate: '03-Feb-2026, 12:32 PM',
       lastModifiedByName: '-',
       lastModifiedDate: ''
+    },
+    {
+      no: 2,
+      initials: 'TS',
+      avatarBg: '#a855f7',
+      name: 'Tanvi Sharma (CO-108)',
+      designation: 'Business Development Executive',
+      status: 'Probation',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '14-Feb-2026, 03:15 PM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    },
+    {
+      no: 3,
+      initials: 'HG',
+      avatarBg: '#0ea5e9',
+      name: 'Harsh Gupta (CO-115)',
+      designation: 'Sr. Business Development Executive',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '22-Feb-2026, 11:05 AM',
+      lastModifiedByName: 'Isha Patel',
+      lastModifiedDate: '19-Mar-2026, 04:45 PM'
+    },
+    {
+      no: 4,
+      initials: 'KR',
+      avatarBg: '#10b981',
+      name: 'Kritika Rao (CO-122)',
+      designation: 'Business Development Executive',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '01-Mar-2026, 09:50 AM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
     }
   ],
   role_6: [
@@ -5139,13 +5467,69 @@ const ROLE_EMPLOYEES_DATA = {
       no: 1,
       initials: 'IP',
       avatarBg: '#10b981',
-      name: 'Isha Patel (CO-002)',
-      designation: 'Head of People',
+      name: 'Isha Patel (CO-0026)',
+      designation: 'Senior Business Analyst',
       status: 'Confirmed',
       expiryDate: '-',
       remarks: '-',
       assignedByName: 'System',
       assignedDate: '12-Jun-2025, 12:27 PM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    },
+    {
+      no: 2,
+      initials: 'SS',
+      avatarBg: '#3b82f6',
+      name: 'Shivam Sharma (CO-014)',
+      designation: 'HR Operations Lead',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'System',
+      assignedDate: '12-Jun-2025, 12:27 PM',
+      lastModifiedByName: 'Isha Patel',
+      lastModifiedDate: '10-Jan-2026, 02:30 PM'
+    },
+    {
+      no: 3,
+      initials: 'IA',
+      avatarBg: '#8b5cf6',
+      name: 'Ishdeep Anand (YOP-073)',
+      designation: 'Admin',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'System',
+      assignedDate: '12-Jun-2025, 12:27 PM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    },
+    {
+      no: 4,
+      initials: 'PM',
+      avatarBg: '#ec4899',
+      name: 'Pallavi Menon (CO-033)',
+      designation: 'HR Business Partner',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '05-Sep-2025, 04:12 PM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    },
+    {
+      no: 5,
+      initials: 'AG',
+      avatarBg: '#f59e0b',
+      name: 'Ankit Goswami (CO-049)',
+      designation: 'People Operations Specialist',
+      status: 'Probation',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '19-Jan-2026, 11:40 AM',
       lastModifiedByName: '-',
       lastModifiedDate: ''
     }
@@ -5156,12 +5540,82 @@ const ROLE_EMPLOYEES_DATA = {
       initials: 'AB',
       avatarBg: '#f59e0b',
       name: 'Aryan Bhardwaj (CO-5039)',
-      designation: 'Executive',
+      designation: 'Business analyst',
       status: 'Probation',
       expiryDate: '-',
       remarks: '-',
       assignedByName: 'Isha Patel',
       assignedDate: '12-Feb-2026, 02:21 PM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    },
+    {
+      no: 2,
+      initials: 'SG',
+      avatarBg: '#3b82f6',
+      name: 'Sanjana Ghosh (COINT-5040)',
+      designation: 'Software Engineer',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '15-Jan-2026, 10:12 AM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    },
+    {
+      no: 3,
+      initials: 'MS',
+      avatarBg: '#10b981',
+      name: 'Megha Salunkhe (CO-5038)',
+      designation: 'Frontend Developer',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '20-Jan-2026, 04:30 PM',
+      lastModifiedByName: 'Isha Patel',
+      lastModifiedDate: '04-Mar-2026, 02:10 PM'
+    },
+    {
+      no: 4,
+      initials: 'KB',
+      avatarBg: '#6366f1',
+      name: 'Kunal Barve (CO-5037)',
+      designation: 'QA Engineer',
+      status: 'Probation',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '01-Feb-2026, 09:45 AM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    },
+    {
+      no: 5,
+      initials: 'AS',
+      avatarBg: '#ec4899',
+      name: 'Ananya Sridhar (CO-5036)',
+      designation: 'UI/UX Designer',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '08-Feb-2026, 01:20 PM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    },
+    {
+      no: 6,
+      initials: 'VA',
+      avatarBg: '#0ea5e9',
+      name: 'Vikram Anand (CO-5035)',
+      designation: 'DevOps Engineer',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '14-Feb-2026, 11:50 AM',
       lastModifiedByName: '-',
       lastModifiedDate: ''
     }
@@ -5180,6 +5634,48 @@ const ROLE_EMPLOYEES_DATA = {
       assignedDate: '25-Mar-2026, 12:39 PM',
       lastModifiedByName: '-',
       lastModifiedDate: ''
+    },
+    {
+      no: 2,
+      initials: 'RM',
+      avatarBg: '#10b981',
+      name: 'Rohit Mehra (CO-052)',
+      designation: 'Engineering Team Lead',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '14-Nov-2025, 03:10 PM',
+      lastModifiedByName: 'Isha Patel',
+      lastModifiedDate: '02-Feb-2026, 11:25 AM'
+    },
+    {
+      no: 3,
+      initials: 'SN',
+      avatarBg: '#f97316',
+      name: 'Shruti Nambiar (CO-068)',
+      designation: 'QA Team Lead',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '09-Jan-2026, 10:45 AM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    },
+    {
+      no: 4,
+      initials: 'DK',
+      avatarBg: '#3b82f6',
+      name: 'Deepak Khandelwal (CO-081)',
+      designation: 'Platform Team Lead',
+      status: 'Probation',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '17-Feb-2026, 04:05 PM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
     }
   ],
   role_9: [
@@ -5188,7 +5684,49 @@ const ROLE_EMPLOYEES_DATA = {
       initials: 'IA',
       avatarBg: '#8b5cf6',
       name: 'Ishdeep Anand (YOP-073)',
-      designation: 'SVP',
+      designation: 'Admin',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'System',
+      assignedDate: '12-Jun-2025, 12:27 PM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    },
+    {
+      no: 2,
+      initials: 'IP',
+      avatarBg: '#10b981',
+      name: 'Isha Patel (CO-0026)',
+      designation: 'Senior Business Analyst',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'System',
+      assignedDate: '12-Jun-2025, 12:27 PM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    },
+    {
+      no: 3,
+      initials: 'PK',
+      avatarBg: '#3b82f6',
+      name: 'Prashant Kumar (CO-021)',
+      designation: 'Project Manager',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '12-Jun-2025, 03:51 PM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    },
+    {
+      no: 4,
+      initials: 'SS',
+      avatarBg: '#ec4899',
+      name: 'Shivam Sharma (CO-014)',
+      designation: 'HR Operations Lead',
       status: 'Confirmed',
       expiryDate: '-',
       remarks: '-',
@@ -5210,6 +5748,78 @@ const ROLE_EMPLOYEES_DATA = {
       remarks: '-',
       assignedByName: 'Isha Patel',
       assignedDate: '07-Oct-2025, 06:18 PM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    },
+    {
+      no: 2,
+      initials: 'RD',
+      avatarBg: '#8b5cf6',
+      name: 'Riya Deshmukh (CO-112)',
+      designation: 'Recruiter',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '18-Jan-2026, 03:20 PM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    },
+    {
+      no: 3,
+      initials: 'PN',
+      avatarBg: '#10b981',
+      name: 'Pooja Nair (CO-124)',
+      designation: 'Technical Recruiter',
+      status: 'Probation',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '19-Feb-2026, 04:50 PM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    }
+  ],
+  role_11: [
+    {
+      no: 1,
+      initials: 'VM',
+      avatarBg: '#f97316',
+      name: 'Vikas Malhotra (CO-104)',
+      designation: 'Business Development Manager',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '03-Feb-2026, 12:32 PM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    },
+    {
+      no: 2,
+      initials: 'HG',
+      avatarBg: '#0ea5e9',
+      name: 'Harsh Gupta (CO-115)',
+      designation: 'Business Development Manager',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '22-Feb-2026, 11:05 AM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    },
+    {
+      no: 3,
+      initials: 'KR',
+      avatarBg: '#10b981',
+      name: 'Kritika Rao (CO-122)',
+      designation: 'Business Development Manager',
+      status: 'Probation',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '01-Mar-2026, 09:50 AM',
       lastModifiedByName: '-',
       lastModifiedDate: ''
     }
