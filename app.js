@@ -16,7 +16,7 @@ const state = {
 
   // 1. Employee Hierarchy Data
   employees: [
-    { id: 'CO-5039', name: 'Aryan Bhardwaj', email: 'calebnguyen@maildrop.cc', role: 'Executive', dept: 'IT - Project', managerId: 'EMP-003', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120' },
+    { id: 'CO-5039', name: 'Aryan Bhardwaj', email: 'calebnguyen@maildrop.cc', role: 'Business analyst', dept: 'Business analyst', managerId: 'EMP-003', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120' },
     { id: 'EMP-001', name: 'Isha Patel', email: 'isha.patel@collabcrm.com', role: 'Head of People & Admin', dept: 'Recruitment & HR', managerId: null, avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120' },
     { id: 'EMP-002', name: 'Shivam Sharma', email: 'shivam.s@collabcrm.com', role: 'HR Specialist', dept: 'People Operations', managerId: 'EMP-001', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120' },
     { id: 'EMP-003', name: 'Ashish Kumar', email: 'ashish.k@collabcrm.com', role: 'Technical Lead & Reporting Manager', dept: 'Engineering', managerId: 'EMP-001', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120' },
@@ -503,10 +503,10 @@ function setAppRole(role) {
     if (rolePersonaAvatar) rolePersonaAvatar.src = avatar;
     if (headerName) headerName.textContent = 'Aryan Bhardwaj';
     if (rolePersonaName) rolePersonaName.textContent = 'Aryan Bhardwaj';
-    if (headerRole) headerRole.textContent = 'Executive (Employee)';
-    if (rolePersonaScope) rolePersonaScope.textContent = 'IT - Project • Learner Portal';
+    if (headerRole) headerRole.textContent = 'Business analyst (Employee)';
+    if (rolePersonaScope) rolePersonaScope.textContent = 'Business analyst • Learner Portal';
     if (portalScopeRoleName) portalScopeRoleName.textContent = 'Employee Learner (My Enrolled Trainings & Progress)';
-    if (rolePortalSubtitle) rolePortalSubtitle.textContent = 'Employee Portal • View your assigned trainings, track resource progress, pass assessments, submit for review, and access Training History & Certificates.';
+    if (rolePortalSubtitle) rolePortalSubtitle.textContent = '';
     if (hierarchyBanner) hierarchyBanner.style.display = 'none';
     if (optAssignDeptRadio) optAssignDeptRadio.style.display = 'none';
   }
@@ -545,7 +545,7 @@ function setAppRole(role) {
     if (configPanel) configPanel.classList.remove('open');
 
     // Hide all management tabs and empty state; show Employee My Training
-    ['sectionDashboard', 'sectionPrograms', 'sectionAssignments', 'sectionProgress', 'sectionReviews', 'sectionCertificates', 'sectionReports', 'sectionEmpCertificates', 'sectionEmpHistory'].forEach(id => {
+    ['sectionDashboard', 'sectionPrograms', 'sectionAssignments', 'sectionProgress', 'sectionReviews', 'sectionCertificates', 'sectionReports', 'sectionEmpCertificates', 'sectionEmpHistory', 'assignTrainingModal'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.style.display = 'none';
     });
@@ -555,6 +555,8 @@ function setAppRole(role) {
     if (secMyTraining) secMyTraining.style.display = 'block';
     const labelEl = document.getElementById('currentActiveTabLabel');
     if (labelEl) labelEl.textContent = 'My Training';
+    const mainHeadingEl = document.getElementById('trainingMainHeading');
+    if (mainHeadingEl) mainHeadingEl.textContent = 'My Training';
 
     loadEmployeeTrainingData('CO-5039');
 
@@ -883,8 +885,25 @@ function switchTrainingTab(tabId) {
   };
 
   const labelEl = document.getElementById('currentActiveTabLabel');
+  const mainHeadingEl = document.getElementById('trainingMainHeading');
   const btnAction = document.getElementById('btnHeaderPrimaryAction');
   const btnActionText = document.getElementById('btnHeaderPrimaryText');
+
+  // Ensure any in-screen subviews (Programme Details / Assign Training) are reset when switching tabs
+  const assignScreen = document.getElementById('assignTrainingModal');
+  if (assignScreen) {
+    assignScreen.style.display = 'none';
+    assignScreen.classList.remove('open');
+  }
+  const progPreviewScreen = document.getElementById('programPreviewModal');
+  const progListCard = document.getElementById('programsCatalogListCard');
+  if (progPreviewScreen) {
+    progPreviewScreen.style.display = 'none';
+    progPreviewScreen.classList.remove('open');
+  }
+  if (progListCard) {
+    progListCard.style.display = 'block';
+  }
 
   // Set active tab buttons and views
   Object.keys(tabBtns).forEach(k => {
@@ -899,15 +918,17 @@ function switchTrainingTab(tabId) {
 
   const tabLabels = {
     dashboard: 'Dashboard',
-    programs: 'Training Management',
-    assignments: 'Assignments',
+    programs: 'Training Programes',
+    assignments: 'Training Assignments',
     progress: 'Employee Progress',
     reviews: 'Training Review',
     certificates: 'Certificates',
     reports: 'Reports'
   };
 
-  if (labelEl) labelEl.textContent = tabLabels[tabId] || 'Portal';
+  const activeTitle = tabLabels[tabId] || 'Dashboard';
+  if (labelEl) labelEl.textContent = activeTitle;
+  if (mainHeadingEl) mainHeadingEl.textContent = activeTitle;
 
   // Contextual Top Action Button
   if (btnAction && btnActionText) {
@@ -1441,8 +1462,10 @@ function toggleArchiveProgram(progId) {
 
 window.toggleArchiveProgram = toggleArchiveProgram;
 
-// Program Preview Modal
+// In-Screen Programme Details View (Replaces Pop-up Modal)
 let previewActiveProgId = null;
+window.previewActiveProgId = null;
+
 function previewProgram(progId) {
   if (trainingConfigData && trainingConfigData.general && trainingConfigData.general.enablePreview === false) {
     alert('Training Preview is currently disabled in Training Config.');
@@ -1451,21 +1474,23 @@ function previewProgram(progId) {
   const p = state.programs.find(prog => prog.id === progId);
   if (!p) return;
   previewActiveProgId = progId;
+  window.previewActiveProgId = progId;
 
-  document.getElementById('previewProgTitle').textContent = p.title;
+  const titleEl = document.getElementById('previewProgTitle');
+  if (titleEl) titleEl.textContent = p.title;
   const body = document.getElementById('previewModalBody');
 
   let resHtml = '';
   (p.resources || []).forEach((r, idx) => {
-    const icon = r.type === 'video' ? '🎬' : (r.type === 'pdf' ? '📄' : (r.type === 'website' ? '🌐' : '🎓'));
+    const icon = (r.type === 'video' || r.type === 'youtube') ? '🎬' : (r.type === 'pdf' ? '📄' : ((r.type === 'website' || r.type === 'external_link') ? '🌐' : '🎓'));
     const mandBadge = r.mandatory ? '<span class="status-pill status-mandatory">Mandatory</span>' : '<span class="status-pill status-optional">Optional</span>';
     resHtml += `
-      <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 6px;">
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <span>${icon}</span>
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 8px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 16px;">${icon}</span>
           <div>
-            <div style="font-weight: 600; font-size: 13px;">Module ${idx + 1}: ${escapeHtml(r.title)}</div>
-            <a href="${escapeHtml(r.url)}" target="_blank" style="font-size: 11px; color: #2563eb; text-decoration: none;">${escapeHtml(r.url)}</a>
+            <div style="font-weight: 600; font-size: 13px; color: #0f172a;">Module ${idx + 1}: ${escapeHtml(r.title)}</div>
+            <a href="${escapeHtml(r.url)}" target="_blank" style="font-size: 11.5px; color: #2563eb; text-decoration: none;">${escapeHtml(r.url)}</a>
           </div>
         </div>
         ${mandBadge}
@@ -1473,61 +1498,150 @@ function previewProgram(progId) {
     `;
   });
 
-  body.innerHTML = `
-    <div style="display: flex; gap: 12px; margin-bottom: 14px;">
-      <span class="badge-dept badge-blue">${escapeHtml(p.dept)}</span>
-      <span class="status-pill status-inprogress">${p.difficulty}</span>
-      <span class="status-pill status-completed">⏱ ${p.durationHours} Expected Hours</span>
-      <span class="status-pill status-changes">🎯 Pass Score: ${p.passScore}%</span>
-    </div>
-
-    <div style="margin-bottom: 16px;">
-      <h4 style="font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Learning Objectives</h4>
-      <p style="font-size: 13px; color: #475569; background: #f8fafc; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0;">
-        ${escapeHtml(p.learningObjectives || 'Foundational to advanced domain skills.')}
-      </p>
-    </div>
-
-    <div style="margin-bottom: 16px;">
-      <h4 style="font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Completion Requirements & Evaluation</h4>
-      <p style="font-size: 12.5px; color: #475569;">
-        ${escapeHtml(p.completionReq || 'Complete all mandatory coursework and pass final evaluation.')}
-      </p>
-    </div>
-
-    <div>
-      <h4 style="font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 8px;">Curriculum & Learning Resources (${(p.resources || []).length})</h4>
-      <div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1;">
-        ${resHtml}
+  // Enrolled learners for this programme
+  const enrolledAsns = state.assignments.filter(a => a.programId === p.id);
+  let enrolledHtml = '';
+  if (enrolledAsns.length === 0) {
+    enrolledHtml = `
+      <div style="padding: 18px; text-align: center; color: #64748b; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; font-size: 12.5px;">
+        No employees are currently assigned to this programme. Click <strong>+ Assign Programme</strong> above to enroll employees.
       </div>
-    </div>
-  `;
+    `;
+  } else {
+    let rows = '';
+    enrolledAsns.forEach((a, i) => {
+      const emp = state.employees.find(e => e.id === a.employeeId) || { name: a.employeeId, role: 'Employee', dept: '-', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120' };
+      const statusLabel = a.trainingStatus === 'completed' ? '<span class="status-pill status-completed">Completed</span>' : (a.trainingStatus === 'submitted' || a.trainingStatus === 'submitted_for_review' ? '<span class="status-pill status-submitted">Under Review</span>' : (a.trainingStatus === 'in_progress' ? '<span class="status-pill status-inprogress">In Progress</span>' : '<span class="status-pill status-notstarted">Not Started</span>'));
+      rows += `
+        <tr style="border-bottom: 1px solid #f1f5f9;">
+          <td style="padding: 10px 14px; color: #64748b;">${i + 1}</td>
+          <td style="padding: 10px 14px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <img src="${emp.avatar}" style="width: 26px; height: 26px; border-radius: 50%; object-fit: cover;" />
+              <div>
+                <div style="font-weight: 600; color: #0f172a; font-size: 12.5px;">${escapeHtml(emp.name)}</div>
+                <div style="font-size: 11px; color: #64748b;">${escapeHtml(emp.role)}</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 10px 14px; color: #334155; font-size: 12.5px;">${escapeHtml(emp.dept)}</td>
+          <td style="padding: 10px 14px; color: #475569; font-size: 12.5px;">${escapeHtml(a.assignedDate)}</td>
+          <td style="padding: 10px 14px; color: #475569; font-size: 12.5px;">${escapeHtml(a.dueDate)}</td>
+          <td style="padding: 10px 14px; font-size: 12.5px; font-weight: 600; color: #2563eb;">${a.progress}%</td>
+          <td style="padding: 10px 14px;">${statusLabel}</td>
+        </tr>
+      `;
+    });
+    enrolledHtml = `
+      <div style="border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 12.5px; text-align: left;">
+          <thead>
+            <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; color: #64748b; font-size: 11px; text-transform: uppercase;">
+              <th style="padding: 10px 14px; width: 45px;">No.</th>
+              <th style="padding: 10px 14px;">Employee</th>
+              <th style="padding: 10px 14px;">Department</th>
+              <th style="padding: 10px 14px;">Assigned Date</th>
+              <th style="padding: 10px 14px;">Due Date</th>
+              <th style="padding: 10px 14px;">Progress</th>
+              <th style="padding: 10px 14px;">Status</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    `;
+  }
 
-  document.getElementById('programPreviewModal').classList.add('open');
+  if (body) {
+    body.innerHTML = `
+      <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px;">
+        <span class="badge-dept badge-blue">${escapeHtml(p.dept)}</span>
+        <span class="status-pill status-inprogress">${escapeHtml(p.difficulty)}</span>
+        <span class="status-pill status-completed">⏱ ${p.durationHours} Expected Hours</span>
+        <span class="status-pill status-changes">🎯 Pass Score: ${p.passScore || 80}%</span>
+        <span class="status-pill ${p.status === 'published' ? 'status-completed' : 'status-notstarted'}">${escapeHtml((p.status || 'published').toUpperCase())}</span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+        <div style="background: #f8fafc; padding: 14px 16px; border-radius: 8px; border: 1px solid #e2e8f0;">
+          <h4 style="font-size: 13px; font-weight: 700; color: #0f172a; margin: 0 0 6px 0;">Learning Objectives</h4>
+          <p style="font-size: 13px; color: #475569; margin: 0; line-height: 1.5;">
+            ${escapeHtml(p.learningObjectives || 'Foundational to advanced domain skills.')}
+          </p>
+        </div>
+
+        <div style="background: #f8fafc; padding: 14px 16px; border-radius: 8px; border: 1px solid #e2e8f0;">
+          <h4 style="font-size: 13px; font-weight: 700; color: #0f172a; margin: 0 0 6px 0;">Completion Requirements & Evaluation</h4>
+          <p style="font-size: 13px; color: #475569; margin: 0; line-height: 1.5;">
+            ${escapeHtml(p.completionReq || 'Complete all mandatory coursework and pass final evaluation.')}
+          </p>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 22px;">
+        <h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 10px;">Curriculum & Learning Resources (${(p.resources || []).length} Modules)</h4>
+        <div style="background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid #e2e8f0;">
+          ${resHtml}
+        </div>
+      </div>
+
+      <div>
+        <h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 10px;">Enrolled Employees (${enrolledAsns.length})</h4>
+        ${enrolledHtml}
+      </div>
+    `;
+  }
+
+  // Switch in-screen inside #sectionPrograms (hide table list, show detail screen)
+  const listCard = document.getElementById('programsCatalogListCard');
+  const previewScreen = document.getElementById('programPreviewModal');
+  const assignScreen = document.getElementById('assignTrainingModal');
+  if (assignScreen) assignScreen.style.display = 'none';
+  if (listCard) listCard.style.display = 'none';
+  if (previewScreen) {
+    previewScreen.style.display = 'block';
+    previewScreen.classList.add('open');
+  }
+  const labelEl = document.getElementById('currentActiveTabLabel');
+  if (labelEl) labelEl.textContent = p.title;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 window.previewProgram = previewProgram;
 
 function closePreviewModal() {
-  document.getElementById('programPreviewModal').classList.remove('open');
+  const listCard = document.getElementById('programsCatalogListCard');
+  const previewScreen = document.getElementById('programPreviewModal');
+  if (previewScreen) {
+    previewScreen.style.display = 'none';
+    previewScreen.classList.remove('open');
+  }
+  if (listCard) {
+    listCard.style.display = 'block';
+  }
+  const labelEl = document.getElementById('currentActiveTabLabel');
+  const mainHeadingEl = document.getElementById('trainingMainHeading');
+  if (labelEl) labelEl.textContent = 'Training Programes';
+  if (mainHeadingEl) mainHeadingEl.textContent = 'Training Programes';
 }
 
 window.closePreviewModal = closePreviewModal;
 
 function assignFromPreview() {
-  closePreviewModal();
   if (previewActiveProgId) {
     openAssignWithProgram(previewActiveProgId);
+  } else {
+    openAssignTrainingModal();
   }
 }
 
 window.assignFromPreview = assignFromPreview;
 
 // ==========================================================================
-// SECTION 3: TRAINING ASSIGNMENT (WITH DUPLICATE PREVENTION & HIERARCHY)
+// SECTION 3: TRAINING ASSIGNMENT (IN-SCREEN FLOW WITH DUPLICATE PREVENTION)
 // ==========================================================================
 function openAssignWithProgram(progId) {
-  switchTrainingTab('assignments');
+  state.assignReturnToProgramPreview = progId;
   openAssignTrainingModal(progId);
 }
 
@@ -1547,6 +1661,16 @@ function openAssignTrainingModal(preselectedProgId = null) {
   if (!allowInd && !allowBulk && !allowDept) {
     alert('All training assignment modes are currently disabled in Training Config.');
     return;
+  }
+
+  if (!preselectedProgId) {
+    state.assignReturnToProgramPreview = null;
+  }
+
+  // Ensure #viewTraining is active
+  const viewTraining = document.getElementById('viewTraining');
+  if (viewTraining && viewTraining.style.display === 'none') {
+    switchToTraining();
   }
 
   const modal = document.getElementById('assignTrainingModal');
@@ -1643,13 +1767,39 @@ function openAssignTrainingModal(preselectedProgId = null) {
   toggleAssignMode(chosenMode);
 
   checkAssignDuplicates();
-  modal.classList.add('open');
+
+  // Render in-screen: hide other training tab views and display #assignTrainingModal in-screen
+  ['sectionDashboard', 'sectionPrograms', 'sectionAssignments', 'sectionProgress', 'sectionReviews', 'sectionCertificates', 'sectionReports'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+  if (modal) {
+    modal.style.display = 'block';
+    modal.classList.add('open');
+  }
+  const labelEl = document.getElementById('currentActiveTabLabel');
+  const mainHeadingEl = document.getElementById('trainingMainHeading');
+  if (labelEl) labelEl.textContent = 'Assign Training Programme';
+  if (mainHeadingEl) mainHeadingEl.textContent = 'Assign Training Programme';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 window.openAssignTrainingModal = openAssignTrainingModal;
 
 function closeAssignTrainingModal() {
-  document.getElementById('assignTrainingModal').classList.remove('open');
+  const modal = document.getElementById('assignTrainingModal');
+  if (modal) {
+    modal.style.display = 'none';
+    modal.classList.remove('open');
+  }
+  if (state.assignReturnToProgramPreview) {
+    const progId = state.assignReturnToProgramPreview;
+    state.assignReturnToProgramPreview = null;
+    switchTrainingTab('programs');
+    previewProgram(progId);
+  } else {
+    switchTrainingTab(state.activeSubTab || 'assignments');
+  }
 }
 
 window.closeAssignTrainingModal = closeAssignTrainingModal;
@@ -1914,12 +2064,24 @@ function confirmTrainingAssignment() {
   logAudit('Training Assigned', `${prog ? prog.title : progId}`, `Assigned to ${targetEmpIds.length} employee(s)`);
   alert(`Successfully assigned "${prog ? prog.title : 'Programme'}" to ${targetEmpIds.length} employee(s)!`);
   
-  closeAssignTrainingModal();
+  state.assignReturnToProgramPreview = null;
+  switchTrainingTab('assignments');
   renderAssignmentsTable();
   renderDashboard();
 }
 
 window.confirmTrainingAssignment = confirmTrainingAssignment;
+
+state.expandedAssignmentEmployees = {};
+
+function toggleAssignmentEmployeeGroup(empId, e) {
+  if (e) e.stopPropagation();
+  if (!state.expandedAssignmentEmployees) state.expandedAssignmentEmployees = {};
+  state.expandedAssignmentEmployees[empId] = !state.expandedAssignmentEmployees[empId];
+  renderAssignmentsTable();
+}
+
+window.toggleAssignmentEmployeeGroup = toggleAssignmentEmployeeGroup;
 
 function renderAssignmentsTable() {
   const tbody = document.getElementById('assignmentsTableBody');
@@ -1956,28 +2118,56 @@ function renderAssignmentsTable() {
     return;
   }
 
-  let html = '';
+  // Group assignments by employeeId so same employee shows 1 primary row with expand/collapse for additional courses
+  const empGroupsMap = new Map();
   filtered.forEach(a => {
-    const emp = state.employees.find(e => e.id === a.employeeId);
-    const prog = state.programs.find(p => p.id === a.programId);
+    if (!empGroupsMap.has(a.employeeId)) {
+      empGroupsMap.set(a.employeeId, []);
+    }
+    empGroupsMap.get(a.employeeId).push(a);
+  });
 
+  const renderAssignmentRowHtml = (a, emp, prog, isPrimary, totalForEmp, isExpanded) => {
     const mandPill = a.mandatory 
       ? '<span class="status-pill status-mandatory">Mandatory</span>' 
       : '<span class="status-pill status-optional">Elective</span>';
 
     const progColor = a.progress === 100 ? 'prog-green' : (a.progress > 0 ? '' : 'prog-red');
 
-    html += `
-      <tr>
-        <td>
-          <div class="cell-user-info">
-            <img src="${emp.avatar}" class="cell-avatar" />
-            <div class="cell-user-meta">
-              <span class="cell-user-name">${escapeHtml(emp.name)}</span>
-              <span class="cell-user-role">${escapeHtml(emp.role)}</span>
-            </div>
-          </div>
-        </td>
+    const hasMultiple = totalForEmp > 1;
+    const expandBtnHtml = (isPrimary && hasMultiple)
+      ? `<button type="button" onclick="toggleAssignmentEmployeeGroup('${emp.id}', event)" title="${isExpanded ? 'Collapse courses' : 'Expand all assigned courses'}" style="display: inline-flex; align-items: center; gap: 4px; margin-left: 8px; padding: 2px 8px; border-radius: 12px; border: 1px solid ${isExpanded ? '#c7d2fe' : '#cbd5e1'}; background: ${isExpanded ? '#eef2ff' : '#f8fafc'}; color: ${isExpanded ? '#4f46e5' : '#475569'}; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.15s ease;">
+           <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" style="transform: rotate(${isExpanded ? '90deg' : '0deg'}); transition: transform 0.15s ease;"><polyline points="9 18 15 12 9 6"></polyline></svg>
+           <span>${isExpanded ? 'Hide' : `+${totalForEmp - 1} more`}</span>
+         </button>`
+      : '';
+
+    const rowStyle = isPrimary
+      ? ''
+      : 'background: #f8fafc; border-left: 3px solid #6366f1;';
+
+    const empCellContent = isPrimary
+      ? `<div class="cell-user-info" style="${hasMultiple ? 'cursor: pointer;' : ''}" ${hasMultiple ? `onclick="toggleAssignmentEmployeeGroup('${emp.id}', event)"` : ''}>
+           <img src="${emp.avatar}" class="cell-avatar" />
+           <div class="cell-user-meta">
+             <div style="display: flex; align-items: center; flex-wrap: wrap;">
+               <span class="cell-user-name">${escapeHtml(emp.name)}</span>
+               ${expandBtnHtml}
+             </div>
+             <span class="cell-user-role">${escapeHtml(emp.role)}</span>
+           </div>
+         </div>`
+      : `<div class="cell-user-info" style="padding-left: 18px;">
+           <img src="${emp.avatar}" class="cell-avatar" style="width: 28px; height: 28px; opacity: 0.85;" />
+           <div class="cell-user-meta">
+             <span class="cell-user-name" style="font-size: 12.5px; color: #334155;">${escapeHtml(emp.name)}</span>
+             <span class="cell-user-role">${escapeHtml(emp.role)}</span>
+           </div>
+         </div>`;
+
+    return `
+      <tr style="${rowStyle}">
+        <td>${empCellContent}</td>
         <td>${escapeHtml(emp.dept)}</td>
         <td>
           <div style="font-weight: 600; color: #0f172a;">${escapeHtml(prog.title)}</div>
@@ -1994,14 +2184,46 @@ function renderAssignmentsTable() {
             <span class="cell-prog-text">${a.progress}%</span>
           </div>
         </td>
-        <td>
-          <div style="display: flex; gap: 6px;">
-            <button class="btn-table-action" onclick="openProgressDetails('${a.id}')">View Details</button>
-            <button class="btn-table-action" onclick="alert('Reminder notification dispatched to ${escapeHtml(emp.name)}!')">Remind</button>
+        <td style="white-space: nowrap;">
+          <div style="display: inline-flex; align-items: center; gap: 4px;">
+            <button type="button" class="emp-action-icon" onclick="openProgressDetails('${a.id}')" title="View Details" aria-label="View Details">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+            <button type="button" class="emp-action-icon" onclick="showConfigToast('Reminder notification dispatched to ${escapeHtml(emp.name)}!')" title="Send Reminder" aria-label="Remind">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              </svg>
+            </button>
           </div>
         </td>
       </tr>
     `;
+  };
+
+  let html = '';
+  empGroupsMap.forEach((empAssignments, empId) => {
+    const emp = state.employees.find(e => e.id === empId);
+    if (!emp || empAssignments.length === 0) return;
+
+    const isExpanded = !!(state.expandedAssignmentEmployees && state.expandedAssignmentEmployees[empId]);
+    const primaryAsn = empAssignments[0];
+    const primaryProg = state.programs.find(p => p.id === primaryAsn.programId);
+    if (primaryProg) {
+      html += renderAssignmentRowHtml(primaryAsn, emp, primaryProg, true, empAssignments.length, isExpanded);
+    }
+
+    if (isExpanded && empAssignments.length > 1) {
+      empAssignments.slice(1).forEach(childAsn => {
+        const childProg = state.programs.find(p => p.id === childAsn.programId);
+        if (childProg) {
+          html += renderAssignmentRowHtml(childAsn, emp, childProg, false, empAssignments.length, isExpanded);
+        }
+      });
+    }
   });
 
   tbody.innerHTML = html;
@@ -5422,9 +5644,9 @@ const DEMO_USERS = [
   {
     id: 'usr_management',
     name: 'Ishdeep Anand',
-    title: 'SVP',
+    title: 'Admin',
     role: 'Management',
-    dept: 'SVP',
+    dept: 'Admin',
     badgeBg: '#f3e8ff',
     badgeColor: '#7e22ce',
     avatarInitials: 'IA',
@@ -5433,9 +5655,9 @@ const DEMO_USERS = [
   {
     id: 'usr_emp',
     name: 'Aryan Bhardwaj',
-    title: 'Executive',
+    title: 'Business analyst',
     role: 'Employee',
-    dept: 'Executive',
+    dept: 'Business analyst',
     badgeBg: '#f1f5f9',
     badgeColor: '#475569',
     avatarInitials: 'AB',
@@ -5565,8 +5787,8 @@ const EMPLOYEES_DETAIL_DATABASE = {
     email: 'ishdeep@maildrop.cc',
     phone: '+91 9999882892',
     businessUnit: 'MailDrop',
-    department: 'Management',
-    designation: 'SVP',
+    department: 'Admin',
+    designation: 'Admin',
     reportingManager: 'Isha Patel',
     reportingAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120',
     empType: 'Technical',
@@ -5683,8 +5905,8 @@ const EMPLOYEES_DETAIL_DATABASE = {
     email: 'calebnguyen@maildrop.cc',
     phone: '+1 9005048244',
     businessUnit: 'MailDrop',
-    department: 'IT - Project',
-    designation: 'Executive',
+    department: 'Business analyst',
+    designation: 'Business analyst',
     reportingManager: 'Megha Salunkhe',
     reportingAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120',
     empType: 'Technical',
@@ -6631,8 +6853,14 @@ function getFallbackEmployeeData(empId = 'CO-5039') {
     };
   });
 
+  const profileObj = JSON.parse(JSON.stringify(store.profile || {}));
+  if (empId === 'CO-5039') {
+    profileObj.designation = 'Business analyst';
+    profileObj.department = 'Business analyst';
+  }
+
   return {
-    profile: JSON.parse(JSON.stringify(store.profile || {})),
+    profile: profileObj,
     stats: stats,
     kpis: stats,
     trainings: trainings,
@@ -6703,8 +6931,8 @@ function renderEmployeeDashboardUI() {
 
   if (elName) elName.textContent = p.name || 'Aryan Bhardwaj';
   if (elCode) elCode.textContent = p.employeeId || p.id || 'CO-5039';
-  if (elDesig) elDesig.textContent = p.designation || 'Executive';
-  if (elDept) elDept.textContent = p.department || 'IT - Project';
+  if (elDesig) elDesig.textContent = p.designation || 'Business analyst';
+  if (elDept) elDept.textContent = p.department || 'Business analyst';
   if (elMgr) elMgr.textContent = p.reportingManager || 'Megha Salunkhe';
   if (elAvatar) {
     elAvatar.textContent = p.avatarInitials || 'AB';

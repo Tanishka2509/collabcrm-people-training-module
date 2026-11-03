@@ -127,7 +127,7 @@
             <span class="user-role-pill-avatar" id="headerUserAvatarBadge" style="background: #8b5cf6;">IA</span>
             <span class="user-role-pill-info">
               <span class="user-role-pill-name" id="headerUserNameDisplay">Ishdeep Anand</span>
-              <span class="user-role-pill-role" id="headerUserRoleDisplay">Management • SVP</span>
+              <span class="user-role-pill-role" id="headerUserRoleDisplay">Management • Admin</span>
             </span>
             <svg class="user-role-pill-chevron" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5">
               <polyline points="6 9 12 15 18 9"></polyline>
@@ -474,11 +474,11 @@
                           <div class="emp-avatar-circle" style="background: #8b5cf6;">IA</div>
                           <div>
                             <div style="font-weight: 600; color: #0f172a;">Ishdeep Anand</div>
-                            <div style="font-size: 11px; color: #64748b;">SVP</div>
+                            <div style="font-size: 11px; color: #64748b;">Admin</div>
                           </div>
                         </div>
                       </td>
-                      <td><span class="emp-dept-badge">Management</span></td>
+                      <td><span class="emp-dept-badge">Admin</span></td>
                       <td>
                         <div style="color: #334155;">ishdeep@maildrop.cc</div>
                         <div style="font-size: 11px; color: #64748b;">+91 9999882892</div>
@@ -550,11 +550,11 @@
                           <div class="emp-avatar-circle" style="background: #f59e0b;">AB</div>
                           <div>
                             <div style="font-weight: 600; color: #0f172a;">Aryan Bhardwaj</div>
-                            <div style="font-size: 11px; color: #64748b;">Executive</div>
+                            <div style="font-size: 11px; color: #64748b;">Business analyst</div>
                           </div>
                         </div>
                       </td>
-                      <td><span class="emp-dept-badge">IT - Project</span></td>
+                      <td><span class="emp-dept-badge">Business analyst</span></td>
                       <td>
                         <div style="color: #334155;">calebnguyen@maildrop.cc</div>
                         <div style="font-size: 11px; color: #64748b;">+1 9005048244</div>
@@ -889,16 +889,10 @@
                 <span class="crumb-separator">›</span>
                 <span class="active-crumb" id="currentActiveTabLabel">Dashboard</span>
               </div>
-              <div class="training-title-row">
-                <div class="training-icon-badge">
-                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2">
-                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
-                    <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
-                  </svg>
-                </div>
+              <div class="training-title-row" style="margin-top: 4px;">
                 <div>
-                  <h1 class="training-main-heading">Training Management Portal</h1>
-                  <p class="training-main-desc" id="rolePortalSubtitle">HR, Admin &amp; Reporting Manager Portal • Manage programmes, assignments, evaluations, and certification compliance.</p>
+                  <h1 class="training-main-heading" id="trainingMainHeading">Dashboard</h1>
+                  <p class="training-main-desc" id="rolePortalSubtitle" style="display: none;"></p>
                 </div>
               </div>
             </div>
@@ -919,9 +913,9 @@
                     <span style="background: #eff6ff; color: #2563eb; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px;">Employee Portal</span>
                   </div>
                   <div style="font-size: 12px; color: #64748b; margin-top: 3px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                    <span>Designation: <strong style="color: #1e293b;" id="empPortalDesig">Executive</strong></span>
+                    <span>Designation: <strong style="color: #1e293b;" id="empPortalDesig">Business analyst</strong></span>
                     <span>•</span>
-                    <span>Department: <strong style="color: #1e293b;" id="empPortalDept">IT - Project</strong></span>
+                    <span>Department: <strong style="color: #1e293b;" id="empPortalDept">Business analyst</strong></span>
                     <span>•</span>
                     <span>Reporting Manager: <strong style="color: #1e293b;" id="empPortalManager">Megha Salunkhe (Sr. Executive)</strong></span>
                   </div>
@@ -1176,12 +1170,12 @@
             <!-- SECTION 2: TRAINING MANAGEMENT (PROGRAMS TABLE)-->
             <!-- ============================================== -->
             <div class="training-tab-view" id="sectionPrograms" style="display: none;">
-              <div class="emp-table-container" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+              <div class="emp-table-container" id="programsCatalogListCard" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
                 <!-- Header Bar matching Screenshot 3 -->
                 <div class="emp-table-header" style="display: flex; align-items: center; justify-content: space-between; padding: 16px 20px 12px 20px;">
                   <div class="emp-title-area" style="display: flex; align-items: center; gap: 10px;">
-                    <h2 class="emp-title" style="font-size: 18px; font-weight: 700; color: #0f172a; margin: 0;">Training Programme Library</h2>
-                    <span class="emp-count-badge" id="programsCountBadge" style="background: #eff6ff; color: #2563eb; font-size: 12px; font-weight: 600; padding: 2px 10px; border-radius: 12px; border: 1px solid #bfdbfe;">6 Programmes</span>
+                    <h2 class="emp-title" style="font-size: 18px; font-weight: 700; color: #0f172a; margin: 0;">Training Programes</h2>
+                    <span class="emp-count-badge" id="programsCountBadge" style="background: #eff6ff; color: #2563eb; font-size: 12px; font-weight: 600; padding: 2px 10px; border-radius: 12px; border: 1px solid #bfdbfe;">12 Programmes</span>
                   </div>
                   <div class="emp-actions-area" style="display: flex; align-items: center; gap: 8px;">
                     <button type="button" class="btn-primary-action" onclick="openCreateProgramModal()" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 13px;">
@@ -1267,6 +1261,140 @@
                 <!-- Hidden fallback container for backwards compatibility -->
                 <div id="programCardsGrid" style="display:none;"></div>
               </div>
+
+              <!-- IN-SCREEN PROGRAMME DETAILS VIEW (Replaces pop-up modal) -->
+              <div id="programPreviewModal" style="display: none; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); overflow: hidden;">
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 22px; border-bottom: 1px solid #e2e8f0; background: #f8fafc; flex-wrap: wrap; gap: 12px;">
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <button type="button" class="btn-secondary-action" onclick="closePreviewModal()" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; font-size: 12.5px; font-weight: 600;">
+                      ← Back to Training Programes
+                    </button>
+                    <h2 id="previewProgTitle" style="font-size: 17px; font-weight: 700; color: #0f172a; margin: 0;">Programme Details</h2>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <button type="button" class="btn-secondary-action" id="previewBtnEdit" onclick="if(window.previewActiveProgId) openEditProgramModal(window.previewActiveProgId)" style="padding: 7px 14px; font-size: 12.5px;">Edit Programme</button>
+                    <button type="button" class="btn-primary-action" id="previewBtnAssign" onclick="assignFromPreview()" style="padding: 7px 16px; font-size: 12.5px; font-weight: 600;">+ Assign Programme</button>
+                  </div>
+                </div>
+                <div id="previewModalBody" style="padding: 22px;">
+                  <!-- Dynamic In-Screen Programme Details Content -->
+                </div>
+              </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- IN-SCREEN ASSIGN TRAINING PROGRAMME VIEW       -->
+            <!-- ============================================== -->
+            <div class="training-tab-view" id="assignTrainingModal" style="display: none;">
+              <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); overflow: hidden;">
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 22px; border-bottom: 1px solid #e2e8f0; background: #f8fafc; flex-wrap: wrap; gap: 12px;">
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <button type="button" class="btn-secondary-action" onclick="closeAssignTrainingModal()" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; font-size: 12.5px; font-weight: 600;">
+                      ← Back
+                    </button>
+                    <div>
+                      <h2 style="font-size: 17px; font-weight: 700; color: #0f172a; margin: 0;">Assign Training Programme</h2>
+                      <p style="font-size: 12px; color: #64748b; margin: 2px 0 0 0;">Select a training programme, target employee(s) or department, and schedule due dates.</p>
+                    </div>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <button type="button" class="btn-secondary-action" onclick="closeAssignTrainingModal()">Cancel</button>
+                    <button type="button" class="btn-primary-action" id="btnConfirmAssign" onclick="confirmTrainingAssignment()">Confirm &amp; Assign</button>
+                  </div>
+                </div>
+
+                <div style="padding: 24px; max-width: 880px;">
+                  <!-- Program Selection -->
+                  <div class="form-group">
+                    <label class="form-label">Select Training Programme *</label>
+                    <select class="form-select" id="assignSelectProgram" onchange="checkAssignDuplicates()">
+                      <!-- Dynamic Programs -->
+                    </select>
+                  </div>
+
+                  <!-- Assignment Mode Selector -->
+                  <div class="form-group">
+                    <label class="form-label">Assignment Mode *</label>
+                    <div style="display: flex; gap: 20px; margin: 8px 0 14px 0; flex-wrap: wrap;">
+                      <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; cursor: pointer; padding: 8px 14px; border: 1px solid #e2e8f0; border-radius: 6px; background: #f8fafc;">
+                        <input type="radio" name="assignMode" value="individual" checked onchange="toggleAssignMode('individual')" />
+                        <span>Individual Employee</span>
+                      </label>
+                      <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; cursor: pointer; padding: 8px 14px; border: 1px solid #e2e8f0; border-radius: 6px; background: #f8fafc;">
+                        <input type="radio" name="assignMode" value="multiple" onchange="toggleAssignMode('multiple')" />
+                        <span>Multiple Selected Employees</span>
+                      </label>
+                      <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; cursor: pointer; padding: 8px 14px; border: 1px solid #e2e8f0; border-radius: 6px; background: #f8fafc;" id="optAssignDeptRadio">
+                        <input type="radio" name="assignMode" value="department" onchange="toggleAssignMode('department')" />
+                        <span>Entire Department</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- 1. Individual Picker -->
+                  <div class="form-group" id="assignGroupIndividual">
+                    <label class="form-label">Choose Employee *</label>
+                    <select class="form-select" id="assignSelectEmployee" onchange="checkAssignDuplicates()">
+                      <!-- Dynamic Employees -->
+                    </select>
+                  </div>
+
+                  <!-- 2. Multiple Employees Checklist -->
+                  <div class="form-group" id="assignGroupMultiple" style="display: none;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                      <label class="form-label" style="margin-bottom: 0;">Select Employees *</label>
+                      <button type="button" class="btn-table-action" onclick="toggleSelectAllEmployees()">Toggle Select All</button>
+                    </div>
+                    <div id="assignMultiEmployeesList" style="max-height: 220px; overflow-y: auto; border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px; background: #f8fafc; display: flex; flex-direction: column; gap: 6px;">
+                      <!-- Dynamic Checkboxes -->
+                    </div>
+                  </div>
+
+                  <!-- 3. Department Picker -->
+                  <div class="form-group" id="assignGroupDept" style="display: none;">
+                    <label class="form-label">Select Target Department *</label>
+                    <select class="form-select" id="assignSelectDept" onchange="checkAssignDuplicates()">
+                      <option value="Business analyst">Business analyst (All Members)</option>
+                      <option value="Admin">Admin (All Members)</option>
+                      <option value="IT - Project">IT - Project (All Members)</option>
+                      <option value="Engineering">Engineering (All Members)</option>
+                      <option value="Recruitment &amp; HR">Recruitment &amp; HR (All Members)</option>
+                      <option value="People Operations">People Operations (All Members)</option>
+                      <option value="Sales &amp; BD">Sales &amp; BD (All Members)</option>
+                    </select>
+                  </div>
+
+                  <!-- Dates & Mandatory Status -->
+                  <div class="form-row">
+                    <div class="form-group half">
+                      <label class="form-label">Assigned Date *</label>
+                      <input type="date" class="form-input" id="assignDateInput" />
+                    </div>
+                    <div class="form-group half">
+                      <label class="form-label">Due Date *</label>
+                      <input type="date" class="form-input" id="assignDueDateInput" />
+                    </div>
+                  </div>
+
+                  <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; margin-top: 10px;">
+                    <div>
+                      <span style="font-size: 13px; font-weight: 600; color: #1e293b;">Mark as Mandatory Training</span>
+                      <p style="font-size: 11.5px; color: #64748b; margin: 2px 0 0 0;">Learners will receive automated reminder notifications and escalation if overdue.</p>
+                    </div>
+                    <input type="checkbox" id="assignIsMandatory" checked style="width: 18px; height: 18px; accent-color: #2563eb;" />
+                  </div>
+
+                  <!-- Anti-Duplicate Alert Notice -->
+                  <div id="assignDuplicateWarning" style="display: none; margin-top: 14px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; padding: 10px 14px; font-size: 12.5px; color: #991b1b;">
+                    ⚠️ <strong>Duplicate Active Assignment Warning:</strong> One or more selected employees already have an active/ongoing assignment for this program. Duplicate active assignments are prevented.
+                  </div>
+
+                  <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
+                    <button type="button" class="btn-secondary-action" onclick="closeAssignTrainingModal()">Cancel</button>
+                    <button type="button" class="btn-primary-action" onclick="confirmTrainingAssignment()">Confirm &amp; Assign</button>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <!-- ============================================== -->
@@ -1283,6 +1411,9 @@
                     <input type="text" class="crm-input-search" id="searchAssignmentsInput" placeholder="Filter employee or training..." oninput="renderAssignmentsTable()" />
                     <select class="crm-select-filter" id="filterAssignDept" onchange="renderAssignmentsTable()">
                       <option value="all">All Departments</option>
+                      <option value="Business analyst">Business analyst</option>
+                      <option value="Admin">Admin</option>
+                      <option value="IT - Project">IT - Project</option>
                       <option value="Engineering">Engineering</option>
                       <option value="Recruitment &amp; HR">Recruitment &amp; HR</option>
                       <option value="People Operations">People Operations</option>
@@ -3393,125 +3524,6 @@
           <button class="btn-secondary-action" onclick="saveProgram('draft')">Save as Draft</button>
           <button class="btn-primary-action" onclick="saveProgram('published')">Publish Programme</button>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ======================================================== -->
-  <!-- MODAL 2: PREVIEW TRAINING PROGRAMME (Section 2)          -->
-  <!-- ======================================================== -->
-  <div class="modal-backdrop" id="programPreviewModal">
-    <div class="modal-dialog modal-large">
-      <div class="modal-header">
-        <h3 class="modal-title" id="previewProgTitle">Programme Preview</h3>
-        <button class="modal-close-btn" onclick="closePreviewModal()">✕</button>
-      </div>
-      <div class="modal-body" id="previewModalBody" style="max-height: 75vh; overflow-y: auto;">
-        <!-- Dynamic Preview Content -->
-      </div>
-      <div class="modal-footer">
-        <button class="btn-secondary-action" onclick="closePreviewModal()">Close Preview</button>
-        <button class="btn-primary-action" id="previewBtnAssign" onclick="assignFromPreview()">Assign Programme</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ======================================================== -->
-  <!-- MODAL 3: ASSIGN TRAINING (Section 3)                      -->
-  <!-- ======================================================== -->
-  <div class="modal-backdrop" id="assignTrainingModal">
-    <div class="modal-dialog modal-large">
-      <div class="modal-header">
-        <h3 class="modal-title">Assign Training Programme</h3>
-        <button class="modal-close-btn" onclick="closeAssignTrainingModal()">✕</button>
-      </div>
-      <div class="modal-body" style="max-height: 75vh; overflow-y: auto;">
-        <!-- Program Selection -->
-        <div class="form-group">
-          <label class="form-label">Select Training Programme *</label>
-          <select class="form-select" id="assignSelectProgram" onchange="checkAssignDuplicates()">
-            <!-- Dynamic Programs -->
-          </select>
-        </div>
-
-        <!-- Assignment Mode Selector -->
-        <div class="form-group">
-          <label class="form-label">Assignment Mode *</label>
-          <div style="display: flex; gap: 16px; margin: 6px 0 12px 0;">
-            <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
-              <input type="radio" name="assignMode" value="individual" checked onchange="toggleAssignMode('individual')" />
-              <span>Individual Employee</span>
-            </label>
-            <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
-              <input type="radio" name="assignMode" value="multiple" onchange="toggleAssignMode('multiple')" />
-              <span>Multiple Selected Employees</span>
-            </label>
-            <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;" id="optAssignDeptRadio">
-              <input type="radio" name="assignMode" value="department" onchange="toggleAssignMode('department')" />
-              <span>Entire Department</span>
-            </label>
-          </div>
-        </div>
-
-        <!-- 1. Individual Picker -->
-        <div class="form-group" id="assignGroupIndividual">
-          <label class="form-label">Choose Employee *</label>
-          <select class="form-select" id="assignSelectEmployee" onchange="checkAssignDuplicates()">
-            <!-- Dynamic Employees -->
-          </select>
-        </div>
-
-        <!-- 2. Multiple Employees Checklist -->
-        <div class="form-group" id="assignGroupMultiple" style="display: none;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <label class="form-label" style="margin-bottom: 0;">Select Employees *</label>
-            <button type="button" class="btn-table-action" onclick="toggleSelectAllEmployees()">Toggle Select All</button>
-          </div>
-          <div id="assignMultiEmployeesList" style="max-height: 180px; overflow-y: auto; border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px; background: #f8fafc; display: flex; flex-direction: column; gap: 6px;">
-            <!-- Dynamic Checkboxes -->
-          </div>
-        </div>
-
-        <!-- 3. Department Picker -->
-        <div class="form-group" id="assignGroupDept" style="display: none;">
-          <label class="form-label">Select Target Department *</label>
-          <select class="form-select" id="assignSelectDept" onchange="checkAssignDuplicates()">
-            <option value="IT - Project">IT - Project (All Members)</option>
-            <option value="Engineering">Engineering (All Members)</option>
-            <option value="Recruitment &amp; HR">Recruitment &amp; HR (All Members)</option>
-            <option value="People Operations">People Operations (All Members)</option>
-            <option value="Sales &amp; BD">Sales &amp; BD (All Members)</option>
-          </select>
-        </div>
-
-        <!-- Dates & Mandatory Status -->
-        <div class="form-row">
-          <div class="form-group half">
-            <label class="form-label">Assigned Date *</label>
-            <input type="date" class="form-input" id="assignDateInput" />
-          </div>
-          <div class="form-group half">
-            <label class="form-label">Due Date *</label>
-            <input type="date" class="form-input" id="assignDueDateInput" />
-          </div>
-        </div>
-
-        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; margin-top: 10px;">
-          <div>
-            <span style="font-size: 13px; font-weight: 600; color: #1e293b;">Mark as Mandatory Training</span>
-            <p style="font-size: 11.5px; color: #64748b;">Learners will receive automated reminder notifications and escalation if overdue.</p>
-          </div>
-          <input type="checkbox" id="assignIsMandatory" checked style="width: 18px; height: 18px; accent-color: #2563eb;" />
-        </div>
-
-        <!-- Anti-Duplicate Alert Notice -->
-        <div id="assignDuplicateWarning" style="display: none; margin-top: 14px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; padding: 10px 14px; font-size: 12.5px; color: #991b1b;">
-          ⚠️ <strong>Duplicate Active Assignment Warning:</strong> One or more selected employees already have an active/ongoing assignment for this program. Duplicate active assignments are prevented.
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn-secondary-action" onclick="closeAssignTrainingModal()">Cancel</button>
-        <button class="btn-primary-action" id="btnConfirmAssign" onclick="confirmTrainingAssignment()">Confirm &amp; Assign</button>
       </div>
     </div>
   </div>
