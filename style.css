@@ -4387,6 +4387,71 @@ body {
   flex-wrap: wrap;
 }
 
+.emp-status-tab-group {
+  display: inline-flex;
+  align-items: center;
+  background: #f1f5f9;
+  padding: 3px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.emp-status-tab,
+.emp-filter-pill {
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  outline: none;
+}
+
+.emp-status-tab:hover,
+.emp-filter-pill:hover {
+  color: #0f172a;
+}
+
+.emp-status-tab.active,
+.emp-filter-pill.active {
+  background: #ffffff;
+  color: #4f46e5;
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.notif-category-tab {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  outline: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.notif-category-tab:hover {
+  color: #0f172a;
+  background: #f1f5f9;
+}
+
+.notif-category-tab.active {
+  background: #eff6ff;
+  color: #2563eb;
+  font-weight: 700;
+  border-color: #bfdbfe;
+}
+
 .emp-filters-left {
   display: flex;
   align-items: center;

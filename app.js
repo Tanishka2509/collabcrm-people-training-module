@@ -429,7 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
   state.employeeTrainingData = getFallbackEmployeeData('CO-5039');
   syncEmployeeTrainingsWithGlobalAssignments();
   setAppRole('admin'); // Start in Admin Role
-  switchToEmployees(); // Start with Employees module selected first
+  switchToTraining(); // Start with Training module selected (Employee module removed per user instruction)
 });
 
 // App Role Switcher (Admin vs HR vs Reporting Manager vs Employee)
@@ -595,62 +595,9 @@ function setAppRole(role) {
 
 window.setAppRole = setAppRole;
 
-// Main Module Switching (Employees, Training, Config)
+// Main Module Switching (Employee module removed; system stays on Training)
 function switchToEmployees() {
-  const configPanel = document.getElementById('configSidePanel');
-  if (configPanel) configPanel.classList.remove('open');
-  const trainingPanel = document.getElementById('trainingSidePanel');
-  if (trainingPanel) trainingPanel.classList.remove('open');
-
-  // Enforce employee role: Employee module removed from employee user side, just keep training module
-  if (state.currentRole === 'employee') {
-    switchToTraining();
-    return;
-  }
-
-  const viewDashboard = document.getElementById('viewDashboard');
-  const viewTraining = document.getElementById('viewTraining');
-  const viewConfig = document.getElementById('viewConfig');
-
-  const menuEmployees = document.getElementById('menuEmployees');
-  const menuTraining = document.getElementById('menuTraining');
-  const menuConfig = document.getElementById('menuConfig');
-
-  const employeesInner = document.getElementById('employeesInner');
-  const trainingInner = document.getElementById('trainingInner');
-  const configInner = document.getElementById('configInner');
-
-  if (viewDashboard) { viewDashboard.style.display = 'block'; viewDashboard.classList.add('active'); }
-  if (viewTraining) { viewTraining.style.display = 'none'; viewTraining.classList.remove('active'); }
-  if (viewConfig) { viewConfig.style.display = 'none'; viewConfig.classList.remove('active'); }
-  const viewTrainingConfig = document.getElementById('viewTrainingConfig');
-  if (viewTrainingConfig) { viewTrainingConfig.style.display = 'none'; viewTrainingConfig.classList.remove('active'); }
-  const viewRoles = document.getElementById('viewRoles');
-  if (viewRoles) { viewRoles.style.display = 'none'; viewRoles.classList.remove('active'); }
-  const viewRolePermissions = document.getElementById('viewRolePermissions');
-  if (viewRolePermissions) { viewRolePermissions.style.display = 'none'; viewRolePermissions.classList.remove('active'); }
-  const viewEmployeeDetail = document.getElementById('viewEmployeeDetail');
-  if (viewEmployeeDetail) { viewEmployeeDetail.style.display = 'none'; viewEmployeeDetail.classList.remove('active'); }
-
-  if (menuEmployees) menuEmployees.classList.add('active');
-  if (menuTraining) menuTraining.classList.remove('active');
-  if (menuConfig) menuConfig.classList.remove('active');
-
-  if (employeesInner) {
-    employeesInner.className = 'bg-indigo-600 text-white relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
-    const icon = employeesInner.querySelector('.icon-users-02');
-    if (icon) icon.className = 'text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-users-02';
-  }
-  if (trainingInner) {
-    trainingInner.className = 'text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
-    const icon = trainingInner.querySelector('.icon-training');
-    if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training';
-  }
-  if (configInner) {
-    configInner.className = 'text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
-    const icon = configInner.querySelector('.icon-settings-02');
-    if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-settings-02';
-  }
+  switchToTraining();
 }
 
 function switchToTraining() {
@@ -3263,6 +3210,277 @@ function renderPortalNotifications() {
 }
 
 window.renderPortalNotifications = renderPortalNotifications;
+
+// ==========================================================================
+// NOTIFICATIONS SCREEN (SCREENSHOT 5)
+// ==========================================================================
+let notifScreenActiveCategory = 'all';
+let notifScreenShowUnreadOnly = false;
+
+const SYSTEM_NOTIFICATIONS_DATA = [
+  {
+    id: 'notif_trn_1',
+    category: 'employee',
+    sender: 'Isha Patel (Head of People)',
+    message: "New training assigned: 'Security Awareness & GDPR Compliance 2026'. Due Date: 28-Jan-2026.",
+    time: '1 day ago',
+    unread: true,
+    trainingId: 'TRN-001'
+  },
+  {
+    id: 'notif_feed_1',
+    category: 'feed',
+    sender: 'Kamlesh Puraswani',
+    message: "Your work allocation has been updated for the project 'CollabCRM'.",
+    time: '1 day ago',
+    unread: true
+  },
+  {
+    id: 'notif_leave_1',
+    category: 'leave',
+    sender: 'Kamlesh Puraswani',
+    message: 'Leave approved: 05 Nov 2026, SH.',
+    time: '1 day ago',
+    unread: false
+  },
+  {
+    id: 'notif_trn_2',
+    category: 'employee',
+    sender: 'Megha Salunkhe (Sr. Executive)',
+    message: "Training Due Date Approaching: 'Cloud Infrastructure & High Performance Node Services' is due in 3 days.",
+    time: '2 days ago',
+    unread: true,
+    trainingId: 'TRN-002'
+  },
+  {
+    id: 'notif_wfh_1',
+    category: 'wfh',
+    sender: 'Kamlesh Puraswani',
+    message: 'WFH approved: 11 Nov 2026, F to 20 Nov 2026, F.',
+    time: '23-Oct-2026',
+    unread: false
+  },
+  {
+    id: 'notif_leave_2',
+    category: 'leave',
+    sender: 'Kamlesh Puraswani',
+    message: 'Leave approved: 23 Oct 2026, SH.',
+    time: '23-Oct-2026',
+    unread: false
+  },
+  {
+    id: 'notif_trn_3',
+    category: 'employee',
+    sender: 'CollabCRM Certification Authority',
+    message: "Certificate Issued: Congratulations! Your certificate for 'Security Awareness & GDPR Compliance 2026' (TRN-2026-0003) is now verified and available.",
+    time: '26-Jan-2026',
+    unread: false,
+    trainingId: 'TRN-001'
+  },
+  {
+    id: 'notif_trn_4',
+    category: 'employee',
+    sender: 'Assessment & Verification Engine',
+    message: "Assessment Graded: You achieved 95% on 'Security Awareness & GDPR Compliance 2026' capstone evaluation.",
+    time: '26-Jan-2026',
+    unread: false,
+    trainingId: 'TRN-001'
+  },
+  {
+    id: 'notif_feed_2',
+    category: 'feed',
+    sender: 'Khushi Bhatt',
+    message: 'New document published. (Work From Home Policy_IT Guidelines)',
+    time: '16-Oct-2026',
+    unread: false
+  },
+  {
+    id: 'notif_org_1',
+    category: 'org',
+    sender: 'System',
+    message: 'Missing timesheet reminder for 14 Oct 2026.',
+    time: '15-Oct-2026',
+    unread: false
+  },
+  {
+    id: 'notif_leave_3',
+    category: 'leave',
+    sender: 'Kamlesh Puraswani',
+    message: 'Leave approved: 14 Oct 2026, SH.',
+    time: '14-Oct-2026',
+    unread: false
+  }
+];
+
+function openNotificationsScreen(category = 'all') {
+  // Close any open side panels
+  const trnPanel = document.getElementById('trainingSidePanel');
+  if (trnPanel) trnPanel.classList.remove('open');
+  const cfgPanel = document.getElementById('configSidePanel');
+  if (cfgPanel) cfgPanel.classList.remove('open');
+  const dd = document.getElementById('portalNotificationsDropdown');
+  if (dd) dd.style.display = 'none';
+
+  // Ensure Training view is active
+  const viewTraining = document.getElementById('viewTraining');
+  if (viewTraining) {
+    viewTraining.style.display = 'block';
+    viewTraining.classList.add('active');
+  }
+
+  // Hide other training subviews
+  [
+    'sectionDashboard', 'sectionPrograms', 'sectionAssignments', 'sectionProgress',
+    'sectionReviews', 'sectionCertificates', 'sectionReports', 'sectionEmpMyTraining',
+    'sectionEmpCertificates', 'sectionEmpHistory', 'sectionEmpTrainingDetailScreen'
+  ].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+
+  const notifScreen = document.getElementById('sectionNotificationsScreen');
+  if (notifScreen) notifScreen.style.display = 'block';
+
+  filterNotifScreen(category);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function filterNotifScreen(category) {
+  notifScreenActiveCategory = category;
+
+  const categories = ['all', 'ar', 'asset', 'employee', 'feed', 'leave', 'org', 'profile_update', 'project', 'wfh'];
+  categories.forEach(c => {
+    const btn = document.getElementById(`notifTab_${c}`);
+    if (btn) btn.classList.toggle('active', c === category);
+  });
+
+  const breadcrumb = document.getElementById('notifBreadcrumbFilterLabel');
+  if (breadcrumb) {
+    const labels = {
+      all: 'All', ar: 'AR', asset: 'Asset', employee: 'Employee', feed: 'Feed',
+      leave: 'Leave', org: 'ORG', profile_update: 'Profile Update', project: 'Project', wfh: 'WFH'
+    };
+    breadcrumb.textContent = labels[category] || category;
+  }
+
+  renderNotificationsScreenList();
+}
+
+function toggleNotifUnreadFilter() {
+  const toggle = document.getElementById('notifScreenUnreadOnlyToggle');
+  notifScreenShowUnreadOnly = toggle ? toggle.checked : !notifScreenShowUnreadOnly;
+
+  const switchEl = document.getElementById('notifToggleSwitch');
+  const thumbEl = document.getElementById('notifToggleThumb');
+  if (switchEl) switchEl.style.background = notifScreenShowUnreadOnly ? '#2563eb' : '#cbd5e1';
+  if (thumbEl) thumbEl.style.transform = notifScreenShowUnreadOnly ? 'translateX(16px)' : 'translateX(0)';
+
+  renderNotificationsScreenList();
+}
+
+function markAllNotifScreenRead() {
+  SYSTEM_NOTIFICATIONS_DATA.forEach(n => n.unread = false);
+  const dotWrap = document.getElementById('headerNotifDotWrap');
+  if (dotWrap) dotWrap.style.display = 'none';
+  const empBadge = document.getElementById('notifScreenEmpCountBadge');
+  if (empBadge) empBadge.style.display = 'none';
+
+  renderNotificationsScreenList();
+  showConfigToast('All notifications marked as read.');
+}
+
+function handleNotifScreenItemClick(id) {
+  const item = SYSTEM_NOTIFICATIONS_DATA.find(n => n.id === id);
+  if (!item) return;
+  item.unread = false;
+
+  // Update employee unread count badge
+  const unreadEmpCount = SYSTEM_NOTIFICATIONS_DATA.filter(n => n.category === 'employee' && n.unread).length;
+  const empBadge = document.getElementById('notifScreenEmpCountBadge');
+  if (empBadge) {
+    empBadge.textContent = unreadEmpCount;
+    empBadge.style.display = unreadEmpCount > 0 ? 'inline-block' : 'none';
+  }
+
+  // If training notification, navigate straight to detail screen
+  if (item.trainingId) {
+    openEmployeeTrainingDetail(item.trainingId);
+    return;
+  }
+
+  renderNotificationsScreenList();
+}
+
+function renderNotificationsScreenList() {
+  const container = document.getElementById('notifScreenListContainer');
+  if (!container) return;
+
+  // Filter items
+  let list = SYSTEM_NOTIFICATIONS_DATA;
+  if (notifScreenActiveCategory !== 'all') {
+    list = list.filter(n => n.category === notifScreenActiveCategory);
+  }
+  if (notifScreenShowUnreadOnly) {
+    list = list.filter(n => n.unread);
+  }
+
+  // Update employee badge count
+  const unreadEmpCount = SYSTEM_NOTIFICATIONS_DATA.filter(n => n.category === 'employee' && n.unread).length;
+  const empBadge = document.getElementById('notifScreenEmpCountBadge');
+  if (empBadge) {
+    empBadge.textContent = unreadEmpCount;
+    empBadge.style.display = unreadEmpCount > 0 ? 'inline-block' : 'none';
+  }
+
+  if (list.length === 0) {
+    container.innerHTML = `
+      <div style="padding: 48px 20px; text-align: center; color: #64748b;">
+        <div style="font-size: 32px; margin-bottom: 8px;">🔔</div>
+        <p style="font-size: 14px; font-weight: 600; color: #1e293b; margin: 0 0 4px 0;">No notifications found</p>
+        <p style="font-size: 12.5px; margin: 0;">There are no notifications matching the selected filter.</p>
+      </div>
+    `;
+    return;
+  }
+
+  let html = '';
+  list.forEach(n => {
+    const isUnread = n.unread;
+    const dotColor = isUnread ? '#2563eb' : '#cbd5e1';
+    const isTrn = n.trainingId ? true : false;
+
+    html += `
+      <div onclick="handleNotifScreenItemClick('${n.id}')" style="display: flex; align-items: flex-start; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid #f1f5f9; cursor: pointer; transition: background 0.15s ease; background: ${isUnread ? '#f8fafc' : '#ffffff'};" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='${isUnread ? '#f8fafc' : '#ffffff'}'">
+        <div style="display: flex; align-items: flex-start; gap: 12px; flex: 1;">
+          <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: ${dotColor}; margin-top: 6px; flex-shrink: 0;"></span>
+          <div>
+            <div style="font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 3px; display: flex; align-items: center; gap: 8px;">
+              <span>${escapeHtml(n.sender)}</span>
+              ${isTrn ? '<span style="font-size: 10.5px; font-weight: 600; color: #4338ca; background: #e0e7ff; padding: 1px 7px; border-radius: 4px;">Training</span>' : ''}
+              ${isUnread ? '<span style="font-size: 10.5px; font-weight: 600; color: #1d4ed8; background: #dbeafe; padding: 1px 6px; border-radius: 4px;">New</span>' : ''}
+            </div>
+            <div style="font-size: 13px; color: #475569; line-height: 1.45;">
+              ${escapeHtml(n.message)}
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 14px; margin-left: 16px; flex-shrink: 0;">
+          <span style="font-size: 12px; color: #64748b; white-space: nowrap;">${escapeHtml(n.time)}</span>
+          <span style="color: #94a3b8; font-size: 14px;" title="Open Details">↗</span>
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
+window.openNotificationsScreen = openNotificationsScreen;
+window.filterNotifScreen = filterNotifScreen;
+window.toggleNotifUnreadFilter = toggleNotifUnreadFilter;
+window.markAllNotifScreenRead = markAllNotifScreenRead;
+window.handleNotifScreenItemClick = handleNotifScreenItemClick;
 
 function togglePortalNotificationsDropdown() {
   const dd = document.getElementById('portalNotificationsDropdown');
@@ -8157,9 +8375,9 @@ function renderEmployeeTrainingsList() {
             <span style="font-size: 11.5px; font-weight: 600; color: #334155; min-width: 32px;">${prog}%</span>
           </div>
         </td>
-        <td style="text-align: right; white-space: nowrap;">
-          <button type="button" class="emp-kpi-view-btn" onclick="openEmployeeTrainingDetail('${t.id}')" style="background: #2563eb; color: #ffffff; border: none; border-radius: 5px; font-size: 11.5px; font-weight: 600; padding: 5px 12px; cursor: pointer;">
-            ${statusText === 'Completed' ? 'View Details' : prog > 0 ? 'Continue' : 'Start'}
+        <td style="text-align: center; white-space: nowrap;">
+          <button type="button" class="emp-action-icon" onclick="openEmployeeTrainingDetail('${t.id}')" title="View Training Details" aria-label="View Details" style="width: 32px; height: 32px; border-radius: 6px; border: 1px solid #cbd5e1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#eff6ff'; this.style.color='#2563eb'; this.style.borderColor='#bfdbfe';" onmouseout="this.style.background='#ffffff'; this.style.color='#334155'; this.style.borderColor='#cbd5e1';">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
           </button>
         </td>
       </tr>
@@ -8334,15 +8552,28 @@ function openEmployeeTrainingDetail(trainingId) {
   // Switch to Overview subtab by default
   switchEmpModalTab('overview');
 
-  // Open modal
-  const modal = document.getElementById('modalEmpTrainingDetail');
-  if (modal) modal.classList.add('open');
+  // Open Full-Screen Training Detail View matching Screenshot 4 (NO POP-UPS)
+  const myTrnSection = document.getElementById('sectionEmpMyTraining');
+  const detailScreen = document.getElementById('sectionEmpTrainingDetailScreen');
+  const breadcrumbEl = document.getElementById('empDetailBreadcrumbTitle');
+
+  if (myTrnSection) myTrnSection.style.display = 'none';
+  if (detailScreen) detailScreen.style.display = 'block';
+  if (breadcrumbEl) breadcrumbEl.textContent = title;
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function closeEmployeeTrainingDetail() {
-  const modal = document.getElementById('modalEmpTrainingDetail');
-  if (modal) modal.classList.remove('open');
+  const myTrnSection = document.getElementById('sectionEmpMyTraining');
+  const detailScreen = document.getElementById('sectionEmpTrainingDetailScreen');
+
+  if (detailScreen) detailScreen.style.display = 'none';
+  if (myTrnSection) myTrnSection.style.display = 'block';
   state.empCurrentTrainingId = null;
+
+  renderEmployeeTrainingsList();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // Sub-Tab Switcher inside Training Detail Modal
