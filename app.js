@@ -336,7 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initClockWidget();
   renderPortalNotifications();
   setAppRole('admin'); // Start in Admin Role
-  switchToTraining();
+  switchToEmployees(); // Start with Employees module selected first
 });
 
 // App Role Switcher (Admin vs HR vs Reporting Manager vs Employee)
@@ -4734,17 +4734,6 @@ window.filterRolePermissionsTable = renderRolePermissionsTable;
 // =============================================================================
 const DEMO_USERS = [
   {
-    id: 'usr_emp',
-    name: 'Aryan Bhardwaj',
-    title: 'Executive',
-    role: 'Employee',
-    dept: 'Executive',
-    badgeBg: '#f1f5f9',
-    badgeColor: '#475569',
-    avatarInitials: 'AB',
-    avatarBg: '#f59e0b'
-  },
-  {
     id: 'usr_management',
     name: 'Ishdeep Anand',
     title: 'SVP',
@@ -4754,10 +4743,21 @@ const DEMO_USERS = [
     badgeColor: '#7e22ce',
     avatarInitials: 'IA',
     avatarBg: '#8b5cf6'
+  },
+  {
+    id: 'usr_emp',
+    name: 'Aryan Bhardwaj',
+    title: 'Executive',
+    role: 'Employee',
+    dept: 'Executive',
+    badgeBg: '#f1f5f9',
+    badgeColor: '#475569',
+    avatarInitials: 'AB',
+    avatarBg: '#f59e0b'
   }
 ];
 
-let activeDemoUser = DEMO_USERS[1]; // Default to Admin (HR / Admin / Reporting Manager)
+let activeDemoUser = DEMO_USERS[0]; // Default to Admin (HR / Admin / Reporting Manager)
 
 function renderUserRolePill() {
   const badgeEl = document.getElementById('headerUserAvatarBadge');
@@ -4832,7 +4832,7 @@ function switchActiveUser(userId) {
 }
 
 function resetDemoData() {
-  activeDemoUser = DEMO_USERS[1];
+  activeDemoUser = DEMO_USERS[0];
   renderUserRolePill();
   renderUserRoleDropdown();
   setAppRole('admin');
