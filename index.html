@@ -922,7 +922,7 @@
         <div class="training-view" id="viewTraining" style="display: none;">
 
           <!-- Top Breadcrumb & Title Area -->
-          <div class="training-top-header" style="padding: 20px 24px 12px 24px;">
+          <div class="training-top-header" style="padding: 20px 24px 20px 24px; margin-bottom: 8px;">
             <div class="training-title-meta">
               <div class="training-breadcrumbs">
                 <span class="crumb-link" onclick="switchToEmployees()" title="Go to CollabCRM People">CollabCRM People</span>
@@ -1086,20 +1086,19 @@
                     <div style="position: relative; width: 140px; height: 140px;">
                       <svg viewBox="0 0 36 36" style="width: 100%; height: 100%; transform: rotate(-90deg);" id="dashDonutSvg">
                         <circle cx="18" cy="18" r="15.9155" fill="transparent" stroke="#f1f5f9" stroke-width="4.2"></circle>
-                        <circle cx="18" cy="18" r="15.9155" fill="transparent" stroke="#10b981" stroke-width="4.2" stroke-dasharray="22.2 77.8" stroke-dashoffset="0" id="dashDonutCompleted"></circle>
-                        <circle cx="18" cy="18" r="15.9155" fill="transparent" stroke="#7c3aed" stroke-width="4.2" stroke-dasharray="33.3 66.7" stroke-dashoffset="-22.2" id="dashDonutInProgress"></circle>
-                        <circle cx="18" cy="18" r="15.9155" fill="transparent" stroke="#f43f5e" stroke-width="4.2" stroke-dasharray="22.2 77.8" stroke-dashoffset="-55.5" id="dashDonutReview"></circle>
-                        <circle cx="18" cy="18" r="15.9155" fill="transparent" stroke="#94a3b8" stroke-width="4.2" stroke-dasharray="11.1 88.9" stroke-dashoffset="-77.7" id="dashDonutNotStarted"></circle>
-                        <circle cx="18" cy="18" r="15.9155" fill="transparent" stroke="#ef4444" stroke-width="4.2" stroke-dasharray="11.1 88.9" stroke-dashoffset="-88.8" id="dashDonutOverdue"></circle>
+                        <circle cx="18" cy="18" r="15.9155" fill="transparent" stroke="#10b981" stroke-width="4.2" stroke-dasharray="25 75" stroke-dashoffset="0" id="dashDonutCompleted"></circle>
+                        <circle cx="18" cy="18" r="15.9155" fill="transparent" stroke="#7c3aed" stroke-width="4.2" stroke-dasharray="35 65" stroke-dashoffset="-25" id="dashDonutInProgress"></circle>
+                        <circle cx="18" cy="18" r="15.9155" fill="transparent" stroke="#ef4444" stroke-width="4.2" stroke-dasharray="20 80" stroke-dashoffset="-60" id="dashDonutOverdue"></circle>
+                        <circle cx="18" cy="18" r="15.9155" fill="transparent" stroke="#94a3b8" stroke-width="4.2" stroke-dasharray="20 80" stroke-dashoffset="-80" id="dashDonutNotStarted"></circle>
                       </svg>
                       <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                         <span style="font-size: 20px; font-weight: 800; color: #0f172a;" id="dashDonutTotal">9</span>
                         <span style="font-size: 10px; color: #64748b; font-weight: 600; text-transform: uppercase;">Learners</span>
                       </div>
                     </div>
-                    <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; min-width: 170px;">
+                    <div style="display: flex; flex-direction: column; gap: 9px; font-size: 12.5px; min-width: 170px;">
                       <div style="display: flex; align-items: center; justify-content: space-between;">
-                        <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #10b981;"></span>Completed &amp; Approved</span>
+                        <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #10b981;"></span>Completed</span>
                         <strong style="color: #0f172a;" id="dashLegendCompleted">2 (22%)</strong>
                       </div>
                       <div style="display: flex; align-items: center; justify-content: space-between;">
@@ -1107,16 +1106,12 @@
                         <strong style="color: #0f172a;" id="dashLegendInProgress">3 (33%)</strong>
                       </div>
                       <div style="display: flex; align-items: center; justify-content: space-between;">
-                        <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #f43f5e;"></span>Under Evaluation</span>
-                        <strong style="color: #0f172a;" id="dashLegendReview">2 (22%)</strong>
-                      </div>
-                      <div style="display: flex; align-items: center; justify-content: space-between;">
                         <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #ef4444;"></span>Overdue</span>
                         <strong style="color: #ef4444;" id="dashLegendOverdue">1 (11%)</strong>
                       </div>
                       <div style="display: flex; align-items: center; justify-content: space-between;">
                         <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #94a3b8;"></span>Not Started</span>
-                        <strong style="color: #0f172a;" id="dashLegendNotStarted">1 (11%)</strong>
+                        <strong style="color: #0f172a;" id="dashLegendNotStarted">3 (33%)</strong>
                       </div>
                     </div>
                   </div>
@@ -1162,13 +1157,9 @@
                       <span style="color: #64748b;">Assessment Pass Threshold:</span>
                       <strong style="color: #166534;">80% Minimum</strong>
                     </div>
-                    <div style="display: flex; justify-content: space-between; padding-bottom: 8px; border-bottom: 1px solid #f1f5f9;">
+                    <div style="display: flex; justify-content: space-between;">
                       <span style="color: #64748b;">Evidence Attachment:</span>
                       <strong style="color: #0f172a;">Mandatory</strong>
-                    </div>
-                    <div style="display: flex; justify-content: space-between;">
-                      <span style="color: #64748b;">Certificate Template:</span>
-                      <strong style="color: #4f46e5;">Modern Tech (TRN)</strong>
                     </div>
                   </div>
                 </div>
@@ -1179,7 +1170,7 @@
             <!-- SECTION 2: TRAINING MANAGEMENT (PROGRAMS TABLE)-->
             <!-- ============================================== -->
             <div class="training-tab-view" id="sectionPrograms" style="display: none;">
-              <div class="emp-table-container" id="programsCatalogListCard" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+              <div class="emp-table-container" id="programsCatalogListCard" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.03); margin-top: 14px;">
                 <!-- Header Bar matching Screenshot 3 -->
                 <div class="emp-table-header" style="display: flex; align-items: center; justify-content: space-between; padding: 16px 20px 12px 20px;">
                   <div class="emp-title-area" style="display: flex; align-items: center; gap: 10px;">
@@ -1355,8 +1346,21 @@
                   </div>
                   <div style="display: flex; align-items: center; gap: 8px;">
                     <button type="button" class="btn-secondary-action" onclick="closeProgramModal()">Cancel</button>
-                    <button type="button" class="btn-secondary-action" onclick="saveProgram('draft')">Save as Draft</button>
-                    <button type="button" class="btn-primary-action" onclick="saveProgram('published')">Publish Programme</button>
+                    <!-- Split Dropdown: Publish Programme with Arrow Icon for Save as Draft (Matching Screenshot 4) -->
+                    <div style="position: relative; display: inline-flex;" class="publish-split-btn-group">
+                      <button type="button" class="btn-primary-action" onclick="saveProgram('published')" style="border-top-right-radius: 0; border-bottom-right-radius: 0; border-right: 1px solid rgba(255,255,255,0.25);">
+                        Publish Programme
+                      </button>
+                      <button type="button" class="btn-primary-action" onclick="togglePublishDropdown(event)" style="border-top-left-radius: 0; border-bottom-left-radius: 0; padding: 0 10px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer;" title="More options">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                      </button>
+                      <div id="publishDropdownMenu" style="display: none; position: absolute; right: 0; top: calc(100% + 4px); background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05); min-width: 160px; z-index: 99; overflow: hidden; padding: 4px;">
+                        <button type="button" onclick="saveProgram('draft'); closePublishDropdown();" style="width: 100%; text-align: left; background: none; border: none; padding: 9px 12px; font-size: 13px; color: #334155; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; border-radius: 6px; transition: background 0.15s ease;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='transparent'">
+                          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                          Save as Draft
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -1929,16 +1933,16 @@
                   <span class="emp-kpi-sub">Active modules in progress</span>
                 </div>
 
-                <!-- 4. Under Review -->
-                <div class="emp-kpi-card" onclick="filterEmpTrainingsByStatus('submitted_for_review')" style="cursor: pointer;" title="Filter Under Review">
-                  <span class="emp-kpi-label">Under Review</span>
+                <!-- 4. Overdue -->
+                <div class="emp-kpi-card" onclick="filterEmpTrainingsByStatus('overdue')" style="cursor: pointer;" title="Filter Overdue">
+                  <span class="emp-kpi-label">Overdue</span>
                   <div class="emp-kpi-val-row">
-                    <span class="emp-kpi-val" id="empKpiSubmitted" style="color: #7c3aed;">1</span>
-                    <span class="emp-kpi-icon-pill" title="Under evaluation">
-                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#7c3aed" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                    <span class="emp-kpi-val" id="empKpiOverdue" style="color: #ef4444;">1</span>
+                    <span class="emp-kpi-icon-pill" title="Overdue">
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
                     </span>
                   </div>
-                  <span class="emp-kpi-sub">Under manager review</span>
+                  <span class="emp-kpi-sub">Target date passed</span>
                 </div>
 
                 <!-- 5. Completed -->
@@ -1989,7 +1993,6 @@
                       <button type="button" class="emp-status-tab emp-filter-pill active" id="empFilterBtn_all" onclick="filterEmpTrainingsByStatus('all')" style="border: none; background: #ffffff; color: #2563eb; font-weight: 700; font-size: 12.5px; padding: 6px 14px; border-radius: 6px; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.08); transition: all 0.15s ease;">All</button>
                       <button type="button" class="emp-status-tab emp-filter-pill" id="empFilterBtn_not_started" onclick="filterEmpTrainingsByStatus('not_started')" style="border: none; background: transparent; color: #475569; font-weight: 500; font-size: 12.5px; padding: 6px 14px; border-radius: 6px; cursor: pointer; transition: all 0.15s ease;">Not Started</button>
                       <button type="button" class="emp-status-tab emp-filter-pill" id="empFilterBtn_in_progress" onclick="filterEmpTrainingsByStatus('in_progress')" style="border: none; background: transparent; color: #475569; font-weight: 500; font-size: 12.5px; padding: 6px 14px; border-radius: 6px; cursor: pointer; transition: all 0.15s ease;">In Progress</button>
-                      <button type="button" class="emp-status-tab emp-filter-pill" id="empFilterBtn_submitted_for_review" onclick="filterEmpTrainingsByStatus('submitted_for_review')" style="border: none; background: transparent; color: #475569; font-weight: 500; font-size: 12.5px; padding: 6px 14px; border-radius: 6px; cursor: pointer; transition: all 0.15s ease;">Under Review</button>
                       <button type="button" class="emp-status-tab emp-filter-pill" id="empFilterBtn_completed" onclick="filterEmpTrainingsByStatus('completed')" style="border: none; background: transparent; color: #475569; font-weight: 500; font-size: 12.5px; padding: 6px 14px; border-radius: 6px; cursor: pointer; transition: all 0.15s ease;">Completed</button>
                       <button type="button" class="emp-status-tab emp-filter-pill" id="empFilterBtn_overdue" onclick="filterEmpTrainingsByStatus('overdue')" style="border: none; background: transparent; color: #475569; font-weight: 500; font-size: 12.5px; padding: 6px 14px; border-radius: 6px; cursor: pointer; transition: all 0.15s ease;">Overdue</button>
                     </div>
