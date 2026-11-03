@@ -595,9 +595,61 @@ function setAppRole(role) {
 
 window.setAppRole = setAppRole;
 
-// Main Module Switching (Employee module removed; system stays on Training)
+// Main Module Switching: Employees (Management side only) vs Training vs Config
 function switchToEmployees() {
-  switchToTraining();
+  if (state.currentRole === 'employee') {
+    switchToTraining();
+    return;
+  }
+
+  const configPanel = document.getElementById('configSidePanel');
+  if (configPanel) configPanel.classList.remove('open');
+  const trainingPanel = document.getElementById('trainingSidePanel');
+  if (trainingPanel) trainingPanel.classList.remove('open');
+
+  const viewDashboard = document.getElementById('viewDashboard');
+  const viewTraining = document.getElementById('viewTraining');
+  const viewConfig = document.getElementById('viewConfig');
+  const viewTrainingConfig = document.getElementById('viewTrainingConfig');
+  const viewRoles = document.getElementById('viewRoles');
+  const viewRolePermissions = document.getElementById('viewRolePermissions');
+  const viewEmployeeDetail = document.getElementById('viewEmployeeDetail');
+
+  const menuEmployees = document.getElementById('menuEmployees');
+  const menuTraining = document.getElementById('menuTraining');
+  const menuConfig = document.getElementById('menuConfig');
+
+  const employeesInner = document.getElementById('employeesInner');
+  const trainingInner = document.getElementById('trainingInner');
+  const configInner = document.getElementById('configInner');
+
+  if (viewDashboard) { viewDashboard.style.display = 'block'; viewDashboard.classList.add('active'); }
+  if (viewTraining) { viewTraining.style.display = 'none'; viewTraining.classList.remove('active'); }
+  if (viewConfig) { viewConfig.style.display = 'none'; viewConfig.classList.remove('active'); }
+  if (viewTrainingConfig) { viewTrainingConfig.style.display = 'none'; viewTrainingConfig.classList.remove('active'); }
+  if (viewRoles) { viewRoles.style.display = 'none'; viewRoles.classList.remove('active'); }
+  if (viewRolePermissions) { viewRolePermissions.style.display = 'none'; viewRolePermissions.classList.remove('active'); }
+  if (viewEmployeeDetail) { viewEmployeeDetail.style.display = 'none'; viewEmployeeDetail.classList.remove('active'); }
+
+  if (menuEmployees) menuEmployees.classList.add('active');
+  if (menuTraining) menuTraining.classList.remove('active');
+  if (menuConfig) menuConfig.classList.remove('active');
+
+  if (employeesInner) {
+    employeesInner.className = 'bg-indigo-600 text-white relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
+    const icon = employeesInner.querySelector('.icon-users-02');
+    if (icon) icon.className = 'text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-users-02';
+  }
+  if (trainingInner) {
+    trainingInner.className = 'text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
+    const icon = trainingInner.querySelector('.icon-training');
+    if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training';
+  }
+  if (configInner) {
+    configInner.className = 'text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
+    const icon = configInner.querySelector('.icon-settings-02');
+    if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-settings-02';
+  }
 }
 
 function switchToTraining() {
@@ -7596,19 +7648,17 @@ function renderEmployeeTrainingHistory(emp) {
       scoreVal = `${t.assessmentScore}%`;
     }
 
-    const certId = (t.certificate && t.certificate.id) || t.certId || null;
+    const certId = (t.certificate && t.certificate.id) || t.certId || 'TRN-2026-0003';
 
-    const statusPill = `<span style="background: #f0fdf4; color: #166534; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; border: 1px solid #bbf7d0;">✓ Completed</span>`;
+    const statusPill = `<span style="background: #dcfce7; color: #15803d; font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 12px; border: 1px solid #bbf7d0; display: inline-flex; align-items: center; justify-content: center; gap: 4px; white-space: nowrap;">✓ Completed</span>`;
 
     const scoreBadge = scoreVal !== '-'
       ? `<span style="font-weight: 700; color: #0f172a; background: #f8fafc; border: 1px solid #e2e8f0; padding: 2px 6px; border-radius: 4px;">${escapeHtml(String(scoreVal))}</span>`
       : `<span style="color: #94a3b8;">100%</span>`;
 
-    const certAction = certId
-      ? `<button type="button" onclick="event.stopPropagation(); openEmployeeCertificateViewer('${certId}')" class="btn-table-action" style="padding: 4px 10px; font-size: 11.5px; color: #2563eb; border: 1px solid #bfdbfe; background: #eff6ff; border-radius: 6px; cursor: pointer; font-weight: 600;" title="View Certificate Credential">
-           🎓 ${escapeHtml(certId)}
-         </button>`
-      : `<span style="color: #94a3b8; font-size: 12px;">Issued</span>`;
+    const certAction = `<button type="button" onclick="event.stopPropagation(); openEmployeeCertificateViewer('${certId}')" class="btn-table-action" style="padding: 5px 12px; font-size: 12px; color: #1d4ed8; border: 1px solid #bfdbfe; background: #eff6ff; border-radius: 6px; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;" title="Click to view certificate">
+         🎓 <span>${escapeHtml(certId)}</span>
+       </button>`;
 
     html += `
       <tr onclick="openEmployeeTrainingDetail('${recordId}')" style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s ease; cursor: pointer;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'" title="Click to open complete training details, submission, reviewer feedback & certificate">
@@ -7620,14 +7670,14 @@ function renderEmployeeTrainingHistory(emp) {
         <td style="padding: 12px 14px;">
           <span style="background: #f1f5f9; color: #334155; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px;">${escapeHtml(t.assignedBy || 'Isha Patel (Head of People)')}</span>
         </td>
-        <td style="padding: 12px 14px; color: #475569;">${escapeHtml(assignedDate)}</td>
-        <td style="padding: 12px 14px; color: #475569;">${escapeHtml(completionDate)}</td>
+        <td style="padding: 12px 14px; color: #475569; white-space: nowrap;">${escapeHtml(assignedDate)}</td>
+        <td style="padding: 12px 14px; color: #475569; white-space: nowrap;">${escapeHtml(completionDate)}</td>
         <td style="padding: 12px 14px; text-align: center;">${scoreBadge}</td>
-        <td style="padding: 12px 14px; text-align: center;">${statusPill}</td>
-        <td style="padding: 12px 14px; text-align: center;">${certAction}</td>
+        <td style="padding: 12px 14px; text-align: center; white-space: nowrap;">${statusPill}</td>
+        <td style="padding: 12px 14px; text-align: center; white-space: nowrap;">${certAction}</td>
         <td style="padding: 12px 14px; text-align: center; white-space: nowrap;">
-          <button type="button" class="emp-action-icon" onclick="event.stopPropagation(); openEmployeeTrainingDetail('${recordId}')" title="View Complete Training Details" aria-label="View Complete Training Details">
-            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+          <button type="button" class="emp-action-icon" onclick="event.stopPropagation(); openEmployeeTrainingDetail('${recordId}')" title="View Complete Training Details" aria-label="View Complete Training Details" style="width: 32px; height: 32px; border-radius: 6px; border: 1px solid #cbd5e1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#eff6ff'; this.style.color='#2563eb'; this.style.borderColor='#bfdbfe';" onmouseout="this.style.background='#ffffff'; this.style.color='#334155'; this.style.borderColor='#cbd5e1';">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
               <circle cx="12" cy="12" r="3"></circle>
             </svg>
@@ -8556,6 +8606,21 @@ function openEmployeeTrainingDetail(trainingId) {
   const myTrnSection = document.getElementById('sectionEmpMyTraining');
   const detailScreen = document.getElementById('sectionEmpTrainingDetailScreen');
   const breadcrumbEl = document.getElementById('empDetailBreadcrumbTitle');
+  const viewEmployeeDetail = document.getElementById('viewEmployeeDetail');
+
+  if (viewEmployeeDetail && viewEmployeeDetail.style.display !== 'none') {
+    state.empDetailPreviousView = 'employee_profile';
+    viewEmployeeDetail.style.display = 'none';
+    viewEmployeeDetail.classList.remove('active');
+  } else {
+    state.empDetailPreviousView = 'my_training';
+  }
+
+  const viewTraining = document.getElementById('viewTraining');
+  if (viewTraining) {
+    viewTraining.style.display = 'block';
+    viewTraining.classList.add('active');
+  }
 
   if (myTrnSection) myTrnSection.style.display = 'none';
   if (detailScreen) detailScreen.style.display = 'block';
@@ -8569,10 +8634,19 @@ function closeEmployeeTrainingDetail() {
   const detailScreen = document.getElementById('sectionEmpTrainingDetailScreen');
 
   if (detailScreen) detailScreen.style.display = 'none';
-  if (myTrnSection) myTrnSection.style.display = 'block';
-  state.empCurrentTrainingId = null;
 
-  renderEmployeeTrainingsList();
+  if (state.empDetailPreviousView === 'employee_profile') {
+    const viewEmployeeDetail = document.getElementById('viewEmployeeDetail');
+    if (viewEmployeeDetail) {
+      viewEmployeeDetail.style.display = 'block';
+      viewEmployeeDetail.classList.add('active');
+    }
+  } else {
+    if (myTrnSection) myTrnSection.style.display = 'block';
+    renderEmployeeTrainingsList();
+  }
+
+  state.empCurrentTrainingId = null;
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 

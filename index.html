@@ -159,7 +159,16 @@
       <aside class="sidebar-wrapper relative" id="sidebarNav">
         <nav class="py-5 px-2 overflow-y-auto overflow-x-hidden sidebar-container 2xl:h-[calc(100vh-116px)] 2xl-to-xl:h-[calc(100vh-108px)] h-[calc(100vh-108px)]">
           <ul role="list" class="space-y-3 sidebar-container" id="sidebarList">
-            <!-- Training (Active by default, Employee module removed per user instruction) -->
+            <!-- 1. Employees (Visible on Management side, hidden on Employee side) -->
+            <li title="Employees" class="relative group cursor-pointer sidebar-nav-li" id="menuEmployees" onclick="switchToEmployees()">
+              <div class="text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap" id="employeesInner">
+                <span class="text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-users-02"></span>
+                <p class="nav-text text-white" style="color: #ffffff !important; text-decoration: none !important;">Employees</p>
+                <span class="icon-chevron-right block ml-auto text-xl text-indigo-300"></span>
+              </div>
+            </li>
+
+            <!-- 2. Training (Active by default) -->
             <li title="Training" class="relative group cursor-pointer sidebar-nav-li active" id="menuTraining" onclick="toggleTrainingPanel()">
               <div class="bg-indigo-600 text-white relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap" id="trainingInner">
                 <span class="text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-training"></span>
