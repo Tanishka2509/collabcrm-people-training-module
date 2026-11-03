@@ -350,8 +350,8 @@ body {
 .py-5 { padding-top: 1.25rem; padding-bottom: 1.25rem; }
 .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
 .p-2 { padding: 0.5rem; }
-.2xl\:p-3 { padding: 0.75rem; }
-.2xl-to-xl\:p-2 { padding: 0.5rem; }
+.\32 xl\:p-3 { padding: 0.75rem; }
+.\32 xl-to-xl\:p-2 { padding: 0.5rem; }
 
 .space-y-3 > :not([hidden]) ~ :not([hidden]) {
   margin-top: 0.75rem;
@@ -484,6 +484,42 @@ body {
 .sidebar-nav-li.active .nav-text,
 .sidebar-nav-li.active span {
   color: #ffffff !important;
+}
+
+#employeesInner,
+#trainingInner,
+#configInner {
+  display: flex !important;
+  align-items: center !important;
+  column-gap: 12px !important;
+  gap: 12px !important;
+  padding: 10px 12px !important;
+  border-radius: 6px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+#employeesInner > span:first-child,
+#trainingInner > span:first-child,
+#configInner > span:first-child {
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+  flex-shrink: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+}
+
+#employeesInner > .nav-text,
+#trainingInner > .nav-text,
+#configInner > .nav-text {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 20px !important;
 }
 
 .nav-item-inner {

@@ -3139,11 +3139,13 @@ function previewCertificate(certId) {
   const prog = state.programs.find(p => p.id === cert.programId);
 
   document.getElementById('certPreviewRecipientName').textContent = emp ? emp.name : 'Learner';
+  const empCodeEl = document.getElementById('certPreviewEmpCode');
+  if (empCodeEl) empCodeEl.textContent = emp ? (emp.code || 'CO-5039') : 'CO-5039';
   document.getElementById('certPreviewProgramName').textContent = prog ? prog.title : 'Training Course';
   document.getElementById('certPreviewNo').textContent = cert.certificateNo;
   document.getElementById('certPreviewIssueDate').textContent = cert.issueDate;
   document.getElementById('certPreviewExpiry').textContent = `Valid until ${cert.expiryDate}`;
-  document.getElementById('certPreviewIssuer').textContent = cert.issuedBy || 'Isha Patel';
+  document.getElementById('certPreviewIssuer').textContent = cert.issuedBy || 'Megha Salunkhe';
 
   const btnIssueFromModal = document.getElementById('btnIssueCertFromModal');
   if (btnIssueFromModal) {
@@ -6444,7 +6446,11 @@ function renderUserRolePill() {
     badgeEl.style.background = activeDemoUser.avatarBg;
   }
   if (nameEl) nameEl.textContent = activeDemoUser.name;
-  if (roleEl) roleEl.textContent = `${activeDemoUser.role} • ${activeDemoUser.dept || 'Management'}`;
+  if (roleEl) {
+    roleEl.textContent = activeDemoUser.id === 'usr_management'
+      ? 'Admin • Management'
+      : `${activeDemoUser.role} • ${activeDemoUser.dept || 'Employee'}`;
+  }
   if (hookName) hookName.textContent = activeDemoUser.name;
   if (hookRole) hookRole.textContent = activeDemoUser.role;
 }
@@ -8910,8 +8916,41 @@ function renderEmployeeCertificates() {
 }
 
 function openEmployeeCertificateViewer(certId) {
-  if (!state.employeeTrainingData || !state.employeeTrainingData.certificates) return;
-  const cert = state.employeeTrainingData.certificates.find(c => c.id === certId) || state.employeeTrainingData.certificates[0];
+  let cert = null;
+  if (state.employeeTrainingData && Array.isArray(state.employeeTrainingData.certificates)) {
+    cert = state.employeeTrainingData.certificates.find(c => c.id === certId);
+  }
+  if (!cert && state.employeeTrainingData && Array.isArray(state.employeeTrainingData.trainings)) {
+    const matchedTrn = state.employeeTrainingData.trainings.find(t => (t.certificate && t.certificate.id === certId) || t.certId === certId);
+    if (matchedTrn) {
+      cert = {
+        id: (matchedTrn.certificate && matchedTrn.certificate.id) || matchedTrn.certId || certId,
+        recipientName: matchedTrn.employeeName || 'Aryan Bhardwaj',
+        recipientId: matchedTrn.employeeCode || 'CO-5039',
+        trainingName: matchedTrn.title || matchedTrn.trainingName,
+        issueDate: (matchedTrn.certificate && matchedTrn.certificate.issueDate) || matchedTrn.completionDate || '26-Jan-2026'
+      };
+    }
+  }
+  if (!cert && typeof EMPLOYEE_TRAINING_HISTORY_MAP !== 'undefined') {
+    for (const [code, list] of Object.entries(EMPLOYEE_TRAINING_HISTORY_MAP)) {
+      const found = (list || []).find(item => item.certId === certId || (item.certificate && item.certificate.id === certId));
+      if (found) {
+        const empProfile = typeof EMPLOYEE_DETAIL_PROFILES !== 'undefined' ? EMPLOYEE_DETAIL_PROFILES[code] : null;
+        cert = {
+          id: found.certId || certId,
+          recipientName: empProfile ? empProfile.fullName : (found.employeeName || 'Aryan Bhardwaj'),
+          recipientId: code,
+          trainingName: found.title || found.trainingName,
+          issueDate: found.completionDate || '26-Jan-2026'
+        };
+        break;
+      }
+    }
+  }
+  if (!cert && state.employeeTrainingData && Array.isArray(state.employeeTrainingData.certificates) && state.employeeTrainingData.certificates.length > 0) {
+    cert = state.employeeTrainingData.certificates[0];
+  }
   if (!cert) return;
 
   const elRecip = document.getElementById('empCertRecipientName');
