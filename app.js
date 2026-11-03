@@ -422,30 +422,30 @@ function setAppRole(role) {
   const empHeaderCard = document.getElementById('empProfileHeaderCard');
   const adminSubnav = document.getElementById('adminSubnavTabs');
   const empSubnav = document.getElementById('employeeSubnavTabs');
+  const subnavBar = document.querySelector('.training-subnav-bar');
   const btnAction = document.getElementById('btnHeaderPrimaryAction');
+  const empEmptyState = document.getElementById('sectionEmployeeEmptyState');
 
   if (role === 'employee') {
-    if (empHeaderCard) empHeaderCard.style.display = 'block';
+    if (empHeaderCard) empHeaderCard.style.display = 'none';
     if (adminSubnav) adminSubnav.style.display = 'none';
-    if (empSubnav) empSubnav.style.display = 'flex';
+    if (empSubnav) empSubnav.style.display = 'none';
+    if (subnavBar) subnavBar.style.display = 'none';
     if (btnAction) btnAction.style.display = 'none';
 
-    // Hide all admin tabs
-    ['sectionDashboard', 'sectionPrograms', 'sectionAssignments', 'sectionProgress', 'sectionReviews', 'sectionCertificates', 'sectionReports'].forEach(id => {
+    // Hide all management and employee tabs
+    ['sectionDashboard', 'sectionPrograms', 'sectionAssignments', 'sectionProgress', 'sectionReviews', 'sectionCertificates', 'sectionReports', 'sectionEmpMyTraining', 'sectionEmpCertificates', 'sectionEmpHistory'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.style.display = 'none';
     });
 
-    if (typeof switchEmployeeTrainingTab === 'function') {
-      switchEmployeeTrainingTab('my_training');
-    }
-    if (typeof loadEmployeeTrainingData === 'function') {
-      loadEmployeeTrainingData('CO-5039');
-    }
+    if (empEmptyState) empEmptyState.style.display = 'block';
   } else {
     if (empHeaderCard) empHeaderCard.style.display = 'none';
+    if (subnavBar) subnavBar.style.display = 'block';
     if (adminSubnav) adminSubnav.style.display = 'flex';
     if (empSubnav) empSubnav.style.display = 'none';
+    if (empEmptyState) empEmptyState.style.display = 'none';
 
     // Hide all employee tabs
     ['sectionEmpMyTraining', 'sectionEmpCertificates', 'sectionEmpHistory'].forEach(id => {
@@ -453,8 +453,8 @@ function setAppRole(role) {
       if (el) el.style.display = 'none';
     });
 
-    // Re-render active sub-tab view with role scoping applied
-    renderActiveSubTab();
+    // Show the active Management sub-tab view and re-render
+    switchTrainingTab(state.activeSubTab || 'dashboard');
   }
 
   if (typeof updateTrainingConfigPermissions === 'function') {
@@ -561,7 +561,11 @@ function switchToTraining() {
     if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-settings-02';
   }
 
-  renderActiveSubTab();
+  if (state.currentRole === 'employee') {
+    setAppRole('employee');
+  } else {
+    renderActiveSubTab();
+  }
 }
 
 // Config Panel Controls (Matching exact CollabCRM specs)
@@ -700,7 +704,11 @@ function switchTrainingTab(tabId) {
     }
   }
 
-  renderActiveSubTab();
+  if (state.currentRole === 'employee') {
+    setAppRole('employee');
+  } else {
+    renderActiveSubTab();
+  }
 }
 
 window.switchTrainingTab = switchTrainingTab;
@@ -4750,62 +4758,34 @@ window.renderRolePermissionsTable = renderRolePermissionsTable;
 window.filterRolePermissionsTable = renderRolePermissionsTable;
 
 // =============================================================================
-// USER ROLE SELECTION SYSTEM (SCREENSHOT 1 FORMAT)
+// USER ROLE SELECTION SYSTEM (MANAGEMENT VS EMPLOYEE)
 // =============================================================================
 const DEMO_USERS = [
   {
-    id: 'usr_admin',
+    id: 'usr_management',
     name: 'Ishdeep Anand',
-    title: 'SVP • Management',
-    role: 'Admin',
+    title: 'SVP • Management (HR / Admin / Reporting Manager)',
+    role: 'HR / Admin / Reporting Manager',
+    dept: 'Management',
     badgeBg: '#f3e8ff',
     badgeColor: '#7e22ce',
     avatarInitials: 'IA',
     avatarBg: '#8b5cf6'
   },
   {
-    id: 'usr_hr',
-    name: 'Sanjana Ghosh',
-    title: 'Executive • IT - Project',
-    role: 'HR',
-    badgeBg: '#fce7f3',
-    badgeColor: '#be185d',
-    avatarInitials: 'SG',
-    avatarBg: '#ec4899'
-  },
-  {
     id: 'usr_emp',
     name: 'Aryan Bhardwaj',
     title: 'Executive • IT - Project',
     role: 'Employee',
+    dept: 'IT - Project',
     badgeBg: '#f1f5f9',
     badgeColor: '#475569',
     avatarInitials: 'AB',
     avatarBg: '#f59e0b'
-  },
-  {
-    id: 'usr_mgr1',
-    name: 'Megha Salunkhe',
-    title: 'Sr. Executive • IT - Project',
-    role: 'Reporting Manager',
-    badgeBg: '#e0f2fe',
-    badgeColor: '#0284c7',
-    avatarInitials: 'MS',
-    avatarBg: '#0ea5e9'
-  },
-  {
-    id: 'usr_mgr2',
-    name: 'Kunal Barve',
-    title: 'Team Leader • IT - Project',
-    role: 'Reporting Manager',
-    badgeBg: '#e0f2fe',
-    badgeColor: '#0284c7',
-    avatarInitials: 'KB',
-    avatarBg: '#0284c7'
   }
 ];
 
-let activeDemoUser = DEMO_USERS[2]; // Aryan Bhardwaj default as per Screenshot 1
+let activeDemoUser = DEMO_USERS[0]; // Default to Management (HR / Admin / Reporting Manager)
 
 function renderUserRolePill() {
   const badgeEl = document.getElementById('headerUserAvatarBadge');
@@ -4819,7 +4799,7 @@ function renderUserRolePill() {
     badgeEl.style.background = activeDemoUser.avatarBg;
   }
   if (nameEl) nameEl.textContent = activeDemoUser.name;
-  if (roleEl) roleEl.textContent = `${activeDemoUser.role} • IT - Project`;
+  if (roleEl) roleEl.textContent = `${activeDemoUser.role} • ${activeDemoUser.dept || 'Management'}`;
   if (hookName) hookName.textContent = activeDemoUser.name;
   if (hookRole) hookRole.textContent = activeDemoUser.role;
 }
@@ -4871,12 +4851,8 @@ function switchActiveUser(userId) {
     showConfigToast(`Switched active user to ${found.name} (${found.role})`);
 
     const rLower = (found.role || '').toLowerCase();
-    if (rLower.includes('employee')) {
+    if (rLower === 'employee') {
       setAppRole('employee');
-    } else if (rLower.includes('manager')) {
-      setAppRole('manager');
-    } else if (rLower.includes('hr')) {
-      setAppRole('hr');
     } else {
       setAppRole('admin');
     }
@@ -4884,9 +4860,10 @@ function switchActiveUser(userId) {
 }
 
 function resetDemoData() {
-  activeDemoUser = DEMO_USERS[2];
+  activeDemoUser = DEMO_USERS[0];
   renderUserRolePill();
   renderUserRoleDropdown();
+  setAppRole('admin');
   const menu = document.getElementById('userRoleDropdownMenu');
   if (menu) menu.style.display = 'none';
   showConfigToast('Demo data reset to factory state.');

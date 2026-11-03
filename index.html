@@ -124,10 +124,10 @@
         <!-- User Role Selection Pill (Screenshot 1 Format) -->
         <div class="user-role-selector-wrap" id="userRoleSelectorContainer">
           <button type="button" class="user-role-pill-btn" id="headerUserRolePill" onclick="toggleUserRoleDropdown(event)" title="Switch Active User &amp; Role">
-            <span class="user-role-pill-avatar" id="headerUserAvatarBadge" style="background: #f59e0b;">AB</span>
+            <span class="user-role-pill-avatar" id="headerUserAvatarBadge" style="background: #8b5cf6;">IA</span>
             <span class="user-role-pill-info">
-              <span class="user-role-pill-name" id="headerUserNameDisplay">Aryan Bhardwaj</span>
-              <span class="user-role-pill-role" id="headerUserRoleDisplay">Employee • IT - Project</span>
+              <span class="user-role-pill-name" id="headerUserNameDisplay">Ishdeep Anand</span>
+              <span class="user-role-pill-role" id="headerUserRoleDisplay">HR / Admin / Reporting Manager • Management</span>
             </span>
             <svg class="user-role-pill-chevron" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5">
               <polyline points="6 9 12 15 18 9"></polyline>
@@ -138,7 +138,7 @@
           <div class="user-role-dropdown" id="userRoleDropdownMenu" style="display: none;">
             <div class="user-role-dropdown-header">
               <div class="user-role-dropdown-title">Switch Active User &amp; Role</div>
-              <div class="user-role-dropdown-desc">Test permissions across Admin, HR, Manager &amp; Employee roles.</div>
+              <div class="user-role-dropdown-desc">Switch between Management (HR / Admin / Reporting Manager) &amp; Employee roles.</div>
             </div>
             <div class="user-role-dropdown-list" id="userRoleDropdownList">
               <!-- Rendered dynamically via renderUserRoleDropdown() in app.js -->
@@ -153,8 +153,8 @@
         </div>
 
         <!-- Preserved DOM Hooks for backward compatibility -->
-        <span id="headerUserName" style="display:none;">Aryan Bhardwaj</span>
-        <span id="headerUserRole" style="display:none;">Employee</span>
+        <span id="headerUserName" style="display:none;">Ishdeep Anand</span>
+        <span id="headerUserRole" style="display:none;">HR / Admin / Reporting Manager</span>
         <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&amp;fit=crop&amp;q=80&amp;w=120" alt="Avatar" id="headerUserAvatar" style="display:none;" />
       </div>
     </header>
@@ -936,6 +936,13 @@
                 <span id="hierarchyNoticeText">Logged in as <strong>Ashish Kumar</strong> (Technical Lead). Access is strictly restricted to your authorized reporting hierarchy: <strong>3 Direct Reports</strong> (Rihan R., Priya Nair, Ananya Roy).</span>
               </div>
               <span style="font-size: 11.5px; color: #78350f;">Hierarchy Enforced ✓</span>
+            </div>
+
+            <!-- Employee Role Empty State (Displayed when Employee role is selected) -->
+            <div class="training-tab-view" id="sectionEmployeeEmptyState" style="display: none;">
+              <div style="background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 10px; padding: 64px 24px; text-align: center; color: #64748b; margin-top: 8px;">
+                <div style="font-size: 14px; font-weight: 600; color: #475569;">No data available</div>
+              </div>
             </div>
 
             <!-- ============================================== -->
