@@ -432,6 +432,8 @@ function setAppRole(role) {
     if (empSubnav) empSubnav.style.display = 'none';
     if (subnavBar) subnavBar.style.display = 'none';
     if (btnAction) btnAction.style.display = 'none';
+    const trainingPanel = document.getElementById('trainingSidePanel');
+    if (trainingPanel) trainingPanel.classList.remove('open');
 
     // Hide all management and employee tabs
     ['sectionDashboard', 'sectionPrograms', 'sectionAssignments', 'sectionProgress', 'sectionReviews', 'sectionCertificates', 'sectionReports', 'sectionEmpMyTraining', 'sectionEmpCertificates', 'sectionEmpHistory'].forEach(id => {
@@ -442,8 +444,8 @@ function setAppRole(role) {
     if (empEmptyState) empEmptyState.style.display = 'block';
   } else {
     if (empHeaderCard) empHeaderCard.style.display = 'none';
-    if (subnavBar) subnavBar.style.display = 'block';
-    if (adminSubnav) adminSubnav.style.display = 'flex';
+    if (subnavBar) subnavBar.style.display = 'none';
+    if (adminSubnav) adminSubnav.style.display = 'none';
     if (empSubnav) empSubnav.style.display = 'none';
     if (empEmptyState) empEmptyState.style.display = 'none';
 
@@ -466,6 +468,11 @@ window.setAppRole = setAppRole;
 
 // Main Module Switching (Employees, Training, Config)
 function switchToEmployees() {
+  const configPanel = document.getElementById('configSidePanel');
+  if (configPanel) configPanel.classList.remove('open');
+  const trainingPanel = document.getElementById('trainingSidePanel');
+  if (trainingPanel) trainingPanel.classList.remove('open');
+
   const viewDashboard = document.getElementById('viewDashboard');
   const viewTraining = document.getElementById('viewTraining');
   const viewConfig = document.getElementById('viewConfig');
@@ -500,7 +507,7 @@ function switchToEmployees() {
     if (icon) icon.className = 'text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-users-02';
   }
   if (trainingInner) {
-    trainingInner.className = 'text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
+    trainingInner.className = 'text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
     const icon = trainingInner.querySelector('.icon-training');
     if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training';
   }
@@ -516,6 +523,9 @@ function switchToTraining() {
     alert('Training Module is currently disabled in System Configuration. Enable it under Config → Training Config.');
     return;
   }
+
+  const configPanel = document.getElementById('configSidePanel');
+  if (configPanel) configPanel.classList.remove('open');
 
   const viewDashboard = document.getElementById('viewDashboard');
   const viewTraining = document.getElementById('viewTraining');
@@ -551,7 +561,7 @@ function switchToTraining() {
     if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-users-02';
   }
   if (trainingInner) {
-    trainingInner.className = 'bg-indigo-600 text-white flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
+    trainingInner.className = 'bg-indigo-600 text-white relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
     const icon = trainingInner.querySelector('.icon-training');
     if (icon) icon.className = 'text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training';
   }
@@ -568,8 +578,78 @@ function switchToTraining() {
   }
 }
 
+// Training Slide-out Side Panel Controls (Admin / Management only, like Config)
+function openTrainingPanel() {
+  const configPanel = document.getElementById('configSidePanel');
+  if (configPanel) configPanel.classList.remove('open');
+
+  if (state.currentRole === 'employee') {
+    switchToTraining();
+    return;
+  }
+
+  const panel = document.getElementById('trainingSidePanel');
+  const menuTraining = document.getElementById('menuTraining');
+  const trainingInner = document.getElementById('trainingInner');
+  const menuConfig = document.getElementById('menuConfig');
+  const configInner = document.getElementById('configInner');
+  const menuEmployees = document.getElementById('menuEmployees');
+  const employeesInner = document.getElementById('employeesInner');
+
+  if (panel) panel.classList.add('open');
+
+  if (menuTraining) menuTraining.classList.add('active');
+  if (trainingInner) {
+    trainingInner.className = 'bg-indigo-600 text-white relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
+    const icon = trainingInner.querySelector('.icon-training');
+    if (icon) icon.className = 'text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training';
+  }
+
+  if (menuConfig) menuConfig.classList.remove('active');
+  if (configInner) {
+    configInner.className = 'text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
+    const icon = configInner.querySelector('.icon-settings-02');
+    if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-settings-02';
+  }
+
+  if (menuEmployees) menuEmployees.classList.remove('active');
+  if (employeesInner) {
+    employeesInner.className = 'text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
+    const icon = employeesInner.querySelector('.icon-users-02');
+    if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-users-02';
+  }
+}
+
+function closeTrainingPanel() {
+  const panel = document.getElementById('trainingSidePanel');
+  if (panel) panel.classList.remove('open');
+}
+
+function toggleTrainingPanel() {
+  if (state.currentRole === 'employee') {
+    closeTrainingPanel();
+    switchToTraining();
+    return;
+  }
+  const panel = document.getElementById('trainingSidePanel');
+  if (panel && panel.classList.contains('open')) {
+    closeTrainingPanel();
+  } else {
+    openTrainingPanel();
+  }
+}
+
+function openTrainingSection(tabId) {
+  closeTrainingPanel();
+  switchToTraining();
+  switchTrainingTab(tabId);
+}
+
 // Config Panel Controls (Matching exact CollabCRM specs)
 function openConfigPanel() {
+  const trainingPanel = document.getElementById('trainingSidePanel');
+  if (trainingPanel) trainingPanel.classList.remove('open');
+
   const panel = document.getElementById('configSidePanel');
   const menuConfig = document.getElementById('menuConfig');
   const configInner = document.getElementById('configInner');
@@ -589,7 +669,7 @@ function openConfigPanel() {
 
   if (menuTraining) menuTraining.classList.remove('active');
   if (trainingInner) {
-    trainingInner.className = 'text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
+    trainingInner.className = 'text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
     const icon = trainingInner.querySelector('.icon-training');
     if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training';
   }
@@ -621,7 +701,6 @@ function toggleConfigPanel() {
   const panel = document.getElementById('configSidePanel');
   if (panel && panel.classList.contains('open')) {
     closeConfigPanel();
-    switchToTraining();
   } else {
     openConfigPanel();
   }
@@ -637,6 +716,10 @@ function openConfigOption(optionName) {
 
 window.switchToEmployees = switchToEmployees;
 window.switchToTraining = switchToTraining;
+window.toggleTrainingPanel = toggleTrainingPanel;
+window.openTrainingPanel = openTrainingPanel;
+window.closeTrainingPanel = closeTrainingPanel;
+window.openTrainingSection = openTrainingSection;
 window.toggleConfigPanel = toggleConfigPanel;
 window.openConfigPanel = openConfigPanel;
 window.closeConfigPanel = closeConfigPanel;
@@ -676,6 +759,11 @@ function switchTrainingTab(tabId) {
   Object.keys(tabBtns).forEach(k => {
     if (tabBtns[k]) tabBtns[k].classList.toggle('active', k === tabId);
     if (sections[k]) sections[k].style.display = (k === tabId) ? 'block' : 'none';
+    const sideItem = document.getElementById(`sideNavTraining_${k}`);
+    if (sideItem) {
+      const titleSpan = sideItem.querySelector('.config-item-training-title');
+      if (titleSpan) titleSpan.style.color = (k === tabId) ? '#4f46e5' : '#27303f';
+    }
   });
 
   const tabLabels = {
@@ -777,6 +865,11 @@ function updatePendingReviewsBadge() {
   if (badge) {
     badge.textContent = pendingCount;
     badge.style.display = pendingCount > 0 ? 'inline-block' : 'none';
+  }
+  const sideBadge = document.getElementById('pendingReviewBadgeSide');
+  if (sideBadge) {
+    sideBadge.textContent = pendingCount;
+    sideBadge.style.display = pendingCount > 0 ? 'inline-block' : 'none';
   }
   const queueBadge = document.getElementById('reviewsCountBadge');
   if (queueBadge) queueBadge.textContent = `${pendingCount} Pending`;
@@ -4426,6 +4519,257 @@ function openRolesModule() {
 
 window.openRolesModule = openRolesModule;
 
+let activeRoleDetailSubTab = 'permissions';
+
+const ROLE_EMPLOYEES_DATA = {
+  role_1: [
+    {
+      no: 1,
+      initials: 'RS',
+      avatarBg: '#a855f7',
+      name: 'Roshan Sudarshana (CO-058)',
+      designation: 'Business Analyst',
+      status: 'Probation',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '06-Feb-2026, 03:44 PM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    }
+  ],
+  role_4: [
+    {
+      no: 1,
+      initials: 'PK',
+      avatarBg: '#3b82f6',
+      name: 'Prashant Kumar (CO-021)',
+      designation: 'Project Manager',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '12-Jun-2025, 03:51 PM',
+      lastModifiedByName: 'Isha Patel',
+      lastModifiedDate: '07-Apr-2026, 06:27 PM'
+    }
+  ],
+  role_5: [
+    {
+      no: 1,
+      initials: 'VM',
+      avatarBg: '#f97316',
+      name: 'Vikas Malhotra (CO-104)',
+      designation: 'Business Development Executive',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '03-Feb-2026, 12:32 PM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    }
+  ],
+  role_6: [
+    {
+      no: 1,
+      initials: 'IP',
+      avatarBg: '#10b981',
+      name: 'Isha Patel (CO-002)',
+      designation: 'Head of People',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'System',
+      assignedDate: '12-Jun-2025, 12:27 PM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    }
+  ],
+  role_7: [
+    {
+      no: 1,
+      initials: 'AB',
+      avatarBg: '#f59e0b',
+      name: 'Aryan Bhardwaj (CO-5039)',
+      designation: 'Executive',
+      status: 'Probation',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '12-Feb-2026, 02:21 PM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    }
+  ],
+  role_8: [
+    {
+      no: 1,
+      initials: 'AK',
+      avatarBg: '#6366f1',
+      name: 'Ashish Kumar (CO-041)',
+      designation: 'Technical Lead',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '25-Mar-2026, 12:39 PM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    }
+  ],
+  role_9: [
+    {
+      no: 1,
+      initials: 'IA',
+      avatarBg: '#8b5cf6',
+      name: 'Ishdeep Anand (YOP-073)',
+      designation: 'SVP',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'System',
+      assignedDate: '12-Jun-2025, 12:27 PM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    }
+  ],
+  role_10: [
+    {
+      no: 1,
+      initials: 'NM',
+      avatarBg: '#ec4899',
+      name: 'Nikita Mehta (CO-089)',
+      designation: 'Recruiter',
+      status: 'Confirmed',
+      expiryDate: '-',
+      remarks: '-',
+      assignedByName: 'Isha Patel',
+      assignedDate: '07-Oct-2025, 06:18 PM',
+      lastModifiedByName: '-',
+      lastModifiedDate: ''
+    }
+  ]
+};
+
+function switchRoleDetailTab(tabName) {
+  activeRoleDetailSubTab = tabName === 'employees' ? 'employees' : 'permissions';
+
+  const btnPerm = document.getElementById('roleSubTabBtnPermissions');
+  const btnEmp = document.getElementById('roleSubTabBtnEmployees');
+  const crumbSub = document.getElementById('permRoleActiveSubTabCrumb');
+  const saveWrap = document.getElementById('rolePermSaveBtnWrap');
+  const searchPermWrap = document.getElementById('rolePermSearchBarWrap');
+  const filterEmpWrap = document.getElementById('roleEmpFilterBarWrap');
+  const panelPerm = document.getElementById('roleTabPanelPermissions');
+  const panelEmp = document.getElementById('roleTabPanelEmployees');
+
+  if (activeRoleDetailSubTab === 'employees') {
+    if (btnEmp) {
+      btnEmp.style.background = '#eef2ff';
+      btnEmp.style.color = '#4f46e5';
+      btnEmp.style.fontWeight = '600';
+    }
+    if (btnPerm) {
+      btnPerm.style.background = 'transparent';
+      btnPerm.style.color = '#475569';
+      btnPerm.style.fontWeight = '500';
+    }
+    if (crumbSub) crumbSub.textContent = 'Employees';
+    if (saveWrap) saveWrap.style.display = 'none';
+    if (searchPermWrap) searchPermWrap.style.display = 'none';
+    if (filterEmpWrap) filterEmpWrap.style.display = 'flex';
+    if (panelPerm) panelPerm.style.display = 'none';
+    if (panelEmp) panelEmp.style.display = 'block';
+    renderRoleEmployeesTable();
+  } else {
+    if (btnPerm) {
+      btnPerm.style.background = '#eef2ff';
+      btnPerm.style.color = '#4f46e5';
+      btnPerm.style.fontWeight = '600';
+    }
+    if (btnEmp) {
+      btnEmp.style.background = 'transparent';
+      btnEmp.style.color = '#475569';
+      btnEmp.style.fontWeight = '500';
+    }
+    if (crumbSub) crumbSub.textContent = 'Permissions';
+    if (saveWrap) saveWrap.style.display = 'block';
+    if (searchPermWrap) searchPermWrap.style.display = 'flex';
+    if (filterEmpWrap) filterEmpWrap.style.display = 'none';
+    if (panelPerm) panelPerm.style.display = 'block';
+    if (panelEmp) panelEmp.style.display = 'none';
+    renderRolePermissionsTable();
+  }
+}
+
+function renderRoleEmployeesTable() {
+  const tbody = document.getElementById('roleEmployeesTableBody');
+  if (!tbody) return;
+
+  const query = (document.getElementById('searchRoleEmployeesInput')?.value || '').trim().toLowerCase();
+  const list = (ROLE_EMPLOYEES_DATA[activeSelectedRoleId] || []).filter(item => {
+    if (!query) return true;
+    return item.name.toLowerCase().includes(query) || item.designation.toLowerCase().includes(query);
+  });
+
+  if (list.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="7" style="padding: 36px 16px; text-align: center; color: #64748b; font-size: 13px;">
+          No assigned employees found for this role.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  let html = '';
+  list.forEach((emp, idx) => {
+    const isProbation = emp.status === 'Probation';
+    const statusBadgeStyle = isProbation
+      ? 'display: inline-flex; align-items: center; gap: 5px; padding: 2px 10px; border-radius: 6px; border: 1px solid #818cf8; background: #eef2ff; color: #4f46e5; font-size: 11.5px; font-weight: 600;'
+      : 'display: inline-flex; align-items: center; gap: 5px; padding: 2px 10px; border-radius: 6px; border: 1px solid #86efac; background: #f0fdf4; color: #166534; font-size: 11.5px; font-weight: 600;';
+
+    html += `
+      <tr style="border-bottom: 1px solid #f1f5f9;">
+        <td style="padding: 14px 16px; color: #334155; font-weight: 500;">${idx + 1}</td>
+        <td style="padding: 14px 16px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 32px; height: 32px; border-radius: 50%; background: ${emp.avatarBg}; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 11.5px; font-weight: 700; flex-shrink: 0;">
+              ${escapeHtml(emp.initials)}
+            </div>
+            <div>
+              <div style="font-weight: 700; color: #0f172a; font-size: 12.5px;">${escapeHtml(emp.name)}</div>
+              <div style="font-size: 11px; color: #64748b; margin-top: 1px;">${escapeHtml(emp.designation)}</div>
+            </div>
+          </div>
+        </td>
+        <td style="padding: 14px 16px;">
+          <span style="${statusBadgeStyle}">• ${escapeHtml(emp.status)}</span>
+        </td>
+        <td style="padding: 14px 16px; color: #475569;">${escapeHtml(emp.expiryDate)}</td>
+        <td style="padding: 14px 16px; color: #475569;">${escapeHtml(emp.remarks)}</td>
+        <td style="padding: 14px 16px; color: #334155; font-size: 12px;">
+          <div style="font-weight: 500; color: #1e293b;">${escapeHtml(emp.assignedByName)}</div>
+          <div style="color: #64748b; font-size: 11px; margin-top: 1px;">${escapeHtml(emp.assignedDate)}</div>
+        </td>
+        <td style="padding: 14px 16px; color: #334155; font-size: 12px;">
+          ${emp.lastModifiedByName && emp.lastModifiedByName !== '-' ? `
+            <div style="font-weight: 500; color: #1e293b;">${escapeHtml(emp.lastModifiedByName)}</div>
+            <div style="color: #64748b; font-size: 11px; margin-top: 1px;">${escapeHtml(emp.lastModifiedDate)}</div>
+          ` : '<span style="color: #64748b;">-</span>'}
+        </td>
+      </tr>
+    `;
+  });
+
+  tbody.innerHTML = html;
+}
+
+window.switchRoleDetailTab = switchRoleDetailTab;
+window.renderRoleEmployeesTable = renderRoleEmployeesTable;
+
 function openRolePermissions(roleId) {
   activeSelectedRoleId = roleId || 'role_1';
   const role = ROLES_DATA.find(r => r.id === activeSelectedRoleId) || ROLES_DATA[0];
@@ -4468,7 +4812,7 @@ function openRolePermissions(roleId) {
   if (modNameEl) modNameEl.textContent = role.lastModifiedByName;
   if (modDateEl) modDateEl.textContent = role.lastModifiedDate || '-';
 
-  renderRolePermissionsTable();
+  switchRoleDetailTab(activeRoleDetailSubTab);
 }
 
 window.openRolePermissions = openRolePermissions;
@@ -4737,7 +5081,7 @@ const DEMO_USERS = [
     id: 'usr_management',
     name: 'Ishdeep Anand',
     title: 'SVP',
-    role: 'HR / Admin / Reporting Manager',
+    role: 'Management',
     dept: 'SVP',
     badgeBg: '#f3e8ff',
     badgeColor: '#7e22ce',
@@ -4757,7 +5101,7 @@ const DEMO_USERS = [
   }
 ];
 
-let activeDemoUser = DEMO_USERS[0]; // Default to Admin (HR / Admin / Reporting Manager)
+let activeDemoUser = DEMO_USERS[0]; // Default to Management
 
 function renderUserRolePill() {
   const badgeEl = document.getElementById('headerUserAvatarBadge');
