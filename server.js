@@ -31,9 +31,9 @@ const EMPLOYEE_TRAINING_STORE = {
   'CO-5039': {
     profile: {
       id: 'CO-5039',
-      name: 'Aryan Bhardwaj',
-      firstName: 'Aryan',
-      lastName: 'Bhardwaj',
+      name: 'Tanya Kapoor',
+      firstName: 'Tanya',
+      lastName: 'Kapoor',
       designation: 'Business analyst',
       department: 'Business analyst',
       reportingManager: 'Megha Salunkhe (Sr. Executive)',

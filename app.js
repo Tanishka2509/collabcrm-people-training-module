@@ -16,7 +16,7 @@ const state = {
 
   // 1. Employee Hierarchy Data
   employees: [
-    { id: 'CO-5039', name: 'Aryan Bhardwaj', email: 'calebnguyen@maildrop.cc', role: 'Business analyst', dept: 'Business analyst', managerId: 'EMP-003', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120' },
+    { id: 'CO-5039', name: 'Tanya Kapoor', email: 'calebnguyen@maildrop.cc', role: 'Business analyst', dept: 'Business analyst', managerId: 'EMP-003', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120' },
     { id: 'EMP-001', name: 'Isha Patel', email: 'isha.patel@collabcrm.com', role: 'Head of People & Admin', dept: 'Recruitment & HR', managerId: null, avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120' },
     { id: 'EMP-002', name: 'Shivam Sharma', email: 'shivam.s@collabcrm.com', role: 'HR Specialist', dept: 'People Operations', managerId: 'EMP-001', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120' },
     { id: 'EMP-003', name: 'Ashish Kumar', email: 'ashish.k@collabcrm.com', role: 'Technical Lead & Reporting Manager', dept: 'Engineering', managerId: 'EMP-001', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120' },
@@ -497,12 +497,12 @@ function setAppRole(role) {
     if (hierarchyBanner) hierarchyBanner.style.display = 'flex';
     if (optAssignDeptRadio) optAssignDeptRadio.style.display = 'none'; // RM can only assign to direct reports
   } else {
-    // Employee Role (Aryan Bhardwaj - CO-5039)
+    // Employee Role (Tanya Kapoor - CO-5039)
     const avatar = 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120';
     if (headerAvatar) headerAvatar.src = avatar;
     if (rolePersonaAvatar) rolePersonaAvatar.src = avatar;
-    if (headerName) headerName.textContent = 'Aryan Bhardwaj';
-    if (rolePersonaName) rolePersonaName.textContent = 'Aryan Bhardwaj';
+    if (headerName) headerName.textContent = 'Tanya Kapoor';
+    if (rolePersonaName) rolePersonaName.textContent = 'Tanya Kapoor';
     if (headerRole) headerRole.textContent = 'Business analyst (Employee)';
     if (rolePersonaScope) rolePersonaScope.textContent = 'Business analyst • Learner Portal';
     if (portalScopeRoleName) portalScopeRoleName.textContent = 'Employee Learner (My Enrolled Trainings & Progress)';
@@ -2943,7 +2943,7 @@ function handleReviewAction(action) {
         issueDate: dateStr,
         expiryDate: 'Lifetime',
         status: 'issued',
-        recipientName: emp ? emp.name : 'Aryan Bhardwaj',
+        recipientName: emp ? emp.name : 'Tanya Kapoor',
         recipientId: emp ? emp.id : 'CO-5039',
         issuerName: 'Isha Patel',
         issuerRole: 'Head of People & Compliance'
@@ -5727,9 +5727,9 @@ const ROLE_EMPLOYEES_DATA = {
     },
     {
       no: 2,
-      initials: 'AB',
+      initials: 'TK',
       avatarBg: '#f59e0b',
-      name: 'Aryan Bhardwaj (CO-5039)',
+      name: 'Tanya Kapoor (CO-5039)',
       designation: 'Business analyst',
       status: 'Confirmed',
       expiryDate: '-',
@@ -6145,9 +6145,9 @@ const ROLE_EMPLOYEES_DATA = {
   role_7: [
     {
       no: 1,
-      initials: 'AB',
+      initials: 'TK',
       avatarBg: '#f59e0b',
-      name: 'Aryan Bhardwaj (CO-5039)',
+      name: 'Tanya Kapoor (CO-5039)',
       designation: 'Business analyst',
       status: 'Probation',
       expiryDate: '-',
@@ -6872,13 +6872,13 @@ const DEMO_USERS = [
   },
   {
     id: 'usr_emp',
-    name: 'Aryan Bhardwaj',
+    name: 'Tanya Kapoor',
     title: 'Business analyst',
     role: 'Employee',
     dept: 'Business analyst',
     badgeBg: '#f1f5f9',
     badgeColor: '#475569',
-    avatarInitials: 'AB',
+    avatarInitials: 'TK',
     avatarBg: '#f59e0b'
   }
 ];
@@ -6939,9 +6939,9 @@ function renderUserRoleDropdown() {
 
     <button type="button" class="profile-menu-link role-switch-item ${isEmp ? 'active-role' : ''}" onclick="switchActiveUser('usr_emp');">
       <div class="role-switch-left">
-        <span class="role-avatar-dot" style="background: #f59e0b;">AB</span>
+        <span class="role-avatar-dot" style="background: #f59e0b;">TK</span>
         <div class="role-switch-meta">
-          <span class="role-switch-name">Aryan Bhardwaj</span>
+          <span class="role-switch-name">Tanya Kapoor</span>
           <span class="role-switch-role">Business analyst • Employee</span>
         </div>
       </div>
@@ -7058,7 +7058,7 @@ const EMPLOYEES_DETAIL_DATABASE = {
     name: 'Ishdeep Anand',
     firstName: 'Ishdeep',
     lastName: 'Anand',
-    gender: 'Male',
+    gender: 'Female',
     dob: '10-May-1990',
     blood: '-',
     email: 'ishdeep@maildrop.cc',
@@ -7173,10 +7173,10 @@ const EMPLOYEES_DETAIL_DATABASE = {
   },
   'CO-5039': {
     code: 'CO-5039',
-    name: 'Aryan Bhardwaj',
-    firstName: 'Aryan',
-    lastName: 'Bhardwaj',
-    gender: 'Male',
+    name: 'Tanya Kapoor',
+    firstName: 'Tanya',
+    lastName: 'Kapoor',
+    gender: 'Female',
     dob: '22-Nov-1996',
     blood: 'O+',
     email: 'calebnguyen@maildrop.cc',
@@ -7200,7 +7200,7 @@ const EMPLOYEES_DETAIL_DATABASE = {
     badges: 'No badges received.',
     seating: 'Floor 3, Desk 18',
     extension: '402',
-    initials: 'AB',
+    initials: 'TK',
     avatarBg: '#f59e0b',
     trainings: [
       {
@@ -7264,7 +7264,7 @@ const EMPLOYEES_DETAIL_DATABASE = {
     name: 'Kunal Barve',
     firstName: 'Kunal',
     lastName: 'Barve',
-    gender: 'Male',
+    gender: 'Female',
     dob: '05-May-1992',
     blood: 'B+',
     email: 'jordanellis@maildrop.cc',
@@ -7352,7 +7352,7 @@ const EMPLOYEES_DETAIL_DATABASE = {
     name: 'Vikram Anand',
     firstName: 'Vikram',
     lastName: 'Anand',
-    gender: 'Male',
+    gender: 'Female',
     dob: '12-Dec-1986',
     blood: 'AB+',
     email: 'vikramanand@maildrop.cc',
@@ -7396,7 +7396,7 @@ const EMPLOYEES_DETAIL_DATABASE = {
     name: 'Rahul Khanna',
     firstName: 'Rahul',
     lastName: 'Khanna',
-    gender: 'Male',
+    gender: 'Female',
     dob: '15-Mar-1997',
     blood: 'A+',
     email: 'elliotsharpe@maildrop.cc',
@@ -7484,7 +7484,7 @@ const EMPLOYEES_DETAIL_DATABASE = {
     name: 'Varun Acharya',
     firstName: 'Varun',
     lastName: 'Acharya',
-    gender: 'Male',
+    gender: 'Female',
     dob: '19-Sep-1993',
     blood: 'O+',
     email: 'trevorlindqvist@maildrop.cc',
@@ -7730,11 +7730,13 @@ function renderEmployeeTrainingHistory(emp) {
 
     const certId = (t.certificate && t.certificate.id) || t.certId || 'TRN-2026-0003';
 
-    const statusPill = `<span style="background: #dcfce7; color: #15803d; font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 12px; border: 1px solid #bbf7d0; display: inline-flex; align-items: center; justify-content: center; gap: 4px; white-space: nowrap;">✓ Completed</span>`;
+    const statusPill = `<span style="display: inline-flex; align-items: center; justify-content: center; gap: 5px; background: #ecfdf5; border: 1px solid #a7f3d0; color: #047857; font-size: 11.5px; font-weight: 700; padding: 4px 12px; border-radius: 9999px; white-space: nowrap; line-height: 1;"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Completed</span>`;
 
     const scoreBadge = scoreVal !== '-'
       ? `<span style="font-weight: 700; color: #0f172a; background: #f8fafc; border: 1px solid #e2e8f0; padding: 2px 6px; border-radius: 4px;">${escapeHtml(String(scoreVal))}</span>`
       : `<span style="color: #94a3b8;">100%</span>`;
+
+    const cleanAssignedBy = escapeHtml((t.assignedBy || 'Isha Patel').replace(/\s*\(.*?\)/g, '').trim());
 
     const certAction = `<button type="button" onclick="event.stopPropagation(); openEmployeeCertificateViewer('${certId}')" class="btn-table-action" style="padding: 5px 12px; font-size: 12px; color: #1d4ed8; border: 1px solid #bfdbfe; background: #eff6ff; border-radius: 6px; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;" title="Click to view certificate">
          🎓 <span>${escapeHtml(certId)}</span>
@@ -7748,7 +7750,7 @@ function renderEmployeeTrainingHistory(emp) {
           <div style="font-size: 11px; color: #64748b; margin-top: 2px;">${escapeHtml(category)}</div>
         </td>
         <td style="padding: 12px 14px;">
-          <span style="background: #f1f5f9; color: #334155; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px;">${escapeHtml(t.assignedBy || 'Isha Patel (Head of People)')}</span>
+          <span style="background: #f1f5f9; color: #334155; font-size: 11.5px; font-weight: 600; padding: 2px 8px; border-radius: 4px;">${cleanAssignedBy}</span>
         </td>
         <td style="padding: 12px 14px; color: #475569; white-space: nowrap;">${escapeHtml(assignedDate)}</td>
         <td style="padding: 12px 14px; color: #475569; white-space: nowrap;">${escapeHtml(completionDate)}</td>
@@ -8018,7 +8020,7 @@ function hydrateUnifiedTrainingRecord(t, empId = 'CO-5039') {
       t.reviewHistory.push({
         date: t.submission.submittedAt,
         action: 'Submitted for Evaluation',
-        user: 'Aryan Bhardwaj',
+        user: 'Tanya Kapoor',
         notes: t.submission.completionRemarks || 'Submitted completed modules and assessment.'
       });
     }
@@ -8208,7 +8210,7 @@ function renderEmployeeDashboardUI() {
   const elMgr = document.getElementById('empProfileCardManager');
   const elAvatar = document.getElementById('empProfileCardAvatar');
 
-  if (elName) elName.textContent = p.name || 'Aryan Bhardwaj';
+  if (elName) elName.textContent = p.name || 'Tanya Kapoor';
   if (elCode) elCode.textContent = p.employeeId || p.id || 'CO-5039';
   if (elDesig) elDesig.textContent = p.designation || 'Business analyst';
   if (elDept) elDept.textContent = p.department || 'Business analyst';
@@ -8632,6 +8634,8 @@ function openEmployeeTrainingDetail(trainingId) {
   const duration = t.expectedDuration || (t.durationHours ? t.durationHours + ' Hours' : '4 Hours');
   const difficulty = t.difficultyLevel || t.difficulty || 'Intermediate';
 
+  const cleanAssignedBy = (t.assignedBy || 'Isha Patel').replace(/\s*\(.*?\)/g, '').trim();
+
   // Header Details
   const elTitle = document.getElementById('empModalTrainingTitle');
   const elCategory = document.getElementById('empModalCategoryBadge');
@@ -8640,14 +8644,16 @@ function openEmployeeTrainingDetail(trainingId) {
   const elDue = document.getElementById('empModalDueDateText');
 
   if (elTitle) elTitle.textContent = title;
-  if (elCategory) elCategory.textContent = t.category || 'General';
+  if (elCategory) {
+    elCategory.textContent = t.category || 'General';
+    elCategory.style.display = 'none'; // Hidden per user requirement
+  }
   if (elMandatory) {
     elMandatory.textContent = isMandatory ? 'Mandatory' : 'Optional';
-    elMandatory.style.background = isMandatory ? '#fee2e2' : '#f1f5f9';
-    elMandatory.style.color = isMandatory ? '#991b1b' : '#475569';
+    elMandatory.style.display = 'none'; // Hidden per user requirement
   }
   if (elStatus) elStatus.textContent = statusText;
-  if (elDue) elDue.textContent = `Due Date: ${t.dueDate} • Assigned By: ${t.assignedBy || 'Megha Salunkhe'}`;
+  if (elDue) elDue.textContent = `Due Date: ${t.dueDate || '15-Dec-2025'} • Assigned By: ${cleanAssignedBy}`;
 
   // Tab 1: Overview & Objectives
   const elDesc = document.getElementById('empModalOverviewDesc');
@@ -8661,7 +8667,7 @@ function openEmployeeTrainingDetail(trainingId) {
   if (elDesc) elDesc.textContent = shortDesc;
   if (elDiff) elDiff.textContent = difficulty;
   if (elDur) elDur.textContent = duration;
-  if (elAssignedBy) elAssignedBy.textContent = t.assignedBy || 'Megha Salunkhe';
+  if (elAssignedBy) elAssignedBy.textContent = cleanAssignedBy;
   if (elAssignedDate) elAssignedDate.textContent = t.assignedDate || '01-Nov-2026';
 
   if (elObjList) {
@@ -8699,11 +8705,18 @@ function openEmployeeTrainingDetail(trainingId) {
   const detailScreen = document.getElementById('sectionEmpTrainingDetailScreen');
   const breadcrumbEl = document.getElementById('empDetailBreadcrumbTitle');
   const viewEmployeeDetail = document.getElementById('viewEmployeeDetail');
+  const viewDashboard = document.getElementById('viewDashboard');
 
-  if (viewEmployeeDetail && viewEmployeeDetail.style.display !== 'none') {
+  if ((viewEmployeeDetail && viewEmployeeDetail.style.display !== 'none') || (viewDashboard && viewDashboard.style.display === 'block')) {
     state.empDetailPreviousView = 'employee_profile';
-    viewEmployeeDetail.style.display = 'none';
-    viewEmployeeDetail.classList.remove('active');
+    if (viewEmployeeDetail) {
+      viewEmployeeDetail.style.display = 'none';
+      viewEmployeeDetail.classList.remove('active');
+    }
+    if (viewDashboard) {
+      viewDashboard.style.display = 'none';
+      viewDashboard.classList.remove('active');
+    }
   } else {
     state.empDetailPreviousView = 'my_training';
   }
@@ -8738,6 +8751,16 @@ function closeEmployeeTrainingDetail() {
   if (detailScreen) detailScreen.style.display = 'none';
 
   if (state.empDetailPreviousView === 'employee_profile') {
+    const viewTraining = document.getElementById('viewTraining');
+    if (viewTraining) {
+      viewTraining.style.display = 'none';
+      viewTraining.classList.remove('active');
+    }
+    const viewDashboard = document.getElementById('viewDashboard');
+    if (viewDashboard) {
+      viewDashboard.style.display = 'block';
+      viewDashboard.classList.add('active');
+    }
     const viewEmployeeDetail = document.getElementById('viewEmployeeDetail');
     if (viewEmployeeDetail) {
       viewEmployeeDetail.style.display = 'block';
@@ -8745,6 +8768,11 @@ function closeEmployeeTrainingDetail() {
       switchEmpDetailSubTab('training');
     }
   } else {
+    const viewTraining = document.getElementById('viewTraining');
+    if (viewTraining) {
+      viewTraining.style.display = 'block';
+      viewTraining.classList.add('active');
+    }
     if (myTrnSection) myTrnSection.style.display = 'block';
     renderEmployeeTrainingsList();
   }
@@ -8848,9 +8876,10 @@ function renderEmpModalResources(t) {
           <button type="button" class="btn-table-action" onclick="openEmployeeResourceViewer('${t.id}', '${r.id}')" style="font-size: 12px;">
             👁 Open Resource
           </button>
-          <button type="button" class="btn-primary-action" onclick="toggleEmployeeResourceComplete('${t.id}', '${r.id}', event)" style="font-size: 12px; background: ${isDone ? '#e2e8f0' : '#4f46e5'}; color: ${isDone ? '#334155' : '#ffffff'}; border-color: ${isDone ? '#cbd5e1' : '#4338ca'};">
-            ${isDone ? 'Mark Incomplete' : 'Mark as Completed ✓'}
-          </button>
+          ${isDone
+            ? '<span style="display: inline-flex; align-items: center; gap: 4px; background: #ecfdf5; border: 1px solid #a7f3d0; color: #047857; font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 6px;">✓ Completed</span>'
+            : `<button type="button" class="btn-primary-action" onclick="toggleEmployeeResourceComplete('${t.id}', '${r.id}', event)" style="font-size: 12px; background: #2563eb; color: #ffffff; border-color: #1d4ed8; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-weight: 600;">Mark as Completed ✓</button>`
+          }
         </div>
       </div>
     `;
@@ -9412,7 +9441,7 @@ function applyLocalTrainingSubmission(trainingId, remarks, evidenceFileName) {
   t.reviewHistory.unshift({
     date: `${dateStr}, ${timeStr}`,
     action: 'Submitted for Evaluation',
-    user: 'Aryan Bhardwaj',
+    user: 'Tanya Kapoor',
     notes: remarks
   });
 
@@ -9471,7 +9500,7 @@ async function submitEmpTrainingWorkflow() {
         t.reviewHistory.unshift({
           date: t.submission?.submittedAt || 'Today',
           action: isResubmission ? 'Resubmitted for Evaluation' : 'Submitted for Evaluation',
-          user: 'Aryan Bhardwaj',
+          user: 'Tanya Kapoor',
           notes: remarks
         });
         hydrateUnifiedTrainingRecord(t, 'CO-5039');
@@ -9492,6 +9521,120 @@ async function submitEmpTrainingWorkflow() {
     applyLocalTrainingSubmission(t.id, remarks, state.empAttachedEvidence?.name || null);
   }
 }
+
+// Coursera Workflow: Employee Marks Course Completed & Management is Notified
+function completeTrainingAndNotifyManagement() {
+  if (!state.employeeTrainingData || !state.empCurrentTrainingId) return;
+  const t = state.employeeTrainingData.trainings.find(x => x.id === state.empCurrentTrainingId);
+  if (!t) return;
+
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+  const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+  // 1. Mark all resources completed
+  if (Array.isArray(t.resources)) {
+    t.resources.forEach(r => {
+      r.isCompleted = true;
+      if (!r.completionDate) r.completionDate = dateStr;
+    });
+  }
+
+  // 2. Mark training completed
+  t.trainingStatus = 'completed';
+  t.status = 'Completed';
+  t.completionPercentage = 100;
+  t.progress = 100;
+  t.completionDate = dateStr;
+  t.submissionStatus = 'approved';
+  t.certificateStatus = 'issued';
+  t.score = t.score || '98%';
+
+  const certId = (t.certificate && t.certificate.id) || t.certId || 'TRN-2026-0003';
+  t.certificate = {
+    id: certId,
+    name: `${t.trainingName || t.title} Credential`,
+    trainingName: t.trainingName || t.title,
+    issueDate: dateStr,
+    status: 'issued',
+    recipientName: 'Tanya Kapoor',
+    recipientId: 'CO-5039'
+  };
+
+  // Add to employee certificates list if not present
+  if (!Array.isArray(state.employeeTrainingData.certificates)) {
+    state.employeeTrainingData.certificates = [];
+  }
+  const certIdx = state.employeeTrainingData.certificates.findIndex(c => c.id === certId);
+  if (certIdx >= 0) {
+    state.employeeTrainingData.certificates[certIdx] = t.certificate;
+  } else {
+    state.employeeTrainingData.certificates.unshift(t.certificate);
+  }
+
+  // 3. Generate Management Notification
+  const notifObj = {
+    id: `notif_${Date.now()}`,
+    title: 'Training Completed: Tanya Kapoor',
+    message: `Tanya Kapoor (CO-5039) has successfully completed all coursework for "${t.trainingName || t.title}". Verified Certificate ${certId} issued.`,
+    time: 'Just now',
+    timestamp: `${dateStr}, ${timeStr}`,
+    category: 'management',
+    unread: true,
+    isRead: false,
+    trainingId: t.id
+  };
+
+  if (Array.isArray(state.notifications)) {
+    state.notifications.unshift(notifObj);
+  }
+  if (state.employeeTrainingData.notifications) {
+    state.employeeTrainingData.notifications.unshift(notifObj);
+  }
+
+  // Update management notification bell badge count
+  const mgmtNotifBadge = document.getElementById('notifBadge');
+  if (mgmtNotifBadge) {
+    const unreadTotal = (state.notifications || []).filter(n => n.unread || !n.isRead).length;
+    mgmtNotifBadge.textContent = unreadTotal;
+    mgmtNotifBadge.style.display = 'inline-block';
+  }
+
+  // Update employee notification badge
+  const empNotifBadge = document.getElementById('empNotificationBadge');
+  if (empNotifBadge) {
+    const empUnread = (state.employeeTrainingData.notifications || []).filter(n => !n.isRead && !n.read).length;
+    empNotifBadge.textContent = empUnread;
+    empNotifBadge.style.display = empUnread > 0 ? 'inline-block' : 'none';
+  }
+
+  hydrateUnifiedTrainingRecord(t, 'CO-5039');
+  saveEmployeeStoreToLocal();
+
+  renderEmpModalSubmission(t);
+  renderEmployeeDashboardUI();
+  renderEmployeeCertificates();
+  renderEmployeeHistoryFull();
+
+  // Update card buttons
+  const btnCoursera = document.getElementById('btnCompleteAndNotifyManagement');
+  if (btnCoursera) {
+    btnCoursera.innerHTML = '<span>✓ Course Completed &amp; Management Notified</span>';
+    btnCoursera.style.background = '#059669';
+    btnCoursera.disabled = true;
+  }
+
+  const pill = document.getElementById('empCourseraStatusPill');
+  if (pill) {
+    pill.textContent = 'Completed & Verified';
+    pill.style.background = '#dcfce7';
+    pill.style.color = '#15803d';
+  }
+
+  showConfigToast(`🎉 Training marked as 100% completed. Management has been notified.`);
+}
+
+window.completeTrainingAndNotifyManagement = completeTrainingAndNotifyManagement;
 
 // 10. My Certificates Section (Spec Sec 11)
 function renderEmployeeCertificates() {
@@ -9543,7 +9686,7 @@ function openEmployeeCertificateViewer(certId) {
     if (matchedTrn) {
       cert = {
         id: (matchedTrn.certificate && matchedTrn.certificate.id) || matchedTrn.certId || certId,
-        recipientName: matchedTrn.employeeName || 'Aryan Bhardwaj',
+        recipientName: matchedTrn.employeeName || 'Tanya Kapoor',
         recipientId: matchedTrn.employeeCode || 'CO-5039',
         trainingName: matchedTrn.title || matchedTrn.trainingName,
         issueDate: (matchedTrn.certificate && matchedTrn.certificate.issueDate) || matchedTrn.completionDate || '26-Jan-2026'
@@ -9557,7 +9700,7 @@ function openEmployeeCertificateViewer(certId) {
         const empProfile = typeof EMPLOYEE_DETAIL_PROFILES !== 'undefined' ? EMPLOYEE_DETAIL_PROFILES[code] : null;
         cert = {
           id: found.certId || certId,
-          recipientName: empProfile ? empProfile.fullName : (found.employeeName || 'Aryan Bhardwaj'),
+          recipientName: empProfile ? empProfile.fullName : (found.employeeName || 'Tanya Kapoor'),
           recipientId: code,
           trainingName: found.title || found.trainingName,
           issueDate: found.completionDate || '26-Jan-2026'
@@ -9577,7 +9720,7 @@ function openEmployeeCertificateViewer(certId) {
   const elCertId = document.getElementById('empCertModalCertId');
   const elDate = document.getElementById('empCertModalIssueDate');
 
-  if (elRecip) elRecip.textContent = cert.recipientName || 'Aryan Bhardwaj';
+  if (elRecip) elRecip.textContent = cert.recipientName || 'Tanya Kapoor';
   if (elRecipId) elRecipId.textContent = cert.recipientId || 'CO-5039';
   if (elTrn) elTrn.textContent = cert.trainingName || cert.name;
   if (elCertId) elCertId.textContent = cert.id;

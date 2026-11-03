@@ -3166,11 +3166,12 @@ body {
 }
 
 .cert-main-title {
-  font-size: 1.6rem;
-  font-weight: 800;
+  font-size: 15px !important;
+  font-weight: 700 !important;
   color: #0f172a;
-  margin: 8px 0;
-  letter-spacing: 0.04em;
+  margin: 6px 0;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase;
 }
 
 .cert-recipient-name {

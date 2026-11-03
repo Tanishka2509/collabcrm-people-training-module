@@ -31,9 +31,9 @@ const EMPLOYEE_TRAINING_STORE = {
   'CO-5039': {
     profile: {
       id: 'CO-5039',
-      name: 'Aryan Bhardwaj',
-      firstName: 'Aryan',
-      lastName: 'Bhardwaj',
+      name: 'Tanya Kapoor',
+      firstName: 'Tanya',
+      lastName: 'Kapoor',
       designation: 'Executive',
       department: 'IT - Project',
       reportingManager: 'Megha Salunkhe (Sr. Executive)',
@@ -306,7 +306,7 @@ const EMPLOYEE_TRAINING_STORE = {
           trainingId: 'TRN-ASSIGN-102',
           issueDate: '26-Jan-2026',
           status: 'issued',
-          recipientName: 'Aryan Bhardwaj',
+          recipientName: 'Tanya Kapoor',
           recipientId: 'CO-5039',
           issuerName: 'Isha Patel',
           issuerRole: 'Head of People & Compliance',
