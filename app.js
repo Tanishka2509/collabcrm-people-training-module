@@ -429,7 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
   state.employeeTrainingData = getFallbackEmployeeData('CO-5039');
   syncEmployeeTrainingsWithGlobalAssignments();
   setAppRole('admin'); // Start in Admin Role
-  switchToTraining(); // Start with Training module selected (Employee module removed per user instruction)
+  switchToEmployees(); // By default, Employees module is opened whenever the system is opened
 });
 
 // App Role Switcher (Admin vs HR vs Reporting Manager vs Employee)
