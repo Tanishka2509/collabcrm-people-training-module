@@ -1096,12 +1096,12 @@ function renderProgramsList() {
         <td style="padding: 12px 14px; text-align: center; color: #334155;">${enrolledCount}</td>
         <td style="padding: 12px 14px; text-align: center;">${statusPill}</td>
         <td style="padding: 12px 14px; text-align: center; white-space: nowrap;">
-          <div style="display: inline-flex; align-items: center; gap: 6px;">
-            <button type="button" onclick="previewProgram('${p.id}')" title="View Programme" aria-label="View" style="width: 28px; height: 28px; border: 1px solid #bfdbfe; background: #eff6ff; color: #2563eb; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 0;">
-              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          <div style="display: inline-flex; align-items: center; gap: 4px;">
+            <button type="button" class="emp-action-icon" onclick="previewProgram('${p.id}')" title="View Programme" aria-label="View">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
             </button>
-            <button type="button" onclick="openEditProgramModal('${p.id}')" title="Edit Programme" aria-label="Edit" style="width: 28px; height: 28px; border: 1px solid #e2e8f0; background: #ffffff; color: #64748b; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 0;">
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+            <button type="button" class="emp-action-icon" onclick="openEditProgramModal('${p.id}')" title="Edit Programme" aria-label="Edit">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
             </button>
           </div>
         </td>
@@ -1871,9 +1871,9 @@ function renderProgressTable() {
         <td>${subPill}</td>
         <td>${certPill}</td>
         <td style="text-align: center; white-space: nowrap;">
-          <button type="button" class="btn-progress-action-icon" onclick="openProgressDetails('${a.id}')" title="View Progress Details" aria-label="View Progress Details">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path>
+          <button type="button" class="emp-action-icon" onclick="openProgressDetails('${a.id}')" title="View Progress Details" aria-label="View Progress Details">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
               <circle cx="12" cy="12" r="3"></circle>
             </svg>
           </button>
@@ -4465,14 +4465,14 @@ function renderRolesTable() {
           <div style="color: #94a3b8; font-size: 11px;">${escapeHtml(r.createdDate)}</div>
         </td>
         <td style="padding: 14px; text-align: right; white-space: nowrap;">
-          <div style="display: inline-flex; align-items: center; gap: 6px;">
-            <button type="button" class="emp-action-icon" onclick="openRolePermissions('${r.id}')" title="View & Configure Permissions (Screenshot 4)" style="color: #4f46e5; padding: 5px; background: #eff6ff; border-radius: 4px;">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          <div style="display: inline-flex; align-items: center; gap: 4px;">
+            <button type="button" class="emp-action-icon" onclick="openRolePermissions('${r.id}')" title="View & Configure Permissions">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
             </button>
-            <button type="button" class="emp-action-icon" onclick="openRolePermissions('${r.id}')" title="Edit Role" style="color: #64748b; padding: 5px;">
+            <button type="button" class="emp-action-icon" onclick="openRolePermissions('${r.id}')" title="Edit Role">
               <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
             </button>
-            <button type="button" class="emp-action-icon" onclick="alert('System protected: Cannot delete this assigned role.')" title="Delete Role" style="color: #94a3b8; padding: 5px;">
+            <button type="button" class="emp-action-icon" onclick="alert('System protected: Cannot delete this assigned role.')" title="Delete Role">
               <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
             </button>
           </div>
@@ -5845,76 +5845,26 @@ function renderEmployeeTrainingHistory(emp) {
   tbody.innerHTML = html;
 }
 
-function switchEmpDetailSubTab(tabName) {
-  activeEmpDetailSubTab = tabName;
+function switchEmpDetailSubTab(tabName = 'training') {
+  activeEmpDetailSubTab = 'training';
 
-  const tabs = {
-    general: document.getElementById('tabNavGeneral'),
-    timeline: document.getElementById('tabNavTimeline'),
-    assets: document.getElementById('tabNavAssets'),
-    performance: document.getElementById('tabNavPerf'),
-    developer: document.getElementById('tabNavDev'),
-    training: document.getElementById('tabNavTraining')
-  };
-
-  Object.keys(tabs).forEach(k => {
-    const btn = tabs[k];
-    if (!btn) return;
-    const isActive = k === tabName;
-    btn.classList.toggle('active', isActive);
-    if (k === 'training') {
-      if (isActive) {
-        btn.style.color = '#0284c7';
-        btn.style.fontWeight = '700';
-        btn.style.borderBottom = '2px solid #0284c7';
-      } else {
-        btn.style.color = '#0284c7';
-        btn.style.fontWeight = '500';
-        btn.style.borderBottom = 'none';
-      }
-    } else {
-      if (isActive) {
-        btn.style.color = '#4f46e5';
-        btn.style.fontWeight = '700';
-        btn.style.borderBottom = '2px solid #4f46e5';
-      } else {
-        btn.style.color = '#64748b';
-        btn.style.fontWeight = '500';
-        btn.style.borderBottom = 'none';
-      }
-    }
-  });
+  const btn = document.getElementById('tabNavTraining');
+  if (btn) {
+    btn.classList.add('active');
+    btn.style.color = '#4f46e5';
+    btn.style.fontWeight = '700';
+    btn.style.borderBottom = '2px solid #4f46e5';
+  }
 
   const bcTab = document.getElementById('empDetailBreadcrumbTab');
   const panelGen = document.getElementById('empDetailPanelGeneral');
   const panelTrn = document.getElementById('empDetailPanelTraining');
   const panelPlc = document.getElementById('empDetailPanelPlaceholder');
-  const plcTitle = document.getElementById('empDetailPlaceholderTitle');
 
-  if (tabName === 'general') {
-    if (bcTab) bcTab.textContent = 'General Info';
-    if (panelGen) panelGen.style.display = 'flex';
-    if (panelTrn) panelTrn.style.display = 'none';
-    if (panelPlc) panelPlc.style.display = 'none';
-  } else if (tabName === 'training') {
-    if (bcTab) bcTab.textContent = 'Training History';
-    if (panelGen) panelGen.style.display = 'none';
-    if (panelTrn) panelTrn.style.display = 'flex';
-    if (panelPlc) panelPlc.style.display = 'none';
-  } else {
-    const titleMap = {
-      timeline: 'Timeline',
-      assets: 'Assets Allocated',
-      performance: 'Performance Review',
-      developer: 'Developer Accounts'
-    };
-    const title = titleMap[tabName] || 'Module Details';
-    if (bcTab) bcTab.textContent = title;
-    if (plcTitle) plcTitle.textContent = title;
-    if (panelGen) panelGen.style.display = 'none';
-    if (panelTrn) panelTrn.style.display = 'none';
-    if (panelPlc) panelPlc.style.display = 'block';
-  }
+  if (bcTab) bcTab.textContent = 'Training History';
+  if (panelGen) panelGen.style.display = 'none';
+  if (panelTrn) panelTrn.style.display = 'flex';
+  if (panelPlc) panelPlc.style.display = 'none';
 }
 
 function openEmployeeDetail(empCode = 'YOP-073') {
@@ -5939,7 +5889,7 @@ function openEmployeeDetail(empCode = 'YOP-073') {
   }
 
   populateEmployeeDetail(empCode);
-  switchEmpDetailSubTab('general');
+  switchEmpDetailSubTab('training');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
