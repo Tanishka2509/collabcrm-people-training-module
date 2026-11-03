@@ -896,10 +896,15 @@ function switchTrainingTab(tabId) {
     assignScreen.classList.remove('open');
   }
   const progPreviewScreen = document.getElementById('programPreviewModal');
+  const progFormScreen = document.getElementById('programFormModal');
   const progListCard = document.getElementById('programsCatalogListCard');
   if (progPreviewScreen) {
     progPreviewScreen.style.display = 'none';
     progPreviewScreen.classList.remove('open');
+  }
+  if (progFormScreen) {
+    progFormScreen.style.display = 'none';
+    progFormScreen.classList.remove('open');
   }
   if (progListCard) {
     progListCard.style.display = 'block';
@@ -1267,21 +1272,46 @@ function renderProgramsList() {
 
 window.renderProgramsList = renderProgramsList;
 
-// Program Form Builder & Multi-Resource Manager
+// Program Form Builder & Multi-Resource Manager (In-Screen View + Per-Programme Config)
 function openCreateProgramModal() {
   if (trainingConfigData && trainingConfigData.general && trainingConfigData.general.allowCreation === false) {
     alert('Training Creation is currently disabled in Training Config.');
     return;
   }
+  if (state.activeSubTab !== 'programs') {
+    switchTrainingTab('programs');
+  }
+
   document.getElementById('editingProgramId').value = '';
   document.getElementById('programFormModalTitle').textContent = 'Create New Training Programme';
   document.getElementById('progTitleInput').value = '';
-  document.getElementById('progDeptInput').value = 'Engineering';
+  document.getElementById('progDeptInput').value = 'Business analyst';
   document.getElementById('progDifficultyInput').value = 'Intermediate';
   document.getElementById('progDurationInput').value = (trainingConfigData?.general?.durationHours) || '16';
   document.getElementById('progPassScoreInput').value = (trainingConfigData?.completion?.passingScore) || '80';
   document.getElementById('progObjectivesInput').value = '';
   document.getElementById('progCriteriaInput').value = 'Complete 100% mandatory modules + achieve >= 80% on assessment';
+
+  // Populate Per-Programme Config Defaults
+  const maxEnrollEl = document.getElementById('progMaxEnrollmentInput');
+  const dueDaysEl = document.getElementById('progDueDaysInput');
+  const maxAttEl = document.getElementById('progMaxAttemptsInput');
+  const certExpEl = document.getElementById('progCertExpiryMonthsInput');
+  const remFreqEl = document.getElementById('progReminderFreqDaysInput');
+  const asgnTypeEl = document.getElementById('progAssignmentTypeInput');
+  const revAppEl = document.getElementById('progReviewerApprovalInput');
+  const evidReqEl = document.getElementById('progEvidenceRequiredInput');
+  const certEnEl = document.getElementById('progCertEnabledInput');
+
+  if (maxEnrollEl) maxEnrollEl.value = 50;
+  if (dueDaysEl) dueDaysEl.value = (trainingConfigData?.assignments?.dueDays) ?? 14;
+  if (maxAttEl) maxAttEl.value = (trainingConfigData?.completion?.maxAttempts) ?? 3;
+  if (certExpEl) certExpEl.value = (trainingConfigData?.general?.certificateExpiryMonths) ?? 24;
+  if (remFreqEl) remFreqEl.value = (trainingConfigData?.general?.reminderFrequencyDays) ?? 7;
+  if (asgnTypeEl) asgnTypeEl.value = (trainingConfigData?.assignments?.defaultType) || 'Mandatory';
+  if (revAppEl) revAppEl.checked = trainingConfigData?.completion?.approvalRequired !== false;
+  if (evidReqEl) evidReqEl.checked = trainingConfigData?.completion?.evidenceMandatory !== false;
+  if (certEnEl) certEnEl.checked = trainingConfigData?.certificates?.enabled !== false;
 
   // Seed default 2 resource rows
   const container = document.getElementById('resourceRowsContainer');
@@ -1289,7 +1319,20 @@ function openCreateProgramModal() {
   addResourceRow({ title: 'Module 1: Architecture Video Lecture', type: 'video', url: 'https://youtube.com/watch?v=sample-video', mandatory: true });
   addResourceRow({ title: 'Module 2: Standard Operating Procedure Handbook', type: 'pdf', url: 'https://docs.collabcrm.internal/sample-handbook.pdf', mandatory: true });
 
-  document.getElementById('programFormModal').classList.add('open');
+  const listCard = document.getElementById('programsCatalogListCard');
+  const previewScreen = document.getElementById('programPreviewModal');
+  const assignScreen = document.getElementById('assignTrainingModal');
+  const formScreen = document.getElementById('programFormModal');
+  if (listCard) listCard.style.display = 'none';
+  if (previewScreen) { previewScreen.style.display = 'none'; previewScreen.classList.remove('open'); }
+  if (assignScreen) { assignScreen.style.display = 'none'; assignScreen.classList.remove('open'); }
+  if (formScreen) {
+    formScreen.style.display = 'block';
+    formScreen.classList.add('open');
+  }
+  const labelEl = document.getElementById('currentActiveTabLabel');
+  if (labelEl) labelEl.textContent = 'Create Training Programme';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 window.openCreateProgramModal = openCreateProgramModal;
@@ -1302,6 +1345,10 @@ function openEditProgramModal(progId) {
   const p = state.programs.find(prog => prog.id === progId);
   if (!p) return;
 
+  if (state.activeSubTab !== 'programs') {
+    switchTrainingTab('programs');
+  }
+
   document.getElementById('editingProgramId').value = p.id;
   document.getElementById('programFormModalTitle').textContent = `Edit Training Programme: ${p.title}`;
   document.getElementById('progTitleInput').value = p.title;
@@ -1312,17 +1359,61 @@ function openEditProgramModal(progId) {
   document.getElementById('progObjectivesInput').value = p.learningObjectives || '';
   document.getElementById('progCriteriaInput').value = p.completionReq || '';
 
+  // Populate Per-Programme Config Values
+  const maxEnrollEl = document.getElementById('progMaxEnrollmentInput');
+  const dueDaysEl = document.getElementById('progDueDaysInput');
+  const maxAttEl = document.getElementById('progMaxAttemptsInput');
+  const certExpEl = document.getElementById('progCertExpiryMonthsInput');
+  const remFreqEl = document.getElementById('progReminderFreqDaysInput');
+  const asgnTypeEl = document.getElementById('progAssignmentTypeInput');
+  const revAppEl = document.getElementById('progReviewerApprovalInput');
+  const evidReqEl = document.getElementById('progEvidenceRequiredInput');
+  const certEnEl = document.getElementById('progCertEnabledInput');
+
+  if (maxEnrollEl) maxEnrollEl.value = p.maxEnrollment ?? 50;
+  if (dueDaysEl) dueDaysEl.value = p.dueDays ?? (trainingConfigData?.assignments?.dueDays ?? 14);
+  if (maxAttEl) maxAttEl.value = p.maxAttempts ?? (trainingConfigData?.completion?.maxAttempts ?? 3);
+  if (certExpEl) certExpEl.value = p.certExpiryMonths ?? (trainingConfigData?.general?.certificateExpiryMonths ?? 24);
+  if (remFreqEl) remFreqEl.value = p.reminderFreqDays ?? (trainingConfigData?.general?.reminderFrequencyDays ?? 7);
+  if (asgnTypeEl) asgnTypeEl.value = p.assignmentType || 'Mandatory';
+  if (revAppEl) revAppEl.checked = p.reviewerApprovalRequired !== false;
+  if (evidReqEl) evidReqEl.checked = p.evidenceRequired !== false;
+  if (certEnEl) certEnEl.checked = p.certEnabled !== false;
+
   const container = document.getElementById('resourceRowsContainer');
   container.innerHTML = '';
   (p.resources || []).forEach(r => addResourceRow(r));
 
-  document.getElementById('programFormModal').classList.add('open');
+  const listCard = document.getElementById('programsCatalogListCard');
+  const previewScreen = document.getElementById('programPreviewModal');
+  const assignScreen = document.getElementById('assignTrainingModal');
+  const formScreen = document.getElementById('programFormModal');
+  if (listCard) listCard.style.display = 'none';
+  if (previewScreen) { previewScreen.style.display = 'none'; previewScreen.classList.remove('open'); }
+  if (assignScreen) { assignScreen.style.display = 'none'; assignScreen.classList.remove('open'); }
+  if (formScreen) {
+    formScreen.style.display = 'block';
+    formScreen.classList.add('open');
+  }
+  const labelEl = document.getElementById('currentActiveTabLabel');
+  if (labelEl) labelEl.textContent = `Edit: ${p.title}`;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 window.openEditProgramModal = openEditProgramModal;
 
 function closeProgramModal() {
-  document.getElementById('programFormModal').classList.remove('open');
+  const formScreen = document.getElementById('programFormModal');
+  const listCard = document.getElementById('programsCatalogListCard');
+  if (formScreen) {
+    formScreen.style.display = 'none';
+    formScreen.classList.remove('open');
+  }
+  if (listCard) {
+    listCard.style.display = 'block';
+  }
+  const labelEl = document.getElementById('currentActiveTabLabel');
+  if (labelEl) labelEl.textContent = 'Training Programes';
 }
 
 window.closeProgramModal = closeProgramModal;
@@ -1394,6 +1485,16 @@ function saveProgram(statusToSet) {
     }
   });
 
+  const maxEnrollment = parseInt(document.getElementById('progMaxEnrollmentInput')?.value, 10) || 50;
+  const dueDays = parseInt(document.getElementById('progDueDaysInput')?.value, 10) || 14;
+  const maxAttempts = parseInt(document.getElementById('progMaxAttemptsInput')?.value, 10) || 3;
+  const certExpiryMonths = parseInt(document.getElementById('progCertExpiryMonthsInput')?.value, 10) || 24;
+  const reminderFreqDays = parseInt(document.getElementById('progReminderFreqDaysInput')?.value, 10) || 7;
+  const assignmentType = document.getElementById('progAssignmentTypeInput')?.value || 'Mandatory';
+  const reviewerApprovalRequired = document.getElementById('progReviewerApprovalInput') ? document.getElementById('progReviewerApprovalInput').checked : true;
+  const evidenceRequired = document.getElementById('progEvidenceRequiredInput') ? document.getElementById('progEvidenceRequiredInput').checked : true;
+  const certEnabled = document.getElementById('progCertEnabledInput') ? document.getElementById('progCertEnabledInput').checked : true;
+
   if (editingId) {
     // Update existing
     const prog = state.programs.find(p => p.id === editingId);
@@ -1407,9 +1508,18 @@ function saveProgram(statusToSet) {
       prog.completionReq = criteria;
       prog.resources = resources;
       prog.status = statusToSet;
+      prog.maxEnrollment = maxEnrollment;
+      prog.dueDays = dueDays;
+      prog.maxAttempts = maxAttempts;
+      prog.certExpiryMonths = certExpiryMonths;
+      prog.reminderFreqDays = reminderFreqDays;
+      prog.assignmentType = assignmentType;
+      prog.reviewerApprovalRequired = reviewerApprovalRequired;
+      prog.evidenceRequired = evidenceRequired;
+      prog.certEnabled = certEnabled;
     }
     logAudit('Updated Training Programme', `Updated: ${title}`, `Status: ${statusToSet}`);
-    alert(`Training Programme "${title}" updated successfully!`);
+    showConfigToast(`Training Programme "${title}" updated successfully!`, 'success');
   } else {
     // Create new
     const newId = `TR-${100 + state.programs.length + 1}`;
@@ -1423,10 +1533,19 @@ function saveProgram(statusToSet) {
       learningObjectives: objectives,
       completionReq: criteria,
       resources: resources,
-      status: statusToSet
+      status: statusToSet,
+      maxEnrollment: maxEnrollment,
+      dueDays: dueDays,
+      maxAttempts: maxAttempts,
+      certExpiryMonths: certExpiryMonths,
+      reminderFreqDays: reminderFreqDays,
+      assignmentType: assignmentType,
+      reviewerApprovalRequired: reviewerApprovalRequired,
+      evidenceRequired: evidenceRequired,
+      certEnabled: certEnabled
     });
     logAudit('Created Training Programme', `Created: ${title}`, `Assigned ID ${newId}`);
-    alert(`Training Programme "${title}" created successfully with status: ${statusToSet}!`);
+    showConfigToast(`Training Programme "${title}" created successfully!`, 'success');
   }
 
   closeProgramModal();
@@ -1587,6 +1706,36 @@ function previewProgram(progId) {
         </div>
       </div>
 
+      <div style="margin-bottom: 20px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px;">
+        <h4 style="font-size: 13px; font-weight: 700; color: #0f172a; margin: 0 0 10px 0;">Programme Configuration &amp; Enrollment Limits</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; font-size: 12.5px;">
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px 12px;">
+            <span style="display: block; font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase;">Max Enrollment Limit</span>
+            <strong style="color: #0f172a; font-size: 13.5px;">${p.maxEnrollment ?? 50} Learners</strong>
+          </div>
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px 12px;">
+            <span style="display: block; font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase;">Default Due Window</span>
+            <strong style="color: #0f172a; font-size: 13.5px;">${p.dueDays ?? 14} Days</strong>
+          </div>
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px 12px;">
+            <span style="display: block; font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase;">Max Assessment Attempts</span>
+            <strong style="color: #0f172a; font-size: 13.5px;">${p.maxAttempts ?? 3} Attempts</strong>
+          </div>
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px 12px;">
+            <span style="display: block; font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase;">Certificate Expiry</span>
+            <strong style="color: #0f172a; font-size: 13.5px;">${p.certExpiryMonths ?? 24} Months</strong>
+          </div>
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px 12px;">
+            <span style="display: block; font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase;">Reminder Frequency</span>
+            <strong style="color: #0f172a; font-size: 13.5px;">${p.reminderFreqDays ?? 7} Days</strong>
+          </div>
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px 12px;">
+            <span style="display: block; font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase;">Assignment Type</span>
+            <strong style="color: #4f46e5; font-size: 13.5px;">${escapeHtml(p.assignmentType || 'Mandatory')}</strong>
+          </div>
+        </div>
+      </div>
+
       <div style="margin-bottom: 22px;">
         <h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 10px;">Curriculum & Learning Resources (${(p.resources || []).length} Modules)</h4>
         <div style="background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid #e2e8f0;">
@@ -1604,8 +1753,10 @@ function previewProgram(progId) {
   // Switch in-screen inside #sectionPrograms (hide table list, show detail screen)
   const listCard = document.getElementById('programsCatalogListCard');
   const previewScreen = document.getElementById('programPreviewModal');
+  const formScreen = document.getElementById('programFormModal');
   const assignScreen = document.getElementById('assignTrainingModal');
   if (assignScreen) assignScreen.style.display = 'none';
+  if (formScreen) { formScreen.style.display = 'none'; formScreen.classList.remove('open'); }
   if (listCard) listCard.style.display = 'none';
   if (previewScreen) {
     previewScreen.style.display = 'block';
@@ -3885,7 +4036,7 @@ function switchToTrainingConfig() {
     if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-users-02';
   }
   if (trainingInner) {
-    trainingInner.className = 'text-white hover:bg-indigo-600 flex items-center rounded-md h-full w-full text-sm leading-6 font-semibold whitespace-nowrap';
+    trainingInner.className = 'text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
     const icon = trainingInner.querySelector('.icon-training');
     if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training';
   }
@@ -4180,30 +4331,26 @@ function renderCategoriesTable() {
         <td style="color: #64748b; font-size: 13px;">${escapeHtml(cat.createdDate || '—')}</td>
         <td style="text-align: right; white-space: nowrap;">
           ${isManager ? '<span style="font-size: 12px; color: #94a3b8;">View only</span>' : `
-            <button type="button" class="tcfg-action-icon-btn btn-edit" onclick="openEditCategoryModal('${cat.id}')" title="Edit Category" aria-label="Edit">
-              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-              </svg>
-            </button>
-            <button type="button" class="tcfg-action-icon-btn btn-toggle" onclick="toggleCategoryStatus('${cat.id}')" title="${isAct ? 'Deactivate Category' : 'Activate Category'}" aria-label="${isAct ? 'Deactivate' : 'Activate'}">
-              ${isAct ? `
-              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
-              </svg>` : `
-              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>`}
-            </button>
-            <button type="button" class="tcfg-action-icon-btn btn-delete" onclick="deleteCategory('${cat.id}')" title="Delete Category" aria-label="Delete">
-              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="3 6 5 6 21 6"></polyline>
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                <line x1="10" y1="11" x2="10" y2="17"></line>
-                <line x1="14" y1="11" x2="14" y2="17"></line>
-              </svg>
-            </button>
+            <div style="display: inline-flex; align-items: center; gap: 6px;">
+              <button type="button" class="emp-action-icon" onclick="openEditCategoryModal('${cat.id}')" title="Edit Category" aria-label="Edit">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 20h9"></path>
+                  <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                </svg>
+              </button>
+              <button type="button" class="emp-action-icon" onclick="toggleCategoryStatus('${cat.id}')" title="${isAct ? 'Deactivate Category' : 'Activate Category'}" aria-label="${isAct ? 'Deactivate' : 'Activate'}">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+              <button type="button" class="emp-action-icon" onclick="deleteCategory('${cat.id}')" title="Delete Category" aria-label="Delete">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+              </button>
+            </div>
           `}
         </td>
       </tr>
@@ -4389,9 +4536,8 @@ function toggleEvidenceFields() {
 }
 
 function toggleApprovalWarning() {
-  const app = document.getElementById('cfg_comp_approval_required')?.checked;
   const warn = document.getElementById('cfg_comp_approval_warning');
-  if (warn) warn.style.display = app ? 'flex' : 'none';
+  if (warn) warn.style.display = 'none';
 }
 
 function toggleAssessmentFields() {
