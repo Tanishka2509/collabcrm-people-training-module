@@ -569,6 +569,12 @@ function setAppRole(role) {
     const mainHeadingEl = document.getElementById('trainingMainHeading');
     if (mainHeadingEl) mainHeadingEl.textContent = 'My Training';
 
+    if (!state.employeeTrainingData || !state.employeeTrainingData.trainings || state.employeeTrainingData.trainings.length === 0) {
+      state.employeeTrainingData = getFallbackEmployeeData('CO-5039');
+      syncEmployeeTrainingsWithGlobalAssignments();
+    }
+    renderEmployeeDashboardUI();
+    renderEmployeeTrainingsList();
     loadEmployeeTrainingData('CO-5039');
 
     // User requirement: "On the employee portal side before the training module keep the dashboard module and create this screen first"
@@ -730,6 +736,12 @@ function switchToTraining() {
   if (state.currentRole === 'employee') {
     const secMyTraining = document.getElementById('sectionEmpMyTraining');
     if (secMyTraining) secMyTraining.style.display = 'block';
+    if (!state.employeeTrainingData || !state.employeeTrainingData.trainings || state.employeeTrainingData.trainings.length === 0) {
+      state.employeeTrainingData = getFallbackEmployeeData('CO-5039');
+      syncEmployeeTrainingsWithGlobalAssignments();
+    }
+    renderEmployeeDashboardUI();
+    renderEmployeeTrainingsList();
     loadEmployeeTrainingData('CO-5039');
   } else {
     renderActiveSubTab();
@@ -812,7 +824,10 @@ window.closeCustomizeWidgetsMenu = closeCustomizeWidgetsMenu;
 
 function renderEmployeeDashboardWidgets() {
   const empId = state.currentRole === 'employee' ? 'CO-5039' : (state.currentEmployeeId || 'CO-5039');
-  const empAsns = (state.assignments || []).filter(a => a.employeeId === empId && a.status !== 'cancelled' && a.status !== 'unassigned');
+  let empAsns = (state.assignments || []).filter(a => a.employeeId === empId && a.status !== 'cancelled' && a.status !== 'unassigned');
+  if (empAsns.length === 0 && state.employeeTrainingData && Array.isArray(state.employeeTrainingData.trainings)) {
+    empAsns = state.employeeTrainingData.trainings.filter(t => t.trainingStatus !== 'cancelled');
+  }
   
   const trainingWidgetBody = document.getElementById('empWidgetTrainingBody');
   if (trainingWidgetBody) {
@@ -827,22 +842,27 @@ function renderEmployeeDashboardWidgets() {
     } else {
       const a = empAsns[0];
       const prog = (state.programs || []).find(p => p.id === a.programId) || {};
-      const statusLabel = a.trainingStatus === 'completed' 
+      const courseTitle = a.programTitle || a.trainingName || prog.title || a.title || 'Assigned Training Programme';
+      const courseDept = a.category || prog.dept || 'Engineering';
+      const courseDueDate = a.dueDate || '15-Nov-2026';
+      const courseProgress = a.completionPercentage !== undefined ? a.completionPercentage : (a.progress || 0);
+      const rawStatus = a.trainingStatus || a.status || 'not_started';
+      const statusLabel = (rawStatus === 'completed' || rawStatus === 'Completed')
         ? '<span class="status-pill status-completed">Completed</span>' 
-        : (a.trainingStatus === 'submitted' || a.trainingStatus === 'submitted_for_review' 
+        : ((rawStatus === 'submitted' || rawStatus === 'submitted_for_review')
             ? '<span class="status-pill status-submitted">Under Review</span>' 
-            : (a.trainingStatus === 'in_progress' ? '<span class="status-pill status-inprogress">In Progress</span>' : '<span class="status-pill status-notstarted">Not Started</span>'));
+            : ((rawStatus === 'in_progress' || rawStatus === 'In Progress') ? '<span class="status-pill status-inprogress">In Progress</span>' : '<span class="status-pill status-notstarted">Not Started</span>'));
       
       trainingWidgetBody.innerHTML = `
         <div style="display: flex; flex-direction: column; gap: 12px;">
           <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;">
             <div>
               <div style="font-weight: 700; font-size: 13.5px; color: #0f172a; margin-bottom: 4px;">
-                ${escapeHtml(a.programTitle || prog.title || 'Assigned Training Programme')}
+                ${escapeHtml(courseTitle)}
               </div>
               <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
-                <span class="badge-dept badge-blue" style="font-size: 10.5px; padding: 2px 7px;">${escapeHtml(prog.dept || 'Engineering')}</span>
-                <span style="font-size: 11.5px; color: #64748b;">📅 Due: <strong>${escapeHtml(a.dueDate || '15-Nov-2026')}</strong></span>
+                <span class="badge-dept badge-blue" style="font-size: 10.5px; padding: 2px 7px;">${escapeHtml(courseDept)}</span>
+                <span style="font-size: 11.5px; color: #64748b;">📅 Due: <strong>${escapeHtml(courseDueDate)}</strong></span>
               </div>
             </div>
             ${statusLabel}
@@ -851,16 +871,16 @@ function renderEmployeeDashboardWidgets() {
           <div>
             <div style="display: flex; justify-content: space-between; font-size: 11.5px; margin-bottom: 5px;">
               <span style="color: #64748b;">Course Progress</span>
-              <strong style="color: #2563eb;">${a.progress || 0}%</strong>
+              <strong style="color: #2563eb;">${courseProgress}%</strong>
             </div>
             <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 9999px; overflow: hidden;">
-              <div style="width: ${a.progress || 0}%; height: 100%; background: #2563eb; border-radius: 9999px; transition: width 0.3s ease;"></div>
+              <div style="width: ${courseProgress}%; height: 100%; background: #2563eb; border-radius: 9999px; transition: width 0.3s ease;"></div>
             </div>
           </div>
 
           <div style="display: flex; justify-content: flex-end; padding-top: 6px;">
-            <button type="button" onclick="switchToTraining()" class="btn-sm-primary" style="font-size: 12px; padding: 6px 14px; border-radius: 6px; cursor: pointer;">
-              Continue Training →
+            <button type="button" onclick="switchToTraining()" class="btn-sm-primary" style="font-size: 12px; padding: 6px 14px; border-radius: 6px; cursor: pointer; background: #2563eb; color: #ffffff; border: none; font-weight: 600;">
+              Go to Training →
             </button>
           </div>
         </div>
@@ -1908,25 +1928,40 @@ function previewProgram(progId) {
   let resHtml = '';
   (p.resources || []).forEach((r, idx) => {
     const icon = (r.type === 'video' || r.type === 'youtube') ? '🎬' : (r.type === 'pdf' ? '📄' : ((r.type === 'website' || r.type === 'external_link') ? '🌐' : '🎓'));
-    const mandBadge = r.mandatory ? '<span class="status-pill status-mandatory" style="font-size: 10.5px; padding: 2px 7px;">Mandatory</span>' : '<span class="status-pill status-optional" style="font-size: 10.5px; padding: 2px 7px;">Optional</span>';
+    const iconBg = (r.type === 'video' || r.type === 'youtube') ? '#fee2e2' : (r.type === 'pdf' ? '#eff6ff' : ((r.type === 'website' || r.type === 'external_link') ? '#f0fdf4' : '#faf5ff'));
+    const iconColor = (r.type === 'video' || r.type === 'youtube') ? '#dc2626' : (r.type === 'pdf' ? '#2563eb' : ((r.type === 'website' || r.type === 'external_link') ? '#16a34a' : '#7c3aed'));
+    const mandBadge = r.mandatory
+      ? '<span class="status-pill status-mandatory" style="font-size: 10.5px; padding: 2px 7px; background: #fee2e2; color: #991b1b; font-weight: 700; border-radius: 4px;">Mandatory</span>'
+      : '<span class="status-pill status-optional" style="font-size: 10.5px; padding: 2px 7px; background: #f1f5f9; color: #475569; font-weight: 600; border-radius: 4px;">Optional</span>';
     const typeLabel = (r.type === 'video' || r.type === 'youtube') ? 'Video Lecture' : (r.type === 'pdf' ? 'PDF Playbook' : ((r.type === 'website' || r.type === 'external_link') ? 'Interactive Sandbox' : 'Masterclass'));
+    const cleanUrl = escapeHtml(r.url || '#');
+    const displayUrl = cleanUrl.replace(/^https?:\/\//, '').replace(/^www\./, '');
+
     resHtml += `
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 12px; display: flex; flex-direction: column; justify-content: space-between; min-height: 140px; box-shadow: 0 1px 2px rgba(0,0,0,0.02); transition: box-shadow 0.15s ease;">
+      <div class="curriculum-portrait-card" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between; min-height: 190px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); transition: all 0.15s ease;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.06)'; this.style.borderColor='#cbd5e1';" onmouseout="this.style.boxShadow='0 1px 3px rgba(0,0,0,0.02)'; this.style.borderColor='#e2e8f0';">
         <div>
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-            <div style="width: 30px; height: 30px; border-radius: 6px; background: #f8fafc; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 15px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+            <div style="width: 34px; height: 34px; border-radius: 8px; background: ${iconBg}; color: ${iconColor}; display: flex; align-items: center; justify-content: center; font-size: 16px;">
               ${icon}
             </div>
-            <span style="font-size: 11px; font-weight: 700; color: #64748b; background: #f1f5f9; padding: 2px 7px; border-radius: 4px;">Module ${idx + 1}</span>
+            <span style="font-size: 11px; font-weight: 700; color: #475569; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; border: 1px solid #e2e8f0;">Module ${idx + 1}</span>
           </div>
-          <div style="font-weight: 600; font-size: 12.5px; color: #0f172a; line-height: 1.35; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;" title="${escapeHtml(r.title)}">
+          <div style="font-weight: 700; font-size: 13px; color: #0f172a; line-height: 1.35; margin-bottom: 6px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;" title="${escapeHtml(r.title)}">
             ${escapeHtml(r.title)}
           </div>
-          <div style="font-size: 11px; color: #64748b; margin-bottom: 8px;">${typeLabel}</div>
+          <div style="font-size: 11.5px; color: #64748b; margin-bottom: 6px; display: flex; align-items: center; gap: 4px;">
+            <span>${typeLabel}</span>
+          </div>
+          <div style="font-size: 11px; color: #94a3b8; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 8px;" title="${cleanUrl}">
+            🔗 ${escapeHtml(displayUrl)}
+          </div>
         </div>
-        <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 8px; border-top: 1px solid #f1f5f9;">
-          <a href="${escapeHtml(r.url)}" target="_blank" style="font-size: 11.5px; color: #2563eb; text-decoration: none; font-weight: 600;" title="${escapeHtml(r.url)}">Open ↗</a>
+        <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px solid #f1f5f9;">
           ${mandBadge}
+          <a href="${cleanUrl}" target="_blank" style="font-size: 11.5px; color: #2563eb; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 3px;" title="${cleanUrl}">
+            <span>Open</span>
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          </a>
         </div>
       </div>
     `;
@@ -2049,9 +2084,12 @@ function previewProgram(progId) {
       </div>
 
       <div style="margin-bottom: 22px;">
-        <h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 12px;">Curriculum &amp; Learning Resources (${(p.resources || []).length} Modules)</h4>
-        <div style="background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid #e2e8f0;">
-          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+          <h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin: 0;">Curriculum &amp; Learning Resources (${(p.resources || []).length} Modules)</h4>
+          <span style="font-size: 11.5px; color: #64748b;">Compact Portrait Cards • Click "Open" to launch resource</span>
+        </div>
+        <div style="background: #f8fafc; padding: 14px; border-radius: 10px; border: 1px solid #e2e8f0;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px;">
             ${resHtml}
           </div>
         </div>
@@ -7971,6 +8009,216 @@ window.resetDemoData = resetDemoData;
 // ==========================================================================
 
 const EMPLOYEES_DETAIL_DATABASE = {
+  'EMP-004': {
+    code: 'EMP-004',
+    name: 'Rihan R.',
+    firstName: 'Rihan',
+    lastName: 'R.',
+    gender: 'Male',
+    dob: '14-Jul-1995',
+    blood: 'B+',
+    email: 'rihan.r@collabcrm.com',
+    phone: '+91 98234 11204',
+    businessUnit: 'Engineering',
+    department: 'Engineering',
+    designation: 'Software Engineer',
+    reportingManager: 'Ashish Kumar',
+    reportingAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120',
+    empType: 'Technical',
+    biometricId: 'EMP-004',
+    activeShift: 'General Shift - GS (10:00 AM - 07:00 PM)',
+    status: '• Confirmed',
+    roleName: 'Software Engineer',
+    roleExpiry: '-',
+    roleRemarks: '-',
+    expPrev: '3Y 8M',
+    expCurrent: '1Y 4M',
+    about: 'Software Engineer specializing in scalable full-stack applications, microservices, and modern UI engineering.',
+    skills: 'React, Node.js, TypeScript, Cloud Native, RESTful APIs',
+    badges: 'Fast Learner, Code Craft',
+    seating: 'Floor 4, Desk 12',
+    extension: '412',
+    initials: 'RR',
+    avatarBg: '#2563eb',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120',
+    trainings: [
+      {
+        id: 'ASN-001',
+        no: 1,
+        title: 'CollabCRM Recruitment & Client Portal Workflows',
+        dept: 'Engineering',
+        assignedBy: 'Ashish Kumar (Engineering Manager)',
+        assignedDate: '01-Oct-2026',
+        completionDate: '2026-11-15 (Due)',
+        dueDate: '2026-11-15',
+        score: '75%',
+        progress: 75,
+        status: 'In Progress',
+        trainingStatus: 'in_progress',
+        certId: null
+      },
+      {
+        id: 'EMP-004-TRN-2',
+        no: 2,
+        title: 'Cloud Infrastructure & High-Performance Node Services',
+        dept: 'Engineering',
+        assignedBy: 'Ashish Kumar (Engineering Manager)',
+        assignedDate: '10-Sep-2026',
+        completionDate: '28-Sep-2026',
+        dueDate: '2026-09-30',
+        score: '96%',
+        progress: 100,
+        status: 'Passed',
+        trainingStatus: 'completed',
+        certId: 'CCRM-ENG-2026-001'
+      },
+      {
+        id: 'EMP-004-TRN-3',
+        no: 3,
+        title: 'Information Security & Global Data Privacy (GDPR/ISO)',
+        dept: 'Engineering',
+        assignedBy: 'Isha Patel (Head of People)',
+        assignedDate: '15-Oct-2026',
+        completionDate: '29-Oct-2026',
+        dueDate: '2026-10-31',
+        score: '94%',
+        progress: 100,
+        status: 'Passed',
+        trainingStatus: 'completed',
+        certId: 'TRN-2026-0003'
+      }
+    ]
+  },
+  'EMP-006': {
+    code: 'EMP-006',
+    name: 'Suresh Prasad',
+    firstName: 'Suresh',
+    lastName: 'Prasad',
+    gender: 'Male',
+    dob: '22-Nov-1992',
+    blood: 'O+',
+    email: 'suresh.p@collabcrm.com',
+    phone: '+91 97112 34506',
+    businessUnit: 'Recruitment & HR',
+    department: 'Recruitment & HR',
+    designation: 'Senior Talent Partner',
+    reportingManager: 'Isha Patel',
+    reportingAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120',
+    empType: 'Technical',
+    biometricId: 'EMP-006',
+    activeShift: 'General Shift - GS (10:00 AM - 07:00 PM)',
+    status: '• Confirmed',
+    roleName: 'Senior Talent Partner',
+    roleExpiry: '-',
+    roleRemarks: '-',
+    expPrev: '5Y 2M',
+    expCurrent: '2Y 1M',
+    about: 'Senior Talent Partner responsible for executive hiring, talent pipeline development, and employer branding.',
+    skills: 'Executive Sourcing, ATS Architecture, Candidate Experience, Interview Compliance',
+    badges: 'Top Recruiter Q3',
+    seating: 'Floor 3, Desk 06',
+    extension: '306',
+    initials: 'SP',
+    avatarBg: '#059669',
+    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=120',
+    trainings: [
+      {
+        id: 'ASN-004',
+        no: 1,
+        title: 'CollabCRM Recruitment & Client Portal Workflows',
+        dept: 'Recruitment & HR',
+        assignedBy: 'Isha Patel (Head of People)',
+        assignedDate: '05-Oct-2026',
+        completionDate: '2026-10-25 (Due)',
+        dueDate: '2026-10-25',
+        score: '30%',
+        progress: 30,
+        status: 'Not Started',
+        trainingStatus: 'overdue',
+        certId: null
+      },
+      {
+        id: 'EMP-006-TRN-2',
+        no: 2,
+        title: 'Advanced Candidate Sourcing & Interview Compliance',
+        dept: 'Recruitment & HR',
+        assignedBy: 'Isha Patel (Head of People)',
+        assignedDate: '01-Aug-2026',
+        completionDate: '20-Aug-2026',
+        dueDate: '2026-08-25',
+        score: '92%',
+        progress: 100,
+        status: 'Passed',
+        trainingStatus: 'completed',
+        certId: 'TRN-2026-0006'
+      }
+    ]
+  },
+  'EMP-002': {
+    code: 'EMP-002',
+    name: 'Shivam Sharma',
+    firstName: 'Shivam',
+    lastName: 'Sharma',
+    gender: 'Male',
+    dob: '08-Mar-1993',
+    blood: 'A+',
+    email: 'shivam.s@collabcrm.com',
+    phone: '+91 98450 78902',
+    businessUnit: 'People Operations',
+    department: 'People Operations',
+    designation: 'HR Specialist',
+    reportingManager: 'Isha Patel',
+    reportingAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120',
+    empType: 'Technical',
+    biometricId: 'EMP-002',
+    activeShift: 'General Shift - GS (10:00 AM - 07:00 PM)',
+    status: '• Confirmed',
+    roleName: 'HR Specialist',
+    roleExpiry: '-',
+    roleRemarks: '-',
+    expPrev: '4Y 6M',
+    expCurrent: '1Y 9M',
+    about: 'HR Specialist leading organizational training, employee onboarding, performance frameworks, and people analytics.',
+    skills: 'HRIS, Training Administration, Onboarding, Policy Compliance',
+    badges: 'Culture Champion',
+    seating: 'Floor 3, Desk 02',
+    extension: '302',
+    initials: 'SS',
+    avatarBg: '#7c3aed',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120',
+    trainings: [
+      {
+        id: 'ASN-008',
+        no: 1,
+        title: 'CollabCRM Recruitment & Client Portal Workflows',
+        dept: 'People Operations',
+        assignedBy: 'Isha Patel (Head of People)',
+        assignedDate: '02-Oct-2026',
+        completionDate: '28-Oct-2026',
+        dueDate: '2026-10-28',
+        score: '94%',
+        progress: 100,
+        status: 'Passed',
+        trainingStatus: 'completed',
+        certId: 'CCRM-HR-2026-002'
+      },
+      {
+        id: 'EMP-002-TRN-2',
+        no: 2,
+        title: 'Information Security & Global Data Privacy (GDPR/ISO)',
+        dept: 'People Operations',
+        assignedBy: 'Isha Patel (Head of People)',
+        assignedDate: '01-Sep-2026',
+        completionDate: '18-Sep-2026',
+        dueDate: '2026-09-20',
+        score: '97%',
+        progress: 100,
+        status: 'Passed',
+        trainingStatus: 'completed',
+        certId: 'TRN-2026-0002'
+      }
+    ]
+  },
   'YOP-073': {
     code: 'YOP-073',
     name: 'Ishdeep Anand',
@@ -8806,7 +9054,15 @@ function switchEmpDetailSubTab(tabName = 'general') {
   if (panelPlc) panelPlc.style.display = 'none';
 }
 
-function openEmployeeDetail(empCode = 'CO-5039', initialTab = 'general') {
+function openEmployeeDetail(empCode = 'CO-5039', initialTab = 'general', sourceView = null) {
+  // If explicitly opened from previewProgram or currently inside previewProgram
+  const previewScreen = document.getElementById('programPreviewModal');
+  if (sourceView === 'previewProgram' || (previewScreen && previewScreen.style.display === 'block')) {
+    state.empDetailPreviousView = 'previewProgram';
+  } else if (!state.empDetailPreviousView) {
+    state.empDetailPreviousView = state.currentRole === 'employee' ? 'my_training' : 'employees';
+  }
+
   // Enforce employee-level data access: logged-in employee can only view their own profile
   if (state.currentRole === 'employee') {
     empCode = 'CO-5039';
@@ -8834,10 +9090,39 @@ function openEmployeeDetail(empCode = 'CO-5039', initialTab = 'general') {
 
   populateEmployeeDetail(empCode);
   switchEmpDetailSubTab(initialTab || 'general');
+
+  // Update back button text based on source
+  const btnBack = document.getElementById('btnEmpDetailBackOrMyTraining');
+  if (btnBack) {
+    if (state.empDetailPreviousView === 'previewProgram') {
+      btnBack.textContent = '← Back to Programme Details';
+    } else if (state.currentRole === 'employee') {
+      btnBack.textContent = '← Go to My Training';
+    } else {
+      btnBack.textContent = '← Back to Employees';
+    }
+  }
+
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function handleEmpDetailBackOrAction() {
+  if (state.empDetailPreviousView === 'previewProgram' && window.previewActiveProgId) {
+    state.empDetailPreviousView = null;
+    const viewEmployeeDetail = document.getElementById('viewEmployeeDetail');
+    if (viewEmployeeDetail) {
+      viewEmployeeDetail.style.display = 'none';
+      viewEmployeeDetail.classList.remove('active');
+    }
+    const viewTraining = document.getElementById('viewTraining');
+    if (viewTraining) {
+      viewTraining.style.display = 'block';
+      viewTraining.classList.add('active');
+    }
+    previewProgram(window.previewActiveProgId);
+    return;
+  }
+
   if (state.currentRole === 'employee') {
     switchToTraining();
   } else {
@@ -13808,19 +14093,9 @@ function renderEmployeeTrainingsList() {
   const tableBody = document.getElementById('empTrainingsTableBody');
   const countBadge = document.getElementById('empTrainingsCountBadge');
 
-  if (!state.employeeTrainingData || !state.employeeTrainingData.trainings) {
-    if (tableBody) {
-      tableBody.innerHTML = `
-        <tr>
-          <td colspan="9" style="text-align: center; padding: 36px 20px; color: #64748b;">
-            <div style="font-size: 28px; margin-bottom: 8px;">⏳</div>
-            <h4 style="font-size: 14px; font-weight: 700; color: #334155; margin: 0 0 4px 0;">Loading Assigned Trainings...</h4>
-            <p style="font-size: 12.5px; margin: 0;">Connecting to CollabCRM backend registry.</p>
-          </td>
-        </tr>
-      `;
-    }
-    return;
+  if (!state.employeeTrainingData || !state.employeeTrainingData.trainings || state.employeeTrainingData.trainings.length === 0) {
+    state.employeeTrainingData = getFallbackEmployeeData('CO-5039');
+    syncEmployeeTrainingsWithGlobalAssignments();
   }
 
   const query = (document.getElementById('searchEmpTrainingsInput')?.value || '').toLowerCase().trim();
@@ -14260,6 +14535,9 @@ function openEmployeeTrainingDetail(trainingId) {
         <button type="button" class="btn-primary-action" onclick="startEmployeeTraining('${t.id}')" style="background: #2563eb; color: #ffffff; font-weight: 700; font-size: 13px; padding: 8px 18px; border-radius: 6px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 1px 3px rgba(37,99,235,0.25);">
           <span>▶ Start Programme</span>
         </button>
+        <button type="button" class="btn-secondary-action" onclick="completeEmployeeTrainingDirect('${t.id}')" style="background: #16a34a; border: 1px solid #15803d; color: #ffffff; font-weight: 700; font-size: 13px; padding: 8px 18px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 1px 3px rgba(22,163,74,0.25);">
+          <span>✓ Complete Programme</span>
+        </button>
       `;
     } else if (sNorm === 'In Progress') {
       actionsHtml = `
@@ -14298,7 +14576,12 @@ function openEmployeeTrainingDetail(trainingId) {
     const progColor = prog === 100 ? '#10b981' : prog > 0 ? '#4f46e5' : '#94a3b8';
     let btnHtml = '';
     if (sNorm === 'Not Started') {
-      btnHtml = `<button type="button" class="btn-primary-action" onclick="startEmployeeTraining('${t.id}')" style="background: #2563eb; color: #ffffff; font-weight: 700; font-size: 13px; padding: 8px 18px; border-radius: 6px; border: none; cursor: pointer;">▶ Start Programme</button>`;
+      btnHtml = `
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button type="button" class="btn-primary-action" onclick="startEmployeeTraining('${t.id}')" style="background: #2563eb; color: #ffffff; font-weight: 700; font-size: 13px; padding: 8px 18px; border-radius: 6px; border: none; cursor: pointer;">▶ Start Programme</button>
+          <button type="button" class="btn-primary-action" onclick="completeEmployeeTrainingDirect('${t.id}')" style="background: #16a34a; border: 1px solid #15803d; color: #ffffff; font-weight: 700; font-size: 13px; padding: 8px 18px; border-radius: 6px; cursor: pointer;">✓ Complete Programme</button>
+        </div>
+      `;
     } else if (sNorm === 'In Progress') {
       btnHtml = `<button type="button" class="btn-primary-action" onclick="completeEmployeeTrainingDirect('${t.id}')" style="background: #16a34a; border: 1px solid #15803d; color: #ffffff; font-weight: 700; font-size: 13px; padding: 8px 18px; border-radius: 6px; cursor: pointer;">✓ Complete Programme</button>`;
     } else if (sNorm === 'Completed') {
