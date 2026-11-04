@@ -526,10 +526,14 @@ function setAppRole(role) {
     menuConfigEl.style.display = role === 'employee' ? 'none' : '';
   }
 
-  // Remove Employee module from employee user side, keep only training module per user requirement
+  // Toggle Employees directory vs Employee Dashboard in sidebar
   const menuEmployeesEl = document.getElementById('menuEmployees');
+  const menuEmpDashboardEl = document.getElementById('menuEmpDashboard');
   if (menuEmployeesEl) {
     menuEmployeesEl.style.display = role === 'employee' ? 'none' : '';
+  }
+  if (menuEmpDashboardEl) {
+    menuEmpDashboardEl.style.display = role === 'employee' ? 'block' : 'none';
   }
 
   // Toggle Employee Portal vs Admin/HR/Manager Portal Navigation
@@ -567,11 +571,8 @@ function setAppRole(role) {
 
     loadEmployeeTrainingData('CO-5039');
 
-    // Switch directly to Training module for employee
-    const viewTraining = document.getElementById('viewTraining');
-    if (!viewTraining || viewTraining.style.display !== 'block') {
-      switchToTraining();
-    }
+    // User requirement: "On the employee portal side before the training module keep the dashboard module and create this screen first"
+    switchToEmployeeDashboard();
   } else {
     if (empHeaderCard) empHeaderCard.style.display = 'none';
     if (subnavBar) subnavBar.style.display = 'none';
@@ -599,7 +600,7 @@ window.setAppRole = setAppRole;
 // Main Module Switching: Employees (Management side only) vs Training vs Config
 function switchToEmployees() {
   if (state.currentRole === 'employee') {
-    switchToTraining();
+    switchToEmployeeDashboard();
     return;
   }
 
@@ -615,14 +616,17 @@ function switchToEmployees() {
   const viewRoles = document.getElementById('viewRoles');
   const viewRolePermissions = document.getElementById('viewRolePermissions');
   const viewEmployeeDetail = document.getElementById('viewEmployeeDetail');
+  const viewEmpDash = document.getElementById('viewEmployeeDashboard');
 
   const menuEmployees = document.getElementById('menuEmployees');
   const menuTraining = document.getElementById('menuTraining');
   const menuConfig = document.getElementById('menuConfig');
+  const menuEmpDashboard = document.getElementById('menuEmpDashboard');
 
   const employeesInner = document.getElementById('employeesInner');
   const trainingInner = document.getElementById('trainingInner');
   const configInner = document.getElementById('configInner');
+  const empDashboardInner = document.getElementById('empDashboardInner');
 
   if (viewDashboard) { viewDashboard.style.display = 'block'; viewDashboard.classList.add('active'); }
   if (viewTraining) { viewTraining.style.display = 'none'; viewTraining.classList.remove('active'); }
@@ -631,10 +635,12 @@ function switchToEmployees() {
   if (viewRoles) { viewRoles.style.display = 'none'; viewRoles.classList.remove('active'); }
   if (viewRolePermissions) { viewRolePermissions.style.display = 'none'; viewRolePermissions.classList.remove('active'); }
   if (viewEmployeeDetail) { viewEmployeeDetail.style.display = 'none'; viewEmployeeDetail.classList.remove('active'); }
+  if (viewEmpDash) { viewEmpDash.style.display = 'none'; viewEmpDash.classList.remove('active'); }
 
   if (menuEmployees) menuEmployees.classList.add('active');
   if (menuTraining) menuTraining.classList.remove('active');
   if (menuConfig) menuConfig.classList.remove('active');
+  if (menuEmpDashboard) menuEmpDashboard.classList.remove('active');
 
   if (employeesInner) {
     employeesInner.className = 'bg-indigo-600 text-white relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
@@ -651,6 +657,11 @@ function switchToEmployees() {
     const icon = configInner.querySelector('.icon-settings-02');
     if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-settings-02';
   }
+  if (empDashboardInner) {
+    empDashboardInner.className = 'text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
+    const icon = empDashboardInner.querySelector('svg');
+    if (icon) icon.className = 'text-indigo-200 group-hover:text-white shrink-0';
+  }
 }
 
 function switchToTraining() {
@@ -665,18 +676,22 @@ function switchToTraining() {
   const viewDashboard = document.getElementById('viewDashboard');
   const viewTraining = document.getElementById('viewTraining');
   const viewConfig = document.getElementById('viewConfig');
+  const viewEmpDash = document.getElementById('viewEmployeeDashboard');
 
   const menuEmployees = document.getElementById('menuEmployees');
   const menuTraining = document.getElementById('menuTraining');
   const menuConfig = document.getElementById('menuConfig');
+  const menuEmpDashboard = document.getElementById('menuEmpDashboard');
 
   const employeesInner = document.getElementById('employeesInner');
   const trainingInner = document.getElementById('trainingInner');
   const configInner = document.getElementById('configInner');
+  const empDashboardInner = document.getElementById('empDashboardInner');
 
   if (viewDashboard) { viewDashboard.style.display = 'none'; viewDashboard.classList.remove('active'); }
   if (viewTraining) { viewTraining.style.display = 'block'; viewTraining.classList.add('active'); }
   if (viewConfig) { viewConfig.style.display = 'none'; viewConfig.classList.remove('active'); }
+  if (viewEmpDash) { viewEmpDash.style.display = 'none'; viewEmpDash.classList.remove('active'); }
   const viewTrainingConfig = document.getElementById('viewTrainingConfig');
   if (viewTrainingConfig) { viewTrainingConfig.style.display = 'none'; viewTrainingConfig.classList.remove('active'); }
   const viewRoles = document.getElementById('viewRoles');
@@ -689,6 +704,7 @@ function switchToTraining() {
   if (menuEmployees) menuEmployees.classList.remove('active');
   if (menuTraining) menuTraining.classList.add('active');
   if (menuConfig) menuConfig.classList.remove('active');
+  if (menuEmpDashboard) menuEmpDashboard.classList.remove('active');
 
   if (employeesInner) {
     employeesInner.className = 'text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
@@ -705,13 +721,216 @@ function switchToTraining() {
     const icon = configInner.querySelector('.icon-settings-02');
     if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center text-base 2xl-to-xl:text-base 2xl:text-xl icon-settings-02';
   }
+  if (empDashboardInner) {
+    empDashboardInner.className = 'text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
+    const icon = empDashboardInner.querySelector('svg');
+    if (icon) icon.className = 'text-indigo-200 group-hover:text-white shrink-0';
+  }
 
   if (state.currentRole === 'employee') {
-    setAppRole('employee');
+    const secMyTraining = document.getElementById('sectionEmpMyTraining');
+    if (secMyTraining) secMyTraining.style.display = 'block';
+    loadEmployeeTrainingData('CO-5039');
   } else {
     renderActiveSubTab();
   }
 }
+
+// ==========================================================================
+// EMPLOYEE DASHBOARD & CUSTOMIZE WIDGETS CONTROLLER (SCREENSHOTS 1, 2, 3)
+// ==========================================================================
+
+const EMP_DASHBOARD_WIDGET_CONFIG_KEY = 'collabcrm_emp_dashboard_widgets_v1';
+
+function getEmpWidgetConfig() {
+  try {
+    const raw = localStorage.getItem(EMP_DASHBOARD_WIDGET_CONFIG_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch (e) {}
+  return {
+    prevAttendance: true,
+    todayAttendance: true,
+    attendanceCalendar: true,
+    todayEvents: true,
+    holidays: true,
+    deviceInUse: true,
+    training: true
+  };
+}
+
+function saveEmpWidgetConfig(cfg) {
+  try {
+    localStorage.setItem(EMP_DASHBOARD_WIDGET_CONFIG_KEY, JSON.stringify(cfg));
+  } catch (e) {}
+}
+
+function applyEmpWidgetVisibility() {
+  const cfg = getEmpWidgetConfig();
+  const map = {
+    prevAttendance: 'widgetPrevAttendance',
+    todayAttendance: 'widgetTodayAttendance',
+    attendanceCalendar: 'widgetAttendanceCalendar',
+    todayEvents: 'widgetTodayEvents',
+    holidays: 'widgetHolidays',
+    deviceInUse: 'widgetDeviceInUse',
+    training: 'widgetTraining'
+  };
+
+  Object.entries(map).forEach(([key, elemId]) => {
+    const el = document.getElementById(elemId);
+    const isVisible = cfg[key] !== false;
+    if (el) el.style.display = isVisible ? 'block' : 'none';
+
+    const chk = document.getElementById(`chkWidget_${key}`);
+    if (chk) chk.checked = isVisible;
+  });
+}
+window.applyEmpWidgetVisibility = applyEmpWidgetVisibility;
+
+function toggleEmpWidget(key) {
+  const cfg = getEmpWidgetConfig();
+  cfg[key] = !cfg[key];
+  saveEmpWidgetConfig(cfg);
+  applyEmpWidgetVisibility();
+}
+window.toggleEmpWidget = toggleEmpWidget;
+
+function toggleCustomizeWidgetsMenu(e) {
+  if (e) e.stopPropagation();
+  const popover = document.getElementById('customizeWidgetsPopover');
+  if (!popover) return;
+  const isHidden = popover.style.display === 'none' || !popover.style.display;
+  popover.style.display = isHidden ? 'block' : 'none';
+}
+window.toggleCustomizeWidgetsMenu = toggleCustomizeWidgetsMenu;
+
+function closeCustomizeWidgetsMenu() {
+  const popover = document.getElementById('customizeWidgetsPopover');
+  if (popover) popover.style.display = 'none';
+}
+window.closeCustomizeWidgetsMenu = closeCustomizeWidgetsMenu;
+
+function renderEmployeeDashboardWidgets() {
+  const empId = state.currentRole === 'employee' ? 'CO-5039' : (state.currentEmployeeId || 'CO-5039');
+  const empAsns = (state.assignments || []).filter(a => a.employeeId === empId && a.status !== 'cancelled' && a.status !== 'unassigned');
+  
+  const trainingWidgetBody = document.getElementById('empWidgetTrainingBody');
+  if (trainingWidgetBody) {
+    if (empAsns.length === 0) {
+      trainingWidgetBody.innerHTML = `
+        <div style="padding: 24px 16px; text-align: center; color: #64748b; font-size: 13px;">
+          <div style="font-size: 26px; margin-bottom: 6px;">📚</div>
+          <strong style="color: #475569; font-size: 13.5px; display: block;">No training available.</strong>
+          <p style="margin: 4px 0 0 0; font-size: 11.5px; color: #94a3b8;">You currently have no active assigned training modules.</p>
+        </div>
+      `;
+    } else {
+      const a = empAsns[0];
+      const prog = (state.programs || []).find(p => p.id === a.programId) || {};
+      const statusLabel = a.trainingStatus === 'completed' 
+        ? '<span class="status-pill status-completed">Completed</span>' 
+        : (a.trainingStatus === 'submitted' || a.trainingStatus === 'submitted_for_review' 
+            ? '<span class="status-pill status-submitted">Under Review</span>' 
+            : (a.trainingStatus === 'in_progress' ? '<span class="status-pill status-inprogress">In Progress</span>' : '<span class="status-pill status-notstarted">Not Started</span>'));
+      
+      trainingWidgetBody.innerHTML = `
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;">
+            <div>
+              <div style="font-weight: 700; font-size: 13.5px; color: #0f172a; margin-bottom: 4px;">
+                ${escapeHtml(a.programTitle || prog.title || 'Assigned Training Programme')}
+              </div>
+              <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+                <span class="badge-dept badge-blue" style="font-size: 10.5px; padding: 2px 7px;">${escapeHtml(prog.dept || 'Engineering')}</span>
+                <span style="font-size: 11.5px; color: #64748b;">📅 Due: <strong>${escapeHtml(a.dueDate || '15-Nov-2026')}</strong></span>
+              </div>
+            </div>
+            ${statusLabel}
+          </div>
+
+          <div>
+            <div style="display: flex; justify-content: space-between; font-size: 11.5px; margin-bottom: 5px;">
+              <span style="color: #64748b;">Course Progress</span>
+              <strong style="color: #2563eb;">${a.progress || 0}%</strong>
+            </div>
+            <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 9999px; overflow: hidden;">
+              <div style="width: ${a.progress || 0}%; height: 100%; background: #2563eb; border-radius: 9999px; transition: width 0.3s ease;"></div>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; padding-top: 6px;">
+            <button type="button" onclick="switchToTraining()" class="btn-sm-primary" style="font-size: 12px; padding: 6px 14px; border-radius: 6px; cursor: pointer;">
+              Continue Training →
+            </button>
+          </div>
+        </div>
+      `;
+    }
+  }
+}
+window.renderEmployeeDashboardWidgets = renderEmployeeDashboardWidgets;
+
+function switchToEmployeeDashboard() {
+  const configPanel = document.getElementById('configSidePanel');
+  if (configPanel) configPanel.classList.remove('open');
+  const trainingPanel = document.getElementById('trainingSidePanel');
+  if (trainingPanel) trainingPanel.classList.remove('open');
+
+  const viewDashboard = document.getElementById('viewDashboard');
+  const viewTraining = document.getElementById('viewTraining');
+  const viewConfig = document.getElementById('viewConfig');
+  const viewTrainingConfig = document.getElementById('viewTrainingConfig');
+  const viewRoles = document.getElementById('viewRoles');
+  const viewRolePermissions = document.getElementById('viewRolePermissions');
+  const viewEmployeeDetail = document.getElementById('viewEmployeeDetail');
+  const viewEmpDash = document.getElementById('viewEmployeeDashboard');
+
+  if (viewDashboard) { viewDashboard.style.display = 'none'; viewDashboard.classList.remove('active'); }
+  if (viewTraining) { viewTraining.style.display = 'none'; viewTraining.classList.remove('active'); }
+  if (viewConfig) { viewConfig.style.display = 'none'; viewConfig.classList.remove('active'); }
+  if (viewTrainingConfig) { viewTrainingConfig.style.display = 'none'; viewTrainingConfig.classList.remove('active'); }
+  if (viewRoles) { viewRoles.style.display = 'none'; viewRoles.classList.remove('active'); }
+  if (viewRolePermissions) { viewRolePermissions.style.display = 'none'; viewRolePermissions.classList.remove('active'); }
+  if (viewEmployeeDetail) { viewEmployeeDetail.style.display = 'none'; viewEmployeeDetail.classList.remove('active'); }
+
+  if (viewEmpDash) {
+    viewEmpDash.style.display = 'block';
+    viewEmpDash.classList.add('active');
+  }
+
+  const menuEmpDashboard = document.getElementById('menuEmpDashboard');
+  const menuTraining = document.getElementById('menuTraining');
+  const empDashboardInner = document.getElementById('empDashboardInner');
+  const trainingInner = document.getElementById('trainingInner');
+
+  if (menuEmpDashboard) menuEmpDashboard.classList.add('active');
+  if (menuTraining) menuTraining.classList.remove('active');
+
+  if (empDashboardInner) {
+    empDashboardInner.className = 'bg-indigo-600 text-white relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
+    const icon = empDashboardInner.querySelector('svg');
+    if (icon) icon.className = 'text-white shrink-0';
+  }
+  if (trainingInner) {
+    trainingInner.className = 'text-white hover:bg-indigo-600 relative z-2 cursor-pointer flex items-center gap-x-3 rounded-md 2xl:p-3 2xl-to-xl:p-2 p-2 text-sm leading-6 font-semibold whitespace-nowrap';
+    const icon = trainingInner.querySelector('.icon-training');
+    if (icon) icon.className = 'text-indigo-200 group-hover:text-white h-6 w-6 shrink-0 whitespace-nowrap flex items-center justify-center 2xl:text-xl 2xl-to-xl:text-lg text-lg icon-training';
+  }
+
+  applyEmpWidgetVisibility();
+  renderEmployeeDashboardWidgets();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+window.switchToEmployeeDashboard = switchToEmployeeDashboard;
+
+function handleTrainingMenuClick() {
+  if (state.currentRole === 'employee') {
+    switchToTraining();
+  } else {
+    toggleTrainingPanel();
+  }
+}
+window.handleTrainingMenuClick = handleTrainingMenuClick;
 
 // Training Slide-out Side Panel Controls (Admin / Management only, like Config)
 function openTrainingPanel() {
@@ -8563,6 +8782,12 @@ document.addEventListener('click', function(e) {
   const dd = document.getElementById('headerMyProfileDropdown');
   if (dd && dd.style.display === 'block' && container && !container.contains(e.target)) {
     dd.style.display = 'none';
+  }
+
+  const popover = document.getElementById('customizeWidgetsPopover');
+  const toggleBtn = document.getElementById('btnCustomizeWidgetsToggle');
+  if (popover && popover.style.display === 'block' && toggleBtn && !toggleBtn.contains(e.target) && !popover.contains(e.target)) {
+    popover.style.display = 'none';
   }
 });
 
