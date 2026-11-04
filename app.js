@@ -654,7 +654,7 @@ function switchToEmployees() {
 
 function switchToTraining() {
   if (trainingConfigData && trainingConfigData.general && trainingConfigData.general.moduleEnabled === false) {
-    alert('Training Module is currently disabled in System Configuration. Enable it under Config → Training Config.');
+    showConfigToast('Training Module is currently disabled in System Configuration. Enable it under Config → Training Config.', 'info')
     return;
   }
 
@@ -842,10 +842,10 @@ function toggleConfigPanel() {
 
 function openConfigOption(optionName) {
   if (state.currentRole === 'manager') {
-    alert(`Access Restricted: Only Admin and authorized HR roles can modify "${optionName}" settings.`);
+    showConfigToast(`Access Restricted: Only Admin and authorized HR roles can modify "${optionName}" settings.`, 'error')
     return;
   }
-  alert(`CollabCRM People Config › ${optionName}\nConfigure system master rules, policies, and workflows.`);
+  showConfigToast(`CollabCRM People Config › ${optionName}\nConfigure system master rules, policies, and workflows.`, 'info')
 }
 
 window.switchToEmployees = switchToEmployees;
@@ -1311,7 +1311,7 @@ window.renderProgramsList = renderProgramsList;
 // Program Form Builder & Multi-Resource Manager (In-Screen View + Per-Programme Config)
 function openCreateProgramModal() {
   if (trainingConfigData && trainingConfigData.general && trainingConfigData.general.allowCreation === false) {
-    alert('Training Creation is currently disabled in Training Config.');
+    showConfigToast('Training Creation is currently disabled in Training Config.', 'info')
     return;
   }
   if (state.activeSubTab !== 'programs') {
@@ -1375,7 +1375,7 @@ window.openCreateProgramModal = openCreateProgramModal;
 
 function openEditProgramModal(progId) {
   if (trainingConfigData && trainingConfigData.general && trainingConfigData.general.allowEditing === false) {
-    alert('Training Editing is currently disabled in Training Config.');
+    showConfigToast('Training Editing is currently disabled in Training Config.', 'info')
     return;
   }
   const p = state.programs.find(prog => prog.id === progId);
@@ -1498,7 +1498,7 @@ function saveProgram(statusToSet) {
   const criteria = document.getElementById('progCriteriaInput').value.trim();
 
   if (!title) {
-    alert('Please enter a Programme Title.');
+    showConfigToast('Please enter a Programme Title.', 'error')
     return;
   }
 
@@ -1604,7 +1604,7 @@ window.togglePublishProgram = togglePublishProgram;
 
 function toggleArchiveProgram(progId) {
   if (trainingConfigData && trainingConfigData.general && trainingConfigData.general.allowArchiving === false) {
-    alert('Training Archiving is currently disabled in Training Config.');
+    showConfigToast('Training Archiving is currently disabled in Training Config.', 'info')
     return;
   }
   const p = state.programs.find(prog => prog.id === progId);
@@ -1623,7 +1623,7 @@ window.previewActiveProgId = null;
 
 function previewProgram(progId) {
   if (trainingConfigData && trainingConfigData.general && trainingConfigData.general.enablePreview === false) {
-    alert('Training Preview is currently disabled in Training Config.');
+    showConfigToast('Training Preview is currently disabled in Training Config.', 'info')
     return;
   }
   const p = state.programs.find(prog => prog.id === progId);
@@ -1845,7 +1845,7 @@ window.openAssignWithProgram = openAssignWithProgram;
 
 function openAssignTrainingModal(preselectedProgId = null) {
   if (state.currentRole === 'manager' && trainingConfigData?.assignments?.allowReportingManager === false) {
-    alert('Reporting Managers are not permitted to assign training per Training Config policy.');
+    showConfigToast('Reporting Managers are not permitted to assign training per Training Config policy.', 'info')
     return;
   }
 
@@ -1855,7 +1855,7 @@ function openAssignTrainingModal(preselectedProgId = null) {
   const allowDept = asg.enableDept !== false;
 
   if (!allowInd && !allowBulk && !allowDept) {
-    alert('All training assignment modes are currently disabled in Training Config.');
+    showConfigToast('All training assignment modes are currently disabled in Training Config.', 'info')
     return;
   }
 
@@ -2071,28 +2071,28 @@ window.checkAssignDuplicates = checkAssignDuplicates;
 
 function confirmTrainingAssignment() {
   if (state.currentRole === 'manager' && trainingConfigData?.assignments?.allowReportingManager === false) {
-    alert('Reporting Managers are not permitted to assign training per Training Config policy.');
+    showConfigToast('Reporting Managers are not permitted to assign training per Training Config policy.', 'info')
     return;
   }
 
   const mode = document.querySelector('input[name="assignMode"]:checked')?.value || 'individual';
   const asg = trainingConfigData?.assignments || {};
   if (mode === 'individual' && asg.enableIndividual === false) {
-    alert('Individual training assignment is disabled in Training Config.');
+    showConfigToast('Individual training assignment is disabled in Training Config.', 'info')
     return;
   }
   if (mode === 'multiple' && asg.enableBulk === false) {
-    alert('Multiple employee (bulk) training assignment is disabled in Training Config.');
+    showConfigToast('Multiple employee (bulk) training assignment is disabled in Training Config.', 'info')
     return;
   }
   if (mode === 'department' && asg.enableDept === false) {
-    alert('Department-wide training assignment is disabled in Training Config.');
+    showConfigToast('Department-wide training assignment is disabled in Training Config.', 'info')
     return;
   }
 
   const isDuplicate = checkAssignDuplicates();
   if (isDuplicate) {
-    alert('Cannot proceed: Active duplicate assignment detected. Please deselect already assigned employees.');
+    showConfigToast('Cannot proceed: Active duplicate assignment detected. Please deselect already assigned employees.', 'error')
     return;
   }
 
@@ -2113,7 +2113,7 @@ function confirmTrainingAssignment() {
   }
 
   if (targetEmpIds.length === 0) {
-    alert('Please select at least one employee to assign.');
+    showConfigToast('Please select at least one employee to assign.', 'error')
     return;
   }
 
@@ -2124,7 +2124,7 @@ function confirmTrainingAssignment() {
       return !emp || emp.managerId !== state.currentManagerId;
     });
     if (invalid) {
-      alert('Security Exception: Reporting Managers are strictly forbidden from assigning training to employees outside their reporting hierarchy.');
+      showConfigToast('Security Exception: Reporting Managers are strictly forbidden from assigning training to employees outside their reporting hierarchy.', 'error')
       return;
     }
   }
@@ -2258,7 +2258,7 @@ function confirmTrainingAssignment() {
   }
 
   logAudit('Training Assigned', `${prog ? prog.title : progId}`, `Assigned to ${targetEmpIds.length} employee(s)`);
-  alert(`Successfully assigned "${prog ? prog.title : 'Programme'}" to ${targetEmpIds.length} employee(s)!`);
+  showConfigToast(`Successfully assigned "${prog ? prog.title : 'Programme'}" to ${targetEmpIds.length} employee(s)!`, 'success')
   
   state.assignReturnToProgramPreview = null;
   switchTrainingTab('assignments');
@@ -2635,13 +2635,21 @@ function openProgressDetails(asnId) {
     ` : ''}
   `;
 
-  document.getElementById('progressDetailsModal').classList.add('open');
+  const screen = document.getElementById('sectionProgressDetailScreen');
+  const tableCard = document.getElementById('mgmtProgressTableCard');
+  if (tableCard) tableCard.style.display = 'none';
+  if (screen) screen.style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 window.openProgressDetails = openProgressDetails;
 
 function closeProgressDetailsModal() {
-  document.getElementById('progressDetailsModal').classList.remove('open');
+  const screen = document.getElementById('sectionProgressDetailScreen');
+  const tableCard = document.getElementById('mgmtProgressTableCard');
+  if (screen) screen.style.display = 'none';
+  if (tableCard) tableCard.style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 window.closeProgressDetailsModal = closeProgressDetailsModal;
@@ -2726,7 +2734,7 @@ function openReviewDetailScreen(asnId) {
 
   // Security Check: Reporting Manager cannot review outside hierarchy
   if (state.currentRole === 'manager' && emp.managerId !== state.currentManagerId) {
-    alert('Permission Denied: You are only authorized to review submissions for your direct reports.');
+    showConfigToast('Permission Denied: You are only authorized to review submissions for your direct reports.', 'error')
     return;
   }
 
@@ -2874,11 +2882,11 @@ function handleReviewAction(action) {
   const comp = trainingConfigData?.completion || {};
 
   if (comp.approvalRequired === false) {
-    alert('Submission approval is currently disabled in Training Config (Auto-approval active).');
+    showConfigToast('Submission approval is currently disabled in Training Config (Auto-approval active).', 'info')
   }
 
   if (action === 'request_changes' && comp.allowRetakes === false) {
-    alert('Learner revisions / retakes are currently disabled in Training Config.');
+    showConfigToast('Learner revisions / retakes are currently disabled in Training Config.', 'info')
     return;
   }
 
@@ -2894,11 +2902,11 @@ function handleReviewAction(action) {
 
   if (action === 'approve') {
     if (comp.evidenceEnabled !== false && comp.evidenceMandatory === true && !a.submissionEvidence) {
-      alert('Cannot approve: Verification evidence document is mandatory per Training Config, but none was submitted.');
+      showConfigToast('Cannot approve: Verification evidence document is mandatory per Training Config, but none was submitted.', 'error')
       return;
     }
     if (comp.remarksRequired === true && (!a.submissionRemarks || !a.submissionRemarks.trim())) {
-      alert('Cannot approve: Learner remarks are required per Training Config.');
+      showConfigToast('Cannot approve: Learner remarks are required per Training Config.', 'error')
       return;
     }
   }
@@ -2998,7 +3006,7 @@ function handleReviewAction(action) {
     }
 
     logAudit('Approved Submission', `${emp.name} - ${prog.title}`, `Evaluator: ${reviewerName}. Marked Completed and moved to Training History.`);
-    alert(`Submission from ${emp.name} approved! Training is now marked Completed and moved from My Training to Training History.`);
+    showConfigToast(`Submission from ${emp.name} approved! Training is now marked Completed and moved from My Training to Training History.`, 'success')
   } else if (action === 'request_changes') {
     a.submissionStatus = 'changes_requested';
     a.trainingStatus = 'changes_requested';
@@ -3033,7 +3041,7 @@ function handleReviewAction(action) {
     }
 
     logAudit('Requested Changes', `${emp.name} - ${prog.title}`, `Feedback: ${feedback}`);
-    alert(`Feedback sent to ${emp.name}. Learner has been requested to submit revisions.`);
+    showConfigToast(`Feedback sent to ${emp.name}. Learner has been requested to submit revisions.`, 'info')
   } else if (action === 'reject') {
     a.submissionStatus = 'rejected';
     a.trainingStatus = 'in_progress';
@@ -3055,7 +3063,7 @@ function handleReviewAction(action) {
       saveEmployeeStoreToLocal();
     }
     logAudit('Rejected Submission', `${emp.name} - ${prog.title}`, `Reason: ${feedback}`);
-    alert(`Submission rejected for ${emp.name}. Remarks logged.`);
+    showConfigToast(`Submission rejected for ${emp.name}. Remarks logged.`, 'info')
   }
 
   closeReviewModal();
@@ -3185,7 +3193,7 @@ window.renderCertificatesTable = renderCertificatesTable;
 // Action 1: Generate Certificate (Separate from Issuance)
 function generateCertificate(asnId) {
   if (trainingConfigData?.certificates?.enabled === false) {
-    alert('Certificate Generation is currently disabled in Training Config.');
+    showConfigToast('Certificate Generation is currently disabled in Training Config.', 'info')
     return;
   }
   const a = state.assignments.find(asn => asn.id === asnId);
@@ -3216,7 +3224,7 @@ function generateCertificate(asnId) {
   a.certificateId = newCertId;
 
   logAudit('Generated Certificate', `${certNo}`, `Generated for ${emp.name} in ${prog.title}`);
-  alert(`Certificate ${certNo} successfully GENERATED! It is now ready for preview and separate issuance.`);
+  showConfigToast(`Certificate ${certNo} successfully GENERATED! It is now ready for preview and separate issuance.`, 'success')
 
   renderCertificatesTable();
   renderDashboard();
@@ -3260,21 +3268,53 @@ function previewCertificate(certId) {
     btnReissueFromModal.style.display = (cert.status === 'issued') ? 'inline-block' : 'none';
   }
 
-  document.getElementById('certificatePreviewModal').classList.add('open');
+  const mgmtCertScreen = document.getElementById('sectionMgmtCertificateScreen');
+  const mgmtCertTable = document.getElementById('mgmtCertificatesTableCard');
+  if (mgmtCertTable) mgmtCertTable.style.display = 'none';
+  if (mgmtCertScreen) mgmtCertScreen.style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function openReissueModalFromPreview() {
+function toggleMgmtReissueCard() {
+  const card = document.getElementById('mgmtReissueCard');
+  if (!card) return;
+  card.style.display = (card.style.display === 'none' || !card.style.display) ? 'block' : 'none';
+}
+window.toggleMgmtReissueCard = toggleMgmtReissueCard;
+
+function confirmReissueFromScreen() {
   if (!previewActiveCertId) return;
-  const targetCertId = previewActiveCertId;
-  closeCertPreviewModal();
-  openReissueModal(targetCertId);
+  const cert = state.certificates.find(c => c.id === previewActiveCertId);
+  if (!cert) return;
+  const reason = document.getElementById('reissueReasonSelectMgmt')?.value || 'Name / Typographical Correction';
+  const notes = document.getElementById('reissueNotesInputMgmt')?.value || '';
+  cert.reissueCount = (cert.reissueCount || 0) + 1;
+  const now = new Date().toISOString().split('T')[0];
+  cert.issueDate = now;
+  appendAuditLog('Reissued Certificate', cert.id, `Revision ${cert.reissueCount}. Reason: ${reason}. Notes: ${notes}`);
+  renderCertificatesTable();
+  previewCertificate(cert.id);
+  const card = document.getElementById('mgmtReissueCard');
+  if (card) card.style.display = 'none';
+  showConfigToast(`Certificate ${cert.certificateNo} reissued (Revision ${cert.reissueCount}) successfully!`, 'success');
+}
+window.confirmReissueFromScreen = confirmReissueFromScreen;
+
+function openReissueModalFromPreview() {
+  toggleMgmtReissueCard();
 }
 
 window.openReissueModalFromPreview = openReissueModalFromPreview;
 window.previewCertificate = previewCertificate;
 
 function closeCertPreviewModal() {
-  document.getElementById('certificatePreviewModal').classList.remove('open');
+  const mgmtCertScreen = document.getElementById('sectionMgmtCertificateScreen');
+  const mgmtCertTable = document.getElementById('mgmtCertificatesTableCard');
+  if (mgmtCertScreen) mgmtCertScreen.style.display = 'none';
+  if (mgmtCertTable) mgmtCertTable.style.display = 'block';
+  const card = document.getElementById('mgmtReissueCard');
+  if (card) card.style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 window.closeCertPreviewModal = closeCertPreviewModal;
@@ -3694,7 +3734,7 @@ window.viewIssuedCertFromModal = viewIssuedCertFromModal;
 // Action 3: Issue Certificate (Separate from Generation - Email & Portal Notified)
 function issueCertificate(certId) {
   if (trainingConfigData?.certificates?.enabled === false) {
-    alert('Certificate Issuance is currently disabled in Training Config.');
+    showConfigToast('Certificate Issuance is currently disabled in Training Config.', 'info')
     return;
   }
   const cert = state.certificates.find(c => c.id === certId);
@@ -3752,7 +3792,7 @@ window.printCertificate = printCertificate;
 // Manage Reissues
 function openReissueModal(certId) {
   if (trainingConfigData?.certificates?.allowReissue === false) {
-    alert('Certificate reissuance is currently disabled in Training Config.');
+    showConfigToast('Certificate reissuance is currently disabled in Training Config.', 'info')
     return;
   }
   const cert = state.certificates.find(c => c.id === certId);
@@ -3772,7 +3812,7 @@ window.closeReissueModal = closeReissueModal;
 
 function confirmReissueCertificate() {
   if (trainingConfigData?.certificates?.allowReissue === false) {
-    alert('Certificate reissuance is currently disabled in Training Config.');
+    showConfigToast('Certificate reissuance is currently disabled in Training Config.', 'info')
     return;
   }
   const certId = document.getElementById('reissueCertId').value;
@@ -3788,7 +3828,7 @@ function confirmReissueCertificate() {
   cert.issueDate = today;
 
   logAudit('Reissued Certificate', `${cert.certificateNo}`, `Revision v${cert.reissueCount + 1}. Reason: ${reason}. Notes: ${notes}`);
-  alert(`Certificate ${cert.certificateNo} reissued (Revision ${cert.reissueCount + 1}) for ${emp.name}!`);
+  showConfigToast(`Certificate ${cert.certificateNo} reissued (Revision ${cert.reissueCount + 1}) for ${emp.name}!`, 'success')
 
   closeReissueModal();
   renderCertificatesTable();
@@ -3995,7 +4035,7 @@ function renderReportsView() {
           <td><span style="color:#ef4444; font-weight:700;">${a.dueDate}</span></td>
           <td><span style="color:#ef4444; font-weight:800;">+8 Days</span></td>
           <td><span class="status-pill status-overdue">Escalated</span></td>
-          <td><button class="btn-table-action danger" onclick="alert('Formal escalation notification dispatched to ${escapeHtml(emp.name)}!')">Send Notice</button></td>
+          <td><button class="btn-table-action danger" onclick="showConfigToast('Formal escalation notification dispatched to ${escapeHtml(emp.name)}!', 'success')">Send Notice</button></td>
         </tr>
       `;
     });
@@ -4961,7 +5001,7 @@ function deleteCategory(catId) {
   );
 
   if (inUse) {
-    alert(`Cannot Delete Category\n\n"${cat.name}" is currently associated with active training curricula. To preserve course historical data, set its status to Inactive instead.`);
+    showConfigToast(`Cannot Delete Category\n\n"${cat.name}" is currently associated with active training curricula. To preserve course historical data, set its status to Inactive instead.`, 'error')
     return;
   }
 
@@ -5658,7 +5698,7 @@ function renderRolesTable() {
             <button type="button" class="emp-action-icon" onclick="openRolePermissions('${r.id}')" title="Edit Role">
               <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
             </button>
-            <button type="button" class="emp-action-icon" onclick="alert('System protected: Cannot delete this assigned role.')" title="Delete Role">
+            <button type="button" class="emp-action-icon" onclick="showConfigToast('System protected: Cannot delete this assigned role.', 'error')" title="Delete Role">
               <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
             </button>
           </div>
@@ -9515,15 +9555,29 @@ function openEmployeeResourceViewer(trainingId, resourceId) {
     }
   }
 
-  const modal = document.getElementById('modalEmpResourceViewer');
-  if (modal) modal.classList.add('open');
+  // Also populate inline resource player
+  const inlineTitle = document.getElementById('empInlineViewerTitle');
+  const inlineSub = document.getElementById('empInlineViewerSubtitle');
+  const inlineIcon = document.getElementById('empInlineViewerTypeIcon');
+  const inlineBody = document.getElementById('empInlineViewerBody');
+
+  if (inlineTitle) inlineTitle.textContent = r.title;
+  if (inlineSub) inlineSub.textContent = `${r.type.toUpperCase()} • ${r.duration || 'Self-Paced'}`;
+  if (inlineIcon) inlineIcon.textContent = typeIcon;
+  if (inlineBody && body) inlineBody.innerHTML = body.innerHTML;
+
+  const inlinePlayer = document.getElementById('empInlineResourcePlayer');
+  if (inlinePlayer) {
+    inlinePlayer.style.display = 'block';
+    inlinePlayer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
 }
 
 function closeEmployeeResourceViewer() {
-  const modal = document.getElementById('modalEmpResourceViewer');
-  if (modal) modal.classList.remove('open');
-  const body = document.getElementById('empViewerBody');
-  if (body) body.innerHTML = '';
+  const inlinePlayer = document.getElementById('empInlineResourcePlayer');
+  if (inlinePlayer) inlinePlayer.style.display = 'none';
+  const inlineBody = document.getElementById('empInlineViewerBody');
+  if (inlineBody) inlineBody.innerHTML = '';
 }
 
 function markCurrentViewerResourceComplete() {
@@ -9955,7 +10009,7 @@ async function submitEmpTrainingWorkflow() {
 
   const remarks = (document.getElementById('empSubmissionRemarksInput')?.value || '').trim();
   if (!remarks) {
-    alert('Please provide your completion remarks before submitting.');
+    showConfigToast('Please provide your completion remarks before submitting.', 'error')
     return;
   }
 
@@ -10212,13 +10266,65 @@ function openEmployeeCertificateViewer(certId) {
   if (elCertId) elCertId.textContent = cert.id;
   if (elDate) elDate.textContent = cert.issueDate;
 
-  const modal = document.getElementById('modalEmpCertViewer');
-  if (modal) modal.classList.add('open');
+  // Set previous view
+  const myTrn = document.getElementById('sectionEmpMyTraining');
+  const trnDetail = document.getElementById('sectionEmpTrainingDetailScreen');
+  const myCerts = document.getElementById('sectionEmpCertificates');
+  const hist = document.getElementById('sectionEmpHistory');
+
+  if (trnDetail && trnDetail.style.display !== 'none') {
+    state.empCertPreviousView = 'training_detail';
+  } else if (myCerts && myCerts.style.display !== 'none') {
+    state.empCertPreviousView = 'my_certificates';
+  } else if (hist && hist.style.display !== 'none') {
+    state.empCertPreviousView = 'history';
+  } else {
+    state.empCertPreviousView = 'my_training';
+  }
+
+  // Hide lists / detail screens
+  if (myTrn) myTrn.style.display = 'none';
+  if (trnDetail) trnDetail.style.display = 'none';
+  if (myCerts) myCerts.style.display = 'none';
+  if (hist) hist.style.display = 'none';
+
+  const certScreen = document.getElementById('sectionEmpCertScreen');
+  if (certScreen) certScreen.style.display = 'block';
+
+  const backLabel = document.getElementById('empCertScreenBackLabel');
+  const backBtn = document.getElementById('empCertScreenBackBtn');
+  if (state.empCertPreviousView === 'training_detail') {
+    if (backLabel) backLabel.textContent = 'Training Details';
+    if (backBtn) backBtn.textContent = '← Back to Training Details';
+  } else if (state.empCertPreviousView === 'my_certificates') {
+    if (backLabel) backLabel.textContent = 'My Certificates';
+    if (backBtn) backBtn.textContent = '← Back to My Certificates';
+  } else {
+    if (backLabel) backLabel.textContent = 'My Training';
+    if (backBtn) backBtn.textContent = '← Back to My Training';
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function closeEmployeeCertViewer() {
-  const modal = document.getElementById('modalEmpCertViewer');
-  if (modal) modal.classList.remove('open');
+  const certScreen = document.getElementById('sectionEmpCertScreen');
+  if (certScreen) certScreen.style.display = 'none';
+
+  if (state.empCertPreviousView === 'training_detail') {
+    const trnDetail = document.getElementById('sectionEmpTrainingDetailScreen');
+    if (trnDetail) trnDetail.style.display = 'block';
+  } else if (state.empCertPreviousView === 'my_certificates') {
+    const myCerts = document.getElementById('sectionEmpCertificates');
+    if (myCerts) myCerts.style.display = 'block';
+  } else if (state.empCertPreviousView === 'history') {
+    const hist = document.getElementById('sectionEmpHistory');
+    if (hist) hist.style.display = 'block';
+  } else {
+    const myTrn = document.getElementById('sectionEmpMyTraining');
+    if (myTrn) myTrn.style.display = 'block';
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function printEmployeeCertificate() {
@@ -10289,7 +10395,7 @@ function renderEmployeeHistoryFull() {
 
 function exportEmpHistoryCSV() {
   if (!state.employeeTrainingData || !state.employeeTrainingData.history) {
-    alert('No training history data available to export.');
+    showConfigToast('No training history data available to export.', 'error')
     return;
   }
 
@@ -10418,3 +10524,51 @@ document.addEventListener("click", function(e) {
 });
 window.togglePublishDropdown = togglePublishDropdown;
 window.closePublishDropdown = closePublishDropdown;
+
+// Global Interactive Utilities (NO POP-UPS)
+function toggleFullScreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(() => {
+      showConfigToast('Fullscreen view enabled in portal.', 'info');
+    });
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    }
+  }
+}
+window.toggleFullScreen = toggleFullScreen;
+
+function changeEmpPage(page) {
+  const pageBtns = document.querySelectorAll('.emp-page-num');
+  pageBtns.forEach(btn => {
+    btn.classList.toggle('active', btn.textContent.trim() === String(page));
+  });
+  showConfigToast(`Navigated to Employees Roster — Page ${page} of 15`, 'info');
+}
+window.changeEmpPage = changeEmpPage;
+
+function focusGlobalSearch() {
+  const searchInput = document.getElementById('searchProgramsInput') || document.getElementById('searchProgressInput');
+  if (searchInput) {
+    searchInput.focus();
+    showConfigToast('Search filter active: Type keywords to filter records.', 'info');
+  } else {
+    showConfigToast('Search portal activated.', 'info');
+  }
+}
+window.focusGlobalSearch = focusGlobalSearch;
+
+function handleHeaderNewAction() {
+  if (state.currentRole === 'employee') {
+    showConfigToast('Learner portal active. To enroll in additional courses, contact HR Operations.', 'info');
+    return;
+  }
+  const viewTraining = document.getElementById('viewTraining');
+  if (viewTraining && viewTraining.style.display !== 'none') {
+    openProgramModal();
+  } else {
+    showConfigToast('New Action: Create training programme or assign curriculum from Training Module.', 'info');
+  }
+}
+window.handleHeaderNewAction = handleHeaderNewAction;

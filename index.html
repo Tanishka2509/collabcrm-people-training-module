@@ -91,7 +91,7 @@
       <div class="header-left">
         <!-- 9-dots App Launcher with vertical dividing line -->
         <div class="header-launcher-box" title="App Launcher">
-          <button class="header-launcher-btn" type="button" aria-label="App Launcher">
+          <button class="header-launcher-btn" type="button" aria-label="App Launcher" onclick="showConfigToast('CollabCRM Suite: People, CRM, Projects &amp; Analytics', 'info')">
             <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="4" cy="4" r="1.75" fill="#64748b"/>
               <circle cx="10" cy="4" r="1.75" fill="#64748b"/>
@@ -122,7 +122,7 @@
       <!-- Header Right: Search, New, To-dos, Notifications, User Avatar -->
       <div class="header-right">
         <!-- Search Button -->
-        <button type="button" class="header-search-btn" title="Search" aria-label="Search">
+        <button type="button" class="header-search-btn" title="Search" aria-label="Search" onclick="focusGlobalSearch()">
           <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -130,7 +130,7 @@
         </button>
 
         <!-- New Action Button with Chevron -->
-        <button type="button" class="header-new-btn" title="New Action">
+        <button type="button" class="header-new-btn" title="New Action" onclick="handleHeaderNewAction()">
           <span>New</span>
           <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="6 9 12 15 18 9"></polyline>
@@ -138,7 +138,7 @@
         </button>
 
         <!-- Tasks / To-dos Button with Red Ping Dot -->
-        <button type="button" class="header-icon-box" title="To-dos" aria-label="To-dos">
+        <button type="button" class="header-icon-box" title="To-dos" aria-label="To-dos" onclick="showConfigToast('To-Do List: All pending approvals and compliance tasks up to date', 'info')">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="3" width="18" height="18" rx="3.5" ry="3.5"></rect>
             <polyline points="9 11.5 11.5 14 16 9"></polyline>
@@ -432,12 +432,12 @@
                   <span class="emp-count-badge">1 - 10 of 141 Employees</span>
                 </div>
                 <div class="emp-actions-area">
-                  <button type="button" class="emp-btn-primary">
+                  <button type="button" class="emp-btn-primary" onclick="showConfigToast('Add Employee: Please configure new hire under People Admin Settings.', 'info')">
                     <span>Add Employee</span>
                     <span class="emp-btn-divider"></span>
                     <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
                   </button>
-                  <button type="button" class="emp-icon-action" title="Full Screen">
+                  <button type="button" class="emp-icon-action" title="Full Screen" onclick="toggleFullScreen()">
                     <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
                       <polyline points="15 3 21 3 21 9"></polyline>
                       <polyline points="9 21 3 21 3 15"></polyline>
@@ -445,7 +445,7 @@
                       <line x1="3" y1="21" x2="10" y2="14"></line>
                     </svg>
                   </button>
-                  <button type="button" class="emp-icon-action" title="More Options">
+                  <button type="button" class="emp-icon-action" title="More Options" onclick="showConfigToast('Roster options: Export roster, mass notify, and report generation available.', 'info')">
                     <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
                       <circle cx="12" cy="12" r="1.5"></circle>
                       <circle cx="12" cy="5" r="1.5"></circle>
@@ -458,7 +458,7 @@
               <!-- Filter Chips Bar -->
               <div class="emp-filter-bar">
                 <div class="emp-filters-left">
-                  <button type="button" class="emp-filter-calc-btn">
+                  <button type="button" class="emp-filter-calc-btn" onclick="showConfigToast('Recalculating employee roster statistics...', 'info')">
                     <span>Σ</span>
                     <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
                   </button>
@@ -480,9 +480,9 @@
                     <span class="chip-val">False</span>
                     <span class="chip-close">✕</span>
                   </div>
-                  <button type="button" class="emp-chip-add" title="Add Filter">+</button>
+                  <button type="button" class="emp-chip-add" title="Add Filter" onclick="showConfigToast('Filter drawer: Select department, designation, or employment status.', 'info')">+</button>
                 </div>
-                <button type="button" class="emp-filter-btn">
+                <button type="button" class="emp-filter-btn" onclick="showConfigToast('Filter applied to employee roster.', 'info')">
                   <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
                   <span>Filter</span>
                 </button>
@@ -539,7 +539,7 @@
                         <button type="button" class="emp-action-icon" title="View Profile" onclick="openEmployeeDetail('YOP-073')">
                           <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                         </button>
-                        <button type="button" class="emp-action-icon" title="Edit Profile">
+                        <button type="button" class="emp-action-icon" title="Edit Profile" onclick="openEmployeeDetail('YOP-073')">
                           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                         </button>
                       </td>
@@ -577,7 +577,7 @@
                         <button type="button" class="emp-action-icon" title="View Profile" onclick="openEmployeeDetail('COINT-5040')">
                           <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                         </button>
-                        <button type="button" class="emp-action-icon" title="Edit Profile">
+                        <button type="button" class="emp-action-icon" title="Edit Profile" onclick="openEmployeeDetail('COINT-5040')">
                           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                         </button>
                       </td>
@@ -615,7 +615,7 @@
                         <button type="button" class="emp-action-icon" title="View Profile" onclick="openEmployeeDetail('CO-5039')">
                           <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                         </button>
-                        <button type="button" class="emp-action-icon" title="Edit Profile">
+                        <button type="button" class="emp-action-icon" title="Edit Profile" onclick="openEmployeeDetail('CO-5039')">
                           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                         </button>
                       </td>
@@ -653,7 +653,7 @@
                         <button type="button" class="emp-action-icon" title="View Profile" onclick="openEmployeeDetail('CO-5038')">
                           <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                         </button>
-                        <button type="button" class="emp-action-icon" title="Edit Profile">
+                        <button type="button" class="emp-action-icon" title="Edit Profile" onclick="openEmployeeDetail('CO-5038')">
                           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                         </button>
                       </td>
@@ -691,7 +691,7 @@
                         <button type="button" class="emp-action-icon" title="View Profile" onclick="openEmployeeDetail('CO-5037')">
                           <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                         </button>
-                        <button type="button" class="emp-action-icon" title="Edit Profile">
+                        <button type="button" class="emp-action-icon" title="Edit Profile" onclick="openEmployeeDetail('CO-5037')">
                           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                         </button>
                       </td>
@@ -729,7 +729,7 @@
                         <button type="button" class="emp-action-icon" title="View Profile" onclick="openEmployeeDetail('CO-5036')">
                           <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                         </button>
-                        <button type="button" class="emp-action-icon" title="Edit Profile">
+                        <button type="button" class="emp-action-icon" title="Edit Profile" onclick="openEmployeeDetail('CO-5036')">
                           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                         </button>
                       </td>
@@ -767,7 +767,7 @@
                         <button type="button" class="emp-action-icon" title="View Profile" onclick="openEmployeeDetail('CO-5035')">
                           <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                         </button>
-                        <button type="button" class="emp-action-icon" title="Edit Profile">
+                        <button type="button" class="emp-action-icon" title="Edit Profile" onclick="openEmployeeDetail('CO-5035')">
                           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                         </button>
                       </td>
@@ -805,7 +805,7 @@
                         <button type="button" class="emp-action-icon" title="View Profile" onclick="openEmployeeDetail('CO-5034')">
                           <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                         </button>
-                        <button type="button" class="emp-action-icon" title="Edit Profile">
+                        <button type="button" class="emp-action-icon" title="Edit Profile" onclick="openEmployeeDetail('CO-5034')">
                           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                         </button>
                       </td>
@@ -843,7 +843,7 @@
                         <button type="button" class="emp-action-icon" title="View Profile" onclick="openEmployeeDetail('CO-5033')">
                           <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                         </button>
-                        <button type="button" class="emp-action-icon" title="Edit Profile">
+                        <button type="button" class="emp-action-icon" title="Edit Profile" onclick="openEmployeeDetail('CO-5033')">
                           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                         </button>
                       </td>
@@ -881,7 +881,7 @@
                         <button type="button" class="emp-action-icon" title="View Profile" onclick="openEmployeeDetail('CO-5032')">
                           <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                         </button>
-                        <button type="button" class="emp-action-icon" title="Edit Profile">
+                        <button type="button" class="emp-action-icon" title="Edit Profile" onclick="openEmployeeDetail('CO-5032')">
                           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                         </button>
                       </td>
@@ -902,14 +902,14 @@
                   </select>
                 </div>
                 <div class="emp-pages-controls">
-                  <button type="button" class="emp-page-btn-nav">← Previous</button>
-                  <button type="button" class="emp-page-num active">1</button>
-                  <button type="button" class="emp-page-num">2</button>
-                  <button type="button" class="emp-page-num">3</button>
-                  <button type="button" class="emp-page-num">4</button>
+                  <button type="button" class="emp-page-btn-nav" onclick="changeEmpPage(1)">← Previous</button>
+                  <button type="button" class="emp-page-num active" onclick="changeEmpPage(1)">1</button>
+                  <button type="button" class="emp-page-num" onclick="changeEmpPage(2)">2</button>
+                  <button type="button" class="emp-page-num" onclick="changeEmpPage(3)">3</button>
+                  <button type="button" class="emp-page-num" onclick="changeEmpPage(4)">4</button>
                   <span class="emp-page-dots">...</span>
-                  <button type="button" class="emp-page-num">15</button>
-                  <button type="button" class="emp-page-btn-nav">Next →</button>
+                  <button type="button" class="emp-page-num" onclick="changeEmpPage(15)">15</button>
+                  <button type="button" class="emp-page-btn-nav" onclick="changeEmpPage(2)">Next →</button>
                 </div>
               </div>
             </div>
@@ -1284,8 +1284,8 @@
                 <div class="emp-pagination-row" style="padding: 12px 16px; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; background: #ffffff;">
                   <div style="font-size: 12px; color: #64748b;">Showing 1 to 6 of 6 programmes</div>
                   <div style="display: flex; align-items: center; gap: 6px;">
-                    <button type="button" style="padding: 4px 10px; font-size: 12px; border-radius: 4px; border: 1px solid #2563eb; background: #eff6ff; color: #2563eb; font-weight: 600;">1</button>
-                    <button type="button" style="padding: 4px 12px; font-size: 12px; border-radius: 4px; border: 1px solid #e2e8f0; background: #ffffff; color: #64748b; font-weight: 500; display: inline-flex; align-items: center; gap: 4px;">Next →</button>
+                    <button type="button" onclick="showConfigToast('Showing page 1 of 1 programmes.', 'info')" style="padding: 4px 10px; font-size: 12px; border-radius: 4px; border: 1px solid #2563eb; background: #eff6ff; color: #2563eb; font-weight: 600; cursor: pointer;">1</button>
+                    <button type="button" onclick="showConfigToast('All programmes currently displayed on page 1.', 'info')" style="padding: 4px 12px; font-size: 12px; border-radius: 4px; border: 1px solid #e2e8f0; background: #ffffff; color: #64748b; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; cursor: pointer;">Next →</button>
                   </div>
                 </div>
 
@@ -1650,7 +1650,7 @@
             <!-- SECTION 4: EMPLOYEE PROGRESS MONITORING        -->
             <!-- ============================================== -->
             <div class="training-tab-view" id="sectionProgress" style="display: none;">
-              <div class="crm-table-container">
+              <div class="crm-table-container" id="mgmtProgressTableCard">
                 <div class="crm-table-header-bar">
                   <div class="crm-table-title-group">
                     <h2 class="crm-table-title">Employee Training Progress Tracker</h2>
@@ -1693,6 +1693,39 @@
                     </thead>
                     <tbody id="progressTableBody"></tbody>
                   </table>
+                </div>
+              </div>
+
+              <!-- IN-SCREEN PROGRESS DETAIL SCREEN (NO POP-UPS) -->
+              <div id="sectionProgressDetailScreen" style="display: none;">
+                <!-- Breadcrumb Header -->
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                  <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #64748b;">
+                    <span onclick="closeProgressDetailsModal()" style="cursor: pointer; display: flex; align-items: center; gap: 4px; color: #4f46e5; font-weight: 500;" title="Back to Learner Progress">
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                      <span>Learner Progress</span>
+                    </span>
+                    <span>›</span>
+                    <span style="font-weight: 600; color: #0f172a;">Progress &amp; Evidence Evaluation</span>
+                  </div>
+                  <button type="button" class="btn-table-action" onclick="closeProgressDetailsModal()" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-size: 12.5px; border-radius: 6px; background: #ffffff; border: 1px solid #cbd5e1; color: #334155; cursor: pointer;">
+                    ← Back to Progress List
+                  </button>
+                </div>
+
+                <!-- Main Card Container -->
+                <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); overflow: hidden;">
+                  <div style="padding: 18px 24px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; background: #f8fafc;">
+                    <div>
+                      <h3 style="font-size: 16px; font-weight: 700; color: #0f172a; margin: 0;">Employee Training Progress &amp; Evidence</h3>
+                      <p style="font-size: 12px; color: #64748b; margin: 3px 0 0 0;">Curriculum milestones, assessment attempts, and submission evidence</p>
+                    </div>
+                    <button type="button" onclick="closeProgressDetailsModal()" style="background: none; border: none; font-size: 20px; color: #64748b; cursor: pointer;" title="Close">&times;</button>
+                  </div>
+                  <div id="progressDetailsModalBody" style="padding: 24px;"></div>
+                  <div style="padding: 14px 24px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end;">
+                    <button type="button" class="btn-secondary-action" onclick="closeProgressDetailsModal()">← Back to Progress List</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1800,7 +1833,7 @@
             <!-- SECTION 6: CERTIFICATE MANAGEMENT              -->
             <!-- ============================================== -->
             <div class="training-tab-view" id="sectionCertificates" style="display: none;">
-              <div class="crm-table-container">
+              <div class="crm-table-container" id="mgmtCertificatesTableCard">
                 <div class="crm-table-header-bar">
                   <div class="crm-table-title-group">
                     <h2 class="crm-table-title">Certificate Management</h2>
@@ -1830,6 +1863,135 @@
                     </thead>
                     <tbody id="certificatesTableBody"></tbody>
                   </table>
+                </div>
+              </div>
+
+              <!-- IN-SCREEN CERTIFICATE SCREEN (NO POP-UPS) -->
+              <div id="sectionMgmtCertificateScreen" style="display: none;">
+                <!-- Breadcrumb Header -->
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                  <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #64748b;">
+                    <span onclick="closeCertPreviewModal()" style="cursor: pointer; display: flex; align-items: center; gap: 4px; color: #4f46e5; font-weight: 500;" title="Back to Certificates">
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                      <span>Certificates</span>
+                    </span>
+                    <span>›</span>
+                    <span style="font-weight: 600; color: #0f172a;">Certificate Preview &amp; Verification</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <button type="button" class="btn-table-action" onclick="printCertificate()" title="Print Certificate" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-size: 12.5px; border-radius: 6px; background: #ffffff; border: 1px solid #cbd5e1; color: #334155; cursor: pointer;">
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                      <span>Print</span>
+                    </button>
+                    <button type="button" class="btn-primary-action" onclick="downloadCertificate()" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px; font-size: 12.5px; border-radius: 6px; background: #2563eb; color: #ffffff; cursor: pointer;">
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                      <span>Download PDF</span>
+                    </button>
+                    <button type="button" class="btn-table-action" onclick="closeCertPreviewModal()" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-size: 12.5px; border-radius: 6px; background: #ffffff; border: 1px solid #cbd5e1; color: #334155; cursor: pointer;">
+                      ← Back to Certificates
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Main Certificate Card -->
+                <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); overflow: hidden;">
+                  <div style="padding: 16px 24px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; background: #f8fafc;">
+                    <div>
+                      <h3 style="font-size: 16px; font-weight: 700; color: #0f172a; margin: 0;">Verified Credential &amp; Certificate</h3>
+                      <p style="font-size: 12px; color: #64748b; margin: 2px 0 0 0;">Official CollabCRM Issued Certificate Record</p>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                      <button type="button" id="btnIssueCertFromModal" class="btn-primary-action" onclick="issueCertificate(previewActiveCertId)" style="display: none; background: #16a34a; border-color: #15803d; padding: 6px 16px; font-size: 12.5px;">Issue Certificate</button>
+                      <button type="button" id="btnReissueCertFromModal" class="btn-table-action" onclick="toggleMgmtReissueCard()" style="display: none; background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; padding: 6px 16px; font-size: 12.5px;">Reissue Certificate</button>
+                    </div>
+                  </div>
+
+                  <!-- Inline Reissue Form (if toggled) -->
+                  <div id="mgmtReissueCard" style="display: none; padding: 18px 24px; background: #fffbeb; border-bottom: 1px solid #fef3c7;">
+                    <h4 style="font-size: 13.5px; font-weight: 700; color: #92400e; margin: 0 0 8px 0;">Reissue Certificate Configuration</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 2fr auto; gap: 12px; align-items: flex-end;">
+                      <div>
+                        <label style="display: block; font-size: 11.5px; font-weight: 600; color: #78350f; margin-bottom: 4px;">Reason for Reissue *</label>
+                        <select class="form-select" id="reissueReasonSelectMgmt" style="width: 100%; height: 36px; font-size: 12.5px;">
+                          <option value="Name / Typographical Correction">Name / Typographical Correction</option>
+                          <option value="Recertification &amp; Validity Renewal">Recertification &amp; Validity Renewal</option>
+                          <option value="Updated Assessment Scope">Updated Assessment Scope</option>
+                          <option value="Authorized Executive Request">Authorized Executive Request</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label style="display: block; font-size: 11.5px; font-weight: 600; color: #78350f; margin-bottom: 4px;">Auditor Notes</label>
+                        <input type="text" class="crm-input-search" id="reissueNotesInputMgmt" placeholder="Context for compliance audit..." style="width: 100%; height: 36px; font-size: 12.5px;" />
+                      </div>
+                      <div style="display: flex; gap: 8px;">
+                        <button type="button" class="btn-primary-action" onclick="confirmReissueFromScreen()" style="height: 36px; padding: 0 16px; font-size: 12.5px;">Confirm</button>
+                        <button type="button" class="btn-table-action" onclick="toggleMgmtReissueCard()" style="height: 36px; padding: 0 12px; font-size: 12.5px;">Cancel</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Printable Canvas Area -->
+                  <div style="padding: 32px 24px; background: #f1f5f9; display: flex; align-items: center; justify-content: center;">
+                    <div class="cert-printable-container" style="width: 100%; max-width: 740px; background: #ffffff; border: none; border-radius: 2px; padding: 54px 64px 44px 64px; box-shadow: 0 14px 36px rgba(15, 23, 42, 0.14); text-align: center; position: relative; overflow: hidden;">
+                      <div style="position: absolute; top: 0; left: 0; width: 205px; height: 205px; background: #163a8f; clip-path: polygon(0 0, 100% 0, 0 100%); pointer-events: none; z-index: 1;"></div>
+                      <div style="position: absolute; bottom: 0; right: 0; width: 195px; height: 195px; background: #7cc0ff; clip-path: polygon(100% 0, 100% 100%, 0 100%); pointer-events: none; z-index: 1;"></div>
+                      <div style="position: absolute; top: 30px; right: 44px; width: 96px; height: 96px; pointer-events: none; z-index: 2; filter: drop-shadow(0 6px 12px rgba(202, 138, 4, 0.22));">
+                        <svg viewBox="0 0 120 120" width="96" height="96">
+                          <defs>
+                            <radialGradient id="certGoldGradMgmtScreen" cx="35%" cy="30%" r="70%">
+                              <stop offset="0%" stop-color="#fef08a" />
+                              <stop offset="55%" stop-color="#facc15" />
+                              <stop offset="100%" stop-color="#ca8a04" />
+                            </radialGradient>
+                            <path id="certSealTextPathMgmtScreen" d="M 60, 60 m -46, 0 a 46,46 0 1,1 92,0 a 46,46 0 1,1 -92,0" />
+                          </defs>
+                          <text fill="#94a3b8" font-size="6.3" font-weight="700" letter-spacing="1.7px" font-family="Inter, sans-serif">
+                            <textPath href="#certSealTextPathMgmtScreen" startOffset="0%">CERTIFICATE OF ACHIEVEMENT • CERTIFICATE OF ACHIEVEMENT •</textPath>
+                          </text>
+                          <circle cx="60" cy="60" r="36" fill="url(#certGoldGradMgmtScreen)" stroke="#eab308" stroke-width="1.5" />
+                          <circle cx="60" cy="60" r="24" fill="none" stroke="#854d0e" stroke-width="0.9" opacity="0.65" />
+                          <circle cx="60" cy="60" r="6" fill="none" stroke="#854d0e" stroke-width="0.9" opacity="0.65" />
+                        </svg>
+                      </div>
+
+                      <div style="position: relative; z-index: 2;">
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 20px;">
+                          <img src="assets/collabcrm-logo.png" alt="CollabCRM" style="width: 26px; height: 26px; object-fit: contain;" />
+                          <span style="font-family: 'Inter', sans-serif; font-size: 17px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: #1e293b;">COLLABCRM</span>
+                        </div>
+                        <h2 class="cert-main-title" style="font-family: Georgia, 'Times New Roman', serif; font-size: 15px; font-weight: 700; color: #1e293b; margin: 0; letter-spacing: 0.14em; text-transform: uppercase;">CERTIFICATE OF EXCELLENCE</h2>
+                        <div style="font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; color: #64748b; margin: 6px 0 22px 0;">OF APPRECIATION</div>
+                        <p style="font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #64748b; margin: 0 0 16px 0;">THIS CERTIFICATE IS PROUDLY PRESENTED TO</p>
+                        <h1 class="cert-recipient-name" id="certPreviewRecipientName" style="font-family: Georgia, 'Times New Roman', serif; font-size: 34px; font-weight: 700; color: #1e293b; text-decoration: none; margin: 0 0 6px 0;">Employee Name</h1>
+                        <p style="font-size: 12.5px; color: #64748b; margin: 0 0 14px 0;">Employee ID: <strong id="certPreviewEmpCode" style="color: #0f172a;">CO-5039</strong></p>
+                        <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 13.5px; color: #475569; line-height: 1.6; max-width: 520px; margin: 0 auto 12px auto;">
+                          has successfully fulfilled all curriculum requirements, passed comprehensive assessments, and achieved mastery in the training program:
+                        </p>
+                        <h3 class="cert-program-name" id="certPreviewProgramName" style="font-size: 18px; font-weight: 800; color: #0f172a; margin: 0 0 34px 0;">Training Programme Title</h3>
+
+                        <div style="display: flex; justify-content: space-between; align-items: flex-end; padding: 0 36px; margin-top: 14px;">
+                          <div style="text-align: center; min-width: 175px;">
+                            <div style="font-size: 11.5px; font-weight: 600; color: #0f172a; margin-bottom: 2px;">Certificate ID: <span id="certPreviewNo" style="font-family: monospace;">CCRM-2026-001</span></div>
+                            <div style="font-size: 11.5px; font-weight: 600; color: #0f172a; margin-bottom: 6px;">Issued Date: <span id="certPreviewIssueDate">02-Nov-2026</span></div>
+                            <div style="height: 1.5px; background: #2b4c8c; width: 100%; margin-bottom: 6px;"></div>
+                            <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #475569; display: block;">DATE OF ISSUE</span>
+                            <span style="font-size: 10px; color: #64748b; display: none;" id="certPreviewExpiry">Valid until 02-Nov-2028</span>
+                          </div>
+                          <div style="text-align: center; min-width: 185px;">
+                            <div class="sig-line" id="certPreviewIssuer" style="font-family: 'Brush Script MT', Georgia, serif; font-size: 22px; color: #1e293b; border: none; margin-bottom: 4px; padding: 0;">Megha Salunkhe</div>
+                            <div style="border-top: 1px dashed #2b4c8c; width: 100%; margin-bottom: 6px;"></div>
+                            <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #475569; display: block;">AUTHORIZED SIGNATORY</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Footer -->
+                  <div style="padding: 14px 24px; background: #ffffff; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+                    <span style="font-size: 12px; color: #64748b;">Issued credentials remain permanently accessible in your CollabCRM portal history.</span>
+                    <button type="button" class="btn-secondary-action" onclick="closeCertPreviewModal()">← Back to Certificates</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -2143,6 +2305,29 @@
 
                   <!-- TAB 2: LEARNING RESOURCES (SPEC SEC 6-7) -->
                   <div id="empModalTabContent_resources" class="emp-modal-tab-content" style="display: none;">
+                    <!-- Inline Resource Player (NO POP-UPS) -->
+                    <div id="empInlineResourcePlayer" style="display: none; background: #0f172a; border-radius: 10px; overflow: hidden; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+                      <div style="padding: 14px 20px; background: #1e293b; border-bottom: 1px solid #334155; display: flex; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                          <span id="empInlineViewerTypeIcon" style="font-size: 18px;">📺</span>
+                          <div>
+                            <h3 id="empInlineViewerTitle" style="font-size: 14.5px; font-weight: 700; color: #ffffff; margin: 0;">Resource Title</h3>
+                            <p id="empInlineViewerSubtitle" style="font-size: 11.5px; color: #94a3b8; margin: 2px 0 0 0;">Interactive Learning Material</p>
+                          </div>
+                        </div>
+                        <button type="button" onclick="closeEmployeeResourceViewer()" style="background: none; border: none; font-size: 20px; color: #94a3b8; cursor: pointer;" title="Close Player">&times;</button>
+                      </div>
+                      <div id="empInlineViewerBody" style="background: #0b0f19; min-height: 380px; padding: 20px; display: flex; align-items: center; justify-content: center;"></div>
+                      <div style="padding: 12px 20px; background: #1e293b; border-top: 1px solid #334155; display: flex; align-items: center; justify-content: space-between;">
+                        <span style="font-size: 12px; color: #94a3b8;">Review this material and mark complete to advance your training progress.</span>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                          <button type="button" class="btn-table-action" onclick="closeEmployeeResourceViewer()" style="color: #cbd5e1; border-color: #475569; background: #334155; cursor: pointer;">Close Player</button>
+                          <button type="button" class="btn-primary-action" id="btnEmpInlineViewerMarkComplete" onclick="markCurrentViewerResourceComplete()" style="background: #16a34a; border-color: #15803d; cursor: pointer;">
+                            Mark as Completed ✓
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                     <!-- Progress Bar Header -->
                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px; margin-bottom: 18px;">
                       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
@@ -2237,6 +2422,106 @@
                       Complete Course &amp; Notify Management ✓
                     </button>
                   </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ======================================================== -->
+            <!-- IN-SCREEN EMPLOYEE CERTIFICATE SCREEN (NO POP-UPS)       -->
+            <!-- ======================================================== -->
+            <div class="training-tab-view" id="sectionEmpCertScreen" style="display: none;">
+              <!-- Breadcrumb Navigation -->
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #64748b;">
+                  <span onclick="closeEmployeeCertViewer()" style="cursor: pointer; display: flex; align-items: center; gap: 4px; color: #4f46e5; font-weight: 500;" title="Back">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    <span id="empCertScreenBackLabel">My Training</span>
+                  </span>
+                  <span>›</span>
+                  <span style="font-weight: 600; color: #0f172a;">Verified Certificate</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <button type="button" class="btn-table-action" onclick="printEmployeeCertificate()" title="Print Certificate" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-size: 12.5px; border-radius: 6px; background: #ffffff; border: 1px solid #cbd5e1; color: #334155; cursor: pointer;">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                    <span>Print</span>
+                  </button>
+                  <button type="button" class="btn-primary-action" onclick="downloadEmployeeCertificate()" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px; font-size: 12.5px; border-radius: 6px; background: #2563eb; color: #ffffff; cursor: pointer;">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    <span>Download Certificate (PDF)</span>
+                  </button>
+                  <button type="button" class="btn-table-action" onclick="closeEmployeeCertViewer()" id="empCertScreenBackBtn" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-size: 12.5px; border-radius: 6px; background: #ffffff; border: 1px solid #cbd5e1; color: #334155; cursor: pointer;">
+                    ← Back to My Training
+                  </button>
+                </div>
+              </div>
+
+              <!-- Main Card -->
+              <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); overflow: hidden;">
+                <div style="padding: 16px 24px; background: #ffffff; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+                  <div>
+                    <h3 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0;">Verified Credential &amp; Certificate</h3>
+                    <p style="font-size: 12px; color: #64748b; margin: 2px 0 0 0;">Official CollabCRM Issued Certificate</p>
+                  </div>
+                  <span style="background: #dcfce7; color: #15803d; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 12px;">✓ Verified Credential</span>
+                </div>
+
+                <div style="padding: 32px 24px; background: #f8fafc; display: flex; align-items: center; justify-content: center;">
+                  <div id="empCertificatePrintableAreaScreen" style="width: 100%; max-width: 740px; background: #ffffff; border: none; border-radius: 2px; padding: 54px 64px 44px 64px; box-shadow: 0 14px 36px rgba(15, 23, 42, 0.14); text-align: center; position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: 0; left: 0; width: 205px; height: 205px; background: #163a8f; clip-path: polygon(0 0, 100% 0, 0 100%); pointer-events: none; z-index: 1;"></div>
+                    <div style="position: absolute; bottom: 0; right: 0; width: 195px; height: 195px; background: #7cc0ff; clip-path: polygon(100% 0, 100% 100%, 0 100%); pointer-events: none; z-index: 1;"></div>
+                    <div style="position: absolute; top: 30px; right: 44px; width: 96px; height: 96px; pointer-events: none; z-index: 2; filter: drop-shadow(0 6px 12px rgba(202, 138, 4, 0.22));">
+                      <svg viewBox="0 0 120 120" width="96" height="96">
+                        <defs>
+                          <radialGradient id="certGoldGradEmpScreen" cx="35%" cy="30%" r="70%">
+                            <stop offset="0%" stop-color="#fef08a" />
+                            <stop offset="55%" stop-color="#facc15" />
+                            <stop offset="100%" stop-color="#ca8a04" />
+                          </radialGradient>
+                          <path id="certSealTextPathEmpScreen" d="M 60, 60 m -46, 0 a 46,46 0 1,1 92,0 a 46,46 0 1,1 -92,0" />
+                        </defs>
+                        <text fill="#94a3b8" font-size="6.3" font-weight="700" letter-spacing="1.7px" font-family="Inter, sans-serif">
+                          <textPath href="#certSealTextPathEmpScreen" startOffset="0%">CERTIFICATE OF ACHIEVEMENT • CERTIFICATE OF ACHIEVEMENT •</textPath>
+                        </text>
+                        <circle cx="60" cy="60" r="36" fill="url(#certGoldGradEmpScreen)" stroke="#eab308" stroke-width="1.5" />
+                        <circle cx="60" cy="60" r="24" fill="none" stroke="#854d0e" stroke-width="0.9" opacity="0.65" />
+                        <circle cx="60" cy="60" r="6" fill="none" stroke="#854d0e" stroke-width="0.9" opacity="0.65" />
+                      </svg>
+                    </div>
+
+                    <div style="position: relative; z-index: 2;">
+                      <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 20px;">
+                        <img src="assets/collabcrm-logo.png" alt="CollabCRM" style="width: 26px; height: 26px; object-fit: contain;" />
+                        <span style="font-family: 'Inter', sans-serif; font-size: 17px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: #1e293b;">COLLABCRM</span>
+                      </div>
+                      <h2 style="font-family: Georgia, 'Times New Roman', serif; font-size: 15px; font-weight: 700; color: #1e293b; margin: 0; letter-spacing: 0.14em; text-transform: uppercase;">CERTIFICATE OF EXCELLENCE</h2>
+                      <div style="font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; color: #64748b; margin: 6px 0 22px 0;">OF APPRECIATION</div>
+                      <p style="font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #64748b; margin: 0 0 16px 0;">THIS CERTIFICATE IS PROUDLY PRESENTED TO</p>
+                      <div id="empCertRecipientName" style="font-family: Georgia, 'Times New Roman', serif; font-size: 34px; font-weight: 700; color: #1e293b; margin: 0 0 6px 0;">Tanya Kapoor</div>
+                      <p style="font-size: 12.5px; color: #64748b; margin: 0 0 14px 0;">Employee ID: <strong id="empCertRecipientId" style="color: #0f172a;">CO-5039</strong></p>
+                      <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 13.5px; color: #475569; line-height: 1.6; max-width: 520px; margin: 0 auto 12px auto;">
+                        has successfully fulfilled all curriculum requirements, passed comprehensive assessments, and achieved mastery in the training program:
+                      </p>
+                      <h3 id="empCertTrainingTitle" style="font-size: 18px; font-weight: 800; color: #0f172a; margin: 0 0 34px 0;">Cloud Architecture &amp; Microservices Security</h3>
+                      <div style="display: flex; justify-content: space-between; align-items: flex-end; padding: 0 36px; margin-top: 14px;">
+                        <div style="text-align: center; min-width: 175px;">
+                          <div style="font-size: 11.5px; font-weight: 600; color: #0f172a; margin-bottom: 2px;">Certificate ID: <strong id="empCertModalCertId">TRN-2026-0003</strong></div>
+                          <div style="font-size: 11.5px; font-weight: 600; color: #0f172a; margin-bottom: 6px;">Issued Date: <strong id="empCertModalIssueDate">02-Nov-2026</strong></div>
+                          <div style="height: 1.5px; width: 100%; background: #2b4c8c; margin-bottom: 6px;"></div>
+                          <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #475569; display: block;">DATE OF ISSUE</span>
+                        </div>
+                        <div style="text-align: center; min-width: 185px;">
+                          <div style="font-family: 'Brush Script MT', Georgia, cursive, sans-serif; font-size: 22px; color: #1e293b; margin-bottom: 4px;">Megha Salunkhe</div>
+                          <div style="border-top: 1px dashed #2b4c8c; width: 100%; margin-bottom: 6px;"></div>
+                          <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #475569; display: block;">AUTHORIZED SIGNATORY</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="padding: 14px 24px; background: #ffffff; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+                  <span style="font-size: 12px; color: #64748b;">Issued credentials remain permanently accessible in your CollabCRM portal history.</span>
+                  <button type="button" class="btn-secondary-action" onclick="closeEmployeeCertViewer()">← Back</button>
                 </div>
               </div>
             </div>
@@ -2412,7 +2697,7 @@
                 </h1>
                 <p class="text-sm text-gray-500 mt-1">Manage training compliance policies, role permissions, notification preferences, and system automation.</p>
               </div>
-              <button class="btn-primary-action" onclick="alert('Configuration settings saved successfully!')">Save Changes</button>
+              <button class="btn-primary-action" onclick="showConfigToast('Configuration settings saved successfully!', 'success')">Save Changes</button>
             </div>
 
             <!-- Settings Grid -->
@@ -3421,7 +3706,7 @@
                 <span class="roles-count-pill" id="rolesCountBadge" style="background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 12px;">11 Roles</span>
               </div>
               <div style="display: flex; align-items: center; gap: 10px;">
-                <button type="button" class="btn-primary-action" onclick="alert('Add Role modal opened.')" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 13px;">
+                <button type="button" class="btn-primary-action" onclick="showConfigToast('Add Role: Please configure custom role under Roles &amp; Permissions.', 'info')" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 13px;">
                   + Add Role
                 </button>
                 <button type="button" class="btn-table-action" style="padding: 7px 10px;" title="More options">
@@ -3637,9 +3922,9 @@
                       </select>
                     </div>
                     <div style="display: inline-flex; align-items: center; border: 1px solid #e2e8f0; border-radius: 6px; overflow: hidden;">
-                      <button type="button" style="background: #ffffff; border: none; border-right: 1px solid #e2e8f0; padding: 6px 12px; font-size: 12px; color: #64748b; cursor: pointer;">← Previous</button>
-                      <button type="button" style="background: #4f46e5; border: none; border-right: 1px solid #e2e8f0; padding: 6px 12px; font-size: 12px; font-weight: 600; color: #ffffff; cursor: pointer;">1</button>
-                      <button type="button" style="background: #ffffff; border: none; padding: 6px 12px; font-size: 12px; color: #64748b; cursor: pointer;">Next →</button>
+                      <button type="button" onclick="showConfigToast('Already on page 1 of roles.', 'info')" style="background: #ffffff; border: none; border-right: 1px solid #e2e8f0; padding: 6px 12px; font-size: 12px; color: #64748b; cursor: pointer;">← Previous</button>
+                      <button type="button" onclick="showConfigToast('Showing page 1 of roles.', 'info')" style="background: #4f46e5; border: none; border-right: 1px solid #e2e8f0; padding: 6px 12px; font-size: 12px; font-weight: 600; color: #ffffff; cursor: pointer;">1</button>
+                      <button type="button" onclick="showConfigToast('All roles currently displayed on page 1.', 'info')" style="background: #ffffff; border: none; padding: 6px 12px; font-size: 12px; color: #64748b; cursor: pointer;">Next →</button>
                     </div>
                   </div>
                 </div>
@@ -3970,21 +4255,21 @@
       <!-- Far Right Quick-Action Dock Strip (Exact Match of Screenshot) -->
       <aside class="right-action-dock">
         <div class="dock-top-tools">
-          <button class="dock-icon-btn dock-pink" title="Help &amp; Support">
+          <button class="dock-icon-btn dock-pink" title="Help &amp; Support" onclick="showConfigToast('Help &amp; Support: CollabCRM Knowledge Base v2026.1', 'info')">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
               <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
             </svg>
           </button>
 
-          <button class="dock-icon-btn" title="Quick Notes">
+          <button class="dock-icon-btn" title="Quick Notes" onclick="showConfigToast('Quick Notes: No pending scratchpad items.', 'info')">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#64748b" stroke-width="2">
               <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
               <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
             </svg>
           </button>
 
-          <button class="dock-icon-btn dock-action-add" title="Quick Action">
+          <button class="dock-icon-btn dock-action-add" title="Quick Action" onclick="handleHeaderNewAction()">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#2563eb" stroke-width="2.5">
               <rect x="3" y="3" width="18" height="18" rx="3"></rect>
               <line x1="12" y1="8" x2="12" y2="16"></line>
@@ -3994,7 +4279,7 @@
         </div>
 
         <div class="dock-bottom-tools">
-          <button class="dock-icon-btn dock-yellow" title="System Alerts">
+          <button class="dock-icon-btn dock-yellow" title="System Alerts" onclick="openNotificationsScreen('all')">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#f59e0b" stroke-width="2.2">
               <circle cx="12" cy="12" r="10"></circle>
               <line x1="12" y1="8" x2="12" y2="12"></line>
@@ -4002,7 +4287,7 @@
             </svg>
           </button>
 
-          <button class="dock-icon-btn" title="Dock Options">
+          <button class="dock-icon-btn" title="Dock Options" onclick="showConfigToast('Dock customized for current role profile.', 'info')">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#94a3b8" stroke-width="2.2">
               <polyline points="11 19 4 12 11 5"></polyline>
               <polyline points="19 19 12 12 19 5"></polyline>
