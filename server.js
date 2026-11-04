@@ -168,9 +168,10 @@ const EMPLOYEE_TRAINING_STORE = {
       "questions": [
         {
           "id": "q1",
+          "type": "single_choice",
           "text": "What is the primary operational objective of API Security & OAuth2 Best Practices?",
           "options": [
-            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Enforce rigorous zero-trust token authentication and access boundaries",
             "Bypass architectural reviews for faster feature releases",
             "Store unencrypted sensitive credentials in public client code",
             "Disable audit logging during customer onboarding"
@@ -179,25 +180,27 @@ const EMPLOYEE_TRAINING_STORE = {
         },
         {
           "id": "q2",
-          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "type": "multiple_choice",
+          "text": "Which mechanisms defend against Broken Object Level Authorization (BOLA)? (Select all that apply)",
           "options": [
-            "Unrelated external vendors",
-            "Reporting Manager, SecOps, and the Incident Commander",
-            "Nobody until end-of-quarter reviews",
-            "Only social media followers"
+            "Validate tenant and object ownership on every state-changing request",
+            "Enforce cryptographically signed JWT claims with short-lived expiration",
+            "Rely solely on client-side routing guards without server validation",
+            "Implement fine-grained resource level access control policies"
           ],
-          "correctAnswer": 1
+          "correctAnswers": [0, 1, 3]
         },
         {
           "id": "q3",
-          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
-          "options": [
-            "50%",
-            "65%",
-            "80%",
-            "100%"
-          ],
-          "correctAnswer": 2
+          "type": "true_false",
+          "text": "OAuth 2.0 access tokens must be transmitted in Authorization headers rather than URL query parameters.",
+          "correctAnswer": "true"
+        },
+        {
+          "id": "q4",
+          "type": "text",
+          "text": "Explain briefly how distributed rate limiting safeguards CRM gateways against denial-of-service spikes.",
+          "minChars": 10
         }
       ]
     },

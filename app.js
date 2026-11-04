@@ -3832,6 +3832,89 @@ function handleReviewAction(action) {
 
 window.handleReviewAction = handleReviewAction;
 
+
+// Pointer 1: Certificate Revocation Controller
+let activeRevokeCertId = null;
+
+function openRevokeCertificateModal(certOrAssignId) {
+  const cert = state.certificates.find(c => c.id === certOrAssignId || c.assignmentId === certOrAssignId);
+  const a = state.assignments.find(asn => asn.id === certOrAssignId || (cert && asn.id === cert.assignmentId));
+  const emp = a ? state.employees.find(e => e.id === a.employeeId) : null;
+  const prog = a ? state.programs.find(p => p.id === a.programId) : null;
+
+  activeRevokeCertId = cert ? cert.id : certOrAssignId;
+
+  const card = document.getElementById('mgmtRevokeCertCard');
+  const certNoEl = document.getElementById('revokeTargetCertNo');
+  const recipEl = document.getElementById('revokeTargetRecipient');
+  const progEl = document.getElementById('revokeTargetProgram');
+  const inputEl = document.getElementById('revokeReasonInput');
+  const charCountEl = document.getElementById('revokeCharCount');
+
+  if (certNoEl) certNoEl.textContent = cert ? cert.certificateNo : activeRevokeCertId;
+  if (recipEl) recipEl.textContent = emp ? emp.name : 'Learner';
+  if (progEl) progEl.textContent = prog ? prog.title : 'Training Programme';
+  if (inputEl) inputEl.value = '';
+  if (charCountEl) charCountEl.textContent = '0';
+
+  if (card) {
+    card.style.display = 'block';
+    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+window.openRevokeCertificateModal = openRevokeCertificateModal;
+
+function closeRevokeCertModal() {
+  activeRevokeCertId = null;
+  const card = document.getElementById('mgmtRevokeCertCard');
+  if (card) card.style.display = 'none';
+}
+window.closeRevokeCertModal = closeRevokeCertModal;
+
+function submitRevokeCertificate() {
+  if (!activeRevokeCertId) return;
+  const reason = (document.getElementById('revokeReasonInput')?.value || '').trim();
+
+  if (reason.length < 5 || reason.length > 500) {
+    showConfigToast('Revocation reason is required and must be between 5 and 500 characters.', 'warning');
+    return;
+  }
+
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
+  // Update in state.certificates
+  const cert = state.certificates.find(c => c.id === activeRevokeCertId || c.assignmentId === activeRevokeCertId);
+  if (cert) {
+    cert.status = 'revoked';
+    cert.revokeReason = reason;
+    cert.revokedAt = dateStr;
+    cert.revokedBy = 'Isha Patel (Head of People)';
+  }
+
+  // Update in state.assignments
+  const a = state.assignments.find(asn => asn.id === activeRevokeCertId || (cert && asn.id === cert.assignmentId));
+  if (a) {
+    a.certificateStatus = 'revoked';
+  }
+
+  // Update in state.employeeTrainingData if present
+  if (state.employeeTrainingData && Array.isArray(state.employeeTrainingData.trainings)) {
+    const t = state.employeeTrainingData.trainings.find(x => (x.certificate && x.certificate.id === activeRevokeCertId) || x.id === activeRevokeCertId);
+    if (t && t.certificate) {
+      t.certificate.status = 'revoked';
+      t.certificate.revokeReason = reason;
+      t.certificate.revokedAt = dateStr;
+    }
+    saveEmployeeStoreToLocal();
+  }
+
+  closeRevokeCertModal();
+  renderCertificatesTable();
+  showConfigToast(`Certificate ${cert ? cert.certificateNo : activeRevokeCertId} has been successfully revoked.`, 'success');
+}
+window.submitRevokeCertificate = submitRevokeCertificate;
+
 // ==========================================================================
 // SECTION 6: CERTIFICATE MANAGEMENT
 // (Certificate generation and issuance must remain separate actions)
@@ -3855,7 +3938,8 @@ function renderCertificatesTable() {
 
       const isExpired = cert && cert.expiryDate && cert.expiryDate !== 'Lifetime' && (new Date(cert.expiryDate) < new Date() || cert.status === 'expired');
 
-      if (filter === 'all' || (filter === 'expired' && isExpired) || a.certificateStatus === filter) {
+      const isRevoked = a.certificateStatus === 'revoked' || (cert && cert.status === 'revoked');
+      if (filter === 'all' || (filter === 'expired' && isExpired) || (filter === 'revoked' && isRevoked) || a.certificateStatus === filter) {
         certItems.push({
           assignment: a,
           employee: emp,
@@ -3918,6 +4002,13 @@ function renderCertificatesTable() {
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
         </button>
       `;
+    } else if (a.certificateStatus === 'revoked' || (cert && cert.status === 'revoked')) {
+      statusPill = '<span class="status-pill status-revoked" style="background:#fee2e2; color:#b91c1c; border:1px solid #fecaca; font-weight:700;">✕ Revoked</span>';
+      actionButtons = `
+        <button type="button" class="emp-action-icon" onclick="previewCertificate('${cert ? cert.id : a.id}')" title="View Revoked Record" aria-label="View Certificate">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        </button>
+      `;
     } else if (a.certificateStatus === 'issued') {
       statusPill = '<span class="status-pill status-issued">Issued & Active</span>';
       actionButtons = `
@@ -3929,6 +4020,9 @@ function renderCertificatesTable() {
         </button>
         <button type="button" class="emp-action-icon" onclick="assignRefresherTraining('${cert ? cert.id : a.id}')" title="Assign Refresher Course" aria-label="Refresher" style="color:#2563eb;">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+        </button>
+        <button type="button" class="emp-action-icon" onclick="openRevokeCertificateModal('${cert ? cert.id : a.id}')" title="Revoke Certificate (Requires 5-500 char reason)" aria-label="Revoke" style="color:#dc2626;">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
         </button>
       `;
     }
@@ -4044,6 +4138,14 @@ function previewCertificate(certId) {
   const btnReissueFromModal = document.getElementById('btnReissueCertFromModal');
   if (btnReissueFromModal) {
     btnReissueFromModal.style.display = (cert.status === 'issued') ? 'inline-block' : 'none';
+  }
+
+  const revokedBanner = document.getElementById('certPreviewRevokedBanner');
+  const revokedReasonEl = document.getElementById('certPreviewRevokeReasonText');
+  const isRevoked = cert.status === 'revoked';
+  if (revokedBanner) {
+    revokedBanner.style.display = isRevoked ? 'block' : 'none';
+    if (revokedReasonEl) revokedReasonEl.textContent = cert.revokeReason || 'Administrative revocation';
   }
 
   const mgmtCertScreen = document.getElementById('sectionMgmtCertificateScreen');
@@ -9074,9 +9176,10 @@ const BUILTIN_CO5039_TRAININGS = [
       "questions": [
         {
           "id": "q1",
+          "type": "single_choice",
           "text": "What is the primary operational objective of API Security & OAuth2 Best Practices?",
           "options": [
-            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Enforce rigorous zero-trust token authentication and access boundaries",
             "Bypass architectural reviews for faster feature releases",
             "Store unencrypted sensitive credentials in public client code",
             "Disable audit logging during customer onboarding"
@@ -9085,25 +9188,27 @@ const BUILTIN_CO5039_TRAININGS = [
         },
         {
           "id": "q2",
-          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "type": "multiple_choice",
+          "text": "Which mechanisms defend against Broken Object Level Authorization (BOLA)? (Select all that apply)",
           "options": [
-            "Unrelated external vendors",
-            "Reporting Manager, SecOps, and the Incident Commander",
-            "Nobody until end-of-quarter reviews",
-            "Only social media followers"
+            "Validate tenant and object ownership on every state-changing request",
+            "Enforce cryptographically signed JWT claims with short-lived expiration",
+            "Rely solely on client-side routing guards without server validation",
+            "Implement fine-grained resource level access control policies"
           ],
-          "correctAnswer": 1
+          "correctAnswers": [0, 1, 3]
         },
         {
           "id": "q3",
-          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
-          "options": [
-            "50%",
-            "65%",
-            "80%",
-            "100%"
-          ],
-          "correctAnswer": 2
+          "type": "true_false",
+          "text": "OAuth 2.0 access tokens must be transmitted in Authorization headers rather than URL query parameters.",
+          "correctAnswer": "true"
+        },
+        {
+          "id": "q4",
+          "type": "text",
+          "text": "Explain briefly how distributed rate limiting safeguards CRM gateways against denial-of-service spikes.",
+          "minChars": 10
         }
       ]
     },
@@ -14727,30 +14832,65 @@ function renderEmpModalAssessment(t) {
     `;
   }
 
-  // Interactive Quiz questions
+  // Interactive Quiz questions supporting 4 Types: Single Choice, Multiple Choice, True-False, Text (POINTER 3)
   const questions = a.questions || [];
   if (questions.length > 0) {
     html += `
       <form id="empAssessmentForm" onsubmit="event.preventDefault(); submitEmployeeAssessment('${t.id}');" style="display: flex; flex-direction: column; gap: 16px;">
-        ${questions.map((q, qIdx) => `
-          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px;">
-            <p style="font-size: 13.5px; font-weight: 600; color: #0f172a; margin: 0 0 10px 0;">
-              Q${qIdx + 1}. ${escapeHtml(q.text || q.question)}
-            </p>
-            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
-              ${(q.options || []).map((opt, optIdx) => `
-                <label style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer;">
-                  <input type="radio" name="q_${q.id}" value="${optIdx}" ${isPassed ? (optIdx === q.correctIndex ? 'checked' : '') : ''} ${isPassed || remaining <= 0 ? 'disabled' : ''} style="width: 16px; height: 16px; accent-color: #4f46e5;" required />
-                  <span style="color: #334155;">${escapeHtml(opt)}</span>
-                </label>
-              `).join('')}
+        ${questions.map((q, qIdx) => {
+          const qType = q.type || 'single_choice';
+          let qTypeBadge = '<span style="font-size: 11px; background: #e0e7ff; color: #4338ca; padding: 2px 7px; border-radius: 4px; font-weight: 600;">Single Choice</span>';
+          let inputMarkup = '';
+
+          if (qType === 'multiple_choice') {
+            qTypeBadge = '<span style="font-size: 11px; background: #ecfdf5; color: #047857; padding: 2px 7px; border-radius: 4px; font-weight: 600;">Multiple Choice (Select all that apply)</span>';
+            inputMarkup = (q.options || []).map((opt, optIdx) => `
+              <label style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer;">
+                <input type="checkbox" name="q_${q.id}" value="${optIdx}" ${isPassed ? 'checked' : ''} ${isPassed || remaining <= 0 ? 'disabled' : ''} style="width: 16px; height: 16px; accent-color: #4f46e5;" />
+                <span style="color: #334155;">${escapeHtml(opt)}</span>
+              </label>
+            `).join('');
+          } else if (qType === 'true_false') {
+            qTypeBadge = '<span style="font-size: 11px; background: #fef3c7; color: #92400e; padding: 2px 7px; border-radius: 4px; font-weight: 600;">True / False</span>';
+            inputMarkup = ['True', 'False'].map((tfVal, tfIdx) => `
+              <label style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer;">
+                <input type="radio" name="q_${q.id}" value="${tfVal.toLowerCase()}" ${isPassed && ((q.correctAnswer === tfVal.toLowerCase()) || tfVal === 'True') ? 'checked' : ''} ${isPassed || remaining <= 0 ? 'disabled' : ''} style="width: 16px; height: 16px; accent-color: #4f46e5;" required />
+                <span style="color: #334155; font-weight: 600;">${tfVal}</span>
+              </label>
+            `).join('');
+          } else if (qType === 'text') {
+            qTypeBadge = '<span style="font-size: 11px; background: #f3e8ff; color: #6b21a8; padding: 2px 7px; border-radius: 4px; font-weight: 600;">Text Response</span>';
+            inputMarkup = `
+              <textarea name="q_${q.id}" rows="3" placeholder="Provide your written response (minimum 10 characters)..." maxlength="500" ${isPassed || remaining <= 0 ? 'disabled' : ''} style="width: 100%; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 12px; font-size: 13px; outline: none; box-sizing: border-box; resize: vertical;" required>${isPassed ? 'Comprehensive compliance standards and procedural safeguards have been thoroughly verified.' : ''}</textarea>
+            `;
+          } else {
+            // single_choice (default)
+            inputMarkup = (q.options || []).map((opt, optIdx) => `
+              <label style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer;">
+                <input type="radio" name="q_${q.id}" value="${optIdx}" ${isPassed ? (optIdx === (q.correctAnswer !== undefined ? q.correctAnswer : q.correctIndex) ? 'checked' : '') : ''} ${isPassed || remaining <= 0 ? 'disabled' : ''} style="width: 16px; height: 16px; accent-color: #4f46e5;" required />
+                <span style="color: #334155;">${escapeHtml(opt)}</span>
+              </label>
+            `).join('');
+          }
+
+          return `
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px;">
+                <p style="font-size: 13.5px; font-weight: 600; color: #0f172a; margin: 0;">
+                  Q${qIdx + 1}. ${escapeHtml(q.text || q.question)}
+                </p>
+                ${qTypeBadge}
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+                ${inputMarkup}
+              </div>
             </div>
-          </div>
-        `).join('')}
+          `;
+        }).join('')}
 
         ${!isPassed && remaining > 0 ? `
           <div style="display: flex; justify-content: flex-end; padding-top: 10px;">
-            <button type="submit" class="btn-primary-action" id="btnSubmitAssessmentForm" style="padding: 9px 20px; font-size: 13px;">
+            <button type="submit" class="btn-primary-action" id="btnSubmitAssessmentForm" style="padding: 9px 20px; font-size: 13px; font-weight: 700;">
               Submit Assessment Attempt
             </button>
           </div>
@@ -14758,7 +14898,6 @@ function renderEmpModalAssessment(t) {
       </form>
     `;
   }
-
   container.innerHTML = html;
 }
 

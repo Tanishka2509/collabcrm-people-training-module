@@ -2415,6 +2415,7 @@
                       <option value="generated">Generated (Ready to Issue)</option>
                       <option value="issued">Issued &amp; Active</option>
                       <option value="expired">Expired</option>
+                      <option value="revoked">Revoked</option>
                     </select>
                   </div>
                 </div>
@@ -2433,6 +2434,42 @@
                     </thead>
                     <tbody id="certificatesTableBody"></tbody>
                   </table>
+                </div>
+              </div>
+
+              
+              <!-- IN-SCREEN REVOKE CERTIFICATE CARD (POINTER 1 - NO POP-UPS) -->
+              <div id="mgmtRevokeCertCard" style="display: none; background: #ffffff; border: 1px solid #fecdd3; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 6px rgba(239, 68, 68, 0.08); overflow: hidden;">
+                <div style="padding: 16px 20px; background: #fff1f2; border-bottom: 1px solid #fecdd3; display: flex; align-items: center; justify-content: space-between;">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 20px;">⚠️</span>
+                    <div>
+                      <h4 style="font-size: 14.5px; font-weight: 700; color: #9f1239; margin: 0;">Revoke Issued Certificate</h4>
+                      <p style="font-size: 12px; color: #881337; margin: 2px 0 0 0;">Enter a formal reason to permanently revoke this issued credential. Reason must be 5 to 500 characters.</p>
+                    </div>
+                  </div>
+                  <button type="button" class="btn-table-action" onclick="closeRevokeCertModal()" style="font-size: 12px; padding: 4px 10px;">Cancel</button>
+                </div>
+                <div style="padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+                  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px 16px; font-size: 12.5px;">
+                    <div><span style="color: #64748b;">Certificate No:</span> <strong id="revokeTargetCertNo" style="color: #0f172a; font-family: monospace;">-</strong></div>
+                    <div><span style="color: #64748b;">Recipient:</span> <strong id="revokeTargetRecipient" style="color: #0f172a;">-</strong></div>
+                    <div><span style="color: #64748b;">Programme:</span> <strong id="revokeTargetProgram" style="color: #0f172a;">-</strong></div>
+                  </div>
+                  <div>
+                    <label style="display: block; font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 6px;">Revocation Reason * <span style="font-size: 11.5px; font-weight: 400; color: #64748b;">(5 - 500 characters)</span></label>
+                    <textarea id="revokeReasonInput" rows="3" placeholder="Specify compliance, audit, or academic justification for certificate revocation..." minlength="5" maxlength="500" style="width: 100%; border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px 12px; font-size: 13px; outline: none; box-sizing: border-box; resize: vertical;" oninput="document.getElementById('revokeCharCount').textContent = this.value.length"></textarea>
+                    <div style="display: flex; justify-content: space-between; font-size: 11px; color: #64748b; margin-top: 4px;">
+                      <span>Required for permanent audit trail compliance</span>
+                      <span><span id="revokeCharCount">0</span>/500 characters</span>
+                    </div>
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button type="button" class="btn-table-action" onclick="closeRevokeCertModal()" style="padding: 7px 16px; font-size: 12.5px;">Cancel</button>
+                    <button type="button" class="btn-primary-action" id="btnConfirmRevoke" onclick="submitRevokeCertificate()" style="background: #dc2626; border-color: #b91c1c; color: #ffffff; padding: 7px 18px; font-size: 12.5px; font-weight: 700;">
+                      Confirm Permanent Revocation ✕
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -2498,6 +2535,11 @@
                         <button type="button" class="btn-table-action" onclick="toggleMgmtReissueCard()" style="height: 36px; padding: 0 12px; font-size: 12.5px;">Cancel</button>
                       </div>
                     </div>
+                  </div>
+
+                  <!-- Revoked Notice Banner in Preview (Pointer 1) -->
+                  <div id="certPreviewRevokedBanner" style="display: none; padding: 14px 24px; background: #fff1f2; border-bottom: 2px solid #fecdd3; color: #9f1239; font-weight: 700; font-size: 13px;">
+                    ⚠️ THIS CERTIFICATE HAS BEEN REVOKED — Reason: <span id="certPreviewRevokeReasonText" style="font-weight: 600; color: #881337;"></span>
                   </div>
 
                   <!-- Printable Canvas Area -->
