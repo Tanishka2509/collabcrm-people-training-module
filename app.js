@@ -8994,6 +8994,8 @@ const BUILTIN_CO5039_TRAININGS = [
     "startDate": "15-Jan-2026",
     "completionPercentage": 67,
     "trainingStatus": "in_progress",
+    "difficultyLevel": "Intermediate",
+    "expectedDuration": "4 Hours",
     "learningObjectives": [
       "Understand OAuth2 authorization code and client credentials grant mechanisms",
       "Implement cryptographically verified JSON Web Token (JWT) validation and RBAC claims",
@@ -9001,118 +9003,107 @@ const BUILTIN_CO5039_TRAININGS = [
       "Configure distributed sliding-window rate limiting algorithms on mission-critical CRM gateways"
     ],
     "expectedOutcomes": "Engineers will be capable of authoring and auditing secure zero-trust APIs, safeguarding CRM customer data, and adhering to strict platform access policies.",
-    "difficultyLevel": "Intermediate",
-    "expectedDuration": "4 Hours",
+    "status": "In Progress",
     "resources": [
       {
-        "id": "res_101_1",
-        "title": "OAuth 2.0 & OpenID Connect Framework Deep Dive",
-        "description": "Comprehensive video breakdown of modern token authorization flows and cryptographic signatures.",
+        "id": "TRN-ASSIGN-101_r1",
+        "title": "Module 1: Foundations & Core Principles of API Security & OAuth2 Best Practices",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
         "type": "youtube",
         "isMandatory": true,
-        "duration": "18 Mins",
+        "duration": "22 Mins",
         "url": "https://www.youtube.com/watch?v=996OiexHze0",
         "isCompleted": true,
         "completionDate": "15-Jan-2026",
-        "completionTimestamp": "15-Jan-2026, 10:20 AM"
+        "completionTimestamp": null
       },
       {
-        "id": "res_101_2",
-        "title": "CollabCRM API Security Specifications & Token Policies (PDF)",
-        "description": "Official corporate documentation outlining API gateway security contracts, header formats, and token lifecycle.",
+        "id": "TRN-ASSIGN-101_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
         "type": "pdf",
         "isMandatory": true,
-        "duration": "25 Mins",
-        "url": "assets/docs/api_security_spec.pdf",
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-101_playbook.pdf",
         "isCompleted": true,
-        "completionDate": "18-Jan-2026",
-        "completionTimestamp": "18-Jan-2026, 03:45 PM"
+        "completionDate": null,
+        "completionTimestamp": null
       },
       {
-        "id": "res_101_3",
-        "title": "Interactive OWASP API Vulnerability Simulation Labs",
-        "description": "External hands-on laboratory exercises simulating real-world API security vulnerability exploitation and mitigation.",
+        "id": "TRN-ASSIGN-101_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
         "type": "external_link",
         "isMandatory": false,
-        "duration": "45 Mins",
-        "url": "https://owasp.org/www-project-api-security/",
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-101",
         "isCompleted": false,
         "completionDate": null,
         "completionTimestamp": null
       },
       {
-        "id": "res_101_4",
-        "title": "CollabCRM Gateway JWT Validation Middleware Demo",
-        "description": "Video walk-through demonstrating custom middleware deployment and automated scope validation.",
+        "id": "TRN-ASSIGN-101_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
         "type": "video",
         "isMandatory": true,
-        "duration": "30 Mins",
-        "url": "assets/videos/jwt_middleware_demo.mp4",
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-101_demo.mp4",
         "isCompleted": false,
         "completionDate": null,
         "completionTimestamp": null
       }
     ],
     "assessment": {
-      "id": "asm_101",
-      "name": "API Security & OAuth2 Certification Assessment",
-      "instructions": "Answer all 4 questions carefully. You must achieve at least 80% to pass. Maximum 3 attempts allowed.",
+      "id": "TRN-ASSIGN-101_asm",
+      "name": "API Security & OAuth2 Best Practices Certification Assessment",
       "passingScore": 80,
       "maxAttempts": 3,
       "attemptsUsed": 1,
       "passed": false,
+      "isPassed": false,
+      "bestScore": 70,
       "previousAttempts": [
         {
           "attemptNumber": 1,
-          "score": 75,
+          "score": 70,
           "passed": false,
-          "submissionDate": "20-Jan-2026, 04:15 PM"
+          "submissionDate": "15-Jan-2026"
         }
       ],
       "questions": [
         {
           "id": "q1",
-          "text": "Which grant type is standardly recommended for Single Page Web Applications without client secrets?",
+          "text": "What is the primary operational objective of API Security & OAuth2 Best Practices?",
           "options": [
-            "Authorization Code Flow with PKCE (Proof Key for Code Exchange)",
-            "Client Credentials Grant",
-            "Implicit Grant with Bearer Token in URL Fragment",
-            "Resource Owner Password Credentials Grant"
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
           ],
-          "correctIndex": 0
+          "correctAnswer": 0
         },
         {
           "id": "q2",
-          "text": "Where should sensitive tokens like long-lived Refresh Tokens NEVER be stored on the client?",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
           "options": [
-            "HttpOnly, Secure SameSite Cookie",
-            "Browser LocalStorage / SessionStorage",
-            "Encrypted Backend Session Store",
-            "Protected Server-Side Secure Enclave"
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
           ],
-          "correctIndex": 1
+          "correctAnswer": 1
         },
         {
           "id": "q3",
-          "text": "What critical security vulnerability is prevented by verifying JWT signatures on incoming API requests?",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
           "options": [
-            "Cross-Site Scripting (XSS)",
-            "Token Payload Tampering and Unauthorized Privilege Escalation",
-            "SQL Query Injection in ORM layer",
-            "DNS Cache Poisoning"
+            "50%",
+            "65%",
+            "80%",
+            "100%"
           ],
-          "correctIndex": 1
-        },
-        {
-          "id": "q4",
-          "text": "When a valid authenticated token lacks the required RBAC scope for an endpoint, which HTTP code must be returned?",
-          "options": [
-            "401 Unauthorized",
-            "403 Forbidden",
-            "400 Bad Request",
-            "404 Not Found"
-          ],
-          "correctIndex": 1
+          "correctAnswer": 2
         }
       ]
     },
@@ -9122,353 +9113,4339 @@ const BUILTIN_CO5039_TRAININGS = [
       "submittedAt": null,
       "isLocked": false
     },
-    "review": null,
+    "review": {
+      "status": "pending",
+      "reviewerName": "Megha Salunkhe",
+      "reviewDate": null,
+      "feedback": null
+    },
     "certificate": null
   },
   {
     "id": "TRN-ASSIGN-102",
-    "trainingName": "Security Awareness & GDPR Compliance 2026",
+    "trainingName": "Data Protection, GDPR & Employee Privacy 2026",
     "category": "Governance & Compliance",
-    "shortDescription": "Annual company-wide compliance covering European GDPR regulations, data subject rights, and breach escalation protocols.",
+    "shortDescription": "Comprehensive training on EU GDPR regulations, CCPA data rights, PII handling, employee consent frameworks, and breach response.",
     "isMandatory": true,
-    "assignedBy": "Isha Patel (Head of People)",
+    "assignedBy": "Isha Patel (HR Operations)",
     "assignedDate": "05-Jan-2026",
-    "dueDate": "28-Jan-2026",
+    "dueDate": "20-Feb-2026",
     "startDate": "08-Jan-2026",
+    "completionDate": "26-Jan-2026",
     "completionPercentage": 100,
     "trainingStatus": "completed",
-    "learningObjectives": [
-      "Understand European GDPR fundamentals and legal basis for CRM customer data retention",
-      "Learn the statutory 72-hour security incident disclosure and notification timelines",
-      "Execute customer Right to be Forgotten (Data Erasure) workflows securely"
-    ],
-    "expectedOutcomes": "Full compliance with global privacy regulations and secure data stewardship.",
     "difficultyLevel": "Beginner",
-    "expectedDuration": "2 Hours",
+    "expectedDuration": "3 Hours",
+    "learningObjectives": [
+      "Identify Personally Identifiable Information (PII) across customer and employee databases",
+      "Execute GDPR Subject Access Requests (SAR) and Right to Erasure procedures",
+      "Maintain Data Protection Impact Assessments (DPIA) for high-risk data workflows",
+      "Implement incident containment protocols within the mandatory 72-hour notification window"
+    ],
+    "expectedOutcomes": "Staff demonstrate thorough comprehension of data subject rights and privacy protection obligations across all software interfaces.",
+    "status": "Completed",
     "resources": [
       {
-        "id": "res_102_1",
-        "title": "GDPR Regulations & Employee Responsibilities",
-        "description": "Core overview of consumer data protection standards.",
+        "id": "TRN-ASSIGN-102_r1",
+        "title": "Module 1: Foundations & Core Principles of Data Protection, GDPR & Employee Privacy 2026",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
+        "isMandatory": true,
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": true,
+        "completionDate": "26-Jan-2026",
+        "completionTimestamp": "24-Jan-2026, 11:15 AM"
+      },
+      {
+        "id": "TRN-ASSIGN-102_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
         "type": "pdf",
         "isMandatory": true,
         "duration": "35 Mins",
-        "url": "assets/docs/gdpr_compliance.pdf",
+        "url": "assets/docs/trn-assign-102_playbook.pdf",
         "isCompleted": true,
-        "completionDate": "10-Jan-2026",
-        "completionTimestamp": "10-Jan-2026, 11:30 AM"
+        "completionDate": "26-Jan-2026",
+        "completionTimestamp": "25-Jan-2026, 02:40 PM"
       },
       {
-        "id": "res_102_2",
-        "title": "Data Privacy Incident Reporting & Escalation Matrix",
-        "description": "Step-by-step procedures to escalate suspected customer PII leaks.",
-        "type": "pdf",
-        "isMandatory": true,
-        "duration": "20 Mins",
-        "url": "assets/docs/escalation_matrix.pdf",
+        "id": "TRN-ASSIGN-102_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-102",
         "isCompleted": true,
-        "completionDate": "12-Jan-2026",
-        "completionTimestamp": "12-Jan-2026, 04:15 PM"
+        "completionDate": "26-Jan-2026",
+        "completionTimestamp": "26-Jan-2026, 04:10 PM"
+      },
+      {
+        "id": "TRN-ASSIGN-102_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-102_demo.mp4",
+        "isCompleted": true,
+        "completionDate": "26-Jan-2026",
+        "completionTimestamp": "26-Jan-2026, 05:30 PM"
       }
     ],
     "assessment": {
-      "id": "asm_102",
-      "name": "GDPR Annual Compliance Test",
-      "instructions": "Achieve 100% to receive verified accreditation.",
-      "passingScore": 100,
+      "id": "TRN-ASSIGN-102_asm",
+      "name": "Data Protection, GDPR & Employee Privacy 2026 Certification Assessment",
+      "passingScore": 80,
       "maxAttempts": 3,
       "attemptsUsed": 1,
       "passed": true,
+      "isPassed": true,
+      "bestScore": 92,
       "previousAttempts": [
         {
           "attemptNumber": 1,
-          "score": 100,
+          "score": 92,
           "passed": true,
-          "submissionDate": "15-Jan-2026, 02:20 PM"
+          "submissionDate": "26-Jan-2026"
         }
       ],
       "questions": [
         {
-          "id": "q102_1",
-          "text": "Under GDPR, what is the maximum statutory timeframe to report a serious personal data breach to the supervisory authority?",
+          "id": "q1",
+          "text": "What is the primary operational objective of Data Protection, GDPR & Employee Privacy 2026?",
           "options": [
-            "24 Hours",
-            "48 Hours",
-            "72 Hours",
-            "7 Days"
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
           ],
-          "correctIndex": 2
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
         }
       ]
     },
     "submission": {
-      "completionRemarks": "All compliance materials thoroughly reviewed and validated against quarterly IT roadmap.",
+      "completionRemarks": "All 4 modules thoroughly studied and assessment completed with score >= 80%.",
       "evidenceFiles": [
-        "signed_compliance_attestation_2026.pdf"
+        "certificate_evidence_trn-assign-102.pdf"
       ],
-      "submittedAt": "15-Jan-2026, 02:40 PM",
+      "submittedAt": "26-Jan-2026",
       "isLocked": true
     },
     "review": {
       "status": "approved",
-      "reviewerName": "Isha Patel (Head of People)",
+      "reviewerName": "Isha Patel",
       "reviewDate": "26-Jan-2026",
-      "feedback": "Excellent work! Certified for the calendar year 2026."
+      "feedback": "Comprehensive coursework completed and passed with distinction. Certificate approved and issued."
     },
     "certificate": {
-      "id": "TRN-2026-0003",
-      "trainingId": "TRN-ASSIGN-102",
+      "id": "TRN-2026-0002",
+      "name": "Data Protection, GDPR & Employee Privacy 2026 Credential",
+      "trainingName": "Data Protection, GDPR & Employee Privacy 2026",
       "issueDate": "26-Jan-2026",
+      "expiryDate": "26-Jan-2028",
       "status": "issued",
       "recipientName": "Tanya Kapoor",
-      "recipientId": "CO-5039",
-      "issuerName": "Isha Patel",
-      "issuerRole": "Head of People & Compliance",
-      "pdfDownloadUrl": "#"
+      "recipientId": "CO-5039"
     }
   },
   {
     "id": "TRN-ASSIGN-103",
-    "trainingName": "CollabCRM Platform Architecture Deep Dive",
-    "category": "Technical Architecture",
-    "shortDescription": "In-depth exploration of CollabCRM multi-tenant database partitioning, Redis caching topologies, and WebSocket streaming.",
+    "trainingName": "CollabCRM Platform Architecture & Microservices",
+    "category": "Product & Platform",
+    "shortDescription": "Deep dive into internal service communication, message brokers, caching tiers, and resilient microservice design.",
     "isMandatory": true,
-    "assignedBy": "Kunal Barve (Principal Architect)",
-    "assignedDate": "01-Feb-2026",
-    "dueDate": "01-Apr-2026",
-    "startDate": "05-Feb-2026",
-    "completionPercentage": 80,
+    "assignedBy": "Ishdeep Anand (Admin)",
+    "assignedDate": "18-Jan-2026",
+    "dueDate": "28-Feb-2026",
+    "startDate": "20-Jan-2026",
+    "completionPercentage": 45,
     "trainingStatus": "in_progress",
-    "learningObjectives": [
-      "Design resilient sharded PostgreSQL schemas with tenant-level connection pools",
-      "Utilize Redis Pub/Sub for high-throughput CRM real-time notifications",
-      "Deploy horizontal read replicas with sub-10ms replication lag"
-    ],
-    "expectedOutcomes": "Mastery in building resilient, enterprise-scale CRM backends.",
     "difficultyLevel": "Advanced",
     "expectedDuration": "6 Hours",
+    "learningObjectives": [
+      "Deconstruct CollabCRM event-driven pub/sub architecture using RabbitMQ/Kafka",
+      "Implement circuit breakers, retries, and exponential backoff in inter-service gRPC calls",
+      "Analyze telemetry traces, distributed spans, and OpenTelemetry instrumentation",
+      "Manage multi-tenant schema partitioning and cross-database referential integrity"
+    ],
+    "expectedOutcomes": "Architects and engineers build scalable, fault-tolerant business features aligned with enterprise system architecture.",
+    "status": "In Progress",
     "resources": [
       {
-        "id": "res_103_1",
-        "title": "Multi-Tenant Database Sharding Architecture (PDF)",
-        "description": "Architecture diagram and query routing rules.",
-        "type": "pdf",
-        "isMandatory": true,
-        "duration": "50 Mins",
-        "url": "assets/docs/sharding_architecture.pdf",
-        "isCompleted": true,
-        "completionDate": "08-Feb-2026",
-        "completionTimestamp": "08-Feb-2026, 05:00 PM"
-      },
-      {
-        "id": "res_103_2",
-        "title": "Redis Cluster Caching Strategies Video",
-        "description": "Cache invalidation design patterns and cache stampede protection.",
+        "id": "TRN-ASSIGN-103_r1",
+        "title": "Module 1: Foundations & Core Principles of CollabCRM Platform Architecture & Microservices",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
         "type": "youtube",
         "isMandatory": true,
         "duration": "22 Mins",
-        "url": "https://www.youtube.com/watch?v=G1rOthIU-uo",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
         "isCompleted": true,
-        "completionDate": "12-Feb-2026",
-        "completionTimestamp": "12-Feb-2026, 06:10 PM"
+        "completionDate": "20-Jan-2026",
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-103_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
+        "type": "pdf",
+        "isMandatory": true,
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-103_playbook.pdf",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-103_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-103",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-103_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-103_demo.mp4",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
       }
     ],
     "assessment": {
-      "id": "asm_103",
-      "name": "Platform Architecture Qualification Assessment",
-      "instructions": "Score at least 85% to pass.",
-      "passingScore": 85,
-      "maxAttempts": 2,
+      "id": "TRN-ASSIGN-103_asm",
+      "name": "CollabCRM Platform Architecture & Microservices Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
       "attemptsUsed": 1,
-      "passed": true,
+      "passed": false,
+      "isPassed": false,
+      "bestScore": 70,
       "previousAttempts": [
         {
           "attemptNumber": 1,
-          "score": 90,
-          "passed": true,
-          "submissionDate": "25-Feb-2026, 03:00 PM"
+          "score": 70,
+          "passed": false,
+          "submissionDate": "20-Jan-2026"
         }
       ],
       "questions": [
         {
-          "id": "q103_1",
-          "text": "Which Redis cache eviction policy is optimal for sliding-window CRM session tokens?",
+          "id": "q1",
+          "text": "What is the primary operational objective of CollabCRM Platform Architecture & Microservices?",
           "options": [
-            "noeviction",
-            "allkeys-lru",
-            "volatile-ttl",
-            "allkeys-random"
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
           ],
-          "correctIndex": 2
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
         }
       ]
     },
     "submission": {
-      "completionRemarks": "Submitted architecture proof-of-concept summary with benchmark charts.",
-      "evidenceFiles": [
-        "cache_benchmark_report_v1.pdf"
-      ],
-      "submittedAt": "27-Feb-2026, 04:30 PM",
+      "completionRemarks": "",
+      "evidenceFiles": [],
+      "submittedAt": null,
       "isLocked": false
     },
     "review": {
-      "status": "changes_requested",
-      "reviewerName": "Kunal Barve (Principal Architect)",
-      "reviewDate": "28-Feb-2026",
-      "feedback": "Please include stress test benchmarks demonstrating failover behavior when the primary Redis shard goes offline."
+      "status": "pending",
+      "reviewerName": "Ishdeep Anand",
+      "reviewDate": null,
+      "feedback": null
     },
-    "certificate": null,
-    "status": "In Progress"
+    "certificate": null
   },
   {
     "id": "TRN-ASSIGN-104",
-    "trainingName": "Effective Cross-Functional Stakeholder Communication",
-    "category": "Professional Skills",
-    "shortDescription": "Practical frameworks for managing expectations across sales, engineering, product management, and executive leadership.",
-    "isMandatory": false,
+    "trainingName": "Enterprise Information Security & Phishing Defense",
+    "category": "Governance & Compliance",
+    "shortDescription": "Mandatory annual cybersecurity defense course covering spear-phishing, social engineering, credential hygiene, and MFA verification.",
+    "isMandatory": true,
     "assignedBy": "Megha Salunkhe (Sr. Executive)",
-    "assignedDate": "15-Feb-2026",
-    "dueDate": "30-Apr-2026",
-    "startDate": null,
-    "completionPercentage": 0,
-    "trainingStatus": "not_started",
-    "learningObjectives": [
-      "Translate deep technical engineering debt into business value for C-suite stakeholders",
-      "Conduct blameless post-mortems and constructive conflict resolution",
-      "Write crisp asynchronous product requirements documents (PRDs)"
-    ],
-    "expectedOutcomes": "Elevated cross-departmental alignment and faster product delivery.",
+    "assignedDate": "10-Dec-2025",
+    "dueDate": "15-Jan-2026",
+    "startDate": "12-Dec-2025",
+    "completionPercentage": 20,
+    "trainingStatus": "overdue",
     "difficultyLevel": "Beginner",
-    "expectedDuration": "2.5 Hours",
+    "expectedDuration": "2 Hours",
+    "learningObjectives": [
+      "Identify sophisticated spear-phishing emails, spoofed headers, and fraudulent domains",
+      "Enforce hardware FIDO2/WebAuthn MFA tokens across all operational workstation logins",
+      "Safely report suspected security threats through internal SecOps dispatch pipelines",
+      "Adhere to clean-desk, screen-locking, and physical badge access requirements"
+    ],
+    "expectedOutcomes": "Employees act as a vigilant first line of cyber defense to eliminate unauthorized intrusions and corporate data breaches.",
+    "status": "Overdue",
     "resources": [
       {
-        "id": "res_104_1",
-        "title": "The Art of Technical Executive Briefings",
-        "description": "Guidance on structuring executive summary slides and metrics.",
+        "id": "TRN-ASSIGN-104_r1",
+        "title": "Module 1: Foundations & Core Principles of Enterprise Information Security & Phishing Defense",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
+        "isMandatory": true,
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-104_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
         "type": "pdf",
         "isMandatory": true,
-        "duration": "30 Mins",
-        "url": "assets/docs/executive_briefings.pdf",
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-104_playbook.pdf",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-104_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-104",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-104_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-104_demo.mp4",
         "isCompleted": false,
         "completionDate": null,
         "completionTimestamp": null
       }
     ],
-    "assessment": null,
+    "assessment": {
+      "id": "TRN-ASSIGN-104_asm",
+      "name": "Enterprise Information Security & Phishing Defense Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
+      "attemptsUsed": 0,
+      "passed": false,
+      "isPassed": false,
+      "bestScore": 0,
+      "previousAttempts": [],
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the primary operational objective of Enterprise Information Security & Phishing Defense?",
+          "options": [
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
+        }
+      ]
+    },
     "submission": {
       "completionRemarks": "",
       "evidenceFiles": [],
       "submittedAt": null,
       "isLocked": false
     },
-    "review": null,
+    "review": {
+      "status": "not_submitted",
+      "reviewerName": "Megha Salunkhe",
+      "reviewDate": null,
+      "feedback": null
+    },
     "certificate": null
   },
   {
     "id": "TRN-ASSIGN-105",
-    "trainingName": "Q4 2025 Workplace Safety & POSH Re-Certification",
-    "category": "Governance & Compliance",
-    "shortDescription": "Mandatory workplace safety policies, POSH compliance, and employee grievance redressal mechanisms.",
-    "isMandatory": true,
-    "assignedBy": "Isha Patel (Head of People)",
-    "assignedDate": "01-Nov-2025",
-    "dueDate": "15-Dec-2025",
-    "startDate": "10-Nov-2025",
-    "completionPercentage": 40,
-    "trainingStatus": "overdue",
+    "trainingName": "Cloud Native DevOps & CI/CD Pipelines",
+    "category": "Technical Architecture",
+    "shortDescription": "Automated continuous integration, deployment gates, trunk-based development, and blue-green rollouts on Kubernetes.",
+    "isMandatory": false,
+    "assignedBy": "Ishdeep Anand (Admin)",
+    "assignedDate": "25-Jan-2026",
+    "dueDate": "30-Apr-2026",
+    "startDate": null,
+    "completionPercentage": 0,
+    "trainingStatus": "not_started",
+    "difficultyLevel": "Intermediate",
+    "expectedDuration": "5 Hours",
     "learningObjectives": [
-      "Recognize workplace harassment and understand Internal Complaints Committee (ICC) procedures",
-      "Review health and physical safety protocols across office premises"
+      "Configure automated Docker multi-stage container builds with vulnerability image scanning",
+      "Design GitHub Actions workflows with ephemeral test environments and preview deployments",
+      "Execute automated canary analysis and zero-downtime rolling service upgrades",
+      "Define Terraform Infrastructure-as-Code modules for cloud resource provisioning"
     ],
-    "expectedOutcomes": "A respectful, safe, and fully compliant workplace environment.",
-    "difficultyLevel": "Beginner",
-    "expectedDuration": "1.5 Hours",
+    "expectedOutcomes": "Engineers achieve frictionless code-to-production workflows while adhering to automated quality and security checks.",
+    "status": "Not Started",
     "resources": [
       {
-        "id": "res_105_1",
-        "title": "Workplace Conduct & POSH Guidelines Handbook",
-        "description": "Official corporate statutory policy document.",
-        "type": "pdf",
+        "id": "TRN-ASSIGN-105_r1",
+        "title": "Module 1: Foundations & Core Principles of Cloud Native DevOps & CI/CD Pipelines",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
         "isMandatory": true,
-        "duration": "45 Mins",
-        "url": "assets/docs/posh_handbook.pdf",
-        "isCompleted": true,
-        "completionDate": "12-Nov-2025",
-        "completionTimestamp": "12-Nov-2025, 02:00 PM"
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
       },
       {
-        "id": "res_105_2",
-        "title": "Employee Emergency Response Video",
-        "description": "Building evacuation and fire drill instructions.",
+        "id": "TRN-ASSIGN-105_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
+        "type": "pdf",
+        "isMandatory": true,
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-105_playbook.pdf",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-105_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-105",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-105_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
         "type": "video",
         "isMandatory": true,
-        "duration": "20 Mins",
-        "url": "assets/videos/emergency_response.mp4",
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-105_demo.mp4",
         "isCompleted": false,
         "completionDate": null,
         "completionTimestamp": null
       }
     ],
-    "assessment": null,
+    "assessment": {
+      "id": "TRN-ASSIGN-105_asm",
+      "name": "Cloud Native DevOps & CI/CD Pipelines Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
+      "attemptsUsed": 0,
+      "passed": false,
+      "isPassed": false,
+      "bestScore": 0,
+      "previousAttempts": [],
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the primary operational objective of Cloud Native DevOps & CI/CD Pipelines?",
+          "options": [
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
+        }
+      ]
+    },
     "submission": {
       "completionRemarks": "",
       "evidenceFiles": [],
       "submittedAt": null,
       "isLocked": false
     },
-    "review": null,
+    "review": {
+      "status": "not_submitted",
+      "reviewerName": "Ishdeep Anand",
+      "reviewDate": null,
+      "feedback": null
+    },
     "certificate": null
   },
   {
     "id": "TRN-ASSIGN-106",
-    "trainingName": "Incident Response & SLA Management",
+    "trainingName": "Client Onboarding & Requirement Intake Playbook",
     "category": "Support & Operations",
-    "shortDescription": "Operational response protocols for high-severity production outages, root cause analyses, and SLA commitments.",
+    "shortDescription": "Standard operating procedures for managing high-touch client onboarding, technical intake workshops, and CRM data migrations.",
     "isMandatory": true,
     "assignedBy": "Megha Salunkhe (Sr. Executive)",
-    "assignedDate": "10-Feb-2026",
-    "dueDate": "20-Mar-2026",
-    "startDate": "12-Feb-2026",
+    "assignedDate": "02-Jan-2026",
+    "dueDate": "10-Feb-2026",
+    "startDate": "04-Jan-2026",
+    "completionDate": "28-Jan-2026",
     "completionPercentage": 100,
-    "trainingStatus": "in_progress",
-    "learningObjectives": [
-      "Understand P0-P3 incident classification and pager escalation hierarchies",
-      "Draft customer-facing Post-Mortem and Root Cause Analysis (RCA) reports"
-    ],
-    "expectedOutcomes": "Speedy incident triage and 99.99% uptime compliance.",
+    "trainingStatus": "completed",
     "difficultyLevel": "Intermediate",
-    "expectedDuration": "3 Hours",
+    "expectedDuration": "4 Hours",
+    "learningObjectives": [
+      "Facilitate structured stakeholder discovery workshops and requirement documentation",
+      "Map legacy CRM customer records to CollabCRM entity models with zero data truncation",
+      "Establish client success milestones, SLA governance, and executive sign-off criteria",
+      "Execute mock migration dry-runs to ensure data validation passes with 100% fidelity"
+    ],
+    "expectedOutcomes": "Support leads onboard enterprise clients smoothly with rapid time-to-value and reduced kickoff friction.",
+    "status": "Completed",
     "resources": [
       {
-        "id": "res_106_1",
-        "title": "Incident Management Operating Procedures",
-        "description": "Incident Commander responsibilities and bridge coordination.",
+        "id": "TRN-ASSIGN-106_r1",
+        "title": "Module 1: Foundations & Core Principles of Client Onboarding & Requirement Intake Playbook",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
+        "isMandatory": true,
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": true,
+        "completionDate": "28-Jan-2026",
+        "completionTimestamp": "24-Jan-2026, 11:15 AM"
+      },
+      {
+        "id": "TRN-ASSIGN-106_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
         "type": "pdf",
         "isMandatory": true,
-        "duration": "40 Mins",
-        "url": "assets/docs/incident_sop.pdf",
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-106_playbook.pdf",
         "isCompleted": true,
-        "completionDate": "18-Feb-2026",
-        "completionTimestamp": "18-Feb-2026, 01:15 PM"
+        "completionDate": "28-Jan-2026",
+        "completionTimestamp": "25-Jan-2026, 02:40 PM"
+      },
+      {
+        "id": "TRN-ASSIGN-106_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-106",
+        "isCompleted": true,
+        "completionDate": "28-Jan-2026",
+        "completionTimestamp": "26-Jan-2026, 04:10 PM"
+      },
+      {
+        "id": "TRN-ASSIGN-106_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-106_demo.mp4",
+        "isCompleted": true,
+        "completionDate": "28-Jan-2026",
+        "completionTimestamp": "26-Jan-2026, 05:30 PM"
       }
     ],
-    "assessment": null,
-    "submission": {
-      "completionRemarks": "Completed all incident drill simulations. Participated in mock P1 bridge drill and submitted post-mortem analysis.",
-      "evidenceFiles": [
-        "mock_incident_post_mortem.pdf"
+    "assessment": {
+      "id": "TRN-ASSIGN-106_asm",
+      "name": "Client Onboarding & Requirement Intake Playbook Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
+      "attemptsUsed": 1,
+      "passed": true,
+      "isPassed": true,
+      "bestScore": 92,
+      "previousAttempts": [
+        {
+          "attemptNumber": 1,
+          "score": 92,
+          "passed": true,
+          "submissionDate": "28-Jan-2026"
+        }
       ],
-      "submittedAt": "27-Feb-2026, 06:15 PM",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the primary operational objective of Client Onboarding & Requirement Intake Playbook?",
+          "options": [
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
+        }
+      ]
+    },
+    "submission": {
+      "completionRemarks": "All 4 modules thoroughly studied and assessment completed with score >= 80%.",
+      "evidenceFiles": [
+        "certificate_evidence_trn-assign-106.pdf"
+      ],
+      "submittedAt": "28-Jan-2026",
       "isLocked": true
     },
     "review": {
-      "status": "pending",
-      "reviewerName": "Megha Salunkhe (Sr. Executive)",
-      "reviewDate": null,
-      "feedback": "Under evaluation by manager."
+      "status": "approved",
+      "reviewerName": "Megha Salunkhe",
+      "reviewDate": "28-Jan-2026",
+      "feedback": "Comprehensive coursework completed and passed with distinction. Certificate approved and issued."
     },
-    "certificate": null,
-    "status": "In Progress"
+    "certificate": {
+      "id": "TRN-2026-0006",
+      "name": "Client Onboarding & Requirement Intake Playbook Credential",
+      "trainingName": "Client Onboarding & Requirement Intake Playbook",
+      "issueDate": "28-Jan-2026",
+      "expiryDate": "26-Jan-2028",
+      "status": "issued",
+      "recipientName": "Tanya Kapoor",
+      "recipientId": "CO-5039"
+    }
+  },
+  {
+    "id": "TRN-ASSIGN-107",
+    "trainingName": "Cross-Functional Agile Leadership & Scrum Mastery",
+    "category": "Professional Skills",
+    "shortDescription": "Empowering cross-disciplinary squad leaders with sprint planning, velocity tracking, backlog refinement, and blameless retrospectives.",
+    "isMandatory": false,
+    "assignedBy": "Isha Patel (HR Operations)",
+    "assignedDate": "14-Jan-2026",
+    "dueDate": "20-Mar-2026",
+    "startDate": "18-Jan-2026",
+    "completionPercentage": 80,
+    "trainingStatus": "in_progress",
+    "difficultyLevel": "Intermediate",
+    "expectedDuration": "3.5 Hours",
+    "learningObjectives": [
+      "Facilitate high-velocity sprint planning, daily standups, and demo showcases",
+      "Manage product backlog prioritization using WSJF (Weighted Shortest Job First)",
+      "Conduct psychological-safety focused blameless sprint retrospectives and action tracking",
+      "Measure cycle time, lead time, and flow efficiency with interactive burndown analytics"
+    ],
+    "expectedOutcomes": "Squad leaders guide development teams to sustainable delivery rhythms and measurable quarterly OKR achievements.",
+    "status": "In Progress",
+    "resources": [
+      {
+        "id": "TRN-ASSIGN-107_r1",
+        "title": "Module 1: Foundations & Core Principles of Cross-Functional Agile Leadership & Scrum Mastery",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
+        "isMandatory": true,
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": true,
+        "completionDate": "18-Jan-2026",
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-107_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
+        "type": "pdf",
+        "isMandatory": true,
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-107_playbook.pdf",
+        "isCompleted": true,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-107_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-107",
+        "isCompleted": true,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-107_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-107_demo.mp4",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      }
+    ],
+    "assessment": {
+      "id": "TRN-ASSIGN-107_asm",
+      "name": "Cross-Functional Agile Leadership & Scrum Mastery Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
+      "attemptsUsed": 1,
+      "passed": false,
+      "isPassed": false,
+      "bestScore": 70,
+      "previousAttempts": [
+        {
+          "attemptNumber": 1,
+          "score": 70,
+          "passed": false,
+          "submissionDate": "18-Jan-2026"
+        }
+      ],
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the primary operational objective of Cross-Functional Agile Leadership & Scrum Mastery?",
+          "options": [
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
+        }
+      ]
+    },
+    "submission": {
+      "completionRemarks": "",
+      "evidenceFiles": [],
+      "submittedAt": null,
+      "isLocked": false
+    },
+    "review": {
+      "status": "pending",
+      "reviewerName": "Isha Patel",
+      "reviewDate": null,
+      "feedback": null
+    },
+    "certificate": null
+  },
+  {
+    "id": "TRN-ASSIGN-108",
+    "trainingName": "Zero-Trust Infrastructure & IAM Policy Hardening",
+    "category": "Technical Architecture",
+    "shortDescription": "Principles of zero-trust architecture, micro-segmentation, least-privilege IAM policies, and cryptographic mutual TLS (mTLS).",
+    "isMandatory": true,
+    "assignedBy": "Ishdeep Anand (Admin)",
+    "assignedDate": "22-Jan-2026",
+    "dueDate": "25-Apr-2026",
+    "startDate": null,
+    "completionPercentage": 0,
+    "trainingStatus": "not_started",
+    "difficultyLevel": "Advanced",
+    "expectedDuration": "5.5 Hours",
+    "learningObjectives": [
+      "Eliminate static network perimeters using dynamic identity-aware reverse proxies",
+      "Implement granular AWS/GCP IAM role-assumption conditions and ABAC policies",
+      "Configure Istio service mesh mTLS peer authentication across all namespace boundaries",
+      "Deploy automated secret rotation via HashiCorp Vault with dynamic ephemeral credentials"
+    ],
+    "expectedOutcomes": "Engineering infrastructure is hardened against lateral movement threats and insider credential misuse.",
+    "status": "Not Started",
+    "resources": [
+      {
+        "id": "TRN-ASSIGN-108_r1",
+        "title": "Module 1: Foundations & Core Principles of Zero-Trust Infrastructure & IAM Policy Hardening",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
+        "isMandatory": true,
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-108_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
+        "type": "pdf",
+        "isMandatory": true,
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-108_playbook.pdf",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-108_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-108",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-108_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-108_demo.mp4",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      }
+    ],
+    "assessment": {
+      "id": "TRN-ASSIGN-108_asm",
+      "name": "Zero-Trust Infrastructure & IAM Policy Hardening Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
+      "attemptsUsed": 0,
+      "passed": false,
+      "isPassed": false,
+      "bestScore": 0,
+      "previousAttempts": [],
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the primary operational objective of Zero-Trust Infrastructure & IAM Policy Hardening?",
+          "options": [
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
+        }
+      ]
+    },
+    "submission": {
+      "completionRemarks": "",
+      "evidenceFiles": [],
+      "submittedAt": null,
+      "isLocked": false
+    },
+    "review": {
+      "status": "not_submitted",
+      "reviewerName": "Ishdeep Anand",
+      "reviewDate": null,
+      "feedback": null
+    },
+    "certificate": null
+  },
+  {
+    "id": "TRN-ASSIGN-109",
+    "trainingName": "Workplace Diversity, Equity & Inclusion (DEI)",
+    "category": "Governance & Compliance",
+    "shortDescription": "Fostering an inclusive, psychologically safe, and culturally respectful workplace culture across global distributed teams.",
+    "isMandatory": true,
+    "assignedBy": "Shivam Sharma (People Operations)",
+    "assignedDate": "01-Jan-2026",
+    "dueDate": "15-Feb-2026",
+    "startDate": "05-Jan-2026",
+    "completionDate": "22-Jan-2026",
+    "completionPercentage": 100,
+    "trainingStatus": "completed",
+    "difficultyLevel": "Beginner",
+    "expectedDuration": "2 Hours",
+    "learningObjectives": [
+      "Recognize unconscious bias in recruitment, performance appraisals, and code reviews",
+      "Implement active allyship and inclusive communication practices across hybrid teams",
+      "Understand corporate grievance redressal, anti-harassment policies, and whistleblower protections",
+      "Promote cognitive diversity to elevate problem-solving efficiency and team belonging"
+    ],
+    "expectedOutcomes": "A respectful, collaborative work atmosphere where every team member is empowered to contribute their best work.",
+    "status": "Completed",
+    "resources": [
+      {
+        "id": "TRN-ASSIGN-109_r1",
+        "title": "Module 1: Foundations & Core Principles of Workplace Diversity, Equity & Inclusion (DEI)",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
+        "isMandatory": true,
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": true,
+        "completionDate": "22-Jan-2026",
+        "completionTimestamp": "24-Jan-2026, 11:15 AM"
+      },
+      {
+        "id": "TRN-ASSIGN-109_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
+        "type": "pdf",
+        "isMandatory": true,
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-109_playbook.pdf",
+        "isCompleted": true,
+        "completionDate": "22-Jan-2026",
+        "completionTimestamp": "25-Jan-2026, 02:40 PM"
+      },
+      {
+        "id": "TRN-ASSIGN-109_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-109",
+        "isCompleted": true,
+        "completionDate": "22-Jan-2026",
+        "completionTimestamp": "26-Jan-2026, 04:10 PM"
+      },
+      {
+        "id": "TRN-ASSIGN-109_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-109_demo.mp4",
+        "isCompleted": true,
+        "completionDate": "22-Jan-2026",
+        "completionTimestamp": "26-Jan-2026, 05:30 PM"
+      }
+    ],
+    "assessment": {
+      "id": "TRN-ASSIGN-109_asm",
+      "name": "Workplace Diversity, Equity & Inclusion (DEI) Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
+      "attemptsUsed": 1,
+      "passed": true,
+      "isPassed": true,
+      "bestScore": 92,
+      "previousAttempts": [
+        {
+          "attemptNumber": 1,
+          "score": 92,
+          "passed": true,
+          "submissionDate": "22-Jan-2026"
+        }
+      ],
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the primary operational objective of Workplace Diversity, Equity & Inclusion (DEI)?",
+          "options": [
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
+        }
+      ]
+    },
+    "submission": {
+      "completionRemarks": "All 4 modules thoroughly studied and assessment completed with score >= 80%.",
+      "evidenceFiles": [
+        "certificate_evidence_trn-assign-109.pdf"
+      ],
+      "submittedAt": "22-Jan-2026",
+      "isLocked": true
+    },
+    "review": {
+      "status": "approved",
+      "reviewerName": "Shivam Sharma",
+      "reviewDate": "22-Jan-2026",
+      "feedback": "Comprehensive coursework completed and passed with distinction. Certificate approved and issued."
+    },
+    "certificate": {
+      "id": "TRN-2026-0009",
+      "name": "Workplace Diversity, Equity & Inclusion (DEI) Credential",
+      "trainingName": "Workplace Diversity, Equity & Inclusion (DEI)",
+      "issueDate": "22-Jan-2026",
+      "expiryDate": "26-Jan-2028",
+      "status": "issued",
+      "recipientName": "Tanya Kapoor",
+      "recipientId": "CO-5039"
+    }
+  },
+  {
+    "id": "TRN-ASSIGN-110",
+    "trainingName": "Advanced SQL & BigQuery Performance Tuning",
+    "category": "Engineering",
+    "shortDescription": "Master query execution plans, partitioning, clustering, cost optimization, and window analytics in Google BigQuery & PostgreSQL.",
+    "isMandatory": false,
+    "assignedBy": "Megha Salunkhe (Sr. Executive)",
+    "assignedDate": "10-Jan-2026",
+    "dueDate": "25-Mar-2026",
+    "startDate": "15-Jan-2026",
+    "completionPercentage": 50,
+    "trainingStatus": "in_progress",
+    "difficultyLevel": "Advanced",
+    "expectedDuration": "6 Hours",
+    "learningObjectives": [
+      "Optimize query slot allocation, scan bytes, and shuffle stages in distributed BigQuery engines",
+      "Design time-unit partition filters and clustering keys to reduce query scan costs by up to 80%",
+      "Write advanced window functions, LEAD/LAG analytics, and recursive Common Table Expressions (CTEs)",
+      "Benchmark index types: B-Tree, GIN, and BRIN for high-throughput transactional database workloads"
+    ],
+    "expectedOutcomes": "Data analysts and engineers author lightning-fast analytical queries while slashing enterprise cloud data compute expenses.",
+    "status": "In Progress",
+    "resources": [
+      {
+        "id": "TRN-ASSIGN-110_r1",
+        "title": "Module 1: Foundations & Core Principles of Advanced SQL & BigQuery Performance Tuning",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
+        "isMandatory": true,
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": true,
+        "completionDate": "15-Jan-2026",
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-110_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
+        "type": "pdf",
+        "isMandatory": true,
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-110_playbook.pdf",
+        "isCompleted": true,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-110_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-110",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-110_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-110_demo.mp4",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      }
+    ],
+    "assessment": {
+      "id": "TRN-ASSIGN-110_asm",
+      "name": "Advanced SQL & BigQuery Performance Tuning Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
+      "attemptsUsed": 1,
+      "passed": false,
+      "isPassed": false,
+      "bestScore": 70,
+      "previousAttempts": [
+        {
+          "attemptNumber": 1,
+          "score": 70,
+          "passed": false,
+          "submissionDate": "15-Jan-2026"
+        }
+      ],
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the primary operational objective of Advanced SQL & BigQuery Performance Tuning?",
+          "options": [
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
+        }
+      ]
+    },
+    "submission": {
+      "completionRemarks": "",
+      "evidenceFiles": [],
+      "submittedAt": null,
+      "isLocked": false
+    },
+    "review": {
+      "status": "pending",
+      "reviewerName": "Megha Salunkhe",
+      "reviewDate": null,
+      "feedback": null
+    },
+    "certificate": null
+  },
+  {
+    "id": "TRN-ASSIGN-111",
+    "trainingName": "SOC2 Type II Audit Preparedness & Evidence Collection",
+    "category": "Governance & Compliance",
+    "shortDescription": "Operational compliance requirements for Trust Services Criteria: Security, Availability, Processing Integrity, and Confidentiality.",
+    "isMandatory": true,
+    "assignedBy": "Ishdeep Anand (Admin)",
+    "assignedDate": "01-Dec-2025",
+    "dueDate": "10-Jan-2026",
+    "startDate": "08-Dec-2025",
+    "completionPercentage": 30,
+    "trainingStatus": "overdue",
+    "difficultyLevel": "Intermediate",
+    "expectedDuration": "4 Hours",
+    "learningObjectives": [
+      "Conduct continuous automated compliance testing against AICPA Trust Services Criteria",
+      "Gather cryptographically verified audit artifacts for change management and access reviews",
+      "Document vendor risk assessments and third-party SaaS sub-processor security evaluations",
+      "Maintain immutable audit logs, incident registers, and business continuity drill reports"
+    ],
+    "expectedOutcomes": "Team members understand audit requirements to ensure successful un-qualified SOC2 Type II examination certifications.",
+    "status": "Overdue",
+    "resources": [
+      {
+        "id": "TRN-ASSIGN-111_r1",
+        "title": "Module 1: Foundations & Core Principles of SOC2 Type II Audit Preparedness & Evidence Collection",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
+        "isMandatory": true,
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-111_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
+        "type": "pdf",
+        "isMandatory": true,
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-111_playbook.pdf",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-111_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-111",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-111_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-111_demo.mp4",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      }
+    ],
+    "assessment": {
+      "id": "TRN-ASSIGN-111_asm",
+      "name": "SOC2 Type II Audit Preparedness & Evidence Collection Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
+      "attemptsUsed": 0,
+      "passed": false,
+      "isPassed": false,
+      "bestScore": 0,
+      "previousAttempts": [],
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the primary operational objective of SOC2 Type II Audit Preparedness & Evidence Collection?",
+          "options": [
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
+        }
+      ]
+    },
+    "submission": {
+      "completionRemarks": "",
+      "evidenceFiles": [],
+      "submittedAt": null,
+      "isLocked": false
+    },
+    "review": {
+      "status": "not_submitted",
+      "reviewerName": "Ishdeep Anand",
+      "reviewDate": null,
+      "feedback": null
+    },
+    "certificate": null
+  },
+  {
+    "id": "TRN-ASSIGN-112",
+    "trainingName": "CollabCRM UI/UX Design System & Accessibility (WCAG 2.1)",
+    "category": "Product & Platform",
+    "shortDescription": "Building pixel-perfect, accessible user interfaces following CollabCRM design tokens, color contrast standards, and keyboard navigation.",
+    "isMandatory": true,
+    "assignedBy": "Megha Salunkhe (Sr. Executive)",
+    "assignedDate": "08-Jan-2026",
+    "dueDate": "18-Feb-2026",
+    "startDate": "10-Jan-2026",
+    "completionDate": "01-Feb-2026",
+    "completionPercentage": 100,
+    "trainingStatus": "completed",
+    "difficultyLevel": "Intermediate",
+    "expectedDuration": "3.5 Hours",
+    "learningObjectives": [
+      "Implement WCAG 2.1 AA compliant color contrast ratios, focus states, and aria attributes",
+      "Utilize CollabCRM design token system for typography, spacing, elevations, and card surfaces",
+      "Test web applications with screen readers (NVDA, VoiceOver) and automated axe-core audits",
+      "Ensure zero layout shifts and responsive multi-device fidelity across all CRM portal screens"
+    ],
+    "expectedOutcomes": "Frontend developers ship polished, accessible, and brand-consistent interfaces usable by all individuals.",
+    "status": "Completed",
+    "resources": [
+      {
+        "id": "TRN-ASSIGN-112_r1",
+        "title": "Module 1: Foundations & Core Principles of CollabCRM UI/UX Design System & Accessibility (WCAG 2.1)",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
+        "isMandatory": true,
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": true,
+        "completionDate": "01-Feb-2026",
+        "completionTimestamp": "24-Jan-2026, 11:15 AM"
+      },
+      {
+        "id": "TRN-ASSIGN-112_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
+        "type": "pdf",
+        "isMandatory": true,
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-112_playbook.pdf",
+        "isCompleted": true,
+        "completionDate": "01-Feb-2026",
+        "completionTimestamp": "25-Jan-2026, 02:40 PM"
+      },
+      {
+        "id": "TRN-ASSIGN-112_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-112",
+        "isCompleted": true,
+        "completionDate": "01-Feb-2026",
+        "completionTimestamp": "26-Jan-2026, 04:10 PM"
+      },
+      {
+        "id": "TRN-ASSIGN-112_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-112_demo.mp4",
+        "isCompleted": true,
+        "completionDate": "01-Feb-2026",
+        "completionTimestamp": "26-Jan-2026, 05:30 PM"
+      }
+    ],
+    "assessment": {
+      "id": "TRN-ASSIGN-112_asm",
+      "name": "CollabCRM UI/UX Design System & Accessibility (WCAG 2.1) Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
+      "attemptsUsed": 1,
+      "passed": true,
+      "isPassed": true,
+      "bestScore": 92,
+      "previousAttempts": [
+        {
+          "attemptNumber": 1,
+          "score": 92,
+          "passed": true,
+          "submissionDate": "01-Feb-2026"
+        }
+      ],
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the primary operational objective of CollabCRM UI/UX Design System & Accessibility (WCAG 2.1)?",
+          "options": [
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
+        }
+      ]
+    },
+    "submission": {
+      "completionRemarks": "All 4 modules thoroughly studied and assessment completed with score >= 80%.",
+      "evidenceFiles": [
+        "certificate_evidence_trn-assign-112.pdf"
+      ],
+      "submittedAt": "01-Feb-2026",
+      "isLocked": true
+    },
+    "review": {
+      "status": "approved",
+      "reviewerName": "Megha Salunkhe",
+      "reviewDate": "01-Feb-2026",
+      "feedback": "Comprehensive coursework completed and passed with distinction. Certificate approved and issued."
+    },
+    "certificate": {
+      "id": "TRN-2026-0012",
+      "name": "CollabCRM UI/UX Design System & Accessibility (WCAG 2.1) Credential",
+      "trainingName": "CollabCRM UI/UX Design System & Accessibility (WCAG 2.1)",
+      "issueDate": "01-Feb-2026",
+      "expiryDate": "26-Jan-2028",
+      "status": "issued",
+      "recipientName": "Tanya Kapoor",
+      "recipientId": "CO-5039"
+    }
+  },
+  {
+    "id": "TRN-ASSIGN-113",
+    "trainingName": "High-Impact Executive Presentation & Business Storytelling",
+    "category": "Professional Skills",
+    "shortDescription": "Techniques for crafting compelling data-driven slide decks, executive summaries, and pitch presentations for enterprise stakeholders.",
+    "isMandatory": false,
+    "assignedBy": "Isha Patel (HR Operations)",
+    "assignedDate": "26-Jan-2026",
+    "dueDate": "30-Apr-2026",
+    "startDate": null,
+    "completionPercentage": 0,
+    "trainingStatus": "not_started",
+    "difficultyLevel": "Beginner",
+    "expectedDuration": "3 Hours",
+    "learningObjectives": [
+      "Structure executive presentations using the Minto Pyramid Principle and SCQA frameworks",
+      "Translate complex quantitative telemetry into actionable business narratives and decisions",
+      "Design clear, clean data visualizations that highlight key performance indicators",
+      "Master stage presence, audience engagement, and confident Q&A objection handling"
+    ],
+    "expectedOutcomes": "Professionals deliver persuasive, engaging presentations that align leadership and drive project approval.",
+    "status": "Not Started",
+    "resources": [
+      {
+        "id": "TRN-ASSIGN-113_r1",
+        "title": "Module 1: Foundations & Core Principles of High-Impact Executive Presentation & Business Storytelling",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
+        "isMandatory": true,
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-113_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
+        "type": "pdf",
+        "isMandatory": true,
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-113_playbook.pdf",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-113_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-113",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-113_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-113_demo.mp4",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      }
+    ],
+    "assessment": {
+      "id": "TRN-ASSIGN-113_asm",
+      "name": "High-Impact Executive Presentation & Business Storytelling Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
+      "attemptsUsed": 0,
+      "passed": false,
+      "isPassed": false,
+      "bestScore": 0,
+      "previousAttempts": [],
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the primary operational objective of High-Impact Executive Presentation & Business Storytelling?",
+          "options": [
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
+        }
+      ]
+    },
+    "submission": {
+      "completionRemarks": "",
+      "evidenceFiles": [],
+      "submittedAt": null,
+      "isLocked": false
+    },
+    "review": {
+      "status": "not_submitted",
+      "reviewerName": "Isha Patel",
+      "reviewDate": null,
+      "feedback": null
+    },
+    "certificate": null
+  },
+  {
+    "id": "TRN-ASSIGN-114",
+    "trainingName": "Distributed Systems Caching with Redis & Memcached",
+    "category": "Engineering",
+    "shortDescription": "Designing low-latency caching architectures, cache eviction algorithms, cache-aside patterns, and thundering herd mitigations.",
+    "isMandatory": true,
+    "assignedBy": "Ishdeep Anand (Admin)",
+    "assignedDate": "15-Jan-2026",
+    "dueDate": "10-Apr-2026",
+    "startDate": "22-Jan-2026",
+    "completionPercentage": 40,
+    "trainingStatus": "in_progress",
+    "difficultyLevel": "Advanced",
+    "expectedDuration": "4.5 Hours",
+    "learningObjectives": [
+      "Choose optimal caching strategies: Cache-Aside, Write-Through, and Write-Behind patterns",
+      "Prevent cache penetration, cache breakdown, and avalanche issues using probabilistic early expiration",
+      "Leverage Redis data structures: Hashes, Sorted Sets, Bitmaps, and HyperLogLogs for CRM metrics",
+      "Configure Redis Cluster with automatic shard failover and Sentinel health monitoring"
+    ],
+    "expectedOutcomes": "Engineers achieve sub-5ms API response latencies while shielding core transactional databases from peak load spikes.",
+    "status": "In Progress",
+    "resources": [
+      {
+        "id": "TRN-ASSIGN-114_r1",
+        "title": "Module 1: Foundations & Core Principles of Distributed Systems Caching with Redis & Memcached",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
+        "isMandatory": true,
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": true,
+        "completionDate": "22-Jan-2026",
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-114_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
+        "type": "pdf",
+        "isMandatory": true,
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-114_playbook.pdf",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-114_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-114",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-114_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-114_demo.mp4",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      }
+    ],
+    "assessment": {
+      "id": "TRN-ASSIGN-114_asm",
+      "name": "Distributed Systems Caching with Redis & Memcached Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
+      "attemptsUsed": 1,
+      "passed": false,
+      "isPassed": false,
+      "bestScore": 70,
+      "previousAttempts": [
+        {
+          "attemptNumber": 1,
+          "score": 70,
+          "passed": false,
+          "submissionDate": "22-Jan-2026"
+        }
+      ],
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the primary operational objective of Distributed Systems Caching with Redis & Memcached?",
+          "options": [
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
+        }
+      ]
+    },
+    "submission": {
+      "completionRemarks": "",
+      "evidenceFiles": [],
+      "submittedAt": null,
+      "isLocked": false
+    },
+    "review": {
+      "status": "pending",
+      "reviewerName": "Ishdeep Anand",
+      "reviewDate": null,
+      "feedback": null
+    },
+    "certificate": null
+  },
+  {
+    "id": "TRN-ASSIGN-115",
+    "trainingName": "Incident Response Management & Root Cause Analysis",
+    "category": "Support & Operations",
+    "shortDescription": "Incident commander protocols, SEV-1 triage procedures, stakeholder communications, and post-mortem retrospective authoring.",
+    "isMandatory": true,
+    "assignedBy": "Megha Salunkhe (Sr. Executive)",
+    "assignedDate": "28-Jan-2026",
+    "dueDate": "15-May-2026",
+    "startDate": null,
+    "completionPercentage": 0,
+    "trainingStatus": "not_started",
+    "difficultyLevel": "Intermediate",
+    "expectedDuration": "4 Hours",
+    "learningObjectives": [
+      "Execute Incident Commander duties, delegating technical investigation and status page updates",
+      "Establish blameless 5-Whys root cause analysis workflows and preventative action items",
+      "Calculate Mean Time to Detect (MTTD), Acknowledge (MTTA), and Recover (MTTR)",
+      "Conduct realistic tabletop crisis simulations to validate operational escalation matrices"
+    ],
+    "expectedOutcomes": "Operations teams resolve production disruptions rapidly while building organizational resilience against repeat failures.",
+    "status": "Not Started",
+    "resources": [
+      {
+        "id": "TRN-ASSIGN-115_r1",
+        "title": "Module 1: Foundations & Core Principles of Incident Response Management & Root Cause Analysis",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
+        "isMandatory": true,
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-115_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
+        "type": "pdf",
+        "isMandatory": true,
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-115_playbook.pdf",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-115_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-115",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-115_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-115_demo.mp4",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      }
+    ],
+    "assessment": {
+      "id": "TRN-ASSIGN-115_asm",
+      "name": "Incident Response Management & Root Cause Analysis Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
+      "attemptsUsed": 0,
+      "passed": false,
+      "isPassed": false,
+      "bestScore": 0,
+      "previousAttempts": [],
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the primary operational objective of Incident Response Management & Root Cause Analysis?",
+          "options": [
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
+        }
+      ]
+    },
+    "submission": {
+      "completionRemarks": "",
+      "evidenceFiles": [],
+      "submittedAt": null,
+      "isLocked": false
+    },
+    "review": {
+      "status": "not_submitted",
+      "reviewerName": "Megha Salunkhe",
+      "reviewDate": null,
+      "feedback": null
+    },
+    "certificate": null
+  },
+  {
+    "id": "TRN-ASSIGN-116",
+    "trainingName": "Enterprise Sales Negotiation & Solution Selling",
+    "category": "Professional Skills",
+    "shortDescription": "Consultative selling methodology, enterprise procurement navigation, competitive objection handling, and win-win contract structuring.",
+    "isMandatory": false,
+    "assignedBy": "Shivam Sharma (People Operations)",
+    "assignedDate": "02-Jan-2026",
+    "dueDate": "05-Feb-2026",
+    "startDate": "06-Jan-2026",
+    "completionDate": "29-Jan-2026",
+    "completionPercentage": 100,
+    "trainingStatus": "completed",
+    "difficultyLevel": "Intermediate",
+    "expectedDuration": "3.5 Hours",
+    "learningObjectives": [
+      "Apply MEDDPICC qualification frameworks to evaluate enterprise opportunity health",
+      "Navigate multi-stakeholder legal, IT security, and procurement negotiation conversations",
+      "Quantify customer ROI models and business value propositions in CRM proposals",
+      "Manage price discount requests through value concessions rather than margin erosion"
+    ],
+    "expectedOutcomes": "Sales consultants close high-value annual contracts with predictable sales velocity and healthy profit margins.",
+    "status": "Completed",
+    "resources": [
+      {
+        "id": "TRN-ASSIGN-116_r1",
+        "title": "Module 1: Foundations & Core Principles of Enterprise Sales Negotiation & Solution Selling",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
+        "isMandatory": true,
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": true,
+        "completionDate": "29-Jan-2026",
+        "completionTimestamp": "24-Jan-2026, 11:15 AM"
+      },
+      {
+        "id": "TRN-ASSIGN-116_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
+        "type": "pdf",
+        "isMandatory": true,
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-116_playbook.pdf",
+        "isCompleted": true,
+        "completionDate": "29-Jan-2026",
+        "completionTimestamp": "25-Jan-2026, 02:40 PM"
+      },
+      {
+        "id": "TRN-ASSIGN-116_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-116",
+        "isCompleted": true,
+        "completionDate": "29-Jan-2026",
+        "completionTimestamp": "26-Jan-2026, 04:10 PM"
+      },
+      {
+        "id": "TRN-ASSIGN-116_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-116_demo.mp4",
+        "isCompleted": true,
+        "completionDate": "29-Jan-2026",
+        "completionTimestamp": "26-Jan-2026, 05:30 PM"
+      }
+    ],
+    "assessment": {
+      "id": "TRN-ASSIGN-116_asm",
+      "name": "Enterprise Sales Negotiation & Solution Selling Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
+      "attemptsUsed": 1,
+      "passed": true,
+      "isPassed": true,
+      "bestScore": 92,
+      "previousAttempts": [
+        {
+          "attemptNumber": 1,
+          "score": 92,
+          "passed": true,
+          "submissionDate": "29-Jan-2026"
+        }
+      ],
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the primary operational objective of Enterprise Sales Negotiation & Solution Selling?",
+          "options": [
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
+        }
+      ]
+    },
+    "submission": {
+      "completionRemarks": "All 4 modules thoroughly studied and assessment completed with score >= 80%.",
+      "evidenceFiles": [
+        "certificate_evidence_trn-assign-116.pdf"
+      ],
+      "submittedAt": "29-Jan-2026",
+      "isLocked": true
+    },
+    "review": {
+      "status": "approved",
+      "reviewerName": "Shivam Sharma",
+      "reviewDate": "29-Jan-2026",
+      "feedback": "Comprehensive coursework completed and passed with distinction. Certificate approved and issued."
+    },
+    "certificate": {
+      "id": "TRN-2026-0016",
+      "name": "Enterprise Sales Negotiation & Solution Selling Credential",
+      "trainingName": "Enterprise Sales Negotiation & Solution Selling",
+      "issueDate": "29-Jan-2026",
+      "expiryDate": "26-Jan-2028",
+      "status": "issued",
+      "recipientName": "Tanya Kapoor",
+      "recipientId": "CO-5039"
+    }
+  },
+  {
+    "id": "TRN-ASSIGN-117",
+    "trainingName": "Kubernetes Cluster Administration & Container Orchestration",
+    "category": "Technical Architecture",
+    "shortDescription": "Production Kubernetes management: Pod autoscaling (HPA), ingress controllers, network policies, helm charts, and daemonsets.",
+    "isMandatory": true,
+    "assignedBy": "Ishdeep Anand (Admin)",
+    "assignedDate": "12-Jan-2026",
+    "dueDate": "15-Apr-2026",
+    "startDate": "16-Jan-2026",
+    "completionPercentage": 60,
+    "trainingStatus": "in_progress",
+    "difficultyLevel": "Advanced",
+    "expectedDuration": "7 Hours",
+    "learningObjectives": [
+      "Manage multi-node Kubernetes clusters with control-plane high availability and etcd backups",
+      "Configure Horizontal Pod Autoscalers (HPA) and cluster autoscaler on cloud node pools",
+      "Author reusable Helm charts with secure values validation and semantic versioning",
+      "Isolate tenant workloads using Calico network policies and Pod Security Standards (PSS)"
+    ],
+    "expectedOutcomes": "Cloud architects maintain stable, self-healing container infrastructures capable of absorbing extreme traffic surges.",
+    "status": "In Progress",
+    "resources": [
+      {
+        "id": "TRN-ASSIGN-117_r1",
+        "title": "Module 1: Foundations & Core Principles of Kubernetes Cluster Administration & Container Orchestration",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
+        "isMandatory": true,
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": true,
+        "completionDate": "16-Jan-2026",
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-117_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
+        "type": "pdf",
+        "isMandatory": true,
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-117_playbook.pdf",
+        "isCompleted": true,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-117_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-117",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-117_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-117_demo.mp4",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      }
+    ],
+    "assessment": {
+      "id": "TRN-ASSIGN-117_asm",
+      "name": "Kubernetes Cluster Administration & Container Orchestration Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
+      "attemptsUsed": 1,
+      "passed": false,
+      "isPassed": false,
+      "bestScore": 70,
+      "previousAttempts": [
+        {
+          "attemptNumber": 1,
+          "score": 70,
+          "passed": false,
+          "submissionDate": "16-Jan-2026"
+        }
+      ],
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the primary operational objective of Kubernetes Cluster Administration & Container Orchestration?",
+          "options": [
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
+        }
+      ]
+    },
+    "submission": {
+      "completionRemarks": "",
+      "evidenceFiles": [],
+      "submittedAt": null,
+      "isLocked": false
+    },
+    "review": {
+      "status": "pending",
+      "reviewerName": "Ishdeep Anand",
+      "reviewDate": null,
+      "feedback": null
+    },
+    "certificate": null
+  },
+  {
+    "id": "TRN-ASSIGN-118",
+    "trainingName": "Anti-Bribery, Anti-Corruption & FCPA Compliance",
+    "category": "Governance & Compliance",
+    "shortDescription": "Global compliance rules governing corporate gifts, hospitality, political contributions, conflict of interest, and anti-bribery statutes.",
+    "isMandatory": true,
+    "assignedBy": "Isha Patel (HR Operations)",
+    "assignedDate": "03-Jan-2026",
+    "dueDate": "28-Jan-2026",
+    "startDate": "07-Jan-2026",
+    "completionDate": "24-Jan-2026",
+    "completionPercentage": 100,
+    "trainingStatus": "completed",
+    "difficultyLevel": "Beginner",
+    "expectedDuration": "2 Hours",
+    "learningObjectives": [
+      "Identify situations giving rise to potential Foreign Corrupt Practices Act (FCPA) liabilities",
+      "Follow proper gift declaration thresholds and corporate entertainment approval processes",
+      "Report potential conflicts of interest regarding personal investments or vendor relationships",
+      "Maintain accurate accounting ledgers and payment documentation without facilitation payments"
+    ],
+    "expectedOutcomes": "Employees uphold CollabCRM’s zero-tolerance standard for bribery, corruption, and unethical business practices.",
+    "status": "Completed",
+    "resources": [
+      {
+        "id": "TRN-ASSIGN-118_r1",
+        "title": "Module 1: Foundations & Core Principles of Anti-Bribery, Anti-Corruption & FCPA Compliance",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
+        "isMandatory": true,
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": true,
+        "completionDate": "24-Jan-2026",
+        "completionTimestamp": "24-Jan-2026, 11:15 AM"
+      },
+      {
+        "id": "TRN-ASSIGN-118_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
+        "type": "pdf",
+        "isMandatory": true,
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-118_playbook.pdf",
+        "isCompleted": true,
+        "completionDate": "24-Jan-2026",
+        "completionTimestamp": "25-Jan-2026, 02:40 PM"
+      },
+      {
+        "id": "TRN-ASSIGN-118_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-118",
+        "isCompleted": true,
+        "completionDate": "24-Jan-2026",
+        "completionTimestamp": "26-Jan-2026, 04:10 PM"
+      },
+      {
+        "id": "TRN-ASSIGN-118_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-118_demo.mp4",
+        "isCompleted": true,
+        "completionDate": "24-Jan-2026",
+        "completionTimestamp": "26-Jan-2026, 05:30 PM"
+      }
+    ],
+    "assessment": {
+      "id": "TRN-ASSIGN-118_asm",
+      "name": "Anti-Bribery, Anti-Corruption & FCPA Compliance Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
+      "attemptsUsed": 1,
+      "passed": true,
+      "isPassed": true,
+      "bestScore": 92,
+      "previousAttempts": [
+        {
+          "attemptNumber": 1,
+          "score": 92,
+          "passed": true,
+          "submissionDate": "24-Jan-2026"
+        }
+      ],
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the primary operational objective of Anti-Bribery, Anti-Corruption & FCPA Compliance?",
+          "options": [
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
+        }
+      ]
+    },
+    "submission": {
+      "completionRemarks": "All 4 modules thoroughly studied and assessment completed with score >= 80%.",
+      "evidenceFiles": [
+        "certificate_evidence_trn-assign-118.pdf"
+      ],
+      "submittedAt": "24-Jan-2026",
+      "isLocked": true
+    },
+    "review": {
+      "status": "approved",
+      "reviewerName": "Isha Patel",
+      "reviewDate": "24-Jan-2026",
+      "feedback": "Comprehensive coursework completed and passed with distinction. Certificate approved and issued."
+    },
+    "certificate": {
+      "id": "TRN-2026-0018",
+      "name": "Anti-Bribery, Anti-Corruption & FCPA Compliance Credential",
+      "trainingName": "Anti-Bribery, Anti-Corruption & FCPA Compliance",
+      "issueDate": "24-Jan-2026",
+      "expiryDate": "26-Jan-2028",
+      "status": "issued",
+      "recipientName": "Tanya Kapoor",
+      "recipientId": "CO-5039"
+    }
+  },
+  {
+    "id": "TRN-ASSIGN-119",
+    "trainingName": "RESTful & GraphQL API Design Governance",
+    "category": "Engineering",
+    "shortDescription": "Authoring clean, predictable APIs with JSON:API conventions, schema-first GraphQL, versioning, pagination, and OpenAPI 3.1 docs.",
+    "isMandatory": false,
+    "assignedBy": "Megha Salunkhe (Sr. Executive)",
+    "assignedDate": "20-Jan-2026",
+    "dueDate": "10-May-2026",
+    "startDate": null,
+    "completionPercentage": 0,
+    "trainingStatus": "not_started",
+    "difficultyLevel": "Intermediate",
+    "expectedDuration": "4 Hours",
+    "learningObjectives": [
+      "Design RESTful resource URI hierarchies adhering to RFC-compliant HTTP status codes",
+      "Implement cursor-based pagination and idempotent HTTP request signatures (Idempotency-Key)",
+      "Model GraphQL schemas with Apollo Server, resolving N+1 queries via DataLoader batching",
+      "Automate contract testing and Swagger/OpenAPI documentation generation via CI gates"
+    ],
+    "expectedOutcomes": "Developers produce delightful, cohesive developer-facing APIs with long-term backward compatibility.",
+    "status": "Not Started",
+    "resources": [
+      {
+        "id": "TRN-ASSIGN-119_r1",
+        "title": "Module 1: Foundations & Core Principles of RESTful & GraphQL API Design Governance",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
+        "isMandatory": true,
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-119_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
+        "type": "pdf",
+        "isMandatory": true,
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-119_playbook.pdf",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-119_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-119",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-119_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-119_demo.mp4",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      }
+    ],
+    "assessment": {
+      "id": "TRN-ASSIGN-119_asm",
+      "name": "RESTful & GraphQL API Design Governance Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
+      "attemptsUsed": 0,
+      "passed": false,
+      "isPassed": false,
+      "bestScore": 0,
+      "previousAttempts": [],
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the primary operational objective of RESTful & GraphQL API Design Governance?",
+          "options": [
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
+        }
+      ]
+    },
+    "submission": {
+      "completionRemarks": "",
+      "evidenceFiles": [],
+      "submittedAt": null,
+      "isLocked": false
+    },
+    "review": {
+      "status": "not_submitted",
+      "reviewerName": "Megha Salunkhe",
+      "reviewDate": null,
+      "feedback": null
+    },
+    "certificate": null
+  },
+  {
+    "id": "TRN-ASSIGN-120",
+    "trainingName": "Customer Success Lifecycle & Retention Strategies",
+    "category": "Support & Operations",
+    "shortDescription": "Proactive customer relationship management, health score monitoring, net retention rate (NRR) optimization, and churn prevention.",
+    "isMandatory": true,
+    "assignedBy": "Shivam Sharma (People Operations)",
+    "assignedDate": "10-Jan-2026",
+    "dueDate": "30-Mar-2026",
+    "startDate": "12-Jan-2026",
+    "completionPercentage": 75,
+    "trainingStatus": "in_progress",
+    "difficultyLevel": "Intermediate",
+    "expectedDuration": "3.5 Hours",
+    "learningObjectives": [
+      "Design multi-factor customer health score algorithms using login frequency and feature usage telemetry",
+      "Conduct high-value Quarterly Business Reviews (QBRs) showcasing customer outcomes and ROI",
+      "Execute early-warning churn mitigation playbooks when product utilization drops below thresholds",
+      "Drive expansion revenue and customer advocacy through cross-selling and success testimonials"
+    ],
+    "expectedOutcomes": "Customer success managers build loyal client partnerships, maximizing customer lifetime value and product adoption.",
+    "status": "In Progress",
+    "resources": [
+      {
+        "id": "TRN-ASSIGN-120_r1",
+        "title": "Module 1: Foundations & Core Principles of Customer Success Lifecycle & Retention Strategies",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
+        "isMandatory": true,
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": true,
+        "completionDate": "12-Jan-2026",
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-120_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
+        "type": "pdf",
+        "isMandatory": true,
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-120_playbook.pdf",
+        "isCompleted": true,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-120_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-120",
+        "isCompleted": true,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-120_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-120_demo.mp4",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      }
+    ],
+    "assessment": {
+      "id": "TRN-ASSIGN-120_asm",
+      "name": "Customer Success Lifecycle & Retention Strategies Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
+      "attemptsUsed": 1,
+      "passed": false,
+      "isPassed": false,
+      "bestScore": 70,
+      "previousAttempts": [
+        {
+          "attemptNumber": 1,
+          "score": 70,
+          "passed": false,
+          "submissionDate": "12-Jan-2026"
+        }
+      ],
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the primary operational objective of Customer Success Lifecycle & Retention Strategies?",
+          "options": [
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
+        }
+      ]
+    },
+    "submission": {
+      "completionRemarks": "",
+      "evidenceFiles": [],
+      "submittedAt": null,
+      "isLocked": false
+    },
+    "review": {
+      "status": "pending",
+      "reviewerName": "Shivam Sharma",
+      "reviewDate": null,
+      "feedback": null
+    },
+    "certificate": null
+  },
+  {
+    "id": "TRN-ASSIGN-121",
+    "trainingName": "Disaster Recovery & High Availability Architecture",
+    "category": "Technical Architecture",
+    "shortDescription": "Multi-region failover design, Recovery Time Objective (RTO), Recovery Point Objective (RPO), database replication, and chaos engineering.",
+    "isMandatory": true,
+    "assignedBy": "Ishdeep Anand (Admin)",
+    "assignedDate": "15-Dec-2025",
+    "dueDate": "20-Jan-2026",
+    "startDate": "18-Dec-2025",
+    "completionPercentage": 15,
+    "trainingStatus": "overdue",
+    "difficultyLevel": "Advanced",
+    "expectedDuration": "5 Hours",
+    "learningObjectives": [
+      "Define verifiable RTO and RPO benchmarks across tier-1, tier-2, and tier-3 CRM services",
+      "Implement active-passive cross-region database streaming replication and split-brain defenses",
+      "Execute DNS health check automated failovers using latency-based routing policies",
+      "Conduct Chaos Mesh experiments simulating network partitions and datacenter power failures"
+    ],
+    "expectedOutcomes": "System resilience is verified to guarantee continuous business operation even through severe infrastructure disasters.",
+    "status": "Overdue",
+    "resources": [
+      {
+        "id": "TRN-ASSIGN-121_r1",
+        "title": "Module 1: Foundations & Core Principles of Disaster Recovery & High Availability Architecture",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
+        "isMandatory": true,
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-121_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
+        "type": "pdf",
+        "isMandatory": true,
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-121_playbook.pdf",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-121_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-121",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-121_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-121_demo.mp4",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      }
+    ],
+    "assessment": {
+      "id": "TRN-ASSIGN-121_asm",
+      "name": "Disaster Recovery & High Availability Architecture Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
+      "attemptsUsed": 0,
+      "passed": false,
+      "isPassed": false,
+      "bestScore": 0,
+      "previousAttempts": [],
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the primary operational objective of Disaster Recovery & High Availability Architecture?",
+          "options": [
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
+        }
+      ]
+    },
+    "submission": {
+      "completionRemarks": "",
+      "evidenceFiles": [],
+      "submittedAt": null,
+      "isLocked": false
+    },
+    "review": {
+      "status": "not_submitted",
+      "reviewerName": "Ishdeep Anand",
+      "reviewDate": null,
+      "feedback": null
+    },
+    "certificate": null
+  },
+  {
+    "id": "TRN-ASSIGN-122",
+    "trainingName": "Artificial Intelligence & LLM Prompt Engineering for Enterprise",
+    "category": "Engineering",
+    "shortDescription": "Leveraging large language models, retrieval augmented generation (RAG), vector embeddings, and guardrails in enterprise applications.",
+    "isMandatory": false,
+    "assignedBy": "Megha Salunkhe (Sr. Executive)",
+    "assignedDate": "27-Jan-2026",
+    "dueDate": "20-Jun-2026",
+    "startDate": null,
+    "completionPercentage": 0,
+    "trainingStatus": "not_started",
+    "difficultyLevel": "Intermediate",
+    "expectedDuration": "5 Hours",
+    "learningObjectives": [
+      "Apply advanced prompt engineering: Few-shot prompting, Chain-of-Thought, and ReAct paradigms",
+      "Build scalable RAG pipelines using pgvector, hybrid semantic search, and re-ranking models",
+      "Implement LLM safety guardrails to prevent hallucinations, jailbreaks, and prompt injections",
+      "Benchmark model latency, token utilization economics, and output precision across LLM providers"
+    ],
+    "expectedOutcomes": "Engineers build high-reliability AI-powered CRM features that respect customer privacy and enterprise compliance.",
+    "status": "Not Started",
+    "resources": [
+      {
+        "id": "TRN-ASSIGN-122_r1",
+        "title": "Module 1: Foundations & Core Principles of Artificial Intelligence & LLM Prompt Engineering for Enterprise",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
+        "isMandatory": true,
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-122_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
+        "type": "pdf",
+        "isMandatory": true,
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-122_playbook.pdf",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-122_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-122",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-122_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-122_demo.mp4",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      }
+    ],
+    "assessment": {
+      "id": "TRN-ASSIGN-122_asm",
+      "name": "Artificial Intelligence & LLM Prompt Engineering for Enterprise Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
+      "attemptsUsed": 0,
+      "passed": false,
+      "isPassed": false,
+      "bestScore": 0,
+      "previousAttempts": [],
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the primary operational objective of Artificial Intelligence & LLM Prompt Engineering for Enterprise?",
+          "options": [
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
+        }
+      ]
+    },
+    "submission": {
+      "completionRemarks": "",
+      "evidenceFiles": [],
+      "submittedAt": null,
+      "isLocked": false
+    },
+    "review": {
+      "status": "not_submitted",
+      "reviewerName": "Megha Salunkhe",
+      "reviewDate": null,
+      "feedback": null
+    },
+    "certificate": null
+  },
+  {
+    "id": "TRN-ASSIGN-123",
+    "trainingName": "HIPAA & Health Data Privacy Standards",
+    "category": "Governance & Compliance",
+    "shortDescription": "Health Insurance Portability and Accountability Act: Protecting electronic Protected Health Information (ePHI), encryption, and BAA rules.",
+    "isMandatory": true,
+    "assignedBy": "Isha Patel (HR Operations)",
+    "assignedDate": "04-Jan-2026",
+    "dueDate": "02-Feb-2026",
+    "startDate": "08-Jan-2026",
+    "completionDate": "25-Jan-2026",
+    "completionPercentage": 100,
+    "trainingStatus": "completed",
+    "difficultyLevel": "Intermediate",
+    "expectedDuration": "3 Hours",
+    "learningObjectives": [
+      "Classify ePHI identifiers according to HIPAA Privacy Rule definitions and Safe Harbor methods",
+      "Ensure AES-256 encryption at rest and TLS 1.3 in transit across all health data integrations",
+      "Enforce Business Associate Agreements (BAA) and minimum-necessary data disclosure rules",
+      "Execute required HIPAA administrative, physical, and technical safeguard audits"
+    ],
+    "expectedOutcomes": "Staff safeguard health data confidentiality, avoiding severe regulatory fines and protecting patient privacy.",
+    "status": "Completed",
+    "resources": [
+      {
+        "id": "TRN-ASSIGN-123_r1",
+        "title": "Module 1: Foundations & Core Principles of HIPAA & Health Data Privacy Standards",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
+        "isMandatory": true,
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": true,
+        "completionDate": "25-Jan-2026",
+        "completionTimestamp": "24-Jan-2026, 11:15 AM"
+      },
+      {
+        "id": "TRN-ASSIGN-123_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
+        "type": "pdf",
+        "isMandatory": true,
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-123_playbook.pdf",
+        "isCompleted": true,
+        "completionDate": "25-Jan-2026",
+        "completionTimestamp": "25-Jan-2026, 02:40 PM"
+      },
+      {
+        "id": "TRN-ASSIGN-123_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-123",
+        "isCompleted": true,
+        "completionDate": "25-Jan-2026",
+        "completionTimestamp": "26-Jan-2026, 04:10 PM"
+      },
+      {
+        "id": "TRN-ASSIGN-123_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-123_demo.mp4",
+        "isCompleted": true,
+        "completionDate": "25-Jan-2026",
+        "completionTimestamp": "26-Jan-2026, 05:30 PM"
+      }
+    ],
+    "assessment": {
+      "id": "TRN-ASSIGN-123_asm",
+      "name": "HIPAA & Health Data Privacy Standards Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
+      "attemptsUsed": 1,
+      "passed": true,
+      "isPassed": true,
+      "bestScore": 92,
+      "previousAttempts": [
+        {
+          "attemptNumber": 1,
+          "score": 92,
+          "passed": true,
+          "submissionDate": "25-Jan-2026"
+        }
+      ],
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the primary operational objective of HIPAA & Health Data Privacy Standards?",
+          "options": [
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
+        }
+      ]
+    },
+    "submission": {
+      "completionRemarks": "All 4 modules thoroughly studied and assessment completed with score >= 80%.",
+      "evidenceFiles": [
+        "certificate_evidence_trn-assign-123.pdf"
+      ],
+      "submittedAt": "25-Jan-2026",
+      "isLocked": true
+    },
+    "review": {
+      "status": "approved",
+      "reviewerName": "Isha Patel",
+      "reviewDate": "25-Jan-2026",
+      "feedback": "Comprehensive coursework completed and passed with distinction. Certificate approved and issued."
+    },
+    "certificate": {
+      "id": "TRN-2026-0023",
+      "name": "HIPAA & Health Data Privacy Standards Credential",
+      "trainingName": "HIPAA & Health Data Privacy Standards",
+      "issueDate": "25-Jan-2026",
+      "expiryDate": "26-Jan-2028",
+      "status": "issued",
+      "recipientName": "Tanya Kapoor",
+      "recipientId": "CO-5039"
+    }
+  },
+  {
+    "id": "TRN-ASSIGN-124",
+    "trainingName": "Product Analytics, Telemetry & User Journey Mapping",
+    "category": "Product & Platform",
+    "shortDescription": "Event tracking taxonomy, retention cohorts, funnel conversion drop-off analysis, and feature adoption metrics with Mixpanel/PostHog.",
+    "isMandatory": false,
+    "assignedBy": "Megha Salunkhe (Sr. Executive)",
+    "assignedDate": "16-Jan-2026",
+    "dueDate": "25-Apr-2026",
+    "startDate": "20-Jan-2026",
+    "completionPercentage": 35,
+    "trainingStatus": "in_progress",
+    "difficultyLevel": "Intermediate",
+    "expectedDuration": "3.5 Hours",
+    "learningObjectives": [
+      "Standardize event tracking naming schemas and metadata properties across web and mobile clients",
+      "Analyze multi-step signup and onboarding conversion funnels to identify friction points",
+      "Build retention heatmaps and cohort analyses to quantify long-term feature stickiness",
+      "Design randomized A/B experimentation hypotheses with statistical significance guardrails"
+    ],
+    "expectedOutcomes": "Product teams make validated, user-centric decisions driven by empirical customer behavioral analytics.",
+    "status": "In Progress",
+    "resources": [
+      {
+        "id": "TRN-ASSIGN-124_r1",
+        "title": "Module 1: Foundations & Core Principles of Product Analytics, Telemetry & User Journey Mapping",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
+        "isMandatory": true,
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": true,
+        "completionDate": "20-Jan-2026",
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-124_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
+        "type": "pdf",
+        "isMandatory": true,
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-124_playbook.pdf",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-124_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-124",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-124_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-124_demo.mp4",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      }
+    ],
+    "assessment": {
+      "id": "TRN-ASSIGN-124_asm",
+      "name": "Product Analytics, Telemetry & User Journey Mapping Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
+      "attemptsUsed": 1,
+      "passed": false,
+      "isPassed": false,
+      "bestScore": 70,
+      "previousAttempts": [
+        {
+          "attemptNumber": 1,
+          "score": 70,
+          "passed": false,
+          "submissionDate": "20-Jan-2026"
+        }
+      ],
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the primary operational objective of Product Analytics, Telemetry & User Journey Mapping?",
+          "options": [
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
+        }
+      ]
+    },
+    "submission": {
+      "completionRemarks": "",
+      "evidenceFiles": [],
+      "submittedAt": null,
+      "isLocked": false
+    },
+    "review": {
+      "status": "pending",
+      "reviewerName": "Megha Salunkhe",
+      "reviewDate": null,
+      "feedback": null
+    },
+    "certificate": null
+  },
+  {
+    "id": "TRN-ASSIGN-125",
+    "trainingName": "Conflict Resolution & Collaborative Problem Solving",
+    "category": "Professional Skills",
+    "shortDescription": "Navigating difficult interpersonal discussions, depersonalizing feedback, finding win-win compromises, and active empathetic listening.",
+    "isMandatory": false,
+    "assignedBy": "Shivam Sharma (People Operations)",
+    "assignedDate": "25-Jan-2026",
+    "dueDate": "30-May-2026",
+    "startDate": null,
+    "completionPercentage": 0,
+    "trainingStatus": "not_started",
+    "difficultyLevel": "Beginner",
+    "expectedDuration": "2.5 Hours",
+    "learningObjectives": [
+      "Apply the Thomas-Kilmann Conflict Mode Instrument (TKI) to match response styles to conflict stakes",
+      "Deliver candid yet empathetic performance feedback using the SBI (Situation-Behavior-Impact) model",
+      "De-escalate emotional friction in high-pressure technical disagreements or project scope shifts",
+      "Establish team alignment through collaborative consensus building and clear accountability"
+    ],
+    "expectedOutcomes": "Teams maintain strong interpersonal trust and resolve disagreements constructively without lasting friction.",
+    "status": "Not Started",
+    "resources": [
+      {
+        "id": "TRN-ASSIGN-125_r1",
+        "title": "Module 1: Foundations & Core Principles of Conflict Resolution & Collaborative Problem Solving",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
+        "isMandatory": true,
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-125_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
+        "type": "pdf",
+        "isMandatory": true,
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-125_playbook.pdf",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-125_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-125",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-125_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-125_demo.mp4",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      }
+    ],
+    "assessment": {
+      "id": "TRN-ASSIGN-125_asm",
+      "name": "Conflict Resolution & Collaborative Problem Solving Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
+      "attemptsUsed": 0,
+      "passed": false,
+      "isPassed": false,
+      "bestScore": 0,
+      "previousAttempts": [],
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the primary operational objective of Conflict Resolution & Collaborative Problem Solving?",
+          "options": [
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
+        }
+      ]
+    },
+    "submission": {
+      "completionRemarks": "",
+      "evidenceFiles": [],
+      "submittedAt": null,
+      "isLocked": false
+    },
+    "review": {
+      "status": "not_submitted",
+      "reviewerName": "Shivam Sharma",
+      "reviewDate": null,
+      "feedback": null
+    },
+    "certificate": null
+  },
+  {
+    "id": "TRN-ASSIGN-126",
+    "trainingName": "Micro-Frontend Architecture with Module Federation",
+    "category": "Engineering",
+    "shortDescription": "Decoupling large monolithic web applications into independently deployable micro-frontends using Webpack 5 Module Federation.",
+    "isMandatory": false,
+    "assignedBy": "Ishdeep Anand (Admin)",
+    "assignedDate": "12-Jan-2026",
+    "dueDate": "10-Apr-2026",
+    "startDate": "18-Jan-2026",
+    "completionPercentage": 55,
+    "trainingStatus": "in_progress",
+    "difficultyLevel": "Advanced",
+    "expectedDuration": "5.5 Hours",
+    "learningObjectives": [
+      "Configure Webpack 5 Module Federation host and remote container boundaries",
+      "Manage shared dependencies (React, design system components) with singleton version resolution",
+      "Implement client-side micro-frontend routing and custom event bus communication",
+      "Ensure isolated CSS scoping and resilient error boundaries to isolate remote container failures"
+    ],
+    "expectedOutcomes": "Engineering squads deliver and deploy UI modules independently without blocking shared release pipelines.",
+    "status": "In Progress",
+    "resources": [
+      {
+        "id": "TRN-ASSIGN-126_r1",
+        "title": "Module 1: Foundations & Core Principles of Micro-Frontend Architecture with Module Federation",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
+        "isMandatory": true,
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": true,
+        "completionDate": "18-Jan-2026",
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-126_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
+        "type": "pdf",
+        "isMandatory": true,
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-126_playbook.pdf",
+        "isCompleted": true,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-126_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-126",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-126_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-126_demo.mp4",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      }
+    ],
+    "assessment": {
+      "id": "TRN-ASSIGN-126_asm",
+      "name": "Micro-Frontend Architecture with Module Federation Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
+      "attemptsUsed": 1,
+      "passed": false,
+      "isPassed": false,
+      "bestScore": 70,
+      "previousAttempts": [
+        {
+          "attemptNumber": 1,
+          "score": 70,
+          "passed": false,
+          "submissionDate": "18-Jan-2026"
+        }
+      ],
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the primary operational objective of Micro-Frontend Architecture with Module Federation?",
+          "options": [
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
+        }
+      ]
+    },
+    "submission": {
+      "completionRemarks": "",
+      "evidenceFiles": [],
+      "submittedAt": null,
+      "isLocked": false
+    },
+    "review": {
+      "status": "pending",
+      "reviewerName": "Ishdeep Anand",
+      "reviewDate": null,
+      "feedback": null
+    },
+    "certificate": null
+  },
+  {
+    "id": "TRN-ASSIGN-127",
+    "trainingName": "Secure Code Review & Static Analysis (SAST/DAST)",
+    "category": "Technical Architecture",
+    "shortDescription": "Integrating automated vulnerability scanning, SonarQube rules, Semgrep pattern matching, and peer security code reviews.",
+    "isMandatory": true,
+    "assignedBy": "Megha Salunkhe (Sr. Executive)",
+    "assignedDate": "01-Jan-2026",
+    "dueDate": "08-Feb-2026",
+    "startDate": "04-Jan-2026",
+    "completionDate": "27-Jan-2026",
+    "completionPercentage": 100,
+    "trainingStatus": "completed",
+    "difficultyLevel": "Advanced",
+    "expectedDuration": "4 Hours",
+    "learningObjectives": [
+      "Identify SQL injections, cross-site scripting (XSS), and insecure deserialization in pull requests",
+      "Configure Semgrep rules and SonarQube quality gates to block critical security vulnerabilities in CI",
+      "Conduct structured peer threat-modeling sessions for major software architectural revisions",
+      "Remediate vulnerable third-party dependencies using automated Dependabot/Snyk pull requests"
+    ],
+    "expectedOutcomes": "Developers prevent security flaws before merging code into main branch deployment pipelines.",
+    "status": "Completed",
+    "resources": [
+      {
+        "id": "TRN-ASSIGN-127_r1",
+        "title": "Module 1: Foundations & Core Principles of Secure Code Review & Static Analysis (SAST/DAST)",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
+        "isMandatory": true,
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": true,
+        "completionDate": "27-Jan-2026",
+        "completionTimestamp": "24-Jan-2026, 11:15 AM"
+      },
+      {
+        "id": "TRN-ASSIGN-127_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
+        "type": "pdf",
+        "isMandatory": true,
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-127_playbook.pdf",
+        "isCompleted": true,
+        "completionDate": "27-Jan-2026",
+        "completionTimestamp": "25-Jan-2026, 02:40 PM"
+      },
+      {
+        "id": "TRN-ASSIGN-127_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-127",
+        "isCompleted": true,
+        "completionDate": "27-Jan-2026",
+        "completionTimestamp": "26-Jan-2026, 04:10 PM"
+      },
+      {
+        "id": "TRN-ASSIGN-127_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-127_demo.mp4",
+        "isCompleted": true,
+        "completionDate": "27-Jan-2026",
+        "completionTimestamp": "26-Jan-2026, 05:30 PM"
+      }
+    ],
+    "assessment": {
+      "id": "TRN-ASSIGN-127_asm",
+      "name": "Secure Code Review & Static Analysis (SAST/DAST) Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
+      "attemptsUsed": 1,
+      "passed": true,
+      "isPassed": true,
+      "bestScore": 92,
+      "previousAttempts": [
+        {
+          "attemptNumber": 1,
+          "score": 92,
+          "passed": true,
+          "submissionDate": "27-Jan-2026"
+        }
+      ],
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the primary operational objective of Secure Code Review & Static Analysis (SAST/DAST)?",
+          "options": [
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
+        }
+      ]
+    },
+    "submission": {
+      "completionRemarks": "All 4 modules thoroughly studied and assessment completed with score >= 80%.",
+      "evidenceFiles": [
+        "certificate_evidence_trn-assign-127.pdf"
+      ],
+      "submittedAt": "27-Jan-2026",
+      "isLocked": true
+    },
+    "review": {
+      "status": "approved",
+      "reviewerName": "Megha Salunkhe",
+      "reviewDate": "27-Jan-2026",
+      "feedback": "Comprehensive coursework completed and passed with distinction. Certificate approved and issued."
+    },
+    "certificate": {
+      "id": "TRN-2026-0027",
+      "name": "Secure Code Review & Static Analysis (SAST/DAST) Credential",
+      "trainingName": "Secure Code Review & Static Analysis (SAST/DAST)",
+      "issueDate": "27-Jan-2026",
+      "expiryDate": "26-Jan-2028",
+      "status": "issued",
+      "recipientName": "Tanya Kapoor",
+      "recipientId": "CO-5039"
+    }
+  },
+  {
+    "id": "TRN-ASSIGN-128",
+    "trainingName": "Service Level Objective (SLO) & Error Budget Engineering",
+    "category": "Support & Operations",
+    "shortDescription": "Site Reliability Engineering principles: Defining SLIs, establishing realistic SLOs, managing error budgets, and alert fatigue reduction.",
+    "isMandatory": true,
+    "assignedBy": "Ishdeep Anand (Admin)",
+    "assignedDate": "28-Jan-2026",
+    "dueDate": "20-May-2026",
+    "startDate": null,
+    "completionPercentage": 0,
+    "trainingStatus": "not_started",
+    "difficultyLevel": "Intermediate",
+    "expectedDuration": "3.5 Hours",
+    "learningObjectives": [
+      "Formulate user-centric Service Level Indicators (SLIs) measuring availability and latency",
+      "Negotiate achievable Service Level Objectives (SLOs) aligning customer expectations with engineering velocity",
+      "Govern release gate freezes when error budgets are exhausted to protect system reliability",
+      "Eliminate noisy non-actionable monitoring alerts by adopting burn-rate based alerting rules"
+    ],
+    "expectedOutcomes": "Operations teams maintain rock-solid reliability while sustaining healthy development innovation velocity.",
+    "status": "Not Started",
+    "resources": [
+      {
+        "id": "TRN-ASSIGN-128_r1",
+        "title": "Module 1: Foundations & Core Principles of Service Level Objective (SLO) & Error Budget Engineering",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
+        "isMandatory": true,
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-128_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
+        "type": "pdf",
+        "isMandatory": true,
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-128_playbook.pdf",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-128_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-128",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-128_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-128_demo.mp4",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      }
+    ],
+    "assessment": {
+      "id": "TRN-ASSIGN-128_asm",
+      "name": "Service Level Objective (SLO) & Error Budget Engineering Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
+      "attemptsUsed": 0,
+      "passed": false,
+      "isPassed": false,
+      "bestScore": 0,
+      "previousAttempts": [],
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the primary operational objective of Service Level Objective (SLO) & Error Budget Engineering?",
+          "options": [
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
+        }
+      ]
+    },
+    "submission": {
+      "completionRemarks": "",
+      "evidenceFiles": [],
+      "submittedAt": null,
+      "isLocked": false
+    },
+    "review": {
+      "status": "not_submitted",
+      "reviewerName": "Ishdeep Anand",
+      "reviewDate": null,
+      "feedback": null
+    },
+    "certificate": null
+  },
+  {
+    "id": "TRN-ASSIGN-129",
+    "trainingName": "ISO 27001 Information Security Management Systems",
+    "category": "Governance & Compliance",
+    "shortDescription": "Implementing ISO/IEC 27001:2022 security controls, risk treatment plans, asset inventories, and internal surveillance audit procedures.",
+    "isMandatory": true,
+    "assignedBy": "Isha Patel (HR Operations)",
+    "assignedDate": "10-Jan-2026",
+    "dueDate": "15-Mar-2026",
+    "startDate": "14-Jan-2026",
+    "completionPercentage": 70,
+    "trainingStatus": "in_progress",
+    "difficultyLevel": "Intermediate",
+    "expectedDuration": "4 Hours",
+    "learningObjectives": [
+      "Implement Annex A information security controls across organizational, people, physical, and technological themes",
+      "Maintain comprehensive information asset registers with classification levels and custody tracking",
+      "Formulate risk treatment plans using qualitative likelihood and business impact matrices",
+      "Participate effectively in internal and external ISO 27001 surveillance audits"
+    ],
+    "expectedOutcomes": "The organization systematically manages information security risks to uphold accredited global certifications.",
+    "status": "In Progress",
+    "resources": [
+      {
+        "id": "TRN-ASSIGN-129_r1",
+        "title": "Module 1: Foundations & Core Principles of ISO 27001 Information Security Management Systems",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
+        "isMandatory": true,
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": true,
+        "completionDate": "14-Jan-2026",
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-129_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
+        "type": "pdf",
+        "isMandatory": true,
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-129_playbook.pdf",
+        "isCompleted": true,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-129_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-129",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-129_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-129_demo.mp4",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      }
+    ],
+    "assessment": {
+      "id": "TRN-ASSIGN-129_asm",
+      "name": "ISO 27001 Information Security Management Systems Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
+      "attemptsUsed": 1,
+      "passed": false,
+      "isPassed": false,
+      "bestScore": 70,
+      "previousAttempts": [
+        {
+          "attemptNumber": 1,
+          "score": 70,
+          "passed": false,
+          "submissionDate": "14-Jan-2026"
+        }
+      ],
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the primary operational objective of ISO 27001 Information Security Management Systems?",
+          "options": [
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
+        }
+      ]
+    },
+    "submission": {
+      "completionRemarks": "",
+      "evidenceFiles": [],
+      "submittedAt": null,
+      "isLocked": false
+    },
+    "review": {
+      "status": "pending",
+      "reviewerName": "Isha Patel",
+      "reviewDate": null,
+      "feedback": null
+    },
+    "certificate": null
+  },
+  {
+    "id": "TRN-ASSIGN-130",
+    "trainingName": "Kafka Event-Driven Architecture & Stream Processing",
+    "category": "Engineering",
+    "shortDescription": "Building distributed event streams with Apache Kafka: Topics, partitions, consumer groups, schema registry, and idempotent producers.",
+    "isMandatory": false,
+    "assignedBy": "Megha Salunkhe (Sr. Executive)",
+    "assignedDate": "05-Dec-2025",
+    "dueDate": "12-Jan-2026",
+    "startDate": "10-Dec-2025",
+    "completionPercentage": 25,
+    "trainingStatus": "overdue",
+    "difficultyLevel": "Advanced",
+    "expectedDuration": "6 Hours",
+    "learningObjectives": [
+      "Design high-throughput Kafka topics with optimal partition sizing and retention policies",
+      "Enforce strong schema evolution and backwards compatibility using Avro and Confluent Schema Registry",
+      "Configure exactly-once processing (EOS) semantics using transactional producer and consumer APIs",
+      "Build real-time event aggregation and streaming join pipelines with Kafka Streams / ksqlDB"
+    ],
+    "expectedOutcomes": "Engineers construct resilient asynchronous data highways powering decoupled microservices across the CRM.",
+    "status": "Overdue",
+    "resources": [
+      {
+        "id": "TRN-ASSIGN-130_r1",
+        "title": "Module 1: Foundations & Core Principles of Kafka Event-Driven Architecture & Stream Processing",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
+        "isMandatory": true,
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-130_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
+        "type": "pdf",
+        "isMandatory": true,
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-130_playbook.pdf",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-130_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-130",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-130_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-130_demo.mp4",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      }
+    ],
+    "assessment": {
+      "id": "TRN-ASSIGN-130_asm",
+      "name": "Kafka Event-Driven Architecture & Stream Processing Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
+      "attemptsUsed": 0,
+      "passed": false,
+      "isPassed": false,
+      "bestScore": 0,
+      "previousAttempts": [],
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the primary operational objective of Kafka Event-Driven Architecture & Stream Processing?",
+          "options": [
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
+        }
+      ]
+    },
+    "submission": {
+      "completionRemarks": "",
+      "evidenceFiles": [],
+      "submittedAt": null,
+      "isLocked": false
+    },
+    "review": {
+      "status": "not_submitted",
+      "reviewerName": "Megha Salunkhe",
+      "reviewDate": null,
+      "feedback": null
+    },
+    "certificate": null
+  },
+  {
+    "id": "TRN-ASSIGN-131",
+    "trainingName": "CollabCRM Mobile App Architecture & Offline Sync",
+    "category": "Product & Platform",
+    "shortDescription": "Building offline-first mobile experiences: SQLite caching, background data synchronization, optimistic UI updates, and conflict resolution.",
+    "isMandatory": false,
+    "assignedBy": "Ishdeep Anand (Admin)",
+    "assignedDate": "26-Jan-2026",
+    "dueDate": "15-Jun-2026",
+    "startDate": null,
+    "completionPercentage": 0,
+    "trainingStatus": "not_started",
+    "difficultyLevel": "Intermediate",
+    "expectedDuration": "4.5 Hours",
+    "learningObjectives": [
+      "Implement local SQLite persistence and reactive querying using WatermelonDB / Realm",
+      "Design two-way conflict resolution algorithms (Last-Write-Wins and CRDT delta merges)",
+      "Deliver optimistic client UI updates with automated retry queues for intermittent connectivity",
+      "Optimize mobile battery and network payload consumption with compressed Delta Sync payloads"
+    ],
+    "expectedOutcomes": "Field sales and service agents experience seamless CRM productivity regardless of cellular network dead zones.",
+    "status": "Not Started",
+    "resources": [
+      {
+        "id": "TRN-ASSIGN-131_r1",
+        "title": "Module 1: Foundations & Core Principles of CollabCRM Mobile App Architecture & Offline Sync",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
+        "isMandatory": true,
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-131_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
+        "type": "pdf",
+        "isMandatory": true,
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-131_playbook.pdf",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-131_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-131",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      },
+      {
+        "id": "TRN-ASSIGN-131_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-131_demo.mp4",
+        "isCompleted": false,
+        "completionDate": null,
+        "completionTimestamp": null
+      }
+    ],
+    "assessment": {
+      "id": "TRN-ASSIGN-131_asm",
+      "name": "CollabCRM Mobile App Architecture & Offline Sync Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
+      "attemptsUsed": 0,
+      "passed": false,
+      "isPassed": false,
+      "bestScore": 0,
+      "previousAttempts": [],
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the primary operational objective of CollabCRM Mobile App Architecture & Offline Sync?",
+          "options": [
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
+        }
+      ]
+    },
+    "submission": {
+      "completionRemarks": "",
+      "evidenceFiles": [],
+      "submittedAt": null,
+      "isLocked": false
+    },
+    "review": {
+      "status": "not_submitted",
+      "reviewerName": "Ishdeep Anand",
+      "reviewDate": null,
+      "feedback": null
+    },
+    "certificate": null
+  },
+  {
+    "id": "TRN-ASSIGN-132",
+    "trainingName": "Time Management & Deep Work Practices for Knowledge Workers",
+    "category": "Professional Skills",
+    "shortDescription": "Mastering calendar blocking, asynchronous communication discipline, context-switching reduction, and deep work focus blocks.",
+    "isMandatory": false,
+    "assignedBy": "Shivam Sharma (People Operations)",
+    "assignedDate": "01-Jan-2026",
+    "dueDate": "20-Jan-2026",
+    "startDate": "04-Jan-2026",
+    "completionDate": "18-Jan-2026",
+    "completionPercentage": 100,
+    "trainingStatus": "completed",
+    "difficultyLevel": "Beginner",
+    "expectedDuration": "2 Hours",
+    "learningObjectives": [
+      "Structure calendar focus blocks following Cal Newport’s Deep Work philosophies",
+      "Minimize cognitive switching costs by batching email, Slack, and administrative tasks",
+      "Apply the Eisenhower Matrix to ruthlessly prioritize high-leverage quarterly objectives",
+      "Establish personal boundaries to sustain long-term intellectual energy and prevent workplace burnout"
+    ],
+    "expectedOutcomes": "Knowledge workers achieve high daily cognitive output and job satisfaction with low chronic stress.",
+    "status": "Completed",
+    "resources": [
+      {
+        "id": "TRN-ASSIGN-132_r1",
+        "title": "Module 1: Foundations & Core Principles of Time Management & Deep Work Practices for Knowledge Workers",
+        "description": "Comprehensive breakdown of fundamental operational standards, compliance benchmarks, and platform rules.",
+        "type": "youtube",
+        "isMandatory": true,
+        "duration": "22 Mins",
+        "url": "https://www.youtube.com/watch?v=996OiexHze0",
+        "isCompleted": true,
+        "completionDate": "18-Jan-2026",
+        "completionTimestamp": "24-Jan-2026, 11:15 AM"
+      },
+      {
+        "id": "TRN-ASSIGN-132_r2",
+        "title": "Module 2: CollabCRM Implementation Playbook & Guidelines (PDF)",
+        "description": "Official corporate documentation outlining specific architectural policies and system workflows.",
+        "type": "pdf",
+        "isMandatory": true,
+        "duration": "35 Mins",
+        "url": "assets/docs/trn-assign-132_playbook.pdf",
+        "isCompleted": true,
+        "completionDate": "18-Jan-2026",
+        "completionTimestamp": "25-Jan-2026, 02:40 PM"
+      },
+      {
+        "id": "TRN-ASSIGN-132_r3",
+        "title": "Module 3: Hands-on Interactive Scenario Sandbox",
+        "description": "Real-world practical laboratory exercises simulating production challenges and mitigation workflows.",
+        "type": "external_link",
+        "isMandatory": false,
+        "duration": "40 Mins",
+        "url": "https://collabcrm.internal/sandbox/trn-assign-132",
+        "isCompleted": true,
+        "completionDate": "18-Jan-2026",
+        "completionTimestamp": "26-Jan-2026, 04:10 PM"
+      },
+      {
+        "id": "TRN-ASSIGN-132_r4",
+        "title": "Module 4: Practical Case Study & Masterclass Demo",
+        "description": "Demonstration video covering edge cases, troubleshooting workflows, and best practice checklists.",
+        "type": "video",
+        "isMandatory": true,
+        "duration": "28 Mins",
+        "url": "assets/videos/trn-assign-132_demo.mp4",
+        "isCompleted": true,
+        "completionDate": "18-Jan-2026",
+        "completionTimestamp": "26-Jan-2026, 05:30 PM"
+      }
+    ],
+    "assessment": {
+      "id": "TRN-ASSIGN-132_asm",
+      "name": "Time Management & Deep Work Practices for Knowledge Workers Certification Assessment",
+      "passingScore": 80,
+      "maxAttempts": 3,
+      "attemptsUsed": 1,
+      "passed": true,
+      "isPassed": true,
+      "bestScore": 92,
+      "previousAttempts": [
+        {
+          "attemptNumber": 1,
+          "score": 92,
+          "passed": true,
+          "submissionDate": "18-Jan-2026"
+        }
+      ],
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the primary operational objective of Time Management & Deep Work Practices for Knowledge Workers?",
+          "options": [
+            "Enforce rigorous security and operational standards across all CRM interactions",
+            "Bypass architectural reviews for faster feature releases",
+            "Store unencrypted sensitive credentials in public client code",
+            "Disable audit logging during customer onboarding"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": "q2",
+          "text": "Which stakeholder must be immediately informed during an unexpected operational issue?",
+          "options": [
+            "Unrelated external vendors",
+            "Reporting Manager, SecOps, and the Incident Commander",
+            "Nobody until end-of-quarter reviews",
+            "Only social media followers"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q3",
+          "text": "What is the minimum passing score required to obtain a verified CollabCRM certificate?",
+          "options": [
+            "50%",
+            "65%",
+            "80%",
+            "100%"
+          ],
+          "correctAnswer": 2
+        }
+      ]
+    },
+    "submission": {
+      "completionRemarks": "All 4 modules thoroughly studied and assessment completed with score >= 80%.",
+      "evidenceFiles": [
+        "certificate_evidence_trn-assign-132.pdf"
+      ],
+      "submittedAt": "18-Jan-2026",
+      "isLocked": true
+    },
+    "review": {
+      "status": "approved",
+      "reviewerName": "Shivam Sharma",
+      "reviewDate": "18-Jan-2026",
+      "feedback": "Comprehensive coursework completed and passed with distinction. Certificate approved and issued."
+    },
+    "certificate": {
+      "id": "TRN-2026-0032",
+      "name": "Time Management & Deep Work Practices for Knowledge Workers Credential",
+      "trainingName": "Time Management & Deep Work Practices for Knowledge Workers",
+      "issueDate": "18-Jan-2026",
+      "expiryDate": "26-Jan-2028",
+      "status": "issued",
+      "recipientName": "Tanya Kapoor",
+      "recipientId": "CO-5039"
+    }
   }
 ];
 
@@ -9481,12 +13458,17 @@ function getFallbackEmployeeData(empId = "CO-5039") {
       if (raw) saved = JSON.parse(raw);
     } catch (e) {}
   }
-  const hasSavedTrainings = saved && Array.isArray(saved.trainings) && saved.trainings.length > 0;
-  const defaultTrainings = (window.DEFAULT_EMPLOYEE_STORE && window.DEFAULT_EMPLOYEE_STORE[empId] && Array.isArray(window.DEFAULT_EMPLOYEE_STORE[empId].trainings) && window.DEFAULT_EMPLOYEE_STORE[empId].trainings.length > 0)
+  const defaultTrainings = (window.DEFAULT_EMPLOYEE_STORE && window.DEFAULT_EMPLOYEE_STORE[empId] && Array.isArray(window.DEFAULT_EMPLOYEE_STORE[empId].trainings) && window.DEFAULT_EMPLOYEE_STORE[empId].trainings.length >= 25)
     ? window.DEFAULT_EMPLOYEE_STORE[empId].trainings
     : BUILTIN_CO5039_TRAININGS;
-  const store = hasSavedTrainings ? saved : { trainings: defaultTrainings, profile: { id: "CO-5039", name: "Tanya Kapoor", department: "Business analyst" } };
-  const trainings = JSON.parse(JSON.stringify(store.trainings || defaultTrainings));
+  
+  let finalTrainings = defaultTrainings;
+  if (saved && Array.isArray(saved.trainings) && saved.trainings.length > 0) {
+    const savedMap = new Map(saved.trainings.map(t => [t.id, t]));
+    finalTrainings = defaultTrainings.map(defT => savedMap.get(defT.id) || defT);
+  }
+  const store = { trainings: finalTrainings, profile: (saved && saved.profile) || { id: "CO-5039", name: "Tanya Kapoor", department: "Business analyst" }, notifications: (saved && saved.notifications) || [] };
+  const trainings = JSON.parse(JSON.stringify(store.trainings));
 trainings.forEach(t => hydrateUnifiedTrainingRecord(t, empId));
   const stats = calcEmployeeStatsFromTrainings(trainings);
   const certs = trainings
@@ -9781,12 +13763,25 @@ function renderEmployeeTrainingsList() {
     list.sort((a, b) => (a.trainingName || a.title || '').localeCompare(b.trainingName || b.title || ''));
   }
 
-  // Update header counter badge (e.g. "1 - 5 of 5 Trainings")
+  // 5. Pagination Computation (User Requirement: Pagination, records > 20-30)
+  state.empTrainingCurrentPage = state.empTrainingCurrentPage || 1;
+  state.empTrainingPageSize = state.empTrainingPageSize || 8;
+
+  const totalRecords = list.length;
+  const totalPages = Math.max(1, Math.ceil(totalRecords / state.empTrainingPageSize));
+  if (state.empTrainingCurrentPage > totalPages) state.empTrainingCurrentPage = totalPages;
+  if (state.empTrainingCurrentPage < 1) state.empTrainingCurrentPage = 1;
+
+  const startIndex = totalRecords === 0 ? 0 : (state.empTrainingCurrentPage - 1) * state.empTrainingPageSize;
+  const endIndex = Math.min(startIndex + state.empTrainingPageSize, totalRecords);
+  const pagedList = totalRecords === 0 ? [] : list.slice(startIndex, endIndex);
+
+  // Update header counter badge (e.g. "1 - 8 of 32 Trainings")
   if (countBadge) {
-    if (list.length === 0) {
+    if (totalRecords === 0) {
       countBadge.textContent = `0 of ${allTrainings.length} Trainings`;
     } else {
-      countBadge.textContent = `1 - ${list.length} of ${list.length} Trainings`;
+      countBadge.textContent = `${startIndex + 1} - ${endIndex} of ${totalRecords} Trainings`;
     }
   }
 
@@ -9806,7 +13801,7 @@ function renderEmployeeTrainingsList() {
 
   if (!tableBody) return;
 
-  if (list.length === 0) {
+  if (totalRecords === 0) {
     tableBody.innerHTML = `
       <tr>
         <td colspan="9" style="text-align: center; padding: 36px 20px; color: #64748b;">
@@ -9817,17 +13812,19 @@ function renderEmployeeTrainingsList() {
         </td>
       </tr>
     `;
+    renderEmpTrainingsPaginationControls(0, 1, 0, 0);
     return;
   }
 
   let tableHtml = '';
-  list.forEach((t, idx) => {
+  pagedList.forEach((t, idx) => {
     const isMandatory = t.isMandatory !== undefined ? t.isMandatory : (t.mandatory !== false);
     const prog = t.completionPercentage !== undefined ? t.completionPercentage : (t.progressPercent || 0);
     const progColor = prog === 100 ? '#10b981' : prog > 0 ? '#4f46e5' : '#94a3b8';
     const title = t.trainingName || t.title || 'Training Program';
     const statusText = normalizeStatus(t.trainingStatus || t.status);
     const duration = t.expectedDuration || (t.durationHours ? t.durationHours + ' hrs' : '4 hrs');
+    const rowNum = startIndex + idx + 1;
 
     // Parse Assigned By details (HR, Admin, or Reporting Manager)
     let assignedByName = t.assignedBy || 'Megha Salunkhe (Sr. Executive)';
@@ -9852,7 +13849,7 @@ function renderEmployeeTrainingsList() {
       assignedByInitials = 'IP';
       assignedByBg = '#10b981';
     } else {
-      const clean = assignedByName.replace(/\(.*?\)/g, '').trim();
+      const clean = assignedByName.replace(/\(.*\)/g, '').trim();
       const parts = clean.split(' ');
       assignedByName = clean;
       assignedByInitials = parts.map(p => p[0]).join('').slice(0, 2).toUpperCase() || 'MG';
@@ -9862,7 +13859,7 @@ function renderEmployeeTrainingsList() {
 
     tableHtml += `
       <tr>
-        <td style="color: #64748b; font-weight: 500;">${idx + 1}</td>
+        <td style="color: #64748b; font-weight: 500;">${rowNum}</td>
         <td>
           <div style="font-weight: 600; color: #0f172a; font-size: 13px; line-height: 1.35; margin-bottom: 3px;">
             ${escapeHtml(title)}
@@ -9917,7 +13914,82 @@ function renderEmployeeTrainingsList() {
   });
 
   tableBody.innerHTML = tableHtml;
+  renderEmpTrainingsPaginationControls(totalRecords, totalPages, startIndex, endIndex);
 }
+
+// Helper: Render Pagination Controls
+function renderEmpTrainingsPaginationControls(totalRecords, totalPages, startIndex, endIndex) {
+  const container = document.getElementById('empTrainingsPagination');
+  if (!container) return;
+
+  if (totalRecords === 0) {
+    container.innerHTML = '<div style="font-size: 12.5px; color: #64748b;">No records to display</div>';
+    return;
+  }
+
+  const currentPage = state.empTrainingCurrentPage || 1;
+  const pageSize = state.empTrainingPageSize || 8;
+
+  let pageBtnsHtml = '';
+  for (let p = 1; p <= totalPages; p++) {
+    const isActive = p === currentPage;
+    pageBtnsHtml += `
+      <button type="button" onclick="changeEmpTrainingPage(${p})" style="min-width: 32px; height: 32px; padding: 0 8px; border-radius: 6px; font-size: 12.5px; font-weight: ${isActive ? '700' : '500'}; border: 1px solid ${isActive ? '#4338ca' : '#cbd5e1'}; background: ${isActive ? '#4f46e5' : '#ffffff'}; color: ${isActive ? '#ffffff' : '#334155'}; cursor: pointer; transition: all 0.15s ease;">
+        ${p}
+      </button>
+    `;
+  }
+
+  container.innerHTML = `
+    <div style="font-size: 12.5px; color: #64748b;">
+      Showing <strong>${startIndex + 1}</strong> to <strong>${endIndex}</strong> of <strong>${totalRecords}</strong> training programmes
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+      <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #64748b;">
+        <span>Rows per page:</span>
+        <select onchange="changeEmpTrainingPageSize(this.value)" style="height: 32px; padding: 0 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; background: #ffffff; color: #334155; outline: none; cursor: pointer;">
+          <option value="8" ${pageSize === 8 ? 'selected' : ''}>8</option>
+          <option value="10" ${pageSize === 10 ? 'selected' : ''}>10</option>
+          <option value="20" ${pageSize === 20 ? 'selected' : ''}>20</option>
+          <option value="50" ${pageSize === 50 ? 'selected' : ''}>50</option>
+        </select>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 4px;">
+        <button type="button" onclick="changeEmpTrainingPage(1)" ${currentPage === 1 ? 'disabled' : ''} style="height: 32px; padding: 0 10px; border-radius: 6px; font-size: 12px; font-weight: 500; border: 1px solid #cbd5e1; background: #ffffff; color: ${currentPage === 1 ? '#94a3b8' : '#334155'}; cursor: ${currentPage === 1 ? 'not-allowed' : 'pointer'};">
+          « First
+        </button>
+        <button type="button" onclick="changeEmpTrainingPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} style="height: 32px; padding: 0 10px; border-radius: 6px; font-size: 12px; font-weight: 500; border: 1px solid #cbd5e1; background: #ffffff; color: ${currentPage === 1 ? '#94a3b8' : '#334155'}; cursor: ${currentPage === 1 ? 'not-allowed' : 'pointer'};">
+          ‹ Prev
+        </button>
+
+        ${pageBtnsHtml}
+
+        <button type="button" onclick="changeEmpTrainingPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''} style="height: 32px; padding: 0 10px; border-radius: 6px; font-size: 12px; font-weight: 500; border: 1px solid #cbd5e1; background: #ffffff; color: ${currentPage === totalPages ? '#94a3b8' : '#334155'}; cursor: ${currentPage === totalPages ? 'not-allowed' : 'pointer'};">
+          Next ›
+        </button>
+        <button type="button" onclick="changeEmpTrainingPage(${totalPages})" ${currentPage === totalPages ? 'disabled' : ''} style="height: 32px; padding: 0 10px; border-radius: 6px; font-size: 12px; font-weight: 500; border: 1px solid #cbd5e1; background: #ffffff; color: ${currentPage === totalPages ? '#94a3b8' : '#334155'}; cursor: ${currentPage === totalPages ? 'not-allowed' : 'pointer'};">
+          Last »
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function changeEmpTrainingPage(page) {
+  state.empTrainingCurrentPage = page;
+  renderEmployeeTrainingsList();
+}
+window.changeEmpTrainingPage = changeEmpTrainingPage;
+
+function changeEmpTrainingPageSize(size) {
+  state.empTrainingPageSize = parseInt(size, 10) || 8;
+  state.empTrainingCurrentPage = 1;
+  renderEmployeeTrainingsList();
+}
+window.changeEmpTrainingPageSize = changeEmpTrainingPageSize;
+
 
 // 4. Employee Subnav Tab Switching (Spec Sec 2)
 function switchEmployeeTrainingTab(tabId) {
@@ -10042,6 +14114,83 @@ function openEmployeeTrainingDetail(trainingId) {
   }
   if (elStatus) elStatus.textContent = statusText;
   if (elDue) elDue.textContent = `Due Date: ${t.dueDate || '15-Dec-2025'} • Assigned By: ${cleanAssignedBy}`;
+
+  // Render Header Actions (Start Programme / Complete Programme) per user requirement
+  const headerActionsEl = document.getElementById('empModalHeaderActions');
+  if (headerActionsEl) {
+    const sNorm = normalizeStatus(t.trainingStatus || t.status);
+    let actionsHtml = '';
+    if (sNorm === 'Not Started') {
+      actionsHtml = `
+        <button type="button" class="btn-primary-action" onclick="startEmployeeTraining('${t.id}')" style="background: #2563eb; color: #ffffff; font-weight: 700; font-size: 13px; padding: 8px 18px; border-radius: 6px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 1px 3px rgba(37,99,235,0.25);">
+          <span>▶ Start Programme</span>
+        </button>
+      `;
+    } else if (sNorm === 'In Progress') {
+      actionsHtml = `
+        <button type="button" class="btn-primary-action" onclick="completeEmployeeTrainingDirect('${t.id}')" style="background: #16a34a; border: 1px solid #15803d; color: #ffffff; font-weight: 700; font-size: 13px; padding: 8px 18px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 1px 3px rgba(22,163,74,0.25);">
+          <span>✓ Complete Programme</span>
+        </button>
+        <button type="button" class="btn-secondary-action" onclick="switchEmpModalTab('resources')" style="padding: 8px 14px; font-size: 12.5px; border-radius: 6px; background: #ffffff; border: 1px solid #cbd5e1; color: #334155; font-weight: 600; cursor: pointer;">
+          <span>Continue Coursework →</span>
+        </button>
+      `;
+    } else if (sNorm === 'Completed') {
+      const certId = (t.certificate && t.certificate.id) || 'TRN-2026-0003';
+      actionsHtml = `
+        <button type="button" class="btn-primary-action" onclick="openEmployeeCertificateViewer('${certId}')" style="background: #16a34a; border: 1px solid #15803d; color: #ffffff; font-weight: 700; font-size: 13px; padding: 8px 18px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+          <span>🎓 View Certificate</span>
+        </button>
+      `;
+    } else if (sNorm === 'Overdue') {
+      actionsHtml = `
+        <button type="button" class="btn-primary-action" onclick="completeEmployeeTrainingDirect('${t.id}')" style="background: #16a34a; border: 1px solid #15803d; color: #ffffff; font-weight: 700; font-size: 13px; padding: 8px 18px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+          <span>✓ Complete Programme</span>
+        </button>
+        <button type="button" class="btn-primary-action" onclick="startEmployeeTraining('${t.id}')" style="background: #ea580c; border: 1px solid #c2410c; color: #ffffff; font-weight: 700; font-size: 13px; padding: 8px 18px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+          <span>▶ Resume Programme</span>
+        </button>
+      `;
+    }
+    headerActionsEl.innerHTML = actionsHtml;
+  }
+
+  // Render Overview Action Card in Tab 1
+  const elActionCard = document.getElementById('empModalOverviewActionCard');
+  if (elActionCard) {
+    const sNorm = normalizeStatus(t.trainingStatus || t.status);
+    const prog = t.completionPercentage !== undefined ? t.completionPercentage : (t.progressPercent || 0);
+    const progColor = prog === 100 ? '#10b981' : prog > 0 ? '#4f46e5' : '#94a3b8';
+    let btnHtml = '';
+    if (sNorm === 'Not Started') {
+      btnHtml = `<button type="button" class="btn-primary-action" onclick="startEmployeeTraining('${t.id}')" style="background: #2563eb; color: #ffffff; font-weight: 700; font-size: 13px; padding: 8px 18px; border-radius: 6px; border: none; cursor: pointer;">▶ Start Programme</button>`;
+    } else if (sNorm === 'In Progress') {
+      btnHtml = `<button type="button" class="btn-primary-action" onclick="completeEmployeeTrainingDirect('${t.id}')" style="background: #16a34a; border: 1px solid #15803d; color: #ffffff; font-weight: 700; font-size: 13px; padding: 8px 18px; border-radius: 6px; cursor: pointer;">✓ Complete Programme</button>`;
+    } else if (sNorm === 'Completed') {
+      const cId = (t.certificate && t.certificate.id) || 'TRN-2026-0003';
+      btnHtml = `<button type="button" class="btn-primary-action" onclick="openEmployeeCertificateViewer('${cId}')" style="background: #16a34a; border: 1px solid #15803d; color: #ffffff; font-weight: 700; font-size: 13px; padding: 8px 18px; border-radius: 6px; cursor: pointer;">🎓 View Verified Certificate</button>`;
+    } else {
+      btnHtml = `<button type="button" class="btn-primary-action" onclick="completeEmployeeTrainingDirect('${t.id}')" style="background: #16a34a; border: 1px solid #15803d; color: #ffffff; font-weight: 700; font-size: 13px; padding: 8px 18px; border-radius: 6px; cursor: pointer;">✓ Complete Programme</button>`;
+    }
+
+    elActionCard.innerHTML = `
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-bottom: 4px;">
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <div>
+            <div style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 4px;">PROGRAMME PROGRESS & STATUS</div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 13px; font-weight: 700; color: #0f172a;">${sNorm}</span>
+              <span style="color: #94a3b8;">•</span>
+              <span style="font-size: 12.5px; font-weight: 600; color: #4338ca;">${prog}% Completed</span>
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          ${btnHtml}
+        </div>
+      </div>
+    `;
+  }
 
   // Tab 1: Overview & Objectives
   const elDesc = document.getElementById('empModalOverviewDesc');
@@ -11439,3 +15588,113 @@ function handleHeaderNewAction() {
   }
 }
 window.handleHeaderNewAction = handleHeaderNewAction;
+
+
+// Action: Start Programme
+function startEmployeeTraining(trainingId) {
+  if (!state.employeeTrainingData) return;
+  const t = (state.employeeTrainingData.trainings || []).find(x => x.id === trainingId);
+  if (!t) return;
+
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
+  t.trainingStatus = 'in_progress';
+  t.status = 'In Progress';
+  t.startDate = dateStr;
+  if (!t.completionPercentage || t.completionPercentage === 0) {
+    t.completionPercentage = 25;
+    if (Array.isArray(t.resources) && t.resources[0]) {
+      t.resources[0].isCompleted = true;
+      t.resources[0].completionDate = dateStr;
+    }
+  }
+
+  saveEmployeeStoreToLocal();
+  updateEmpTrainingDerivedState();
+  showConfigToast(`Programme "${t.trainingName}" started! Coursework is now active and in progress.`, 'success');
+
+  // Re-render open detail if on screen
+  if (document.getElementById('sectionEmpTrainingDetailScreen')?.style.display !== 'none' && state.empCurrentTrainingId === trainingId) {
+    openEmployeeTrainingDetail(trainingId);
+  }
+  renderEmployeeTrainingsList();
+  renderEmployeeDashboardUI();
+}
+window.startEmployeeTraining = startEmployeeTraining;
+
+// Action: Complete Programme
+function completeEmployeeTrainingDirect(trainingId) {
+  if (!state.employeeTrainingData) return;
+  const t = (state.employeeTrainingData.trainings || []).find(x => x.id === trainingId);
+  if (!t) return;
+
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
+  t.trainingStatus = 'completed';
+  t.status = 'Completed';
+  t.completionPercentage = 100;
+  t.completionDate = dateStr;
+
+  // Mark all resources completed
+  if (Array.isArray(t.resources)) {
+    t.resources.forEach(r => {
+      r.isCompleted = true;
+      if (!r.completionDate) r.completionDate = dateStr;
+    });
+  }
+
+  // Ensure assessment passed
+  if (t.assessment) {
+    t.assessment.passed = true;
+    t.assessment.isPassed = true;
+    t.assessment.bestScore = 95;
+    if (!t.assessment.previousAttempts) t.assessment.previousAttempts = [];
+    t.assessment.previousAttempts.push({
+      attemptNumber: t.assessment.previousAttempts.length + 1,
+      score: 95,
+      passed: true,
+      submissionDate: dateStr
+    });
+  }
+
+  // Issue certificate
+  if (!t.certificate) {
+    const certNum = Math.floor(1000 + Math.random() * 9000);
+    t.certificate = {
+      id: `TRN-2026-${certNum}`,
+      name: `${t.trainingName} Credential`,
+      trainingName: t.trainingName,
+      issueDate: dateStr,
+      expiryDate: '26-Jan-2028',
+      status: 'issued',
+      recipientName: state.employeeTrainingData.profile?.name || 'Tanya Kapoor',
+      recipientId: state.employeeTrainingData.profile?.id || 'CO-5039'
+    };
+  }
+
+  // Add notification
+  if (state.employeeTrainingData.notifications) {
+    state.employeeTrainingData.notifications.unshift({
+      id: 'notif_' + Date.now(),
+      title: 'Training Programme Completed',
+      message: `Congratulations! You have completed "${t.trainingName}". Certificate ${t.certificate.id} has been issued.`,
+      type: 'success',
+      timestamp: 'Just now',
+      read: false
+    });
+  }
+
+  saveEmployeeStoreToLocal();
+  updateEmpTrainingDerivedState();
+  showConfigToast(`Congratulations! "${t.trainingName}" completed. Verified certificate issued.`, 'success');
+
+  // Re-render open detail if on screen
+  if (document.getElementById('sectionEmpTrainingDetailScreen')?.style.display !== 'none' && state.empCurrentTrainingId === trainingId) {
+    openEmployeeTrainingDetail(trainingId);
+  }
+  renderEmployeeTrainingsList();
+  renderEmployeeDashboardUI();
+}
+window.completeEmployeeTrainingDirect = completeEmployeeTrainingDirect;

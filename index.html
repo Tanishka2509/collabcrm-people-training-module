@@ -2771,6 +2771,9 @@
                   </table>
                 </div>
 
+                <!-- Pagination Controls for Trainings Listing -->
+                <div id="empTrainingsPagination" class="emp-table-pagination" style="display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-top: 1px solid #e2e8f0; background: #ffffff; flex-wrap: wrap; gap: 12px;"></div>
+
                 <!-- Hidden fallback container for compatibility -->
                 <div id="empTrainingsGrid" style="display: none;"></div>
               </div>
@@ -2814,6 +2817,8 @@
                       <p id="empModalDueDateText" style="font-size: 12px; color: #64748b; margin: 3px 0 0 0;">Due Date: 15-Nov-2026 • Assigned By: Megha Salunkhe</p>
                     </div>
                   </div>
+                  <!-- Header Action Buttons: Start Programme / Complete Programme -->
+                  <div id="empModalHeaderActions" style="display: flex; align-items: center; gap: 10px; flex-shrink: 0; flex-wrap: wrap;"></div>
                 </div>
 
                 <!-- Tabs Navigation matching Screenshot 4 -->
@@ -2837,6 +2842,9 @@
                   <!-- TAB 1: OVERVIEW & OBJECTIVES matching Screenshot 4 -->
                   <div id="empModalTabContent_overview" class="emp-modal-tab-content">
                     <div style="display: flex; flex-direction: column; gap: 18px;">
+                      <!-- Action & Status Card: Start / Complete Programme -->
+                      <div id="empModalOverviewActionCard"></div>
+
                       <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px;">
                         <h4 style="font-size: 12px; font-weight: 700; color: #0f172a; margin: 0 0 8px 0; text-transform: uppercase; letter-spacing: 0.05em;">COURSE SUMMARY</h4>
                         <p id="empModalOverviewDesc" style="font-size: 13.5px; color: #334155; line-height: 1.6; margin: 0;">Detailed description here.</p>
