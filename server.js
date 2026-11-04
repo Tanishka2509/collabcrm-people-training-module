@@ -42,7 +42,8 @@ const EMPLOYEE_TRAINING_STORE = {
       phone: '+1 9005048244',
       avatarInitials: 'AB',
       avatarBg: '#f59e0b',
-      experience: '3Y 11M'
+      experience: '3Y 11M',
+      status: 'active'
     },
     notifications: [
       {
@@ -519,7 +520,64 @@ const EMPLOYEE_TRAINING_STORE = {
         certificate: null
       }
     ]
+  },
+  'EMP-010': {
+    profile: {
+      id: 'EMP-010',
+      name: 'Karan Johar',
+      firstName: 'Karan',
+      lastName: 'Johar',
+      designation: 'Former Sales Lead',
+      department: 'Sales & BD',
+      reportingManager: 'Isha Patel (Head of People)',
+      reportingManagerId: 'EMP-001',
+      email: 'karan.j@collabcrm.com',
+      phone: '+1 9005048299',
+      avatarInitials: 'KJ',
+      avatarBg: '#64748b',
+      experience: '2Y 4M',
+      status: 'inactive',
+      exitDate: '15-Feb-2026'
+    },
+    notifications: [],
+    trainings: [
+      {
+        id: 'TRN-ASSIGN-901',
+        trainingName: 'Executive Leadership & Strategic Governance',
+        category: 'Governance & Compliance',
+        shortDescription: 'Core executive oversight and ethical corporate conduct.',
+        isMandatory: true,
+        assignedBy: 'Isha Patel (Head of People)',
+        assignedDate: '10-Dec-2025',
+        dueDate: '15-Jan-2026',
+        startDate: '12-Dec-2025',
+        completionPercentage: 100,
+        trainingStatus: 'completed',
+        resources: [],
+        review: {
+          status: 'approved',
+          reviewerName: 'Isha Patel',
+          reviewDate: '14-Jan-2026',
+          feedback: 'Successfully finished before exit.'
+        },
+        certificate: {
+          id: 'CERT-2026-099',
+          name: 'Executive Leadership Credential',
+          issueDate: '14-Jan-2026',
+          expiryDate: '14-Jan-2028',
+          status: 'issued'
+        }
+      }
+    ]
   }
+};
+
+// Global in-memory training program registry for version tracking
+const TRAINING_PROGRAMS_REGISTRY = {
+  'TR-101': { id: 'TR-101', title: 'CollabCRM Recruitment & Client Portal Workflows', version: 1, versions: [], status: 'published' },
+  'TR-102': { id: 'TR-102', title: 'Enterprise Cloud Architecture & Distributed Microservices', version: 1, versions: [], status: 'published' },
+  'TR-103': { id: 'TR-103', title: 'Information Security, GDPR & Data Privacy 2026', version: 1, versions: [], status: 'published' },
+  'TR-104': { id: 'TR-104', title: 'Executive Sales Leadership & High-Ticket Negotiation', version: 1, versions: [], status: 'published' }
 };
 
 // Helper: Calculate Dashboard Stats
@@ -589,9 +647,11 @@ const server = http.createServer(async (req, res) => {
   if (pathname === '/api/employee/training-data' && req.method === 'GET') {
     const empId = parsedUrl.searchParams.get('employeeId') || 'CO-5039';
     const store = EMPLOYEE_TRAINING_STORE[empId] || EMPLOYEE_TRAINING_STORE['CO-5039'];
+    const isInactive = store.profile && (store.profile.status === 'inactive' || store.profile.status === 'exited');
     const stats = calculateEmployeeDashboardStats(store);
     return sendJson(res, 200, {
       success: true,
+      isBlocked: isInactive,
       employee: store.profile,
       stats: stats,
       trainings: store.trainings,
@@ -863,20 +923,53 @@ const server = http.createServer(async (req, res) => {
     });
   }
 
-  // 9. POST Assign New Training to Employee Store (Preserves unified record)
+  // 9. POST Assign New Training to Employee Store (With Exit & Duplicate Active Validations)
   if (pathname === '/api/employee/assign' && req.method === 'POST') {
     const body = await parseJsonBody(req);
     const { employeeId, training } = body;
-    const store = EMPLOYEE_TRAINING_STORE[employeeId || 'CO-5039'] || EMPLOYEE_TRAINING_STORE['CO-5039'];
+    const targetEmpId = employeeId || (training && training.employeeId) || 'CO-5039';
+    const store = EMPLOYEE_TRAINING_STORE[targetEmpId] || EMPLOYEE_TRAINING_STORE['CO-5039'];
+
     if (!training || !training.id) {
       return sendJson(res, 400, { success: false, message: 'Invalid training assignment payload' });
     }
+
+    // Validation 1: Prevent new assignments when employee is inactive or exited
+    if (store.profile && (store.profile.status === 'inactive' || store.profile.status === 'exited')) {
+      return sendJson(res, 400, {
+        success: false,
+        message: `Cannot assign training: Employee ${store.profile.name} (${store.profile.id}) is marked as inactive / exited.`
+      });
+    }
+
+    // Validation 2: Prevent duplicate active assignments
+    const isDuplicateActive = store.trainings.some(t => {
+      const sameProg = (t.programId && training.programId && t.programId === training.programId) ||
+                       (t.trainingName && training.trainingName && t.trainingName.trim().toLowerCase() === training.trainingName.trim().toLowerCase());
+      const isActive = t.trainingStatus !== 'cancelled' && t.trainingStatus !== 'completed';
+      return sameProg && isActive && t.id !== training.id;
+    });
+
+    if (isDuplicateActive) {
+      return sendJson(res, 400, {
+        success: false,
+        message: `An active assignment for this training program already exists for ${store.profile.name}. Cancel or reassign the existing active record instead.`
+      });
+    }
+
+    // Attach current program version if applicable
+    const progMeta = training.programId ? TRAINING_PROGRAMS_REGISTRY[training.programId] : null;
+    if (progMeta && !training.programVersion) {
+      training.programVersion = progMeta.version || 1;
+    }
+
     const existingIdx = store.trainings.findIndex(t => t.id === training.id);
     if (existingIdx !== -1) {
       Object.assign(store.trainings[existingIdx], training);
     } else {
       store.trainings.unshift(training);
     }
+
     const now = new Date();
     const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
     const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
@@ -889,6 +982,7 @@ const server = http.createServer(async (req, res) => {
       trainingId: training.id,
       read: false
     });
+
     return sendJson(res, 200, {
       success: true,
       training: training,
@@ -899,11 +993,28 @@ const server = http.createServer(async (req, res) => {
   // 10. POST Reviewer Decision (In-place transition from My Training to Training History on Approval)
   if (pathname === '/api/employee/review-decision' && req.method === 'POST') {
     const body = await parseJsonBody(req);
-    const { employeeId, trainingId, action, reviewerName, feedback, certificate } = body;
+    const { employeeId, trainingId, action, reviewerName, reviewerId, feedback, certificate, userRole } = body;
     const store = EMPLOYEE_TRAINING_STORE[employeeId || 'CO-5039'] || EMPLOYEE_TRAINING_STORE['CO-5039'];
     const training = store.trainings.find(t => t.id === trainingId || t.programId === body.programId);
     if (!training) {
       return sendJson(res, 404, { success: false, message: 'Training assignment not found' });
+    }
+
+    // Security Check: Enforce authorized reviewer permissions
+    const isAuthorizedAdmin = userRole === 'admin' || userRole === 'hr';
+    const isDesignatedReviewer = training.reviewerId && reviewerId && training.reviewerId === reviewerId;
+    const isDirectManager = store.profile && reviewerId && store.profile.reportingManagerId === reviewerId;
+    const isDesignatedName = training.reviewerName && reviewerName && training.reviewerName.toLowerCase().includes(reviewerName.toLowerCase());
+
+    if (!isAuthorizedAdmin && !isDesignatedReviewer && !isDirectManager && !isDesignatedName && userRole !== 'admin') {
+      // Allow if reviewerName matches assigner or manager
+      const assignerMatch = training.assignedBy && reviewerName && training.assignedBy.toLowerCase().includes(reviewerName.toLowerCase());
+      if (!assignerMatch) {
+        return sendJson(res, 403, {
+          success: false,
+          message: 'Permission Denied: You are not authorized to evaluate this submission. Only the assigned reviewer, reporting manager, or Admin can approve.'
+        });
+      }
     }
 
     const now = new Date();
@@ -917,7 +1028,8 @@ const server = http.createServer(async (req, res) => {
       training.completionDate = dateStr;
       training.review = {
         status: 'approved',
-        reviewerName: reviewerName || training.assignedBy || 'Isha Patel (Admin)',
+        reviewerName: reviewerName || training.reviewerName || training.assignedBy || 'Isha Patel (Admin)',
+        reviewerId: reviewerId || training.reviewerId || null,
         reviewDate: `${dateStr}, ${timeStr}`,
         feedback: feedback || 'Submission approved. All mandatory resources and assessment requirements verified.'
       };
@@ -929,10 +1041,10 @@ const server = http.createServer(async (req, res) => {
           name: `${training.trainingName} Credential`,
           trainingName: training.trainingName,
           issueDate: dateStr,
-          expiryDate: 'Lifetime',
+          expiryDate: new Date(Date.now() + 2 * 365 * 24 * 60 * 60 * 1000).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
           status: 'issued',
           recipientName: store.profile.name,
-          recipientId: store.profile.employeeId,
+          recipientId: store.profile.id || store.profile.employeeId,
           signatoryName: 'Isha Patel',
           signatoryTitle: 'Head of People & Org Development'
         };
@@ -940,7 +1052,7 @@ const server = http.createServer(async (req, res) => {
       store.notifications.unshift({
         id: `notif_${Date.now()}`,
         title: 'Training Approved & Completed',
-        message: `Your submission for "${training.trainingName}" was approved by ${training.review.reviewerName} and moved to Training History.`,
+        message: `Your submission for "${training.trainingName}" was approved by ${training.review.reviewerName}. Official certificate issued!`,
         type: 'certificate',
         timestamp: `${dateStr}, ${timeStr}`,
         trainingId: training.id,
@@ -952,7 +1064,8 @@ const server = http.createServer(async (req, res) => {
       if (training.submission) training.submission.isLocked = false;
       training.review = {
         status: 'changes_requested',
-        reviewerName: reviewerName || training.assignedBy || 'Isha Patel (Admin)',
+        reviewerName: reviewerName || training.reviewerName || training.assignedBy || 'Isha Patel (Admin)',
+        reviewerId: reviewerId || training.reviewerId || null,
         reviewDate: `${dateStr}, ${timeStr}`,
         feedback: feedback || 'Please revise your submission remarks and attach supporting evidence.'
       };
@@ -971,7 +1084,8 @@ const server = http.createServer(async (req, res) => {
       if (training.submission) training.submission.isLocked = false;
       training.review = {
         status: 'rejected',
-        reviewerName: reviewerName || training.assignedBy || 'Isha Patel (Admin)',
+        reviewerName: reviewerName || training.reviewerName || training.assignedBy || 'Isha Patel (Admin)',
+        reviewerId: reviewerId || training.reviewerId || null,
         reviewDate: `${dateStr}, ${timeStr}`,
         feedback: feedback || 'Submission rejected.'
       };
@@ -981,6 +1095,315 @@ const server = http.createServer(async (req, res) => {
       success: true,
       training: training,
       stats: calculateEmployeeDashboardStats(store)
+    });
+  }
+
+  // 11. POST Cancel Assignment (Feature 1: Cancellation with reason, retains history & progress)
+  if (pathname === '/api/training/cancel-assignment' && req.method === 'POST') {
+    const body = await parseJsonBody(req);
+    const { assignmentId, employeeId, cancellationReason, cancelledBy } = body;
+    const targetEmpId = employeeId || 'CO-5039';
+    const store = EMPLOYEE_TRAINING_STORE[targetEmpId] || EMPLOYEE_TRAINING_STORE['CO-5039'];
+    const training = store.trainings.find(t => t.id === assignmentId);
+
+    if (!training) {
+      return sendJson(res, 404, { success: false, message: 'Assignment not found.' });
+    }
+
+    if (!cancellationReason || cancellationReason.trim().length < 3) {
+      return sendJson(res, 400, { success: false, message: 'Please provide a valid reason for cancellation.' });
+    }
+
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+    training.trainingStatus = 'cancelled';
+    training.status = 'Cancelled';
+    training.cancellationReason = cancellationReason.trim();
+    training.cancelledBy = cancelledBy || 'Admin';
+    training.cancelledAt = `${dateStr}, ${timeStr}`;
+
+    if (!training.auditHistory) training.auditHistory = [];
+    training.auditHistory.unshift({
+      date: `${dateStr}, ${timeStr}`,
+      action: 'Assignment Cancelled',
+      user: cancelledBy || 'Admin',
+      notes: `Cancelled. Reason: ${cancellationReason.trim()}`
+    });
+
+    store.notifications.unshift({
+      id: `notif_${Date.now()}`,
+      title: 'Training Assignment Cancelled',
+      message: `Your training assignment for "${training.trainingName}" was cancelled by ${training.cancelledBy}. Reason: ${training.cancellationReason}`,
+      type: 'warning',
+      timestamp: `${dateStr}, ${timeStr}`,
+      trainingId: training.id,
+      read: false
+    });
+
+    return sendJson(res, 200, {
+      success: true,
+      message: 'Training assignment cancelled successfully. Past progress and history preserved.',
+      training: training,
+      stats: calculateEmployeeDashboardStats(store)
+    });
+  }
+
+  // 12. POST Reassign Training (Feature 1: Reassign with new due date, retains progress, checks duplicate)
+  if (pathname === '/api/training/reassign' && req.method === 'POST') {
+    const body = await parseJsonBody(req);
+    const { assignmentId, employeeId, newDueDate, reassignedBy, notes } = body;
+    const targetEmpId = employeeId || 'CO-5039';
+    const store = EMPLOYEE_TRAINING_STORE[targetEmpId] || EMPLOYEE_TRAINING_STORE['CO-5039'];
+    const training = store.trainings.find(t => t.id === assignmentId);
+
+    if (!training) {
+      return sendJson(res, 404, { success: false, message: 'Assignment not found.' });
+    }
+
+    if (!newDueDate) {
+      return sendJson(res, 400, { success: false, message: 'New due date is required for reassignment.' });
+    }
+
+    // Check if another active assignment exists
+    const duplicate = store.trainings.find(t => {
+      if (t.id === assignmentId) return false;
+      const sameProg = (training.programId && t.programId && t.programId === training.programId) ||
+                       (training.trainingName && t.trainingName && t.trainingName.trim().toLowerCase() === training.trainingName.trim().toLowerCase());
+      const isActive = t.trainingStatus !== 'cancelled' && t.trainingStatus !== 'completed';
+      return sameProg && isActive;
+    });
+    if (duplicate) {
+      return sendJson(res, 400, {
+        success: false,
+        message: 'Cannot reassign: An active assignment already exists for this training program.'
+      });
+    }
+
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+    training.dueDate = newDueDate;
+    training.trainingStatus = (training.completionPercentage > 0) ? 'in_progress' : 'not_started';
+    training.status = (training.completionPercentage > 0) ? 'In Progress' : 'Not Started';
+    training.reassignedAt = `${dateStr}, ${timeStr}`;
+    training.reassignedBy = reassignedBy || 'Admin';
+    training.cancellationReason = null;
+
+    if (!training.auditHistory) training.auditHistory = [];
+    training.auditHistory.unshift({
+      date: `${dateStr}, ${timeStr}`,
+      action: 'Assignment Reassigned',
+      user: reassignedBy || 'Admin',
+      notes: `Reassigned with new due date ${newDueDate}. ${notes || ''}`
+    });
+
+    store.notifications.unshift({
+      id: `notif_${Date.now()}`,
+      title: 'Training Reassigned',
+      message: `"${training.trainingName}" has been reassigned to you by ${reassignedBy || 'Admin'}. New Due Date: ${newDueDate}.`,
+      type: 'assignment',
+      timestamp: `${dateStr}, ${timeStr}`,
+      trainingId: training.id,
+      read: false
+    });
+
+    return sendJson(res, 200, {
+      success: true,
+      message: `Assignment successfully reassigned with new due date ${newDueDate}. Previous progress preserved.`,
+      training: training,
+      stats: calculateEmployeeDashboardStats(store)
+    });
+  }
+
+  // 13. POST Delegate Reviewer (Feature 5: Assign and reassign reviewers, restrict submissions)
+  if (pathname === '/api/training/delegate-reviewer' && req.method === 'POST') {
+    const body = await parseJsonBody(req);
+    const { assignmentId, employeeId, reviewerId, reviewerName, delegatedBy, notes } = body;
+    const targetEmpId = employeeId || 'CO-5039';
+    const store = EMPLOYEE_TRAINING_STORE[targetEmpId] || EMPLOYEE_TRAINING_STORE['CO-5039'];
+    const training = store.trainings.find(t => t.id === assignmentId);
+
+    if (!training) {
+      return sendJson(res, 404, { success: false, message: 'Assignment not found.' });
+    }
+
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+    training.reviewerId = reviewerId;
+    training.reviewerName = reviewerName;
+    training.reviewerDelegatedBy = delegatedBy || 'Admin';
+    training.reviewerDelegatedAt = `${dateStr}, ${timeStr}`;
+
+    if (!training.auditHistory) training.auditHistory = [];
+    training.auditHistory.unshift({
+      date: `${dateStr}, ${timeStr}`,
+      action: 'Reviewer Delegated',
+      user: delegatedBy || 'Admin',
+      notes: `Assigned evaluation authority to ${reviewerName}. ${notes || ''}`
+    });
+
+    return sendJson(res, 200, {
+      success: true,
+      message: `Reviewer successfully delegated to ${reviewerName}.`,
+      training: training
+    });
+  }
+
+  // 14. POST Send Certificate Expiry Reminder (Feature 2)
+  if (pathname === '/api/training/certificate/send-reminder' && req.method === 'POST') {
+    const body = await parseJsonBody(req);
+    const { certificateId, employeeId } = body;
+    const targetEmpId = employeeId || 'CO-5039';
+    const store = EMPLOYEE_TRAINING_STORE[targetEmpId] || EMPLOYEE_TRAINING_STORE['CO-5039'];
+
+    const training = store.trainings.find(t => (t.certificate && t.certificate.id === certificateId) || t.id === body.assignmentId);
+    const certName = (training && training.certificate && training.certificate.name) || (training && training.trainingName) || 'Certificate';
+    const expiry = (training && training.certificate && training.certificate.expiryDate) || 'Expiring soon';
+
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+    store.notifications.unshift({
+      id: `notif_${Date.now()}`,
+      title: 'Certificate Expiry Reminder',
+      message: `Reminder: Your certification "${certName}" is scheduled to expire (${expiry}). Please complete refresher training to renew your credential.`,
+      type: 'warning',
+      timestamp: `${dateStr}, ${timeStr}`,
+      read: false
+    });
+
+    return sendJson(res, 200, {
+      success: true,
+      message: `Expiry reminder dispatched to ${store.profile.name}.`
+    });
+  }
+
+  // 15. POST Assign Refresher Training (Feature 2)
+  if (pathname === '/api/training/certificate/assign-refresher' && req.method === 'POST') {
+    const body = await parseJsonBody(req);
+    const { certificateId, employeeId, programId, assignedBy, dueDate } = body;
+    const targetEmpId = employeeId || 'CO-5039';
+    const store = EMPLOYEE_TRAINING_STORE[targetEmpId] || EMPLOYEE_TRAINING_STORE['CO-5039'];
+
+    // Check employee active status
+    if (store.profile && (store.profile.status === 'inactive' || store.profile.status === 'exited')) {
+      return sendJson(res, 400, {
+        success: false,
+        message: 'Cannot assign refresher training: Employee profile is inactive / exited.'
+      });
+    }
+
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    const defaultDue = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
+    const progMeta = programId ? TRAINING_PROGRAMS_REGISTRY[programId] : null;
+    const progVersion = (progMeta && progMeta.version) || 1;
+
+    const refresherAssignment = {
+      id: `TRN-REFR-${Date.now().toString().slice(-4)}`,
+      programId: programId || 'TR-101',
+      programVersion: progVersion,
+      trainingName: body.trainingName || 'Compliance Refresher',
+      category: body.category || 'Governance & Compliance',
+      shortDescription: `Refresher training for certificate renewal (${certificateId || 'Existing'}).`,
+      isMandatory: true,
+      isRefresher: true,
+      refresherForCertId: certificateId,
+      assignedBy: assignedBy || 'Isha Patel (Head of People)',
+      assignedDate: dateStr,
+      dueDate: dueDate || defaultDue,
+      startDate: null,
+      completionPercentage: 0,
+      trainingStatus: 'not_started',
+      status: 'Not Started',
+      resources: [],
+      assessment: null,
+      submission: { completionRemarks: '', evidenceFiles: [], submittedAt: null, isLocked: false },
+      review: null,
+      certificate: null // New certificate only issued AFTER approval
+    };
+
+    store.trainings.unshift(refresherAssignment);
+    store.notifications.unshift({
+      id: `notif_${Date.now()}`,
+      title: 'Refresher Training Assigned',
+      message: `A certificate renewal refresher course has been assigned to you. Due Date: ${refresherAssignment.dueDate}.`,
+      type: 'assignment',
+      timestamp: `${dateStr}, ${timeStr}`,
+      trainingId: refresherAssignment.id,
+      read: false
+    });
+
+    return sendJson(res, 200, {
+      success: true,
+      message: 'Refresher training successfully assigned. Certificate will be renewed upon completion and approval.',
+      assignment: refresherAssignment,
+      stats: calculateEmployeeDashboardStats(store)
+    });
+  }
+
+  // 16. POST Update Employee Status (Feature 3: Exit handling)
+  if (pathname === '/api/employee/status' && req.method === 'POST') {
+    const body = await parseJsonBody(req);
+    const { employeeId, status, exitDate, reason } = body;
+    const targetEmpId = employeeId || 'CO-5039';
+    const store = EMPLOYEE_TRAINING_STORE[targetEmpId] || EMPLOYEE_TRAINING_STORE['CO-5039'];
+
+    if (!['active', 'inactive', 'exited'].includes(status)) {
+      return sendJson(res, 400, { success: false, message: 'Invalid status. Must be active, inactive, or exited.' });
+    }
+
+    store.profile.status = status;
+    if (exitDate) store.profile.exitDate = exitDate;
+    if (reason) store.profile.exitReason = reason;
+
+    return sendJson(res, 200, {
+      success: true,
+      message: `Employee status updated to ${status}. All historical training records and certificates preserved.`,
+      employee: store.profile
+    });
+  }
+
+  // 17. POST Training Program Update & Version Management (Feature 4)
+  if (pathname === '/api/training/program-update' && req.method === 'POST') {
+    const body = await parseJsonBody(req);
+    const { programId, title, dept, difficulty, durationHours, passScore, status } = body;
+
+    let prog = TRAINING_PROGRAMS_REGISTRY[programId];
+    if (!prog) {
+      prog = { id: programId, title, version: 1, versions: [], status: status || 'published' };
+      TRAINING_PROGRAMS_REGISTRY[programId] = prog;
+    }
+
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
+    // If already published and updating, create new version snapshot
+    if (prog.status === 'published' && status === 'published') {
+      const { versions: _v, ...progSnapshot } = prog;
+      prog.versions.push({
+        version: prog.version,
+        title: prog.title,
+        updatedAt: dateStr,
+        snapshot: JSON.parse(JSON.stringify(progSnapshot))
+      });
+      prog.version = (prog.version || 1) + 1;
+    }
+
+    Object.assign(prog, body);
+
+    return sendJson(res, 200, {
+      success: true,
+      message: `Programme updated to version v${prog.version}. Existing employee assignments remain linked to their original version without progress reset.`,
+      program: prog
     });
   }
 

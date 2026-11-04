@@ -1150,7 +1150,7 @@
             <!-- SECTION 2: TRAINING MANAGEMENT (PROGRAMS TABLE)-->
             <!-- ============================================== -->
             <div class="training-tab-view" id="sectionPrograms" style="display: none;">
-              <div class="emp-table-container" id="programsCatalogListCard" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.03); margin-top: 14px;">
+              <div class="emp-table-container" id="programsCatalogListCard" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.03); margin-top: 26px;">
                 <!-- Header Bar matching Screenshot 3 -->
                 <div class="emp-table-header" style="display: flex; align-items: center; justify-content: space-between; padding: 16px 20px 12px 20px;">
                   <div class="emp-title-area" style="display: flex; align-items: center; gap: 10px;">
@@ -1644,6 +1644,87 @@
                   </table>
                 </div>
               </div>
+
+              <!-- IN-SCREEN CANCEL ASSIGNMENT SCREEN (NO POP-UPS) -->
+              <div id="assignCancelScreen" style="display: none; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); overflow: hidden; margin-top: 14px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 22px; border-bottom: 1px solid #e2e8f0; background: #fff1f2;">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <button type="button" class="btn-secondary-action" onclick="closeCancelAssignmentScreen()" style="padding: 6px 12px; font-size: 12.5px;">← Back to Assignments</button>
+                    <h2 style="font-size: 16px; font-weight: 700; color: #9f1239; margin: 0;">Cancel Training Assignment</h2>
+                  </div>
+                </div>
+                <div style="padding: 24px; max-width: 640px; display: flex; flex-direction: column; gap: 18px;">
+                  <input type="hidden" id="cancelAssignmentId" value="" />
+                  <div id="cancelAssignmentDetailsCard" style="padding: 14px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 13px;"></div>
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 6px; margin: 0;">
+                    <label class="form-label" style="font-size: 13px; font-weight: 600; color: #1e293b;">Cancellation Reason *</label>
+                    <textarea id="cancelAssignmentReasonInput" class="form-textarea" rows="3" placeholder="Provide a detailed explanation for cancelling this assignment (e.g. employee role transfer, curriculum deprecation)..." style="width: 100%; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; font-size: 13px;"></textarea>
+                    <span style="font-size: 11.5px; color: #64748b;">Past employee completion progress, uploaded evidence, and historical attempts will be preserved in audit logs.</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <button type="button" class="btn-primary-action" onclick="submitCancelAssignment()" style="background: #e11d48; border-color: #be123c;">Confirm Cancellation</button>
+                    <button type="button" class="btn-secondary-action" onclick="closeCancelAssignmentScreen()">Keep Active</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- IN-SCREEN REASSIGNMENT SCREEN (NO POP-UPS) -->
+              <div id="assignReassignScreen" style="display: none; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); overflow: hidden; margin-top: 14px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 22px; border-bottom: 1px solid #e2e8f0; background: #f0fdf4;">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <button type="button" class="btn-secondary-action" onclick="closeReassignScreen()" style="padding: 6px 12px; font-size: 12.5px;">← Back to Assignments</button>
+                    <h2 style="font-size: 16px; font-weight: 700; color: #166534; margin: 0;">Reassign Training Course</h2>
+                  </div>
+                </div>
+                <div style="padding: 24px; max-width: 640px; display: flex; flex-direction: column; gap: 18px;">
+                  <input type="hidden" id="reassignAssignmentId" value="" />
+                  <div id="reassignAssignmentDetailsCard" style="padding: 14px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 13px;"></div>
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 6px; margin: 0;">
+                    <label class="form-label" style="font-size: 13px; font-weight: 600; color: #1e293b;">New Due Date *</label>
+                    <input type="date" id="reassignDueDateInput" class="form-input" style="height: 40px; border: 1px solid #cbd5e1; border-radius: 8px; padding: 0 12px; font-size: 13px;" />
+                  </div>
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 6px; margin: 0;">
+                    <label class="form-label" style="font-size: 13px; font-weight: 600; color: #1e293b;">Reassignment Notes / Instructions</label>
+                    <textarea id="reassignNotesInput" class="form-textarea" rows="2" placeholder="Optional notes for employee explaining new timeline..." style="width: 100%; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; font-size: 13px;"></textarea>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <button type="button" class="btn-primary-action" onclick="submitReassignAssignment()" style="background: #16a34a; border-color: #15803d;">Confirm Reassignment</button>
+                    <button type="button" class="btn-secondary-action" onclick="closeReassignScreen()">Cancel</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- IN-SCREEN DELEGATE REVIEWER SCREEN (NO POP-UPS) -->
+              <div id="assignDelegateScreen" style="display: none; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); overflow: hidden; margin-top: 14px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 22px; border-bottom: 1px solid #e2e8f0; background: #f8fafc;">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <button type="button" class="btn-secondary-action" onclick="closeDelegateReviewerScreen()" style="padding: 6px 12px; font-size: 12.5px;">← Back to Assignments</button>
+                    <h2 style="font-size: 16px; font-weight: 700; color: #1e293b; margin: 0;">Assign / Delegate Submission Reviewer</h2>
+                  </div>
+                </div>
+                <div style="padding: 24px; max-width: 640px; display: flex; flex-direction: column; gap: 18px;">
+                  <input type="hidden" id="delegateAssignmentId" value="" />
+                  <div id="delegateAssignmentDetailsCard" style="padding: 14px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 13px;"></div>
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 6px; margin: 0;">
+                    <label class="form-label" style="font-size: 13px; font-weight: 600; color: #1e293b;">Designated Reviewer *</label>
+                    <select id="delegateReviewerSelect" class="form-select" style="height: 40px; border: 1px solid #cbd5e1; border-radius: 8px; padding: 0 12px; font-size: 13px;">
+                      <option value="EMP-001">Isha Patel (Head of People &amp; Admin)</option>
+                      <option value="EMP-003">Ashish Kumar (Technical Lead &amp; Reporting Manager)</option>
+                      <option value="EMP-002">Shivam Sharma (HR Specialist)</option>
+                      <option value="EMP-006">Suresh Prasad (Senior Talent Partner)</option>
+                    </select>
+                    <span style="font-size: 11.5px; color: #64748b;">Submissions will be routed exclusively to this designated reviewer and reporting hierarchy.</span>
+                  </div>
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 6px; margin: 0;">
+                    <label class="form-label" style="font-size: 13px; font-weight: 600; color: #1e293b;">Delegation Notes</label>
+                    <textarea id="delegateNotesInput" class="form-textarea" rows="2" placeholder="e.g. Delegating final assessment review for technical code check..." style="width: 100%; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; font-size: 13px;"></textarea>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <button type="button" class="btn-primary-action" onclick="submitDelegateReviewer()">Save Reviewer Delegation</button>
+                    <button type="button" class="btn-secondary-action" onclick="closeDelegateReviewerScreen()">Cancel</button>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <!-- ============================================== -->
@@ -1845,6 +1926,7 @@
                       <option value="eligible">Eligible (Not Yet Generated)</option>
                       <option value="generated">Generated (Ready to Issue)</option>
                       <option value="issued">Issued &amp; Active</option>
+                      <option value="expired">Expired</option>
                     </select>
                   </div>
                 </div>
@@ -2097,6 +2179,17 @@
                     </span>
                   </div>
                   <span class="emp-kpi-sub">Approved &amp; certified</span>
+                </div>
+              </div>
+
+              <!-- Employee Exit Status In-Screen Banner (Feature 3) -->
+              <div id="empExitBlockedBanner" style="display: none; background: #fff1f2; border: 1px solid #fecdd3; border-radius: 10px; padding: 16px 20px; margin-bottom: 18px; align-items: flex-start; gap: 12px;">
+                <div style="font-size: 22px; line-height: 1;">🚫</div>
+                <div>
+                  <h3 style="font-size: 14px; font-weight: 700; color: #9f1239; margin: 0 0 4px 0;">Employee Profile Inactive / Exited</h3>
+                  <p style="font-size: 12.5px; color: #881337; margin: 0; line-height: 1.45;">
+                    Access to new training assignments, course modules, and evaluation submissions is suspended because this employee profile has exited. All historical verified credentials, passed assessments, and audit logs remain permanently preserved and accessible below.
+                  </p>
                 </div>
               </div>
 

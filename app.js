@@ -16,16 +16,17 @@ const state = {
 
   // 1. Employee Hierarchy Data
   employees: [
-    { id: 'CO-5039', name: 'Tanya Kapoor', email: 'calebnguyen@maildrop.cc', role: 'Business analyst', dept: 'Business analyst', managerId: 'EMP-003', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120' },
-    { id: 'EMP-001', name: 'Isha Patel', email: 'isha.patel@collabcrm.com', role: 'Head of People & Admin', dept: 'Recruitment & HR', managerId: null, avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120' },
-    { id: 'EMP-002', name: 'Shivam Sharma', email: 'shivam.s@collabcrm.com', role: 'HR Specialist', dept: 'People Operations', managerId: 'EMP-001', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120' },
-    { id: 'EMP-003', name: 'Ashish Kumar', email: 'ashish.k@collabcrm.com', role: 'Technical Lead & Reporting Manager', dept: 'Engineering', managerId: 'EMP-001', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120' },
-    { id: 'EMP-004', name: 'Rihan R.', email: 'rihan.r@collabcrm.com', role: 'Software Engineer', dept: 'Engineering', managerId: 'EMP-003', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120' },
-    { id: 'EMP-005', name: 'Priya Nair', email: 'priya.n@collabcrm.com', role: 'Frontend Developer', dept: 'Engineering', managerId: 'EMP-003', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=120' },
-    { id: 'EMP-006', name: 'Suresh Prasad', email: 'suresh.p@collabcrm.com', role: 'Senior Talent Partner', dept: 'Recruitment & HR', managerId: 'EMP-001', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=120' },
-    { id: 'EMP-007', name: 'Vikram Malhotra', email: 'vikram.m@collabcrm.com', role: 'Enterprise Account Executive', dept: 'Sales & BD', managerId: 'EMP-001', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=120' },
-    { id: 'EMP-008', name: 'Ananya Roy', email: 'ananya.r@collabcrm.com', role: 'DevOps & Cloud Engineer', dept: 'Engineering', managerId: 'EMP-003', avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=120' },
-    { id: 'EMP-009', name: 'Neha Gupta', email: 'neha.g@collabcrm.com', role: 'HR Executive', dept: 'People Operations', managerId: 'EMP-002', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120' }
+    { id: 'CO-5039', name: 'Tanya Kapoor', email: 'calebnguyen@maildrop.cc', role: 'Business analyst', dept: 'Business analyst', managerId: 'EMP-003', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120', status: 'active' },
+    { id: 'EMP-001', name: 'Isha Patel', email: 'isha.patel@collabcrm.com', role: 'Head of People & Admin', dept: 'Recruitment & HR', managerId: null, avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120', status: 'active' },
+    { id: 'EMP-002', name: 'Shivam Sharma', email: 'shivam.s@collabcrm.com', role: 'HR Specialist', dept: 'People Operations', managerId: 'EMP-001', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120', status: 'active' },
+    { id: 'EMP-003', name: 'Ashish Kumar', email: 'ashish.k@collabcrm.com', role: 'Technical Lead & Reporting Manager', dept: 'Engineering', managerId: 'EMP-001', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120', status: 'active' },
+    { id: 'EMP-004', name: 'Rihan R.', email: 'rihan.r@collabcrm.com', role: 'Software Engineer', dept: 'Engineering', managerId: 'EMP-003', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120', status: 'active' },
+    { id: 'EMP-005', name: 'Priya Nair', email: 'priya.n@collabcrm.com', role: 'Frontend Developer', dept: 'Engineering', managerId: 'EMP-003', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=120', status: 'active' },
+    { id: 'EMP-006', name: 'Suresh Prasad', email: 'suresh.p@collabcrm.com', role: 'Senior Talent Partner', dept: 'Recruitment & HR', managerId: 'EMP-001', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=120', status: 'active' },
+    { id: 'EMP-007', name: 'Vikram Malhotra', email: 'vikram.m@collabcrm.com', role: 'Enterprise Account Executive', dept: 'Sales & BD', managerId: 'EMP-001', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=120', status: 'active' },
+    { id: 'EMP-008', name: 'Ananya Roy', email: 'ananya.r@collabcrm.com', role: 'DevOps & Cloud Engineer', dept: 'Engineering', managerId: 'EMP-003', avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=120', status: 'active' },
+    { id: 'EMP-009', name: 'Neha Gupta', email: 'neha.g@collabcrm.com', role: 'HR Executive', dept: 'People Operations', managerId: 'EMP-002', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120', status: 'active' },
+    { id: 'EMP-010', name: 'Karan Johar', email: 'karan.j@collabcrm.com', role: 'Former Sales Lead', dept: 'Sales & BD', managerId: 'EMP-001', avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&q=80&w=120', status: 'inactive', exitDate: '2026-02-15' }
   ],
 
   // 2. Training Programmes Catalog (Section 2)
@@ -1282,7 +1283,10 @@ function renderProgramsList() {
     tableHtml += `
       <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s ease;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
         <td style="padding: 12px 14px; text-align: center; color: #64748b;">${idx + 1}</td>
-        <td style="padding: 12px 14px; font-weight: 600; color: #0f172a;">${escapeHtml(p.title)}</td>
+        <td style="padding: 12px 14px; font-weight: 600; color: #0f172a;">
+          <span>${escapeHtml(p.title)}</span>
+          <span style="display: inline-block; font-size: 10.5px; font-weight: 700; color: #4338ca; background: #e0e7ff; padding: 1px 6px; border-radius: 4px; margin-left: 6px; vertical-align: middle;">v${p.version || 1}</span>
+        </td>
         <td style="padding: 12px 14px; color: #334155;">${escapeHtml(p.dept)}</td>
         <td style="padding: 12px 14px;"><span class="status-pill" ${diffBadge}>${escapeHtml(p.difficulty)}</span></td>
         <td style="padding: 12px 14px; text-align: center; color: #334155;">${p.durationHours} hrs</td>
@@ -1532,9 +1536,23 @@ function saveProgram(statusToSet) {
   const certEnabled = document.getElementById('progCertEnabledInput') ? document.getElementById('progCertEnabledInput').checked : true;
 
   if (editingId) {
-    // Update existing
+    // Update existing with Version Management (Feature 4)
     const prog = state.programs.find(p => p.id === editingId);
     if (prog) {
+      const wasPublished = prog.status === 'published';
+      const isPublishing = statusToSet === 'published';
+
+      if (wasPublished && isPublishing) {
+        if (!prog.versions) prog.versions = [];
+        prog.versions.push({
+          version: prog.version || 1,
+          title: prog.title,
+          updatedAt: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+          resources: JSON.parse(JSON.stringify(prog.resources || []))
+        });
+        prog.version = (prog.version || 1) + 1;
+      }
+
       prog.title = title;
       prog.dept = dept;
       prog.difficulty = difficulty;
@@ -1553,9 +1571,25 @@ function saveProgram(statusToSet) {
       prog.reviewerApprovalRequired = reviewerApprovalRequired;
       prog.evidenceRequired = evidenceRequired;
       prog.certEnabled = certEnabled;
+
+      // Sync version update with backend (keeps existing assignments linked to original version)
+      fetch(getEmpApiUrl('/api/training/program-update'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          programId: prog.id,
+          title: prog.title,
+          dept: prog.dept,
+          difficulty: prog.difficulty,
+          durationHours: prog.durationHours,
+          passScore: prog.passScore,
+          status: prog.status,
+          version: prog.version || 1
+        })
+      }).catch(err => console.warn('Backend version sync note:', err));
     }
-    logAudit('Updated Training Programme', `Updated: ${title}`, `Status: ${statusToSet}`);
-    showConfigToast(`Training Programme "${title}" updated successfully!`, 'success');
+    logAudit('Updated Training Programme', `Updated: ${title} (v${prog?.version || 1})`, `Status: ${statusToSet}`);
+    showConfigToast(`Training Programme "${title}" updated to v${prog?.version || 1}! Existing assignments keep original version.`, 'success');
   } else {
     // Create new
     const newId = `TR-${100 + state.programs.length + 1}`;
@@ -1892,21 +1926,28 @@ function openAssignTrainingModal(preselectedProgId = null) {
   multiContainer.innerHTML = '';
 
   availableEmployees.forEach(emp => {
+    const isInactive = emp.status === 'inactive' || emp.status === 'exited';
     // Individual select option
     const opt = document.createElement('option');
     opt.value = emp.id;
-    opt.textContent = `${emp.name} — ${emp.role} (${emp.dept})`;
+    opt.textContent = isInactive ? `${emp.name} — [Inactive / Exited Profile]` : `${emp.name} — ${emp.role} (${emp.dept})`;
+    if (isInactive) {
+      opt.disabled = true;
+      opt.style.color = '#94a3b8';
+    }
     empSelect.appendChild(opt);
 
     // Multi-select checkbox item
-    const lbl = document.createElement('label');
-    lbl.style.cssText = 'display: flex; align-items: center; gap: 8px; font-size: 12.5px; cursor: pointer; padding: 4px 6px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 4px;';
-    lbl.innerHTML = `
-      <input type="checkbox" class="assign-emp-check" value="${emp.id}" onchange="checkAssignDuplicates()" />
-      <img src="${emp.avatar}" style="width: 22px; height: 22px; border-radius: 50%;" />
-      <span><strong>${escapeHtml(emp.name)}</strong> (${emp.dept})</span>
-    `;
-    multiContainer.appendChild(lbl);
+    if (!isInactive) {
+      const lbl = document.createElement('label');
+      lbl.style.cssText = 'display: flex; align-items: center; gap: 8px; font-size: 12.5px; cursor: pointer; padding: 4px 6px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 4px;';
+      lbl.innerHTML = `
+        <input type="checkbox" class="assign-emp-check" value="${emp.id}" onchange="checkAssignDuplicates()" />
+        <img src="${emp.avatar}" style="width: 22px; height: 22px; border-radius: 50%;" />
+        <span><strong>${escapeHtml(emp.name)}</strong> (${emp.dept})</span>
+      `;
+      multiContainer.appendChild(lbl);
+    }
   });
 
   // Dates and allowDueEdit enforcement
@@ -2045,13 +2086,26 @@ function checkAssignDuplicates() {
 
   // Check if any active assignment exists for (empId, progId)
   const duplicates = [];
+  const inactiveBlocked = [];
   targetEmpIds.forEach(empId => {
-    const exists = state.assignments.find(a => a.employeeId === empId && a.programId === progId && a.trainingStatus !== 'completed');
+    const emp = state.employees.find(e => e.id === empId);
+    if (emp && (emp.status === 'inactive' || emp.status === 'exited')) {
+      inactiveBlocked.push(emp.name);
+    }
+    const exists = state.assignments.find(a => a.employeeId === empId && a.programId === progId && a.trainingStatus !== 'completed' && a.trainingStatus !== 'cancelled');
     if (exists) {
-      const emp = state.employees.find(e => e.id === empId);
       duplicates.push(emp ? emp.name : empId);
     }
   });
+
+  if (inactiveBlocked.length > 0) {
+    if (warningBox) {
+      warningBox.style.display = 'block';
+      warningBox.innerHTML = `🚫 <strong>Inactive Employee Assignment Blocked:</strong> [${inactiveBlocked.join(', ')}] has exited or is inactive. Training cannot be assigned to exited employees.`;
+    }
+    if (btnConfirm) btnConfirm.disabled = true;
+    return true;
+  }
 
   if (duplicates.length > 0) {
     if (warningBox) {
@@ -2370,7 +2424,12 @@ function renderAssignmentsTable() {
           <span style="font-size: 11px; color: #64748b;">${prog.difficulty} • ${prog.durationHours} hrs</span>
         </td>
         <td>${a.assignedDate}</td>
-        <td><strong style="${a.trainingStatus === 'overdue' ? 'color:#ef4444;' : ''}">${a.dueDate}</strong></td>
+        <td>
+          ${a.trainingStatus === 'cancelled'
+            ? '<span style="background: #fee2e2; color: #b91c1c; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; border: 1px solid #fecaca;">Cancelled</span>'
+            : `<strong style="${a.trainingStatus === 'overdue' ? 'color:#ef4444;' : ''}">${a.dueDate}</strong>`
+          }
+        </td>
         <td>${mandPill}</td>
         <td>
           <div class="cell-prog-wrap">
@@ -2388,12 +2447,44 @@ function renderAssignmentsTable() {
                 <circle cx="12" cy="12" r="3"></circle>
               </svg>
             </button>
-            <button type="button" class="emp-action-icon" onclick="showConfigToast('Reminder notification dispatched to ${escapeHtml(emp.name)}!')" title="Send Reminder" aria-label="Remind">
-              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-              </svg>
-            </button>
+            ${a.trainingStatus !== 'cancelled' ? `
+              <button type="button" class="emp-action-icon" onclick="showConfigToast('Reminder notification dispatched to ${escapeHtml(emp.name)}!')" title="Send Reminder" aria-label="Remind">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+              </button>
+              <button type="button" class="emp-action-icon" onclick="openReassignScreen('${a.id}')" title="Reassign / Change Due Date" aria-label="Reassign" style="color: #2563eb;">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="23 4 23 10 17 10"></polyline>
+                  <polyline points="1 20 1 14 7 14"></polyline>
+                  <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                </svg>
+              </button>
+              <button type="button" class="emp-action-icon" onclick="openDelegateReviewerScreen('${a.id}')" title="Assign / Delegate Reviewer" aria-label="Delegate" style="color: #7c3aed;">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="8.5" cy="7" r="4"></circle>
+                  <line x1="20" y1="8" x2="20" y2="14"></line>
+                  <line x1="23" y1="11" x2="17" y2="11"></line>
+                </svg>
+              </button>
+              <button type="button" class="emp-action-icon" onclick="openCancelAssignmentScreen('${a.id}')" title="Cancel Assignment" aria-label="Cancel" style="color: #e11d48;">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="15" y1="9" x2="9" y2="15"></line>
+                  <line x1="9" y1="9" x2="15" y2="15"></line>
+                </svg>
+              </button>
+            ` : `
+              <button type="button" class="emp-action-icon" onclick="openReassignScreen('${a.id}')" title="Reassign Training Course" aria-label="Reassign" style="color: #16a34a;">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="23 4 23 10 17 10"></polyline>
+                  <polyline points="1 20 1 14 7 14"></polyline>
+                  <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                </svg>
+              </button>
+            `}
           </div>
         </td>
       </tr>
@@ -2426,6 +2517,416 @@ function renderAssignmentsTable() {
 }
 
 window.renderAssignmentsTable = renderAssignmentsTable;
+
+// ==========================================================================
+// FEATURE 1 & 5: IN-SCREEN ASSIGNMENT ACTIONS (Cancel, Reassign, Delegate)
+// (NO POP-UPS: Seamlessly transitions between table & in-screen drawer cards)
+// ==========================================================================
+
+function openCancelAssignmentScreen(asnId) {
+  const a = state.assignments.find(asn => asn.id === asnId);
+  if (!a) return;
+  const emp = state.employees.find(e => e.id === a.employeeId);
+  const prog = state.programs.find(p => p.id === a.programId);
+
+  const screen = document.getElementById('assignCancelScreen');
+  const details = document.getElementById('cancelAssignmentDetailsCard');
+  const idInput = document.getElementById('cancelAssignmentId');
+  const reasonInput = document.getElementById('cancelAssignmentReasonInput');
+
+  if (idInput) idInput.value = a.id;
+  if (reasonInput) reasonInput.value = '';
+
+  if (details) {
+    details.innerHTML = `
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+        <span style="font-weight: 700; color: #0f172a; font-size: 14px;">${escapeHtml(emp ? emp.name : a.employeeId)}</span>
+        <span style="font-size: 11px; background: #fee2e2; color: #991b1b; padding: 2px 8px; border-radius: 4px; font-weight: 700;">Assignment ID: ${a.id}</span>
+      </div>
+      <div style="color: #475569; font-size: 12.5px; line-height: 1.4;">
+        <div><strong>Programme:</strong> ${escapeHtml(prog ? prog.title : (a.trainingName || 'Training Course'))}</div>
+        <div><strong>Current Due Date:</strong> ${a.dueDate} | <strong>Current Progress:</strong> ${a.progress}%</div>
+      </div>
+    `;
+  }
+
+  const tableCard = document.querySelector('#sectionAssignments .crm-table-container');
+  if (tableCard) tableCard.style.display = 'none';
+  if (screen) screen.style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function closeCancelAssignmentScreen() {
+  const screen = document.getElementById('assignCancelScreen');
+  const tableCard = document.querySelector('#sectionAssignments .crm-table-container');
+  if (screen) screen.style.display = 'none';
+  if (tableCard) tableCard.style.display = 'block';
+}
+
+async function submitCancelAssignment() {
+  const idInput = document.getElementById('cancelAssignmentId');
+  const reasonInput = document.getElementById('cancelAssignmentReasonInput');
+  const asnId = idInput ? idInput.value : '';
+  const reason = reasonInput ? reasonInput.value.trim() : '';
+
+  if (!reason || reason.length < 3) {
+    showConfigToast('Please provide a valid cancellation reason.', 'error');
+    if (reasonInput) reasonInput.focus();
+    return;
+  }
+
+  const a = state.assignments.find(asn => asn.id === asnId);
+  if (!a) return;
+
+  const user = state.currentRole === 'admin' ? 'Isha Patel (Admin)' : (state.currentRole === 'hr' ? 'Shivam Sharma (HR)' : 'Ashish Kumar (Manager)');
+  const today = new Date().toISOString().split('T')[0];
+
+  a.trainingStatus = 'cancelled';
+  a.status = 'Cancelled';
+  a.cancellationReason = reason;
+  a.cancelledBy = user;
+  a.cancelledAt = today;
+
+  if (!a.reviewHistory) a.reviewHistory = [];
+  a.reviewHistory.unshift({
+    date: today,
+    action: 'Assignment Cancelled',
+    user: user,
+    notes: `Cancelled. Reason: ${reason}`
+  });
+
+  // Call backend API to persist
+  try {
+    await fetch(getEmpApiUrl('/api/training/cancel-assignment'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        assignmentId: a.id,
+        employeeId: a.employeeId,
+        cancellationReason: reason,
+        cancelledBy: user
+      })
+    });
+  } catch (err) {
+    console.warn('Backend cancellation note:', err);
+  }
+
+  closeCancelAssignmentScreen();
+  renderAssignmentsTable();
+  renderDashboard();
+  renderProgressTable();
+  if (state.employeeTrainingData) renderEmployeeDashboardUI();
+  showConfigToast('Training assignment cancelled. Previous progress and history preserved.', 'success');
+}
+
+function openReassignScreen(asnId) {
+  const a = state.assignments.find(asn => asn.id === asnId);
+  if (!a) return;
+  const emp = state.employees.find(e => e.id === a.employeeId);
+  const prog = state.programs.find(p => p.id === a.programId);
+
+  const screen = document.getElementById('assignReassignScreen');
+  const details = document.getElementById('reassignAssignmentDetailsCard');
+  const idInput = document.getElementById('reassignAssignmentId');
+  const dueInput = document.getElementById('reassignDueDateInput');
+  const notesInput = document.getElementById('reassignNotesInput');
+
+  if (idInput) idInput.value = a.id;
+  if (notesInput) notesInput.value = '';
+
+  const future14 = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+  if (dueInput) dueInput.value = future14;
+
+  if (details) {
+    details.innerHTML = `
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+        <span style="font-weight: 700; color: #0f172a; font-size: 14px;">${escapeHtml(emp ? emp.name : a.employeeId)}</span>
+        <span style="font-size: 11px; background: #e0e7ff; color: #3730a3; padding: 2px 8px; border-radius: 4px; font-weight: 700;">Assignment ID: ${a.id}</span>
+      </div>
+      <div style="color: #475569; font-size: 12.5px; line-height: 1.4;">
+        <div><strong>Programme:</strong> ${escapeHtml(prog ? prog.title : (a.trainingName || 'Training Course'))}</div>
+        <div><strong>Prior Progress:</strong> ${a.progress}% (Will be preserved upon reassignment)</div>
+      </div>
+    `;
+  }
+
+  const tableCard = document.querySelector('#sectionAssignments .crm-table-container');
+  if (tableCard) tableCard.style.display = 'none';
+  if (screen) screen.style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function closeReassignScreen() {
+  const screen = document.getElementById('assignReassignScreen');
+  const tableCard = document.querySelector('#sectionAssignments .crm-table-container');
+  if (screen) screen.style.display = 'none';
+  if (tableCard) tableCard.style.display = 'block';
+}
+
+async function submitReassignAssignment() {
+  const idInput = document.getElementById('reassignAssignmentId');
+  const dueInput = document.getElementById('reassignDueDateInput');
+  const notesInput = document.getElementById('reassignNotesInput');
+  const asnId = idInput ? idInput.value : '';
+  const newDueDate = dueInput ? dueInput.value : '';
+  const notes = notesInput ? notesInput.value.trim() : '';
+
+  if (!newDueDate) {
+    showConfigToast('Please select a valid new due date.', 'error');
+    if (dueInput) dueInput.focus();
+    return;
+  }
+
+  const a = state.assignments.find(asn => asn.id === asnId);
+  if (!a) return;
+
+  // Check duplicate active assignments: prevent if another active assignment exists for this (employee, program)
+  const duplicate = state.assignments.find(other => other.id !== a.id && other.employeeId === a.employeeId && other.programId === a.programId && other.trainingStatus !== 'cancelled' && other.trainingStatus !== 'completed');
+  if (duplicate) {
+    showConfigToast('Duplicate active assignment detected for this employee and programme. Reassignment prevented.', 'error');
+    return;
+  }
+
+  const user = state.currentRole === 'admin' ? 'Isha Patel (Admin)' : (state.currentRole === 'hr' ? 'Shivam Sharma (HR)' : 'Ashish Kumar (Manager)');
+  const today = new Date().toISOString().split('T')[0];
+
+  a.dueDate = newDueDate;
+  a.trainingStatus = (a.progress > 0) ? 'in_progress' : 'not_started';
+  a.status = (a.progress > 0) ? 'In Progress' : 'Not Started';
+  a.cancellationReason = null;
+
+  if (!a.reviewHistory) a.reviewHistory = [];
+  a.reviewHistory.unshift({
+    date: today,
+    action: 'Assignment Reassigned',
+    user: user,
+    notes: `Reassigned with new due date ${newDueDate}. ${notes}`
+  });
+
+  // Call backend API to persist
+  try {
+    await fetch(getEmpApiUrl('/api/training/reassign'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        assignmentId: a.id,
+        employeeId: a.employeeId,
+        newDueDate: newDueDate,
+        reassignedBy: user,
+        notes: notes
+      })
+    });
+  } catch (err) {
+    console.warn('Backend reassignment note:', err);
+  }
+
+  closeReassignScreen();
+  renderAssignmentsTable();
+  renderDashboard();
+  renderProgressTable();
+  if (state.employeeTrainingData) renderEmployeeDashboardUI();
+  showConfigToast(`Course reassigned with due date ${newDueDate}. Prior progress preserved.`, 'success');
+}
+
+function openDelegateReviewerScreen(asnId) {
+  const a = state.assignments.find(asn => asn.id === asnId);
+  if (!a) return;
+  const emp = state.employees.find(e => e.id === a.employeeId);
+  const prog = state.programs.find(p => p.id === a.programId);
+
+  const screen = document.getElementById('assignDelegateScreen');
+  const details = document.getElementById('delegateAssignmentDetailsCard');
+  const idInput = document.getElementById('delegateAssignmentId');
+  const select = document.getElementById('delegateReviewerSelect');
+  const notesInput = document.getElementById('delegateNotesInput');
+
+  if (idInput) idInput.value = a.id;
+  if (notesInput) notesInput.value = '';
+
+  if (select && a.reviewerId) {
+    select.value = a.reviewerId;
+  }
+
+  if (details) {
+    details.innerHTML = `
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+        <span style="font-weight: 700; color: #0f172a; font-size: 14px;">${escapeHtml(emp ? emp.name : a.employeeId)}</span>
+        <span style="font-size: 11px; background: #f3e8ff; color: #6b21a8; padding: 2px 8px; border-radius: 4px; font-weight: 700;">Assignment ID: ${a.id}</span>
+      </div>
+      <div style="color: #475569; font-size: 12.5px; line-height: 1.4;">
+        <div><strong>Programme:</strong> ${escapeHtml(prog ? prog.title : (a.trainingName || 'Training Course'))}</div>
+        <div><strong>Current Reviewer:</strong> ${escapeHtml(a.reviewerName || 'Reporting Hierarchy')}</div>
+      </div>
+    `;
+  }
+
+  const tableCard = document.querySelector('#sectionAssignments .crm-table-container');
+  if (tableCard) tableCard.style.display = 'none';
+  if (screen) screen.style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function closeDelegateReviewerScreen() {
+  const screen = document.getElementById('assignDelegateScreen');
+  const tableCard = document.querySelector('#sectionAssignments .crm-table-container');
+  if (screen) screen.style.display = 'none';
+  if (tableCard) tableCard.style.display = 'block';
+}
+
+async function submitDelegateReviewer() {
+  const idInput = document.getElementById('delegateAssignmentId');
+  const select = document.getElementById('delegateReviewerSelect');
+  const notesInput = document.getElementById('delegateNotesInput');
+  const asnId = idInput ? idInput.value : '';
+  const reviewerId = select ? select.value : '';
+  const reviewerName = select ? select.options[select.selectedIndex]?.text : '';
+  const notes = notesInput ? notesInput.value.trim() : '';
+
+  const a = state.assignments.find(asn => asn.id === asnId);
+  if (!a) return;
+
+  const user = state.currentRole === 'admin' ? 'Isha Patel (Admin)' : (state.currentRole === 'hr' ? 'Shivam Sharma (HR)' : 'Ashish Kumar (Manager)');
+  const today = new Date().toISOString().split('T')[0];
+
+  a.reviewerId = reviewerId;
+  a.reviewerName = reviewerName;
+
+  if (!a.reviewHistory) a.reviewHistory = [];
+  a.reviewHistory.unshift({
+    date: today,
+    action: 'Reviewer Delegated',
+    user: user,
+    notes: `Review responsibility assigned to ${reviewerName}. ${notes}`
+  });
+
+  // Call backend API to persist
+  try {
+    await fetch(getEmpApiUrl('/api/training/delegate-reviewer'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        assignmentId: a.id,
+        employeeId: a.employeeId,
+        reviewerId: reviewerId,
+        reviewerName: reviewerName,
+        delegatedBy: user,
+        notes: notes
+      })
+    });
+  } catch (err) {
+    console.warn('Backend delegation note:', err);
+  }
+
+  closeDelegateReviewerScreen();
+  renderAssignmentsTable();
+  showConfigToast(`Submission evaluation delegated to ${reviewerName}.`, 'success');
+}
+
+// Certificate Expiry Reminders and Refresher Training (Feature 2)
+async function sendCertificateReminder(certId) {
+  try {
+    await fetch(getEmpApiUrl('/api/training/certificate/send-reminder'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ certificateId: certId, employeeId: 'CO-5039' })
+    });
+  } catch (err) {
+    console.warn('Backend reminder note:', err);
+  }
+  showConfigToast(`Certificate expiry reminder notification dispatched to employee.`, 'success');
+}
+
+async function assignRefresherTraining(certId) {
+  const cert = state.certificates.find(c => c.id === certId || c.assignmentId === certId);
+  const progId = cert ? cert.programId : 'TR-101';
+  const prog = state.programs.find(p => p.id === progId) || state.programs[0];
+  const empId = cert ? cert.employeeId : 'CO-5039';
+  const emp = state.employees.find(e => e.id === empId);
+
+  if (emp && (emp.status === 'inactive' || emp.status === 'exited')) {
+    showConfigToast(`Cannot assign refresher training: Employee ${emp.name} has exited or is inactive.`, 'error');
+    return;
+  }
+
+  const user = state.currentRole === 'admin' ? 'Isha Patel (Admin)' : (state.currentRole === 'hr' ? 'Shivam Sharma (HR)' : 'Ashish Kumar (Manager)');
+  const today = new Date().toISOString().split('T')[0];
+  const due = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+
+  const newAsnId = `ASN-REFR-${String(state.assignments.length + 1).padStart(3, '0')}`;
+  const refresherAsn = {
+    id: newAsnId,
+    employeeId: empId,
+    programId: prog.id,
+    programVersion: prog.version || 1,
+    trainingName: `${prog.title} (Refresher)`,
+    title: `${prog.title} (Refresher)`,
+    category: prog.dept,
+    shortDescription: `Certificate renewal refresher course for ${cert ? cert.id : 'expired credential'}.`,
+    isMandatory: true,
+    mandatory: true,
+    isRefresher: true,
+    refresherForCertId: cert ? cert.id : certId,
+    assignedBy: user,
+    assignedDate: today,
+    dueDate: due,
+    startDate: null,
+    progress: 0,
+    completionPercentage: 0,
+    trainingStatus: 'not_started',
+    status: 'Not Started',
+    submissionStatus: 'none',
+    submissionRemarks: '',
+    submissionEvidence: '',
+    assessmentScore: null,
+    certificateStatus: 'not_eligible', // New certificate issued ONLY after approval
+    certificateId: null,
+    difficultyLevel: prog.difficulty,
+    expectedDuration: `${prog.durationHours} Hours`,
+    resources: (prog.resources || []).map((r, idx) => ({ ...r, id: `refr_${newAsnId}_${idx}`, isCompleted: false })),
+    review: null,
+    certificate: null,
+    reviewHistory: [
+      { date: today, action: 'Assigned Refresher', user: user, notes: `Assigned for renewal of ${cert ? cert.id : 'credential'}.` }
+    ]
+  };
+
+  state.assignments.unshift(refresherAsn);
+
+  try {
+    await fetch(getEmpApiUrl('/api/training/certificate/assign-refresher'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        certificateId: cert ? cert.id : certId,
+        employeeId: empId,
+        programId: prog.id,
+        assignedBy: user,
+        dueDate: due,
+        trainingName: refresherAsn.trainingName
+      })
+    });
+  } catch (err) {
+    console.warn('Backend refresher note:', err);
+  }
+
+  renderAssignmentsTable();
+  renderCertificatesTable();
+  renderDashboard();
+  if (state.employeeTrainingData) renderEmployeeDashboardUI();
+  showConfigToast(`Refresher training assigned for ${prog.title}. Credential will renew upon completion & approval.`, 'success');
+}
+
+window.openCancelAssignmentScreen = openCancelAssignmentScreen;
+window.closeCancelAssignmentScreen = closeCancelAssignmentScreen;
+window.submitCancelAssignment = submitCancelAssignment;
+window.openReassignScreen = openReassignScreen;
+window.closeReassignScreen = closeReassignScreen;
+window.submitReassignAssignment = submitReassignAssignment;
+window.openDelegateReviewerScreen = openDelegateReviewerScreen;
+window.closeDelegateReviewerScreen = closeDelegateReviewerScreen;
+window.submitDelegateReviewer = submitDelegateReviewer;
+window.sendCertificateReminder = sendCertificateReminder;
+window.assignRefresherTraining = assignRefresherTraining;
 
 // ==========================================================================
 // SECTION 4: EMPLOYEE PROGRESS MONITORING
@@ -2900,6 +3401,16 @@ function handleReviewAction(action) {
   const prog = state.programs.find(p => p.id === a.programId);
   const reviewerName = state.currentRole === 'admin' ? 'Isha Patel (Admin)' : (state.currentRole === 'hr' ? 'Shivam Sharma (HR)' : 'Ashish Kumar (Manager)');
 
+  // Security Check: Enforce Reviewer Delegation & Hierarchy Permissions (Feature 5)
+  if (state.currentRole !== 'admin') {
+    const isDesignatedReviewer = a.reviewerId && (a.reviewerId === state.currentManagerId || (typeof activeDemoUser !== 'undefined' && activeDemoUser && a.reviewerId === activeDemoUser.id));
+    const isDirectManager = emp && emp.managerId === state.currentManagerId;
+    if (!isDesignatedReviewer && !isDirectManager) {
+      showConfigToast('Permission Denied: You are not authorized to evaluate this submission. Only the designated reviewer or direct reporting manager can approve.', 'error');
+      return;
+    }
+  }
+
   if (action === 'approve') {
     if (comp.evidenceEnabled !== false && comp.evidenceMandatory === true && !a.submissionEvidence) {
       showConfigToast('Cannot approve: Verification evidence document is mandatory per Training Config, but none was submitted.', 'error')
@@ -3098,12 +3609,15 @@ function renderCertificatesTable() {
       const prog = state.programs.find(p => p.id === a.programId);
       const cert = state.certificates.find(c => c.assignmentId === a.id);
 
-      if (filter === 'all' || a.certificateStatus === filter) {
+      const isExpired = cert && cert.expiryDate && cert.expiryDate !== 'Lifetime' && (new Date(cert.expiryDate) < new Date() || cert.status === 'expired');
+
+      if (filter === 'all' || (filter === 'expired' && isExpired) || a.certificateStatus === filter) {
         certItems.push({
           assignment: a,
           employee: emp,
           program: prog,
-          certificate: cert
+          certificate: cert,
+          isExpired: isExpired
         });
       }
     }
@@ -3128,29 +3642,49 @@ function renderCertificatesTable() {
     const emp = item.employee;
     const prog = item.program;
     const cert = item.certificate;
+    const isExpired = item.isExpired;
 
     let statusPill = '';
     let actionButtons = '';
 
-    if (a.certificateStatus === 'eligible') {
+    if (isExpired) {
+      statusPill = '<span class="status-pill status-expired" style="background:#fee2e2; color:#b91c1c; border:1px solid #fecaca; font-weight:700;">Expired</span>';
+      actionButtons = `
+        <button type="button" class="emp-action-icon" onclick="previewCertificate('${cert ? cert.id : a.id}')" title="View Certificate" aria-label="View Certificate">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        </button>
+        <button type="button" class="emp-action-icon" onclick="sendCertificateReminder('${cert ? cert.id : a.id}')" title="Send Expiry Reminder" aria-label="Remind" style="color:#d97706;">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        </button>
+        <button type="button" class="emp-action-icon" onclick="assignRefresherTraining('${cert ? cert.id : a.id}')" title="Assign Refresher Course" aria-label="Refresher" style="color:#2563eb;">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+        </button>
+      `;
+    } else if (a.certificateStatus === 'eligible') {
       statusPill = '<span class="status-pill status-eligible">Eligible (Not Generated)</span>';
       actionButtons = `
-        <button type="button" class="emp-action-icon" onclick="previewCertificate('${a.id}')" title="Generate & View Certificate" aria-label="View Certificate" style="width: 32px; height: 32px; border-radius: 6px; border: 1px solid #cbd5e1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#eff6ff'; this.style.color='#2563eb'; this.style.borderColor='#bfdbfe';" onmouseout="this.style.background='#ffffff'; this.style.color='#334155'; this.style.borderColor='#cbd5e1';">
+        <button type="button" class="emp-action-icon" onclick="previewCertificate('${a.id}')" title="Generate & View Certificate" aria-label="View Certificate">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
         </button>
       `;
     } else if (a.certificateStatus === 'generated') {
       statusPill = '<span class="status-pill status-generated">Generated (Awaiting Issuance)</span>';
       actionButtons = `
-        <button type="button" class="emp-action-icon" onclick="previewCertificate('${cert ? cert.id : a.id}')" title="View Certificate Details & Issue" aria-label="View Certificate" style="width: 32px; height: 32px; border-radius: 6px; border: 1px solid #cbd5e1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#eff6ff'; this.style.color='#2563eb'; this.style.borderColor='#bfdbfe';" onmouseout="this.style.background='#ffffff'; this.style.color='#334155'; this.style.borderColor='#cbd5e1';">
+        <button type="button" class="emp-action-icon" onclick="previewCertificate('${cert ? cert.id : a.id}')" title="View Certificate Details & Issue" aria-label="View Certificate">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
         </button>
       `;
     } else if (a.certificateStatus === 'issued') {
       statusPill = '<span class="status-pill status-issued">Issued & Active</span>';
       actionButtons = `
-        <button type="button" class="emp-action-icon" onclick="previewCertificate('${cert ? cert.id : a.id}')" title="View Certificate Details & Reissue" aria-label="View Certificate" style="width: 32px; height: 32px; border-radius: 6px; border: 1px solid #cbd5e1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#eff6ff'; this.style.color='#2563eb'; this.style.borderColor='#bfdbfe';" onmouseout="this.style.background='#ffffff'; this.style.color='#334155'; this.style.borderColor='#cbd5e1';">
+        <button type="button" class="emp-action-icon" onclick="previewCertificate('${cert ? cert.id : a.id}')" title="View Certificate Details & Reissue" aria-label="View Certificate">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        </button>
+        <button type="button" class="emp-action-icon" onclick="sendCertificateReminder('${cert ? cert.id : a.id}')" title="Send Expiry Reminder" aria-label="Remind" style="color:#d97706;">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        </button>
+        <button type="button" class="emp-action-icon" onclick="assignRefresherTraining('${cert ? cert.id : a.id}')" title="Assign Refresher Course" aria-label="Refresher" style="color:#2563eb;">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
         </button>
       `;
     }
@@ -10194,6 +10728,11 @@ function renderEmployeeCertificates() {
 
   let html = '';
   list.forEach((c, idx) => {
+    const isExpired = c.expiryDate && c.expiryDate !== 'Lifetime' && new Date(c.expiryDate) < new Date();
+    const statusHtml = isExpired
+      ? '<span style="background: #fee2e2; color: #b91c1c; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; border: 1px solid #fecaca;">✕ Expired</span>'
+      : `<span style="background: #dcfce7; color: #15803d; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px;">✓ ${escapeHtml(c.status || 'Issued')}</span>`;
+
     html += `
       <tr style="border-bottom: 1px solid #f1f5f9;">
         <td style="padding: 12px 16px; text-align: center; color: #64748b;">${idx + 1}</td>
@@ -10203,7 +10742,7 @@ function renderEmployeeCertificates() {
         <td style="padding: 12px 16px; color: #475569;">${escapeHtml(c.issueDate)}</td>
         <td style="padding: 12px 16px; color: #475569;">${escapeHtml(c.expiryDate || 'Lifetime')}</td>
         <td style="padding: 12px 16px; text-align: center;">
-          <span style="background: #dcfce7; color: #15803d; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px;">✓ ${escapeHtml(c.status || 'Issued')}</span>
+          ${statusHtml}
         </td>
         <td style="padding: 12px 16px; text-align: right;">
           <button type="button" class="btn-table-action" onclick="openEmployeeCertificateViewer('${c.id}')" style="margin-right: 6px;">👁 View</button>
