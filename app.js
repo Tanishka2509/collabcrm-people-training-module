@@ -14029,11 +14029,12 @@ function openEmployeeTrainingDetail(trainingId) {
     const empObj = EMPLOYEES_DETAIL_DATABASE[code];
     const row = empObj && empObj.trainings && empObj.trainings[idx];
     if (row) {
+      const scoreNum = parseInt(String(row.score).replace('%', ''), 10) || 94;
       t = {
         id: trainingId,
         trainingName: row.title,
-        category: row.dept || empObj.department,
-        shortDescription: `Completed curriculum for ${row.title}.`,
+        category: row.dept || empObj.department || 'Management',
+        shortDescription: `Comprehensive enterprise programme on ${row.title}. Designed to enforce compliance, operational excellence, and organizational leadership.`,
         isMandatory: true,
         assignedBy: empObj.reportingManager || 'Isha Patel (Head of People)',
         assignedDate: row.assignedDate,
@@ -14044,23 +14045,51 @@ function openEmployeeTrainingDetail(trainingId) {
         status: 'Completed',
         difficultyLevel: 'Intermediate',
         expectedDuration: '4 Hours',
+        learningObjectives: [
+          `Master core compliance and execution workflows for ${row.title}`,
+          'Implement role-based controls, data governance, and risk mitigation policies',
+          'Coordinate cross-departmental operations with verified reporting metrics',
+          'Pass the comprehensive capstone evaluation with score >= 80%'
+        ],
+        expectedOutcomes: `${empObj.name} successfully demonstrated proficiency in operational governance and achieved certification.`,
         resources: [
-          { id: `${trainingId}_r1`, title: `${row.title} — Core Handbook & Guidelines`, type: 'pdf', isMandatory: true, duration: '45 Mins', url: '#', isCompleted: true, completionDate: row.completionDate }
+          { id: `${trainingId}_r1`, title: `Module 1: Principles of ${row.title}`, type: 'youtube', isMandatory: true, duration: '25 Mins', url: 'https://www.youtube.com/watch?v=996OiexHze0', isCompleted: true, completionDate: row.assignedDate },
+          { id: `${trainingId}_r2`, title: `Module 2: CollabCRM ${row.title} Playbook (PDF)`, type: 'pdf', isMandatory: true, duration: '40 Mins', url: 'assets/docs/governance_playbook.pdf', isCompleted: true, completionDate: row.completionDate },
+          { id: `${trainingId}_r3`, title: `Module 3: Interactive Simulation Sandbox`, type: 'external_link', isMandatory: false, duration: '45 Mins', url: 'https://collabcrm.internal/sandbox', isCompleted: true, completionDate: row.completionDate },
+          { id: `${trainingId}_r4`, title: `Module 4: Case Study & Executive Review`, type: 'video', isMandatory: true, duration: '30 Mins', url: 'assets/videos/exec_review.mp4', isCompleted: true, completionDate: row.completionDate }
         ],
         assessment: {
           id: `${trainingId}_asm`,
-          name: `${row.title} Final Assessment`,
+          name: `${row.title} Certification Assessment`,
           passingScore: 80,
           maxAttempts: 3,
           attemptsUsed: 1,
           passed: true,
           isPassed: true,
-          bestScore: parseInt(String(row.score).replace('%', ''), 10) || 95,
-          previousAttempts: [{ attemptNumber: 1, score: parseInt(String(row.score).replace('%', ''), 10) || 95, passed: true, submissionDate: row.completionDate }],
-          questions: []
+          bestScore: scoreNum,
+          previousAttempts: [{ attemptNumber: 1, score: scoreNum, passed: true, submissionDate: row.completionDate }],
+          questions: [
+            {
+              id: 'q1',
+              text: `What is the primary operational benchmark of ${row.title}?`,
+              options: [
+                'Ensure 100% adherence to organizational governance and audit standards',
+                'Bypass stakeholder reviews during quarterly planning',
+                'Disable telemetry logging',
+                'Skip evidence submission'
+              ],
+              correctAnswer: 0
+            },
+            {
+              id: 'q2',
+              text: 'Who must approve the final training submission before credential issuance?',
+              options: ['Authorized Reviewer / Head of People', 'Any external contractor', 'Nobody', 'Automated bot only'],
+              correctAnswer: 0
+            }
+          ]
         },
         submission: {
-          completionRemarks: 'Completed all required coursework, practical exercises, and assessment modules.',
+          completionRemarks: `All 4 modules completed and passed assessment with score ${scoreNum}%.`,
           evidenceFiles: ['verified_completion_evidence.pdf'],
           submittedAt: row.completionDate,
           isLocked: true
@@ -14069,13 +14098,14 @@ function openEmployeeTrainingDetail(trainingId) {
           status: 'approved',
           reviewerName: empObj.reportingManager || 'Isha Patel (Head of People)',
           reviewDate: row.completionDate,
-          feedback: 'Approved and verified.'
+          feedback: `Excellent performance by ${empObj.name}. Assessment passed with ${scoreNum}%. Certificate approved and issued.`
         },
         certificate: row.certId ? {
           id: row.certId,
           name: `${row.title} Credential`,
           trainingName: row.title,
           issueDate: row.completionDate,
+          expiryDate: '25-Feb-2028',
           status: 'issued',
           recipientName: empObj.name,
           recipientId: empObj.code
@@ -14238,14 +14268,22 @@ function openEmployeeTrainingDetail(trainingId) {
   switchEmpModalTab('overview');
 
   // Open Full-Screen Training Detail View matching Screenshot 4 (NO POP-UPS)
+  // Open Full-Screen Training Detail View matching Screenshot 4 (NO POP-UPS)
   const myTrnSection = document.getElementById('sectionEmpMyTraining');
   const detailScreen = document.getElementById('sectionEmpTrainingDetailScreen');
   const breadcrumbEl = document.getElementById('empDetailBreadcrumbTitle');
   const viewEmployeeDetail = document.getElementById('viewEmployeeDetail');
   const viewDashboard = document.getElementById('viewDashboard');
 
+  let empName = 'Employee';
+  let empCode = activeEmployeeDetailCode || 'YOP-073';
+  if (EMPLOYEES_DETAIL_DATABASE[empCode]) {
+    empName = EMPLOYEES_DETAIL_DATABASE[empCode].name;
+  }
+
   if ((viewEmployeeDetail && viewEmployeeDetail.style.display !== 'none') || (viewDashboard && viewDashboard.style.display === 'block')) {
     state.empDetailPreviousView = 'employee_profile';
+    state.empDetailPreviousEmpCode = empCode;
     if (viewEmployeeDetail) {
       viewEmployeeDetail.style.display = 'none';
       viewEmployeeDetail.classList.remove('active');
@@ -14258,21 +14296,36 @@ function openEmployeeTrainingDetail(trainingId) {
     state.empDetailPreviousView = 'my_training';
   }
 
+  // Switch main view to viewTraining
   const viewTraining = document.getElementById('viewTraining');
   if (viewTraining) {
     viewTraining.style.display = 'block';
     viewTraining.classList.add('active');
   }
 
-  if (myTrnSection) myTrnSection.style.display = 'none';
+  // CRITICAL: Hide ALL management tabs and empty states so detailScreen is isolated
+  [
+    'sectionDashboard', 'sectionPrograms', 'sectionAssignments', 
+    'sectionProgress', 'sectionReviews', 'sectionCertificates', 
+    'sectionReports', 'sectionEmpMyTraining', 'sectionEmpCertificates', 
+    'sectionEmpHistory', 'assignTrainingModal', 'sectionEmployeeEmptyState'
+  ].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+
+  const hierarchyBanner = document.getElementById('hierarchyNoticeBanner');
+  if (hierarchyBanner) hierarchyBanner.style.display = 'none';
+
+  // Show Programme Detail Screen
   if (detailScreen) detailScreen.style.display = 'block';
   if (breadcrumbEl) breadcrumbEl.textContent = title;
 
   const backLabel = document.getElementById('empDetailBackLabel');
   const backBtn = document.getElementById('empDetailBackBtn');
   if (state.empDetailPreviousView === 'employee_profile') {
-    if (backLabel) backLabel.textContent = 'Employee Profile › Training History';
-    if (backBtn) backBtn.textContent = '← Back to Profile';
+    if (backLabel) backLabel.textContent = `Employee Profile (${empName}) › Training History`;
+    if (backBtn) backBtn.textContent = `← Back to ${empName}'s Profile`;
   } else {
     if (backLabel) backLabel.textContent = 'My Training';
     if (backBtn) backBtn.textContent = '← Back to My Training';
@@ -14302,6 +14355,7 @@ function closeEmployeeTrainingDetail() {
     if (viewEmployeeDetail) {
       viewEmployeeDetail.style.display = 'block';
       viewEmployeeDetail.classList.add('active');
+      openEmployeeDetail(state.empDetailPreviousEmpCode || activeEmployeeDetailCode || 'YOP-073');
       switchEmpDetailSubTab('training');
     }
   } else {
@@ -14310,8 +14364,12 @@ function closeEmployeeTrainingDetail() {
       viewTraining.style.display = 'block';
       viewTraining.classList.add('active');
     }
-    if (myTrnSection) myTrnSection.style.display = 'block';
-    renderEmployeeTrainingsList();
+    if (state.currentRole === 'employee') {
+      if (myTrnSection) myTrnSection.style.display = 'block';
+      renderEmployeeTrainingsList();
+    } else {
+      switchTrainingTab(state.activeSubTab || 'programs');
+    }
   }
 
   state.empCurrentTrainingId = null;
