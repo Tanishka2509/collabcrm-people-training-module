@@ -1315,14 +1315,9 @@
               <!-- IN-SCREEN CREATE / EDIT TRAINING PROGRAMME VIEW (With Per-Programme Config) -->
               <div id="programFormModal" style="display: none; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); overflow: hidden;">
                 <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 22px; border-bottom: 1px solid #e2e8f0; background: #f8fafc; flex-wrap: wrap; gap: 12px;">
-                  <div style="display: flex; align-items: center; gap: 12px;">
-                    <button type="button" class="btn-secondary-action" onclick="closeProgramModal()" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; font-size: 12.5px; font-weight: 600;">
-                      ← Back to Training Programes
-                    </button>
-                    <div>
-                      <h2 id="programFormModalTitle" style="font-size: 17px; font-weight: 700; color: #0f172a; margin: 0;">Create Training Programme</h2>
-                      <p style="font-size: 12px; color: #64748b; margin: 2px 0 0 0;">Configure curriculum details, per-programme enrollment limits, compliance rules, and learning resources.</p>
-                    </div>
+                  <div>
+                    <h2 id="programFormModalTitle" style="font-size: 17px; font-weight: 700; color: #0f172a; margin: 0;">Create Training Programme</h2>
+                    <p style="font-size: 12px; color: #64748b; margin: 2px 0 0 0;">Configure curriculum details, per-programme enrollment limits, compliance rules, and learning resources.</p>
                   </div>
                   <div style="display: flex; align-items: center; gap: 8px;">
                     <button type="button" class="btn-secondary-action" onclick="closeProgramModal()">Cancel</button>
@@ -1354,10 +1349,24 @@
                       <p style="font-size: 12px; color: #64748b; margin: 2px 0 0 0;">Define the programme name, target department, difficulty level, and baseline duration.</p>
                     </div>
 
-                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 18px;">
+                    <div style="display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 18px;">
                       <div class="form-group" style="display: flex; flex-direction: column; gap: 6px; margin: 0;">
                         <label class="form-label" style="font-size: 12.5px; font-weight: 600; color: #1e293b;">Programme Name *</label>
                         <input type="text" class="form-input" id="progTitleInput" placeholder="e.g. CollabCRM Recruitment &amp; Client Portal Workflows" style="height: 40px; padding: 0 14px;" />
+                      </div>
+                      <div class="form-group" style="display: flex; flex-direction: column; gap: 6px; margin: 0;">
+                        <label class="form-label" style="font-size: 12.5px; font-weight: 600; color: #1e293b;">Training Category *</label>
+                        <select class="form-select" id="progCategoryInput" style="height: 40px; padding: 0 14px;">
+                          <option value="Recruitment &amp; HR Operations" selected>Recruitment &amp; HR Operations</option>
+                          <option value="Engineering &amp; Architecture">Engineering &amp; Architecture</option>
+                          <option value="Sales &amp; Business Development">Sales &amp; Business Development</option>
+                          <option value="Security, Privacy &amp; Compliance">Security, Privacy &amp; Compliance</option>
+                          <option value="Leadership &amp; Management">Leadership &amp; Management</option>
+                          <option value="Product Design &amp; UX">Product Design &amp; UX</option>
+                          <option value="Customer Success &amp; Support">Customer Success &amp; Support</option>
+                          <option value="DevOps &amp; Cloud Operations">DevOps &amp; Cloud Operations</option>
+                          <option value="Artificial Intelligence &amp; ML">Artificial Intelligence &amp; ML</option>
+                        </select>
                       </div>
                       <div class="form-group" style="display: flex; flex-direction: column; gap: 6px; margin: 0;">
                         <label class="form-label" style="font-size: 12.5px; font-weight: 600; color: #1e293b;">Department *</label>

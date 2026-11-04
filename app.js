@@ -1313,6 +1313,17 @@ function renderProgramsList() {
 window.renderProgramsList = renderProgramsList;
 
 // Program Form Builder & Multi-Resource Manager (In-Screen View + Per-Programme Config)
+function populateCategorySelect(selectId, selectedValue = '') {
+  const el = document.getElementById(selectId);
+  if (!el) return;
+  const cats = (trainingConfigData?.categories || DEFAULT_TRAINING_CONFIG.categories || []).filter(c => c.status !== 'Inactive');
+  const catNames = cats.map(c => c.name);
+  if (selectedValue && !catNames.includes(selectedValue)) {
+    catNames.unshift(selectedValue);
+  }
+  el.innerHTML = catNames.map(name => `<option value="${escapeHtml(name)}" ${name === selectedValue ? 'selected' : ''}>${escapeHtml(name)}</option>`).join('');
+}
+
 function openCreateProgramModal() {
   if (trainingConfigData && trainingConfigData.general && trainingConfigData.general.allowCreation === false) {
     showConfigToast('Training Creation is currently disabled in Training Config.', 'info')
@@ -1325,6 +1336,7 @@ function openCreateProgramModal() {
   document.getElementById('editingProgramId').value = '';
   document.getElementById('programFormModalTitle').textContent = 'Create New Training Programme';
   document.getElementById('progTitleInput').value = '';
+  populateCategorySelect('progCategoryInput', 'Recruitment & HR Operations');
   document.getElementById('progDeptInput').value = 'Business analyst';
   document.getElementById('progDifficultyInput').value = 'Intermediate';
   document.getElementById('progDurationInput').value = (trainingConfigData?.general?.durationHours) || '16';
@@ -1392,6 +1404,7 @@ function openEditProgramModal(progId) {
   document.getElementById('editingProgramId').value = p.id;
   document.getElementById('programFormModalTitle').textContent = `Edit Training Programme: ${p.title}`;
   document.getElementById('progTitleInput').value = p.title;
+  populateCategorySelect('progCategoryInput', p.category || 'Recruitment & HR Operations');
   document.getElementById('progDeptInput').value = p.dept;
   document.getElementById('progDifficultyInput').value = p.difficulty;
   document.getElementById('progDurationInput').value = p.durationHours;
@@ -1494,6 +1507,7 @@ window.addResourceRow = addResourceRow;
 function saveProgram(statusToSet) {
   const editingId = document.getElementById('editingProgramId').value;
   const title = document.getElementById('progTitleInput').value.trim();
+  const category = document.getElementById('progCategoryInput')?.value || 'Recruitment & HR Operations';
   const dept = document.getElementById('progDeptInput').value;
   const difficulty = document.getElementById('progDifficultyInput').value;
   const durationHours = parseInt(document.getElementById('progDurationInput').value, 10) || 10;
@@ -1554,6 +1568,7 @@ function saveProgram(statusToSet) {
       }
 
       prog.title = title;
+      prog.category = category;
       prog.dept = dept;
       prog.difficulty = difficulty;
       prog.durationHours = durationHours;
@@ -1579,6 +1594,7 @@ function saveProgram(statusToSet) {
         body: JSON.stringify({
           programId: prog.id,
           title: prog.title,
+          category: prog.category,
           dept: prog.dept,
           difficulty: prog.difficulty,
           durationHours: prog.durationHours,
@@ -1596,6 +1612,7 @@ function saveProgram(statusToSet) {
     state.programs.unshift({
       id: newId,
       title: title,
+      category: category,
       dept: dept,
       difficulty: difficulty,
       durationHours: durationHours,
@@ -1672,17 +1689,26 @@ function previewProgram(progId) {
   let resHtml = '';
   (p.resources || []).forEach((r, idx) => {
     const icon = (r.type === 'video' || r.type === 'youtube') ? '🎬' : (r.type === 'pdf' ? '📄' : ((r.type === 'website' || r.type === 'external_link') ? '🌐' : '🎓'));
-    const mandBadge = r.mandatory ? '<span class="status-pill status-mandatory">Mandatory</span>' : '<span class="status-pill status-optional">Optional</span>';
+    const mandBadge = r.mandatory ? '<span class="status-pill status-mandatory" style="font-size: 10.5px; padding: 2px 7px;">Mandatory</span>' : '<span class="status-pill status-optional" style="font-size: 10.5px; padding: 2px 7px;">Optional</span>';
+    const typeLabel = (r.type === 'video' || r.type === 'youtube') ? 'Video Lecture' : (r.type === 'pdf' ? 'PDF Playbook' : ((r.type === 'website' || r.type === 'external_link') ? 'Interactive Sandbox' : 'Masterclass'));
     resHtml += `
-      <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 8px;">
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <span style="font-size: 16px;">${icon}</span>
-          <div>
-            <div style="font-weight: 600; font-size: 13px; color: #0f172a;">Module ${idx + 1}: ${escapeHtml(r.title)}</div>
-            <a href="${escapeHtml(r.url)}" target="_blank" style="font-size: 11.5px; color: #2563eb; text-decoration: none;">${escapeHtml(r.url)}</a>
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 12px; display: flex; flex-direction: column; justify-content: space-between; min-height: 140px; box-shadow: 0 1px 2px rgba(0,0,0,0.02); transition: box-shadow 0.15s ease;">
+        <div>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+            <div style="width: 30px; height: 30px; border-radius: 6px; background: #f8fafc; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 15px;">
+              ${icon}
+            </div>
+            <span style="font-size: 11px; font-weight: 700; color: #64748b; background: #f1f5f9; padding: 2px 7px; border-radius: 4px;">Module ${idx + 1}</span>
           </div>
+          <div style="font-weight: 600; font-size: 12.5px; color: #0f172a; line-height: 1.35; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;" title="${escapeHtml(r.title)}">
+            ${escapeHtml(r.title)}
+          </div>
+          <div style="font-size: 11px; color: #64748b; margin-bottom: 8px;">${typeLabel}</div>
         </div>
-        ${mandBadge}
+        <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 8px; border-top: 1px solid #f1f5f9;">
+          <a href="${escapeHtml(r.url)}" target="_blank" style="font-size: 11.5px; color: #2563eb; text-decoration: none; font-weight: 600;" title="${escapeHtml(r.url)}">Open ↗</a>
+          ${mandBadge}
+        </div>
       </div>
     `;
   });
@@ -1699,7 +1725,7 @@ function previewProgram(progId) {
   } else {
     let rows = '';
     enrolledAsns.forEach((a, i) => {
-      const emp = state.employees.find(e => e.id === a.employeeId) || { name: a.employeeId, role: 'Employee', dept: '-', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120' };
+      const emp = state.employees.find(e => e.id === a.employeeId) || { id: a.employeeId, name: a.employeeId, role: 'Employee', dept: '-', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120' };
       const statusLabel = a.trainingStatus === 'completed' ? '<span class="status-pill status-completed">Completed</span>' : (a.trainingStatus === 'submitted' || a.trainingStatus === 'submitted_for_review' ? '<span class="status-pill status-submitted">Under Review</span>' : (a.trainingStatus === 'in_progress' ? '<span class="status-pill status-inprogress">In Progress</span>' : '<span class="status-pill status-notstarted">Not Started</span>'));
       rows += `
         <tr style="border-bottom: 1px solid #f1f5f9;">
@@ -1719,7 +1745,7 @@ function previewProgram(progId) {
           <td style="padding: 10px 14px; font-size: 12.5px; font-weight: 600; color: #2563eb;">${a.progress}%</td>
           <td style="padding: 10px 14px;">${statusLabel}</td>
           <td style="padding: 10px 14px; text-align: center;">
-            <button type="button" class="emp-action-icon" onclick="openProgressDetails('${a.id}')" title="View Progress &amp; Details" aria-label="View Details" style="display: inline-flex; align-items: center; justify-content: center;">
+            <button type="button" class="emp-action-icon" onclick="openEmployeeDetail('${emp.id || a.employeeId}')" title="View Detail Screen of ${escapeHtml(emp.name)}" aria-label="View Details" style="display: inline-flex; align-items: center; justify-content: center;">
               <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                 <circle cx="12" cy="12" r="3"></circle>
@@ -1752,33 +1778,30 @@ function previewProgram(progId) {
 
   if (body) {
     body.innerHTML = `
-      <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px;">
+      <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; align-items: center;">
         <span class="badge-dept badge-blue">${escapeHtml(p.dept)}</span>
-        <span class="status-pill status-inprogress">${escapeHtml(p.difficulty)}</span>
-        <span class="status-pill status-completed">⏱ ${p.durationHours} Expected Hours</span>
-        <span class="status-pill status-changes">🎯 Pass Score: ${p.passScore || 80}%</span>
-        <span class="status-pill ${p.status === 'published' ? 'status-completed' : 'status-notstarted'}">${escapeHtml((p.status || 'published').toUpperCase())}</span>
-      </div>
-
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
-        <div style="background: #f8fafc; padding: 14px 16px; border-radius: 8px; border: 1px solid #e2e8f0;">
-          <h4 style="font-size: 13px; font-weight: 700; color: #0f172a; margin: 0 0 6px 0;">Learning Objectives</h4>
-          <p style="font-size: 13px; color: #475569; margin: 0; line-height: 1.5;">
-            ${escapeHtml(p.learningObjectives || 'Foundational to advanced domain skills.')}
-          </p>
-        </div>
-
-        <div style="background: #f8fafc; padding: 14px 16px; border-radius: 8px; border: 1px solid #e2e8f0;">
-          <h4 style="font-size: 13px; font-weight: 700; color: #0f172a; margin: 0 0 6px 0;">Completion Requirements & Evaluation</h4>
-          <p style="font-size: 13px; color: #475569; margin: 0; line-height: 1.5;">
-            ${escapeHtml(p.completionReq || 'Complete all mandatory coursework and pass final evaluation.')}
-          </p>
-        </div>
+        ${p.category ? `<span class="badge-dept" style="background: #f1f5f9; color: #334155; border: 1px solid #e2e8f0;">📁 ${escapeHtml(p.category)}</span>` : ''}
       </div>
 
       <div style="margin-bottom: 20px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px;">
         <h4 style="font-size: 13px; font-weight: 700; color: #0f172a; margin: 0 0 10px 0;">Programme Configuration &amp; Enrollment Limits</h4>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; font-size: 12.5px;">
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px 12px;">
+            <span style="display: block; font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase;">Status</span>
+            <span class="status-pill ${p.status === 'published' ? 'status-completed' : 'status-notstarted'}" style="margin-top: 4px; display: inline-block;">${escapeHtml((p.status || 'published').toUpperCase())}</span>
+          </div>
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px 12px;">
+            <span style="display: block; font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase;">Difficulty Level</span>
+            <strong style="color: #0f172a; font-size: 13.5px;">${escapeHtml(p.difficulty || 'Intermediate')}</strong>
+          </div>
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px 12px;">
+            <span style="display: block; font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase;">Expected Duration</span>
+            <strong style="color: #0f172a; font-size: 13.5px;">⏱ ${p.durationHours || 10} Hours</strong>
+          </div>
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px 12px;">
+            <span style="display: block; font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase;">Passing Assessment Score</span>
+            <strong style="color: #0f172a; font-size: 13.5px;">🎯 ${p.passScore || 80}%</strong>
+          </div>
           <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px 12px;">
             <span style="display: block; font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase;">Max Enrollment Limit</span>
             <strong style="color: #0f172a; font-size: 13.5px;">${p.maxEnrollment ?? 50} Learners</strong>
@@ -1807,9 +1830,11 @@ function previewProgram(progId) {
       </div>
 
       <div style="margin-bottom: 22px;">
-        <h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 10px;">Curriculum & Learning Resources (${(p.resources || []).length} Modules)</h4>
+        <h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 12px;">Curriculum &amp; Learning Resources (${(p.resources || []).length} Modules)</h4>
         <div style="background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid #e2e8f0;">
-          ${resHtml}
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px;">
+            ${resHtml}
+          </div>
         </div>
       </div>
 
@@ -8100,8 +8125,86 @@ const EMPLOYEES_DETAIL_DATABASE = {
 let activeEmployeeDetailCode = 'YOP-073';
 let activeEmpDetailSubTab = 'general';
 
+function getEmployeeDetailObject(empCode) {
+  if (EMPLOYEES_DETAIL_DATABASE[empCode]) {
+    return EMPLOYEES_DETAIL_DATABASE[empCode];
+  }
+  // Search in state.employees by id or code or name
+  const emp = (state.employees || []).find(e => e.id === empCode || e.code === empCode || e.name === empCode);
+  if (emp) {
+    const mgr = (state.employees || []).find(m => m.id === emp.managerId) || { name: 'Isha Patel', avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120' };
+    const nameParts = (emp.name || '').trim().split(' ');
+    const fName = nameParts[0] || emp.name;
+    const lName = nameParts.slice(1).join(' ') || '';
+    const initials = ((nameParts[0]?.[0] || 'E') + (nameParts[1]?.[0] || nameParts[0]?.[1] || 'M')).toUpperCase();
+
+    // Collect trainings from assignments
+    const empAsns = (state.assignments || []).filter(a => a.employeeId === emp.id);
+    const trainings = empAsns.map((a, idx) => {
+      const prog = (state.programs || []).find(p => p.id === a.programId) || {};
+      const cert = (state.certificates || []).find(c => c.assignmentId === a.id || (c.employeeId === emp.id && c.programId === a.programId));
+      return {
+        id: a.id,
+        no: idx + 1,
+        title: a.programTitle || prog.title || 'Training Programme',
+        trainingName: a.programTitle || prog.title || 'Training Programme',
+        dept: prog.dept || emp.dept || 'Engineering',
+        assignedBy: a.assignedBy || 'Isha Patel',
+        assignedDate: a.assignedDate || '2026-10-01',
+        completionDate: a.completionDate || (a.trainingStatus === 'completed' ? (a.review?.reviewDate || a.dueDate) : '-'),
+        dueDate: a.dueDate || '2026-11-15',
+        score: a.assessmentScore ? `${a.assessmentScore}%` : (a.progress === 100 ? '92%' : '-'),
+        progress: a.progress || 0,
+        status: a.trainingStatus === 'completed' ? 'Passed' : (a.trainingStatus === 'in_progress' ? 'In Progress' : 'Not Started'),
+        trainingStatus: a.trainingStatus,
+        certId: cert ? cert.id : (a.trainingStatus === 'completed' ? `TRN-2026-00${idx + 10}` : null),
+        certificate: cert
+      };
+    });
+
+    const isFemale = ['Priya Nair', 'Ananya Roy', 'Neha Gupta', 'Isha Patel', 'Tanya Kapoor', 'Muskan Sharma'].includes(emp.name);
+    const obj = {
+      code: emp.id,
+      name: emp.name,
+      firstName: fName,
+      lastName: lName,
+      gender: isFemale ? 'Female' : 'Male',
+      dob: '14-Aug-1994',
+      blood: 'O+',
+      email: emp.email || `${fName.toLowerCase()}@collabcrm.com`,
+      phone: '+91 98765 43210',
+      businessUnit: 'CollabCRM Tech',
+      department: emp.dept || 'Engineering',
+      designation: emp.role || 'Software Engineer',
+      reportingManager: mgr.name,
+      reportingAvatar: mgr.avatar,
+      empType: 'Full-time',
+      biometricId: emp.id,
+      activeShift: 'General Shift - GS (10:00 AM - 07:00 PM)',
+      status: emp.status === 'inactive' ? '• Inactive' : '• Confirmed',
+      roleName: emp.role || 'Employee',
+      roleExpiry: '-',
+      roleRemarks: '-',
+      expPrev: '4Y 2M',
+      expCurrent: '1Y 6M',
+      about: `${emp.name} is working as ${emp.role} in ${emp.dept}.`,
+      skills: 'Full Stack, Cloud Services, Automated Testing, Agile Delivery',
+      badges: 'Verified Team Member',
+      seating: 'Floor 2, Pod C',
+      extension: '214',
+      initials: initials,
+      avatarBg: '#2563eb',
+      avatar: emp.avatar,
+      trainings: trainings
+    };
+    EMPLOYEES_DETAIL_DATABASE[empCode] = obj;
+    return obj;
+  }
+  return EMPLOYEES_DETAIL_DATABASE['CO-5039'] || EMPLOYEES_DETAIL_DATABASE['YOP-073'];
+}
+
 function populateEmployeeDetail(empCode) {
-  const emp = EMPLOYEES_DETAIL_DATABASE[empCode] || EMPLOYEES_DETAIL_DATABASE['CO-5039'] || EMPLOYEES_DETAIL_DATABASE['YOP-073'];
+  const emp = getEmployeeDetailObject(empCode);
   activeEmployeeDetailCode = emp.code;
 
   // Left Sidebar
