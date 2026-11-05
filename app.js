@@ -1578,7 +1578,7 @@ function openCreateProgramModal() {
   populateCategorySelect('progCategoryInput', 'Recruitment & HR Operations');
   document.getElementById('progDeptInput').value = 'Business analyst';
   document.getElementById('progDifficultyInput').value = 'Intermediate';
-  document.getElementById('progDurationInput').value = (trainingConfigData?.general?.durationHours) || '16';
+  document.getElementById('progDurationInput').value = (trainingConfigData?.general?.durationHours) || '4';
   document.getElementById('progPassScoreInput').value = (trainingConfigData?.completion?.passingScore) || '80';
   document.getElementById('progObjectivesInput').value = '';
   document.getElementById('progCriteriaInput').value = 'Complete 100% mandatory modules + achieve >= 80% on assessment';
@@ -16337,24 +16337,75 @@ function autoFillAssignTrainingModal() {
 
 // Auto-fill for Program Form Modal
 function autoFillProgramFormModal() {
-  const titleInput = document.getElementById('progFormTitle');
-  if (titleInput) titleInput.value = 'Enterprise Cloud Architecture & Security Governance';
-  const catInput = document.getElementById('progFormCategory');
-  if (catInput) catInput.value = 'Engineering';
-  const diffInput = document.getElementById('progFormDifficulty');
+  const titleInput = document.getElementById('progTitleInput');
+  if (titleInput) titleInput.value = 'Advanced Enterprise Cloud Architecture & Kubernetes Security';
+
+  const catInput = document.getElementById('progCategoryInput');
+  if (catInput) catInput.value = 'Engineering & Architecture';
+
+  const deptInput = document.getElementById('progDeptInput');
+  if (deptInput) deptInput.value = 'Business analyst';
+
+  const diffInput = document.getElementById('progDifficultyInput');
   if (diffInput) diffInput.value = 'Intermediate';
-  const durInput = document.getElementById('progFormDuration');
-  if (durInput) durInput.value = '6';
-  const descInput = document.getElementById('progFormDescription');
-  if (descInput) descInput.value = 'Comprehensive multi-tier cloud security architecture covering zero-trust infrastructure, identity isolation, compliance auditing, and container runtime protection.';
-  const scoreInput = document.getElementById('progFormScore');
+
+  const durInput = document.getElementById('progDurationInput');
+  if (durInput) durInput.value = '4';
+
+  const scoreInput = document.getElementById('progPassScoreInput');
   if (scoreInput) scoreInput.value = '80';
-  const attemptsInput = document.getElementById('progFormAttempts');
+
+  const objInput = document.getElementById('progObjectivesInput');
+  if (objInput) objInput.value = 'Master enterprise microservices architecture, OAuth2 token isolation, zero-trust perimeter defense, and automated compliance auditing.';
+
+  const critInput = document.getElementById('progCriteriaInput');
+  if (critInput) critInput.value = 'Complete 100% mandatory modules + achieve >= 80% on assessment';
+
+  const maxEnrollEl = document.getElementById('progMaxEnrollmentInput');
+  if (maxEnrollEl) maxEnrollEl.value = '50';
+
+  const dueDaysEl = document.getElementById('progDueDaysInput');
+  if (dueDaysEl) dueDaysEl.value = '14';
+
+  const attemptsInput = document.getElementById('progMaxAttemptsInput');
   if (attemptsInput) attemptsInput.value = '3';
-  const expiryInput = document.getElementById('progFormExpiry');
+
+  const expiryInput = document.getElementById('progCertExpiryMonthsInput');
   if (expiryInput) expiryInput.value = '24';
-  const reminderInput = document.getElementById('progFormReminder');
+
+  const reminderInput = document.getElementById('progReminderFreqDaysInput');
   if (reminderInput) reminderInput.value = '7';
+
+  const asgnTypeEl = document.getElementById('progAssignmentTypeInput');
+  if (asgnTypeEl) asgnTypeEl.value = 'Mandatory';
+
+  const revAppEl = document.getElementById('progReviewerApprovalInput');
+  if (revAppEl) revAppEl.checked = true;
+
+  const evidReqEl = document.getElementById('progEvidenceRequiredInput');
+  if (evidReqEl) evidReqEl.checked = true;
+
+  const certEnEl = document.getElementById('progCertEnabledInput');
+  if (certEnEl) certEnEl.checked = true;
+
+  // Add sample resources matching screenshot 2
+  const container = document.getElementById('resourceRowsContainer');
+  if (container) {
+    container.innerHTML = '';
+    addResourceRow({
+      title: 'Module 1: Architecture Video Lecture',
+      type: 'video',
+      url: 'https://youtube.com/watch?v=sample-video',
+      mandatory: true
+    });
+    addResourceRow({
+      title: 'Module 2: Standard Operating Procedure Handbook',
+      type: 'pdf',
+      url: 'https://docs.collabcrm.internal/sample-handbook.pdf',
+      mandatory: true
+    });
+  }
+
   showConfigToast('⚡ Programme form auto-filled with sample architecture curriculum!');
 }
 
