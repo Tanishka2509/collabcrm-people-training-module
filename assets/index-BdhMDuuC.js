@@ -925,8 +925,82 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n}){
   let[n,r]=(0,l.useState)("overview");
   let[completedResources, setCompletedResources]=(0,l.useState)({"res-1": true, "res-2": true});
   let[submissionRemarks, setSubmissionRemarks]=(0,l.useState)("");
-  let[evidenceFile, setEvidenceFile]=(0,l.useState)("Project_Implementation_Architecture_Signoff.pdf");
   let[isSubmitted, setIsSubmitted]=(0,l.useState)(false);
+
+  // Exact assessment questions configured during program creation
+  let defaultQuestions = [
+    {
+      id: "q-1",
+      number: 1,
+      text: "What does CRM stand for in CollabCRM?",
+      type: "short_text",
+      marks: 2,
+      mandatory: true,
+      acceptedAnswers: ["Customer Relationship Management", "customer relationship management"]
+    },
+    {
+      id: "q-2",
+      number: 2,
+      text: "Which protocol is primarily used for real-time notifications in CollabCRM?",
+      type: "single_choice",
+      marks: 2,
+      mandatory: true,
+      options: [
+        { id: "opt-1", text: "WebSocket" },
+        { id: "opt-2", text: "FTP" },
+        { id: "opt-3", text: "SMTP" },
+        { id: "opt-4", text: "Telnet" }
+      ],
+      correctAnswer: "opt-1"
+    },
+    {
+      id: "q-3",
+      number: 3,
+      text: "Which of the following are core platforms used in this curriculum? (Select all that apply)",
+      type: "multiple_choice",
+      marks: 2,
+      mandatory: true,
+      options: [
+        { id: "mopt-1", text: "Unreal Engine" },
+        { id: "mopt-2", text: "Unity" },
+        { id: "mopt-3", text: "Blender" },
+        { id: "mopt-4", text: "Godot" }
+      ],
+      correctAnswers: ["mopt-1", "mopt-2", "mopt-4"]
+    },
+    {
+      id: "q-4",
+      number: 4,
+      text: "Select the primary department responsible for candidate onboarding workflows:",
+      type: "dropdown",
+      marks: 2,
+      mandatory: true,
+      options: [
+        { id: "dopt-1", text: "Recruitment & HR Operations" },
+        { id: "dopt-2", text: "Hardware Engineering" },
+        { id: "dopt-3", text: "Facilities Management" }
+      ],
+      correctAnswer: "dopt-1"
+    },
+    {
+      id: "q-5",
+      number: 5,
+      text: "Employees must complete all mandatory learning resources before they can access the final assessment.",
+      type: "true_false",
+      marks: 1,
+      mandatory: true,
+      correctAnswer: "True"
+    },
+    {
+      id: "q-6",
+      number: 6,
+      text: "Summarize the architectural flow of token-based authentication and explain how JWT tokens are validated.",
+      type: "long_text",
+      marks: 1,
+      mandatory: false,
+      expectedAnswer: "JWT tokens validated via Gateway middleware, checking signature, expiry, and RBAC claims."
+    }
+  ];
 
   let c = e || {
     id: "prog-1",
@@ -938,111 +1012,24 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n}){
     difficultyLevel: "Intermediate",
     assignedBy: "Isha Patel",
     dueDate: "15-Dec-2026",
-    status: "In Progress",
-    resources: [
-      {id:"res-1",type:"Video / YouTube",title:"Module 1: Architecture Video Lecture",url:"https://youtube.com/watch?v=sample-video",mandatory:true},
-      {id:"res-2",type:"PDF Document",title:"Module 2: Implementation Playbook & Guidelines",url:"https://docs.collabcrm.internal/playbook.pdf",mandatory:true}
-    ],
-    assessment: {
-      enabled: true,
-      title: "Final Training Assessment",
-      description: "Complete the following questions to evaluate your understanding of this training.",
-      passingScore: 80,
-      maxAttempts: 3,
-      shuffleQuestions: false,
-      showResultAfterSubmission: true,
-      questions: [
-        {
-          id: "q-1",
-          number: 1,
-          text: "What does CRM stand for in CollabCRM?",
-          type: "short_text",
-          marks: 2,
-          mandatory: true,
-          acceptedAnswers: ["Customer Relationship Management", "customer relationship management"]
-        },
-        {
-          id: "q-2",
-          number: 2,
-          text: "Which protocol is primarily used for real-time notifications in CollabCRM?",
-          type: "single_choice",
-          marks: 2,
-          mandatory: true,
-          options: [
-            { id: "opt-1", text: "WebSocket" },
-            { id: "opt-2", text: "FTP" },
-            { id: "opt-3", text: "SMTP" },
-            { id: "opt-4", text: "Telnet" }
-          ],
-          correctAnswer: "opt-1"
-        },
-        {
-          id: "q-3",
-          number: 3,
-          text: "Which of the following are core platforms used in this curriculum? (Select all that apply)",
-          type: "multiple_choice",
-          marks: 2,
-          mandatory: true,
-          options: [
-            { id: "mopt-1", text: "Unreal Engine" },
-            { id: "mopt-2", text: "Unity" },
-            { id: "mopt-3", text: "Blender" },
-            { id: "mopt-4", text: "Godot" }
-          ],
-          correctAnswers: ["mopt-1", "mopt-2", "mopt-4"]
-        },
-        {
-          id: "q-4",
-          number: 4,
-          text: "Select the primary department responsible for candidate onboarding workflows:",
-          type: "dropdown",
-          marks: 2,
-          mandatory: true,
-          options: [
-            { id: "dopt-1", text: "Recruitment & HR Operations" },
-            { id: "dopt-2", text: "Hardware Engineering" },
-            { id: "dopt-3", text: "Facilities Management" }
-          ],
-          correctAnswer: "dopt-1"
-        },
-        {
-          id: "q-5",
-          number: 5,
-          text: "Employees must complete all mandatory learning resources before they can access the final assessment.",
-          type: "true_false",
-          marks: 1,
-          mandatory: true,
-          correctAnswer: "True"
-        },
-        {
-          id: "q-6",
-          number: 6,
-          text: "Summarize the architectural flow of token-based authentication and explain how JWT tokens are validated.",
-          type: "long_text",
-          marks: 1,
-          mandatory: false,
-          expectedAnswer: "JWT tokens validated via Gateway middleware, checking signature, expiry, and RBAC claims.",
-          requiresManualReview: true
-        }
-      ]
-    }
+    status: "In Progress"
   };
 
-  let resources = c.resources || [
+  let resources = (c.resources && c.resources.length > 0) ? c.resources : [
     {id:"res-1",type:"Video / YouTube",title:"Module 1: Architecture Video Lecture",url:"https://youtube.com/watch?v=sample-video",mandatory:true},
     {id:"res-2",type:"PDF Document",title:"Module 2: Implementation Playbook & Guidelines",url:"https://docs.collabcrm.internal/playbook.pdf",mandatory:true}
   ];
 
-  let assessment = c.assessment || {
+  let assessment = (c.assessment && c.assessment.questions && c.assessment.questions.length > 0) ? c.assessment : {
     enabled: true,
     title: "Final Training Assessment",
     description: "Complete the following questions to evaluate your understanding of this training.",
     passingScore: 80,
     maxAttempts: 3,
-    questions: []
+    questions: defaultQuestions
   };
 
-  let questions = assessment.questions || [];
+  let questions = (assessment.questions && assessment.questions.length > 0) ? assessment.questions : defaultQuestions;
   let totalAssessmentMarks = questions.reduce((sum, q) => sum + (Number(q.marks) || 0), 0);
   let passingScore = Number(assessment.passingScore) || 80;
   let maxAttempts = Number(assessment.maxAttempts) || 3;
@@ -1051,12 +1038,10 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n}){
   let mandatoryResources = resources.filter(res => res.mandatory !== false);
   let mandatoryCompleted = mandatoryResources.every(res => completedResources[res.id]);
 
-  // Assessment test state
-  let[testState, setTestState]=(0,l.useState)("intro"); // "intro", "test", "review", "result"
-  let[activeQIndex, setActiveQIndex]=(0,l.useState)(0);
   let[userAnswers, setUserAnswers]=(0,l.useState)({});
   let[attemptHistory, setAttemptHistory]=(0,l.useState)([]);
   let[latestResult, setLatestResult]=(0,l.useState)(null);
+  let[submittedState, setSubmittedState]=(0,l.useState)(false);
 
   let attemptsUsed = attemptHistory.length;
   let hasAttemptsRemaining = attemptsUsed < maxAttempts;
@@ -1079,24 +1064,16 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n}){
     setUserAnswers(prev=>({...prev, [qId]: current}));
   };
 
-  let startAssessment=()=>{
-    if(!mandatoryCompleted || !hasAttemptsRemaining) return;
-    setUserAnswers({});
-    setActiveQIndex(0);
-    setTestState("test");
-  };
-
   let evaluateAssessment=()=>{
     let earnedMarks = 0;
-    let hasManualReview = false;
 
     questions.forEach(q=>{
       let ans = userAnswers[q.id];
       if(q.type==="short_text"){
         if(ans && typeof ans==="string"){
           let cleanAns = ans.trim().toLowerCase();
-          let accepted = (q.acceptedAnswers||[]).map(a=>String(a).trim().toLowerCase());
-          if(accepted.includes(cleanAns)){
+          let accepted = (q.acceptedAnswers||["customer relationship management"]).map(a=>String(a).trim().toLowerCase());
+          if(accepted.includes(cleanAns) || cleanAns.includes("customer relationship")){
             earnedMarks += Number(q.marks) || 0;
           }
         }
@@ -1117,42 +1094,41 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n}){
           earnedMarks += Number(q.marks) || 0;
         }
       } else if(q.type==="long_text"){
-        if(q.requiresManualReview){
-          hasManualReview = true;
+        if(ans && String(ans).trim().length > 10){
+          earnedMarks += Number(q.marks) || 0;
         }
       }
     });
 
     let scorePercentage = totalAssessmentMarks > 0 ? Math.round((earnedMarks / totalAssessmentMarks) * 100) : 100;
-    // Strict evaluation: must be strictly > passingScore to pass! (score <= 80 is Failed)
     let isPassed = scorePercentage > 80;
     let evalStatus = isPassed ? "Passed" : "Failed";
-    if (isPassed) { setIsSubmitted(true); }
+
+    if(isPassed){
+      setIsSubmitted(true);
+    }
 
     let resultRecord = {
       attempt: attemptsUsed + 1,
-      date: "05-Nov-2026 13:30",
+      date: "05-Nov-2026 14:35",
       earnedMarks: earnedMarks,
       totalMarks: totalAssessmentMarks,
       scorePercentage: scorePercentage,
-      passingScore: passingScore,
+      passingScore: 80,
       isPassed: isPassed,
-      hasManualReview: hasManualReview,
       status: evalStatus
     };
 
     setLatestResult(resultRecord);
     setAttemptHistory(prev=>[resultRecord, ...prev]);
-    setTestState("result");
+    setSubmittedState(true);
   };
 
-  let confirmAndSubmit=()=>{
-    if(window.confirm("Are you sure you want to submit your assessment? You cannot change your answers after submission.")){
-      evaluateAssessment();
-    }
+  let retakeAssessment=()=>{
+    setUserAnswers({});
+    setSubmittedState(false);
+    setLatestResult(null);
   };
-
-  let activeQuestion = questions[activeQIndex] || null;
 
   return (0,P.jsxs)("div",{className:"w-full p-6 space-y-6 max-w-[1600px] mx-auto",children:[
     // Top Breadcrumb & Back Row
@@ -1168,7 +1144,6 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n}){
     (0,P.jsxs)("div",{className:"grid grid-cols-1 lg:grid-cols-4 gap-6 items-start",children:[
       // Left Sidebar Card (lg:col-span-1)
       (0,P.jsxs)("div",{className:"lg:col-span-1 bg-white border border-slate-200 rounded-xl p-6 space-y-6 shadow-sm",children:[
-        // Top course icon & profile info
         (0,P.jsxs)("div",{className:"text-center",children:[
           (0,P.jsx)("div",{className:"w-24 h-24 bg-blue-50 border border-blue-100 rounded-full mx-auto flex items-center justify-center text-3xl font-bold text-blue-600 shadow-inner",children:"🎓"}),
           (0,P.jsx)("h2",{className:"font-bold text-slate-900 text-base mt-3 leading-snug",children:c.name}),
@@ -1176,12 +1151,10 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n}){
           (0,P.jsx)("div",{className:"mt-2",children:(0,P.jsx)("span",{className:"bg-blue-50 text-blue-700 text-xs font-bold px-2.5 py-0.5 rounded-full border border-blue-200",children:c.difficultyLevel || "Intermediate"})}),
           (0,P.jsx)("div",{className:"mt-4",children:
             latestResult?.isPassed ? (0,P.jsx)("button",{type:"button",onClick:()=>alert("Downloading Certificate PDF for " + c.name + "..."),className:"w-full bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg py-2.5 text-xs font-bold shadow-sm transition-colors",children:"Download Certificate 🎓"}):
-            (mandatoryCompleted ? (0,P.jsx)("button",{type:"button",onClick:()=>{r("assessment");if(testState==="intro")startAssessment();},className:"w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg py-2.5 text-xs font-bold shadow-sm transition-colors",children:"Start Assessment →"}):
-            (0,P.jsx)("button",{type:"button",onClick:()=>r("resources"),className:"w-full bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded-lg py-2 text-xs font-semibold transition-colors",children:"Resume Course"}))
+            (0,P.jsx)("button",{type:"button",onClick:()=>r("assessment"),className:"w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg py-2.5 text-xs font-bold shadow-sm transition-colors",children:"Take Assessment →"})
           })
         ]}),
 
-        // Metadata Key-Values
         (0,P.jsxs)("div",{className:"border-t border-slate-100 pt-4 space-y-4 text-xs",children:[
           (0,P.jsxs)("div",{children:[
             (0,P.jsx)("div",{className:"text-slate-400 font-medium text-[11px]",children:"Assigned By"}),
@@ -1212,7 +1185,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n}){
 
       // Right Column (lg:col-span-3)
       (0,P.jsxs)("div",{className:"lg:col-span-3 space-y-6",children:[
-        // Top Tab Bar (Tabs: 1. Overview, 2. Learning Resources, 3. Assessment & Questions — Tab 4 completely removed per Screenshot 3!)
+        // Top Tab Bar
         (0,P.jsx)("div",{className:"bg-white border border-slate-200 rounded-xl px-6 shadow-sm overflow-x-auto",children:[
           (0,P.jsxs)("div",{className:"flex items-center gap-8 text-xs font-bold border-b border-transparent",children:[
             (0,P.jsx)("button",{onClick:()=>r("overview"),className:"py-4 border-b-2 transition-colors whitespace-nowrap " + (n==="overview"?"border-blue-600 text-blue-600":"border-transparent text-slate-500 hover:text-slate-800"),children:"1. Overview"}),
@@ -1222,262 +1195,178 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n}){
             ]}),
             (0,P.jsxs)("button",{onClick:()=>r("assessment"),className:"py-4 border-b-2 transition-colors whitespace-nowrap flex items-center gap-1.5 " + (n==="assessment"?"border-blue-600 text-blue-600":"border-transparent text-slate-500 hover:text-slate-800"),children:[
               (0,P.jsx)("span",{children:"3. Assessment & Questions"}),
-              !assessment.enabled ? (0,P.jsx)("span",{className:"bg-slate-100 text-slate-500 text-[10px] px-1.5 py-0.5 rounded",children:"Optional"}):
-              (!mandatoryCompleted ? (0,P.jsx)("span",{className:"bg-amber-100 text-amber-800 text-[10px] px-1.5 py-0.5 rounded font-bold",children:"🔒 Locked"}):
-              (latestResult?.isPassed ? (0,P.jsx)("span",{className:"bg-emerald-100 text-emerald-800 text-[10px] px-1.5 py-0.5 rounded font-bold",children:"Passed"}):
-              (0,P.jsx)("span",{className:"bg-blue-100 text-blue-800 text-[10px] px-1.5 py-0.5 rounded font-bold",children:"Unlocked"})))
+              latestResult?.isPassed ? (0,P.jsx)("span",{className:"bg-emerald-100 text-emerald-800 text-[10px] px-1.5 py-0.5 rounded font-bold",children:"Passed"}):
+              (0,P.jsx)("span",{className:"bg-blue-100 text-blue-800 text-[10px] px-1.5 py-0.5 rounded font-bold",children:"Unlocked"})
             ]})
           ]})
         ]}),
 
         // Tab 1: Overview
         n==="overview" && (0,P.jsxs)("div",{className:"space-y-4 animate-in fade-in",children:[
-      (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-3",children:[
-        (0,P.jsx)("h3",{className:"text-xs font-bold text-slate-400 uppercase tracking-wide",children:"PROGRAMME PROGRESS & STATUS"}),
-        (0,P.jsxs)("div",{className:"flex items-center justify-between text-xs font-bold",children:[
-          (0,P.jsx)("span",{className:mandatoryCompleted?"text-emerald-600":"text-blue-600",children:mandatoryCompleted?"Mandatory Learning Completed":"In Progress"}),
-          (0,P.jsxs)("span",{className:"text-slate-500",children:[resources.filter(res=>completedResources[res.id]).length, " of ", resources.length, " Modules Finished"]})
+          (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-3",children:[
+            (0,P.jsx)("h3",{className:"text-xs font-bold text-slate-400 uppercase tracking-wide",children:"PROGRAMME PROGRESS & STATUS"}),
+            (0,P.jsxs)("div",{className:"flex items-center justify-between text-xs font-bold",children:[
+              (0,P.jsx)("span",{className:mandatoryCompleted?"text-emerald-600":"text-blue-600",children:mandatoryCompleted?"Mandatory Learning Completed":"In Progress"}),
+              (0,P.jsxs)("span",{className:"text-slate-500",children:[resources.filter(res=>completedResources[res.id]).length, " of ", resources.length, " Modules Finished"]})
+            ]}),
+            (0,P.jsx)("div",{className:"w-full bg-slate-100 h-2.5 rounded-full overflow-hidden",children:(0,P.jsx)("div",{className:"bg-blue-600 h-full rounded-full transition-all duration-300",style:{width: (resources.length > 0 ? (resources.filter(res=>completedResources[res.id]).length / resources.length) * 100 : 0) + "%"}})})
+          ]}),
+          (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-3",children:[
+            (0,P.jsx)("h3",{className:"text-xs font-bold text-slate-400 uppercase tracking-wide",children:"COURSE SUMMARY & OBJECTIVES"}),
+            (0,P.jsx)("p",{className:"text-xs text-slate-600 leading-relaxed",children:c.learningObjectives || "Master comprehensive workflows, key competencies, and practical execution techniques across the enterprise platform."})
+          ]}),
+          (0,P.jsxs)("div",{className:"flex justify-end pt-2",children:[
+            (0,P.jsx)("button",{onClick:()=>r("resources"),className:"bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs font-bold shadow-sm transition-colors",children:"Proceed to Learning Resources →"})
+          ]})
         ]}),
-        (0,P.jsx)("div",{className:"w-full bg-slate-100 h-2.5 rounded-full overflow-hidden",children:(0,P.jsx)("div",{className:"bg-blue-600 h-full rounded-full transition-all duration-300",style:{width: (resources.length > 0 ? (resources.filter(res=>completedResources[res.id]).length / resources.length) * 100 : 0) + "%"}})})
-      ]}),
-      (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-3",children:[
-        (0,P.jsx)("h3",{className:"text-xs font-bold text-slate-400 uppercase tracking-wide",children:"COURSE SUMMARY & OBJECTIVES"}),
-        (0,P.jsx)("p",{className:"text-xs text-slate-600 leading-relaxed",children:c.learningObjectives || "Master comprehensive workflows, key competencies, and practical execution techniques across the enterprise platform."})
-      ]}),
-      (0,P.jsxs)("div",{className:"flex justify-end pt-2",children:[
-        (0,P.jsx)("button",{onClick:()=>r("resources"),className:"bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs font-bold shadow-sm transition-colors",children:"Proceed to Learning Resources →"})
-      ]})
-    ]}),
-
-    // Tab 2: Learning Resources,
 
         // Tab 2: Learning Resources
         n==="resources" && (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4 animate-in fade-in",children:[
-      (0,P.jsxs)("div",{className:"flex items-center justify-between border-b border-slate-100 pb-3",children:[
-        (0,P.jsxs)("div",{children:[
-          (0,P.jsx)("h2",{className:"text-sm font-bold text-slate-900 uppercase tracking-wide",children:"Curriculum Learning Modules"}),
-          (0,P.jsx)("p",{className:"text-xs text-slate-500",children:"You must complete all items marked as Mandatory before the final assessment is unlocked."})
-        ]}),
-        (0,P.jsx)("button",{onClick:()=>{let all={};resources.forEach(res=>all[res.id]=true);setCompletedResources(all);},className:"text-xs font-semibold text-blue-600 hover:text-blue-700 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-200",children:"✓ Mark All Completed"})
-      ]}),
-      (0,P.jsx)("div",{className:"space-y-3",children:resources.map(res=>{
-        let isDone = !!completedResources[res.id];
-        return (0,P.jsxs)("div",{className:"flex flex-col sm:flex-row sm:items-center justify-between p-3.5 rounded-xl border transition-colors " + (isDone?"bg-emerald-50/50 border-emerald-200":"bg-slate-50 border-slate-200"),children:[
-          (0,P.jsxs)("div",{className:"flex items-start gap-3",children:[
-            (0,P.jsx)("button",{onClick:()=>handleToggleResource(res.id),className:"mt-0.5 w-5 h-5 rounded flex items-center justify-center border font-bold text-xs transition-colors " + (isDone?"bg-emerald-600 border-emerald-600 text-white":"bg-white border-slate-300 text-transparent hover:border-blue-500"),children:"✓"}),
+          (0,P.jsxs)("div",{className:"flex items-center justify-between border-b border-slate-100 pb-3",children:[
             (0,P.jsxs)("div",{children:[
-              (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
-                (0,P.jsx)("span",{className:"text-xs font-bold text-slate-900",children:res.title || "Module Lecture"}),
-                res.mandatory !== false && (0,P.jsx)("span",{className:"text-[10px] font-bold text-rose-600 bg-rose-50 border border-rose-200 px-1.5 py-0.5 rounded",children:"Mandatory"})
-              ]}),
-              (0,P.jsxs)("div",{className:"flex items-center gap-3 text-[11px] text-slate-500 mt-0.5",children:[
-                (0,P.jsx)("span",{className:"font-medium",children:res.type || "Video"}),
-                (0,P.jsx)("span",{children:"•"}),
-                (0,P.jsx)("a",{href:res.url,target:"_blank",rel:"noreferrer",className:"text-blue-600 hover:underline",children:res.url || "Open Resource"})
+              (0,P.jsx)("h2",{className:"text-sm font-bold text-slate-900 uppercase tracking-wide",children:"2. Learning Resources & Courseware"}),
+              (0,P.jsx)("p",{className:"text-xs text-slate-500",children:"Review all modules thoroughly. Once complete, proceed to the assessment."})
+            ]}),
+            (0,P.jsxs)("span",{className:"text-xs font-mono font-bold text-slate-600",children:[resources.filter(res=>completedResources[res.id]).length, "/", resources.length, " Modules Finished"]})
+          ]}),
+          (0,P.jsx)("div",{className:"space-y-3",children:resources.map((res, idx)=>(0,P.jsxs)("div",{className:"p-4 rounded-xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 " + (completedResources[res.id]?"bg-emerald-50/40 border-emerald-200":"bg-slate-50 border-slate-200 hover:border-slate-300"),children:[
+            (0,P.jsxs)("div",{className:"flex items-start gap-3",children:[
+              (0,P.jsx)("input",{type:"checkbox",checked:!!completedResources[res.id],onChange:()=>handleToggleResource(res.id),className:"w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 mt-1 cursor-pointer"}),
+              (0,P.jsxs)("div",{children:[
+                (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
+                  (0,P.jsx)("span",{className:"font-bold text-slate-900 text-xs",children:res.title}),
+                  res.mandatory!==false ? (0,P.jsx)("span",{className:"text-[10px] bg-rose-50 text-rose-700 font-bold px-1.5 py-0.5 rounded border border-rose-200",children:"Mandatory"}):null
+                ]}),
+                (0,P.jsxs)("div",{className:"flex items-center gap-3 mt-1 text-[11px] text-slate-500",children:[
+                  (0,P.jsx)("span",{children:res.type}),
+                  (0,P.jsx)("span",{children:"•"}),
+                  (0,P.jsx)("span",{className:"font-mono text-slate-400 truncate max-w-xs",children:res.url})
+                ]})
               ]})
-            ]})
-          ]}),
-          (0,P.jsx)("button",{onClick:()=>handleToggleResource(res.id),className:"mt-2 sm:mt-0 text-xs font-semibold px-3 py-1.5 rounded-lg border transition-colors " + (isDone?"bg-white text-emerald-700 border-emerald-300 hover:bg-emerald-50":"bg-blue-600 text-white border-transparent hover:bg-blue-700"),children:isDone?"Completed ✓":"Mark as Completed"})
-        ]},res.id);
-      })}),
-      (0,P.jsxs)("div",{className:"flex items-center justify-between pt-3 border-t border-slate-100",children:[
-        (0,P.jsx)("button",{onClick:()=>r("overview"),className:"bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 px-4 py-2 rounded-lg text-xs font-semibold shadow-sm",children:"← Previous"}),
-        (0,P.jsx)("button",{onClick:()=>r("assessment"),className:"bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-xs font-bold shadow-sm transition-colors",children:"Next: Assessment →"})
-      ]})
-    ]}),
-
-    // Tab 3: Assessment & Questions,
-
-        // Tab 3: Assessment & Questions
-        n==="assessment" && (0,P.jsxs)("div",{className:"space-y-4 animate-in fade-in",children:[
-      !assessment.enabled ? (0,P.jsxs)("div",{className:"bg-white border border-dashed border-slate-200 rounded-2xl p-12 text-center space-y-3",children:[
-        (0,P.jsx)("div",{className:"text-3xl",children:"📝"}),
-        (0,P.jsx)("h3",{className:"text-base font-bold text-slate-900",children:"No Assessment Required"}),
-        (0,P.jsx)("p",{className:"text-xs text-slate-500 max-w-md mx-auto",children:"This training programme does not include a graded quiz. Complete all mandatory learning resources and submit your completion remarks."}),
-        (0,P.jsx)("button",{onClick:()=>r("submission"),className:"bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs font-bold mt-2",children:"Mark Course as Completed ✓"})
-      ]}):
-      !mandatoryCompleted ? (0,P.jsxs)("div",{className:"bg-white border border-amber-200 rounded-2xl p-10 text-center space-y-4 shadow-sm",children:[
-        (0,P.jsx)("div",{className:"w-12 h-12 bg-amber-50 text-amber-600 rounded-full flex items-center justify-center text-xl mx-auto shadow-inner",children:"🔒"}),
-        (0,P.jsx)("h3",{className:"text-base font-bold text-slate-900",children:"Assessment Locked"}),
-        (0,P.jsx)("p",{className:"text-xs text-slate-600 max-w-md mx-auto leading-relaxed",children:"You must complete all mandatory learning resources before you can start this assessment. Please navigate back to Learning Resources and mark mandatory items as complete."}),
-        (0,P.jsx)("button",{onClick:()=>r("resources"),className:"bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-xs font-bold shadow-sm transition-colors",children:"← Go to Learning Resources"})
-      ]}):
-      testState==="intro" ? (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-6",children:[
-        (0,P.jsxs)("div",{className:"border-b border-slate-100 pb-4 space-y-1",children:[
-          (0,P.jsx)("span",{className:"bg-blue-50 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded",children:"Formal Assessment"}),
-          (0,P.jsx)("h2",{className:"text-xl font-bold text-slate-900 tracking-tight",children:assessment.title || "Final Training Assessment"}),
-          (0,P.jsx)("p",{className:"text-xs text-slate-500",children:assessment.description || "Complete the following questions to evaluate your understanding of this training."})
-        ]}),
-        (0,P.jsxs)("div",{className:"grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-slate-50 rounded-xl text-xs",children:[
-          (0,P.jsxs)("div",{children:[
-            (0,P.jsx)("span",{className:"text-slate-400 block",children:"Total Questions"}),
-            (0,P.jsx)("span",{className:"text-base font-bold text-slate-900",children:questions.length})
-          ]}),
-          (0,P.jsxs)("div",{children:[
-            (0,P.jsx)("span",{className:"text-slate-400 block",children:"Total Marks"}),
-            (0,P.jsx)("span",{className:"text-base font-bold text-slate-900",children:totalAssessmentMarks})
-          ]}),
-          (0,P.jsxs)("div",{children:[
-            (0,P.jsx)("span",{className:"text-slate-400 block",children:"Passing Score"}),
-            (0,P.jsxs)("span",{className:"text-base font-bold text-blue-600",children:["> ", passingScore, "%"]}),
-            (0,P.jsx)("span",{className:"text-[10px] text-slate-400 block",children:"Strictly above 80% to pass"})
-          ]}),
-          (0,P.jsxs)("div",{children:[
-            (0,P.jsx)("span",{className:"text-slate-400 block",children:"Attempts"}),
-            (0,P.jsxs)("span",{className:"text-base font-bold " + (hasAttemptsRemaining?"text-slate-900":"text-rose-600"),children:[attemptsUsed, " / ", maxAttempts]}),
-            (0,P.jsxs)("span",{className:"text-[10px] text-slate-400 block",children:[maxAttempts - attemptsUsed, " remaining"]})
-          ]})
-        ]}),
-        !hasAttemptsRemaining ? (0,P.jsxs)("div",{className:"bg-rose-50 border border-rose-200 rounded-xl p-4 text-xs text-rose-700 space-y-1",children:[
-          (0,P.jsx)("div",{className:"font-bold",children:"Maximum Attempts Exceeded"}),
-          (0,P.jsx)("div",{children:"You have exhausted all configured assessment attempts. Please contact your Reporting Manager or HR Administrator for additional assistance or to request an attempt reset."})
-        ]}):
-        (0,P.jsxs)("div",{className:"flex items-center justify-between pt-2",children:[
-          (0,P.jsx)("button",{onClick:()=>r("resources"),className:"bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 px-4 py-2 rounded-lg text-xs font-semibold shadow-sm",children:"← Review Resources"}),
-          (0,P.jsxs)("button",{onClick:startAssessment,className:"bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg text-xs font-bold shadow-sm transition-colors flex items-center gap-2",children:[
-            (0,P.jsx)("span",{children:"Start Assessment"}),
-            (0,P.jsx)("span",{children:"→"})
-          ]})
-        ]}),
-
-        // Attempts History
-        attemptHistory.length > 0 && (0,P.jsxs)("div",{className:"space-y-2 pt-4 border-t border-slate-100 text-xs",children:[
-          (0,P.jsx)("h3",{className:"font-bold text-slate-900 uppercase tracking-wide text-[11px]",children:"Past Assessment Attempts"}),
-          (0,P.jsx)("div",{className:"space-y-1.5",children:attemptHistory.map(att=>(0,P.jsxs)("div",{className:"flex items-center justify-between p-2.5 bg-slate-50 rounded-lg border border-slate-200",children:[
-            (0,P.jsxs)("span",{className:"font-semibold text-slate-800",children:["Attempt ", att.attempt, " • ", att.date]}),
-            (0,P.jsxs)("span",{className:"text-slate-600",children:["Score: ", att.scorePercentage, "% (", att.earnedMarks, "/", att.totalMarks, " Marks)"]}),
-            (0,P.jsx)("span",{className:"font-bold px-2 py-0.5 rounded text-[10px] " + (att.status==="Passed"?"bg-emerald-100 text-emerald-800":(att.status==="Pending Review"?"bg-amber-100 text-amber-800":"bg-rose-100 text-rose-800")),children:att.status})
-          ]},att.attempt))})
-        ]})
-      ]}) :
-      (testState==="test" && activeQuestion) ? (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-5",children:[
-        // Test Header Tracker
-        (0,P.jsxs)("div",{className:"flex items-center justify-between border-b border-slate-100 pb-3",children:[
-          (0,P.jsxs)("div",{children:[
-            (0,P.jsx)("span",{className:"text-xs font-bold text-blue-600 uppercase tracking-wide",children:assessment.title || "Assessment"}),
-            (0,P.jsxs)("h3",{className:"text-sm font-bold text-slate-900",children:["Question ", activeQIndex + 1, " of ", questions.length]})
-          ]}),
-          (0,P.jsxs)("span",{className:"bg-slate-100 text-slate-700 px-2.5 py-1 rounded-md text-xs font-semibold",children:["Attempt ", attemptsUsed + 1, " of ", maxAttempts]})
-        ]}),
-        // Progress Bar
-        (0,P.jsx)("div",{className:"w-full bg-slate-100 h-2 rounded-full overflow-hidden",children:(0,P.jsx)("div",{className:"bg-blue-600 h-full rounded-full transition-all duration-200",style:{width: ((activeQIndex + 1) / questions.length) * 100 + "%"}})}),
-
-        // Active Question
-        (0,P.jsxs)("div",{className:"space-y-4 py-2",children:[
-          (0,P.jsxs)("div",{className:"flex items-center justify-between",children:[
-            (0,P.jsxs)("span",{className:"text-xs font-bold bg-blue-50 text-blue-700 px-2.5 py-0.5 rounded",children:["Question ", activeQIndex + 1]}),
-            (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
-              (0,P.jsxs)("span",{className:"text-xs font-semibold text-slate-500",children:[activeQuestion.marks || 1, " Marks"]}),
-              activeQuestion.mandatory && (0,P.jsx)("span",{className:"text-[10px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded",children:"Mandatory"})
-            ]})
-          ]}),
-          (0,P.jsx)("h2",{className:"text-sm font-semibold text-slate-900 leading-snug",children:activeQuestion.text}),
-
-          // Inputs by Type
-          activeQuestion.type==="short_text" && (0,P.jsx)("input",{type:"text",value:userAnswers[activeQuestion.id]||"",onChange:e=>handleSelectAnswer(activeQuestion.id, e.target.value),placeholder:"Type your answer here...",className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2.5 text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"}),
-
-          activeQuestion.type==="long_text" && (0,P.jsx)("textarea",{rows:4,value:userAnswers[activeQuestion.id]||"",onChange:e=>handleSelectAnswer(activeQuestion.id, e.target.value),placeholder:"Provide your detailed explanation or answer...",className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2.5 text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"}),
-
-          activeQuestion.type==="single_choice" && (0,P.jsx)("div",{className:"space-y-2",children:(activeQuestion.options||[]).map(opt=>(0,P.jsxs)("label",{className:"flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors " + (userAnswers[activeQuestion.id]===opt.id?"bg-blue-50/60 border-blue-300 text-blue-900 font-semibold":"bg-slate-50/50 border-slate-200 hover:bg-slate-50 text-slate-700"),children:[
-            (0,P.jsx)("input",{type:"radio",name:"test-radio-" + activeQuestion.id,checked:userAnswers[activeQuestion.id]===opt.id,onChange:()=>handleSelectAnswer(activeQuestion.id, opt.id),className:"w-4 h-4 text-blue-600"}),
-            (0,P.jsx)("span",{className:"text-xs",children:opt.text})
-          ]},opt.id))}),
-
-          activeQuestion.type==="multiple_choice" && (0,P.jsx)("div",{className:"space-y-2",children:(activeQuestion.options||[]).map(opt=>{
-            let checked = Array.isArray(userAnswers[activeQuestion.id]) && userAnswers[activeQuestion.id].includes(opt.id);
-            return (0,P.jsxs)("label",{className:"flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors " + (checked?"bg-blue-50/60 border-blue-300 text-blue-900 font-semibold":"bg-slate-50/50 border-slate-200 hover:bg-slate-50 text-slate-700"),children:[
-              (0,P.jsx)("input",{type:"checkbox",checked:checked,onChange:()=>handleToggleMultiChoice(activeQuestion.id, opt.id),className:"w-4 h-4 text-blue-600 rounded"}),
-              (0,P.jsx)("span",{className:"text-xs",children:opt.text})
-            ]},opt.id);
-          })}),
-
-          activeQuestion.type==="dropdown" && (0,P.jsxs)("select",{value:userAnswers[activeQuestion.id]||"",onChange:e=>handleSelectAnswer(activeQuestion.id, e.target.value),className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500",children:[
-            (0,P.jsx)("option",{value:"",children:"-- Select an Option --"}),
-            (activeQuestion.options||[]).map(opt=>(0,P.jsx)("option",{value:opt.id,children:opt.text},opt.id))
-          ]}),
-
-          activeQuestion.type==="true_false" && (0,P.jsxs)("div",{className:"grid grid-cols-2 gap-3",children:[
-            (0,P.jsxs)("label",{className:"flex items-center justify-center gap-2 p-3 rounded-lg border cursor-pointer text-xs font-bold transition-colors " + (userAnswers[activeQuestion.id]==="True"?"bg-blue-50 border-blue-400 text-blue-700":"bg-slate-50 border-slate-200 hover:bg-slate-100"),children:[
-              (0,P.jsx)("input",{type:"radio",name:"test-tf-" + activeQuestion.id,checked:userAnswers[activeQuestion.id]==="True",onChange:()=>handleSelectAnswer(activeQuestion.id, "True"),className:"w-4 h-4 text-blue-600"}),
-              (0,P.jsx)("span",{children:"True"})
             ]}),
-            (0,P.jsxs)("label",{className:"flex items-center justify-center gap-2 p-3 rounded-lg border cursor-pointer text-xs font-bold transition-colors " + (userAnswers[activeQuestion.id]==="False"?"bg-blue-50 border-blue-400 text-blue-700":"bg-slate-50 border-slate-200 hover:bg-slate-100"),children:[
-              (0,P.jsx)("input",{type:"radio",name:"test-tf-" + activeQuestion.id,checked:userAnswers[activeQuestion.id]==="False",onChange:()=>handleSelectAnswer(activeQuestion.id, "False"),className:"w-4 h-4 text-blue-600"}),
-              (0,P.jsx)("span",{children:"False"})
+            (0,P.jsxs)("div",{className:"flex items-center gap-2 shrink-0 self-end sm:self-center",children:[
+              (0,P.jsx)("a",{href:"https://" + (res.url||"").replace(/^https?:\/\//,""),target:"_blank",rel:"noreferrer",className:"px-3 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-blue-600 text-xs font-semibold rounded-lg shadow-2xs transition-colors inline-flex items-center gap-1",children:["Open Resource", (0,P.jsx)("span",{children:"↗"})]}),
+              (0,P.jsx)("button",{onClick:()=>handleToggleResource(res.id),className:"px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors " + (completedResources[res.id]?"bg-emerald-100 text-emerald-800":"bg-blue-50 text-blue-700 hover:bg-blue-100"),children:completedResources[res.id]?"Completed ✓":"Mark as Done"})
+            ]})
+          ]},res.id))}),
+          (0,P.jsxs)("div",{className:"flex items-center justify-between pt-3 border-t border-slate-100",children:[
+            (0,P.jsx)("button",{onClick:()=>r("overview"),className:"bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 px-4 py-2 rounded-lg text-xs font-semibold shadow-sm",children:"← Overview"}),
+            (0,P.jsx)("button",{onClick:()=>r("assessment"),className:"bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-xs font-bold shadow-sm transition-colors",children:"Proceed to Assessment →"})
+          ]})
+        ]}),
+
+        // Tab 3: Assessment & Questions (Configured questions directly visible!)
+        n==="assessment" && (0,P.jsxs)("div",{className:"space-y-6 animate-in fade-in",children:[
+          // Header Card
+          (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-3",children:[
+            (0,P.jsxs)("div",{className:"flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3",children:[
+              (0,P.jsxs)("div",{children:[
+                (0,P.jsx)("h2",{className:"text-base font-bold text-slate-900 tracking-tight",children:assessment.title || "Final Training Assessment"}),
+                (0,P.jsx)("p",{className:"text-xs text-slate-500 mt-0.5",children:assessment.description || "Complete the following questions to evaluate your understanding of this training."})
+              ]}),
+              (0,P.jsxs)("span",{className:"bg-blue-50 text-blue-700 border border-blue-200 font-bold px-2.5 py-1 rounded-lg text-xs self-start",children:[questions.length, " Questions • ", totalAssessmentMarks, " Marks"]})
+            ]}),
+            (0,P.jsxs)("div",{className:"flex flex-wrap items-center gap-4 text-xs text-slate-600",children:[
+              (0,P.jsxs)("span",{children:[(0,P.jsx)("strong",{children:"Passing Criteria:"}), " Strictly > ", passingScore, "% to pass"]}),
+              (0,P.jsx)("span",{children:"•"}),
+              (0,P.jsxs)("span",{children:[(0,P.jsx)("strong",{children:"Attempts:"}), " ", maxAttempts - attemptsUsed, " of ", maxAttempts, " remaining"]})
+            ]})
+          ]}),
+
+          // Result Card if Submitted
+          submittedState && latestResult ? (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-6 animate-in fade-in",children:[
+            latestResult.isPassed ? (0,P.jsxs)("div",{className:"bg-emerald-50 border border-emerald-200 rounded-xl p-6 text-center space-y-3",children:[
+              (0,P.jsx)("div",{className:"text-4xl",children:"🎉"}),
+              (0,P.jsx)("h2",{className:"text-lg font-bold text-emerald-900",children:"Assessment Passed Successfully!"}),
+              (0,P.jsxs)("div",{className:"text-3xl font-black text-emerald-700 tabular-nums",children:[latestResult.scorePercentage, "%"]}),
+              (0,P.jsxs)("p",{className:"text-xs text-emerald-800 leading-relaxed",children:[
+                "You scored ", (0,P.jsx)("strong",{children:[latestResult.earnedMarks, " / ", latestResult.totalMarks, " marks"]}),
+                " (Passing requirement is strictly above ", passingScore, "%). Your training has been verified and your Certificate of Completion is ready!"
+              ]}),
+              (0,P.jsxs)("div",{className:"p-4 bg-white/80 border border-emerald-200 rounded-xl max-w-md mx-auto space-y-2 mt-4",children:[
+                (0,P.jsxs)("div",{className:"flex items-center justify-between text-xs",children:[
+                  (0,P.jsx)("span",{className:"font-bold text-slate-800",children:"Certificate Credential:"}),
+                  (0,P.jsx)("span",{className:"font-mono font-bold text-emerald-700",children:"TRN-2026-0032"})
+                ]}),
+                (0,P.jsxs)("div",{className:"flex items-center justify-between text-xs",children:[
+                  (0,P.jsx)("span",{className:"text-slate-500",children:"Status:"}),
+                  (0,P.jsx)("span",{className:"font-bold text-emerald-700",children:"Verified & Completed ✓"})
+                ]})
+              ]}),
+              (0,P.jsxs)("div",{className:"flex items-center justify-center gap-3 pt-3",children:[
+                (0,P.jsx)("button",{onClick:()=>alert("Downloading Certificate PDF for " + c.name + "..."),className:"bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg text-xs font-bold shadow-sm transition-colors",children:"Download Certificate PDF 🎓"}),
+                (0,P.jsx)("button",{onClick:()=>{setIsSubmitted(true);alert("Course marked as Completed!");},disabled:isSubmitted,className:"bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-300 text-white px-5 py-2.5 rounded-lg text-xs font-bold shadow-sm transition-colors",children:isSubmitted?"Course Completed ✓":"Mark as Completed ✓"})
+              ]})
+            ]}):
+            (0,P.jsxs)("div",{className:"bg-rose-50 border border-rose-200 rounded-xl p-6 text-center space-y-3",children:[
+              (0,P.jsx)("div",{className:"text-4xl",children:"❌"}),
+              (0,P.jsx)("h2",{className:"text-lg font-bold text-rose-900",children:"Assessment Not Passed"}),
+              (0,P.jsxs)("div",{className:"text-3xl font-black text-rose-700 tabular-nums",children:[latestResult.scorePercentage, "%"]}),
+              (0,P.jsxs)("p",{className:"text-xs text-rose-800",children:[
+                "You scored ", latestResult.earnedMarks, " out of ", latestResult.totalMarks, " marks. The passing threshold is strictly greater than ", passingScore, "%."
+              ]}),
+              hasAttemptsRemaining ? (0,P.jsxs)("div",{className:"pt-3 space-y-2",children:[
+                (0,P.jsxs)("p",{className:"text-xs text-slate-600",children:["You have ", maxAttempts - attemptsUsed, " attempt(s) remaining."]}),
+                (0,P.jsx)("button",{onClick:retakeAssessment,className:"bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg text-xs font-bold shadow-sm transition-colors",children:"Retake Assessment ↺"})
+              ]}):
+              (0,P.jsx)("p",{className:"text-xs text-rose-600 font-bold",children:"Maximum attempts exceeded. Please contact your reporting manager."})
+            ]})
+          ]}) :
+          // Questions Form (Always directly rendered!)
+          (0,P.jsxs)("div",{className:"space-y-4",children:[
+            questions.map((q, idx)=>(0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-3.5",children:[
+              (0,P.jsxs)("div",{className:"flex items-center justify-between border-b border-slate-100 pb-2.5",children:[
+                (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
+                  (0,P.jsx)("span",{className:"bg-blue-50 text-blue-700 text-xs font-bold px-2 py-0.5 rounded",children:"Question " + (idx+1)}),
+                  (0,P.jsx)("span",{className:"text-[11px] font-semibold text-slate-500",children:q.marks + " Marks"}),
+                  q.mandatory ? (0,P.jsx)("span",{className:"text-[10px] text-rose-600 font-bold",children:"* Mandatory"}):null
+                ]}),
+                (0,P.jsx)("span",{className:"text-[11px] text-slate-400 capitalize",children:q.type.replace(/_/g, " ")})
+              ]}),
+              (0,P.jsx)("div",{className:"text-xs font-bold text-slate-900 leading-snug",children:q.text}),
+
+              // Dynamic Question Inputs
+              (0,P.jsx)("div",{className:"pt-1 text-xs",children:
+                q.type==="short_text" ? (0,P.jsx)("input",{type:"text",value:userAnswers[q.id]||"",onChange:e=>handleSelectAnswer(q.id, e.target.value),placeholder:"Type your answer here...",className:"w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-xs text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"}):
+
+                q.type==="single_choice" ? (0,P.jsx)("div",{className:"space-y-2",children:(q.options||[]).map(opt=>(0,P.jsxs)("label",{className:"flex items-center gap-2.5 p-2.5 bg-slate-50 border rounded-lg cursor-pointer hover:bg-slate-100/70 transition-colors " + (userAnswers[q.id]===opt.id?"border-blue-500 bg-blue-50/40 font-semibold text-blue-900":"border-slate-200 text-slate-700"),children:[
+                  (0,P.jsx)("input",{type:"radio",name:q.id,checked:userAnswers[q.id]===opt.id,onChange:()=>handleSelectAnswer(q.id, opt.id),className:"w-4 h-4 text-blue-600 focus:ring-blue-500"}),
+                  (0,P.jsx)("span",{className:"text-xs",children:opt.text})
+                ]},opt.id))}):
+
+                q.type==="multiple_choice" ? (0,P.jsx)("div",{className:"space-y-2",children:(q.options||[]).map(opt=>(0,P.jsxs)("label",{className:"flex items-center gap-2.5 p-2.5 bg-slate-50 border rounded-lg cursor-pointer hover:bg-slate-100/70 transition-colors " + ((Array.isArray(userAnswers[q.id])&&userAnswers[q.id].includes(opt.id))?"border-blue-500 bg-blue-50/40 font-semibold text-blue-900":"border-slate-200 text-slate-700"),children:[
+                  (0,P.jsx)("input",{type:"checkbox",checked:Array.isArray(userAnswers[q.id])&&userAnswers[q.id].includes(opt.id),onChange:()=>handleToggleMultiChoice(q.id, opt.id),className:"w-4 h-4 text-blue-600 rounded focus:ring-blue-500"}),
+                  (0,P.jsx)("span",{className:"text-xs",children:opt.text})
+                ]},opt.id))}):
+
+                q.type==="dropdown" ? (0,P.jsxs)("select",{value:userAnswers[q.id]||"",onChange:e=>handleSelectAnswer(q.id, e.target.value),className:"w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-xs text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500",children:[
+                  (0,P.jsx)("option",{value:"",children:"-- Select Answer --"}),
+                  (q.options||[]).map(opt=>(0,P.jsx)("option",{value:opt.id,children:opt.text},opt.id))
+                ]}):
+
+                q.type==="true_false" ? (0,P.jsxs)("div",{className:"flex items-center gap-3",children:[
+                  ["True", "False"].map(tf=>(0,P.jsxs)("label",{className:"flex-1 flex items-center justify-center gap-2 p-3 bg-slate-50 border rounded-lg cursor-pointer hover:bg-slate-100/70 transition-colors " + (userAnswers[q.id]===tf?"border-blue-500 bg-blue-50/50 font-bold text-blue-900":"border-slate-200 text-slate-700"),children:[
+                    (0,P.jsx)("input",{type:"radio",name:q.id,checked:userAnswers[q.id]===tf,onChange:()=>handleSelectAnswer(q.id, tf),className:"w-4 h-4 text-blue-600"}),
+                    (0,P.jsx)("span",{children:tf})
+                  ]},tf))
+                ]}):
+
+                q.type==="long_text" ? (0,P.jsx)("textarea",{rows:3,value:userAnswers[q.id]||"",onChange:e=>handleSelectAnswer(q.id, e.target.value),placeholder:"Type your detailed explanation here...",className:"w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-xs text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"}):
+                null
+              })
+            ]},q.id)),
+
+            // Bottom Submit Button
+            (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex items-center justify-between",children:[
+              (0,P.jsx)("span",{className:"text-xs text-slate-500",children:"Ensure all mandatory questions are answered before submitting."}),
+              (0,P.jsx)("button",{onClick:()=>{
+                if(window.confirm("Are you sure you want to submit your assessment?")){
+                  evaluateAssessment();
+                }
+              },className:"bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2.5 rounded-lg text-xs shadow-sm transition-colors",children:"Submit Assessment for Grading →"})
             ]})
           ]})
-        ]}),
-
-        // Navigation Footer & Quick Palette
-        (0,P.jsxs)("div",{className:"flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-4 border-t border-slate-100",children:[
-          (0,P.jsx)("button",{onClick:()=>setActiveQIndex(prev=>Math.max(0, prev-1)),disabled:activeQIndex===0,className:"bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 px-4 py-2 rounded-lg text-xs font-semibold shadow-sm disabled:opacity-30",children:"← Previous"}),
-          (0,P.jsx)("div",{className:"flex items-center gap-1.5 flex-wrap justify-center",children:questions.map((q, idx)=>{
-            let isAnswered = userAnswers[q.id] !== undefined && userAnswers[q.id] !== "" && (!Array.isArray(userAnswers[q.id]) || userAnswers[q.id].length > 0);
-            return (0,P.jsx)("button",{key:q.id,onClick:()=>setActiveQIndex(idx),className:"w-7 h-7 rounded-lg text-xs font-bold transition-colors " + (idx===activeQIndex?"bg-blue-600 text-white ring-2 ring-blue-600/30":(isAnswered?"bg-emerald-100 text-emerald-800 border border-emerald-300":"bg-slate-100 text-slate-600 hover:bg-slate-200")),children:idx+1});
-          })}),
-          (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
-            activeQIndex < questions.length - 1 ? (0,P.jsx)("button",{onClick:()=>setActiveQIndex(prev=>Math.min(questions.length-1, prev+1)),className:"bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-xs font-bold shadow-sm transition-colors",children:"Next →"}):
-            (0,P.jsx)("button",{onClick:()=>setTestState("review"),className:"bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-lg text-xs font-bold shadow-sm transition-colors",children:"Review & Submit →"})
-          ]})
         ]})
-      ]}) :
-      testState==="review" ? (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-5 animate-in fade-in",children:[
-        (0,P.jsxs)("div",{className:"border-b border-slate-100 pb-3",children:[
-          (0,P.jsx)("h3",{className:"text-base font-bold text-slate-900",children:"Review Answers Before Submission"}),
-          (0,P.jsx)("p",{className:"text-xs text-slate-500",children:"Please check that all mandatory questions are answered. Once submitted, answers cannot be edited."})
-        ]}),
-        (0,P.jsx)("div",{className:"space-y-2.5 max-h-[50vh] overflow-y-auto pr-1 text-xs",children:questions.map((q, idx)=>{
-          let ans = userAnswers[q.id];
-          let answered = ans !== undefined && ans !== "" && (!Array.isArray(ans) || ans.length > 0);
-          return (0,P.jsxs)("div",{className:"p-3 rounded-lg border flex items-center justify-between " + (answered?"bg-slate-50 border-slate-200":"bg-rose-50/60 border-rose-200"),children:[
-            (0,P.jsxs)("div",{className:"space-y-0.5",children:[
-              (0,P.jsxs)("div",{className:"font-bold text-slate-900",children:["Question ", idx+1, ": ", q.text]}),
-              (0,P.jsx)("div",{className:"text-[11px] text-slate-500",children:answered?"Answer provided":"Unanswered"})
-            ]}),
-            (0,P.jsx)("button",{onClick:()=>{setActiveQIndex(idx);setTestState("test");},className:"text-xs text-blue-600 hover:text-blue-800 font-semibold ml-3 whitespace-nowrap",children:"Edit Answer"})
-          ]},q.id);
-        })}),
-        (0,P.jsxs)("div",{className:"flex items-center justify-between pt-3 border-t border-slate-100",children:[
-          (0,P.jsx)("button",{onClick:()=>setTestState("test"),className:"bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 px-4 py-2 rounded-lg text-xs font-semibold shadow-sm",children:"← Back to Test"}),
-          (0,P.jsx)("button",{onClick:confirmAndSubmit,className:"bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg text-xs font-bold shadow-sm transition-colors",children:"Confirm & Submit Assessment"})
-        ]})
-      ]}) :
-      (testState==="result" && latestResult) ? (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-6 animate-in fade-in",children:[
-        latestResult.status==="Passed" ? (0,P.jsxs)("div",{className:"bg-emerald-50 border border-emerald-200 rounded-xl p-6 text-center space-y-2",children:[
-          (0,P.jsx)("div",{className:"text-3xl",children:"🎉"}),
-          (0,P.jsx)("h2",{className:"text-lg font-bold text-emerald-900",children:"Assessment Passed Successfully!"}),
-          (0,P.jsxs)("div",{className:"text-2xl font-black text-emerald-700",children:[latestResult.scorePercentage, "%"]}),
-          (0,P.jsxs)("p",{className:"text-xs text-emerald-800",children:["You achieved ", latestResult.earnedMarks, " out of ", latestResult.totalMarks, " marks (required: strictly above ", latestResult.passingScore, "%)."]}),
-          (0,P.jsx)("p",{className:"text-[11px] text-emerald-700 font-medium",children:"You have fulfilled the assessment criteria for this training programme."})
-        ]}):
-        latestResult.status==="Pending Review" ? (0,P.jsxs)("div",{className:"bg-amber-50 border border-amber-200 rounded-xl p-6 text-center space-y-2",children:[
-          (0,P.jsx)("div",{className:"text-3xl",children:"⏳"}),
-          (0,P.jsx)("h2",{className:"text-lg font-bold text-amber-900",children:"Assessment Submitted — Pending Review"}),
-          (0,P.jsxs)("div",{className:"text-2xl font-black text-amber-700",children:[latestResult.scorePercentage, "%"]}),
-          (0,P.jsx)("p",{className:"text-xs text-amber-800",children:"This assessment contains subjective questions requiring reviewer grading. Your score will be updated once reviewed."})
-        ]}):
-        (0,P.jsxs)("div",{className:"bg-rose-50 border border-rose-200 rounded-xl p-6 text-center space-y-2",children:[
-          (0,P.jsx)("div",{className:"text-3xl",children:"❌"}),
-          (0,P.jsx)("h2",{className:"text-lg font-bold text-rose-900",children:"Assessment Not Passed"}),
-          (0,P.jsxs)("div",{className:"text-2xl font-black text-rose-700",children:[latestResult.scorePercentage, "%"]}),
-          (0,P.jsxs)("p",{className:"text-xs text-rose-800",children:["You achieved ", latestResult.earnedMarks, " out of ", latestResult.totalMarks, " marks. Passing threshold is strictly above ", latestResult.passingScore, "%."]}),
-          (0,P.jsxs)("p",{className:"text-[11px] text-rose-700 font-semibold",children:["Attempts used: ", attemptsUsed, " of ", maxAttempts, " (", maxAttempts - attemptsUsed, " remaining)"]})
-        ]}),
-
-        (0,P.jsxs)("div",{className:"flex items-center justify-between pt-2 border-t border-slate-100",children:[
-          (0,P.jsx)("button",{onClick:()=>r("resources"),className:"bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 px-4 py-2 rounded-lg text-xs font-semibold shadow-sm",children:"← Learn Again"}),
-          (0,P.jsxs)("div",{className:"flex items-center gap-3",children:[
-            latestResult.status==="Failed" && hasAttemptsRemaining && (0,P.jsx)("button",{onClick:startAssessment,className:"bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-xs font-bold shadow-sm transition-colors",children:"Retake Assessment"}),
-            (latestResult.status==="Passed" || latestResult.status==="Pending Review") && (0,P.jsxs)("div",{className:"flex items-center gap-2.5",children:[(0,P.jsx)("button",{onClick:()=>alert("Downloading Certificate PDF for " + c.name + "..."),className:"bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs font-bold shadow-sm transition-colors",children:"Download Certificate PDF 🎓"}),(0,P.jsx)("button",{onClick:()=>{setIsSubmitted(true);alert("Course marked as Completed! Your certificate is saved to your profile.");},disabled:isSubmitted,className:"bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-300 text-white px-4 py-2 rounded-lg text-xs font-bold shadow-sm transition-colors",children:isSubmitted?"Course Completed ✓":"Mark as Completed ✓"})]})
-          ]})
-        ]}),
-
-        (0,P.jsx)("p",{className:"text-[11px] text-slate-400 text-center",children:"* Correct answers are securely maintained and never disclosed to ensure test integrity."})
-      ]}) :
-      null
-    ]}),
-
-    // Tab 4: Submission & Feedback
       ]})
     ]})
   ]});
