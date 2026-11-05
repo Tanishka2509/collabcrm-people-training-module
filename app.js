@@ -16350,10 +16350,10 @@ function autoFillProgramFormModal() {
   if (diffInput) diffInput.value = 'Intermediate';
 
   const durInput = document.getElementById('progDurationInput');
-  if (durInput) durInput.value = '4';
+  if (durInput) durInput.value = '6';
 
   const scoreInput = document.getElementById('progPassScoreInput');
-  if (scoreInput) scoreInput.value = '80';
+  if (scoreInput) scoreInput.value = '85';
 
   const objInput = document.getElementById('progObjectivesInput');
   if (objInput) objInput.value = 'Master enterprise microservices architecture, OAuth2 token isolation, zero-trust perimeter defense, and automated compliance auditing.';
@@ -16371,7 +16371,7 @@ function autoFillProgramFormModal() {
   if (attemptsInput) attemptsInput.value = '3';
 
   const expiryInput = document.getElementById('progCertExpiryMonthsInput');
-  if (expiryInput) expiryInput.value = '24';
+  if (expiryInput) expiryInput.value = '36';
 
   const reminderInput = document.getElementById('progReminderFreqDaysInput');
   if (reminderInput) reminderInput.value = '7';
@@ -16388,7 +16388,7 @@ function autoFillProgramFormModal() {
   const certEnEl = document.getElementById('progCertEnabledInput');
   if (certEnEl) certEnEl.checked = true;
 
-  // Add sample resources matching screenshot 2
+  // Add sample resources matching AI Studio exactly
   const container = document.getElementById('resourceRowsContainer');
   if (container) {
     container.innerHTML = '';
@@ -16406,7 +16406,7 @@ function autoFillProgramFormModal() {
     });
   }
 
-  showConfigToast('⚡ Programme form auto-filled with sample architecture curriculum!');
+  showConfigToast('⚡ Programme form auto-filled from Google AI Studio curriculum!');
 }
 
 // Add New Employee Modal handlers
@@ -16485,7 +16485,6 @@ function handleNewEmployeeSubmit(e) {
   closeNewEmployeeModal();
   showConfigToast(`Employee "${fullName}" successfully registered!`, 'success');
 
-  // Update total counts
   const countBadge = document.getElementById('totalEmployeesBadge');
   if (countBadge) countBadge.textContent = state.employees.length;
 
@@ -16493,8 +16492,6 @@ function handleNewEmployeeSubmit(e) {
     renderEmployeesTable();
   }
 }
-
-// Window bindings
 window.openAssignmentDetail = openAssignmentDetail;
 window.closeAssignmentDetailScreen = closeAssignmentDetailScreen;
 window.evaluateCurrentAssignmentFromDetail = evaluateCurrentAssignmentFromDetail;
