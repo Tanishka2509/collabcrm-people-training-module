@@ -446,7 +446,7 @@
                   <span class="emp-count-badge">1 - 10 of 141 Employees</span>
                 </div>
                 <div class="emp-actions-area">
-                  <button type="button" class="emp-btn-primary" onclick="showConfigToast('Add Employee: Please configure new hire under People Admin Settings.', 'info')">
+                  <button type="button" class="emp-btn-primary" onclick="openNewEmployeeModal()">
                     <span>Add Employee</span>
                     <span class="emp-btn-divider"></span>
                     <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
@@ -1841,6 +1841,9 @@
                     <p style="font-size: 12px; color: #64748b; margin: 2px 0 0 0;">Configure curriculum details, per-programme enrollment limits, compliance rules, and learning resources.</p>
                   </div>
                   <div style="display: flex; align-items: center; gap: 8px;">
+                    <button type="button" onclick="autoFillProgramFormModal()" style="display: inline-flex; align-items: center; gap: 5px; background: #fef3c7; color: #92400e; border: 1px solid #fde68a; padding: 7px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer;" title="Auto-fill sample programme details">
+                      <span>⚡ Auto-Fill</span>
+                    </button>
                     <button type="button" class="btn-secondary-action" onclick="closeProgramModal()">Cancel</button>
                     <!-- Split Dropdown: Publish Programme with Arrow Icon for Save as Draft (Matching Screenshot 4) -->
                     <div style="position: relative; display: inline-flex;" class="publish-split-btn-group">
@@ -2032,6 +2035,9 @@
                     </div>
                   </div>
                   <div style="display: flex; align-items: center; gap: 8px;">
+                    <button type="button" onclick="autoFillAssignTrainingModal()" style="display: inline-flex; align-items: center; gap: 5px; background: #fef3c7; color: #92400e; border: 1px solid #fde68a; padding: 7px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer;" title="Auto-fill default assignment parameters">
+                      <span>⚡ Auto-Fill</span>
+                    </button>
                     <button type="button" class="btn-secondary-action" onclick="closeAssignTrainingModal()">Cancel</button>
                     <button type="button" class="btn-primary-action" id="btnConfirmAssign" onclick="confirmTrainingAssignment()">Confirm &amp; Assign</button>
                   </div>
@@ -2252,6 +2258,107 @@
                   <div style="display: flex; align-items: center; gap: 10px;">
                     <button type="button" class="btn-primary-action" onclick="submitDelegateReviewer()">Save Reviewer Delegation</button>
                     <button type="button" class="btn-secondary-action" onclick="closeDelegateReviewerScreen()">Cancel</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- IN-SCREEN ASSIGNMENT DETAIL SCREEN (Matching Studio App ot component) -->
+              <div id="sectionAssignmentDetailScreen" style="display: none; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); overflow: hidden; margin-top: 14px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 22px; border-bottom: 1px solid #e2e8f0; background: #ffffff; flex-wrap: wrap; gap: 12px;">
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <button type="button" class="btn-table-action" onclick="closeAssignmentDetailScreen()" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-size: 12.5px; border-radius: 6px; background: #ffffff; border: 1px solid #cbd5e1; color: #334155; cursor: pointer;">
+                      ← Back to Assignments
+                    </button>
+                    <span id="asnDetailHeaderTitle" style="font-size: 15px; font-weight: 700; color: #0f172a;">Assignment Details</span>
+                  </div>
+                  <div id="asnDetailHeaderActions" style="display: flex; align-items: center; gap: 10px;">
+                    <button type="button" class="btn-primary-action" id="btnAsnDetailEvaluate" onclick="evaluateCurrentAssignmentFromDetail()" style="background: #2563eb; color: #ffffff; padding: 7px 16px; font-size: 12.5px; font-weight: 600; border-radius: 6px; cursor: pointer;">
+                      Evaluate Submission
+                    </button>
+                  </div>
+                </div>
+
+                <div style="padding: 24px; background: #f8fafc;">
+                  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; align-items: flex-start;">
+                    <!-- Col 1: Employee & Assignment Meta Card -->
+                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 22px; display: flex; flex-direction: column; gap: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                      <div style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #f1f5f9; padding-bottom: 14px;">
+                        <div id="asnDetailEmpAvatar" style="width: 46px; height: 46px; border-radius: 50%; background: #dbeafe; color: #1d4ed8; font-weight: 700; font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                          T
+                        </div>
+                        <div>
+                          <h3 id="asnDetailEmpName" style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0;">Tanya Kapoor</h3>
+                          <p id="asnDetailEmpRole" style="font-size: 12px; color: #64748b; margin: 2px 0 0 0;">Business Analyst • Business analyst</p>
+                        </div>
+                      </div>
+
+                      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; font-size: 12px;">
+                        <div>
+                          <span style="color: #94a3b8; font-weight: 600; text-transform: uppercase; font-size: 10.5px; letter-spacing: 0.04em;">Assignment ID</span>
+                          <div id="asnDetailIdText" style="font-family: monospace; font-weight: 700; color: #7c3aed; margin-top: 3px; font-size: 13px;">TRN-ASSIGN-101</div>
+                        </div>
+                        <div>
+                          <span style="color: #94a3b8; font-weight: 600; text-transform: uppercase; font-size: 10.5px; letter-spacing: 0.04em;">Assignment Type</span>
+                          <div id="asnDetailTypeText" style="font-weight: 600; color: #0f172a; margin-top: 3px;">Mandatory</div>
+                        </div>
+                        <div>
+                          <span style="color: #94a3b8; font-weight: 600; text-transform: uppercase; font-size: 10.5px; letter-spacing: 0.04em;">Assigned Date</span>
+                          <div id="asnDetailAssignedDateText" style="font-weight: 600; color: #0f172a; margin-top: 3px;">12-Jan-2026</div>
+                        </div>
+                        <div>
+                          <span style="color: #94a3b8; font-weight: 600; text-transform: uppercase; font-size: 10.5px; letter-spacing: 0.04em;">Due Date</span>
+                          <div id="asnDetailDueDateText" style="font-weight: 600; color: #0f172a; margin-top: 3px;">15-Mar-2026</div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <span style="color: #94a3b8; font-weight: 600; text-transform: uppercase; font-size: 10.5px; letter-spacing: 0.04em; display: block; margin-bottom: 4px;">Current Status</span>
+                        <div id="asnDetailStatusBadgeContainer"></div>
+                      </div>
+                    </div>
+
+                    <!-- Col 2: Programme & Curriculum Details Card -->
+                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 22px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                      <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <h4 style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin: 0;">Programme &amp; Curriculum Details</h4>
+                        <span id="asnDetailProgLevelBadge" style="font-size: 11px; font-weight: 600; color: #2563eb; background: #eff6ff; padding: 2px 8px; border-radius: 4px;">Intermediate • 4 hrs</span>
+                      </div>
+                      <h3 id="asnDetailProgTitle" style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0;">API Security &amp; OAuth2 Best Practices</h3>
+                      <p id="asnDetailProgDesc" style="font-size: 12.5px; color: #475569; line-height: 1.5; margin: 0;">Master token-based authentication, RBAC scopes, OAuth2 grant types, and API rate limiting in CollabCRM architecture.</p>
+
+                      <div style="border-top: 1px solid #f1f5f9; padding-top: 12px;">
+                        <span style="font-size: 11.5px; font-weight: 700; color: #334155; display: block; margin-bottom: 8px;">Required Learning Resources:</span>
+                        <div id="asnDetailResourcesList" style="display: flex; flex-direction: column; gap: 8px;"></div>
+                      </div>
+                    </div>
+
+                    <!-- Col 3: Milestone Progress & Evidence Card -->
+                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 22px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                      <h4 style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin: 0;">Milestone Progress &amp; Evidence</h4>
+                      
+                      <div>
+                        <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 6px;">
+                          <span style="color: #334155;">Overall Course Progress</span>
+                          <span id="asnDetailProgressPercentText" style="font-weight: 700; color: #0f172a;">100%</span>
+                        </div>
+                        <div style="width: 100%; background: #f1f5f9; height: 8px; border-radius: 4px; overflow: hidden;">
+                          <div id="asnDetailProgressBarFill" style="background: #10b981; height: 100%; border-radius: 4px; width: 100%; transition: width 0.3s ease;"></div>
+                        </div>
+                      </div>
+
+                      <div style="padding: 12px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; font-size: 12px;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                          <span style="font-size: 16px;">📜</span>
+                          <span id="asnDetailCertBadgeText" style="font-weight: 600; color: #334155;">Certificate: TRN-2026-0032</span>
+                        </div>
+                        <button type="button" id="btnAsnDetailDownloadCert" onclick="downloadEmployeeCertificate()" style="color: #2563eb; font-weight: 700; background: none; border: none; cursor: pointer; text-decoration: none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Download PDF ↗</button>
+                      </div>
+
+                      <div id="asnDetailRemarksBox" style="padding: 12px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 12px; color: #475569;">
+                        <span style="font-size: 10.5px; font-weight: 700; text-transform: uppercase; color: #94a3b8; display: block; margin-bottom: 4px;">Learner Submission Remarks</span>
+                        <span id="asnDetailRemarksText" style="font-style: italic;">No submission remarks submitted.</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -5837,6 +5944,94 @@
         <button type="button" class="btn-table-action" onclick="markAllEmpNotificationsRead()">Mark all as read</button>
         <button type="button" class="btn-primary-action" onclick="closeEmployeeNotificationsDrawer()">Done</button>
       </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: ADD NEW EMPLOYEE (MATCHING STUDIO gt)   -->
+  <!-- ============================================== -->
+  <div id="addEmployeeModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.45); backdrop-filter: blur(2px); z-index: 10005; align-items: center; justify-content: center; padding: 16px;">
+    <div style="background: #ffffff; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); max-width: 520px; width: 100%; overflow: hidden; border: 1px solid #e2e8f0;">
+      <div style="padding: 18px 22px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between; background: #f8fafc;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 32px; height: 32px; border-radius: 8px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 16px;">
+            👤
+          </div>
+          <div>
+            <h2 style="font-size: 16px; font-weight: 700; color: #0f172a; margin: 0;">Add New Employee</h2>
+            <p style="font-size: 11.5px; color: #64748b; margin: 2px 0 0 0;">Create employee profile with credentials, department assignment, and role access.</p>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button type="button" onclick="autoFillNewEmployeeForm()" style="display: inline-flex; align-items: center; gap: 5px; background: #fef3c7; color: #92400e; border: 1px solid #fde68a; padding: 5px 10px; border-radius: 6px; font-size: 11.5px; font-weight: 700; cursor: pointer;" title="Auto-fill sample employee data">
+            <span>⚡ Auto-Fill</span>
+          </button>
+          <button type="button" onclick="closeNewEmployeeModal()" style="background: none; border: none; font-size: 18px; color: #94a3b8; cursor: pointer; padding: 4px;" title="Close">&times;</button>
+        </div>
+      </div>
+
+      <form id="newEmployeeForm" onsubmit="handleNewEmployeeSubmit(event)" style="padding: 22px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div>
+            <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">First Name *</label>
+            <input type="text" id="newEmpFirstName" required placeholder="e.g. Aarav" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; box-sizing: border-box;" />
+          </div>
+          <div>
+            <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Last Name *</label>
+            <input type="text" id="newEmpLastName" required placeholder="e.g. Sharma" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; box-sizing: border-box;" />
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div>
+            <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Company Email *</label>
+            <input type="email" id="newEmpEmail" required placeholder="aarav.sharma@collabcrm.internal" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; box-sizing: border-box;" />
+          </div>
+          <div>
+            <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Contact Mobile</label>
+            <input type="text" id="newEmpMobile" placeholder="+1 9887654321" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; box-sizing: border-box;" />
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div>
+            <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Department</label>
+            <select id="newEmpDepartment" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; background: #fff; box-sizing: border-box;">
+              <option value="IT - Project">IT - Project</option>
+              <option value="Engineering">Engineering</option>
+              <option value="Recruitment & HR">Recruitment &amp; HR</option>
+              <option value="Business analyst">Business analyst</option>
+              <option value="CPA Firms">CPA Firms</option>
+              <option value="Admin">Admin</option>
+            </select>
+          </div>
+          <div>
+            <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Status</label>
+            <select id="newEmpStatus" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; background: #fff; box-sizing: border-box;">
+              <option value="Confirmed">Confirmed</option>
+              <option value="Intern">Intern</option>
+              <option value="Probation">Probation</option>
+              <option value="Notice Period">Notice Period</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div>
+            <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Designation</label>
+            <input type="text" id="newEmpDesignation" placeholder="e.g. Senior Software Engineer" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; box-sizing: border-box;" />
+          </div>
+          <div>
+            <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Reporting Manager</label>
+            <input type="text" id="newEmpReportingTo" placeholder="e.g. Ishdeep Anand" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; box-sizing: border-box;" />
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin-top: 10px; padding-top: 14px; border-top: 1px solid #f1f5f9;">
+          <button type="button" class="btn-secondary-action" onclick="closeNewEmployeeModal()">Cancel</button>
+          <button type="submit" class="btn-primary-action" style="background: #2563eb; color: #ffffff;">Save Employee</button>
+        </div>
+      </form>
     </div>
   </div>
 

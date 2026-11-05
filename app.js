@@ -2723,7 +2723,7 @@ function renderAssignmentsTable() {
         </td>
         <td style="white-space: nowrap;">
           <div style="display: inline-flex; align-items: center; gap: 4px;">
-            <button type="button" class="emp-action-icon" onclick="openProgressDetails('${a.id}')" title="View Details" aria-label="View Details">
+            <button type="button" class="emp-action-icon" onclick="openAssignmentDetail('${a.id}')" title="View Assignment Details" aria-label="View Details">
               <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                 <circle cx="12" cy="12" r="3"></circle>
@@ -16167,3 +16167,289 @@ function completeEmployeeTrainingDirect(trainingId) {
   renderEmployeeDashboardUI();
 }
 window.completeEmployeeTrainingDirect = completeEmployeeTrainingDirect;
+
+
+// ==========================================
+// NEW FEATURES CLONED FROM AI STUDIO
+// ==========================================
+
+let activeAssignmentDetailId = null;
+
+function openAssignmentDetail(asnId) {
+  const a = state.assignments.find(asn => asn.id === asnId);
+  if (!a) return;
+  activeAssignmentDetailId = asnId;
+  const emp = state.employees.find(e => e.id === a.employeeId) || { name: 'Unknown', role: 'Employee', dept: 'General', avatar: '' };
+  const prog = state.programs.find(p => p.id === a.programId) || { name: a.trainingName || 'Training Programme', category: 'General', durationHours: 4, level: 'Intermediate' };
+
+  // Hide assignments list card and progress screen if any
+  const tableCard = document.getElementById('mgmtProgressTableCard');
+  if (tableCard) tableCard.style.display = 'none';
+  const progressScreen = document.getElementById('sectionProgressDetailScreen');
+  if (progressScreen) progressScreen.style.display = 'none';
+
+  // Header Title
+  const titleEl = document.getElementById('asnDetailHeaderTitle');
+  if (titleEl) titleEl.textContent = `Assignment Details: ${prog.name || a.trainingName || 'Training Programme'}`;
+
+  // Column 1: Learner Meta
+  const avatarEl = document.getElementById('asnDetailEmpAvatar');
+  if (avatarEl) avatarEl.textContent = (emp.name || 'E')[0].toUpperCase();
+  const nameEl = document.getElementById('asnDetailEmpName');
+  if (nameEl) nameEl.textContent = emp.name;
+  const roleEl = document.getElementById('asnDetailEmpRole');
+  if (roleEl) roleEl.textContent = `${emp.role || 'Employee'} • ${emp.dept || 'Engineering'}`;
+
+  const idEl = document.getElementById('asnDetailIdText');
+  if (idEl) idEl.textContent = `TRN-ASSIGN-${a.id}`;
+  const typeEl = document.getElementById('asnDetailTypeText');
+  if (typeEl) typeEl.textContent = a.mandatory ? 'Mandatory' : 'Elective';
+  const assignDateEl = document.getElementById('asnDetailAssignedDateText');
+  if (assignDateEl) assignDateEl.textContent = a.assignedDate || '01-Jan-2026';
+  const dueDateEl = document.getElementById('asnDetailDueDateText');
+  if (dueDateEl) dueDateEl.textContent = a.dueDate || '20-Jan-2026';
+
+  const statusWrap = document.getElementById('asnDetailStatusBadgeContainer');
+  if (statusWrap) {
+    const isCompleted = a.status === 'Completed' || a.trainingStatus === 'completed' || a.progress === 100;
+    const isOverdue = a.status === 'Overdue' || a.trainingStatus === 'overdue';
+    let bg = '#ecfdf5', text = '#047857', border = '#a7f3d0', icon = '✓', label = a.status || 'Completed';
+    if (isOverdue) {
+      bg = '#fef2f2'; text = '#b91c1c'; border = '#fecaca'; icon = '!'; label = 'Overdue';
+    } else if (!isCompleted) {
+      bg = '#eff6ff'; text = '#1d4ed8'; border = '#bfdbfe'; icon = '⏳'; label = a.status || 'In Progress';
+    }
+    statusWrap.innerHTML = `
+      <span style="display:inline-flex; align-items:center; gap:5px; padding:3px 10px; border-radius:9999px; font-size:12px; font-weight:600; background:${bg}; color:${text}; border:1px solid ${border};">
+        <span>${icon}</span>
+        <span>${label}</span>
+      </span>
+    `;
+  }
+
+  // Column 2: Programme & Curriculum Details
+  const levelEl = document.getElementById('asnDetailProgLevelBadge');
+  if (levelEl) levelEl.textContent = `${prog.level || 'Intermediate'} • ${prog.durationHours || 4} hrs`;
+  const progTitleEl = document.getElementById('asnDetailProgTitle');
+  if (progTitleEl) progTitleEl.textContent = prog.name || a.trainingName;
+  const progDescEl = document.getElementById('asnDetailProgDesc');
+  if (progDescEl) progDescEl.textContent = prog.description || 'This course covers comprehensive industry standards, best practices, hands-on labs, and final assessment criteria required for enterprise compliance.';
+
+  const resList = document.getElementById('asnDetailResourcesList');
+  if (resList) {
+    const resources = prog.resources && prog.resources.length > 0 ? prog.resources : [
+      { id: 'r1', title: `Module 1: ${prog.name || 'Core Concept'} Architecture Lecture`, type: 'video', isCompleted: a.progress >= 50 },
+      { id: 'r2', title: `Module 2: Implementation Playbook & Standards (PDF)`, type: 'document', isCompleted: a.progress >= 100 }
+    ];
+    resList.innerHTML = resources.map((r, i) => {
+      const isDone = a.progress === 100 || (a.progress >= Math.round(((i + 1) / resources.length) * 100));
+      const icon = r.type === 'video' ? '🎥' : '📄';
+      return `
+        <div style="padding:10px 12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; display:flex; align-items:center; justify-content:space-between; font-size:12px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span>${icon}</span>
+            <span style="font-weight:600; color:#1e293b;">${escapeHtml(r.title)}</span>
+          </div>
+          <span style="font-weight:600; color:${isDone ? '#047857' : '#d97706'};">${isDone ? 'Completed (100%)' : 'In Progress'}</span>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Column 3: Milestone Progress & Evidence
+  const pct = a.progress || 0;
+  const pctEl = document.getElementById('asnDetailProgressPercentText');
+  if (pctEl) pctEl.textContent = `${pct}%`;
+  const fillEl = document.getElementById('asnDetailProgressBarFill');
+  if (fillEl) fillEl.style.width = `${pct}%`;
+
+  const certBadge = document.getElementById('asnDetailCertBadgeText');
+  const btnCert = document.getElementById('btnAsnDetailDownloadCert');
+  const remarksBox = document.getElementById('asnDetailRemarksBox');
+  const remarksText = document.getElementById('asnDetailRemarksText');
+
+  if (pct === 100 || a.status === 'Completed' || a.certificateStatus === 'issued') {
+    if (certBadge) certBadge.textContent = 'Issued & Verified';
+    if (btnCert) {
+      btnCert.disabled = false;
+      btnCert.style.opacity = '1';
+      btnCert.style.pointerEvents = 'auto';
+    }
+  } else {
+    if (certBadge) certBadge.textContent = 'Pending Completion';
+    if (btnCert) {
+      btnCert.disabled = true;
+      btnCert.style.opacity = '0.5';
+      btnCert.style.pointerEvents = 'none';
+    }
+  }
+
+  if (a.submissionRemarks) {
+    if (remarksBox) remarksBox.style.display = 'block';
+    if (remarksText) remarksText.textContent = `"${a.submissionRemarks}"`;
+  } else {
+    if (remarksBox) remarksBox.style.display = 'none';
+  }
+
+  // Show the screen
+  const screen = document.getElementById('sectionAssignmentDetailScreen');
+  if (screen) screen.style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function closeAssignmentDetailScreen() {
+  const screen = document.getElementById('sectionAssignmentDetailScreen');
+  if (screen) screen.style.display = 'none';
+  const tableCard = document.getElementById('mgmtProgressTableCard');
+  if (tableCard) tableCard.style.display = 'block';
+  activeAssignmentDetailId = null;
+}
+
+function evaluateCurrentAssignmentFromDetail() {
+  if (!activeAssignmentDetailId) return;
+  closeAssignmentDetailScreen();
+  openReviewEvaluationModal(activeAssignmentDetailId);
+}
+
+// Auto-fill for Assign Training Modal
+function autoFillAssignTrainingModal() {
+  const progSelect = document.getElementById('assignProgramSelect');
+  if (progSelect && progSelect.options.length > 1) {
+    progSelect.selectedIndex = 1;
+  }
+  const typeSelect = document.getElementById('assignTypeSelect');
+  if (typeSelect) typeSelect.value = 'mandatory';
+
+  const today = new Date().toISOString().split('T')[0];
+  const dueDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+  const assignDateInput = document.getElementById('assignDateInput');
+  if (assignDateInput) assignDateInput.value = today;
+  const dueDateInput = document.getElementById('assignDueDateInput');
+  if (dueDateInput) dueDateInput.value = dueDate;
+
+  // Auto-check Tanya Kapoor or first employee
+  const checkboxes = document.querySelectorAll('#assignEmployeesList input[type="checkbox"]');
+  if (checkboxes.length > 0) {
+    checkboxes.forEach((cb, i) => cb.checked = (i === 0));
+  }
+  showConfigToast('⚡ Assignment fields auto-filled with sample enterprise data!');
+}
+
+// Auto-fill for Program Form Modal
+function autoFillProgramFormModal() {
+  const titleInput = document.getElementById('progFormTitle');
+  if (titleInput) titleInput.value = 'Enterprise Cloud Architecture & Security Governance';
+  const catInput = document.getElementById('progFormCategory');
+  if (catInput) catInput.value = 'Engineering';
+  const diffInput = document.getElementById('progFormDifficulty');
+  if (diffInput) diffInput.value = 'Intermediate';
+  const durInput = document.getElementById('progFormDuration');
+  if (durInput) durInput.value = '6';
+  const descInput = document.getElementById('progFormDescription');
+  if (descInput) descInput.value = 'Comprehensive multi-tier cloud security architecture covering zero-trust infrastructure, identity isolation, compliance auditing, and container runtime protection.';
+  const scoreInput = document.getElementById('progFormScore');
+  if (scoreInput) scoreInput.value = '80';
+  const attemptsInput = document.getElementById('progFormAttempts');
+  if (attemptsInput) attemptsInput.value = '3';
+  const expiryInput = document.getElementById('progFormExpiry');
+  if (expiryInput) expiryInput.value = '24';
+  const reminderInput = document.getElementById('progFormReminder');
+  if (reminderInput) reminderInput.value = '7';
+  showConfigToast('⚡ Programme form auto-filled with sample architecture curriculum!');
+}
+
+// Add New Employee Modal handlers
+function openNewEmployeeModal() {
+  const modal = document.getElementById('addEmployeeModal');
+  if (modal) modal.style.display = 'flex';
+}
+
+function closeNewEmployeeModal() {
+  const modal = document.getElementById('addEmployeeModal');
+  if (modal) modal.style.display = 'none';
+  const form = document.getElementById('newEmployeeForm');
+  if (form) form.reset();
+}
+
+function autoFillNewEmployeeForm() {
+  const fName = document.getElementById('newEmpFirstName');
+  if (fName) fName.value = 'Aarav';
+  const lName = document.getElementById('newEmpLastName');
+  if (lName) lName.value = 'Sharma';
+  const email = document.getElementById('newEmpEmail');
+  if (email) email.value = 'aarav.sharma@collabcrm.io';
+  const mobile = document.getElementById('newEmpMobile');
+  if (mobile) mobile.value = '+91 98765 43210';
+  const dept = document.getElementById('newEmpDepartment');
+  if (dept) dept.value = 'Engineering';
+  const status = document.getElementById('newEmpStatus');
+  if (status) status.value = 'Confirmed';
+  const desig = document.getElementById('newEmpDesignation');
+  if (desig) desig.value = 'Senior DevOps Specialist';
+  const rep = document.getElementById('newEmpReportingTo');
+  if (rep) rep.value = 'Ashish Kumar';
+  showConfigToast('⚡ Employee fields auto-filled with demo employee data!');
+}
+
+function handleNewEmployeeSubmit(e) {
+  if (e) e.preventDefault();
+  const fName = document.getElementById('newEmpFirstName')?.value.trim() || 'Aarav';
+  const lName = document.getElementById('newEmpLastName')?.value.trim() || 'Sharma';
+  const fullName = `${fName} ${lName}`;
+  const email = document.getElementById('newEmpEmail')?.value.trim() || 'aarav.sharma@collabcrm.io';
+  const dept = document.getElementById('newEmpDepartment')?.value || 'Engineering';
+  const desig = document.getElementById('newEmpDesignation')?.value || 'DevOps Engineer';
+  const statusVal = document.getElementById('newEmpStatus')?.value || 'Confirmed';
+  const repTo = document.getElementById('newEmpReportingTo')?.value || 'Ashish Kumar';
+
+  const newId = `emp-${Date.now()}`;
+  const newEmp = {
+    id: newId,
+    code: `YOP-${Math.floor(100 + Math.random() * 900)}`,
+    name: fullName,
+    firstName: fName,
+    lastName: lName,
+    email: email,
+    department: dept,
+    dept: dept,
+    role: desig,
+    designation: desig,
+    status: statusVal,
+    reportingTo: repTo,
+    managerId: 'emp-2',
+    avatar: `https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80`,
+    experience: '3Y 4M',
+    joiningDate: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+  };
+
+  state.employees.unshift(newEmp);
+  if (typeof EMPLOYEES_DETAIL_DATABASE !== 'undefined') {
+    EMPLOYEES_DETAIL_DATABASE[newId] = {
+      ...newEmp,
+      personal: { mobile: '+91 98765 43210', personalEmail: email },
+      skills: ['AWS', 'Docker', 'Kubernetes', 'CI/CD']
+    };
+  }
+
+  closeNewEmployeeModal();
+  showConfigToast(`Employee "${fullName}" successfully registered!`, 'success');
+
+  // Update total counts
+  const countBadge = document.getElementById('totalEmployeesBadge');
+  if (countBadge) countBadge.textContent = state.employees.length;
+
+  if (typeof renderEmployeesTable === 'function') {
+    renderEmployeesTable();
+  }
+}
+
+// Window bindings
+window.openAssignmentDetail = openAssignmentDetail;
+window.closeAssignmentDetailScreen = closeAssignmentDetailScreen;
+window.evaluateCurrentAssignmentFromDetail = evaluateCurrentAssignmentFromDetail;
+window.autoFillAssignTrainingModal = autoFillAssignTrainingModal;
+window.autoFillProgramFormModal = autoFillProgramFormModal;
+window.openNewEmployeeModal = openNewEmployeeModal;
+window.closeNewEmployeeModal = closeNewEmployeeModal;
+window.autoFillNewEmployeeForm = autoFillNewEmployeeForm;
+window.handleNewEmployeeSubmit = handleNewEmployeeSubmit;
