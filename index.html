@@ -3202,32 +3202,23 @@
                       <p id="empModalDueDateText" style="font-size: 12px; color: #64748b; margin: 3px 0 0 0;">Due Date: 15-Nov-2026 • Assigned By: Megha Salunkhe</p>
                     </div>
                   </div>
-                  <!-- Header Action Buttons: Start Programme / Complete Programme -->
-                  <div id="empModalHeaderActions" style="display: flex; align-items: center; gap: 10px; flex-shrink: 0; flex-wrap: wrap;"></div>
+                  <!-- Header Action Buttons: Removed per employee user requirement -->
+                  <div id="empModalHeaderActions" style="display: none; align-items: center; gap: 10px; flex-shrink: 0; flex-wrap: wrap;"></div>
                 </div>
 
-                <!-- Tabs Navigation matching Screenshot 4 -->
-                <div style="display: flex; gap: 4px; padding: 0 24px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; flex-shrink: 0; overflow-x: auto;">
-                  <button type="button" class="training-subnav-btn active" id="empTabBtn_overview" onclick="switchEmpModalTab('overview')" style="border-radius: 0; border-bottom: 2px solid transparent; font-size: 13px; padding: 12px 18px;">
-                    1. Overview &amp; Objectives
-                  </button>
-                  <button type="button" class="training-subnav-btn" id="empTabBtn_resources" onclick="switchEmpModalTab('resources')" style="border-radius: 0; border-bottom: 2px solid transparent; font-size: 13px; padding: 12px 18px;">
-                    2. Learning Resources <span id="empModalResourcesCountBadge" style="background: #e2e8f0; color: #334155; font-size: 11px; padding: 2px 6px; border-radius: 10px; margin-left: 6px;">0/0</span>
-                  </button>
-                  <button type="button" class="training-subnav-btn" id="empTabBtn_assessment" onclick="switchEmpModalTab('assessment')" style="border-radius: 0; border-bottom: 2px solid transparent; font-size: 13px; padding: 12px 18px;">
-                    3. Assessment <span id="empModalAssessmentStatusBadge" style="background: #e2e8f0; color: #334155; font-size: 11px; padding: 2px 6px; border-radius: 10px; margin-left: 6px;">Available</span>
-                  </button>
-                  <button type="button" class="training-subnav-btn" id="empTabBtn_submission" onclick="switchEmpModalTab('submission')" style="border-radius: 0; border-bottom: 2px solid transparent; font-size: 13px; padding: 12px 18px;">
-                    4. Submission &amp; Feedback
-                  </button>
+                <!-- Merged View Title Bar: Programme Details -->
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; flex-shrink: 0;">
+                  <h3 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 8px;">
+                    <span>Programme Details</span>
+                  </h3>
                 </div>
 
-                <!-- Body (Full Screen Responsive) -->
-                <div style="padding: 24px; background: #ffffff;">
-                  <!-- TAB 1: OVERVIEW & OBJECTIVES matching Screenshot 4 -->
-                  <div id="empModalTabContent_overview" class="emp-modal-tab-content">
+                <!-- Body (Unified Continuous View) -->
+                <div style="padding: 24px; background: #ffffff; display: flex; flex-direction: column; gap: 28px;">
+                  <!-- SECTION 1: OVERVIEW & OBJECTIVES -->
+                  <div id="empModalTabContent_overview" class="emp-modal-tab-content" style="display: block;">
                     <div style="display: flex; flex-direction: column; gap: 18px;">
-                      <!-- Action & Status Card: Start / Complete Programme -->
+                      <!-- Action & Status Card: Programme Progress & Status -->
                       <div id="empModalOverviewActionCard"></div>
 
                       <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px;">
@@ -3277,8 +3268,13 @@
                     </div>
                   </div>
 
-                  <!-- TAB 2: LEARNING RESOURCES (SPEC SEC 6-7) -->
-                  <div id="empModalTabContent_resources" class="emp-modal-tab-content" style="display: none;">
+                  <!-- SECTION 2: LEARNING RESOURCES -->
+                  <div id="empModalTabContent_resources" class="emp-modal-tab-content" style="display: block; border-top: 1px solid #f1f5f9; padding-top: 24px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                      <h4 style="font-size: 14.5px; font-weight: 700; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 8px;">
+                        <span>📚</span> Learning Resources <span id="empModalResourcesCountBadge" style="background: #e2e8f0; color: #334155; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px;">0/0</span>
+                      </h4>
+                    </div>
                     <!-- Inline Resource Player (NO POP-UPS) -->
                     <div id="empInlineResourcePlayer" style="display: none; background: #0f172a; border-radius: 10px; overflow: hidden; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
                       <div style="padding: 14px 20px; background: #1e293b; border-bottom: 1px solid #334155; display: flex; align-items: center; justify-content: space-between;">
@@ -3326,76 +3322,47 @@
                     </div>
                   </div>
 
-                  <!-- TAB 3: ASSESSMENT (SPEC SEC 8) -->
-                  <div id="empModalTabContent_assessment" class="emp-modal-tab-content" style="display: none;">
+                  <!-- SECTION 3: ASSESSMENT -->
+                  <div id="empModalTabContent_assessment" class="emp-modal-tab-content" style="display: block; border-top: 1px solid #f1f5f9; padding-top: 24px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                      <h4 style="font-size: 14.5px; font-weight: 700; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 8px;">
+                        <span>📝</span> Assessment &amp; Knowledge Check
+                      </h4>
+                    </div>
                     <div id="empModalAssessmentContainer">
                       <!-- Populated via JS -->
                     </div>
                   </div>
 
-                  <!-- TAB 4: SUBMISSION & REVIEW (COURSERA WORKFLOW WITH MANAGEMENT NOTIFICATION) -->
-                  <div id="empModalTabContent_submission" class="emp-modal-tab-content" style="display: none;">
+                  <!-- SECTION 4: SUBMISSION & COMPLETION -->
+                  <div id="empModalTabContent_submission" class="emp-modal-tab-content" style="display: block; border-top: 1px solid #f1f5f9; padding-top: 24px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                      <h4 style="font-size: 14.5px; font-weight: 700; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 8px;">
+                        <span>💬</span> Completion Remarks &amp; Feedback
+                      </h4>
+                    </div>
+
                     <!-- Review Feedback Banner if Changes Requested or Approved or Rejected -->
                     <div id="empModalReviewFeedbackBanner" style="display: none; margin-bottom: 18px;"></div>
 
-                    <!-- Coursera-style Completion Summary Card -->
-                    <div id="empCourseraCompletionCard" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 22px; margin-bottom: 20px;">
-                      <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
-                        <div style="max-width: 580px;">
-                          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-                            <span style="background: #e0e7ff; color: #4338ca; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.04em;">LMS Course Completion</span>
-                            <span id="empCourseraStatusPill" style="background: #dcfce7; color: #15803d; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 12px;">Tasks in Progress</span>
-                          </div>
-                          <h4 style="font-size: 16px; font-weight: 700; color: #0f172a; margin: 0 0 6px 0;">Finalize Coursework &amp; Notify Management</h4>
-                          <p style="font-size: 13px; color: #64748b; line-height: 1.5; margin: 0;">
-                            Review your completed learning modules and assessment results. Once verified, click the button to mark your training as 100% completed. An automated notification with your verified record will be dispatched immediately to the management team.
-                          </p>
-                        </div>
-                        <div style="text-align: right;">
-                          <button type="button" class="btn-primary-action" id="btnCompleteAndNotifyManagement" onclick="completeTrainingAndNotifyManagement()" style="background: #16a34a; border-color: #15803d; color: #ffffff; font-weight: 700; font-size: 13.5px; padding: 10px 20px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 2px 4px rgba(22, 163, 74, 0.2);">
-                            <span>Complete Course &amp; Notify Management ✓</span>
-                          </button>
-                        </div>
-                      </div>
-
-                      <!-- Course Task Readiness Checklist -->
-                      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; font-size: 12.5px; margin-top: 18px;">
-                        <div id="chkRule_resources" style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px;">
-                          <span id="chkRuleIcon_resources">⚪</span>
-                          <span style="font-weight: 600; color: #334155;">Mandatory Tasks &amp; Resources</span>
-                        </div>
-                        <div id="chkRule_assessment" style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px;">
-                          <span id="chkRuleIcon_assessment">⚪</span>
-                          <span style="font-weight: 600; color: #334155;">Assessment &amp; Knowledge Check</span>
-                        </div>
-                        <div id="chkRule_evidence" style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px;">
-                          <span id="chkRuleIcon_evidence">⚪</span>
-                          <span style="font-weight: 600; color: #334155;">Certification Credential</span>
-                        </div>
-                      </div>
-                    </div>
-
                     <!-- Optional Completion Remarks / Feedback -->
                     <div id="empSubmissionFormFields" style="display: flex; flex-direction: column; gap: 14px;">
-                      <div>
-                        <label style="display: block; font-size: 12.5px; font-weight: 600; color: #1e293b; margin-bottom: 5px;">
+                      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px;">
+                        <label style="display: block; font-size: 13px; font-weight: 700; color: #1e293b; margin-bottom: 6px;">
                           Completion Remarks / Self-Evaluation Notes (Optional)
                         </label>
-                        <textarea id="empSubmissionRemarksInput" rows="3" oninput="validateEmpSubmissionReadiness()" placeholder="Add any final remarks or takeaways for your manager..." style="width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; outline: none;"></textarea>
+                        <textarea id="empSubmissionRemarksInput" rows="3" placeholder="Add any final remarks or takeaways for your manager..." style="width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; outline: none; background: #ffffff;"></textarea>
+                        <span style="font-size: 12px; color: #64748b; margin-top: 6px; display: block;">When completed, management will be automatically notified with your completion status and verified certificate.</span>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <!-- Footer Bar matching Screenshot 4 & Screenshot 10 -->
+                <!-- Footer Bar -->
                 <div style="padding: 16px 24px; background: #ffffff; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: flex-end; flex-shrink: 0;">
-                  <div style="display: flex; align-items: center; gap: 10px;">
-                    <button type="button" class="btn-table-action" id="btnEmpModalPrevTab" onclick="navigateEmpModalTab(-1)" style="padding: 8px 18px; font-size: 13px; font-weight: 600; border-radius: 6px;">← Previous</button>
-                    <button type="button" class="btn-primary-action" id="btnEmpModalNextTab" onclick="navigateEmpModalTab(1)" style="padding: 8px 22px; font-size: 13px; font-weight: 600; border-radius: 6px; background: #2563eb; color: #ffffff;">Next →</button>
-                    <button type="button" class="btn-primary-action" id="btnEmpModalSubmitReview" onclick="completeTrainingAndNotifyManagement()" style="display: none; background: #16a34a; border-color: #15803d; padding: 8px 22px; font-size: 13px; font-weight: 600; border-radius: 6px;">
-                      Complete Course &amp; Notify Management ✓
-                    </button>
-                  </div>
+                  <button type="button" class="btn-primary-action" id="btnEmpModalSubmitReview" onclick="completeTrainingAndNotifyManagement()" style="background: #16a34a; border: 1px solid #15803d; color: #ffffff; padding: 10px 24px; font-size: 13.5px; font-weight: 700; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 1px 3px rgba(22,163,74,0.3);">
+                    <span>Complete Course ✓</span>
+                  </button>
                 </div>
               </div>
             </div>

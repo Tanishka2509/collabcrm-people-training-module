@@ -14525,87 +14525,36 @@ function openEmployeeTrainingDetail(trainingId) {
   if (elStatus) elStatus.textContent = statusText;
   if (elDue) elDue.textContent = `Due Date: ${t.dueDate || '15-Dec-2025'} • Assigned By: ${cleanAssignedBy}`;
 
-  // Render Header Actions (Start Programme / Complete Programme) per user requirement
+  // Header Actions removed per user requirement (Screenshot 1)
   const headerActionsEl = document.getElementById('empModalHeaderActions');
   if (headerActionsEl) {
-    const sNorm = normalizeStatus(t.trainingStatus || t.status);
-    let actionsHtml = '';
-    if (sNorm === 'Not Started') {
-      actionsHtml = `
-        <button type="button" class="btn-primary-action" onclick="startEmployeeTraining('${t.id}')" style="background: #2563eb; color: #ffffff; font-weight: 700; font-size: 13px; padding: 8px 18px; border-radius: 6px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 1px 3px rgba(37,99,235,0.25);">
-          <span>▶ Start Programme</span>
-        </button>
-        <button type="button" class="btn-secondary-action" onclick="completeEmployeeTrainingDirect('${t.id}')" style="background: #16a34a; border: 1px solid #15803d; color: #ffffff; font-weight: 700; font-size: 13px; padding: 8px 18px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 1px 3px rgba(22,163,74,0.25);">
-          <span>✓ Complete Programme</span>
-        </button>
-      `;
-    } else if (sNorm === 'In Progress') {
-      actionsHtml = `
-        <button type="button" class="btn-primary-action" onclick="completeEmployeeTrainingDirect('${t.id}')" style="background: #16a34a; border: 1px solid #15803d; color: #ffffff; font-weight: 700; font-size: 13px; padding: 8px 18px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 1px 3px rgba(22,163,74,0.25);">
-          <span>✓ Complete Programme</span>
-        </button>
-        <button type="button" class="btn-secondary-action" onclick="switchEmpModalTab('resources')" style="padding: 8px 14px; font-size: 12.5px; border-radius: 6px; background: #ffffff; border: 1px solid #cbd5e1; color: #334155; font-weight: 600; cursor: pointer;">
-          <span>Continue Coursework →</span>
-        </button>
-      `;
-    } else if (sNorm === 'Completed') {
-      const certId = (t.certificate && t.certificate.id) || 'TRN-2026-0003';
-      actionsHtml = `
-        <button type="button" class="btn-primary-action" onclick="openEmployeeCertificateViewer('${certId}')" style="background: #16a34a; border: 1px solid #15803d; color: #ffffff; font-weight: 700; font-size: 13px; padding: 8px 18px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
-          <span>🎓 View Certificate</span>
-        </button>
-      `;
-    } else if (sNorm === 'Overdue') {
-      actionsHtml = `
-        <button type="button" class="btn-primary-action" onclick="completeEmployeeTrainingDirect('${t.id}')" style="background: #16a34a; border: 1px solid #15803d; color: #ffffff; font-weight: 700; font-size: 13px; padding: 8px 18px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
-          <span>✓ Complete Programme</span>
-        </button>
-        <button type="button" class="btn-primary-action" onclick="startEmployeeTraining('${t.id}')" style="background: #ea580c; border: 1px solid #c2410c; color: #ffffff; font-weight: 700; font-size: 13px; padding: 8px 18px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
-          <span>▶ Resume Programme</span>
-        </button>
-      `;
-    }
-    headerActionsEl.innerHTML = actionsHtml;
+    headerActionsEl.innerHTML = '';
   }
 
-  // Render Overview Action Card in Tab 1
+  // Render Programme Progress & Status Indicator
   const elActionCard = document.getElementById('empModalOverviewActionCard');
   if (elActionCard) {
     const sNorm = normalizeStatus(t.trainingStatus || t.status);
     const prog = t.completionPercentage !== undefined ? t.completionPercentage : (t.progressPercent || 0);
     const progColor = prog === 100 ? '#10b981' : prog > 0 ? '#4f46e5' : '#94a3b8';
-    let btnHtml = '';
-    if (sNorm === 'Not Started') {
-      btnHtml = `
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <button type="button" class="btn-primary-action" onclick="startEmployeeTraining('${t.id}')" style="background: #2563eb; color: #ffffff; font-weight: 700; font-size: 13px; padding: 8px 18px; border-radius: 6px; border: none; cursor: pointer;">▶ Start Programme</button>
-          <button type="button" class="btn-primary-action" onclick="completeEmployeeTrainingDirect('${t.id}')" style="background: #16a34a; border: 1px solid #15803d; color: #ffffff; font-weight: 700; font-size: 13px; padding: 8px 18px; border-radius: 6px; cursor: pointer;">✓ Complete Programme</button>
-        </div>
-      `;
-    } else if (sNorm === 'In Progress') {
-      btnHtml = `<button type="button" class="btn-primary-action" onclick="completeEmployeeTrainingDirect('${t.id}')" style="background: #16a34a; border: 1px solid #15803d; color: #ffffff; font-weight: 700; font-size: 13px; padding: 8px 18px; border-radius: 6px; cursor: pointer;">✓ Complete Programme</button>`;
-    } else if (sNorm === 'Completed') {
-      const cId = (t.certificate && t.certificate.id) || 'TRN-2026-0003';
-      btnHtml = `<button type="button" class="btn-primary-action" onclick="openEmployeeCertificateViewer('${cId}')" style="background: #16a34a; border: 1px solid #15803d; color: #ffffff; font-weight: 700; font-size: 13px; padding: 8px 18px; border-radius: 6px; cursor: pointer;">🎓 View Verified Certificate</button>`;
-    } else {
-      btnHtml = `<button type="button" class="btn-primary-action" onclick="completeEmployeeTrainingDirect('${t.id}')" style="background: #16a34a; border: 1px solid #15803d; color: #ffffff; font-weight: 700; font-size: 13px; padding: 8px 18px; border-radius: 6px; cursor: pointer;">✓ Complete Programme</button>`;
-    }
 
     elActionCard.innerHTML = `
-      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-bottom: 4px;">
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-bottom: 4px;">
         <div style="display: flex; align-items: center; gap: 16px;">
           <div>
-            <div style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 4px;">PROGRAMME PROGRESS & STATUS</div>
+            <div style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 4px;">PROGRAMME PROGRESS &amp; STATUS</div>
             <div style="display: flex; align-items: center; gap: 10px;">
               <span style="font-size: 13px; font-weight: 700; color: #0f172a;">${sNorm}</span>
               <span style="color: #94a3b8;">•</span>
-              <span style="font-size: 12.5px; font-weight: 600; color: #4338ca;">${prog}% Completed</span>
+              <span style="font-size: 12.5px; font-weight: 600; color: ${progColor};">${prog}% Completed</span>
             </div>
           </div>
         </div>
-        <div style="display: flex; align-items: center; gap: 10px;">
-          ${btnHtml}
-        </div>
+        ${sNorm === 'Completed' ? `
+          <button type="button" class="btn-primary-action" onclick="openEmployeeCertificateViewer('${escapeHtml((t.certificate && t.certificate.id) || 'TRN-2026-0003')}')" style="background: #16a34a; border: 1px solid #15803d; color: #ffffff; font-weight: 700; font-size: 12.5px; padding: 7px 16px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+            <span>🎓 View Verified Certificate</span>
+          </button>
+        ` : ''}
       </div>
     `;
   }
@@ -14764,26 +14713,26 @@ function closeEmployeeTrainingDetail() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Sub-Tab Switcher inside Training Detail Modal
+// Sub-Tab Switcher / Section Anchor inside Unified Training Detail Screen
 function switchEmpModalTab(tabKey) {
   state.empModalActiveTab = tabKey;
   const tabs = ['overview', 'resources', 'assessment', 'submission'];
 
+  // All sections remain visible in the merged single-page view
   tabs.forEach(k => {
-    const btn = document.getElementById(`empTabBtn_${k}`);
     const content = document.getElementById(`empModalTabContent_${k}`);
-    if (btn) btn.classList.toggle('active', k === tabKey);
-    if (content) content.style.display = (k === tabKey) ? 'block' : 'none';
+    if (content) content.style.display = 'block';
   });
 
-  // Footer Navigation Buttons
-  const btnPrev = document.getElementById('btnEmpModalPrevTab');
-  const btnNext = document.getElementById('btnEmpModalNextTab');
-  const btnSubmit = document.getElementById('btnEmpModalSubmitReview');
+  if (tabKey && tabKey !== 'overview') {
+    const target = document.getElementById(`empModalTabContent_${tabKey}`);
+    if (target && target.scrollIntoView) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
 
-  if (btnPrev) btnPrev.style.display = tabKey === 'overview' ? 'none' : 'inline-block';
-  if (btnNext) btnNext.style.display = tabKey === 'submission' ? 'none' : 'inline-block';
-  if (btnSubmit) btnSubmit.style.display = tabKey === 'submission' ? 'inline-block' : 'none';
+  const btnSubmit = document.getElementById('btnEmpModalSubmitReview');
+  if (btnSubmit) btnSubmit.style.display = 'inline-flex';
 }
 
 function navigateEmpModalTab(dir) {
@@ -15372,12 +15321,27 @@ function renderEmpModalSubmission(t) {
   // Pre-fill remarks if available
   if (remarksInput) {
     remarksInput.value = t.submission?.completionRemarks || t.submissionRemarks || '';
-    remarksInput.disabled = (statusText === 'Submitted for Review' || statusText === 'Completed');
+    remarksInput.disabled = (statusText === 'Completed');
   }
 
   if (submitBtn) {
-    submitBtn.textContent = statusText === 'Changes Requested' ? 'Resubmit for Review ↻' : 'Submit for Review ✓';
-    submitBtn.style.display = (statusText === 'Submitted for Review' || statusText === 'Completed') ? 'none' : 'inline-block';
+    if (statusText === 'Completed') {
+      submitBtn.innerHTML = '<span>✓ Course Completed</span>';
+      submitBtn.disabled = true;
+      submitBtn.style.background = '#059669';
+      submitBtn.style.borderColor = '#047857';
+      submitBtn.style.cursor = 'default';
+      submitBtn.style.opacity = '0.85';
+      submitBtn.style.display = 'inline-flex';
+    } else {
+      submitBtn.innerHTML = '<span>Complete Course ✓</span>';
+      submitBtn.disabled = false;
+      submitBtn.style.background = '#16a34a';
+      submitBtn.style.borderColor = '#15803d';
+      submitBtn.style.cursor = 'pointer';
+      submitBtn.style.opacity = '1';
+      submitBtn.style.display = 'inline-flex';
+    }
   }
 
   validateEmpSubmissionReadiness();
@@ -15389,29 +15353,12 @@ function validateEmpSubmissionReadiness() {
   const t = state.employeeTrainingData.trainings.find(x => x.id === state.empCurrentTrainingId);
   if (!t) return;
 
-  const mandatoryResources = (t.resources || []).filter(r => r.isMandatory !== undefined ? r.isMandatory : (r.mandatory !== false));
-  const resourcesPassed = mandatoryResources.every(r => !!r.isCompleted);
-
-  const assessmentPassed = !t.assessment || !!(t.assessment.passed !== undefined ? t.assessment.passed : t.assessment.isPassed);
-  const remarksEntered = !!(document.getElementById('empSubmissionRemarksInput')?.value || '').trim();
-  const evidenceUploaded = true; // Evidence is optional unless configured
-
-  const updateBadge = (idIcon, isMet) => {
-    const el = document.getElementById(idIcon);
-    if (el) el.textContent = isMet ? '✓' : '⏳';
-  };
-
-  updateBadge('chkRuleIcon_resources', resourcesPassed);
-  updateBadge('chkRuleIcon_assessment', assessmentPassed);
-  updateBadge('chkRuleIcon_remarks', remarksEntered);
-  updateBadge('chkRuleIcon_evidence', evidenceUploaded);
-
-  const allMet = resourcesPassed && assessmentPassed && remarksEntered;
   const submitBtn = document.getElementById('btnEmpModalSubmitReview');
   if (submitBtn) {
-    submitBtn.disabled = !allMet;
-    submitBtn.style.opacity = allMet ? '1' : '0.6';
-    submitBtn.style.cursor = allMet ? 'pointer' : 'not-allowed';
+    const isCompleted = normalizeStatus(t.trainingStatus || t.status) === 'Completed';
+    submitBtn.disabled = isCompleted;
+    submitBtn.style.opacity = isCompleted ? '0.85' : '1';
+    submitBtn.style.cursor = isCompleted ? 'default' : 'pointer';
   }
 }
 
@@ -15563,12 +15510,36 @@ function completeTrainingAndNotifyManagement() {
   const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
   const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
+  // Get optional remarks entered by employee
+  const remarks = (document.getElementById('empSubmissionRemarksInput')?.value || '').trim();
+  if (remarks) {
+    if (!t.submission) t.submission = {};
+    t.submission.completionRemarks = remarks;
+    t.submissionRemarks = remarks;
+  }
+
   // 1. Mark all resources completed
   if (Array.isArray(t.resources)) {
     t.resources.forEach(r => {
       r.isCompleted = true;
       if (!r.completionDate) r.completionDate = dateStr;
     });
+  }
+
+  // Ensure assessment marked passed
+  if (t.assessment) {
+    t.assessment.passed = true;
+    t.assessment.isPassed = true;
+    t.assessment.bestScore = t.assessment.bestScore || 95;
+    if (!t.assessment.previousAttempts) t.assessment.previousAttempts = [];
+    if (t.assessment.previousAttempts.length === 0) {
+      t.assessment.previousAttempts.push({
+        attemptNumber: 1,
+        score: 95,
+        passed: true,
+        submissionDate: dateStr
+      });
+    }
   }
 
   // 2. Mark training completed
@@ -15581,15 +15552,19 @@ function completeTrainingAndNotifyManagement() {
   t.certificateStatus = 'issued';
   t.score = t.score || '98%';
 
-  const certId = (t.certificate && t.certificate.id) || t.certId || 'TRN-2026-0003';
+  const empName = state.employeeTrainingData.profile?.name || 'Tanya Kapoor';
+  const empId = state.employeeTrainingData.profile?.id || 'CO-5039';
+
+  const certId = (t.certificate && t.certificate.id) || t.certId || `TRN-2026-${Math.floor(1000 + Math.random() * 9000)}`;
   t.certificate = {
     id: certId,
     name: `${t.trainingName || t.title} Credential`,
     trainingName: t.trainingName || t.title,
     issueDate: dateStr,
+    expiryDate: '26-Jan-2028',
     status: 'issued',
-    recipientName: 'Tanya Kapoor',
-    recipientId: 'CO-5039'
+    recipientName: empName,
+    recipientId: empId
   };
 
   // Add to employee certificates list if not present
@@ -15606,8 +15581,8 @@ function completeTrainingAndNotifyManagement() {
   // 3. Generate Management Notification
   const notifObj = {
     id: `notif_${Date.now()}`,
-    title: 'Training Completed: Tanya Kapoor',
-    message: `Tanya Kapoor (CO-5039) has successfully completed all coursework for "${t.trainingName || t.title}". Verified Certificate ${certId} issued.`,
+    title: `Training Completed: ${empName}`,
+    message: `${empName} (${empId}) has successfully completed all coursework for "${t.trainingName || t.title}"${remarks ? ` with remarks: "${remarks}"` : ''}. Verified Certificate ${certId} issued.`,
     time: 'Just now',
     timestamp: `${dateStr}, ${timeStr}`,
     category: 'management',
@@ -15639,28 +15614,42 @@ function completeTrainingAndNotifyManagement() {
     empNotifBadge.style.display = empUnread > 0 ? 'inline-block' : 'none';
   }
 
-  hydrateUnifiedTrainingRecord(t, 'CO-5039');
+  hydrateUnifiedTrainingRecord(t, empId);
   saveEmployeeStoreToLocal();
 
+  renderEmpModalResources(t);
+  renderEmpModalAssessment(t);
   renderEmpModalSubmission(t);
   renderEmployeeDashboardUI();
+  renderEmployeeTrainingsList();
   renderEmployeeCertificates();
   renderEmployeeHistoryFull();
 
-  // Update card buttons
-  const btnCoursera = document.getElementById('btnCompleteAndNotifyManagement');
-  if (btnCoursera) {
-    btnCoursera.innerHTML = '<span>✓ Course Completed &amp; Management Notified</span>';
-    btnCoursera.style.background = '#059669';
-    btnCoursera.disabled = true;
+  // Update overview action card if visible
+  const elActionCard = document.getElementById('empModalOverviewActionCard');
+  if (elActionCard) {
+    elActionCard.innerHTML = `
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-bottom: 4px;">
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <div>
+            <div style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 4px;">PROGRAMME PROGRESS &amp; STATUS</div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 13px; font-weight: 700; color: #0f172a;">Completed</span>
+              <span style="color: #94a3b8;">•</span>
+              <span style="font-size: 12.5px; font-weight: 600; color: #10b981;">100% Completed</span>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn-primary-action" onclick="openEmployeeCertificateViewer('${escapeHtml(certId)}')" style="background: #16a34a; border: 1px solid #15803d; color: #ffffff; font-weight: 700; font-size: 12.5px; padding: 7px 16px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+          <span>🎓 View Verified Certificate</span>
+        </button>
+      </div>
+    `;
   }
 
-  const pill = document.getElementById('empCourseraStatusPill');
-  if (pill) {
-    pill.textContent = 'Completed & Verified';
-    pill.style.background = '#dcfce7';
-    pill.style.color = '#15803d';
-  }
+  // Update status badge at top
+  const elStatus = document.getElementById('empModalStatusBadge');
+  if (elStatus) elStatus.textContent = 'Completed';
 
   showConfigToast(`🎉 Training marked as 100% completed. Management has been notified.`);
 }
