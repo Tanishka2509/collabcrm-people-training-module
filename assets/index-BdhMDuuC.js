@@ -276,31 +276,19 @@ Error generating stack: `+e.message+`
     ]})
   ]});
 }function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n}){
-  let[r,i]=(0,l.useState)(!1);
   let[a,o]=(0,l.useState)(n?.name||"");
   let[s,c]=(0,l.useState)(n?.category||"Recruitment & HR Operations");
-  let[u,d]=(0,l.useState)(n?.department||"Business analyst");
   let[f,p]=(0,l.useState)(n?.difficultyLevel||"Intermediate");
   let[m,h]=(0,l.useState)(n?.expectedDurationHours||4);
   let[g,_]=(0,l.useState)(n?.passingScore||80);
   let[v,y]=(0,l.useState)(n?.maxAttempts||3);
-  let[b,x]=(0,l.useState)(n?.certificateExpiryMonths||24);
-  let[S,ee]=(0,l.useState)(n?.reminderFrequencyDays||7);
-  let[maxEnroll,setMaxEnroll]=(0,l.useState)(n?.maxEnrollmentLimit||50);
   let[duePeriod,setDuePeriod]=(0,l.useState)(n?.defaultDuePeriod||14);
-  let[defaultAssignType,setDefaultAssignType]=(0,l.useState)(n?.defaultAssignmentType||"Mandatory");
-  let[learnObj,setLearnObj]=(0,l.useState)(n?.learningObjectives||"Specify measurable skills, tools, and competencies learners will achieve...");
-  let[compReq,setCompReq]=(0,l.useState)(n?.completionRequirements||"Complete 100% mandatory modules + achieve >= 80% on assessment");
-  let[C,w]=(0,l.useState)(n?.mandatoryResourceCompletion??!0);
-  let[te,T]=(0,l.useState)(n?.reviewerApprovalRequired??!0);
-  let[evidenceUpload,setEvidenceUpload]=(0,l.useState)(n?.mandatoryEvidenceUpload??!0);
-  let[certGen,setCertGen]=(0,l.useState)(n?.certificateGeneration??!0);
-  let[ne,re]=(0,l.useState)(n?.autoPassQuiz??!1);
   
-  // Resources
+  // Resources (no mandatory checkbox, clean placeholders)
   let[ie,E]=(0,l.useState)(n?.resources||[
-    {id:"res-1",type:"Video / YouTube",title:"Module 1: Architecture Video Lecture",url:"https://youtube.com/watch?v=sample-video",mandatory:!0},
-    {id:"res-2",type:"PDF Document",title:"Module 2: Implementation Playbook & Guidelines",url:"https://docs.collabcrm.internal/playbook.pdf",mandatory:!0}
+    {id:"res-1",type:"Video / YouTube",title:"Module 1: Architecture Video Lecture",url:"https://youtube.com/watch?v=sample-video"},
+    {id:"res-2",type:"PDF Document",title:"Module 2: Implementation Playbook & Guidelines",url:"https://docs.collabcrm.internal/playbook.pdf"},
+    {id:"res-3",type:"Video / YouTube",title:"",url:""}
   ]);
 
   // Section 4: Assessment & Questions Config
@@ -340,7 +328,7 @@ Error generating stack: `+e.message+`
       {
         id: "q-3",
         number: 3,
-        text: "Which of the following are game engines / core platforms used in this curriculum? (Select all that apply)",
+        text: "Which of the following are core platforms used in this curriculum? (Select all that apply)",
         type: "multiple_choice",
         marks: 2,
         mandatory: true,
@@ -382,8 +370,7 @@ Error generating stack: `+e.message+`
         type: "long_text",
         marks: 1,
         mandatory: false,
-        expectedAnswer: "JWT tokens validated via Gateway middleware, checking signature, expiry, and RBAC claims.",
-        requiresManualReview: true
+        expectedAnswer: "JWT tokens validated via Gateway middleware, checking signature, expiry, and RBAC claims."
       }
     ]
   };
@@ -406,33 +393,22 @@ Error generating stack: `+e.message+`
   let ae=()=>{
     o("Advanced Enterprise Cloud Architecture & Kubernetes Security");
     c("Recruitment & HR Operations");
-    d("Business analyst");
     p("Intermediate");
     h(4);
     _(80);
     y(3);
-    x(24);
-    ee(7);
-    setMaxEnroll(50);
     setDuePeriod(14);
-    setDefaultAssignType("Mandatory");
-    setLearnObj("Specify measurable skills, tools, and competencies learners will achieve...");
-    setCompReq("Complete 100% mandatory modules + achieve >= 80% on assessment");
-    w(!0);
-    T(!0);
-    setEvidenceUpload(!0);
-    setCertGen(!0);
   };
 
   let oe=()=>{
-    let newRes={id:"res-" + Date.now(),type:"Video / YouTube",title:"",url:"",mandatory:!0};
+    let newRes={id:"res-" + Date.now(),type:"Video / YouTube",title:"",url:""};
     E([...ie,newRes]);
   };
   let se=(id)=>{
     E(ie.filter(res=>res.id!==id));
   };
 
-  // Question builder operations
+  // Question operations
   let handleAddQuestion=()=>{
     let newQ={
       id:"q-" + Date.now(),
@@ -455,33 +431,36 @@ Error generating stack: `+e.message+`
       if(q.id!==qId) return q;
       let updated = {...q, [field]: value};
       if(field==="type"){
-        // Reset answer fields appropriate to the type
         if(value==="short_text"){
           updated.acceptedAnswers=[""];
           delete updated.options;
           delete updated.correctAnswer;
           delete updated.correctAnswers;
+          delete updated.expectedAnswer;
         } else if(value==="long_text"){
           updated.expectedAnswer="";
-          updated.requiresManualReview=true;
           delete updated.options;
           delete updated.correctAnswer;
           delete updated.correctAnswers;
+          delete updated.acceptedAnswers;
         } else if(value==="single_choice" || value==="dropdown"){
           updated.options=[{id:"opt-1", text:""}, {id:"opt-2", text:""}];
           updated.correctAnswer="opt-1";
           delete updated.correctAnswers;
           delete updated.acceptedAnswers;
+          delete updated.expectedAnswer;
         } else if(value==="multiple_choice"){
           updated.options=[{id:"mopt-1", text:""}, {id:"mopt-2", text:""}];
           updated.correctAnswers=["mopt-1"];
           delete updated.correctAnswer;
           delete updated.acceptedAnswers;
+          delete updated.expectedAnswer;
         } else if(value==="true_false"){
           updated.correctAnswer="True";
           delete updated.options;
           delete updated.correctAnswers;
           delete updated.acceptedAnswers;
+          delete updated.expectedAnswer;
         }
       }
       return updated;
@@ -635,23 +614,11 @@ Error generating stack: `+e.message+`
       id: n?.id || "prog-" + Date.now(),
       name: a,
       category: s,
-      department: u,
       difficultyLevel: f,
       expectedDurationHours: Number(m) || 4,
       passingScore: Number(g) || 80,
       maxAttempts: Number(v) || 3,
-      certificateExpiryMonths: Number(b) || 24,
-      reminderFrequencyDays: Number(S) || 7,
-      maxEnrollmentLimit: Number(maxEnroll) || 50,
       defaultDuePeriod: Number(duePeriod) || 14,
-      defaultAssignmentType: defaultAssignType,
-      learningObjectives: learnObj,
-      completionRequirements: compReq,
-      mandatoryResourceCompletion: C,
-      reviewerApprovalRequired: te,
-      mandatoryEvidenceUpload: evidenceUpload,
-      certificateGeneration: certGen,
-      autoPassQuiz: ne,
       resources: ie,
       assessment: compiledAssessment,
       status: status,
@@ -664,7 +631,7 @@ Error generating stack: `+e.message+`
   };
 
   return (0,P.jsxs)("div",{className:"px-6 py-4 space-y-5 max-w-[1600px] mx-auto w-full",children:[
-    // Header
+    // Header Bar
     (0,P.jsxs)("div",{className:"flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-3",children:[
       (0,P.jsxs)("div",{children:[
         (0,P.jsxs)("div",{className:"flex items-center gap-1.5 text-xs text-slate-500 font-medium mb-1",children:[
@@ -700,15 +667,15 @@ Error generating stack: `+e.message+`
       (0,P.jsx)("button",{onClick:()=>setValidationError(""),className:"text-rose-500 hover:text-rose-800",children:"✕"})
     ]}),
 
-    // 1. Core Programme Details
+    // 1. Core Programme Details (Cleaned per Image 1: No Department, No Learning Objectives, No Completion Requirements)
     (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4",children:[
       (0,P.jsx)("h2",{className:"text-sm font-bold text-slate-900 uppercase tracking-wide border-b border-slate-100 pb-2",children:"1. Core Programme Details"}),
-      (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-3 gap-4 text-xs",children:[
-        (0,P.jsxs)("div",{className:"space-y-1 md:col-span-1",children:[
+      (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-4 gap-4 text-xs",children:[
+        (0,P.jsxs)("div",{className:"space-y-1 md:col-span-2",children:[
           (0,P.jsx)("label",{className:"font-semibold text-slate-700",children:"Programme Name *"}),
           (0,P.jsx)("input",{type:"text",value:a,onChange:e=>o(e.target.value),placeholder:"e.g. CollabCRM Recruitment & Client Portal Workflows",className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"})
         ]}),
-        (0,P.jsxs)("div",{className:"space-y-1",children:[
+        (0,P.jsxs)("div",{className:"space-y-1 md:col-span-2",children:[
           (0,P.jsx)("label",{className:"font-semibold text-slate-700",children:"Training Category *"}),
           (0,P.jsxs)("select",{value:s,onChange:e=>c(e.target.value),className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500",children:[
             (0,P.jsx)("option",{value:"Recruitment & HR Operations",children:"Recruitment & HR Operations"}),
@@ -718,17 +685,7 @@ Error generating stack: `+e.message+`
             (0,P.jsx)("option",{value:"Product & Design",children:"Product & Design"})
           ]})
         ]}),
-        (0,P.jsxs)("div",{className:"space-y-1",children:[
-          (0,P.jsx)("label",{className:"font-semibold text-slate-700",children:"Department *"}),
-          (0,P.jsxs)("select",{value:u,onChange:e=>d(e.target.value),className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500",children:[
-            (0,P.jsx)("option",{value:"Business analyst",children:"Business analyst"}),
-            (0,P.jsx)("option",{value:"Recruitment & HR",children:"Recruitment & HR"}),
-            (0,P.jsx)("option",{value:"Engineering",children:"Engineering"}),
-            (0,P.jsx)("option",{value:"Sales & BD",children:"Sales & BD"}),
-            (0,P.jsx)("option",{value:"People Operations",children:"People Operations"})
-          ]})
-        ]}),
-        (0,P.jsxs)("div",{className:"space-y-1",children:[
+        (0,P.jsxs)("div",{className:"space-y-1 md:col-span-2",children:[
           (0,P.jsx)("label",{className:"font-semibold text-slate-700",children:"Difficulty Level *"}),
           (0,P.jsxs)("select",{value:f,onChange:e=>p(e.target.value),className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500",children:[
             (0,P.jsx)("option",{value:"Beginner",children:"Beginner"}),
@@ -743,89 +700,38 @@ Error generating stack: `+e.message+`
         (0,P.jsxs)("div",{className:"space-y-1",children:[
           (0,P.jsx)("label",{className:"font-semibold text-slate-700",children:"Passing Assessment Score (%) *"}),
           (0,P.jsx)("input",{type:"number",value:g,onChange:e=>_(e.target.value),className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"})
-        ]}),
-        (0,P.jsxs)("div",{className:"space-y-1 md:col-span-2",children:[
-          (0,P.jsx)("label",{className:"font-semibold text-slate-700",children:"Learning Objectives *"}),
-          (0,P.jsx)("textarea",{rows:2,value:learnObj,onChange:e=>setLearnObj(e.target.value),placeholder:"Specify measurable skills, tools, and competencies learners will achieve...",className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"})
-        ]}),
-        (0,P.jsxs)("div",{className:"space-y-1 md:col-span-1",children:[
-          (0,P.jsx)("label",{className:"font-semibold text-slate-700",children:"Completion Requirements & Assessment Criteria"}),
-          (0,P.jsx)("textarea",{rows:2,value:compReq,onChange:e=>setCompReq(e.target.value),placeholder:"Complete 100% mandatory modules + achieve >= 80% on assessment",className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"})
         ]})
       ]})
     ]}),
 
-    // 2. Per-Programme Configuration & Limits
+    // 2. Per-Programme Configuration & Limits (Cleaned per Image 1: Only Default Due Period & Max Attempts)
     (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4",children:[
       (0,P.jsxs)("div",{children:[
         (0,P.jsx)("h2",{className:"text-sm font-bold text-slate-900 uppercase tracking-wide",children:"2. Per-Programme Configuration & Limits"}),
-        (0,P.jsx)("p",{className:"text-[11px] text-slate-500",children:"Customize enrollment capacity, due window, assessment attempt limits, certificate expiry, and reminder cadence."})
+        (0,P.jsx)("p",{className:"text-[11px] text-slate-500",children:"Customize due window and assessment attempt limits for this specific programme."})
       ]}),
-      (0,P.jsxs)("div",{className:"grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs",children:[
-        (0,P.jsxs)("div",{className:"space-y-1",children:[
-          (0,P.jsx)("label",{className:"font-semibold text-slate-700 uppercase text-[10px] tracking-wide",children:"MAX ENROLLMENT LIMIT (LEARNERS)"}),
-          (0,P.jsx)("input",{type:"number",value:maxEnroll,onChange:e=>setMaxEnroll(e.target.value),className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white"})
-        ]}),
+      (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-2 gap-4 text-xs",children:[
         (0,P.jsxs)("div",{className:"space-y-1",children:[
           (0,P.jsx)("label",{className:"font-semibold text-slate-700 uppercase text-[10px] tracking-wide",children:"DEFAULT DUE PERIOD (DAYS)"}),
-          (0,P.jsx)("input",{type:"number",value:duePeriod,onChange:e=>setDuePeriod(e.target.value),className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white"})
+          (0,P.jsx)("input",{type:"number",value:duePeriod,onChange:e=>setDuePeriod(e.target.value),className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"})
         ]}),
         (0,P.jsxs)("div",{className:"space-y-1",children:[
           (0,P.jsx)("label",{className:"font-semibold text-slate-700 uppercase text-[10px] tracking-wide",children:"MAX ASSESSMENT ATTEMPTS"}),
-          (0,P.jsx)("input",{type:"number",value:v,onChange:e=>y(e.target.value),className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white"})
-        ]}),
-        (0,P.jsxs)("div",{className:"space-y-1",children:[
-          (0,P.jsx)("label",{className:"font-semibold text-slate-700 uppercase text-[10px] tracking-wide",children:"CERTIFICATE EXPIRY (MONTHS)"}),
-          (0,P.jsx)("input",{type:"number",value:b,onChange:e=>x(e.target.value),className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white"})
-        ]}),
-        (0,P.jsxs)("div",{className:"space-y-1",children:[
-          (0,P.jsx)("label",{className:"font-semibold text-slate-700 uppercase text-[10px] tracking-wide",children:"REMINDER FREQUENCY (DAYS)"}),
-          (0,P.jsx)("input",{type:"number",value:S,onChange:e=>ee(e.target.value),className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white"})
-        ]}),
-        (0,P.jsxs)("div",{className:"space-y-1",children:[
-          (0,P.jsx)("label",{className:"font-semibold text-slate-700 uppercase text-[10px] tracking-wide",children:"DEFAULT ASSIGNMENT TYPE"}),
-          (0,P.jsxs)("select",{value:defaultAssignType,onChange:e=>setDefaultAssignType(e.target.value),className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white",children:[
-            (0,P.jsx)("option",{value:"Mandatory",children:"Mandatory"}),
-            (0,P.jsx)("option",{value:"Recommended",children:"Recommended"}),
-            (0,P.jsx)("option",{value:"Optional",children:"Optional"})
-          ]})
-        ]})
-      ]}),
-      (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 border-t border-slate-100",children:[
-        (0,P.jsxs)("label",{className:"flex items-center justify-between p-3 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50",children:[
-          (0,P.jsxs)("div",{children:[
-            (0,P.jsx)("div",{className:"text-xs font-bold text-slate-800",children:"Reviewer Approval Required"}),
-            (0,P.jsx)("div",{className:"text-[10px] text-slate-500",children:"Require HR/Manager sign-off"})
-          ]}),
-          (0,P.jsx)("input",{type:"checkbox",checked:te,onChange:e=>T(e.target.checked),className:"w-4 h-4 text-blue-600 rounded"})
-        ]}),
-        (0,P.jsxs)("label",{className:"flex items-center justify-between p-3 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50",children:[
-          (0,P.jsxs)("div",{children:[
-            (0,P.jsx)("div",{className:"text-xs font-bold text-slate-800",children:"Mandatory Evidence Upload"}),
-            (0,P.jsx)("div",{className:"text-[10px] text-slate-500",children:"Require proof attachment"})
-          ]}),
-          (0,P.jsx)("input",{type:"checkbox",checked:evidenceUpload,onChange:e=>setEvidenceUpload(e.target.checked),className:"w-4 h-4 text-blue-600 rounded"})
-        ]}),
-        (0,P.jsxs)("label",{className:"flex items-center justify-between p-3 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50",children:[
-          (0,P.jsxs)("div",{children:[
-            (0,P.jsx)("div",{className:"text-xs font-bold text-slate-800",children:"Certificate Generation"}),
-            (0,P.jsx)("div",{className:"text-[10px] text-slate-500",children:"Issue credential upon approval"})
-          ]}),
-          (0,P.jsx)("input",{type:"checkbox",checked:certGen,onChange:e=>setCertGen(e.target.checked),className:"w-4 h-4 text-blue-600 rounded"})
+          (0,P.jsx)("input",{type:"number",value:v,onChange:e=>y(e.target.value),className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"})
         ]})
       ]})
     ]}),
 
-    // 3. Learning Resources
+    // 3. Learning Resources (Cleaned per Image 5: Type select, Title input with placeholder, URL input with placeholder, delete button. No mandatory checkbox.)
     (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4",children:[
       (0,P.jsxs)("div",{className:"flex items-center justify-between flex-wrap gap-2",children:[
         (0,P.jsxs)("div",{children:[
           (0,P.jsx)("h2",{className:"text-sm font-bold text-slate-900 uppercase tracking-wide",children:"3. Learning Resources (YouTube, External Courses, Websites, Videos, PDFs, Docs) *"}),
-          (0,P.jsx)("p",{className:"text-[11px] text-slate-500",children:"Learners will be required to finish all items flagged as Mandatory before taking the assessment."})
+          (0,P.jsx)("p",{className:"text-[11px] text-slate-500",children:"Add curriculum resources, video lectures, playbooks, and course links for learners."})
         ]}),
         (0,P.jsx)("button",{onClick:oe,type:"button",className:"text-xs font-semibold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg border border-blue-200 shadow-sm transition-colors",children:"+ Add Learning Resource"})
       ]}),
-      (0,P.jsx)("div",{className:"space-y-3",children:ie.map(res=>(0,P.jsxs)("div",{className:"flex flex-col md:flex-row items-center gap-3 bg-slate-50 p-3 rounded-lg border border-slate-200",children:[
+      (0,P.jsx)("div",{className:"space-y-3",children:ie.map((res, idx)=>(0,P.jsxs)("div",{className:"flex flex-col md:flex-row items-center gap-3 bg-slate-50 p-3 rounded-lg border border-slate-200",children:[
         (0,P.jsxs)("select",{value:res.type,onChange:e=>{let val=e.target.value;E(ie.map(r=>r.id===res.id?{...r,type:val}:r))},className:"w-full md:w-44 bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-800",children:[
           (0,P.jsx)("option",{value:"Video / YouTube",children:"Video / YouTube"}),
           (0,P.jsx)("option",{value:"PDF Document",children:"PDF Document"}),
@@ -834,15 +740,11 @@ Error generating stack: `+e.message+`
         ]}),
         (0,P.jsx)("input",{type:"text",value:res.title,onChange:e=>{let val=e.target.value;E(ie.map(r=>r.id===res.id?{...r,title:val}:r))},placeholder:"Module title (e.g. Architecture Lecture)...",className:"flex-1 w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-800 placeholder-slate-400"}),
         (0,P.jsx)("input",{type:"text",value:res.url,onChange:e=>{let val=e.target.value;E(ie.map(r=>r.id===res.id?{...r,url:val}:r))},placeholder:"URL / link (https://...)",className:"flex-1 w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-800 placeholder-slate-400"}),
-        (0,P.jsxs)("label",{className:"flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-200 px-2.5 py-1.5 rounded-lg cursor-pointer whitespace-nowrap",children:[
-          (0,P.jsx)("input",{type:"checkbox",checked:res.mandatory??true,onChange:e=>{let val=e.target.checked;E(ie.map(r=>r.id===res.id?{...r,mandatory:val}:r))},className:"w-3.5 h-3.5 text-blue-600 rounded"}),
-          (0,P.jsx)("span",{children:"Mandatory"})
-        ]}),
         (0,P.jsx)("button",{onClick:()=>se(res.id),type:"button",className:"p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors",title:"Delete Resource",children:"✕"})
-      ]},res.id))})
+      ]},res.id || idx))})
     ]}),
 
-    // 4. Assessment & Questions
+    // 4. Assessment & Questions (Redesigned per Image 2 & Image 4)
     (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-5",children:[
       (0,P.jsxs)("div",{className:"flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3",children:[
         (0,P.jsxs)("div",{children:[
@@ -908,103 +810,91 @@ Error generating stack: `+e.message+`
           ]})
         ]}),
 
-        // Question Cards
-        (0,P.jsx)("div",{className:"space-y-4",children:questions.map((q, qIndex)=>(0,P.jsxs)("div",{className:"bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3.5 relative",children:[
-          // Question Header Bar
-          (0,P.jsxs)("div",{className:"flex items-center justify-between flex-wrap gap-2 border-b border-slate-200 pb-2.5",children:[
-            (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
+        // Question Cards (Redesigned per Image 2: Clean, proper alignment, full-width inputs)
+        (0,P.jsx)("div",{className:"space-y-4",children:questions.map((q, qIndex)=>(0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4",children:[
+          // Question Header Toolbar
+          (0,P.jsxs)("div",{className:"flex items-center justify-between flex-wrap gap-2 border-b border-slate-100 pb-3",children:[
+            (0,P.jsxs)("div",{className:"flex items-center gap-2.5",children:[
               (0,P.jsxs)("span",{className:"bg-blue-600 text-white font-bold text-xs px-2.5 py-1 rounded-md shadow-sm",children:["Question ", q.number || (qIndex + 1)]}),
-              (0,P.jsxs)("span",{className:"text-xs font-semibold text-slate-600 bg-white border border-slate-200 px-2 py-0.5 rounded",children:[q.marks || 1, " Marks"]}),
-              q.mandatory && (0,P.jsx)("span",{className:"text-[10px] font-bold text-rose-600 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded",children:"Mandatory"})
+              (0,P.jsxs)("div",{className:"flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-md px-2 py-0.5 text-xs",children:[
+                (0,P.jsx)("span",{className:"text-slate-500 font-medium",children:"Marks:"}),
+                (0,P.jsx)("input",{type:"number",min:1,value:q.marks,onChange:e=>handleUpdateQuestion(q.id, "marks", e.target.value),className:"w-10 text-center bg-white border border-slate-300 rounded font-bold text-slate-800 text-xs py-0.5"})
+              ]}),
+              (0,P.jsxs)("label",{className:"flex items-center gap-1.5 cursor-pointer bg-slate-50 border border-slate-200 rounded-md px-2 py-1 text-xs",children:[
+                (0,P.jsx)("input",{type:"checkbox",checked:q.mandatory??true,onChange:e=>handleUpdateQuestion(q.id, "mandatory", e.target.checked),className:"w-3.5 h-3.5 text-blue-600 rounded"}),
+                (0,P.jsx)("span",{className:"text-[11px] font-semibold text-slate-700",children:"Mandatory"})
+              ]})
             ]}),
             (0,P.jsxs)("div",{className:"flex items-center gap-1",children:[
-              (0,P.jsx)("button",{type:"button",onClick:()=>handleMoveQuestion(qIndex, -1),disabled:qIndex===0,className:"p-1.5 text-slate-500 hover:text-slate-800 disabled:opacity-30 rounded hover:bg-white",title:"Move Up",children:"▲"}),
-              (0,P.jsx)("button",{type:"button",onClick:()=>handleMoveQuestion(qIndex, 1),disabled:qIndex===questions.length-1,className:"p-1.5 text-slate-500 hover:text-slate-800 disabled:opacity-30 rounded hover:bg-white",title:"Move Down",children:"▼"}),
-              (0,P.jsx)("button",{type:"button",onClick:()=>handleDuplicateQuestion(q.id),className:"p-1.5 text-slate-500 hover:text-blue-600 rounded hover:bg-white text-xs font-medium",title:"Duplicate Question",children:"📋 Duplicate"}),
+              (0,P.jsx)("button",{type:"button",onClick:()=>handleMoveQuestion(qIndex, -1),disabled:qIndex===0,className:"p-1.5 text-slate-500 hover:text-slate-800 disabled:opacity-30 rounded hover:bg-slate-100 text-xs",title:"Move Up",children:"▲"}),
+              (0,P.jsx)("button",{type:"button",onClick:()=>handleMoveQuestion(qIndex, 1),disabled:qIndex===questions.length-1,className:"p-1.5 text-slate-500 hover:text-slate-800 disabled:opacity-30 rounded hover:bg-slate-100 text-xs",title:"Move Down",children:"▼"}),
+              (0,P.jsx)("button",{type:"button",onClick:()=>handleDuplicateQuestion(q.id),className:"p-1.5 text-slate-500 hover:text-blue-600 rounded hover:bg-blue-50 text-xs font-medium ml-1",title:"Duplicate Question",children:"📋 Duplicate"}),
               (0,P.jsx)("button",{type:"button",onClick:()=>handleDeleteQuestion(q.id),className:"p-1.5 text-rose-500 hover:text-rose-700 rounded hover:bg-rose-50 text-xs font-medium ml-1",title:"Delete Question",children:"🗑️ Delete"})
             ]})
           ]}),
 
-          // Question Text & Configuration
-          (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-4 gap-3 text-xs",children:[
-            (0,P.jsxs)("div",{className:"md:col-span-3 space-y-1",children:[
-              (0,P.jsx)("label",{className:"font-semibold text-slate-700",children:"Question Statement *"}),
-              (0,P.jsx)("textarea",{rows:2,value:q.text,onChange:e=>handleUpdateQuestion(q.id, "text", e.target.value),placeholder:"Enter your question statement here...",className:"w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs focus:ring-1 focus:ring-blue-500"})
-            ]}),
-            (0,P.jsxs)("div",{className:"space-y-3",children:[
-              (0,P.jsxs)("div",{className:"space-y-1",children:[
-                (0,P.jsx)("label",{className:"font-semibold text-slate-700",children:"Question Type *"}),
-                (0,P.jsxs)("select",{value:q.type,onChange:e=>handleUpdateQuestion(q.id, "type", e.target.value),className:"w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-medium focus:ring-1 focus:ring-blue-500",children:[
-                  (0,P.jsx)("option",{value:"short_text",children:"Short Text Answer"}),
-                  (0,P.jsx)("option",{value:"long_text",children:"Long Text Answer"}),
-                  (0,P.jsx)("option",{value:"single_choice",children:"Single Selection (Radio)"}),
-                  (0,P.jsx)("option",{value:"multiple_choice",children:"Multiple Selection (Checkbox)"}),
-                  (0,P.jsx)("option",{value:"dropdown",children:"Dropdown Selection"}),
-                  (0,P.jsx)("option",{value:"true_false",children:"True / False"})
-                ]})
-              ]}),
-              (0,P.jsxs)("div",{className:"grid grid-cols-2 gap-2",children:[
-                (0,P.jsxs)("div",{className:"space-y-1",children:[
-                  (0,P.jsx)("label",{className:"font-semibold text-slate-700",children:"Marks *"}),
-                  (0,P.jsx)("input",{type:"number",min:1,value:q.marks,onChange:e=>handleUpdateQuestion(q.id, "marks", e.target.value),className:"w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs text-center"})
-                ]}),
-                (0,P.jsxs)("div",{className:"flex flex-col justify-end",children:[
-                  (0,P.jsxs)("label",{className:"flex items-center gap-1.5 cursor-pointer pb-2",children:[
-                    (0,P.jsx)("input",{type:"checkbox",checked:q.mandatory??true,onChange:e=>handleUpdateQuestion(q.id, "mandatory", e.target.checked),className:"w-3.5 h-3.5 text-blue-600 rounded"}),
-                    (0,P.jsx)("span",{className:"text-[11px] font-semibold text-slate-700",children:"Mandatory"})
-                  ]})
-                ]})
-              ]})
+          // Question Statement (Full Width)
+          (0,P.jsxs)("div",{className:"space-y-1 text-xs",children:[
+            (0,P.jsx)("label",{className:"font-semibold text-slate-700 block",children:"Question Statement *"}),
+            (0,P.jsx)("textarea",{rows:2,value:q.text,onChange:e=>handleUpdateQuestion(q.id, "text", e.target.value),placeholder:"Enter your question statement here...",className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"})
+          ]}),
+
+          // Question Type Selection (Clean full row)
+          (0,P.jsxs)("div",{className:"space-y-1 text-xs",children:[
+            (0,P.jsx)("label",{className:"font-semibold text-slate-700 block",children:"Question Type *"}),
+            (0,P.jsxs)("select",{value:q.type,onChange:e=>handleUpdateQuestion(q.id, "type", e.target.value),className:"w-full md:w-80 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500",children:[
+              (0,P.jsx)("option",{value:"short_text",children:"Short Text Answer"}),
+              (0,P.jsx)("option",{value:"long_text",children:"Long Text Answer"}),
+              (0,P.jsx)("option",{value:"single_choice",children:"Single Selection (Radio)"}),
+              (0,P.jsx)("option",{value:"multiple_choice",children:"Multiple Selection (Checkbox)"}),
+              (0,P.jsx)("option",{value:"dropdown",children:"Dropdown Selection"}),
+              (0,P.jsx)("option",{value:"true_false",children:"True / False"})
             ]})
           ]}),
 
-          // Format-specific Answer Setup
-          (0,P.jsxs)("div",{className:"pt-2 border-t border-slate-200/80 text-xs",children:[
+          // Format-specific Answer Setup (Clean & well-padded)
+          (0,P.jsxs)("div",{className:"pt-2 border-t border-slate-100 text-xs",children:[
             // Short Text Answer setup
-            q.type==="short_text" && (0,P.jsxs)("div",{className:"space-y-2",children:[
+            q.type==="short_text" && (0,P.jsxs)("div",{className:"space-y-2.5",children:[
               (0,P.jsxs)("div",{className:"flex items-center justify-between",children:[
                 (0,P.jsx)("span",{className:"font-semibold text-slate-700",children:"Configured Accepted Answers (Evaluated case-insensitively with trimmed whitespace):"}),
                 (0,P.jsx)("button",{type:"button",onClick:()=>handleAddAcceptedAnswer(q.id),className:"text-blue-600 hover:text-blue-700 font-semibold text-xs",children:"+ Add Accepted Answer"})
               ]}),
-              (0,P.jsx)("div",{className:"space-y-1.5",children:(q.acceptedAnswers||[""]).map((ans, aIdx)=>(0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
-                (0,P.jsx)("input",{type:"text",value:ans,onChange:e=>handleUpdateAcceptedAnswer(q.id, aIdx, e.target.value),placeholder:"Enter accepted correct answer (e.g. Customer Relationship Management)...",className:"flex-1 bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-xs focus:ring-1 focus:ring-blue-500"}),
-                (q.acceptedAnswers||[]).length > 1 && (0,P.jsx)("button",{type:"button",onClick:()=>handleRemoveAcceptedAnswer(q.id, aIdx),className:"text-slate-400 hover:text-rose-600 px-2 py-1 text-xs",children:"✕"})
+              (0,P.jsx)("div",{className:"space-y-2",children:(q.acceptedAnswers||[""]).map((ans, aIdx)=>(0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
+                (0,P.jsx)("input",{type:"text",value:ans,onChange:e=>handleUpdateAcceptedAnswer(q.id, aIdx, e.target.value),placeholder:"Enter accepted correct answer (e.g. Customer Relationship Management)...",className:"flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:ring-1 focus:ring-blue-500"}),
+                (q.acceptedAnswers||[]).length > 1 && (0,P.jsx)("button",{type:"button",onClick:()=>handleRemoveAcceptedAnswer(q.id, aIdx),className:"text-slate-400 hover:text-rose-600 p-1.5 rounded hover:bg-slate-100 text-xs",title:"Remove",children:"✕"})
               ]},aIdx))})
             ]}),
 
-            // Long Text Answer setup
+            // Long Text Answer setup (Cleaned per Image 4: No "Requires Manual Review" checkbox)
             q.type==="long_text" && (0,P.jsxs)("div",{className:"space-y-2",children:[
-              (0,P.jsx)("label",{className:"font-semibold text-slate-700",children:"Expected Answer / Evaluation Reference for Reviewer:"}),
-              (0,P.jsx)("textarea",{rows:2,value:q.expectedAnswer||"",onChange:e=>handleUpdateQuestion(q.id, "expectedAnswer", e.target.value),placeholder:"Enter key points, rubric, or sample solution for the evaluator...",className:"w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-xs focus:ring-1 focus:ring-blue-500"}),
-              (0,P.jsxs)("label",{className:"flex items-center gap-2 cursor-pointer pt-1",children:[
-                (0,P.jsx)("input",{type:"checkbox",checked:q.requiresManualReview??true,onChange:e=>handleUpdateQuestion(q.id, "requiresManualReview", e.target.checked),className:"w-4 h-4 text-blue-600 rounded"}),
-                (0,P.jsx)("span",{className:"font-medium text-slate-700",children:"Requires Manual Review (Assessment marked as 'Pending Review' until evaluated by reviewer)"})
-              ]})
+              (0,P.jsx)("label",{className:"font-semibold text-slate-700 block",children:"Expected Answer / Evaluation Reference for Reviewer:"}),
+              (0,P.jsx)("textarea",{rows:2,value:q.expectedAnswer||"",onChange:e=>handleUpdateQuestion(q.id, "expectedAnswer", e.target.value),placeholder:"Enter key points, rubric, or sample solution for the evaluator...",className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:ring-1 focus:ring-blue-500"})
             ]}),
 
             // Single Selection (Radio) setup
-            q.type==="single_choice" && (0,P.jsxs)("div",{className:"space-y-2",children:[
+            q.type==="single_choice" && (0,P.jsxs)("div",{className:"space-y-2.5",children:[
               (0,P.jsxs)("div",{className:"flex items-center justify-between",children:[
                 (0,P.jsx)("span",{className:"font-semibold text-slate-700",children:"Answer Options (Mark exactly 1 option as Correct Answer):"}),
                 (0,P.jsx)("button",{type:"button",onClick:()=>handleAddOption(q.id),className:"text-blue-600 hover:text-blue-700 font-semibold text-xs",children:"+ Add Option"})
               ]}),
-              (0,P.jsx)("div",{className:"space-y-1.5",children:(q.options||[]).map((opt, oIdx)=>(0,P.jsxs)("div",{className:"flex items-center gap-2 bg-white p-2 rounded-lg border border-slate-200",children:[
+              (0,P.jsx)("div",{className:"space-y-2",children:(q.options||[]).map((opt, oIdx)=>(0,P.jsxs)("div",{className:"flex items-center gap-2.5 bg-slate-50 p-2.5 rounded-lg border border-slate-200",children:[
                 (0,P.jsx)("input",{type:"radio",name:"correct-" + q.id,checked:q.correctAnswer===opt.id,onChange:()=>handleUpdateQuestion(q.id, "correctAnswer", opt.id),className:"w-4 h-4 text-blue-600 cursor-pointer",title:"Mark as Correct Answer"}),
-                (0,P.jsx)("input",{type:"text",value:opt.text,onChange:e=>handleUpdateOptionText(q.id, opt.id, e.target.value),placeholder:"Option " + (oIdx+1) + " text...",className:"flex-1 border-0 focus:ring-0 text-xs text-slate-800"}),
-                q.correctAnswer===opt.id && (0,P.jsx)("span",{className:"text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded",children:"Correct Answer"}),
-                (q.options||[]).length > 2 && (0,P.jsx)("button",{type:"button",onClick:()=>handleRemoveOption(q.id, opt.id),className:"text-slate-400 hover:text-rose-600 px-2",children:"✕"})
+                (0,P.jsx)("input",{type:"text",value:opt.text,onChange:e=>handleUpdateOptionText(q.id, opt.id, e.target.value),placeholder:"Option " + (oIdx+1) + " text...",className:"flex-1 bg-white border border-slate-200 rounded px-2.5 py-1.5 text-xs text-slate-800"}),
+                q.correctAnswer===opt.id && (0,P.jsx)("span",{className:"text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded",children:"Correct Answer"}),
+                (q.options||[]).length > 2 && (0,P.jsx)("button",{type:"button",onClick:()=>handleRemoveOption(q.id, opt.id),className:"text-slate-400 hover:text-rose-600 p-1 rounded hover:bg-white",title:"Delete Option",children:"✕"})
               ]},opt.id))})
             ]}),
 
             // Multiple Selection (Checkbox) setup
-            q.type==="multiple_choice" && (0,P.jsxs)("div",{className:"space-y-2",children:[
+            q.type==="multiple_choice" && (0,P.jsxs)("div",{className:"space-y-2.5",children:[
               (0,P.jsxs)("div",{className:"flex items-center justify-between",children:[
                 (0,P.jsx)("span",{className:"font-semibold text-slate-700",children:"Answer Options (Check all options that are correct):"}),
                 (0,P.jsx)("button",{type:"button",onClick:()=>handleAddOption(q.id),className:"text-blue-600 hover:text-blue-700 font-semibold text-xs",children:"+ Add Option"})
               ]}),
-              (0,P.jsx)("div",{className:"space-y-1.5",children:(q.options||[]).map((opt, oIdx)=>{
+              (0,P.jsx)("div",{className:"space-y-2",children:(q.options||[]).map((opt, oIdx)=>{
                 let isChecked = Array.isArray(q.correctAnswers) && q.correctAnswers.includes(opt.id);
-                return (0,P.jsxs)("div",{className:"flex items-center gap-2 bg-white p-2 rounded-lg border border-slate-200",children:[
+                return (0,P.jsxs)("div",{className:"flex items-center gap-2.5 bg-slate-50 p-2.5 rounded-lg border border-slate-200",children:[
                   (0,P.jsx)("input",{type:"checkbox",checked:isChecked,onChange:e=>{
                     let curr = Array.isArray(q.correctAnswers) ? [...q.correctAnswers] : [];
                     if(e.target.checked){
@@ -1014,25 +904,25 @@ Error generating stack: `+e.message+`
                     }
                     handleUpdateQuestion(q.id, "correctAnswers", curr);
                   },className:"w-4 h-4 text-blue-600 rounded cursor-pointer",title:"Check if correct"}),
-                  (0,P.jsx)("input",{type:"text",value:opt.text,onChange:e=>handleUpdateOptionText(q.id, opt.id, e.target.value),placeholder:"Option " + (oIdx+1) + " text...",className:"flex-1 border-0 focus:ring-0 text-xs text-slate-800"}),
-                  isChecked && (0,P.jsx)("span",{className:"text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded",children:"Correct"}),
-                  (q.options||[]).length > 2 && (0,P.jsx)("button",{type:"button",onClick:()=>handleRemoveOption(q.id, opt.id),className:"text-slate-400 hover:text-rose-600 px-2",children:"✕"})
+                  (0,P.jsx)("input",{type:"text",value:opt.text,onChange:e=>handleUpdateOptionText(q.id, opt.id, e.target.value),placeholder:"Option " + (oIdx+1) + " text...",className:"flex-1 bg-white border border-slate-200 rounded px-2.5 py-1.5 text-xs text-slate-800"}),
+                  isChecked && (0,P.jsx)("span",{className:"text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded",children:"Correct"}),
+                  (q.options||[]).length > 2 && (0,P.jsx)("button",{type:"button",onClick:()=>handleRemoveOption(q.id, opt.id),className:"text-slate-400 hover:text-rose-600 p-1 rounded hover:bg-white",title:"Delete Option",children:"✕"})
                 ]},opt.id);
               })})
             ]}),
 
             // Dropdown Selection setup
-            q.type==="dropdown" && (0,P.jsxs)("div",{className:"space-y-2",children:[
+            q.type==="dropdown" && (0,P.jsxs)("div",{className:"space-y-2.5",children:[
               (0,P.jsxs)("div",{className:"flex items-center justify-between",children:[
                 (0,P.jsx)("span",{className:"font-semibold text-slate-700",children:"Dropdown Options (Select the correct dropdown answer):"}),
                 (0,P.jsx)("button",{type:"button",onClick:()=>handleAddOption(q.id),className:"text-blue-600 hover:text-blue-700 font-semibold text-xs",children:"+ Add Option"})
               ]}),
-              (0,P.jsx)("div",{className:"space-y-1.5",children:(q.options||[]).map((opt, oIdx)=>(0,P.jsxs)("div",{className:"flex items-center gap-2 bg-white p-2 rounded-lg border border-slate-200",children:[
+              (0,P.jsx)("div",{className:"space-y-2",children:(q.options||[]).map((opt, oIdx)=>(0,P.jsxs)("div",{className:"flex items-center gap-2 bg-slate-50 p-2 rounded-lg border border-slate-200",children:[
                 (0,P.jsx)("span",{className:"text-xs text-slate-400 font-mono w-6 text-center",children:oIdx+1}),
-                (0,P.jsx)("input",{type:"text",value:opt.text,onChange:e=>handleUpdateOptionText(q.id, opt.id, e.target.value),placeholder:"Option text...",className:"flex-1 border-0 focus:ring-0 text-xs text-slate-800"}),
-                (q.options||[]).length > 2 && (0,P.jsx)("button",{type:"button",onClick:()=>handleRemoveOption(q.id, opt.id),className:"text-slate-400 hover:text-rose-600 px-2",children:"✕"})
+                (0,P.jsx)("input",{type:"text",value:opt.text,onChange:e=>handleUpdateOptionText(q.id, opt.id, e.target.value),placeholder:"Option text...",className:"flex-1 bg-white border border-slate-200 rounded px-2.5 py-1.5 text-xs text-slate-800"}),
+                (q.options||[]).length > 2 && (0,P.jsx)("button",{type:"button",onClick:()=>handleRemoveOption(q.id, opt.id),className:"text-slate-400 hover:text-rose-600 p-1 rounded hover:bg-white",title:"Delete Option",children:"✕"})
               ]},opt.id))}),
-              (0,P.jsxs)("div",{className:"flex items-center gap-2 pt-2",children:[
+              (0,P.jsxs)("div",{className:"flex items-center gap-2 pt-1",children:[
                 (0,P.jsx)("span",{className:"font-semibold text-slate-700",children:"Correct Answer:"}),
                 (0,P.jsx)("select",{value:q.correctAnswer||"",onChange:e=>handleUpdateQuestion(q.id, "correctAnswer", e.target.value),className:"bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-medium focus:ring-1 focus:ring-blue-500",children:(q.options||[]).map(opt=>(0,P.jsx)("option",{value:opt.id,children:opt.text || ("Option (" + opt.id + ")")},opt.id))})
               ]})
@@ -1040,13 +930,13 @@ Error generating stack: `+e.message+`
 
             // True / False setup
             q.type==="true_false" && (0,P.jsxs)("div",{className:"space-y-2",children:[
-              (0,P.jsx)("span",{className:"font-semibold text-slate-700",children:"Select the Correct Statement Answer:"}),
+              (0,P.jsx)("span",{className:"font-semibold text-slate-700 block",children:"Select the Correct Statement Answer:"}),
               (0,P.jsxs)("div",{className:"flex items-center gap-6 pt-1",children:[
-                (0,P.jsxs)("label",{className:"flex items-center gap-2 cursor-pointer bg-white px-3 py-2 rounded-lg border border-slate-200",children:[
+                (0,P.jsxs)("label",{className:"flex items-center gap-2 cursor-pointer bg-slate-50 px-4 py-2 rounded-lg border border-slate-200",children:[
                   (0,P.jsx)("input",{type:"radio",name:"tf-" + q.id,checked:q.correctAnswer==="True",onChange:()=>handleUpdateQuestion(q.id, "correctAnswer", "True"),className:"w-4 h-4 text-blue-600"}),
                   (0,P.jsx)("span",{className:"font-bold text-slate-800",children:"True"})
                 ]}),
-                (0,P.jsxs)("label",{className:"flex items-center gap-2 cursor-pointer bg-white px-3 py-2 rounded-lg border border-slate-200",children:[
+                (0,P.jsxs)("label",{className:"flex items-center gap-2 cursor-pointer bg-slate-50 px-4 py-2 rounded-lg border border-slate-200",children:[
                   (0,P.jsx)("input",{type:"radio",name:"tf-" + q.id,checked:q.correctAnswer==="False",onChange:()=>handleUpdateQuestion(q.id, "correctAnswer", "False"),className:"w-4 h-4 text-blue-600"}),
                   (0,P.jsx)("span",{className:"font-bold text-slate-800",children:"False"})
                 ]})
@@ -1057,33 +947,11 @@ Error generating stack: `+e.message+`
       ]}) : (0,P.jsxs)("div",{className:"p-8 text-center bg-slate-50 border border-dashed border-slate-200 rounded-xl space-y-2",children:[
         (0,P.jsx)("div",{className:"text-2xl",children:"📋"}),
         (0,P.jsx)("div",{className:"text-xs font-bold text-slate-700",children:"Assessment Disabled"}),
-        (0,P.jsx)("div",{className:"text-[11px] text-slate-500",children:"Learners enrolled in this programme will complete it upon finishing all mandatory learning resources without requiring an assessment."})
+        (0,P.jsx)("div",{className:"text-[11px] text-slate-500",children:"Learners enrolled in this programme will complete it upon finishing all learning resources without requiring an assessment."})
       ]})
     ]}),
 
-    // 5. Review & Publish
-    (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4",children:[
-      (0,P.jsx)("h2",{className:"text-sm font-bold text-slate-900 uppercase tracking-wide border-b border-slate-100 pb-2",children:"5. Review & Publish"}),
-      (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-slate-50 rounded-xl text-xs",children:[
-        (0,P.jsxs)("div",{children:[
-          (0,P.jsx)("span",{className:"text-slate-400 block",children:"Programme"}),
-          (0,P.jsx)("span",{className:"font-bold text-slate-900",children:a || "Untitled"})
-        ]}),
-        (0,P.jsxs)("div",{children:[
-          (0,P.jsx)("span",{className:"text-slate-400 block",children:"Department & Level"}),
-          (0,P.jsxs)("span",{className:"font-bold text-slate-900",children:[u, " • ", f]})
-        ]}),
-        (0,P.jsxs)("div",{children:[
-          (0,P.jsx)("span",{className:"text-slate-400 block",children:"Learning Resources"}),
-          (0,P.jsxs)("span",{className:"font-bold text-slate-900",children:[ie.length, " Modules (", ie.filter(r=>r.mandatory).length, " Mandatory)"]})
-        ]}),
-        (0,P.jsxs)("div",{children:[
-          (0,P.jsx)("span",{className:"text-slate-400 block",children:"Assessment"}),
-          (0,P.jsx)("span",{className:"font-bold text-slate-900",children:assessmentEnabled ? (totalQuestions + " Questions (" + totalAssessmentMarks + " Marks)") : "Disabled"})
-        ]})
-      ]}),
-null
-    ]}),
+    // (Section 5 REVIEW & PUBLISH completely removed per Image 3)
 
     // Assessment Preview Modal
     showPreviewModal && (0,P.jsx)("div",{className:"fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto",children:(0,P.jsxs)("div",{className:"bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 space-y-4 my-8",children:[
@@ -1107,7 +975,6 @@ null
           (0,P.jsxs)("span",{className:"bg-slate-100 text-slate-600 px-2 py-0.5 rounded text-[10px] font-semibold",children:[q.marks, " Marks"]})
         ]}),
         (0,P.jsx)("div",{className:"text-slate-800 font-medium",children:q.text || "(Untitled question)"}),
-        // Display employee mock input
         q.type==="short_text" && (0,P.jsx)("input",{disabled:true,placeholder:"Type your short text answer here...",className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs cursor-not-allowed"}),
         q.type==="long_text" && (0,P.jsx)("textarea",{disabled:true,rows:2,placeholder:"Type your detailed answer here...",className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs cursor-not-allowed"}),
         (q.type==="single_choice" || q.type==="true_false") && (0,P.jsx)("div",{className:"space-y-1.5",children:(q.type==="true_false" ? [{id:"t",text:"True"},{id:"f",text:"False"}] : (q.options||[])).map(o=>(0,P.jsxs)("label",{className:"flex items-center gap-2 p-2 rounded-lg border border-slate-100 bg-slate-50/50 text-slate-700",children:[
