@@ -110,6 +110,52 @@ This document specifies the exact end-to-end user navigation flow, screen transi
 
 ---
 
+### Flow 3B: View Programme Details Flow (Unified 2-Column Detail Layout)
+**User Type:** Company Admin / HR Manager / Employee Learner  
+**Acceptance Criteria:**
+1. **Navigation:** `People > Training Module > Training Management > Click 'View Programme' (Eye icon)`.
+2. Screen adopts the unified 2-column detail layout matching the Employee Profile format:
+   - **Top Navigation Bar:**
+     - Left: `< Back to Training Programmes` button (with arrow icon).
+     - Right: `+ Assign Programme` button (primary blue button).
+   - **Left Column (1 Column - Metadata & Sidebar Card):**
+     - Status pill at top-left: `Published` (emerald badge).
+     - Large centered programme icon circle (`w-24 h-24` with book/curriculum icon).
+     - Full Programme Title (e.g., `Enterprise Security & Data Protection Compliance`).
+     - Training Category subtitle (e.g., `Recruitment & HR Operations`).
+     - Difficulty level pill badge (e.g., `Intermediate`).
+     - Quick action button: `Assign Programme`.
+     - Key parameters list (divided by subtle top border):
+       - `Expected Duration`: e.g., `18 Hours`.
+       - `Passing Assessment Score`: e.g., `80% (Strictly > 80% to pass)`.
+       - `Department`: e.g., `Project`.
+       - `Enrolled Learners`: Dynamic active enrolled count (e.g., `3 Enrolled`).
+       - Bottom navigation shortcut: `View All Programmes`.
+   - **Right Column (3 Columns - Tabbed Information & Management Area):**
+     - **Top Segmented Tab Bar:**
+       - `General Info` (active default).
+       - `Curriculum & Modules`.
+       - `Enrolled Employees` with live learner count pill badge.
+     - **Tab 1: `General Info` Section:**
+       - 3 Top Key Stat Cards across the grid:
+         1. `Status`: `Published` with emerald check icon.
+         2. `Expected Duration`: `18 Hours` with book/clock icon.
+         3. `Passing Assessment Score`: `80% (Strictly > 80% to pass)` with target icon.
+       - Detailed `PROGRAMME INFORMATION` card:
+         - 3-Column key-value grid:
+           - Column 1: `PROGRAMME NAME`, `DIFFICULTY LEVEL`.
+           - Column 2: `TRAINING CATEGORY`, `EXPECTED DURATION`.
+           - Column 3: `DEPARTMENT`, `PASSING ASSESSMENT SCORE`.
+         - Dividers for:
+           - `LEARNING OBJECTIVES`: Detailed operational objectives text.
+           - `COMPLETION REQUIREMENTS & ASSESSMENT CRITERIA`: Strict completion standards.
+     - **Tab 2: `Curriculum & Modules` Section:**
+       - Displays card grid of all curriculum resources (playbooks, videos, sandbox demo) with mandatory flags and open resource links.
+     - **Tab 3: `Enrolled Employees` Section:**
+       - Searchable table of all enrolled learners with progress bars, due dates, statuses, and quick link to learner profile.
+
+---
+
 ### Flow 4: Assignments Screen Flow
 **User Type:** Company Admin / HR Manager  
 **Acceptance Criteria:**
@@ -233,6 +279,14 @@ This document specifies the exact end-to-end user navigation flow, screen transi
    2. `Employee Name` (Avatar, Learner Name, IT-related Department/Role).
    3. `Programme Name` (Interactive `<select>` dropdown menu containing all completed programmes for that employee, defaulting to the current completed programme).
    4. `Actions` (Aligned cleanly with `w-36 text-center` and centered eye icon; clicking `View Certificate` opens the modal dynamically displaying the exact completed programme chosen in that row's dropdown).
+   - **Certificate Modal Credential Details:**
+     - Title: `CERTIFICATE OF APPRECIATION`
+     - Recipient Name: Dynamic employee name (e.g., `Tanya Kapoor`).
+     - Employee ID: Dynamic code (e.g., `EMP-1042`).
+     - Programme Name: Dynamic completed programme title chosen from row dropdown (e.g., `Cloud Infrastructure & High-Performance Node Services`).
+     - Issued Date: Formatted completion date.
+     - Certificate ID: Unique serial (e.g., `TRN-2026-0027`).
+     - Authorized Signatory: Strictly **`Khushi Bhatt, Head of HR`** (verified Authorized Signatory).
    *(Note: Columns for `Approval Date`, `Status`, and `Expiry Date` are removed from the system as certifications are automated upon assessment pass).*
 
 ---
