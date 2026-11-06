@@ -9000,7 +9000,6 @@ function renderEmployeeTrainingHistory(emp) {
         <td style="padding: 12px 14px; color: #475569; white-space: nowrap;">${escapeHtml(completionDate)}</td>
         <td style="padding: 12px 14px; text-align: center;">${scoreBadge}</td>
         <td style="padding: 12px 14px; text-align: center; white-space: nowrap;">${statusPill}</td>
-        <td style="padding: 12px 14px; text-align: center; white-space: nowrap;">${certAction}</td>
         <td style="padding: 12px 14px; text-align: center; white-space: nowrap;">
           <button type="button" class="emp-action-icon" onclick="event.stopPropagation(); openEmployeeTrainingDetail('${recordId}')" title="View Complete Training Details" aria-label="View Complete Training Details" style="width: 32px; height: 32px; border-radius: 6px; border: 1px solid #cbd5e1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#eff6ff'; this.style.color='#2563eb'; this.style.borderColor='#bfdbfe';" onmouseout="this.style.background='#ffffff'; this.style.color='#334155'; this.style.borderColor='#cbd5e1';">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">

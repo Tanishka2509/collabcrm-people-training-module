@@ -5471,6 +5471,15 @@ label:not(.inline-flex):not([class*="cursor-pointer"]) {
   margin-bottom: 0.375rem !important; /* 6px clean breathing room */
 }
 .space-y-1 > label, .space-y-1\.5 > label, .space-y-2 > label {
-  display: block !important;
+  display: block;
+  margin-bottom: 0.375rem;
+}
+
+
+/* Fix flex labels so info icon (i) stays on the same line beside label text */
+label.flex, label[class*="flex"], label.inline-flex, label[class*="inline-flex"] {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.375rem !important;
   margin-bottom: 0.375rem !important;
 }

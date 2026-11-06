@@ -173,7 +173,7 @@ This document specifies the exact end-to-end user navigation flow, screen transi
    *(Note: The `All Assignments` dropdown filter is removed).*
 4. Table displays all assignments in tabular form with the following columns:
    1. `EMPLOYEE` (Avatar with user initials, Employee Name, Designation/Role).
-   2. `ASSIGNED TARGET` (Renamed from `DEPARTMENT` / `Assignment Scope`; captures assignment scope targeted by Employee, Department, or Designation, e.g. `Department: Project`, `Designation: Technical Lead`, `Employee: Ishdeep Anand`).
+   2. `ASSIGNED SCOPE` (Renamed from `DEPARTMENT` to represent multi-entity scope targeted by Employee, Department, or Designation, e.g. `Department: Project`, `Designation: Frontend Developer`, `Employee: Tanya Kapoor`).
    3. `ASSIGNED TRAINING` (Programme Title, Level, Duration).
    4. `ASSIGNED DATE` (Formatted date: `YYYY-MM-DD` or `DD-MMM-YYYY`).
    5. `DUE DATE` (Target completion date).
@@ -275,14 +275,16 @@ This document specifies the exact end-to-end user navigation flow, screen transi
    - Manual management review queues, evaluator approval steps, and manual certificate assignment links do **not** exist.
 3. User lands on the **Certificates** screen.
 4. Screen subheader displays table title as **`Certificates`** (matching the module name, renamed from `Certificate Management`) with record count badge (e.g. `8 Certified Employees` or `34 Certificates`).
-5. **Unique Employee Grouping with Programme Dropdown:**
-   - Instead of repeating the employee name across separate rows for each certificate, records are grouped by unique employee.
-   - The `Programme Name` column provides an interactive `<select>` dropdown menu listing all completed programmes for that employee, with the currently completed programme selected by default.
+5. **Master-Detail Expandable Table Format (Matching Screenshot 3):**
+   - The table utilizes master-detail expandable rows instead of dropdown inputs or redundant candidate rows.
+   - Beside the serial number (`No.`), an interactive chevron dropdown toggle button (`^` / `v`) allows expanding or collapsing that employee's earned programmes.
+   - In the `Programme Name` column, the programme is displayed in clean view text format only (the `<select>` input box is removed, and the `✓ Passed` option/badge is removed).
+   - The `Actions` column is positioned tightly to the left right next to Programme Name (avoiding wide empty gaps), with a centered eye icon button.
 6. Tabular listing of all issued certificates with columns:
-   1. `No.` (Sequential serial numbers: 1, 2, 3... and so on).
-   2. `Employee Name` (Avatar, Learner Name, IT-related Department/Role).
-   3. `Programme Name` (Interactive `<select>` dropdown menu containing all completed programmes for that employee, defaulting to the current completed programme).
-   4. `Actions` (Aligned cleanly with `w-36 text-center` and centered eye icon; clicking `View Certificate` opens the modal dynamically displaying the exact completed programme chosen in that row's dropdown).
+   1. `No.` (Expand/collapse chevron button `^` / `v` + sequential number: 1, 2, 3...; sub-rows have blank No. cells).
+   2. `Employee Name` (Master row displays Avatar, Learner Name, Department/Role; sub-rows have blank Employee cells).
+   3. `Programme Name (Earned Programmes)` (Clean view text format only. Master row displays the first completed programme; nested sub-rows display subsequent completed programmes with an indented left border connector).
+   4. `Actions` (Aligned cleanly to the left beside Programme Name; clicking the eye icon on any row or sub-row opens the Certificate Modal dynamically populated with that exact completed programme).
    - **Certificate Modal Credential Details:**
      - Title: `CERTIFICATE OF APPRECIATION`
      - Recipient Name: Dynamic employee name (e.g., `Tanya Kapoor`).
@@ -290,7 +292,7 @@ This document specifies the exact end-to-end user navigation flow, screen transi
      - Programme Name: Dynamic completed programme title chosen from row dropdown (e.g., `Cloud Infrastructure & High-Performance Node Services`).
      - Issued Date: Formatted completion date.
      - Certificate ID: Unique serial (e.g., `TRN-2026-0027`).
-     - Authorized Signatory: Strictly **`Khushi Bhatt, Head of HR`** (verified Authorized Signatory).
+     - Authorized Signatory: Strictly **`Khushi Bhatt, Head of HR`** (as per HR specification) (verified Authorized Signatory).
    *(Note: Columns for `Approval Date`, `Status`, and `Expiry Date` are removed from the system as certifications are automated upon assessment pass).*
 
 ---
