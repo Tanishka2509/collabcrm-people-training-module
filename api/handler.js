@@ -4628,7 +4628,20 @@ export async function handleApi(req, res) {
     return res.end();
   }
 
-  const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+  // Robust URL extraction supporting both direct requests and platform rewrites
+  const rawPath = req.headers['x-matched-path'] || req.headers['x-forwarded-url'] || req.url;
+  const parsedUrl = new URL(rawPath, `http://${req.headers.host || 'localhost'}`);
+  
+  // Merge query parameters if req.url has query params not in rawPath
+  try {
+    const directUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+    directUrl.searchParams.forEach((val, key) => {
+      if (!parsedUrl.searchParams.has(key)) {
+        parsedUrl.searchParams.set(key, val);
+      }
+    });
+  } catch (e) {}
+
   let pathname = parsedUrl.pathname;
   if (!pathname.startsWith('/api')) {
     pathname = '/api' + (pathname.startsWith('/') ? pathname : '/' + pathname);

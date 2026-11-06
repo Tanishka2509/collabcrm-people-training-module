@@ -3,6 +3,18 @@
   "cleanUrls": true,
   "rewrites": [
     {
+      "source": "/api/employee/:path*",
+      "destination": "/api/employee/[...path].js"
+    },
+    {
+      "source": "/api/training/certificate/:path*",
+      "destination": "/api/training/certificate/[...path].js"
+    },
+    {
+      "source": "/api/training/:path*",
+      "destination": "/api/training/[...path].js"
+    },
+    {
       "source": "/((?!api|assets|.*\\..*).*)",
       "destination": "/index.html"
     }
