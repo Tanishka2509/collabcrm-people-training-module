@@ -5464,3 +5464,13 @@ body {
 
 
 .translate-x-4{--tw-translate-x:1rem;translate:var(--tw-translate-x) var(--tw-translate-y);transform:translateX(16px);}
+
+/* Spacing between field name and text field box across overall system */
+label:not(.inline-flex):not([class*="cursor-pointer"]) {
+  display: block;
+  margin-bottom: 0.375rem !important; /* 6px clean breathing room */
+}
+.space-y-1 > label, .space-y-1\.5 > label, .space-y-2 > label {
+  display: block !important;
+  margin-bottom: 0.375rem !important;
+}

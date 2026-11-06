@@ -83,6 +83,7 @@ This document specifies the exact end-to-end user navigation flow, screen transi
      - `Publish Programme` split button (options: `Publish Programme` or `Save Draft`).
    - The form is divided into 3 sequential sections:
      - **Section 1: 1. CORE PROGRAMME DETAILS**
+       - **Field Label Spacing:** Every field maintains consistent vertical breathing room (`mb-1.5` / `0.375rem` margin) between the field name label and the text field / select dropdown box to prevent label clipping and focus ring collisions across the entire system.
        - User enters Programme Name.
        - User selects Training Category from dropdown.
        - User selects Difficulty Level from dropdown.
