@@ -188,16 +188,13 @@ This document specifies the exact end-to-end user navigation flow, screen transi
    - When a learner completes all mandatory resources and scores $\ge$ the passing score on the assessment, the system **automatically** generates the certificate.
    - Manual management review queues, evaluator approval steps, and manual certificate assignment links do **not** exist.
 3. User lands on the **Certificates** screen.
-4. Top controls: Search by Certificate ID or recipient name, filter by programme.
+4. Screen subheader displays table title as **`Certificates`** (renamed from `Certificate Management`) with record count badge (e.g. `34 Certificates`).
 5. Tabular listing of all issued certificates with columns:
-   1. `CERTIFICATE ID` (e.g., `CERT-2026-0812`).
-   2. `RECIPIENT NAME` (Avatar and Learner Name).
-   3. `PROGRAMME NAME` (Title of completed training).
-   4. `COMPLETION DATE` (Date assessment was passed).
-   5. `SCORE ACHIEVED` (e.g., `85% (Pass: 80%)`).
-   6. `VERIFICATION HASH` (Tamper-evident verification code).
-   7. `ACTIONS`:
-      - Single `View Certificate` eye icon button (opens formatted certificate modal).
+   1. `No.` (Sequential serial numbers: 1, 2, 3... and so on).
+   2. `Employee Name` (Avatar, Learner Name, IT-related Department/Role).
+   3. `Programme Name` (Title of completed training programme).
+   4. `Actions` (Single `View Certificate` eye icon button to inspect credential).
+   *(Note: Columns for `Approval Date`, `Status`, and `Expiry Date` are removed from the system as certifications are automated upon assessment pass).*
 
 ---
 
