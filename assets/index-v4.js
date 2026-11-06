@@ -948,7 +948,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n}){
     // Screen Title & Subtitle (per Image 4)
     (0,P.jsxs)('div',{className:'flex flex-col md:flex-row md:items-center justify-between gap-4',children:[
       (0,P.jsxs)('div',{children:[
-        (0,P.jsx)('h1',{className:'text-xl font-bold text-slate-900',children:'Training Progress'}),
+        (0,P.jsx)('h1',{className:'text-xl font-bold text-slate-900',children:'Progress'}),
         (0,P.jsx)('p',{className:'text-xs text-slate-500 mt-0.5',children:'Granular learner progress tracking and completion analytics across employees and training programmes.'})
       ]}),
       // Dual-Mode View Switcher (Employee-wise vs Programme-wise)
@@ -968,7 +968,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n}){
     viewMode === 'employee' ? (0,P.jsxs)('div',{className:'bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden',children:[
       (0,P.jsxs)('div',{className:'p-4 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4',children:[
         (0,P.jsxs)('div',{className:'flex items-center gap-3',children:[
-          (0,P.jsx)('h2',{className:'font-bold text-slate-900 text-base',children:'Employee Training Progress Tracker'}),
+          (0,P.jsx)('h2',{className:'font-bold text-slate-900 text-base',children:'Employee Progress Tracker'}),
           (0,P.jsxs)('span',{className:'bg-blue-50 text-blue-700 text-xs font-bold px-2 py-0.5 rounded-full',children:[filteredEmployees.length,' Records']})
         ]}),
         (0,P.jsxs)('div',{className:'flex items-center gap-3 flex-wrap',children:[

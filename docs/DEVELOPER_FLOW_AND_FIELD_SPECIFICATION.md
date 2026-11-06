@@ -140,13 +140,13 @@ This document specifies the exact end-to-end user navigation flow, screen transi
 2. In the side panel, the sub-module label is **`Progress`** on a single line.
 3. User lands on the **Progress** screen.
 4. Screen header contains:
-   - Title: `Training Progress`.
-   - Subtitle: `Granular employee and programme progress tracking and completion analytics across all enrollments.`
+   - Title: `Progress` (strictly matching the sidebar module name).
+   - Subtitle: `Granular learner progress tracking and completion analytics across employees and training programmes.`
    - Segmented Dual-View Toggle:
      - `[ Employee-wise ]`
      - `[ Programme-wise ]`
 5. **When `Employee-wise` is selected (Default Mode):**
-   - Subheader shows: `Employee Training Progress Tracker` with record count (e.g. `41 Records`).
+   - Subheader shows: `Employee Progress Tracker` with record count (e.g. `15 Records`).
    - Filters:
      - Search input: `Filter employee name or email...`.
      - Department dropdown: `All Departments`, `Engineering`, `HR`, etc.
