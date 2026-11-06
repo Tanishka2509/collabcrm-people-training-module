@@ -584,10 +584,39 @@ This document specifies the exact end-to-end user navigation flow, screen transi
 stateDiagram-v2
     [*] --> Assigned: Assignment created or automated onboarding
     Assigned --> In_Progress: Learner completes first learning resource
-    In_Progress --> Assessment_Taken: Learner finishes all resources & starts quiz
+    In_Progress --> Assessment_Taken: Assessment Enabled & Learner starts quiz
+    In_Progress --> Completed: Assessment Disabled & All Mandatory Modules Completed
     Assessment_Taken --> Completed: Score >= Passing Score (e.g. 80%)
     Completed --> Certificate_Issued: System generates authenticated Certificate (Instant)
     Assessment_Taken --> In_Progress: Score < Passing Score & Attempts Remaining > 0
     Assessment_Taken --> Overdue: Due Date elapsed without passing score
     Certificate_Issued --> [*]
 ```
+
+---
+
+## SECTION 4: ASSESSMENT & PORTAL DYNAMIC BEHAVIORAL SPECIFICATIONS
+
+### 4.1 Assessment Toggle State Matrix (Admin vs Employee User Role)
+| Configuration Parameter | Assessment Toggle: ON (`enabled: true`) | Assessment Toggle: OFF (`enabled: false`) |
+| :--- | :--- | :--- |
+| **Tab 3 Header** | `3. Assessment & Questions` (clean title; no `[Unlocked]` tag) | `3. Assessment & Questions` (clean title; no `[Unlocked]` tag) |
+| **Tab 3 Content Body** | Displays full evaluation card, attempt counter, passing criteria, and all configured questions | **Empty State Container**: "No Assessment Configured" message with icon; **no questions, no scoring inputs, no submit button** |
+| **Left Sidebar Action Button** | "Take Assessment →" (or "Assessment Passed ✓" when cleared) | "Start Learning Modules →" (or "Programme Completed ✓" when modules done) |
+| **Passing Score Indicator** | `🎯 {passingScore}% (Strictly > 80% to pass)` | `N/A (Assessment Disabled)` |
+| **Tab 2 Navigation Button** | "Proceed to Assessment →" | "All Modules Completed ✓" |
+| **Completion Criteria** | 100% Mandatory Resources + Passing Score on Assessment | 100% Mandatory Resources Reviewed |
+
+### 4.2 Dynamic Question Format Parity
+- **Short Text (`short_text`)**: Single-line text input with case-insensitive accepted answer evaluation.
+- **Long Text (`long_text`)**: Multi-line textarea for detailed subjective responses.
+- **Single Choice (`single_choice`)**: Radio group with option labels and single select state.
+- **Multiple Choice (`multiple_choice`)**: Checkbox group supporting multiple selections with array equality grading.
+- **Dropdown (`dropdown`)**: Standard select menu with placeholder `-- Select Answer --` and option values.
+- **True / False (`true_false`)**: Dual toggle buttons/radios for binary verification.
+- **Marks & Mandatory Indicators**: Every question displays its designated marks (`X Marks`) and mandatory status (`• Mandatory`).
+
+### 4.3 Certificates Master-Detail Actions Alignment
+- The Certificates table spans the full width of the card (`w-full`).
+- The `Actions` column header and action eye icon buttons are aligned to the far right edge of the card (`text-right pr-6`), positioned directly below the `All Records` category filter dropdown.
+
