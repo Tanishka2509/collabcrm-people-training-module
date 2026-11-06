@@ -117,20 +117,25 @@ This document specifies the exact end-to-end user navigation flow, screen transi
 2. User lands on the **Assignments** screen.
    *(Note: The top-right `+ Assign Training` button is removed. Assignments are listed in read-only and inspection mode).*
 3. Top filter bar contains:
-   - Counter badge: `41 Total`.
+   - Counter badge: Live count matching actual records (e.g. `41 Total`).
    - Search input: `Filter employee or training...`.
-   - Dropdown filter: `All Departments` (Project, Quality Assurance, Cloud & DevOps, Cyber Security, Infrastructure).
+   - Dropdown filter: `All Departments` (Project, Quality Assurance, Cloud & DevOps, Cyber Security, Infrastructure, Recruitment & HR, Sales & BD).
    *(Note: The `All Assignments` dropdown filter is removed).*
 4. Table displays all assignments in tabular form with the following columns:
    1. `EMPLOYEE` (Avatar with user initials, Employee Name, Designation/Role).
-   2. `DEPARTMENT` (Department Name).
+   2. `ASSIGNMENT SCOPE` (Renamed from `DEPARTMENT`; captures assignment scope targeted by Employee, Department, or Designation, e.g. `Department: Project`, `Designation: Technical Lead`, `Employee: Ishdeep Anand`).
    3. `ASSIGNED TRAINING` (Programme Title, Level, Duration).
    4. `ASSIGNED DATE` (Formatted date: `YYYY-MM-DD` or `DD-MMM-YYYY`).
    5. `DUE DATE` (Target completion date).
    6. `PROGRESS` (Numeric percentage e.g. `75%` with visual color progress bar).
    7. `ACTIONS`: Contains **only** the `View Assignment Details` eye icon.
    *(Note: The `TYPE` column is completely removed from the table; Reassign and Delegate Reviewer icons are removed).*
-5. User clicks the `View Assignment Details` eye icon in any row to navigate to the Assignment Details screen.
+5. **Full Record Listing & Pagination**:
+   - The table renders the complete set of records corresponding to the counter badge (exactly 41 assignment records).
+   - Bottom pagination bar contains:
+     - Record range indicator: `Showing 1 to 10 of 41 Assignments` (dynamically updates per page and filter).
+     - Navigation controls: `Previous` button, individual numeric page buttons (`1`, `2`, `3`, `4`, `5`), and `Next` button.
+6. User clicks the `View Assignment Details` eye icon in any row to navigate to the Assignment Details screen.
 
 ---
 
@@ -267,6 +272,10 @@ This document specifies the exact end-to-end user navigation flow, screen transi
        - `training.assignments.view` (View assignments list).
        - `training.progress.view` (View progress tracker).
        - `training.certificates.manage` (Download and verify certificates).
+   - **Screen C: `Config > Training Config > Training Categories`**:
+     - User inspects and manages global training categories.
+     - **Strict Case-Insensitive Uniqueness:** Repeating categories with varying casing or standard character formatting (e.g., `engineering and architecture` vs `Engineering & Architecture`) are strictly disallowed on both creation and edit. Form validation flags duplicate names.
+     - **Active Status Toggle Sign:** The toggle switch in the Actions column uses active emerald green (`bg-emerald-600`) with an embedded checkmark sign (`✓`) inside the white circle knob when active, shifting to neutral gray (`bg-slate-300`) when inactive.
 
 ---
 
