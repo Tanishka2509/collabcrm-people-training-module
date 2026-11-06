@@ -15,13 +15,13 @@ This document specifies the exact end-to-end user navigation flow, screen transi
    - System displays all employees in tabular form with verified IT-related departments (`Infrastructure`, `Project`, `Quality Assurance`, `Cloud & DevOps`, `Cyber Security`).
    - The prefix `IT - ` is omitted from department badges for clear, concise naming.
 3. Under `People`, user clicks on `Training Module`.
-4. Clicking on `Training Module` opens a dedicated side panel drawer with the following 6 sub-modules:
+4. Clicking on `Training Module` opens a dedicated side panel drawer with the following 5 sub-modules:
    - a. `Dashboard`
    - b. `Training Management`
    - c. `Assignments`
    - d. `Progress` (short, concise name)
    - e. `Certificates`
-   - f. `Reports`
+   *(Note: The `Reports` sub-module has been removed from the module navigation).*
 5. By default, `Dashboard` is selected and loaded as the active screen.
 
 ---
@@ -123,7 +123,7 @@ This document specifies the exact end-to-end user navigation flow, screen transi
    *(Note: The `All Assignments` dropdown filter is removed).*
 4. Table displays all assignments in tabular form with the following columns:
    1. `EMPLOYEE` (Avatar with user initials, Employee Name, Designation/Role).
-   2. `ASSIGNMENT SCOPE` (Renamed from `DEPARTMENT`; captures assignment scope targeted by Employee, Department, or Designation, e.g. `Department: Project`, `Designation: Technical Lead`, `Employee: Ishdeep Anand`).
+   2. `ASSIGNED TARGET` (Renamed from `DEPARTMENT` / `Assignment Scope`; captures assignment scope targeted by Employee, Department, or Designation, e.g. `Department: Project`, `Designation: Technical Lead`, `Employee: Ishdeep Anand`).
    3. `ASSIGNED TRAINING` (Programme Title, Level, Duration).
    4. `ASSIGNED DATE` (Formatted date: `YYYY-MM-DD` or `DD-MMM-YYYY`).
    5. `DUE DATE` (Target completion date).
@@ -173,7 +173,7 @@ This document specifies the exact end-to-end user navigation flow, screen transi
 **User Type:** Company Admin / HR Manager / Department Lead  
 **Acceptance Criteria:**
 1. **Navigation:** `People > Training Module > Progress`.
-2. In the side panel, the sub-module label is **`Progress`** on a single line.
+2. In the side panel, the sub-module label is **`Progress`** on a single line (short and concise).
 3. User lands on the **Progress** screen.
 4. Screen header contains:
    - Title: `Progress` (strictly matching the sidebar module name).
@@ -182,25 +182,25 @@ This document specifies the exact end-to-end user navigation flow, screen transi
      - `[ Employee-wise ]`
      - `[ Programme-wise ]`
 5. **When `Employee-wise` is selected (Default Mode):**
-   - Subheader shows: `Employee Progress Tracker` with record count (e.g. `15 Records`).
+   - Subheader shows: `Progress Tracker` (matching module name convention) with record count (e.g. `15 Records`).
    - Filters:
      - Search input: `Filter employee name or email...`.
      - Department dropdown: `All Departments`, `Engineering`, `HR`, etc.
      - Training Status dropdown: `All Statuses`, `Not Started`, `In Progress`, `Completed`, `Overdue`.
-     - Certificate Status dropdown: `All Certificate Statuses`, `Issued`, `Pending`, `None`.
+     - Certificate Status dropdown: `All Certificate Statuses`, `Received`, `Not Received`.
    - Tabular columns:
      1. `EMPLOYEE NAME` (Avatar, Full Name, Email).
-     2. `DEPARTMENT` (Department Name).
+     2. `DEPARTMENT` (Department Name without redundant 'IT - ' prefix).
      3. `ASSIGNED TRAINING` (Programme Title).
      4. `ASSIGNMENT DATE` (Date assigned).
      5. `DUE DATE` (Due date).
      6. `COMPLETION %` (Progress percentage with progress bar).
      7. `TRAINING STATUS` (Pill: `Completed`, `In Progress`, `Not Started`, `Overdue`).
-     8. `SUBMISSION STATUS` (Pill: `Approved`, `Auto-Evaluated`, `In Progress`).
-     9. `CERTIFICATE STATUS` (Pill: `Issued` in purple, `Pending`, or `None`).
-     10. `ACTION` (View icon to inspect individual learner progress).
+     8. `CERTIFICATE STATUS` (Strictly indicates whether candidate has received certificate or not: `Received` in green badge with check icon, or `Not Received` in slate badge).
+     9. `ACTION` (View icon to inspect individual learner progress).
+   *(Note: The `SUBMISSION STATUS` column is completely removed from the table and data models).*
 6. **When `Programme-wise` is selected:**
-   - Subheader shows: `Programme Training Progress Tracker` with programme count (e.g. `12 Programmes`).
+   - Subheader shows: `Programme Progress Tracker` with programme count (e.g. `12 Programmes`).
    - Search input: `Filter programmes...`.
    - Tabular / Card catalogue of all 12 programmes with the following columns:
      1. `PROGRAMME NAME` (Title, Category, Version tag).
@@ -224,12 +224,15 @@ This document specifies the exact end-to-end user navigation flow, screen transi
    - When a learner completes all mandatory resources and scores $\ge$ the passing score on the assessment, the system **automatically** generates the certificate.
    - Manual management review queues, evaluator approval steps, and manual certificate assignment links do **not** exist.
 3. User lands on the **Certificates** screen.
-4. Screen subheader displays table title as **`Certificates`** (renamed from `Certificate Management`) with record count badge (e.g. `34 Certificates`).
-5. Tabular listing of all issued certificates with columns:
+4. Screen subheader displays table title as **`Certificates`** (matching the module name, renamed from `Certificate Management`) with record count badge (e.g. `8 Certified Employees` or `34 Certificates`).
+5. **Unique Employee Grouping with Programme Dropdown:**
+   - Instead of repeating the employee name across separate rows for each certificate, records are grouped by unique employee.
+   - The `Programme Name` column provides an interactive `<select>` dropdown menu listing all completed programmes for that employee, with the currently completed programme selected by default.
+6. Tabular listing of all issued certificates with columns:
    1. `No.` (Sequential serial numbers: 1, 2, 3... and so on).
    2. `Employee Name` (Avatar, Learner Name, IT-related Department/Role).
-   3. `Programme Name` (Title of completed training programme).
-   4. `Actions` (Single `View Certificate` eye icon button to inspect credential).
+   3. `Programme Name` (Interactive `<select>` dropdown menu containing all completed programmes for that employee, defaulting to the current completed programme).
+   4. `Actions` (Aligned cleanly with `w-36 text-center` and centered eye icon; clicking `View Certificate` opens the modal dynamically displaying the exact completed programme chosen in that row's dropdown).
    *(Note: Columns for `Approval Date`, `Status`, and `Expiry Date` are removed from the system as certifications are automated upon assessment pass).*
 
 ---

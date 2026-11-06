@@ -7,7 +7,7 @@ window.DEFAULT_EMPLOYEE_STORE = {
       firstName: 'Tanya',
       lastName: 'Kapoor',
       designation: 'Business analyst',
-      department: 'Business analyst',
+      department: 'Project',
       reportingManager: 'Megha Salunkhe (Sr. Executive)',
       reportingManagerId: 'CO-5038',
       email: 'calebnguyen@maildrop.cc',
