@@ -7,19 +7,22 @@ This document specifies the exact end-to-end user navigation flow, screen transi
 
 ## SECTION 1: SYSTEM NAVIGATION & USER FLOWS
 
-### Flow 1: Accessing Training Module
+### Flow 1: Accessing Training Module & Department Setup
 **User Type:** Company Admin / HR Manager / Employee  
 **Acceptance Criteria:**
-1. **Navigation:** User clicks on `People` from the left main navigation bar.
-2. Under `People`, user clicks on `Training Module`.
-3. Clicking on `Training Module` opens a dedicated side panel drawer with the following sub-modules:
+1. **Navigation:** User navigates to `People` from the left main navigation bar.
+2. Under `People > Employees`:
+   - System displays all employees in tabular form with verified IT-related departments (`Infrastructure`, `Project`, `Quality Assurance`, `Cloud & DevOps`, `Cyber Security`).
+   - The prefix `IT - ` is omitted from department badges for clear, concise naming.
+3. Under `People`, user clicks on `Training Module`.
+4. Clicking on `Training Module` opens a dedicated side panel drawer with the following 6 sub-modules:
    - a. `Dashboard`
    - b. `Training Management`
    - c. `Assignments`
-   - d. `Progress`
+   - d. `Progress` (short, concise name)
    - e. `Certificates`
    - f. `Reports`
-4. By default, `Dashboard` is selected and loaded as the active screen.
+5. By default, `Dashboard` is selected and loaded as the active screen.
 
 ---
 
@@ -29,14 +32,19 @@ This document specifies the exact end-to-end user navigation flow, screen transi
 1. **Navigation:** `People > Training Module > Dashboard`.
 2. User lands on the Dashboard screen.
 3. System displays 4 high-level KPI metric cards at the top:
-   - `Total Programmes` (Count of all active and draft programmes).
-   - `Active Enrollments` (Count of all active learner assignments).
-   - `Overdue Assignments` (Count of learners past due date without completion).
-   - `Avg. Completion Rate` (Overall percentage progress across all learners).
-4. System displays 3 visual analytic sections:
-   - `Department Completion Matrix` (Bar graph of completion rates by department).
-   - `Enrollment Status Distribution` (Pie/donut chart: Not Started, In Progress, Completed, Overdue).
-   - `Quick Action Shortcuts` (Direct navigation links to `+ Create Programme` and `Training Progress`).
+   - `TOTAL PROGRAMMES` (Count of all active and draft programmes, e.g. `12`).
+   - `ACTIVE ENROLLMENTS` (Count of all active learner assignments, e.g. `41`).
+   - `OVERDUE ASSIGNMENTS` (Count of learners past due date without completion, e.g. `5`).
+   - `CERTIFICATES EARNED` (Count of earned credentials, e.g. `9`, with overdue and verified telemetry. Renamed from `CERTIFICATES ISSUED` to reflect that employees earn certificates upon passing assessment tests; no manual issuance exists).
+4. System displays live graphical telemetry and analytics widgets:
+   - **Training Programmes Performance & Assessment Analytics (Graphical Widget):**
+     - Replaces obsolete manual review queues with automated telemetry.
+     - `Top Programmes Completion & Pass Rates`: Dynamic progress bars showing completion percentage, enrolled counts, certified counts, and average assessment scores (e.g. Enterprise Security 96% pass rate, API Security 92% pass rate, Executive Leadership 100% pass rate).
+     - `Departmental Training Adoption`: Visual progress indicators across all departments (`Project & Management` 94%, `Quality Assurance` 89%, `Cloud & DevOps` 92%, `Cyber Security` 97%, `Infrastructure` 86%).
+     - `Assessment Benchmark Insight`: Summary note highlighting first-attempt pass metrics (91% of learners clear their programme assessments on the first attempt with average scores exceeding 90%).
+   - **Enrollment Status Distribution & Participation:**
+     - Status charts showing active distribution (`In Progress`, `Overdue`, `Not Started`, `Completed`).
+     - Direct navigation links into `Training Progress` and `+ Create Programme`.
 
 ---
 
@@ -209,9 +217,9 @@ This document specifies the exact end-to-end user navigation flow, screen transi
      - System displays a table of all training programmes assigned to this employee:
        - Columns: `Programme Title`, `Category`, `Level`, `Assigned Date`, `Due Date`, `Progress %`, `Status`, `Score`, `Action`.
        - Action: `Resume Training` (for active trainings) or `View Syllabus` (for completed trainings).
-   - **Tab B: `My Certificates`**:
-     - User clicks `My Certificates`.
-     - System displays a card grid of all certificates earned by this employee.
+   - **Tab B: `Earned Certificates`**:
+     - User clicks `Earned Certificates` (or `My Certificates`).
+     - System displays a clean card grid of all authenticated certificates earned by this employee (unnecessary static badges like `5 Verified Credentials Active` are removed for clarity).
      - Each card displays certificate badge, programme name, completion date, score, and buttons to `View Certificate` and `Download PDF`.
 
 ---
