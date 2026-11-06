@@ -49,7 +49,7 @@ The left collapsible sidebar provides access to:
 1. **Employees** (`employees`): Complete employee directory with profile cards and Add Employee modal.
 2. **Training Hub**:
    - **Dashboard** (`training-dashboard`): Real-time metrics (Active Learners, Total Assignments, Completion Rate, Average Score), urgent review queue, and performance analytics.
-   - **Training Programmes** (`training-programmes`): Full course catalogue, status filters (All, Published, Draft, Archived), search, and "+ Create Programme" action.
+   - **Training Programmes** (`training-programmes`): Full course catalogue, status filters (All, Published, Draft), search, and "+ Create Programme" action.
    - **Assignments** (`training-assignments`): Central assignment register with **`ASSIGNED SCOPE`** column (Employee, Department, Designation), `41 Total` assignment count, and 5-page pagination (10 items/page).
    - **Progress** (`training-progress`): Dual-mode tracking (Department Analytics vs Employee-wise Completion view).
    - **Certificates** (`certificates`): Expandable master-detail table matching Screenshot 3 format (`^ / v` toggle chevron, plain-text earned programmes, and right-aligned Actions column directly under `All Records`).
