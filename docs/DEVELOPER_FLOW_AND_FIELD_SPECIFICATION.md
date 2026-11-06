@@ -124,13 +124,12 @@ This document specifies the exact end-to-end user navigation flow, screen transi
       *(Note: Reassign and Delegate Reviewer icons are removed).*
 5. **View Details Flow:**
    - User clicks the `View Assignment Details` eye icon in any row.
-   - System opens a slide-over drawer / modal showing:
-     - Employee profile summary (Name, Department, Email).
-     - Assigned programme syllabus and learning modules checklist.
-     - Completion percentage breakdown.
-     - Assessment attempt history and score.
-     - Action button: `Send Reminder` (dispatches in-app and email reminder to learner).
-     - Close button (`X`): closes the modal and returns user to the table.
+   - System navigates to the dedicated **Assignment Details** screen (`Assignment Details: [Programme Name]`):
+     - Displays a unified, full-width card containing all essential assignment details given to the employee:
+       - Header: Learner avatar, Name, Department & Role (IT-related), Assignment Type badge, and Status badge.
+       - Details Grid: Assignment ID (e.g. `TRN-ASSIGN-132`), Assigned Training Title, Assigned Date, Due Date.
+       - Progress & Score: Overall Course Progress percentage bar and Certificate Credential status (`Issued`).
+       - Curriculum Modules: Checklist of assigned learning modules and final assessment results.
 
 ---
 
@@ -198,8 +197,7 @@ This document specifies the exact end-to-end user navigation flow, screen transi
    5. `SCORE ACHIEVED` (e.g., `85% (Pass: 80%)`).
    6. `VERIFICATION HASH` (Tamper-evident verification code).
    7. `ACTIONS`:
-      - `View Certificate` (opens formatted certificate modal).
-      - `Download PDF` (downloads authenticated PDF certificate).
+      - Single `View Certificate` eye icon button (opens formatted certificate modal).
 
 ---
 
