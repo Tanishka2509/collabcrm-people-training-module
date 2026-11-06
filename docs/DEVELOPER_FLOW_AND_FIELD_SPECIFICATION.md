@@ -16,7 +16,7 @@ This document specifies the exact end-to-end user navigation flow, screen transi
    - a. `Dashboard`
    - b. `Training Management`
    - c. `Assignments`
-   - d. `Training Progress`
+   - d. `Progress`
    - e. `Certificates`
    - f. `Reports`
 4. By default, `Dashboard` is selected and loaded as the active screen.
@@ -134,12 +134,12 @@ This document specifies the exact end-to-end user navigation flow, screen transi
 
 ---
 
-### Flow 5: Training Progress (Dual-Mode Tracker Flow)
+### Flow 5: Progress (Dual-Mode Tracker Flow)
 **User Type:** Company Admin / HR Manager / Department Lead  
 **Acceptance Criteria:**
-1. **Navigation:** `People > Training Module > Training Progress`.
-2. In the side panel, the sub-module label is **`Training Progress`** on a single line.
-3. User lands on the **Training Progress** screen.
+1. **Navigation:** `People > Training Module > Progress`.
+2. In the side panel, the sub-module label is **`Progress`** on a single line.
+3. User lands on the **Progress** screen.
 4. Screen header contains:
    - Title: `Training Progress`.
    - Subtitle: `Granular employee and programme progress tracking and completion analytics across all enrollments.`
