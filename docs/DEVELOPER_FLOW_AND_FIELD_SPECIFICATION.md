@@ -68,7 +68,10 @@ This document specifies the exact end-to-end user navigation flow, screen transi
    5. `Enrolled ↕` (Count of enrolled employees)
    6. `Status ↕` (Pill: `Published` in green, `Draft` in amber)
    7. `Actions`:
-      - Active/Inactive toggle switch (instantly toggles between Published and Draft).
+      - **Active/Inactive Toggle Switch:**
+        - **Active Scenario (Published):** The toggle track is highlighted in active blue (`bg-blue-600`), the knob shifts to the right (`translateX(16px)`), and displays an embedded checkmark sign (`✓`) inside the white circular knob. Row status badge displays green `Published`.
+        - **Inactive Scenario (Draft):** The toggle track displays neutral gray (`bg-slate-300`), the knob shifts to the left (`translateX(0px)`), and displays an embedded cancel/cross sign (`✕`) inside the white circular knob. Row status badge displays amber `Draft`.
+        - **Reactive State:** Clicking the switch immediately re-renders the component, updates status telemetry, and toggles between Published and Draft without reloading.
       - View Programme icon (eye icon): opens programme detail view.
       - Edit Programme icon (pencil icon): opens programme editor.
 5. **Create Programme Flow:**
