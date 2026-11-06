@@ -469,3 +469,24 @@ stateDiagram-v2
 - **Column Header**: **`ASSIGNED SCOPE`** (synchronized across all multi-entity assignment types: Employee, Department, Designation).
 - **Total Record Count**: **`41 Total`** assignments.
 - **Pagination**: Complete 5-page pagination (10 items per page with reactive Previous/Next and page number indicators).
+
+### 4.4 Training Programmes Catalogue & Status Architecture
+- **Strict Separation of Statuses**:
+  - **Lifecycle Status (`Status ↕`)**: Reflects the editorial/publishing stage (`Published` vs `Draft`).
+    - `Published`: Emerald badge (`bg-emerald-50 text-emerald-700 border border-emerald-200`). Programme is officially approved and released.
+    - `Draft`: Amber badge (`bg-amber-50 text-amber-700 border border-amber-200`). Programme is under authoring or review.
+  - **Operational Status (`Active / Inactive`)**: Reflects operational availability/visibility in a separate, dedicated table column.
+    - Toggle Switch: `h-6 w-11` container with `h-5 w-5` sliding knob.
+    - Toggle ON / Right (`translate-x-5`, `bg-blue-600`): **Active** (`isActive: true`).
+    - Toggle OFF / Left (`translate-x-0`, `bg-slate-300`): **Inactive** (`isActive: false`).
+  - **No Combined Status**: Lifecycle status (`Published` / `Draft`) and operational status (`Active` / `Inactive`) are independent fields on the programme model. Toggling `Active / Inactive` operates purely on `e.isActive` and does not mutate `e.status`.
+- **Catalogue Table Column Structure (8 Columns)**:
+  1. `No.` (`w-16`, tabular digits)
+  2. `Programme Name ↕` (Programme title + version badge)
+  3. `Level ↕` (Beginner / Intermediate / Expert badge)
+  4. `Duration ↕` (Hours in monospace)
+  5. `Enrolled ↕` (Learner enrollment count)
+  6. `Status ↕` (Lifecycle badge: `Published` or `Draft` only)
+  7. `Active / Inactive` (Centered operational toggle switch only)
+  8. `Actions` (Right-aligned View `👁` and Edit `✏️` action buttons)
+
