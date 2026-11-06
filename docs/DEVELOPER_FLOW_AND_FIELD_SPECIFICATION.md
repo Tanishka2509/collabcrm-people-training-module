@@ -38,7 +38,8 @@ This document specifies the exact end-to-end user navigation flow, screen transi
    - `CERTIFICATES EARNED` (Count of earned credentials, e.g. `9`, with overdue and verified telemetry. Renamed from `CERTIFICATES ISSUED` to reflect that employees earn certificates upon passing assessment tests; no manual issuance exists).
 4. System displays live graphical telemetry and analytics widgets:
    - **Training Programmes Performance & Assessment Analytics (Graphical Widget):**
-     - Replaces obsolete manual review queues with automated telemetry.
+     - Replaces obsolete manual review queues with automated graphical telemetry.
+     - Header displays title and subtitle cleanly without auxiliary cohort or telemetry tags.
      - `Top Programmes Completion & Pass Rates`: Dynamic progress bars showing completion percentage, enrolled counts, certified counts, and average assessment scores (e.g. Enterprise Security 96% pass rate, API Security 92% pass rate, Executive Leadership 100% pass rate).
      - `Departmental Training Adoption`: Visual progress indicators across all departments (`Project & Management` 94%, `Quality Assurance` 89%, `Cloud & DevOps` 92%, `Cyber Security` 97%, `Infrastructure` 86%).
      - `Assessment Benchmark Insight`: Summary note highlighting first-attempt pass metrics (91% of learners clear their programme assessments on the first attempt with average scores exceeding 90%).
@@ -118,26 +119,48 @@ This document specifies the exact end-to-end user navigation flow, screen transi
 3. Top filter bar contains:
    - Counter badge: `41 Total`.
    - Search input: `Filter employee or training...`.
-   - Dropdown filter 1: `All Departments` (Engineering, Recruitment & HR, Sales & BD, Business Analyst, etc.).
-   - Dropdown filter 2: `All Assignments` (All Assignments, Mandatory, Elective, Overdue).
+   - Dropdown filter: `All Departments` (Project, Quality Assurance, Cloud & DevOps, Cyber Security, Infrastructure).
+   *(Note: The `All Assignments` dropdown filter is removed).*
 4. Table displays all assignments in tabular form with the following columns:
    1. `EMPLOYEE` (Avatar with user initials, Employee Name, Designation/Role).
    2. `DEPARTMENT` (Department Name).
    3. `ASSIGNED TRAINING` (Programme Title, Level, Duration).
    4. `ASSIGNED DATE` (Formatted date: `YYYY-MM-DD` or `DD-MMM-YYYY`).
    5. `DUE DATE` (Target completion date).
-   6. `TYPE` (Badge: `Mandatory` in rose or `Elective` in slate).
-   7. `PROGRESS` (Numeric percentage e.g. `75%` with visual color progress bar).
-   8. `ACTIONS`: Contains **only** the `View Assignment Details` eye icon.
-      *(Note: Reassign and Delegate Reviewer icons are removed).*
-5. **View Details Flow:**
-   - User clicks the `View Assignment Details` eye icon in any row.
-   - System navigates to the dedicated **Assignment Details** screen (`Assignment Details: [Programme Name]`):
-     - Displays a unified, full-width card containing all essential assignment details given to the employee:
-       - Header: Learner avatar, Name, Department & Role (IT-related), Assignment Type badge, and Status badge.
-       - Details Grid: Assignment ID (e.g. `TRN-ASSIGN-132`), Assigned Training Title, Assigned Date, Due Date.
-       - Progress & Score: Overall Course Progress percentage bar and Certificate Credential status (`Issued`).
-       - Curriculum Modules: Checklist of assigned learning modules and final assessment results.
+   6. `PROGRESS` (Numeric percentage e.g. `75%` with visual color progress bar).
+   7. `ACTIONS`: Contains **only** the `View Assignment Details` eye icon.
+   *(Note: The `TYPE` column is completely removed from the table; Reassign and Delegate Reviewer icons are removed).*
+5. User clicks the `View Assignment Details` eye icon in any row to navigate to the Assignment Details screen.
+
+---
+
+### Flow 4B: Assignment Details View Flow (Same format as Job Detail Screen)
+**User Type:** Company Admin / HR Manager / Department Lead / Employee Learner  
+**Acceptance Criteria:**
+1. **Navigation:** `People > Training Module > Assignments > Click 'View Assignment Details' (Eye icon)`.
+2. Header Bar:
+   - Left: `Back to Assignments` button (`< Back to Assignments`).
+   - Title: Displays **strictly the programme name** (e.g. `API Security & OAuth2 Best Practices`) without redundant prefixes like `Assignment Details: `.
+   - Right: Pill badge indicating `Automated Evaluation Active`.
+3. Screen layout consists of a unified card structure formatted identically to the system's detail screens:
+   - **Section 1: Learner Identity Bar**:
+     - Large learner avatar circle with first initial.
+     - Full employee name (e.g., `Tanya Kapoor`).
+     - Subtitle displaying clean role and department hierarchy: `Business Analyst • Project`.
+     - Live status badge pill: `Completed` (emerald badge with check icon).
+   - **Section 2: Assignment Parameters (4-Column Key-Value Grid)**:
+     1. `Assignment ID`: Mono-spaced identifier (e.g., `TRN-ASSIGN-132`).
+     2. `Assigned Training`: Full programme title (e.g., `API Security & OAuth2 Best Practices`).
+     3. `Assigned Date`: Formatted calendar start date (e.g., `01-Jan-2026`).
+     4. `Due Date`: Formatted target completion date (e.g., `20-Jan-2026`).
+   - **Section 3: Course Completion & Credential Cards (2-Column Grid)**:
+     1. `Overall Course Progress`: Displays percentage (`100%`) alongside an emerald full-width progress bar.
+     2. `Certificate Credential`: Displays credential serial (`TRN-2026-0032 • Automated Issuance`) with an `Earned` badge.
+   - **Section 4: Assigned Learning Modules & Assessment Checklist**:
+     - Subheader: `ASSIGNED LEARNING MODULES & ASSESSMENT`.
+     - Item 1: Module 1 Video Lecture with status `Completed (100%)`.
+     - Item 2: Module 2 Implementation Playbook (PDF) with status `Completed (100%)`.
+     - Item 3: Final Assessment with score result `Passed (94% Score)`.
 
 ---
 
@@ -424,6 +447,62 @@ This document specifies the exact end-to-end user navigation flow, screen transi
     - `Standard Corporate Blue`
     - `Executive Gold`
     - `Technical Minimalist`
+
+---
+
+### 3. Assignment Details Screen Fields (`Assignments > View Assignment Details`)
+
+- **Header Programme Name:**
+  - Mandatory: Yes
+  - Type: Text / Heading
+  - Max. Length: 120
+  - Default value: Bound to assigned training programme name
+  - Validation: Displays strictly the programme title (e.g. `API Security & OAuth2 Best Practices`) with no `Assignment Details: ` prefix.
+
+- **Learner Name:**
+  - Mandatory: Yes
+  - Type: Alphabets / Display text
+  - Max. Length: 100
+  - Default value: Bound to assigned employee record (e.g. `Tanya Kapoor`)
+  - Validation: Read-only display of employee's first and last name.
+
+- **Learner Subtitle (Role & Department):**
+  - Mandatory: Yes
+  - Type: Alphanumeric
+  - Max. Length: 100
+  - Default value: `{Designation} • {Department}` (e.g. `Business Analyst • Project`)
+  - Validation: Displays verified IT-related department hierarchy.
+
+- **Assignment ID:**
+  - Mandatory: Yes
+  - Type: Alphanumeric (Formatted identifier)
+  - Max. Length: 30
+  - Default value: `TRN-ASSIGN-{id}`
+  - Validation: Unique alphanumeric assignment tracking code.
+
+- **Assigned Date:**
+  - Mandatory: Yes
+  - Type: Date (DD-MMM-YYYY)
+  - Default value: System timestamp on assignment creation
+  - Validation: Valid calendar date; cannot be future-dated beyond assignment inception.
+
+- **Due Date:**
+  - Mandatory: Yes
+  - Type: Date (DD-MMM-YYYY)
+  - Default value: Computed from assignment date + default due period (14 days)
+  - Validation: Must be on or after Assigned Date.
+
+- **Overall Course Progress:**
+  - Mandatory: Yes
+  - Type: Numeric (Integer percentage 0-100)
+  - Default value: `0`
+  - Validation: Automatically increments as learner completes learning resources and final assessment.
+
+- **Certificate Credential:**
+  - Mandatory: Conditional (Generated once assessment passed)
+  - Type: Alphanumeric (Formatted credential serial)
+  - Default value: `TRN-{YYYY}-{serial}`
+  - Validation: Read-only cryptographic verification code with status badge `Earned`.
 
 ---
 
