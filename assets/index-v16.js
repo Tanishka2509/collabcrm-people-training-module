@@ -334,7 +334,7 @@ const COMPLETION_REQ_OPTIONS=[`Watch all required videos`,`Pass the assessment`,
         ]}),
         (0,P.jsxs)("div",{className:"border-t border-slate-100 pt-4 space-y-4 text-xs",children:[
           (0,P.jsxs)("div",{children:[
-            (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Expected Duration"}),
+            (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Duration"}),
             (0,P.jsx)("div",{className:"font-semibold text-slate-800 mt-0.5",children:fmtDurationHM(e.expectedDurationHours ? e : {expectedDurationHours:18})})
           ]}),
           (0,P.jsxs)("div",{children:[
@@ -342,14 +342,10 @@ const COMPLETION_REQ_OPTIONS=[`Watch all required videos`,`Pass the assessment`,
             (0,P.jsx)("div",{className:"font-semibold text-slate-800 mt-0.5",children:e.assessment && e.assessment.enabled === !1 ? "N/A (Assessment Disabled)" : ((Number(e.assessment?.passingScore || e.passingScore) || 80) + "%")})
           ]}),
           (0,P.jsxs)("div",{children:[
-            (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Department"}),
-            (0,P.jsx)("div",{className:"font-semibold text-slate-800 mt-0.5",children:e.department || "Business Analysis"})
-          ]}),
-          (0,P.jsxs)("div",{children:[
             (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Enrolled Employees"}),
             (0,P.jsxs)("div",{className:"font-semibold text-slate-800 mt-0.5",children:[o.length, " Enrolled"]})
           ]}),
-          (0,P.jsx)("button",{onClick:n,className:"w-full bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg py-2 text-xs font-bold transition-colors shadow-sm",children:"View All Trainings"})
+          (0,P.jsx)("button",{onClick:n,className:"w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg py-2 text-xs font-bold transition-colors shadow-sm cursor-pointer",children:"View All Trainings"})
         ]})
       ]}),
 
@@ -1440,16 +1436,93 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
       (0,P.jsx)("div",{className:"flex justify-end pt-2 border-t border-slate-100",children:(0,P.jsx)("button",{onClick:()=>setShowPreviewModal(false),className:"bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-lg text-xs font-semibold shadow-sm",children:"Close Preview"})})
     ]})})
   ]});
-}function it({assignments:e,onOpenAssignTraining:t,onEvaluate:n,onSelectAssignment:r}){
+}function it({assignments:e,employees:empList,onOpenAssignTraining:t,onEvaluate:n,onSelectAssignment:r}){
   let rawList = [{"id": "132", "name": "Tanya Kapoor", "role": "Business Analyst", "dept": "Collab", "training": "API Security & OAuth2 Best Practices", "level": "Intermediate \u2022 4 hrs", "assigned": "01-Jan-2026", "due": "20-Jan-2026", "progress": 100, "status": "Completed", "scope": "Department: Collab"}, {"id": "133", "name": "Rihan R.", "role": "Software Engineer", "dept": "Web", "training": "CollabCRM Recruitment & Client Portal Workflows", "level": "Intermediate \u2022 18 hrs", "assigned": "01-Oct-2026", "due": "15-Nov-2026", "progress": 75, "status": "In Progress", "scope": "Department: Web"}, {"id": "134", "name": "Priya Nair", "role": "Frontend Developer", "dept": "Web", "training": "Cloud Infrastructure & High-Performance Node Services", "level": "Advanced \u2022 16 hrs", "assigned": "10-Oct-2026", "due": "20-Nov-2026", "progress": 40, "status": "In Progress", "scope": "Designation: Frontend Developer"}, {"id": "135", "name": "Suresh Prasad", "role": "Senior Talent Partner", "dept": "Business Analysis", "training": "CollabCRM Recruitment & Client Portal Workflows", "level": "Intermediate \u2022 18 hrs", "assigned": "05-Oct-2026", "due": "25-Oct-2026", "progress": 0, "status": "Not Started", "scope": "Department: Business Analysis"}, {"id": "136", "name": "Ashish Kumar", "role": "Technical Lead & Reporting Manager", "dept": "Web", "training": "Cloud Infrastructure & High-Performance Node Services", "level": "Advanced \u2022 16 hrs", "assigned": "15-Sep-2026", "due": "20-Oct-2026", "progress": 100, "status": "Completed", "scope": "Designation: Technical Lead"}, {"id": "137", "name": "Vikram Malhotra", "role": "Enterprise Account Executive", "dept": "Collab", "training": "Enterprise CRM Communication & Client Delight", "level": "Intermediate \u2022 12 hrs", "assigned": "01-Oct-2026", "due": "30-Nov-2026", "progress": 0, "status": "Not Started", "scope": "Department: Collab"}, {"id": "138", "name": "Ishdeep Anand", "role": "Admin", "dept": "Business Analysis", "training": "Enterprise Security & Data Protection Compliance", "level": "Advanced \u2022 20 hrs", "assigned": "01-Sep-2026", "due": "15-Oct-2026", "progress": 100, "status": "Completed", "scope": "Employee: Ishdeep Anand"}, {"id": "139", "name": "Sanjana Ghosh", "role": "Executive", "dept": "Collab", "training": "Agile Project Delivery & Sprint Planning", "level": "Intermediate \u2022 8 hrs", "assigned": "01-Oct-2026", "due": "10-Nov-2026", "progress": 65, "status": "In Progress", "scope": "Department: Collab"}, {"id": "140", "name": "Megha Salunkhe", "role": "Sr. Executive", "dept": "Collab", "training": "Client Stakeholder Relationship Management", "level": "Intermediate \u2022 6 hrs", "assigned": "20-Sep-2026", "due": "30-Oct-2026", "progress": 90, "status": "In Progress", "scope": "Department: Collab"}, {"id": "141", "name": "Kunal Barve", "role": "Team leader", "dept": "Collab", "training": "Incident Response & SLA Management", "level": "Advanced \u2022 10 hrs", "assigned": "15-Oct-2026", "due": "25-Nov-2026", "progress": 50, "status": "In Progress", "scope": "Designation: Team Leader"}, {"id": "142", "name": "Ananya Sridhar", "role": "Manager", "dept": "Collab", "training": "Executive Leadership & Strategic Governance", "level": "Advanced \u2022 14 hrs", "assigned": "10-Sep-2026", "due": "20-Oct-2026", "progress": 100, "status": "Completed", "scope": "Designation: Manager"}, {"id": "143", "name": "Vikram Anand", "role": "AVP", "dept": "Collab", "training": "Enterprise Resource Scaling & Budgeting", "level": "Advanced \u2022 12 hrs", "assigned": "15-Aug-2026", "due": "30-Sep-2026", "progress": 100, "status": "Completed", "scope": "Employee: Vikram Anand"}, {"id": "144", "name": "Rahul Khanna", "role": "Executive", "dept": "Game", "training": "Automated End-to-End Regression Testing", "level": "Intermediate \u2022 15 hrs", "assigned": "01-Oct-2026", "due": "15-Nov-2026", "progress": 80, "status": "In Progress", "scope": "Department: Game"}, {"id": "145", "name": "Deepa Ramaswamy", "role": "Executive", "dept": "Web", "training": "Kubernetes Multi-Cluster Orchestration", "level": "Advanced \u2022 18 hrs", "assigned": "10-Oct-2026", "due": "20-Nov-2026", "progress": 30, "status": "In Progress", "scope": "Department: Web"}, {"id": "146", "name": "Trevor Lindqvist", "role": "Sr. Executive", "dept": "Data analytics", "training": "Zero Trust Architecture & Threat Mitigation", "level": "Advanced \u2022 22 hrs", "assigned": "25-Sep-2026", "due": "05-Nov-2026", "progress": 100, "status": "Completed", "scope": "Department: Data analytics"}, {"id": "147", "name": "Devin Patel", "role": "Backend Architect", "dept": "Web", "training": "High-Throughput Microservices in Go", "level": "Advanced \u2022 16 hrs", "assigned": "05-Oct-2026", "due": "25-Nov-2026", "progress": 45, "status": "In Progress", "scope": "Designation: Backend Architect"}, {"id": "148", "name": "Sneha Verma", "role": "Talent Acquisition Specialist", "dept": "Business Analysis", "training": "Interview Compliance & Bias Mitigation", "level": "Intermediate \u2022 6 hrs", "assigned": "12-Oct-2026", "due": "18-Nov-2026", "progress": 20, "status": "In Progress", "scope": "Department: Business Analysis"}, {"id": "149", "name": "Aarav Shah", "role": "Business Development Representative", "dept": "Collab", "training": "Cold Outreach & Objection Mastery", "level": "Beginner \u2022 8 hrs", "assigned": "08-Oct-2026", "due": "12-Nov-2026", "progress": 95, "status": "In Progress", "scope": "Department: Collab"}, {"id": "150", "name": "Maya Krishnan", "role": "Systems Administrator", "dept": "Business Analysis", "training": "Linux Kernel Hardening & Audit Logging", "level": "Advanced \u2022 14 hrs", "assigned": "18-Sep-2026", "due": "28-Oct-2026", "progress": 100, "status": "Completed", "scope": "Department: Business Analysis"}, {"id": "151", "name": "Rohan Desai", "role": "QA Automation Engineer", "dept": "Game", "training": "Performance & Load Testing with k6", "level": "Intermediate \u2022 10 hrs", "assigned": "14-Oct-2026", "due": "22-Nov-2026", "progress": 60, "status": "In Progress", "scope": "Designation: QA Automation Engineer"}, {"id": "152", "name": "Zara Haddad", "role": "Executive", "dept": "Collab", "training": "Risk Management & Change Control Procedures", "level": "Intermediate \u2022 7 hrs", "assigned": "02-Oct-2026", "due": "14-Nov-2026", "progress": 85, "status": "In Progress", "scope": "Department: Collab"}, {"id": "153", "name": "Caleb Nguyen", "role": "Business Analyst", "dept": "Collab", "training": "Business Requirements Document (BRD) Standards", "level": "Intermediate \u2022 9 hrs", "assigned": "28-Sep-2026", "due": "02-Nov-2026", "progress": 100, "status": "Completed", "scope": "Designation: Business Analyst"}, {"id": "154", "name": "Naomi Tanaka", "role": "Sr. Executive", "dept": "Collab", "training": "Agile Kanban Optimization & Velocity Tracking", "level": "Intermediate \u2022 5 hrs", "assigned": "16-Oct-2026", "due": "28-Nov-2026", "progress": 15, "status": "In Progress", "scope": "Department: Collab"}, {"id": "155", "name": "Jordan Ellis", "role": "Team leader", "dept": "Collab", "training": "Team Velocity & Burn-Down Chart Diagnostics", "level": "Intermediate \u2022 8 hrs", "assigned": "04-Oct-2026", "due": "16-Nov-2026", "progress": 70, "status": "In Progress", "scope": "Designation: Team Leader"}, {"id": "156", "name": "Sasha Petrov", "role": "Manager", "dept": "Collab", "training": "Cross-Functional Dependency Governance", "level": "Advanced \u2022 11 hrs", "assigned": "12-Sep-2026", "due": "22-Oct-2026", "progress": 100, "status": "Completed", "scope": "Employee: Sasha Petrov"}, {"id": "157", "name": "Elliot Sharpe", "role": "Executive", "dept": "Game", "training": "API Contract Testing with Postman & Pact", "level": "Intermediate \u2022 12 hrs", "assigned": "11-Oct-2026", "due": "21-Nov-2026", "progress": 55, "status": "In Progress", "scope": "Department: Game"}, {"id": "158", "name": "Bianca Moreau", "role": "Executive", "dept": "Web", "training": "Terraform Cloud & GitOps Pipelines", "level": "Advanced \u2022 16 hrs", "assigned": "07-Oct-2026", "due": "19-Nov-2026", "progress": 90, "status": "In Progress", "scope": "Department: Web"}, {"id": "159", "name": "Aditya Joshi", "role": "Security Analyst", "dept": "Data analytics", "training": "Penetration Testing & Vulnerability Assessment", "level": "Advanced \u2022 20 hrs", "assigned": "30-Sep-2026", "due": "10-Nov-2026", "progress": 65, "status": "In Progress", "scope": "Department: Data analytics"}, {"id": "160", "name": "Kavita Rao", "role": "Full-Stack Engineer", "dept": "Web", "training": "React 19 Server Components & State Management", "level": "Advanced \u2022 14 hrs", "assigned": "03-Oct-2026", "due": "17-Nov-2026", "progress": 80, "status": "In Progress", "scope": "Designation: Full-Stack Engineer"}, {"id": "161", "name": "Manish Gupta", "role": "HR Generalist", "dept": "Business Analysis", "training": "Payroll Compliance & Labor Law Fundamentals", "level": "Intermediate \u2022 10 hrs", "assigned": "22-Sep-2026", "due": "25-Oct-2026", "progress": 100, "status": "Completed", "scope": "Department: Business Analysis"}, {"id": "162", "name": "Pooja Hegde", "role": "Account Manager", "dept": "Collab", "training": "SaaS Customer Retention & Upselling Frameworks", "level": "Intermediate \u2022 8 hrs", "assigned": "09-Oct-2026", "due": "23-Nov-2026", "progress": 40, "status": "In Progress", "scope": "Department: Collab"}, {"id": "163", "name": "Karan Mehra", "role": "Network Engineer", "dept": "Business Analysis", "training": "Software Defined Networking (SDN) & BGP", "level": "Advanced \u2022 16 hrs", "assigned": "14-Sep-2026", "due": "24-Oct-2026", "progress": 100, "status": "Completed", "scope": "Designation: Network Engineer"}, {"id": "164", "name": "Simran Kaur", "role": "QA Lead", "dept": "Game", "training": "Test Strategy Design & QA Metrics Reporting", "level": "Advanced \u2022 10 hrs", "assigned": "06-Oct-2026", "due": "18-Nov-2026", "progress": 75, "status": "In Progress", "scope": "Designation: QA Lead"}, {"id": "165", "name": "Farhan Akhtar", "role": "DevOps Engineer", "dept": "Web", "training": "Docker Container Hardening & CIS Benchmarks", "level": "Intermediate \u2022 12 hrs", "assigned": "13-Oct-2026", "due": "26-Nov-2026", "progress": 35, "status": "In Progress", "scope": "Department: Web"}, {"id": "166", "name": "Nisha Singhania", "role": "SOC Lead", "dept": "Data analytics", "training": "SIEM Alert Triage & Incident Escalation", "level": "Advanced \u2022 18 hrs", "assigned": "19-Sep-2026", "due": "29-Oct-2026", "progress": 100, "status": "Completed", "scope": "Designation: SOC Lead"}, {"id": "167", "name": "Tarun Roy", "role": "Data Engineer", "dept": "Web", "training": "Apache Kafka Event Streaming at Scale", "level": "Advanced \u2022 18 hrs", "assigned": "02-Oct-2026", "due": "16-Nov-2026", "progress": 50, "status": "In Progress", "scope": "Department: Web"}, {"id": "168", "name": "Geeta Nair", "role": "People Partner", "dept": "Business Analysis", "training": "Employee Engagement & Retention Strategies", "level": "Intermediate \u2022 6 hrs", "assigned": "15-Oct-2026", "due": "30-Nov-2026", "progress": 10, "status": "In Progress", "scope": "Department: Business Analysis"}, {"id": "169", "name": "Harsh Vardhan", "role": "Sales Director", "dept": "Collab", "training": "Enterprise Revenue Forecasting & Sales Leadership", "level": "Advanced \u2022 12 hrs", "assigned": "08-Sep-2026", "due": "18-Oct-2026", "progress": 100, "status": "Completed", "scope": "Designation: Sales Director"}, {"id": "170", "name": "Isha Roy", "role": "Cloud Architect", "dept": "Business Analysis", "training": "Multi-Region Disaster Recovery on AWS/GCP", "level": "Advanced \u2022 20 hrs", "assigned": "16-Sep-2026", "due": "26-Oct-2026", "progress": 100, "status": "Completed", "scope": "Employee: Isha Roy"}, {"id": "171", "name": "Jayesh Tiwari", "role": "Automation Engineer", "dept": "Game", "training": "Cypress & Playwright Modern Web Automation", "level": "Intermediate \u2022 14 hrs", "assigned": "08-Oct-2026", "due": "20-Nov-2026", "progress": 70, "status": "In Progress", "scope": "Department: Game"}, {"id": "172", "name": "Lavanya Swaminathan", "role": "Compliance Officer", "dept": "Data analytics", "training": "ISO 27001 ISMS Implementation & Internal Audit", "level": "Advanced \u2022 16 hrs", "assigned": "25-Sep-2026", "due": "05-Nov-2026", "progress": 95, "status": "In Progress", "scope": "Employee: Lavanya Swaminathan"}];
   let [searchQuery, setSearchQuery] = (0, l.useState)("");
   let [selectedDept, setSelectedDept] = (0, l.useState)("All Departments");
   let [currentPage, setCurrentPage] = (0, l.useState)(1);
+  let [hoveredScope, setHoveredScope] = (0, l.useState)(null);
   let pageSize = 10;
 
-  let filtered = rawList.filter(item => {
+  let allList = (0, l.useMemo)(() => {
+    let empPool = [
+      ...rawList.map(r => ({ name: r.name, role: r.role, dept: r.dept })),
+      ...(Array.isArray(empList) ? empList.map(emp => ({
+        name: `${emp.firstName || ""} ${emp.lastName || ""}`.trim(),
+        role: emp.designation || emp.employeeRole || "Employee",
+        dept: emp.department || "Collab"
+      })) : [])
+    ].filter(x => x.name);
+
+    let dedupeEmps = arr => {
+      let seen = new Set();
+      return arr.filter(x => {
+        let k = (x.name || "").trim().toLowerCase();
+        if (!k || seen.has(k)) return false;
+        seen.add(k);
+        return true;
+      });
+    };
+
+    let dynamicGroups = [];
+    if (Array.isArray(e)) {
+      let dynMap = new Map();
+      e.filter(a => a && !/^asg-[1-7]$/.test(String(a.id || ""))).forEach(a => {
+        let tsMatch = String(a.id || "").match(/^asg-(\d+)-/);
+        let batchTs = tsMatch ? tsMatch[1] : String(a.id || "");
+        let key = `${batchTs}::${a.programmeName || ""}::${a.assignedDate || ""}::${a.dueDate || ""}`;
+        if (!dynMap.has(key)) dynMap.set(key, []);
+        dynMap.get(key).push(a);
+      });
+      dynMap.forEach(group => {
+        let first = group[0];
+        let matched = empPool.find(x => x.name.toLowerCase() === String(first.employeeName || "").toLowerCase());
+        let enrolledEmployees = dedupeEmps(group.map(g => {
+          let m = empPool.find(x => x.name.toLowerCase() === String(g.employeeName || "").toLowerCase());
+          return { name: g.employeeName || m?.name || "Employee", role: m?.role || "Employee", dept: m?.dept || "Collab" };
+        }));
+        dynamicGroups.push({
+          id: first.id,
+          name: first.employeeName || matched?.name || "Employee",
+          role: matched?.role || "Employee",
+          dept: matched?.dept || "Collab",
+          training: first.programmeName || "",
+          level: "Assigned Training",
+          assigned: first.assignedDate || "04-Nov-2026",
+          due: first.dueDate || "01-Dec-2026",
+          progress: Number(first.progress) || 0,
+          status: first.status || "Not Started",
+          enrolledEmployees
+        });
+      });
+    }
+
+    let resolveStaticEnrolled = item => {
+      let sc = String(item.scope || "");
+      let base = { name: item.name, role: item.role, dept: item.dept };
+      if (sc.startsWith("Employee:")) return [base];
+      if (sc.startsWith("Department:")) {
+        let targetDept = sc.replace(/^Department:\s*/i, "").trim().toLowerCase();
+        let peers = empPool.filter(x => (x.dept || "").toLowerCase() === targetDept);
+        return dedupeEmps([base, ...peers]).slice(0, 4);
+      }
+      let targetDesig = sc.replace(/^Designation:\s*/i, "").trim().toLowerCase();
+      let rolePeers = empPool.filter(x => (x.role || "").toLowerCase().includes(targetDesig));
+      let deptPeers = empPool.filter(x => (x.dept || "").toLowerCase() === (item.dept || "").toLowerCase());
+      return dedupeEmps([base, ...rolePeers, ...deptPeers]).slice(0, 3);
+    };
+
+    let enrichedStatic = rawList.map(item => ({
+      ...item,
+      enrolledEmployees: resolveStaticEnrolled(item)
+    }));
+
+    return [...dynamicGroups, ...enrichedStatic];
+  }, [e, empList]);
+
+  let filtered = allList.filter(item => {
     let q = searchQuery.toLowerCase().trim();
-    let matchesSearch = !q || item.name.toLowerCase().includes(q) || item.training.toLowerCase().includes(q) || (item.role||"").toLowerCase().includes(q);
+    let matchesSearch = !q || item.name.toLowerCase().includes(q) || item.training.toLowerCase().includes(q) || (item.role||"").toLowerCase().includes(q) || (item.enrolledEmployees||[]).some(emp => emp.name.toLowerCase().includes(q));
     let matchesDept = selectedDept === "All Departments" || item.dept === selectedDept;
     return matchesSearch && matchesDept;
   });
@@ -1458,6 +1531,17 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
   let totalPages = Math.ceil(totalCount / pageSize) || 1;
   let currentSafePage = Math.min(currentPage, totalPages);
   let paginated = filtered.slice((currentSafePage - 1) * pageSize, currentSafePage * pageSize);
+
+  let showScopePopover = (ev, item) => {
+    let list = item.enrolledEmployees && item.enrolledEmployees.length > 0 ? item.enrolledEmployees : [{ name: item.name, role: item.role, dept: item.dept }];
+    let rect = ev.currentTarget.getBoundingClientRect();
+    let winH = window.innerHeight || 800;
+    let winW = window.innerWidth || 1200;
+    let placeBelow = (winH - rect.bottom) >= 210 || rect.top < 210;
+    let y = placeBelow ? (rect.bottom + 8) : (rect.top - 8);
+    let x = Math.max(145, Math.min(winW - 145, rect.left + rect.width / 2));
+    setHoveredScope({ x, y, placeBelow, list });
+  };
 
   return (0, P.jsxs)("div", {className: "p-6 space-y-6 max-w-[1600px] mx-auto w-full", children: [
     
@@ -1471,13 +1555,13 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
           (0, P.jsx)("input", {
             type: "text",
             value: searchQuery,
-            onChange: e => { setSearchQuery(e.target.value); setCurrentPage(1); },
+            onChange: ev => { setSearchQuery(ev.target.value); setCurrentPage(1); },
             placeholder: "Filter employee or training...",
             className: "bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-800 placeholder-slate-400 w-64 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
           }),
           (0, P.jsxs)("select", {
             value: selectedDept,
-            onChange: e => { setSelectedDept(e.target.value); setCurrentPage(1); },
+            onChange: ev => { setSelectedDept(ev.target.value); setCurrentPage(1); },
             className: "bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20",
             children: [
               (0, P.jsx)("option", {value: "All Departments", children: "All Departments"}),
@@ -1495,7 +1579,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
           (0, P.jsx)("thead", {children: 
             (0, P.jsxs)("tr", {className: "border-b border-slate-200 text-[11px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50", children: [
               (0, P.jsx)("th", {className: "py-3 px-4", children: "Employee Name"}),
-              (0, P.jsx)("th", {className: "py-3 px-4", title: "Assigned by Employee, Department, or Designation", children: "ASSIGNED SCOPE"}),
+              (0, P.jsx)("th", {className: "py-3 px-4", title: "Employees enrolled in this training assignment", children: "Assigned to"}),
               (0, P.jsx)("th", {className: "py-3 px-4", children: "Assigned Training"}),
               (0, P.jsx)("th", {className: "py-3 px-4", children: "Assigned Date"}),
               (0, P.jsx)("th", {className: "py-3 px-4", children: "Due Date"}),
@@ -1504,40 +1588,52 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
             ]})
           }),
           (0, P.jsx)("tbody", {className: "divide-y divide-slate-100 text-sm", children: 
-            paginated.map((item, idx) => (0, P.jsxs)("tr", {
-              key: item.id || idx,
-              className: "hover:bg-slate-50/80 transition-colors cursor-pointer",
-              onClick: () => r(item),
-              children: [
-                (0, P.jsx)("td", {className: "py-3 px-4", children: 
-                  (0, P.jsxs)("div", {className: "flex items-center gap-3", children: [
-                    (0, P.jsx)("div", {className: "w-8 h-8 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-xs shrink-0", children: item.name[0]}),
-                    (0, P.jsxs)("div", {children: [
-                      (0, P.jsx)("div", {className: "font-bold text-slate-900", children: item.name}),
-                      (0, P.jsx)("div", {className: "text-xs text-slate-500", children: item.role})
+            paginated.map((item, idx) => {
+              let enrolledList = item.enrolledEmployees && item.enrolledEmployees.length > 0 ? item.enrolledEmployees : [{ name: item.name, role: item.role, dept: item.dept }];
+              let firstEmp = enrolledList[0];
+              let extraCount = enrolledList.length - 1;
+              return (0, P.jsxs)("tr", {
+                className: "hover:bg-slate-50/80 transition-colors cursor-pointer",
+                onClick: () => r(item),
+                children: [
+                  (0, P.jsx)("td", {className: "py-3 px-4", children: 
+                    (0, P.jsxs)("div", {className: "flex items-center gap-3", children: [
+                      (0, P.jsx)("div", {className: "w-8 h-8 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-xs shrink-0", children: (item.name || "E")[0]}),
+                      (0, P.jsxs)("div", {children: [
+                        (0, P.jsx)("div", {className: "font-bold text-slate-900", children: item.name}),
+                        (0, P.jsx)("div", {className: "text-xs text-slate-500", children: item.role})
+                      ]})
                     ]})
-                  ]})
-                }),
-                (0, P.jsx)("td", {className: "py-3 px-4 text-xs", children: 
-                  (0, P.jsx)("span", {className: "inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200", children: item.scope || item.dept})
-                }),
-                (0, P.jsxs)("td", {className: "py-3 px-4", children: [
-                  (0, P.jsx)("div", {className: "font-semibold text-slate-900 text-xs", children: item.training}),
-                  (0, P.jsx)("div", {className: "text-[11px] text-slate-500", children: item.level})
-                ]}),
-                (0, P.jsx)("td", {className: "py-3 px-4 text-slate-600 text-xs tabular-nums", children: fmtSysDate(item.assigned)}),
-                (0, P.jsx)("td", {className: "py-3 px-4 text-xs tabular-nums font-medium text-slate-700", children: fmtSysDate(item.due)}),
-                (0, P.jsxs)("td", {className: "py-3 px-4 w-36", children: [
-                  (0, P.jsx)("div", {className: "flex items-center justify-between text-xs font-mono font-bold mb-1 text-slate-700", children: (0, P.jsxs)("span", {children: [item.progress, "%"]})}),
-                  (0, P.jsx)("div", {className: "w-full bg-slate-100 h-2 rounded-full overflow-hidden", children: (0, P.jsx)("div", {className: `h-full rounded-full ${item.progress === 100 ? "bg-emerald-500" : "bg-blue-600"}`, style: {width: `${item.progress}%`} })})
-                ]}),
-                (0, P.jsx)("td", {className: "py-3 px-4 text-right", onClick: e => e.stopPropagation(), children: 
-                  (0, P.jsx)("div", {className: "flex items-center justify-end gap-1.5", children: 
-                    (0, P.jsx)("button", {type: "button", onClick: () => r(item), className: "p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer", title: "View Assignment Details", children: (0, P.jsx)(pe, {className: "w-4 h-4"})})
+                  }),
+                  (0, P.jsx)("td", {className: "py-3 px-4 text-xs", children: 
+                    (0, P.jsxs)("div", {
+                      onMouseEnter: ev => showScopePopover(ev, item),
+                      onMouseLeave: () => setHoveredScope(null),
+                      className: "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200 hover:border-blue-300 hover:bg-blue-50/50 transition-colors cursor-default whitespace-nowrap",
+                      children: [
+                        (0, P.jsx)("span", {children: firstEmp.name}),
+                        extraCount > 0 && (0, P.jsxs)("span", {className: "inline-flex items-center justify-center px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 text-[11px] font-bold", children: ["+", extraCount]})
+                      ]
+                    })
+                  }),
+                  (0, P.jsxs)("td", {className: "py-3 px-4", children: [
+                    (0, P.jsx)("div", {className: "font-semibold text-slate-900 text-xs", children: item.training}),
+                    (0, P.jsx)("div", {className: "text-[11px] text-slate-500", children: item.level})
+                  ]}),
+                  (0, P.jsx)("td", {className: "py-3 px-4 text-slate-600 text-xs tabular-nums", children: fmtSysDate(item.assigned)}),
+                  (0, P.jsx)("td", {className: "py-3 px-4 text-xs tabular-nums font-medium text-slate-700", children: fmtSysDate(item.due)}),
+                  (0, P.jsxs)("td", {className: "py-3 px-4 w-36", children: [
+                    (0, P.jsx)("div", {className: "flex items-center justify-between text-xs font-mono font-bold mb-1 text-slate-700", children: (0, P.jsxs)("span", {children: [item.progress, "%"]})}),
+                    (0, P.jsx)("div", {className: "w-full bg-slate-100 h-2 rounded-full overflow-hidden", children: (0, P.jsx)("div", {className: `h-full rounded-full ${item.progress === 100 ? "bg-emerald-500" : "bg-blue-600"}`, style: {width: `${item.progress}%`} })})
+                  ]}),
+                  (0, P.jsx)("td", {className: "py-3 px-4 text-right", onClick: ev => ev.stopPropagation(), children: 
+                    (0, P.jsx)("div", {className: "flex items-center justify-end gap-1.5", children: 
+                      (0, P.jsx)("button", {type: "button", onClick: () => r(item), className: "p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer", title: "View Assignment Details", children: (0, P.jsx)(pe, {className: "w-4 h-4"})})
+                    })
                   })
-                })
-              ]
-            }))
+                ]
+              }, item.id || idx);
+            })
           })
         ]})
       }),
@@ -1553,7 +1649,51 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
           (0, P.jsx)("button", {type: "button", disabled: currentSafePage === totalPages, onClick: () => setCurrentPage(p => Math.min(totalPages, p + 1)), className: "px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed font-medium shadow-xs transition-colors", children: "Next"})
         ]})
       ]})
-    ]})
+    ]}),
+
+    hoveredScope && (0, P.jsxs)("div", {
+      role: "tooltip",
+      style: {
+        position: "fixed",
+        left: hoveredScope.x + "px",
+        top: hoveredScope.y + "px",
+        transform: hoveredScope.placeBelow ? "translate(-50%, 0)" : "translate(-50%, -100%)",
+        zIndex: 99999,
+        minWidth: "230px",
+        maxWidth: "290px",
+        backgroundColor: "#ffffff",
+        border: "1px solid #e2e8f0",
+        borderRadius: "10px",
+        boxShadow: "0 12px 28px -6px rgba(15, 23, 42, 0.22)",
+        padding: "10px 12px",
+        pointerEvents: "none"
+      },
+      children: [
+        (0, P.jsxs)("div", {
+          style: { fontSize: "11px", fontWeight: "700", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: "8px", paddingBottom: "6px", borderBottom: "1px solid #f1f5f9" },
+          children: ["Enrolled Employees (", hoveredScope.list.length, ")"]
+        }),
+        (0, P.jsx)("div", {
+          style: { display: "flex", flexDirection: "column", gap: "7px" },
+          children: hoveredScope.list.map((emp, idx) => (0, P.jsxs)("div", {
+            style: { display: "flex", alignItems: "center", gap: "8px" },
+            children: [
+              (0, P.jsx)("div", {
+                style: { width: "24px", height: "24px", borderRadius: "9999px", backgroundColor: "#eff6ff", color: "#1d4ed8", fontSize: "10px", fontWeight: "700", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 },
+                children: (emp.name || "E")[0]
+              }),
+              (0, P.jsxs)("div", {
+                style: { minWidth: 0 },
+                children: [
+                  (0, P.jsx)("div", { style: { fontSize: "12px", fontWeight: "600", color: "#0f172a", lineHeight: "1.2" }, children: emp.name }),
+                  (0, P.jsx)("div", { style: { fontSize: "10px", color: "#64748b", lineHeight: "1.3" }, children: [emp.role, emp.dept].filter(Boolean).join(" • ") })
+                ]
+              })
+            ]
+          }, emp.name + "-" + idx))
+        })
+      ]
+    })
   ]});
 }function at({assignment:e,onBack:t,onEvaluate:n}){
   let r=e||{id:"132",name:"Tanya Kapoor",role:"Business Analyst",dept:"Project",training:"API Security & OAuth2 Best Practices",level:"Intermediate • 4 hrs",assigned:"01-Jan-2026",due:"20-Jan-2026",type:"Elective",progress:100,status:"Completed"};
@@ -3081,4 +3221,4 @@ function ht({onClose:e,onAddEmployee:t}){let[n,r]=(0,l.useState)(``),[i,a]=(0,l.
     ]})
   ]})});
 }
-function vt(){let[e,t]=(0,l.useState)(`employees`),[n,r]=(0,l.useState)(d),[i,a]=(0,l.useState)(null),[o,s]=(0,l.useState)(f),[c,u]=(0,l.useState)(null),[m,h]=(0,l.useState)(null),[g,_]=(0,l.useState)(null),[v,y]=(0,l.useState)(p),[b,x]=(0,l.useState)({name:`Ishdeep Anand`,role:`Admin / HR / Reporting Manager`,initials:`IA`,canChangeAvailability:!0}),[S,ee]=(0,l.useState)(!1),[C,w]=(0,l.useState)(!1),[te,T]=(0,l.useState)(!1),[ne,re]=(0,l.useState)(``),[ie,E]=(0,l.useState)(!1),[ae,oe]=(0,l.useState)(!1),[se,D]=(0,l.useState)(null),[courseProgress,setCourseProgress]=(0,l.useState)({}),[categories,setCategories]=(0,l.useState)(DEFAULT_CATEGORIES_SEED);(0,l.useEffect)(()=>{let cancelled=!1;fetch(`/api/training/programmes`).then(r=>r.json()).then(data=>{if(!cancelled&&data?.success&&Array.isArray(data.programmes)){s(data.programmes);if(Array.isArray(data.categories)&&data.categories.length>0)setCategories(data.categories);if(data.courseProgress&&typeof data.courseProgress===`object`)setCourseProgress(data.courseProgress);if(Array.isArray(data.assignments)&&data.assignments.length>0){y(prev=>{let ids=new Set(prev.map(x=>x.id));let extra=data.assignments.filter(x=>!ids.has(x.id));return extra.length>0?[...extra,...prev]:prev})}}}).catch(()=>{});return()=>{cancelled=!0}},[]);let isLearnerStarted=(st,pct)=>{let k=String(st||``).trim().toLowerCase(),pr=Number(pct)||0;if(k===`completed`||k===`cancelled`)return!1;if(k===`in progress`||k===`in_progress`||k===`under review`||k===`under_review`||k===`submitted_for_review`||k===`changes_requested`)return!0;if(k===`overdue`&&pr>0)return!0;return pr>0&&pr<100},hasStartedLearnerFn=prog=>{if(!prog)return!1;let pname=(prog.name||``).trim().toLowerCase(),cpVals=Object.values(courseProgress||{}).filter(entry=>entry&&((entry.programmeId&&entry.programmeId===prog.id)||(entry.programmeName&&pname&&entry.programmeName.trim().toLowerCase()===pname)));if(cpVals.some(entry=>isLearnerStarted(entry.status,entry.progress)))return!0;let matchingAsg=(v||[]).filter(a=>(a.programmeId&&a.programmeId===prog.id)||(a.programmeName&&pname&&a.programmeName.trim().toLowerCase()===pname));if(matchingAsg.some(a=>{let ov=courseProgress[(a.employeeId||"CO-5039")+"::"+prog.id]||courseProgress[prog.id];return isLearnerStarted(ov?ov.status:a.status,ov?ov.progress:a.progress)}))return!0;if(prog.id===`prog-7`){let ov7=courseProgress[`CO-5039::prog-7`]||courseProgress[`prog-7`];return ov7?isLearnerStarted(ov7.status,ov7.progress):!0}if([`prog-1`,`prog-2`,`prog-3`,`prog-8`,`prog-11`,`prog-12`].includes(prog.id)){let ovS=courseProgress[`CO-5039::${prog.id}`]||courseProgress[prog.id];if((prog.id===`prog-8`||prog.id===`prog-11`)&&ovS&&!isLearnerStarted(ovS.status,ovS.progress))return!1;return!0}return!1},updateCourseProgressApi=async(prog,status,progress,completedResources,latestResult,attemptHistory,extra)=>{let pid=prog.id||prog.name,pname=prog.name||``,key=`CO-5039::${pid}`,entry={employeeId:`CO-5039`,programmeId:pid,programmeName:pname,status,progress,completedResources,latestResult,attemptHistory,submittedDocs:extra?.submittedDocs||[],managerApprovalStatus:extra?.managerApprovalStatus||``};setCourseProgress(prev=>({...prev,[key]:entry}));y(prev=>prev.map(a=>((pid&&a.programmeId===pid)||(pname&&a.programmeName&&a.programmeName.trim().toLowerCase()===pname.trim().toLowerCase()))&&(a.employeeId===`emp-3`||a.employeeId===`CO-5039`||a.employeeName===`Tanya Kapoor`||a.employeeId===`emp-1`||!0)?(a.employeeId===`emp-3`||a.employeeId===`CO-5039`||a.employeeName===`Tanya Kapoor`?{...a,status,progress}:a):a));try{await fetch(`/api/training/employee-course-progress`,{method:`POST`,headers:{"Content-Type":"application/json"},body:JSON.stringify(entry)})}catch{}},approveCompletionApi=async(prog,empId)=>{let pid=prog.id||prog.name,pname=prog.name||``,empKey=(empId===`emp-3`||!empId)?`CO-5039`:empId,key=`${empKey}::${pid}`,prevEntry=courseProgress[key]||courseProgress[`CO-5039::${pid}`]||courseProgress[pid]||{};let entry={...prevEntry,employeeId:`CO-5039`,programmeId:pid,programmeName:pname,status:`Completed`,progress:100,managerApprovalStatus:`Approved`};setCourseProgress(prev=>({...prev,[`CO-5039::${pid}`]:entry,[key]:entry}));y(prev=>prev.map(a=>((pid&&a.programmeId===pid)||(pname&&a.programmeName&&a.programmeName.trim().toLowerCase()===pname.trim().toLowerCase()))&&(a.employeeId===empId||a.employeeId===`emp-3`||a.employeeName===`Tanya Kapoor`)?{...a,status:`Completed`,progress:100}:a));try{await fetch(`/api/training/employee-course-progress`,{method:`POST`,headers:{"Content-Type":"application/json"},body:JSON.stringify(entry)})}catch{}};let toggleCategoryApi=async(catName)=>{if((o||[]).some(pr=>doesProgUseCategory(pr,catName))){let cur=categories.find(c=>normCatKey(c.name)===normCatKey(catName));if(cur&&cur.active!==!1){return{success:!1,message:`Cannot mark "${cur.name}" as Inactive because it is currently assigned to one or more training programmes.`}}}let res=await fetch(`/api/training/categories`,{method:`POST`,headers:{"Content-Type":"application/json"},body:JSON.stringify({action:`toggle`,name:catName,userName:b.name})});let data=await res.json();if(data?.categories)setCategories(data.categories);return data},saveCategoryApi=async(payload)=>{let res=await fetch(`/api/training/categories`,{method:`POST`,headers:{"Content-Type":"application/json"},body:JSON.stringify({...payload,userName:b.name})});let data=await res.json();if(data?.categories)setCategories(data.categories);if(data?.programmes)s(data.programmes);return data};let canToggleProg=usr=>{if(!usr||usr.canChangeAvailability===!1)return!1;let rs=(usr.role||``).toLowerCase();return!(rs.includes(`employee`)||rs.includes(`viewer`)||rs.includes(`view only`))&&(rs.includes(`admin`)||rs.includes(`hr`)||rs.includes(`reporting manager`)||rs.includes(`management`))},canManageAvail=canToggleProg(b),syncProgList=(list,updated)=>{Array.isArray(list)&&s(list),updated&&c&&c.id===updated.id&&u(updated)},ce=e=>{a(e),t(`employee-detail`)},le=e=>{u(e),t(`programme-detail`)},ue=e=>{h(e),t(`assignment-detail`)},de=e=>{let p=(o||[]).find(x=>(e.id&&x.id===e.id)||(e.name&&x.name&&x.name.trim().toLowerCase()===e.name.trim().toLowerCase()));_(p?{...e,...p,status:e.status||"Not Started",progress:e.progress!=null?e.progress:0,assignedBy:e.assignedBy,assignedDate:e.assignedDate,dueDate:e.dueDate,assessment:p.assessment||e.assessment,resources:Array.isArray(p.resources)?p.resources:e.resources}:e),t(`employee-course-detail`)},fe=usr=>{let wasEmp=b.name===`Tanya Kapoor`||b.role.includes(`Employee`),nextIsEmp=usr.role.includes(`Employee`)||usr.name===`Tanya Kapoor`;x(usr),nextIsEmp?t(`employee-dashboard`):wasEmp&&t(`employees`)},pe=e=>{r([e,...n]),E(!1)},saveProgApi=async(progPayload,isEdit)=>{let res=await fetch(`/api/training/programmes`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programme:progPayload,userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canManageAvail}})});let data=await res.json().catch(()=>({success:!1,message:`Failed to communicate with backend.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`Unable to save training programme.`};syncProgList(data.programmes,isEdit?data.programme:null),isEdit&&data.programme&&u(data.programme),t(`training-programmes`);return{success:!0,programme:data.programme}},me=e=>saveProgApi(e,!1),he=e=>saveProgApi(e,!0),toggleAvailabilityApi=async(prog,targetStatus,reason)=>{let res=await fetch(`/api/training/programmes/availability`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programmeId:prog.id,targetAvailabilityStatus:targetStatus,reason,userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canManageAvail}})});let data=await res.json().catch(()=>({success:!1,message:`Network error updating availability.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`Failed to update availability status.`};syncProgList(data.programmes,data.programme);return{success:!0,programme:data.programme}},archiveProgApi=async(prog,reason)=>{let res=await fetch(`/api/training/programmes/archive`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programmeId:prog.id,reason,userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canManageAvail}})});let data=await res.json().catch(()=>({success:!1,message:`Network error archiving programme.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`Failed to archive programme.`};syncProgList(data.programmes,data.programme);return{success:!0,programme:data.programme}},restoreProgApi=async(prog,reason)=>{let res=await fetch(`/api/training/programmes/restore`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programmeId:prog.id,reason,userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canManageAvail}})});let data=await res.json().catch(()=>({success:!1,message:`Network error restoring programme.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`Failed to restore programme.`};syncProgList(data.programmes,data.programme);return{success:!0,programme:data.programme}},ge=async payload=>{let res=await fetch(`/api/training/assign`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programmeId:payload.programme.id,employees:payload.employees,assignmentMethod:payload.assignmentMethod,startDate:payload.startDate,endDate:payload.endDate,assignedBy:b.name})});let data=await res.json().catch(()=>({success:!1,message:`Network error assigning training.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`This training is currently inactive and cannot be assigned.`};Array.isArray(data.assignments)&&y(prev=>[...data.assignments,...prev]),syncProgList(data.programmes,data.programme),oe(!1);return{success:!0}},_e=e=>{y(v.map(t=>t.id===e.id?e:t)),D(null)},ve=e=>{let n=o.find(t=>t.name.toLowerCase()===e.toLowerCase()||t.id===e);u(n||{...o[0],name:e}),(b.name===`Tanya Kapoor`||b.role.includes(`Employee`))&&x({name:`Ishdeep Anand`,role:`Admin / HR / Reporting Manager`,initials:`IA`,canChangeAvailability:!0}),t(`programme-detail`)},ye=b.name===`Tanya Kapoor`||b.role.includes(`Employee`),activeSelectedProgramme=(c&&o.find(x=>x.id===c.id))||c||o[0];return(0,P.jsxs)(`div`,{className:`flex h-screen bg-slate-100 font-sans text-slate-900 overflow-hidden select-none`,children:[(0,P.jsx)(Je,{currentTab:e,onSelectTab:e=>{e===`employees`&&a(null),t(e)},isTrainingFlyoutOpen:S,onToggleTrainingFlyout:ee,isConfigFlyoutOpen:C,onToggleConfigFlyout:w,collapsed:te,onToggleCollapse:()=>T(!te),currentUser:b}),(0,P.jsxs)(`div`,{className:`flex-1 flex flex-col min-w-0 overflow-hidden relative`,children:[(0,P.jsx)(Ye,{currentTab:e,onOpenNewEmployee:()=>E(!0),onOpenCreateProgramme:()=>{ee(!1),t(`training-management`)},onOpenAssignTraining:()=>oe(!0),searchQuery:ne,onSearchChange:re,currentUser:b,onSwitchUser:fe,onOpenMyProfile:()=>{let e=n.find(e=>e.firstName===`Tanya`)||n[0];a(e),t(`employee-profile`)}}),(0,P.jsx)(`main`,{className:`flex-1 overflow-y-auto`,children:ye?(0,P.jsxs)(P.Fragment,{children:[e===`employee-dashboard`&&(0,P.jsx)(ft,{onGoToTraining:()=>t(`employee-training`),onSelectCourse:de,employeeName:b.name,programmes:o,assignments:v,courseProgress:courseProgress}),e===`employee-training`&&(0,P.jsx)(pt,{onSelectCourse:de,programmes:o,assignments:v,courseProgress:courseProgress}),e===`employee-course-detail`&&(0,P.jsx)(mt,{course:g,programmes:o,courseProgress:courseProgress,onUpdateCourseProgress:updateCourseProgressApi,onBack:()=>t(`employee-training`)}),e===`employee-profile`&&i&&(0,P.jsx)($e,{employee:i,assignments:v,programmes:o,isEmployeeSide:!0,onBack:()=>t(`employee-training`),onOpenAssignTraining:()=>oe(!0),onNavigateToProgrammeDetail:ve})]}):(0,P.jsxs)(P.Fragment,{children:[e===`employees`&&(0,P.jsx)(Xe,{employees:n,onSelectEmployee:ce,onOpenNewEmployee:()=>E(!0),searchQuery:ne}),e===`employee-detail`&&i&&(0,P.jsx)($e,{employee:i,assignments:v,onBack:()=>t(`employees`),onOpenAssignTraining:()=>oe(!0),onNavigateToProgrammeDetail:ve}),e===`training-dashboard`&&(0,P.jsx)(et,{assignments:v,onOpenReviewQueue:()=>t(`training-review`),onEvaluateSubmission:e=>D(e)}),e===`training-programmes`&&(0,P.jsx)(tt,{programmes:o,employees:n,assignments:v,courseProgress:courseProgress,onOpenCreateProgramme:()=>t(`training-management`),onSelectProgramme:le,onEditProgramme:e=>{u(e),t(`edit-programme`)},onToggleAvailability:toggleAvailabilityApi,currentUser:b,canToggleAvailability:canManageAvail,hasStartedLearner:hasStartedLearnerFn}),e===`programme-detail`&&(0,P.jsx)(nt,{programme:activeSelectedProgramme,employees:n,assignments:v,courseProgress:courseProgress,onBack:()=>t(`training-programmes`),onOpenAssignTraining:()=>oe(!0),onSelectEmployee:ce,onEditProgramme:()=>t(`edit-programme`),onArchiveProgramme:archiveProgApi,onRestoreProgramme:restoreProgApi,onToggleAvailability:toggleAvailabilityApi,canToggleAvailability:canManageAvail,hasStartedLearner:hasStartedLearnerFn,onApproveCompletion:approveCompletionApi}),e===`training-management`&&(0,P.jsx)(rt,{categories:categories,onCancel:()=>t(`training-programmes`),onSaveProgramme:me},`new-programme`),e===`edit-programme`&&(0,P.jsx)(rt,{categories:categories,programmeToEdit:activeSelectedProgramme,onCancel:()=>t(`training-programmes`),onSaveProgramme:he},activeSelectedProgramme?.id||`edit-prog`),e===`training-assignments`&&(0,P.jsx)(it,{assignments:v,onOpenAssignTraining:()=>oe(!0),onEvaluate:e=>D(e),onSelectAssignment:ue}),e===`assignment-detail`&&(0,P.jsx)(at,{assignment:m,onBack:()=>t(`training-assignments`),onEvaluate:()=>{let e=v[0];e&&D(e)}}),e===`training-progress`&&(0,P.jsx)(ot,{categories:categories}),e===`certificates`&&(0,P.jsx)(ct,{assignments:v}),e===`config`&&(0,P.jsx)(ut,{currentTab:e,categories:categories,programmes:o,onToggleCategory:toggleCategoryApi,onSaveCategory:saveCategoryApi}),e===`roles`&&(0,P.jsx)(dt,{onSelectRole:e=>alert(`Selected role: ${e}`)})]})})]}),ie&&(0,P.jsx)(ht,{onClose:()=>E(!1),onAddEmployee:pe}),ae&&(0,P.jsx)(gt,{employees:n,programmes:o,initialProgrammeId:e===`programme-detail`?activeSelectedProgramme?.id:void 0,onClose:()=>oe(!1),onAssign:ge}),se&&(0,P.jsx)(_t,{assignment:se,onClose:()=>D(null),onSaveEvaluation:_e})]})}(0,u.createRoot)(document.getElementById(`root`)).render((0,P.jsx)(vt,{}));
+function vt(){let[e,t]=(0,l.useState)(`employees`),[n,r]=(0,l.useState)(d),[i,a]=(0,l.useState)(null),[o,s]=(0,l.useState)(f),[c,u]=(0,l.useState)(null),[m,h]=(0,l.useState)(null),[g,_]=(0,l.useState)(null),[v,y]=(0,l.useState)(p),[b,x]=(0,l.useState)({name:`Ishdeep Anand`,role:`Admin / HR / Reporting Manager`,initials:`IA`,canChangeAvailability:!0}),[S,ee]=(0,l.useState)(!1),[C,w]=(0,l.useState)(!1),[te,T]=(0,l.useState)(!1),[ne,re]=(0,l.useState)(``),[ie,E]=(0,l.useState)(!1),[ae,oe]=(0,l.useState)(!1),[se,D]=(0,l.useState)(null),[courseProgress,setCourseProgress]=(0,l.useState)({}),[categories,setCategories]=(0,l.useState)(DEFAULT_CATEGORIES_SEED);(0,l.useEffect)(()=>{let cancelled=!1;fetch(`/api/training/programmes`).then(r=>r.json()).then(data=>{if(!cancelled&&data?.success&&Array.isArray(data.programmes)){s(data.programmes);if(Array.isArray(data.categories)&&data.categories.length>0)setCategories(data.categories);if(data.courseProgress&&typeof data.courseProgress===`object`)setCourseProgress(data.courseProgress);if(Array.isArray(data.assignments)&&data.assignments.length>0){y(prev=>{let ids=new Set(prev.map(x=>x.id));let extra=data.assignments.filter(x=>!ids.has(x.id));return extra.length>0?[...extra,...prev]:prev})}}}).catch(()=>{});return()=>{cancelled=!0}},[]);let isLearnerStarted=(st,pct)=>{let k=String(st||``).trim().toLowerCase(),pr=Number(pct)||0;if(k===`completed`||k===`cancelled`)return!1;if(k===`in progress`||k===`in_progress`||k===`under review`||k===`under_review`||k===`submitted_for_review`||k===`changes_requested`)return!0;if(k===`overdue`&&pr>0)return!0;return pr>0&&pr<100},hasStartedLearnerFn=prog=>{if(!prog)return!1;let pname=(prog.name||``).trim().toLowerCase(),cpVals=Object.values(courseProgress||{}).filter(entry=>entry&&((entry.programmeId&&entry.programmeId===prog.id)||(entry.programmeName&&pname&&entry.programmeName.trim().toLowerCase()===pname)));if(cpVals.some(entry=>isLearnerStarted(entry.status,entry.progress)))return!0;let matchingAsg=(v||[]).filter(a=>(a.programmeId&&a.programmeId===prog.id)||(a.programmeName&&pname&&a.programmeName.trim().toLowerCase()===pname));if(matchingAsg.some(a=>{let ov=courseProgress[(a.employeeId||"CO-5039")+"::"+prog.id]||courseProgress[prog.id];return isLearnerStarted(ov?ov.status:a.status,ov?ov.progress:a.progress)}))return!0;if(prog.id===`prog-7`){let ov7=courseProgress[`CO-5039::prog-7`]||courseProgress[`prog-7`];return ov7?isLearnerStarted(ov7.status,ov7.progress):!0}if([`prog-1`,`prog-2`,`prog-3`,`prog-8`,`prog-11`,`prog-12`].includes(prog.id)){let ovS=courseProgress[`CO-5039::${prog.id}`]||courseProgress[prog.id];if((prog.id===`prog-8`||prog.id===`prog-11`)&&ovS&&!isLearnerStarted(ovS.status,ovS.progress))return!1;return!0}return!1},updateCourseProgressApi=async(prog,status,progress,completedResources,latestResult,attemptHistory,extra)=>{let pid=prog.id||prog.name,pname=prog.name||``,key=`CO-5039::${pid}`,entry={employeeId:`CO-5039`,programmeId:pid,programmeName:pname,status,progress,completedResources,latestResult,attemptHistory,submittedDocs:extra?.submittedDocs||[],managerApprovalStatus:extra?.managerApprovalStatus||``};setCourseProgress(prev=>({...prev,[key]:entry}));y(prev=>prev.map(a=>((pid&&a.programmeId===pid)||(pname&&a.programmeName&&a.programmeName.trim().toLowerCase()===pname.trim().toLowerCase()))&&(a.employeeId===`emp-3`||a.employeeId===`CO-5039`||a.employeeName===`Tanya Kapoor`||a.employeeId===`emp-1`||!0)?(a.employeeId===`emp-3`||a.employeeId===`CO-5039`||a.employeeName===`Tanya Kapoor`?{...a,status,progress}:a):a));try{await fetch(`/api/training/employee-course-progress`,{method:`POST`,headers:{"Content-Type":"application/json"},body:JSON.stringify(entry)})}catch{}},approveCompletionApi=async(prog,empId)=>{let pid=prog.id||prog.name,pname=prog.name||``,empKey=(empId===`emp-3`||!empId)?`CO-5039`:empId,key=`${empKey}::${pid}`,prevEntry=courseProgress[key]||courseProgress[`CO-5039::${pid}`]||courseProgress[pid]||{};let entry={...prevEntry,employeeId:`CO-5039`,programmeId:pid,programmeName:pname,status:`Completed`,progress:100,managerApprovalStatus:`Approved`};setCourseProgress(prev=>({...prev,[`CO-5039::${pid}`]:entry,[key]:entry}));y(prev=>prev.map(a=>((pid&&a.programmeId===pid)||(pname&&a.programmeName&&a.programmeName.trim().toLowerCase()===pname.trim().toLowerCase()))&&(a.employeeId===empId||a.employeeId===`emp-3`||a.employeeName===`Tanya Kapoor`)?{...a,status:`Completed`,progress:100}:a));try{await fetch(`/api/training/employee-course-progress`,{method:`POST`,headers:{"Content-Type":"application/json"},body:JSON.stringify(entry)})}catch{}};let toggleCategoryApi=async(catName)=>{if((o||[]).some(pr=>doesProgUseCategory(pr,catName))){let cur=categories.find(c=>normCatKey(c.name)===normCatKey(catName));if(cur&&cur.active!==!1){return{success:!1,message:`Cannot mark "${cur.name}" as Inactive because it is currently assigned to one or more training programmes.`}}}let res=await fetch(`/api/training/categories`,{method:`POST`,headers:{"Content-Type":"application/json"},body:JSON.stringify({action:`toggle`,name:catName,userName:b.name})});let data=await res.json();if(data?.categories)setCategories(data.categories);return data},saveCategoryApi=async(payload)=>{let res=await fetch(`/api/training/categories`,{method:`POST`,headers:{"Content-Type":"application/json"},body:JSON.stringify({...payload,userName:b.name})});let data=await res.json();if(data?.categories)setCategories(data.categories);if(data?.programmes)s(data.programmes);return data};let canToggleProg=usr=>{if(!usr||usr.canChangeAvailability===!1)return!1;let rs=(usr.role||``).toLowerCase();return!(rs.includes(`employee`)||rs.includes(`viewer`)||rs.includes(`view only`))&&(rs.includes(`admin`)||rs.includes(`hr`)||rs.includes(`reporting manager`)||rs.includes(`management`))},canManageAvail=canToggleProg(b),syncProgList=(list,updated)=>{Array.isArray(list)&&s(list),updated&&c&&c.id===updated.id&&u(updated)},ce=e=>{a(e),t(`employee-detail`)},le=e=>{u(e),t(`programme-detail`)},ue=e=>{h(e),t(`assignment-detail`)},de=e=>{let p=(o||[]).find(x=>(e.id&&x.id===e.id)||(e.name&&x.name&&x.name.trim().toLowerCase()===e.name.trim().toLowerCase()));_(p?{...e,...p,status:e.status||"Not Started",progress:e.progress!=null?e.progress:0,assignedBy:e.assignedBy,assignedDate:e.assignedDate,dueDate:e.dueDate,assessment:p.assessment||e.assessment,resources:Array.isArray(p.resources)?p.resources:e.resources}:e),t(`employee-course-detail`)},fe=usr=>{let wasEmp=b.name===`Tanya Kapoor`||b.role.includes(`Employee`),nextIsEmp=usr.role.includes(`Employee`)||usr.name===`Tanya Kapoor`;x(usr),nextIsEmp?t(`employee-dashboard`):wasEmp&&t(`employees`)},pe=e=>{r([e,...n]),E(!1)},saveProgApi=async(progPayload,isEdit)=>{let res=await fetch(`/api/training/programmes`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programme:progPayload,userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canManageAvail}})});let data=await res.json().catch(()=>({success:!1,message:`Failed to communicate with backend.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`Unable to save training programme.`};syncProgList(data.programmes,isEdit?data.programme:null),isEdit&&data.programme&&u(data.programme),t(`training-programmes`);return{success:!0,programme:data.programme}},me=e=>saveProgApi(e,!1),he=e=>saveProgApi(e,!0),toggleAvailabilityApi=async(prog,targetStatus,reason)=>{let res=await fetch(`/api/training/programmes/availability`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programmeId:prog.id,targetAvailabilityStatus:targetStatus,reason,userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canManageAvail}})});let data=await res.json().catch(()=>({success:!1,message:`Network error updating availability.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`Failed to update availability status.`};syncProgList(data.programmes,data.programme);return{success:!0,programme:data.programme}},archiveProgApi=async(prog,reason)=>{let res=await fetch(`/api/training/programmes/archive`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programmeId:prog.id,reason,userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canManageAvail}})});let data=await res.json().catch(()=>({success:!1,message:`Network error archiving programme.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`Failed to archive programme.`};syncProgList(data.programmes,data.programme);return{success:!0,programme:data.programme}},restoreProgApi=async(prog,reason)=>{let res=await fetch(`/api/training/programmes/restore`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programmeId:prog.id,reason,userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canManageAvail}})});let data=await res.json().catch(()=>({success:!1,message:`Network error restoring programme.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`Failed to restore programme.`};syncProgList(data.programmes,data.programme);return{success:!0,programme:data.programme}},ge=async payload=>{let res=await fetch(`/api/training/assign`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programmeId:payload.programme.id,employees:payload.employees,assignmentMethod:payload.assignmentMethod,startDate:payload.startDate,endDate:payload.endDate,assignedBy:b.name})});let data=await res.json().catch(()=>({success:!1,message:`Network error assigning training.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`This training is currently inactive and cannot be assigned.`};Array.isArray(data.assignments)&&y(prev=>[...data.assignments,...prev]),syncProgList(data.programmes,data.programme),oe(!1);return{success:!0}},_e=e=>{y(v.map(t=>t.id===e.id?e:t)),D(null)},ve=e=>{let n=o.find(t=>t.name.toLowerCase()===e.toLowerCase()||t.id===e);u(n||{...o[0],name:e}),(b.name===`Tanya Kapoor`||b.role.includes(`Employee`))&&x({name:`Ishdeep Anand`,role:`Admin / HR / Reporting Manager`,initials:`IA`,canChangeAvailability:!0}),t(`programme-detail`)},ye=b.name===`Tanya Kapoor`||b.role.includes(`Employee`),activeSelectedProgramme=(c&&o.find(x=>x.id===c.id))||c||o[0];return(0,P.jsxs)(`div`,{className:`flex h-screen bg-slate-100 font-sans text-slate-900 overflow-hidden select-none`,children:[(0,P.jsx)(Je,{currentTab:e,onSelectTab:e=>{e===`employees`&&a(null),t(e)},isTrainingFlyoutOpen:S,onToggleTrainingFlyout:ee,isConfigFlyoutOpen:C,onToggleConfigFlyout:w,collapsed:te,onToggleCollapse:()=>T(!te),currentUser:b}),(0,P.jsxs)(`div`,{className:`flex-1 flex flex-col min-w-0 overflow-hidden relative`,children:[(0,P.jsx)(Ye,{currentTab:e,onOpenNewEmployee:()=>E(!0),onOpenCreateProgramme:()=>{ee(!1),t(`training-management`)},onOpenAssignTraining:()=>oe(!0),searchQuery:ne,onSearchChange:re,currentUser:b,onSwitchUser:fe,onOpenMyProfile:()=>{let e=n.find(e=>e.firstName===`Tanya`)||n[0];a(e),t(`employee-profile`)}}),(0,P.jsx)(`main`,{className:`flex-1 overflow-y-auto`,children:ye?(0,P.jsxs)(P.Fragment,{children:[e===`employee-dashboard`&&(0,P.jsx)(ft,{onGoToTraining:()=>t(`employee-training`),onSelectCourse:de,employeeName:b.name,programmes:o,assignments:v,courseProgress:courseProgress}),e===`employee-training`&&(0,P.jsx)(pt,{onSelectCourse:de,programmes:o,assignments:v,courseProgress:courseProgress}),e===`employee-course-detail`&&(0,P.jsx)(mt,{course:g,programmes:o,courseProgress:courseProgress,onUpdateCourseProgress:updateCourseProgressApi,onBack:()=>t(`employee-training`)}),e===`employee-profile`&&i&&(0,P.jsx)($e,{employee:i,assignments:v,programmes:o,isEmployeeSide:!0,onBack:()=>t(`employee-training`),onOpenAssignTraining:()=>oe(!0),onNavigateToProgrammeDetail:ve})]}):(0,P.jsxs)(P.Fragment,{children:[e===`employees`&&(0,P.jsx)(Xe,{employees:n,onSelectEmployee:ce,onOpenNewEmployee:()=>E(!0),searchQuery:ne}),e===`employee-detail`&&i&&(0,P.jsx)($e,{employee:i,assignments:v,onBack:()=>t(`employees`),onOpenAssignTraining:()=>oe(!0),onNavigateToProgrammeDetail:ve}),e===`training-dashboard`&&(0,P.jsx)(et,{assignments:v,onOpenReviewQueue:()=>t(`training-review`),onEvaluateSubmission:e=>D(e)}),e===`training-programmes`&&(0,P.jsx)(tt,{programmes:o,employees:n,assignments:v,courseProgress:courseProgress,onOpenCreateProgramme:()=>t(`training-management`),onSelectProgramme:le,onEditProgramme:e=>{u(e),t(`edit-programme`)},onToggleAvailability:toggleAvailabilityApi,currentUser:b,canToggleAvailability:canManageAvail,hasStartedLearner:hasStartedLearnerFn}),e===`programme-detail`&&(0,P.jsx)(nt,{programme:activeSelectedProgramme,employees:n,assignments:v,courseProgress:courseProgress,onBack:()=>t(`training-programmes`),onOpenAssignTraining:()=>oe(!0),onSelectEmployee:ce,onEditProgramme:()=>t(`edit-programme`),onArchiveProgramme:archiveProgApi,onRestoreProgramme:restoreProgApi,onToggleAvailability:toggleAvailabilityApi,canToggleAvailability:canManageAvail,hasStartedLearner:hasStartedLearnerFn,onApproveCompletion:approveCompletionApi}),e===`training-management`&&(0,P.jsx)(rt,{categories:categories,onCancel:()=>t(`training-programmes`),onSaveProgramme:me},`new-programme`),e===`edit-programme`&&(0,P.jsx)(rt,{categories:categories,programmeToEdit:activeSelectedProgramme,onCancel:()=>t(`training-programmes`),onSaveProgramme:he},activeSelectedProgramme?.id||`edit-prog`),e===`training-assignments`&&(0,P.jsx)(it,{assignments:v,employees:n,onOpenAssignTraining:()=>oe(!0),onEvaluate:e=>D(e),onSelectAssignment:ue}),e===`assignment-detail`&&(0,P.jsx)(at,{assignment:m,onBack:()=>t(`training-assignments`),onEvaluate:()=>{let e=v[0];e&&D(e)}}),e===`training-progress`&&(0,P.jsx)(ot,{categories:categories}),e===`certificates`&&(0,P.jsx)(ct,{assignments:v}),e===`config`&&(0,P.jsx)(ut,{currentTab:e,categories:categories,programmes:o,onToggleCategory:toggleCategoryApi,onSaveCategory:saveCategoryApi}),e===`roles`&&(0,P.jsx)(dt,{onSelectRole:e=>alert(`Selected role: ${e}`)})]})})]}),ie&&(0,P.jsx)(ht,{onClose:()=>E(!1),onAddEmployee:pe}),ae&&(0,P.jsx)(gt,{employees:n,programmes:o,initialProgrammeId:e===`programme-detail`?activeSelectedProgramme?.id:void 0,onClose:()=>oe(!1),onAssign:ge}),se&&(0,P.jsx)(_t,{assignment:se,onClose:()=>D(null),onSaveEvaluation:_e})]})}(0,u.createRoot)(document.getElementById(`root`)).render((0,P.jsx)(vt,{}));
