@@ -463,7 +463,7 @@
 <li class=""><strong>Select Skills (Displayed when <code>Add Skill to Employee Profile</code> is ON):</strong></li>
 <li class="nested-li">Mandatory: Yes (<code>*</code>, when <code>Add Skill to Employee Profile</code> is <code>ON</code>)</li>
 <li class="nested-li">Type: Searchable Multi-select Checkbox Dropdown (with removable skill chips &amp; <code>Done</code> close button)</li>
-<li class="nested-li">Display Format: Trigger input directly shows the comma-separated selected skill name(s) (e.g., <code>Account Management, React</code>) with overflow ellipsis + full tooltip instead of a generic count string.</li>
+<li class="nested-li">Display Format: Trigger input directly renders the selected skill chips with individual <code>×</code> remove buttons inside the dropdown box itself (no duplicate chip strip below) when 1 or more skills are selected, and <code>"Select Skills from Config &gt; Skills..."</code> when empty.</li>
 <li class="nested-li">Data Source: Loaded dynamically from <strong>active</strong> skills in <code>Config &gt; Skills</code> (<code>GET /api/config/skills</code>); never hardcoded.</li>
 <li class="nested-li">Inline Creation: Authorised users can click <strong>+ Create New Skill in Config</strong> directly inside Section 3 to add a new skill via <code>Config &gt; Skills</code>; saving automatically selects and makes the skill available in the Training skill dropdown without leaving the form.</li>
 <li class="nested-li">Validation: At least 1 active skill must be selected; duplicate selections within the same Training are prevented; inactive skills from <code>Config &gt; Skills</code> are rejected on new configurations.</li>

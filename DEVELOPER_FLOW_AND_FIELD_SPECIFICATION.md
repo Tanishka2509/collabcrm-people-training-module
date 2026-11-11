@@ -207,7 +207,7 @@ The left collapsible sidebar provides access to:
 - **Select Skills (Displayed when `Add Skill to Employee Profile` is ON):**
   - Mandatory: Yes (`*`, when `Add Skill to Employee Profile` is `ON`)
   - Type: Searchable Multi-select Checkbox Dropdown (with removable skill chips & `Done` close button)
-  - Display Format: Trigger input directly shows the comma-separated selected skill name(s) (e.g., `Account Management, React`) with overflow ellipsis + full tooltip instead of a generic count string.
+  - Display Format: Trigger input directly renders the selected skill chips with individual `×` remove buttons inside the dropdown box itself (no duplicate chip strip below) when 1 or more skills are selected, and `"Select Skills from Config > Skills..."` when empty.
   - Data Source: Loaded dynamically from **active** skills in `Config > Skills` (`GET /api/config/skills`); never hardcoded.
   - Inline Creation: Authorised users can click **+ Create New Skill in Config** directly inside Section 3 to add a new skill via `Config > Skills`; saving automatically selects and makes the skill available in the Training skill dropdown without leaving the form.
   - Validation: At least 1 active skill must be selected; duplicate selections within the same Training are prevented; inactive skills from `Config > Skills` are rejected on new configurations.

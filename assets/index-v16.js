@@ -1820,19 +1820,16 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
               (0,P.jsx)("span",{className:"text-rose-500",children:"*"}),
               (0,P.jsx)(InfoTip,{text:"Choose one or more active skills from Config > Skills. Duplicate selections are prevented automatically."})
             ]}),
-            (0,P.jsxs)("button",{type:"button",title:selectedSkillNames.length>0?selectedSkillNames.join(", "):"Select Skills from Config > Skills...",onClick:()=>setSkillDropdownOpen(!skillDropdownOpen),className:"w-full flex items-center justify-between gap-2 bg-white border border-purple-200 rounded-lg px-3 py-2 text-xs text-left focus:outline-none focus:ring-2 focus:ring-purple-500/20",children:[
-              (0,P.jsx)("span",{style:{minWidth:0,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"},className:selectedSkillNames.length>0?"text-slate-900 font-semibold":"text-slate-400",children:selectedSkillNames.length>0 ? selectedSkillNames.join(", ") : "Select Skills from Config > Skills..."}),
+            (0,P.jsxs)("div",{role:"button",tabIndex:0,"aria-expanded":skillDropdownOpen,title:selectedSkillNames.length>0?selectedSkillNames.join(", "):"Select Skills from Config > Skills...",onClick:()=>setSkillDropdownOpen(!skillDropdownOpen),onKeyDown:ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();setSkillDropdownOpen(!skillDropdownOpen);}},className:"w-full flex items-center justify-between gap-2 bg-white border border-purple-200 rounded-lg px-3 py-1.5 text-xs text-left cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-500/20",style:{minHeight:"36px"},children:[
+              selectedSkillIds.length > 0 ? (0,P.jsx)("div",{className:"flex flex-wrap items-center gap-1.5",style:{minWidth:0,flex:1},children:selectedSkillIds.map(sid => {
+                let sk = allSkillsMaster.find(m => m.id === sid) || { id: sid, name: sid };
+                return (0,P.jsxs)("span",{className:"inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-purple-50 text-purple-700 border border-purple-200",children:[
+                  (0,P.jsx)("span",{children:sk.name}),
+                  (0,P.jsx)("button",{type:"button",onClick:ev=>{ev.stopPropagation();setSelectedSkillIds(prev => prev.filter(x => x !== sid));},className:"text-purple-400 hover:text-rose-600 font-bold leading-none cursor-pointer",title:"Remove skill",children:"×"})
+                ]},sid);
+              })}) : (0,P.jsx)("span",{className:"text-slate-400",children:"Select Skills from Config > Skills..."}),
               (0,P.jsx)("span",{style:{flexShrink:0},className:"text-purple-600 font-bold text-[11px]",children:skillDropdownOpen ? "▲" : "▼"})
             ]}),
-
-            // Selected Skill Chips
-            selectedSkillIds.length > 0 && (0,P.jsx)("div",{className:"flex flex-wrap gap-1.5 pt-1",children:selectedSkillIds.map(sid => {
-              let sk = allSkillsMaster.find(m => m.id === sid) || { id: sid, name: sid };
-              return (0,P.jsxs)("span",{className:"inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-white text-purple-700 border border-purple-200 shadow-2xs",children:[
-                (0,P.jsx)("span",{children:sk.name}),
-                (0,P.jsx)("button",{type:"button",onClick:()=>setSelectedSkillIds(prev => prev.filter(x => x !== sid)),className:"text-purple-400 hover:text-rose-600 font-bold leading-none",title:"Remove skill",children:"×"})
-              ]},sid);
-            })}),
 
             // Dropdown List
             skillDropdownOpen && (0,P.jsxs)("div",{className:"mt-1 bg-white border border-purple-200 rounded-xl shadow-lg p-3 space-y-2 z-30",children:[
