@@ -643,7 +643,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
   let[assessmentDesc, setAssessmentDesc] = (0,l.useState)(initialAssess ? (initialAssess.description || "Complete the following questions to evaluate your understanding of this training.") : "");
   let[assessPassScore, setAssessPassScore] = (0,l.useState)(initialAssess ? (initialAssess.passingScore ?? 80) : "");
   let[assessMaxAttempts, setAssessMaxAttempts] = (0,l.useState)(initialAssess ? (initialAssess.maxAttempts ?? 3) : "");
-  let[assessTotalMarks, setAssessTotalMarks] = (0,l.useState)(initialAssess ? (initialAssess.totalMarks ?? ((initialAssess.questions||[]).reduce((sum,q)=>sum+(Number(q.marks)||0),0) || "")) : "");
+  let[assessTotalMarks, setAssessTotalMarks] = (0,l.useState)(initialAssess ? (initialAssess.totalMarks ?? "") : "");
   let[shuffleQuestions, setShuffleQuestions] = (0,l.useState)(initialAssess ? (initialAssess.shuffleQuestions ?? false) : false);
   let[showResultAfterSub, setShowResultAfterSub] = (0,l.useState)(initialAssess ? (initialAssess.showResultAfterSubmission ?? true) : true);
   let[questions, setQuestions] = (0,l.useState)(initialAssess ? (initialAssess.questions || []) : []);
@@ -653,20 +653,9 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
 
   let totalQuestions = questions.length;
   let questionsMarksSum = questions.reduce((sum, q) => sum + (Number(q.marks) || 0), 0);
-  let totalAssessmentMarks = (assessTotalMarks !== "" && Number(assessTotalMarks) > 0) ? Number(assessTotalMarks) : questionsMarksSum;
-
-  let handleDistributeTotalMarks=()=>{
-    let target = Number(assessTotalMarks);
-    if(!target || target <= 0 || questions.length === 0) return;
-    if(target < questions.length){
-      setValidationError("Total Marks (" + target + ") must be at least " + questions.length + " to award at least 1 mark per question.");
-      return;
-    }
-    let base = Math.floor(target / questions.length);
-    let rem = target % questions.length;
-    setQuestions(questions.map((q, idx)=>({...q, marks: idx < rem ? base + 1 : base})));
-    setValidationError("");
-  };
+  let totalAssessmentMarks = (assessTotalMarks !== "" && Number(assessTotalMarks) > 0) ? Number(assessTotalMarks) : 0;
+  let allQuestionsHaveMarks = questions.length > 0 && questions.every(q => q.marks !== "" && Number(q.marks) > 0);
+  let hasMarksMismatch = assessTotalMarks !== "" && Number(assessTotalMarks) > 0 && allQuestionsHaveMarks && questionsMarksSum !== Number(assessTotalMarks);
 
   let ae=()=>{
     let demoCat = activeCats.find(cat=>normCatKey(cat.name)===normCatKey("Engineering & Architecture"))?.name || activeCats[0]?.name || "";
@@ -706,7 +695,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
       number: questions.length + 1,
       text:"",
       type:"single_choice",
-      marks:2,
+      marks:"",
       mandatory:true,
       options:[
         {id:"opt-1", text:""},
@@ -875,12 +864,16 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
         setValidationError("Assessment is enabled. At least 1 question must be added.");
         return;
       }
-      if(assessTotalMarks !== "" && (isNaN(Number(assessTotalMarks)) || Number(assessTotalMarks) <= 0)){
-        setValidationError("Total Marks must be greater than 0.");
+      if(!assessTotalMarks || isNaN(Number(assessTotalMarks)) || Number(assessTotalMarks) <= 0){
+        setValidationError("Total Marks is required and must be greater than 0.");
         return;
       }
-      if(assessTotalMarks !== "" && Number(assessTotalMarks) > 0 && questionsMarksSum !== Number(assessTotalMarks)){
-        setValidationError("Sum of question marks (" + questionsMarksSum + ") must match configured Total Marks (" + Number(assessTotalMarks) + "). Adjust question marks or click \"Distribute Equally\".");
+      if(!allQuestionsHaveMarks){
+        setValidationError("Please enter marks greater than 0 for every question.");
+        return;
+      }
+      if(questionsMarksSum !== Number(assessTotalMarks)){
+        setValidationError("Total question marks (" + questionsMarksSum + ") do not match Total Marks (" + Number(assessTotalMarks) + ").");
         return;
       }
       for(let i=0; i<questions.length; i++){
@@ -1085,11 +1078,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
                 (0,P.jsx)("input",{type:"checkbox",checked:checked,onChange:()=>toggleCompReq(opt),className:"w-3.5 h-3.5 text-blue-600 rounded border-slate-300 focus:ring-blue-500"}),
                 (0,P.jsx)("span",{className:"text-xs",children:opt})
               ]},opt);
-            }),
-            (0,P.jsxs)("div",{className:"pt-1.5 mt-1 border-t border-slate-100 px-2 flex items-center justify-between text-[11px]",children:[
-              (0,P.jsx)("button",{type:"button",onClick:()=>setCompReqList([]),className:"text-slate-500 hover:text-slate-700 font-medium",children:"Clear"}),
-              (0,P.jsx)("button",{type:"button",onClick:()=>setShowCompReqDrop(!1),className:"text-blue-600 hover:text-blue-700 font-bold",children:"Done"})
-            ]})
+            })
           ]})
         ]})
       ]})
@@ -1166,18 +1155,16 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
             (0,P.jsxs)("span",{className:"bg-blue-50 text-blue-700 border border-blue-200 text-xs font-bold px-2.5 py-0.5 rounded-full",children:[totalQuestions," Questions"]}),
             (0,P.jsxs)("div",{style:{display:"inline-flex",alignItems:"center",gap:"8px"},children:[
               (0,P.jsx)("label",{className:"text-xs font-semibold text-slate-700 whitespace-nowrap",children:"Total Marks:"}),
-              (0,P.jsx)("input",{type:"text",inputMode:"numeric",value:assessTotalMarks,onChange:e=>setAssessTotalMarks(e.target.value.replace(/[^0-9]/g,"")),placeholder:String(questionsMarksSum || 0),title:"Set target total marks for this assessment",style:{width:"68px"},className:"bg-white border border-slate-300 rounded-lg px-2.5 py-1 text-center font-bold text-slate-800 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500"})
+              (0,P.jsx)("input",{type:"text",inputMode:"numeric",value:assessTotalMarks,onChange:e=>setAssessTotalMarks(e.target.value.replace(/[^0-9]/g,"")),placeholder:"e.g. 100",title:"Enter total marks for this assessment",style:{width:"74px"},className:"bg-white border border-slate-300 rounded-lg px-2.5 py-1 text-center font-bold text-slate-800 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500"})
             ]}),
-            questions.length > 0 && assessTotalMarks !== "" && Number(assessTotalMarks) > 0 && questionsMarksSum !== Number(assessTotalMarks) ? (0,P.jsxs)("div",{style:{display:"inline-flex",alignItems:"center",gap:"8px"},children:[
-              (0,P.jsxs)("span",{className:"bg-amber-50 text-amber-800 border border-amber-200 text-[11px] font-semibold px-2.5 py-0.5 rounded-full",children:["Allocated: ", questionsMarksSum, " / ", Number(assessTotalMarks)]}),
-              (0,P.jsx)("button",{type:"button",onClick:handleDistributeTotalMarks,className:"text-[11px] font-bold text-blue-700 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-2.5 py-1 rounded-lg transition-colors",children:"Distribute Equally"})
-            ]}) : (questions.length > 0 && assessTotalMarks !== "" && Number(assessTotalMarks) > 0 && (0,P.jsx)("span",{className:"bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-semibold px-2.5 py-0.5 rounded-full",children:"Matched ✓"}))
+            assessTotalMarks !== "" && Number(assessTotalMarks) > 0 && allQuestionsHaveMarks && questionsMarksSum === Number(assessTotalMarks) && (0,P.jsx)("span",{className:"bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-semibold px-2.5 py-0.5 rounded-full",children:"Matched ✓"})
           ]}),
           (0,P.jsxs)("button",{type:"button",onClick:handleAddQuestion,className:"bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 rounded-lg text-xs font-bold shadow-sm flex items-center gap-1.5 transition-colors self-start sm:self-auto",children:[
             (0,P.jsx)("span",{children:"+"}),
             (0,P.jsx)("span",{children:"Add Question"})
           ]})
         ]}),
+        hasMarksMismatch && (0,P.jsx)("div",{className:"bg-rose-50 border border-rose-200 text-rose-700 px-3.5 py-2 rounded-lg text-xs font-semibold",children:"Total question marks (" + questionsMarksSum + ") do not match Total Marks (" + Number(assessTotalMarks) + ")."}),
 
         // Question Cards (Redesigned per Image 2: Clean, proper alignment, full-width inputs)
         (0,P.jsx)("div",{className:"space-y-4",children:questions.length===0 ? (0,P.jsx)("div",{className:"bg-slate-50 border border-dashed border-slate-300 rounded-xl p-6 text-center text-xs text-slate-500",children:"No questions added yet. Click \"+ Add Question\" or \"⚡ Auto-Fill Demo\" to populate questions."}) : questions.map((q, qIndex)=>(0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4",children:[
@@ -1187,17 +1174,22 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
               (0,P.jsxs)("span",{className:"bg-blue-600 text-white font-bold text-xs px-2.5 py-1 rounded-md shadow-sm",children:["Question ", q.number || (qIndex + 1)]}),
               (0,P.jsxs)("div",{className:"flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-md px-2 py-0.5 text-xs",children:[
                 (0,P.jsx)("span",{className:"text-slate-500 font-medium",children:"Marks:"}),
-                (0,P.jsx)("input",{type:"number",min:1,value:q.marks,onChange:e=>handleUpdateQuestion(q.id, "marks", e.target.value),className:"w-10 text-center bg-white border border-slate-300 rounded font-bold text-slate-800 text-xs py-0.5"})
+                (0,P.jsx)("input",{type:"text",inputMode:"numeric",placeholder:"0",value:q.marks,onChange:e=>handleUpdateQuestion(q.id, "marks", e.target.value.replace(/[^0-9]/g,"")),style:{width:"42px"},className:"text-center bg-white border border-slate-300 rounded font-bold text-slate-800 text-xs py-0.5 focus:outline-none focus:ring-1 focus:ring-blue-500"})
               ]}),
               (0,P.jsxs)("label",{className:"flex items-center gap-1.5 cursor-pointer bg-slate-50 border border-slate-200 rounded-md px-2 py-1 text-xs",children:[
                 (0,P.jsx)("input",{type:"checkbox",checked:q.mandatory??true,onChange:e=>handleUpdateQuestion(q.id, "mandatory", e.target.checked),className:"w-3.5 h-3.5 text-blue-600 rounded"}),
                 (0,P.jsx)("span",{className:"text-[11px] font-semibold text-slate-700",children:"Mandatory"})
               ]})
             ]}),
-            (0,P.jsxs)("div",{className:"flex items-center gap-1",children:[
-              
-              (0,P.jsx)("button",{type:"button",onClick:()=>handleDuplicateQuestion(q.id),className:"p-1.5 text-slate-500 hover:text-blue-600 rounded hover:bg-blue-50 text-xs font-medium ml-1",title:"Duplicate Question",children:"📋 Duplicate"}),
-              (0,P.jsx)("button",{type:"button",onClick:()=>handleDeleteQuestion(q.id),className:"p-1.5 text-rose-500 hover:text-rose-700 rounded hover:bg-rose-50 text-xs font-medium ml-1",title:"Delete Question",children:"🗑️ Delete"})
+            (0,P.jsxs)("div",{style:{display:"inline-flex",alignItems:"center",gap:"8px"},children:[
+              (0,P.jsxs)("button",{type:"button",onClick:()=>handleDuplicateQuestion(q.id),style:{display:"inline-flex",alignItems:"center",gap:"5px",padding:"5px 10px"},className:"bg-white border border-slate-200 hover:border-blue-300 hover:bg-blue-50 text-slate-700 hover:text-blue-700 rounded-lg text-xs font-semibold transition-colors",title:"Duplicate Question",children:[
+                (0,P.jsx)(ue,{className:"w-3.5 h-3.5"}),
+                (0,P.jsx)("span",{children:"Duplicate"})
+              ]}),
+              (0,P.jsxs)("button",{type:"button",onClick:()=>handleDeleteQuestion(q.id),style:{display:"inline-flex",alignItems:"center",gap:"5px",padding:"5px 10px"},className:"bg-white border border-rose-200 hover:border-rose-300 hover:bg-rose-50 text-rose-600 hover:text-rose-700 rounded-lg text-xs font-semibold transition-colors",title:"Delete Question",children:[
+                (0,P.jsx)(ze,{className:"w-3.5 h-3.5"}),
+                (0,P.jsx)("span",{children:"Delete"})
+              ]})
             ]})
           ]}),
 
