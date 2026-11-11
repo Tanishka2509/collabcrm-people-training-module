@@ -707,6 +707,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
   let[assessmentDesc, setAssessmentDesc] = (0,l.useState)(initialAssess ? (initialAssess.description || "Complete the following questions to evaluate your understanding of this training.") : "");
   let[assessPassScore, setAssessPassScore] = (0,l.useState)(initialAssess ? (initialAssess.passingScore ?? 80) : "");
   let[assessMaxAttempts, setAssessMaxAttempts] = (0,l.useState)(initialAssess ? (initialAssess.maxAttempts ?? 3) : "");
+  let[assessTotalMarks, setAssessTotalMarks] = (0,l.useState)(initialAssess ? (initialAssess.totalMarks ?? ((initialAssess.questions||[]).reduce((sum,q)=>sum+(Number(q.marks)||0),0) || "")) : "");
   let[shuffleQuestions, setShuffleQuestions] = (0,l.useState)(initialAssess ? (initialAssess.shuffleQuestions ?? false) : false);
   let[showResultAfterSub, setShowResultAfterSub] = (0,l.useState)(initialAssess ? (initialAssess.showResultAfterSubmission ?? true) : true);
   let[questions, setQuestions] = (0,l.useState)(initialAssess ? (initialAssess.questions || []) : []);
@@ -715,7 +716,21 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
   let[validationError, setValidationError] = (0,l.useState)("");
 
   let totalQuestions = questions.length;
-  let totalAssessmentMarks = questions.reduce((sum, q) => sum + (Number(q.marks) || 0), 0);
+  let questionsMarksSum = questions.reduce((sum, q) => sum + (Number(q.marks) || 0), 0);
+  let totalAssessmentMarks = (assessTotalMarks !== "" && Number(assessTotalMarks) > 0) ? Number(assessTotalMarks) : questionsMarksSum;
+
+  let handleDistributeTotalMarks=()=>{
+    let target = Number(assessTotalMarks);
+    if(!target || target <= 0 || questions.length === 0) return;
+    if(target < questions.length){
+      setValidationError("Total Marks (" + target + ") must be at least " + questions.length + " to award at least 1 mark per question.");
+      return;
+    }
+    let base = Math.floor(target / questions.length);
+    let rem = target % questions.length;
+    setQuestions(questions.map((q, idx)=>({...q, marks: idx < rem ? base + 1 : base})));
+    setValidationError("");
+  };
 
   let ae=()=>{
     let demoCat = activeCats.find(cat=>normCatKey(cat.name)===normCatKey("Engineering & Architecture"))?.name || activeCats[0]?.name || "";
@@ -732,6 +747,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
     setAssessmentDesc(demoAssessmentTemplate.description);
     setAssessPassScore(80);
     setAssessMaxAttempts(3);
+    setAssessTotalMarks(10);
     _(80);
     y(3);
     setDuePeriod(14);
@@ -923,6 +939,14 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
         setValidationError("Assessment is enabled. At least 1 question must be added.");
         return;
       }
+      if(assessTotalMarks !== "" && (isNaN(Number(assessTotalMarks)) || Number(assessTotalMarks) <= 0)){
+        setValidationError("Total Marks must be greater than 0.");
+        return;
+      }
+      if(assessTotalMarks !== "" && Number(assessTotalMarks) > 0 && questionsMarksSum !== Number(assessTotalMarks)){
+        setValidationError("Sum of question marks (" + questionsMarksSum + ") must match configured Total Marks (" + Number(assessTotalMarks) + "). Adjust question marks or click \"Distribute Equally\".");
+        return;
+      }
       for(let i=0; i<questions.length; i++){
         let q = questions[i];
         if(!q.text.trim()){
@@ -968,6 +992,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
       description: assessmentDesc,
       passingScore: Number(assessPassScore) || 80,
       maxAttempts: Number(assessMaxAttempts) || 3,
+      totalMarks: totalAssessmentMarks,
       shuffleQuestions: shuffleQuestions,
       showResultAfterSubmission: showResultAfterSub,
       questions: questions
@@ -1194,12 +1219,19 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
 
         // Question Builder Header & Stats
         (0,P.jsxs)("div",{className:"flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2",children:[
-          (0,P.jsxs)("div",{className:"flex items-center gap-2.5",children:[
+          (0,P.jsxs)("div",{className:"flex items-center gap-2.5 flex-wrap",children:[
             (0,P.jsx)("span",{className:"text-xs font-bold text-slate-900 uppercase tracking-wide",children:"Questions List"}),
             (0,P.jsxs)("span",{className:"bg-blue-50 text-blue-700 border border-blue-200 text-xs font-bold px-2.5 py-0.5 rounded-full",children:[totalQuestions," Questions"]}),
-            (0,P.jsxs)("span",{className:"bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold px-2.5 py-0.5 rounded-full",children:[totalAssessmentMarks," Total Marks"]})
+            (0,P.jsxs)("div",{className:"inline-flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 rounded-full pl-3 pr-1.5 py-0.5 text-xs",children:[
+              (0,P.jsx)("span",{className:"font-bold text-emerald-800 whitespace-nowrap",children:"Total Marks:"}),
+              (0,P.jsx)("input",{type:"number",min:1,value:assessTotalMarks,onChange:e=>setAssessTotalMarks(e.target.value),placeholder:String(questionsMarksSum || 0),title:"Set target total marks for this assessment",className:"w-16 text-center bg-white border border-emerald-300 rounded-full font-bold text-emerald-800 text-xs py-0.5 px-1.5 focus:outline-none focus:ring-1 focus:ring-emerald-500"})
+            ]}),
+            questions.length > 0 && assessTotalMarks !== "" && Number(assessTotalMarks) > 0 && questionsMarksSum !== Number(assessTotalMarks) ? (0,P.jsxs)("div",{className:"inline-flex items-center gap-2",children:[
+              (0,P.jsxs)("span",{className:"bg-amber-50 text-amber-800 border border-amber-200 text-[11px] font-semibold px-2.5 py-0.5 rounded-full",children:["Allocated: ", questionsMarksSum, " / ", Number(assessTotalMarks)]}),
+              (0,P.jsx)("button",{type:"button",onClick:handleDistributeTotalMarks,className:"text-[11px] font-bold text-blue-700 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-2.5 py-0.5 rounded-full transition-colors",children:"Distribute Equally"})
+            ]}) : (questions.length > 0 && assessTotalMarks !== "" && Number(assessTotalMarks) > 0 && (0,P.jsx)("span",{className:"bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-semibold px-2 py-0.5 rounded-full",children:"Matched ✓"}))
           ]}),
-          (0,P.jsxs)("button",{type:"button",onClick:handleAddQuestion,className:"bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 rounded-lg text-xs font-bold shadow-sm flex items-center gap-1.5 transition-colors",children:[
+          (0,P.jsxs)("button",{type:"button",onClick:handleAddQuestion,className:"bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 rounded-lg text-xs font-bold shadow-sm flex items-center gap-1.5 transition-colors self-start sm:self-auto",children:[
             (0,P.jsx)("span",{children:"+"}),
             (0,P.jsx)("span",{children:"Add Question"})
           ]})
