@@ -310,13 +310,14 @@
 <h3>Flow 2: Navigation Drawer Structure</h3>
 <p>The left collapsible sidebar provides access to:</p>
 <li class="numbered-li"><strong>Employees</strong> (<code>employees</code>): Complete employee directory with profile cards and Add Employee modal.</li>
-<li class="numbered-li"><strong>Training Hub</strong>:</li>
+<li class="numbered-li"><strong>Training Hub</strong> (non-bold submenu items):</li>
 <li class="nested-li"><strong>Dashboard</strong> (<code>training-dashboard</code>): Real-time metrics (Active Learners, Total Assignments, Completion Rate, Average Score), urgent review queue, and performance analytics.</li>
-<li class="nested-li"><strong>Training Management</strong> (<code>training-programmes</code>, breadcrumb: <code>Training Programmes</code>): Full course catalogue, status filters (All, Published, Draft), search, and <code>+ Create Programme</code> action.</li>
-<li class="nested-li"><strong>Assignments</strong> (<code>training-assignments</code>): Central assignment register with <strong><code>ASSIGNED SCOPE</code></strong> column (Employee, Department, Designation), <code>41 Total</code> assignment count, and 5-page pagination (10 items/page).</li>
+<li class="nested-li"><strong>Training Management</strong> (<code>training-programmes</code>, breadcrumb: <code>Training Programmes</code>): Full course catalogue, lifecycle status filters (<code>All</code>, <code>Published</code>, <code>Draft</code>, <code>Archived</code>), search, Availability Status (<code>Active</code> / <code>Inactive</code>) toggle, View <code>👁</code> flow to <strong>Programme Detail</strong>, and <code>+ Create Programme</code> action.</li>
+<li class="nested-li"><strong>Assignments</strong> (<code>training-assignments</code>): Central assignment register with <strong><code>ASSIGNED SCOPE</code></strong> column (Employee, Department, Designation), <code>41 Total</code> assignment count, and 5-page pagination (10 items/page). Clicking a record opens <strong>Assignment Details</strong> (without the removed <code>Automated Evaluation Active</code> header badge).</li>
 <li class="nested-li"><strong>Progress</strong> (<code>training-progress</code>): Dual-mode tracking (<code>1. Employee-wise Training Completion</code> vs <code>2. Departmental Compliance Audit</code>), 4 KPI cards (<code>ACTIVE LEARNERS</code>, <code>TOTAL ASSIGNMENTS</code>, <code>COMPLETED</code>, <code>AVG SCORE</code>), and CSV export.</li>
-<li class="nested-li"><strong>Certificates</strong> (<code>certificates</code>): Expandable master-detail table matching Screenshot 3 format (<code>^ / v</code> toggle chevron, plain-text earned programmes, and right-aligned Actions column directly under <code>All Records</code>).</li>
+<li class="nested-li"><strong>Certificates</strong> (<code>certificates</code>): Expandable master-detail table defaulting to <strong>collapsed</strong> employee rows (<code>expandedMap</code>), <code>^ / v</code> toggle chevron, plain-text earned programmes, clickable certificate card preview, and right-aligned Actions column directly under <code>All Records</code>.</li>
 <li class="numbered-li"><strong>Config Hub</strong>:</li>
+<li class="nested-li"><strong>Config Flyout</strong> (compact full-height left drawer panel): Quick access to <strong>Training Config</strong> (<code>config</code>) and <strong>Roles</strong> (<code>roles</code>).</li>
 <li class="nested-li"><strong>Training Config</strong> (<code>config</code>): Tabbed settings for <strong>General Settings</strong> (5 module access permission toggles) and <strong>Training Categories</strong> (master category table + Add Category modal with duplicate validation).</li>
 <li class="nested-li"><strong>Roles &amp; Permissions</strong> (<code>roles</code>): 11-role RBAC table (<code>Sr. Business Analyst</code>, <code>Senior Recruiter</code>, <code>CEO</code>, <code>Project Manager</code>, <code>BDE</code>, <code>Admin/HR</code>, <code>Employee</code>, <code>Team leader</code>, <code>Management</code>, <code>Recruiter</code>, <code>BDM</code>), <code>+ Add Role</code> slideover modal, and interactive Role Permission Matrix.</li>
 <p><em>(Note: The legacy "Reports" drawer item has been removed.)</em></p>
@@ -342,21 +343,25 @@
 <hr />
 <h3>Flow 5: Certificates Verification Flow</h3>
 <li class=""><strong>Master-Detail Expandable Table</strong>:</li>
+<li class="nested-li">Defaults to <strong>collapsed</strong> employee rows (<code>!!expandedMap[emp.id]</code>); expanding a row reveals child sub-rows for additional certificates earned by that employee.</li>
 <li class="nested-li">Master row displays Employee Name, Department/Role, Primary Earned Programme, and an expand toggle (<code>^ / v</code>).</li>
-<li class="nested-li">Expanding reveals child sub-rows for all additional certificates earned by that employee.</li>
-<li class="nested-li">Plain-text format for programme names (no select dropdowns or passed badges in cell).</li>
+<li class="nested-li">Plain-text format for programme names (no select dropdowns or passed badges in cell). Clicking a certificate card also opens the verified certificate modal.</li>
 <li class="nested-li"><strong>Right-Aligned Actions</strong>: The <code>Actions</code> column header and eye icon <code>(👁)</code> buttons are aligned to the far right edge (<code>w-28 text-right pr-6</code>), positioned directly below the <code>All Records</code> category filter.</li>
 <li class=""><strong>Certificate Modal</strong>:</li>
-<li class="nested-li">Displays official certificate of appreciation.</li>
+<li class="nested-li">Displays official certificate of appreciation with <strong>centered <code>CollabCRM</code> brand header</strong>, gold seal icon, and dark-navy corner accent.</li>
 <li class="nested-li">Dynamically bound to the exact completed programme and learner name.</li>
 <li class="nested-li"><strong>Authorized Signatory</strong>: Configured strictly as <strong><code>Khushi Bhatt, Head of HR</code></strong>.</li>
 <hr />
 <h3>Flow 6: Employee User Role Learning Portal Flow</h3>
-<li class="">Access by switching user to <code>Tanya Kapoor</code> or navigating to <code>My Training</code>.</li>
-<li class=""><strong>Dynamic State Integration</strong>: Newly created and published programmes from Admin/HR view automatically populate in the employee's training list.</li>
+<li class="">Access by switching user to <code>Tanya Kapoor</code> or navigating to <code>Training &gt; My Training</code>.</li>
+<li class=""><strong>Dynamic State Integration</strong>: Newly created and published programmes from Admin/HR view automatically populate in the employee's training list. <strong>Archived programmes (<code>publicationStatus === "Archived"</code>) are excluded from all employee views and APIs</strong> (<code>Employee Dashboard</code>, <code>My Training</code>, <code>Employee Course Detail</code>, <code>Employee Profile &gt; Training History</code>, <code>/api/employee/training-data</code>, <code>/api/employee/history</code>).</li>
+<li class=""><strong>Inactive Programme Read-Only Handling</strong>:</li>
+<li class="nested-li">Programmes marked <code>Inactive</code> (including programmes <code>Completed</code> first and then set to <code>Inactive</code>) remain visible in <code>My Training</code> with an <code>Inactive</code> status pill.</li>
+<li class="nested-li">Opening an <code>Inactive</code> programme shows an <strong>Inactive warning banner</strong> and disables all actions inside (<code>Start Learning</code>, <code>Mark Complete</code>, external resource links, assessment inputs/selects/checkboxes/radios, <code>Submit Assessment</code>, <code>Retake Assessment</code>, certificate download, and backend mutation APIs).</li>
+<li class=""><strong>Employee Training History (<code>Employee Profile &gt; Training History</code>)</strong>: Displays enrollment metrics (<code>TOTAL ENROLLED</code>, <code>COMPLETED &amp; PASSED</code>, <code>IN PROGRESS</code>, <code>CERTIFICATES EARNED</code>), a compact <code>+ Assign New Training</code> button, and non-archived training records.</li>
 <li class=""><strong>3-Tab Course Learning Layout (<code>mt</code>)</strong>:</li>
 <li class="nested-li"><strong>Tab 1: 1. Overview</strong>: Progress bar, completed modules counter, course summary, and objectives.</li>
-<li class="nested-li"><strong>Tab 2: 2. Learning Resources</strong>: Resource checklist with external link openers, checkable completion toggles, and mandatory indicators.</li>
+<li class="nested-li"><strong>Tab 2: 2. Learning Resources</strong>: Resource checklist with external link openers, checkable completion toggles, and mandatory indicators (disabled if programme is <code>Inactive</code>).</li>
 <li class="nested-li"><strong>Tab 3: 3. Assessment &amp; Questions</strong>:</li>
 <li class="nested-li"><strong>Header</strong>: Clean title <strong><code>3. Assessment &amp; Questions</code></strong> with no <code>[Unlocked]</code> tag.</li>
 <li class="nested-li"><strong>When Assessment Toggle is OFF (<code>enabled: false</code>)</strong>:</li>
@@ -366,6 +371,7 @@
 <li class="nested-li"><strong>When Assessment Toggle is ON (<code>enabled: true</code>)</strong>:</li>
 <li class="nested-li">Inside Tab 3: Renders the exact question types, marks, mandatory indicators, and options configured by Admin/HR.</li>
 <li class="nested-li">Left Sidebar: Passing Assessment Score displays <code>🎯 80% (Strictly &gt; 80% to pass)</code>. Action button displays <code>Take Assessment →</code> (or <code>Download Certificate 🎓</code> upon passing).</li>
+<li class="nested-li">Result Status: Displays unified <code>Completed</code> badge when assessment passes and programme completes.</li>
 <hr />
 <h2>SECTION 2: FORM FIELD VALUES &amp; VALIDATION SPECIFICATIONS</h2>
 <h3>1. Create Training Programme Form (<code>Training Management &gt; Create Programme</code>)</h3>
@@ -714,25 +720,39 @@
 <li class=""><strong>Column Header</strong>: <strong><code>ASSIGNED SCOPE</code></strong> (synchronized across all multi-entity assignment types: Employee, Department, Designation).</li>
 <li class=""><strong>Total Record Count</strong>: <strong><code>41 Total</code></strong> assignments.</li>
 <li class=""><strong>Pagination</strong>: Complete 5-page pagination (10 items per page with reactive Previous/Next and page number indicators).</li>
-<h3>4.4 Training Programmes Catalogue &amp; Status Architecture</h3>
+<h3>4.4 Training Programmes Catalogue, Archive &amp; Availability Status Architecture</h3>
 <li class=""><strong>Strict Separation of Statuses</strong>:</li>
-<li class="nested-li"><strong>Lifecycle Status (<code>Status ↕</code>)</strong>: Reflects the editorial/publishing stage (<code>Published</code> vs <code>Draft</code>).</li>
-<li class="nested-li"><code>Published</code>: Emerald badge (<code>bg-emerald-50 text-emerald-700 border border-emerald-200</code>). Programme is officially approved and released.</li>
-<li class="nested-li"><code>Draft</code>: Amber badge (<code>bg-amber-50 text-amber-700 border border-amber-200</code>). Programme is under authoring or review.</li>
-<li class="nested-li"><strong>Operational Status (<code>Active / Inactive</code>)</strong>: Reflects operational availability/visibility in a separate, dedicated table column.</li>
+<li class="nested-li"><strong>Publication Status (<code>Status ↕</code> / <code>publicationStatus</code>)</strong>: Reflects the editorial lifecycle stage (<code>Published</code>, <code>Draft</code>, or <code>Archived</code>).</li>
+<li class="nested-li"><code>Published</code>: Emerald badge (<code>bg-emerald-50 text-emerald-700 border border-emerald-200</code>). Visible across management and employee portals.</li>
+<li class="nested-li"><code>Draft</code>: Amber badge (<code>bg-amber-50 text-amber-700 border border-amber-200</code>). Management authoring only (<code>Availability Status</code> locked to <code>Inactive</code> until published).</li>
+<li class="nested-li"><code>Archived</code>: Slate badge (<code>bg-slate-100 text-slate-600 border border-slate-200</code>). Visible <strong>only on the Management side</strong> and excluded everywhere on the Employee side.</li>
+<li class="nested-li"><strong>Availability Status (<code>Active / Inactive</code> / <code>availabilityStatus</code>)</strong>: Independent operational availability toggle in the catalogue table and Programme Detail sidebar.</li>
 <li class="nested-li">Toggle Switch: <code>h-6 w-11</code> container with <code>h-5 w-5</code> sliding knob.</li>
-<li class="nested-li">Toggle ON / Right (<code>translate-x-5</code>, <code>bg-blue-600</code>): <strong>Active</strong> (<code>isActive: true</code>).</li>
-<li class="nested-li">Toggle OFF / Left (<code>translate-x-0</code>, <code>bg-slate-300</code>): <strong>Inactive</strong> (<code>isActive: false</code>).</li>
-<li class="nested-li"><strong>No Combined Status</strong>: Lifecycle status (<code>Published</code> / <code>Draft</code>) and operational status (<code>Active</code> / <code>Inactive</code>) are independent fields on the programme model. Toggling <code>Active / Inactive</code> operates purely on <code>e.isActive</code> and does not mutate <code>e.status</code>.</li>
+<li class="nested-li">Toggle ON / Right (<code>translate-x-5</code>, <code>bg-blue-600</code>): <strong>Active</strong> (<code>availabilityStatus: "Active"</code>, <code>isActive: true</code>).</li>
+<li class="nested-li">Toggle OFF / Left (<code>translate-x-0</code>, <code>bg-slate-300</code>): <strong>Inactive</strong> (<code>availabilityStatus: "Inactive"</code>, <code>isActive: false</code>).</li>
+<li class="nested-li"><strong>Archive vs. Inactive Independence Rule</strong>:</li>
+<li class="nested-li">Archiving a programme changes <strong>only <code>publicationStatus</code> to <code>Archived</code></strong> and <strong>preserves <code>availabilityStatus</code></strong> (<code>Active</code> stays <code>Active</code>; <code>Inactive</code> stays <code>Inactive</code>).</li>
+<li class="nested-li">Restoring an archived programme changes <code>publicationStatus</code> back to <code>Published</code> while <strong>preserving <code>availabilityStatus</code></strong>.</li>
+<li class="nested-li"><strong>Started Learner Lock (Deactivation Guard)</strong>:</li>
+<li class="nested-li">Once any employee has started working on a programme (<code>In Progress</code>, <code>Under Review</code>, <code>submitted_for_review</code>, <code>changes_requested</code>, <code>Overdue</code> with <code>progress &gt; 0</code>, or <code>0 &lt; progress &lt; 100</code>), that programme <strong>cannot be made <code>Inactive</code></strong>. Attempting deactivation is rejected on both UI and backend (<code>POST /api/training/programmes/availability</code> returns <code>400</code>).</li>
+<li class="nested-li">Once all learners have finished (<code>Completed</code>, <code>progress: 100</code>) or before any learner starts (<code>Not Started</code>, <code>progress: 0</code>), setting <code>Inactive</code> is permitted.</li>
+<li class="nested-li"><strong>Inactive Action Lock</strong>:</li>
+<li class="nested-li">On <strong>Management (<code>Programme Detail</code>)</strong>: Shows an Inactive warning banner and disables <code>+ Assign Programme</code>, <code>Assign Programme</code>, <code>+ Add Module</code>, and <code>Open Resource →</code> while <code>availabilityStatus === "Inactive"</code>. Archive/Restore and the Catalogue Availability Toggle remain available for management administration.</li>
+<li class="nested-li">On <strong>Employee (<code>My Training</code> &amp; <code>Employee Course Detail</code>)</strong>: Programmes completed first and then made <code>Inactive</code> remain visible in <code>My Training</code> (<code>Completed</code> + <code>Inactive</code> pills) in strict read-only mode; all controls inside are disabled and employee mutation APIs (<code>/api/employee/resource-progress</code>, <code>/api/employee/assessment-submit</code>, <code>/api/employee/training-submit</code>, <code>/api/employee/training-resubmit</code>) reject requests with <code>400</code>.</li>
 <li class=""><strong>Catalogue Table Column Structure (8 Columns)</strong>:</li>
 <li class="numbered-li"><code>No.</code> (<code>w-16</code>, tabular digits)</li>
 <li class="numbered-li"><code>Programme Name ↕</code> (Programme title + version badge)</li>
 <li class="numbered-li"><code>Level ↕</code> (Beginner / Intermediate / Expert badge)</li>
 <li class="numbered-li"><code>Duration ↕</code> (Hours in monospace)</li>
 <li class="numbered-li"><code>Enrolled ↕</code> (Learner enrollment count)</li>
-<li class="numbered-li"><code>Status ↕</code> (Lifecycle badge: <code>Published</code> or <code>Draft</code> only)</li>
-<li class="numbered-li"><code>Active / Inactive</code> (Centered operational toggle switch only)</li>
+<li class="numbered-li"><code>Status ↕</code> (Publication Status badge: <code>Published</code>, <code>Draft</code>, or <code>Archived</code>)</li>
+<li class="numbered-li"><code>Active / Inactive</code> (Centered Availability Status toggle switch)</li>
 <li class="numbered-li"><code>Actions</code> (Right-aligned View <code>👁</code> and Edit <code>✏️</code> action buttons)</li>
+<li class=""><strong>Programme Detail View (Management <code>nt</code>)</strong>:</li>
+<li class="nested-li"><strong>General Info Tab</strong>: Displays a 3-card summary row (<strong>Status</strong> <code>Published</code>/<code>Draft</code>/<code>Archived</code> + <code>Active</code>/<code>Inactive</code>, <strong>Expected Duration</strong>, <strong>Passing Score</strong>) with balanced icon-to-text spacing, followed by detailed programme metadata.</li>
+<li class="nested-li"><strong>Curriculum &amp; Modules Tab</strong>: Displays learning resources in a structured table (<code>Module</code>, <code>Resource Title</code>, <code>Type</code>, <code>Resource URL</code>, <code>Requirement</code>, <code>Action</code>) with <code>Open Resource →</code> (disabled when programme is <code>Inactive</code>).</li>
+<li class="nested-li"><strong>Enrolled Employees &amp; Status History Tabs</strong>: Tracks learner progress and audit history for Availability/Publication transitions (<code>Archive</code> / <code>Restore</code> modal with high-contrast Confirm button).</li>
+<li class="nested-li"><strong>API Endpoints</strong>: <code>POST /api/training/programmes/availability</code>, <code>POST /api/training/programmes/archive</code>, <code>POST /api/training/programmes/restore</code>, <code>POST /api/training/employee-course-progress</code>.</li>
   </main>
 </body>
 </html>

@@ -47,13 +47,14 @@ flowchart TD
 ### Flow 2: Navigation Drawer Structure
 The left collapsible sidebar provides access to:
 1. **Employees** (`employees`): Complete employee directory with profile cards and Add Employee modal.
-2. **Training Hub**:
+2. **Training Hub** (non-bold submenu items):
    - **Dashboard** (`training-dashboard`): Real-time metrics (Active Learners, Total Assignments, Completion Rate, Average Score), urgent review queue, and performance analytics.
-   - **Training Management** (`training-programmes`, breadcrumb: `Training Programmes`): Full course catalogue, status filters (All, Published, Draft), search, and `+ Create Programme` action.
-   - **Assignments** (`training-assignments`): Central assignment register with **`ASSIGNED SCOPE`** column (Employee, Department, Designation), `41 Total` assignment count, and 5-page pagination (10 items/page).
+   - **Training Management** (`training-programmes`, breadcrumb: `Training Programmes`): Full course catalogue, lifecycle status filters (`All`, `Published`, `Draft`, `Archived`), search, Availability Status (`Active` / `Inactive`) toggle, View `👁` flow to **Programme Detail**, and `+ Create Programme` action.
+   - **Assignments** (`training-assignments`): Central assignment register with **`ASSIGNED SCOPE`** column (Employee, Department, Designation), `41 Total` assignment count, and 5-page pagination (10 items/page). Clicking a record opens **Assignment Details** (without the removed `Automated Evaluation Active` header badge).
    - **Progress** (`training-progress`): Dual-mode tracking (`1. Employee-wise Training Completion` vs `2. Departmental Compliance Audit`), 4 KPI cards (`ACTIVE LEARNERS`, `TOTAL ASSIGNMENTS`, `COMPLETED`, `AVG SCORE`), and CSV export.
-   - **Certificates** (`certificates`): Expandable master-detail table matching Screenshot 3 format (`^ / v` toggle chevron, plain-text earned programmes, and right-aligned Actions column directly under `All Records`).
+   - **Certificates** (`certificates`): Expandable master-detail table defaulting to **collapsed** employee rows (`expandedMap`), `^ / v` toggle chevron, plain-text earned programmes, clickable certificate card preview, and right-aligned Actions column directly under `All Records`.
 3. **Config Hub**:
+   - **Config Flyout** (compact full-height left drawer panel): Quick access to **Training Config** (`config`) and **Roles** (`roles`).
    - **Training Config** (`config`): Tabbed settings for **General Settings** (5 module access permission toggles) and **Training Categories** (master category table + Add Category modal with duplicate validation).
    - **Roles & Permissions** (`roles`): 11-role RBAC table (`Sr. Business Analyst`, `Senior Recruiter`, `CEO`, `Project Manager`, `BDE`, `Admin/HR`, `Employee`, `Team leader`, `Management`, `Recruiter`, `BDM`), `+ Add Role` slideover modal, and interactive Role Permission Matrix.
 *(Note: The legacy "Reports" drawer item has been removed.)*
@@ -85,23 +86,27 @@ The left collapsible sidebar provides access to:
 
 ### Flow 5: Certificates Verification Flow
 - **Master-Detail Expandable Table**:
+  - Defaults to **collapsed** employee rows (`!!expandedMap[emp.id]`); expanding a row reveals child sub-rows for additional certificates earned by that employee.
   - Master row displays Employee Name, Department/Role, Primary Earned Programme, and an expand toggle (`^ / v`).
-  - Expanding reveals child sub-rows for all additional certificates earned by that employee.
-  - Plain-text format for programme names (no select dropdowns or passed badges in cell).
+  - Plain-text format for programme names (no select dropdowns or passed badges in cell). Clicking a certificate card also opens the verified certificate modal.
   - **Right-Aligned Actions**: The `Actions` column header and eye icon `(👁)` buttons are aligned to the far right edge (`w-28 text-right pr-6`), positioned directly below the `All Records` category filter.
 - **Certificate Modal**:
-  - Displays official certificate of appreciation.
+  - Displays official certificate of appreciation with **centered `CollabCRM` brand header**, gold seal icon, and dark-navy corner accent.
   - Dynamically bound to the exact completed programme and learner name.
   - **Authorized Signatory**: Configured strictly as **`Khushi Bhatt, Head of HR`**.
 
 ---
 
 ### Flow 6: Employee User Role Learning Portal Flow
-- Access by switching user to `Tanya Kapoor` or navigating to `My Training`.
-- **Dynamic State Integration**: Newly created and published programmes from Admin/HR view automatically populate in the employee's training list.
+- Access by switching user to `Tanya Kapoor` or navigating to `Training > My Training`.
+- **Dynamic State Integration**: Newly created and published programmes from Admin/HR view automatically populate in the employee's training list. **Archived programmes (`publicationStatus === "Archived"`) are excluded from all employee views and APIs** (`Employee Dashboard`, `My Training`, `Employee Course Detail`, `Employee Profile > Training History`, `/api/employee/training-data`, `/api/employee/history`).
+- **Inactive Programme Read-Only Handling**:
+  - Programmes marked `Inactive` (including programmes `Completed` first and then set to `Inactive`) remain visible in `My Training` with an `Inactive` status pill.
+  - Opening an `Inactive` programme shows an **Inactive warning banner** and disables all actions inside (`Start Learning`, `Mark Complete`, external resource links, assessment inputs/selects/checkboxes/radios, `Submit Assessment`, `Retake Assessment`, certificate download, and backend mutation APIs).
+- **Employee Training History (`Employee Profile > Training History`)**: Displays enrollment metrics (`TOTAL ENROLLED`, `COMPLETED & PASSED`, `IN PROGRESS`, `CERTIFICATES EARNED`), a compact `+ Assign New Training` button, and non-archived training records.
 - **3-Tab Course Learning Layout (`mt`)**:
   - **Tab 1: 1. Overview**: Progress bar, completed modules counter, course summary, and objectives.
-  - **Tab 2: 2. Learning Resources**: Resource checklist with external link openers, checkable completion toggles, and mandatory indicators.
+  - **Tab 2: 2. Learning Resources**: Resource checklist with external link openers, checkable completion toggles, and mandatory indicators (disabled if programme is `Inactive`).
   - **Tab 3: 3. Assessment & Questions**:
     - **Header**: Clean title **`3. Assessment & Questions`** with no `[Unlocked]` tag.
     - **When Assessment Toggle is OFF (`enabled: false`)**:
@@ -111,6 +116,7 @@ The left collapsible sidebar provides access to:
     - **When Assessment Toggle is ON (`enabled: true`)**:
       - Inside Tab 3: Renders the exact question types, marks, mandatory indicators, and options configured by Admin/HR.
       - Left Sidebar: Passing Assessment Score displays `🎯 80% (Strictly > 80% to pass)`. Action button displays `Take Assessment →` (or `Download Certificate 🎓` upon passing).
+      - Result Status: Displays unified `Completed` badge when assessment passes and programme completes.
 
 ---
 
@@ -494,23 +500,37 @@ stateDiagram-v2
 - **Total Record Count**: **`41 Total`** assignments.
 - **Pagination**: Complete 5-page pagination (10 items per page with reactive Previous/Next and page number indicators).
 
-### 4.4 Training Programmes Catalogue & Status Architecture
+### 4.4 Training Programmes Catalogue, Archive & Availability Status Architecture
 - **Strict Separation of Statuses**:
-  - **Lifecycle Status (`Status ↕`)**: Reflects the editorial/publishing stage (`Published` vs `Draft`).
-    - `Published`: Emerald badge (`bg-emerald-50 text-emerald-700 border border-emerald-200`). Programme is officially approved and released.
-    - `Draft`: Amber badge (`bg-amber-50 text-amber-700 border border-amber-200`). Programme is under authoring or review.
-  - **Operational Status (`Active / Inactive`)**: Reflects operational availability/visibility in a separate, dedicated table column.
+  - **Publication Status (`Status ↕` / `publicationStatus`)**: Reflects the editorial lifecycle stage (`Published`, `Draft`, or `Archived`).
+    - `Published`: Emerald badge (`bg-emerald-50 text-emerald-700 border border-emerald-200`). Visible across management and employee portals.
+    - `Draft`: Amber badge (`bg-amber-50 text-amber-700 border border-amber-200`). Management authoring only (`Availability Status` locked to `Inactive` until published).
+    - `Archived`: Slate badge (`bg-slate-100 text-slate-600 border border-slate-200`). Visible **only on the Management side** and excluded everywhere on the Employee side.
+  - **Availability Status (`Active / Inactive` / `availabilityStatus`)**: Independent operational availability toggle in the catalogue table and Programme Detail sidebar.
     - Toggle Switch: `h-6 w-11` container with `h-5 w-5` sliding knob.
-    - Toggle ON / Right (`translate-x-5`, `bg-blue-600`): **Active** (`isActive: true`).
-    - Toggle OFF / Left (`translate-x-0`, `bg-slate-300`): **Inactive** (`isActive: false`).
-  - **No Combined Status**: Lifecycle status (`Published` / `Draft`) and operational status (`Active` / `Inactive`) are independent fields on the programme model. Toggling `Active / Inactive` operates purely on `e.isActive` and does not mutate `e.status`.
+    - Toggle ON / Right (`translate-x-5`, `bg-blue-600`): **Active** (`availabilityStatus: "Active"`, `isActive: true`).
+    - Toggle OFF / Left (`translate-x-0`, `bg-slate-300`): **Inactive** (`availabilityStatus: "Inactive"`, `isActive: false`).
+  - **Archive vs. Inactive Independence Rule**:
+    - Archiving a programme changes **only `publicationStatus` to `Archived`** and **preserves `availabilityStatus`** (`Active` stays `Active`; `Inactive` stays `Inactive`).
+    - Restoring an archived programme changes `publicationStatus` back to `Published` while **preserving `availabilityStatus`**.
+  - **Started Learner Lock (Deactivation Guard)**:
+    - Once any employee has started working on a programme (`In Progress`, `Under Review`, `submitted_for_review`, `changes_requested`, `Overdue` with `progress > 0`, or `0 < progress < 100`), that programme **cannot be made `Inactive`**. Attempting deactivation is rejected on both UI and backend (`POST /api/training/programmes/availability` returns `400`).
+    - Once all learners have finished (`Completed`, `progress: 100`) or before any learner starts (`Not Started`, `progress: 0`), setting `Inactive` is permitted.
+  - **Inactive Action Lock**:
+    - On **Management (`Programme Detail`)**: Shows an Inactive warning banner and disables `+ Assign Programme`, `Assign Programme`, `+ Add Module`, and `Open Resource →` while `availabilityStatus === "Inactive"`. Archive/Restore and the Catalogue Availability Toggle remain available for management administration.
+    - On **Employee (`My Training` & `Employee Course Detail`)**: Programmes completed first and then made `Inactive` remain visible in `My Training` (`Completed` + `Inactive` pills) in strict read-only mode; all controls inside are disabled and employee mutation APIs (`/api/employee/resource-progress`, `/api/employee/assessment-submit`, `/api/employee/training-submit`, `/api/employee/training-resubmit`) reject requests with `400`.
 - **Catalogue Table Column Structure (8 Columns)**:
   1. `No.` (`w-16`, tabular digits)
   2. `Programme Name ↕` (Programme title + version badge)
   3. `Level ↕` (Beginner / Intermediate / Expert badge)
   4. `Duration ↕` (Hours in monospace)
   5. `Enrolled ↕` (Learner enrollment count)
-  6. `Status ↕` (Lifecycle badge: `Published` or `Draft` only)
-  7. `Active / Inactive` (Centered operational toggle switch only)
+  6. `Status ↕` (Publication Status badge: `Published`, `Draft`, or `Archived`)
+  7. `Active / Inactive` (Centered Availability Status toggle switch)
   8. `Actions` (Right-aligned View `👁` and Edit `✏️` action buttons)
+- **Programme Detail View (Management `nt`)**:
+  - **General Info Tab**: Displays a 3-card summary row (**Status** `Published`/`Draft`/`Archived` + `Active`/`Inactive`, **Expected Duration**, **Passing Score**) with balanced icon-to-text spacing, followed by detailed programme metadata.
+  - **Curriculum & Modules Tab**: Displays learning resources in a structured table (`Module`, `Resource Title`, `Type`, `Resource URL`, `Requirement`, `Action`) with `Open Resource →` (disabled when programme is `Inactive`).
+  - **Enrolled Employees & Status History Tabs**: Tracks learner progress and audit history for Availability/Publication transitions (`Archive` / `Restore` modal with high-contrast Confirm button).
+  - **API Endpoints**: `POST /api/training/programmes/availability`, `POST /api/training/programmes/archive`, `POST /api/training/programmes/restore`, `POST /api/training/employee-course-progress`.
 
