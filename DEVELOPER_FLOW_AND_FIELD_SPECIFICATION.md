@@ -87,7 +87,7 @@ The left collapsible sidebar provides access to:
 - **Inactive Programme Read-Only Handling**:
   - Programmes marked **Inactive** (including programmes **Completed** first and then set to **Inactive**) remain visible in **My Training** with an **Inactive** status pill.
   - Opening an **Inactive** programme shows an **Inactive warning banner** and disables all actions inside (Start Learning, Mark Complete, external resource links, assessment inputs/selects/checkboxes/radios, Submit Assessment, Retake Assessment, and certificate download).
-- **Employee Training History (Employee Profile > Training History)**: Displays enrollment metrics (Total Enrolled, Completed & Passed, In Progress, Certificates Earned), a compact **+ Assign New Training** button, and assigned training records.
+- **Training History (Employee Profile > Training History)**: Displays enrollment metrics (Total Enrolled, Completed & Passed, In Progress, Certificates Earned), a compact **+ Assign New Training** button, and assigned training records.
 - **3-Tab Course Learning Layout**:
   - **Tab 1 — 1. Overview**: Progress bar, completed modules counter, course summary, learning objectives, and configured **Completion Requirements** checklist (e.g., Watch all required videos, Pass the assessment, Submit any required documents, Get approval from the manager — once all required steps are completed, the training is marked **Completed**).
   - **Tab 2 — 2. Learning Resources**: Resource checklist with external link openers and completion toggles (disabled if programme is Inactive).
@@ -493,7 +493,7 @@ The left collapsible sidebar provides access to:
     - Once any employee has started working on a programme (In Progress, Under Review, Submitted for Review, Changes Requested, or Overdue with progress started), that programme cannot be made **Inactive**. Attempting deactivation is blocked with a validation error.
     - Once all learners have finished (Completed at 100%) or before any learner starts (Not Started at 0%), setting **Inactive** is permitted.
   - **Inactive Action Lock**:
-    - **Management (Programme Detail)**: Displays an Inactive warning banner and disables `+ Assign Programme`, `Assign Programme`, `+ Add Module`, and curriculum View action while Inactive. The sidebar availability toggle remains enabled for administration.
+    - **Management (Programme Detail)**: Displays an Inactive warning banner and disables `+ Assign Programme`, `Assign Programme`, `+ Add Resource`, and curriculum View action while Inactive. The sidebar availability toggle remains enabled for administration.
     - **Employee (My Training & Course Detail)**: Programmes completed first and then set to Inactive remain visible in My Training (with Completed + Inactive pills) in strict read-only mode; all interactive controls inside are disabled.
 - **Catalogue Table Column Structure (7 Columns)**:
   1. **No.**
@@ -506,8 +506,8 @@ The left collapsible sidebar provides access to:
 - **Programme Detail View (Management)**:
   - **Left Sidebar**: Displays publication badge (`Published` / `Draft`) on the top-left and the **Active / Inactive** toggle switch on the top-right, followed by Programme Title, Category, Difficulty Level, `Assign Programme` button, and core summary metrics (**Expected Duration**, **Passing Assessment Score** as clean `80%`, **Department**, **Enrolled Learners**).
   - **General Info Tab (Right Panel)**: Displays all programme details not shown on the left sidebar — **Learning Objectives**, **Completion Requirements & Assessment Criteria**, and the **Assessment & Questions** section (Assessment Enabled/Disabled state, Assessment Title, Description, Total Marks, Max Attempts, and the full Questions List with question type, marks, and configured options/answers when present) cleanly without duplicating the sidebar summary details.
-  - **Curriculum & Modules Tab**: Displays learning resources in a structured table (Module, Resource Title, Type, Resource URL, Action with eye View icon linking directly to the resource).
-  - **Enrolled Employees & Status History Tabs**: Tracks enrolled learners with exact count consistency against the Training Management listing, plus audit history for `Active` / `Inactive` availability transitions.
+  - **Curriculum & Modules Tab**: Displays learning resources in a structured table (heading **Curriculum & Modules**, `+ Add Resource` button, and columns Module, Resource Title, Type, Resource URL, Action with eye View icon linking directly to the resource).
+  - **Enrolled Employees & Status History Tabs**: Tracks enrolled learners with exact count consistency against the Training Management listing, plus audit history for `Active` / `Inactive` availability transitions (clean `Programme ID` header without redundant `Availability Status Audit History` title).
 
 ### 4.5 System Typography Standard
 - **Uniform Sans-Serif Typography**: Every text element across the entire system (headings, tables, labels, duration metrics, version badges, IDs, percentages, URLs, modals, and certificates) consistently uses the exact same **Sans-Serif** font family (`--font-sans`), with no monospace or serif font overrides.
