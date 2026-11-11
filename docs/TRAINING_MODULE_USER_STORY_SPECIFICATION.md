@@ -74,21 +74,22 @@
    3. `Level ↕` (Beginner, Intermediate, Advanced)
    4. `Duration ↕` (Hours)
    5. `Enrolled ↕` (Count of currently enrolled learners)
-   6. `Status ↕` (Active / Draft badge)
-   7. `Actions` (Status toggle switch, View Programme icon, Edit Programme icon)
+   6. `Status ↕` (`Published` + `Active` / `Inactive` badges, or `Draft` badge — `Archived` removed)
+   7. `Actions` (View Programme icon, Edit Programme icon)
 3. Header controls include:
-   - Filter buttons: `All`, `Published`, `Draft`.
+   - Filter buttons: `All`, `Published`, `Draft` (no `Archived` tab).
    - Search input: Filter by programme name, category, or code.
    - Filter dropdown button.
-   - Primary Action Button: `+ Create Programme`.
-4. Clicking `+ Create Programme` opens the Programme Builder screen (`Training Programmes › Create Programme`):
-   - Header contains: `Auto-Fill Demo`, `Cancel`, and `Publish Programme` (with dropdown option `Save Draft`).
+   - Primary Action Button: `+ Add Training`.
+4. Clicking `+ Add Training` opens the Programme Builder screen (`Training Programmes › Create Programme`):
+   - Header contains: `Auto-Fill Demo`, `Cancel`, and `Publish Programme` (with text-only dropdown option `Save as Draft`, no floppy disk icon).
    - The form is divided into the following sections:
      - **Section 1. CORE PROGRAMME DETAILS**:
        - Programme Name *
        - Training Category *
        - Difficulty Level *
-       - Expected Duration (Hours) *
+       - Duration * (Expected Duration Hours)
+       - Completion Requirements (Multi-select checkbox dropdown with `Watch all required videos`, `Pass the assessment`, `Submit any required documents`, `Get approval from the manager` — closes on outside click; no `Clear` or `Done` footer buttons).
        *(Note: Passing Assessment Score is configured within the Assessment section and is excluded from Section 1. Per-Programme Configuration & Limits is removed).*
      - **Section 2. LEARNING RESOURCES (YOUTUBE, EXTERNAL COURSES, WEBSITES, VIDEOS, PDFS, DOCS) \***:
        - User can add multiple curriculum resources via `+ Add Learning Resource`.
@@ -101,19 +102,20 @@
        - `Enable Assessment` toggle switch (default: ON).
        - Top configuration row:
          1. `Assessment Title *`
-         2. `Passing Score (%) *` (Default: 80%)
-         3. `Max Assessment Attempts *` (Default: 3)
+         2. `Passing Score (%) *` (clean label; no `(Strictly > 80% to pass)` text)
+         3. `Max Assessment Attempts *`
        - `Assessment Description`: Placed **full-width directly below** the 3 fields above.
        *(Note: Checkboxes for "Shuffle Questions" and "Show Result After Submission" are removed).*
-       - Question Builder section (`QUESTIONS LIST` with questions count and total marks summary):
-         - `+ Add Question` button.
+       - Question Builder section (`QUESTIONS LIST` with questions count badge and manual `Total Marks:` numeric text input, empty by default with placeholder `e.g. 100`):
+         - `+ Add Question` button (new questions start with empty `Marks:` `""`, not pre-filled).
+         - Live validation shows inline mismatch error (`Total question marks (X) do not match Total Marks (Y).`) when all questions have marks and the sum does not match `Total Marks`, or `Matched ✓` when equal.
          - For each question:
            1. Question identifier badge (`Question 1`, `Question 2`, etc.).
-           2. `Marks` numeric input (default: 2).
+           2. `Marks:` manual numeric input (default: empty).
            3. `Mandatory` checkbox.
            4. `Question Statement *` input.
-           5. Options list with radio/checkbox selectors, option text input, and correct answer indicator.
-           6. Actions: Duplicate question, Delete question.
+           5. Options list with radio/checkbox selectors, option text input, and correct answer indicator (Short Text uses `Enter accepted correct answer...` without extra example hint).
+           6. Actions: Clean bordered **Duplicate** and **Delete** buttons with SVG icons (`8px` gap).
 5. Clicking `Publish Programme`:
    - Validates all mandatory fields.
    - Saves programme with status `Published` and auto-increments version (e.g. `v1.0`).
@@ -266,7 +268,8 @@
 | **Programme Name** | Mandatory | Alphanumeric | Max: 120 chars | `""` | Valid text; cannot be blank or whitespace only. |
 | **Training Category** | Mandatory | Dropdown | NA | Select Category | `Recruitment & HR Operations`, `Engineering & Architecture`, `Security & Compliance`, `Sales & BD`, `Executive Leadership`. |
 | **Difficulty Level** | Mandatory | Dropdown | NA | `Intermediate` | `Beginner`, `Intermediate`, `Advanced`. |
-| **Expected Duration (Hours)** | Mandatory | Numeric | Min: 1, Max: 200 | `4` | Positive integer; strictly between 1 and 200. |
+| **Expected Duration (Hours)** | Mandatory | Numeric | Min: 1, Max: 200 | `""` (`e.g. 4`) | Positive integer; strictly between 1 and 200. |
+| **Completion Requirements** | Optional | Multi-select Checkbox Dropdown | NA | `[]` | `Watch all required videos`, `Pass the assessment`, `Submit any required documents`, `Get approval from the manager` (toggles directly; closes on outside click; no Clear/Done buttons). |
 
 ---
 
@@ -284,11 +287,12 @@
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **Enable Assessment** | Mandatory | Toggle | NA | `ON` (true) | Boolean: `true` or `false`. |
 | **Assessment Title** | Mandatory | Alphanumeric | Max: 120 chars | `Final Training Assessment` | Text; required when assessment toggle is ON. |
-| **Passing Score (%)** | Mandatory | Numeric | Min: 1, Max: 100 | `80` | Integer between 1 and 100; score required to earn automated certificate. |
+| **Passing Score (%)** | Mandatory | Numeric | Min: 1, Max: 100 | `""` (`80` via Demo) | Integer between 1 and 100; clean label without `(Strictly > 80% to pass)` text. |
+| **Total Marks** | Mandatory | Numeric Text | Min: 1 | `""` (`e.g. 100`) | Entered manually by user (never auto-filled); must equal sum of all question marks. |
 | **Max Assessment Attempts** | Mandatory | Numeric | Min: 1, Max: 10 | `3` | Integer between 1 and 10 attempts allowed per learner. |
 | **Assessment Description** | Optional | Textarea | Max: 500 chars | `Complete the following questions...` | Instructions displayed to learner before commencing test. Placed full-width below parameter fields. |
 | **Question Statement** | Mandatory | Textarea | Max: 1000 chars | `""` | Clear question prompt for learner. |
-| **Question Marks** | Mandatory | Numeric | Min: 1, Max: 100 | `2` | Points awarded for correct answer. |
+| **Question Marks** | Mandatory | Numeric Text | Min: 1, Max: 100 | `""` | Entered manually per question (not auto-filled); triggers inline mismatch error if sum != Total Marks. |
 | **Mandatory Question** | Optional | Checkbox | NA | `true` | Boolean: Learner must answer before submitting. |
 | **Question Options** | Mandatory | List (2 to 6) | Max: 200 chars each | `""` | Minimum 2 options; at least 1 must be marked as correct answer. |
 

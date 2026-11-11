@@ -6,7 +6,7 @@
   <title>CollabCRM People Training Module - Developer Flow & Field Specification</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary: #2563eb;
@@ -170,7 +170,7 @@
       min-width: 20px;
     }
     code {
-      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       font-size: 12.5px;
       background-color: #f1f5f9;
       color: #0f172a;
@@ -186,7 +186,7 @@
       overflow-x: auto;
       margin: 16px 0 20px 0;
       font-size: 12.5px;
-      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       line-height: 1.5;
     }
     pre code {
@@ -313,7 +313,7 @@
 <div class="step-item"><span class="step-num">1.</span><span><strong>Employees</strong>: Complete employee directory with profile cards and the Add Employee modal.</span></div>
 <div class="step-item"><span class="step-num">2.</span><span><strong>Training Hub</strong>:</span></div>
 <li class="nested-li"><strong>Dashboard</strong>: Real-time metrics (Active Learners, Total Assignments, Completion Rate, Average Score), urgent review queue, and performance analytics.</li>
-<li class="nested-li"><strong>Training Management (Training Programmes)</strong>: Full course catalogue, lifecycle status filters (All, Published, Draft, Archived), search, independent Availability Status (Active / Inactive) toggle, View action to open <strong>Programme Detail</strong>, and <strong>+ Create Programme</strong> action.</li>
+<li class="nested-li"><strong>Training Management (Training Programmes)</strong>: Full course catalogue, publication status filters (<strong>All</strong>, <strong>Published</strong>, <strong>Draft</strong>), search, <strong>Status ↕</strong> column showing <strong>Published</strong> + <strong>Active</strong> / <strong>Inactive</strong> badges (or <strong>Draft</strong>), View &amp; Edit actions, and <strong>+ Add Training</strong> action. (<strong>Archived</strong> status has been removed; once published, only <strong>Active</strong> / <strong>Inactive</strong> toggling can be performed.)</li>
 <li class="nested-li"><strong>Assignments</strong>: Central assignment register with the <strong>ASSIGNED SCOPE</strong> column (Employee, Department, Designation), <strong>41 Total</strong> assignment count, and 5-page pagination (10 items per page). Clicking a record opens <strong>Assignment Details</strong>.</li>
 <li class="nested-li"><strong>Progress</strong>: Dual-mode tracking (1. Employee-wise Training Completion vs 2. Departmental Compliance Audit), 4 summary cards (Active Learners, Total Assignments, Completed, Avg Score), and CSV export.</li>
 <li class="nested-li"><strong>Certificates</strong>: Expandable master-detail table defaulting to <strong>collapsed</strong> employee rows with expand/collapse chevrons, plain-text earned programmes, clickable certificate preview, and a right-aligned <strong>Actions</strong> column directly under <strong>All Records</strong>.</li>
@@ -324,13 +324,13 @@
 <p><em>(Note: The legacy Reports drawer item has been removed.)</em></p>
 <hr />
 <h3>Flow 3: Training Management (Create / Edit Programme Flow)</h3>
-<li class="">Accessed via <strong>Training Programmes &gt; + Create Programme</strong> or <strong>Edit Programme</strong>.</li>
+<li class="">Accessed via <strong>Training Management &gt; + Add Training</strong> or <strong>Edit Programme</strong>.</li>
 <li class="">Features an <strong>Auto-Fill Demo</strong> button to populate sample data.</li>
 <li class="">Structured across three core sections:</li>
-<div class="step-item nested-step"><span class="step-num">1.</span><span><strong>Core Programme Details</strong>: Programme Name, Training Category, Difficulty Level, Expected Duration.</span></div>
+<div class="step-item nested-step"><span class="step-num">1.</span><span><strong>Core Programme Details</strong>: Programme Name, Training Category, Difficulty Level, Duration, Learning Objectives, and <strong>Completion Requirements</strong> (multi-select checkbox dropdown with options <strong>Watch all required videos</strong>, <strong>Pass the assessment</strong>, <strong>Submit any required documents</strong>, and <strong>Get approval from the manager</strong>; checkboxes toggle directly without <strong>Clear</strong>/<strong>Done</strong> buttons and the menu closes on outside click).</span></div>
 <div class="step-item nested-step"><span class="step-num">2.</span><span><strong>Learning Resources Builder</strong>: Dynamic resource list (Video/YouTube, PDF Document, External Link, Article).</span></div>
-<div class="step-item nested-step"><span class="step-num">3.</span><span><strong>Assessment &amp; Questions Builder</strong>: Enable Assessment toggle, Assessment Title, Passing Score, Max Attempts, Description, and dynamic multi-format question builder.</span></div>
-<li class="">Header Actions: <strong>Auto-Fill Demo</strong>, <strong>Cancel</strong>, <strong>Save as Draft</strong>, and <strong>Publish Programme</strong> (or <strong>Update &amp; Publish</strong>).</li>
+<div class="step-item nested-step"><span class="step-num">3.</span><span><strong>Assessment &amp; Questions Builder</strong>: Enable Assessment toggle, Assessment Title, Passing Score (<strong>Passing Score (%) *</strong> without any <strong>(Strictly &gt; 80% to pass)</strong> text), Max Assessment Attempts, Assessment Description, manual <strong>Total Marks</strong> numeric text field (<strong>Total Marks:</strong>, empty by default), and dynamic multi-format question builder with manual per-question <strong>Marks</strong> (empty by default), live mismatch validation against <strong>Total Marks</strong>, and bordered SVG-icon <strong>Duplicate</strong> / <strong>Delete</strong> buttons.</span></div>
+<li class="">Header Actions: <strong>Auto-Fill Demo</strong>, <strong>Cancel</strong>, <strong>Publish Programme</strong> (or <strong>Update &amp; Publish</strong> / <strong>Save Changes</strong>), and text-only <strong>Save as Draft</strong> dropdown option (no floppy disk icon).</li>
 <hr />
 <h3>Flow 4: Assign Training Slideover Modal Flow</h3>
 <li class="">Accessed via <strong>+ Assign Training</strong> button in Header, Training Programmes, or Assignments table.</li>
@@ -355,23 +355,23 @@
 <hr />
 <h3>Flow 6: Employee User Role Learning Portal Flow</h3>
 <li class="">Accessed by switching user to <strong>Tanya Kapoor</strong> or navigating to <strong>Training &gt; My Training</strong>.</li>
-<li class=""><strong>Dynamic State Integration</strong>: Newly created and published programmes from Admin/HR view automatically populate in the employee's training list. <strong>Archived programmes are excluded from all employee views</strong> (Employee Dashboard, My Training, Employee Course Detail, and Employee Profile Training History).</li>
+<li class=""><strong>Dynamic State Integration</strong>: Newly created and published programmes from Admin/HR view automatically populate in the employee's training list. <strong>Draft programmes are excluded from all employee views</strong> (Employee Dashboard, My Training, Employee Course Detail, and Employee Profile Training History).</li>
 <li class=""><strong>Inactive Programme Read-Only Handling</strong>:</li>
 <li class="nested-li">Programmes marked <strong>Inactive</strong> (including programmes <strong>Completed</strong> first and then set to <strong>Inactive</strong>) remain visible in <strong>My Training</strong> with an <strong>Inactive</strong> status pill.</li>
 <li class="nested-li">Opening an <strong>Inactive</strong> programme shows an <strong>Inactive warning banner</strong> and disables all actions inside (Start Learning, Mark Complete, external resource links, assessment inputs/selects/checkboxes/radios, Submit Assessment, Retake Assessment, and certificate download).</li>
-<li class=""><strong>Employee Training History (Employee Profile &gt; Training History)</strong>: Displays enrollment metrics (Total Enrolled, Completed &amp; Passed, In Progress, Certificates Earned), a compact <strong>+ Assign New Training</strong> button, and non-archived training records.</li>
+<li class=""><strong>Employee Training History (Employee Profile &gt; Training History)</strong>: Displays enrollment metrics (Total Enrolled, Completed &amp; Passed, In Progress, Certificates Earned), a compact <strong>+ Assign New Training</strong> button, and assigned training records.</li>
 <li class=""><strong>3-Tab Course Learning Layout</strong>:</li>
-<li class="nested-li"><strong>Tab 1 — 1. Overview</strong>: Progress bar, completed modules counter, course summary, and learning objectives.</li>
+<li class="nested-li"><strong>Tab 1 — 1. Overview</strong>: Progress bar, completed modules counter, course summary, learning objectives, and configured <strong>Completion Requirements</strong> checklist (e.g., Watch all required videos, Pass the assessment, Submit any required documents, Get approval from the manager — once all required steps are completed, the training is marked <strong>Completed</strong>).</li>
 <li class="nested-li"><strong>Tab 2 — 2. Learning Resources</strong>: Resource checklist with external link openers, completion toggles, and mandatory indicators (disabled if programme is Inactive).</li>
 <li class="nested-li"><strong>Tab 3 — 3. Assessment &amp; Questions</strong>:</li>
 <li class="nested-li"><strong>Header</strong>: Clean title <strong>3. Assessment &amp; Questions</strong> (without any Unlocked tag).</li>
 <li class="nested-li"><strong>When Assessment Toggle is OFF</strong>:</li>
-<li class="nested-li">Inside Tab 3: Renders a clean empty container ("No Assessment Configured — Assessment is disabled for this training programme. Learners achieve completion upon reviewing all mandatory learning resources"). No questions, no scoring inputs, and no submit button are shown.</li>
+<li class="nested-li">Inside Tab 3: Renders a clean empty container ("No Assessment Configured — Assessment is disabled for this training programme. Learners achieve completion upon completing all configured requirements"). No questions, no scoring inputs, and no submit button are shown.</li>
 <li class="nested-li">Left Sidebar: Passing Assessment Score displays <strong>N/A (Assessment Disabled)</strong>. Action button displays <strong>Start Learning Modules →</strong> or <strong>Programme Completed ✓</strong> (never prompts to take an assessment).</li>
 <li class="nested-li">Tab 2 Navigation: Bottom button displays <strong>All Modules Completed ✓</strong>.</li>
 <li class="nested-li"><strong>When Assessment Toggle is ON</strong>:</li>
 <li class="nested-li">Inside Tab 3: Renders the exact question types, marks, mandatory indicators, and options configured by Admin/HR.</li>
-<li class="nested-li">Left Sidebar: Passing Assessment Score displays <strong>80% (Strictly &gt; 80% to pass)</strong>. Action button displays <strong>Take Assessment →</strong> (or <strong>Download Certificate</strong> upon passing).</li>
+<li class="nested-li">Left Sidebar: Passing Assessment Score displays <strong>80%</strong> (clean percentage without extra strictly-greater-than hint). Action button displays <strong>Take Assessment →</strong> (or <strong>Download Certificate</strong> upon passing and completing all required steps).</li>
 <li class="nested-li">Result Status: Displays unified <strong>Completed</strong> badge when assessment passes and programme completes.</li>
 <hr />
 <h2>SECTION 2: FORM FIELD VALUES &amp; VALIDATION SPECIFICATIONS</h2>
@@ -402,13 +402,23 @@
 <li class="nested-li">Beginner</li>
 <li class="nested-li">Intermediate</li>
 <li class="nested-li">Expert</li>
-<li class=""><strong>Expected Duration (Hours):</strong></li>
+<li class="">*<em>Duration </em> (<strong>Expected Duration (Hours)</strong>):**</li>
 <li class="nested-li">Mandatory: Yes (<strong>*</strong>)</li>
 <li class="nested-li">Type: Numeric (Integer)</li>
 <li class="nested-li">Max. Value: 200</li>
 <li class="nested-li">Min. Value: 1</li>
-<li class="nested-li">Default value: 4</li>
+<li class="nested-li">Default value: Empty (Placeholder: <strong>e.g. 4</strong>)</li>
 <li class="nested-li">Validation: Positive integer; decimals or negative values not permitted.</li>
+<li class=""><strong>Completion Requirements:</strong></li>
+<li class="nested-li">Mandatory: No (Optional)</li>
+<li class="nested-li">Type: Multi-select Checkbox Dropdown (closes on outside click or header re-click; no <strong>Clear</strong> or <strong>Done</strong> footer buttons)</li>
+<li class="nested-li">Default value: Empty (Placeholder: <strong>Select completion requirements...</strong>)</li>
+<li class="nested-li">Allowed Values:</li>
+<div class="step-item nested-step"><span class="step-num">1.</span><span><strong>Watch all required videos</strong></span></div>
+<div class="step-item nested-step"><span class="step-num">2.</span><span><strong>Pass the assessment</strong></span></div>
+<div class="step-item nested-step"><span class="step-num">3.</span><span><strong>Submit any required documents</strong></span></div>
+<div class="step-item nested-step"><span class="step-num">4.</span><span><strong>Get approval from the manager</strong></span></div>
+<li class="nested-li">Behavior: Controls what the employee must complete to finish the training. Once all selected required steps are completed, the training status transitions to <strong>Completed</strong>.</li>
 <hr />
 <h4>Section 2: Learning Resources (YouTube, External Courses, Websites, Videos, PDFs, Docs) *</h4>
 <li class=""><strong>Resource Type:</strong></li>
@@ -451,8 +461,13 @@
 <li class="nested-li">Type: Numeric (Integer)</li>
 <li class="nested-li">Max. Value: 100</li>
 <li class="nested-li">Min. Value: 1</li>
-<li class="nested-li">Default value: 80</li>
-<li class="nested-li">Validation: Benchmark passing percentage (Strictly &gt; 80% to pass).</li>
+<li class="nested-li">Default value: Empty on create (<strong>Auto-Fill Demo</strong> populates <strong>80</strong>)</li>
+<li class="nested-li">Validation: Benchmark passing percentage (clean label <strong>Passing Score (%) *</strong> without extra <strong>(Strictly &gt; 80% to pass)</strong> helper text).</li>
+<li class=""><strong>Total Marks (<strong>Questions List</strong> Header):</strong></li>
+<li class="nested-li">Mandatory: Yes (when Enable Assessment is Active)</li>
+<li class="nested-li">Type: Numeric Text Input (<strong>inputMode: numeric</strong>)</li>
+<li class="nested-li">Default value: Empty (<strong>""</strong>, placeholder: <strong>e.g. 100</strong>; never auto-calculated or auto-filled from question marks)</li>
+<li class="nested-li">Validation: Must be greater than <strong>0</strong>; user enters target Total Marks manually. Once all added questions have marks <strong>&gt; 0</strong> and <strong>questionsMarksSum !== Number(Total Marks)</strong>, an inline error (<strong>Total question marks (X) do not match Total Marks (Y).</strong>) is displayed and save/publish is blocked. When equal, a <strong>Matched ✓</strong> pill is displayed.</li>
 <li class=""><strong>Max Assessment Attempts:</strong></li>
 <li class="nested-li">Mandatory: Yes (<strong>*</strong>, when Enable Assessment is Active)</li>
 <li class="nested-li">Type: Numeric (Integer)</li>
@@ -482,23 +497,22 @@
 <div class="step-item nested-step"><span class="step-num">4.</span><span>Multiple Selection (Checkbox)</span></div>
 <div class="step-item nested-step"><span class="step-num">5.</span><span>Dropdown Selection</span></div>
 <div class="step-item nested-step"><span class="step-num">6.</span><span>True / False</span></div>
-<li class=""><strong>Marks:</strong></li>
+<li class=""><strong>Marks (Per Question):</strong></li>
 <li class="nested-li">Mandatory: Yes</li>
-<li class="nested-li">Type: Numeric (Integer)</li>
-<li class="nested-li">Max. Value: 50</li>
+<li class="nested-li">Type: Numeric Text Input (<strong>inputMode: numeric</strong>)</li>
 <li class="nested-li">Min. Value: 1</li>
-<li class="nested-li">Default value: 2</li>
-<li class="nested-li">Validation: Must be greater than 0.</li>
+<li class="nested-li">Default value: Empty (<strong>""</strong>, placeholder: <strong>0</strong> — marks are entered manually per question and never auto-filled or auto-distributed)</li>
+<li class="nested-li">Validation: Must be greater than 0; sum of all question marks must equal configured <strong>Total Marks</strong>.</li>
 <li class=""><strong>Mandatory Question:</strong></li>
 <li class="nested-li">Mandatory: Yes</li>
 <li class="nested-li">Type: Checkbox / Toggle</li>
 <li class="nested-li">Default value: Checked / Active</li>
 <li class=""><strong>Question Options &amp; Correct Answers:</strong></li>
 <li class="nested-li"><strong>Single Selection (Radio), Multiple Selection (Checkbox), and Dropdown Selection</strong>: Minimum 2 options required, each with Option Text. Single selection and dropdown require one selected Correct Answer; multiple selection requires at least one selected Correct Answer.</li>
-<li class="nested-li"><strong>Short Text Answer</strong>: Minimum 1 accepted keyword/phrase required for automated case-insensitive grading.</li>
-<li class="nested-li"><strong>True / False</strong>: Correct answer selection (True or False).</li>
+<li class="nested-li"><strong>Short Text Answer (<strong>Configured Accepted Answers (Evaluated case-insensitively with trimmed whitespace):</strong>)</strong>: Minimum 1 accepted keyword/phrase required (<strong>Enter accepted correct answer...</strong>, without extra example hints).</li>
+<li class="nested-li"><strong>True / False</strong>: Clean <strong>Answer Option:</strong> / Correct Answer selection (<strong>True</strong> or <strong>False</strong>).</li>
 <li class="nested-li"><strong>Long Text Answer</strong>: Expected Answer / Evaluation Reference summary for manual reviewer grading.</li>
-<li class="nested-li"><strong>Question Actions</strong>: Duplicate and Delete (question reorder buttons are removed).</li>
+<li class="nested-li"><strong>Question Actions</strong>: Clean bordered <strong>Duplicate</strong> and <strong>Delete</strong> pill buttons with SVG icons (<strong>8px</strong> gap). (Question reorder buttons are removed.)</li>
 <hr />
 <h3>2. Assign Training Form (Assignments &gt; + Assign Training)</h3>
 <li class=""><strong>Training Programme:</strong></li>
@@ -679,7 +693,7 @@
 </tr>
 <tr>
 <td><strong>Passing Score Display</strong></td>
-<td>80% (Strictly &gt; 80% to pass)</td>
+<td>80%</td>
 <td>N/A (Assessment Disabled)</td>
 </tr>
 <tr>
@@ -689,8 +703,8 @@
 </tr>
 <tr>
 <td><strong>Completion Criteria</strong></td>
-<td>100% Mandatory Resources + Passing Score on Assessment</td>
-<td>100% Mandatory Resources Reviewed</td>
+<td>All configured Completion Requirements satisfied (e.g. Videos + Passing Score on Assessment + Required Docs + Manager Approval)</td>
+<td>All configured non-assessment Completion Requirements satisfied</td>
 </tr>
 </tbody></table></div>
 <h3>4.2 Supported Question Formats</h3>
@@ -705,37 +719,33 @@
 <li class=""><strong>Scope Column Header</strong>: <strong>ASSIGNED SCOPE</strong> (displays Employee, Department, or Designation assignment scope).</li>
 <li class=""><strong>Total Record Count</strong>: <strong>41 Total</strong> assignments.</li>
 <li class=""><strong>Pagination</strong>: Complete 5-page pagination (10 items per page with Previous/Next and page number controls).</li>
-<h3>4.4 Training Programmes Catalogue, Archive &amp; Availability Status Architecture</h3>
-<li class=""><strong>Strict Separation of Statuses</strong>:</li>
-<li class="nested-li"><strong>Publication Status (Status ↕)</strong>: Reflects the editorial lifecycle stage (<strong>Published</strong>, <strong>Draft</strong>, or <strong>Archived</strong>).</li>
-<li class="nested-li"><strong>Published</strong>: Emerald badge. Visible across management and employee portals.</li>
-<li class="nested-li"><strong>Draft</strong>: Amber badge. Management authoring only (Availability Status stays locked to Inactive until published).</li>
-<li class="nested-li"><strong>Archived</strong>: Slate badge. Visible only on the Management side and excluded everywhere on the Employee side.</li>
-<li class="nested-li"><strong>Availability Status (Active / Inactive)</strong>: Independent operational availability toggle in the catalogue table and Programme Detail sidebar.</li>
-<li class="nested-li">Toggle ON / Right: <strong>Active</strong>.</li>
-<li class="nested-li">Toggle OFF / Left: <strong>Inactive</strong>.</li>
-<li class="nested-li"><strong>Archive vs. Inactive Independence Rule</strong>:</li>
-<li class="nested-li">Archiving a programme changes only Publication Status to <strong>Archived</strong> and preserves Availability Status (Active stays Active; Inactive stays Inactive).</li>
-<li class="nested-li">Restoring an archived programme changes Publication Status back to <strong>Published</strong> while preserving Availability Status.</li>
+<h3>4.4 Training Programmes Catalogue &amp; Availability Status Architecture</h3>
+<li class=""><strong>Publication &amp; Availability Status Rules (No <strong>Archived</strong> Status)</strong>:</li>
+<li class="nested-li"><strong>Publication Status (<strong>Status ↕</strong>)</strong>: Strictly <strong>Published</strong> or <strong>Draft</strong> (<strong>Archived</strong> status and archiving actions are removed).</li>
+<li class="nested-li"><strong>Published</strong>: Emerald badge + accompanying <strong>Active</strong> (blue) or <strong>Inactive</strong> (slate) availability pill in the catalogue table. Visible on Management side; Active published programmes are assignable and usable on Employee side.</li>
+<li class="nested-li"><strong>Draft</strong>: Amber badge. Management authoring only (Availability Status stays locked to Inactive until published and hidden from Employee side).</li>
+<li class="nested-li"><strong>Active / Inactive Only After Publish</strong>: Once a programme is <strong>Published</strong>, only <strong>Active</strong> / <strong>Inactive</strong> transitions can be performed via the cleanly spaced <strong>Active / Inactive</strong> toggle switch in the <strong>Programme Detail</strong> header.</li>
 <li class="nested-li"><strong>Started Learner Lock (Deactivation Guard)</strong>:</li>
 <li class="nested-li">Once any employee has started working on a programme (In Progress, Under Review, Submitted for Review, Changes Requested, or Overdue with progress started), that programme cannot be made <strong>Inactive</strong>. Attempting deactivation is blocked with a validation error.</li>
 <li class="nested-li">Once all learners have finished (Completed at 100%) or before any learner starts (Not Started at 0%), setting <strong>Inactive</strong> is permitted.</li>
 <li class="nested-li"><strong>Inactive Action Lock</strong>:</li>
-<li class="nested-li"><strong>Management (Programme Detail)</strong>: Displays an Inactive warning banner and disables + Assign Programme, Assign Programme, + Add Module, and Open Resource while Inactive. Archive/Restore and the Catalogue Availability Toggle remain enabled for administration.</li>
+<li class="nested-li"><strong>Management (Programme Detail)</strong>: Displays an Inactive warning banner and disables <strong>+ Assign Programme</strong>, <strong>Assign Programme</strong>, <strong>+ Add Module</strong>, and <strong>Open Resource</strong> while Inactive. The <strong>Active / Inactive</strong> toggle remains enabled for administration.</li>
 <li class="nested-li"><strong>Employee (My Training &amp; Course Detail)</strong>: Programmes completed first and then set to Inactive remain visible in My Training (with Completed + Inactive pills) in strict read-only mode; all interactive controls inside are disabled.</li>
-<li class=""><strong>Catalogue Table Column Structure (8 Columns)</strong>:</li>
+<li class=""><strong>Catalogue Table Column Structure (7 Columns)</strong>:</li>
 <div class="step-item nested-step"><span class="step-num">1.</span><span><strong>No.</strong></span></div>
-<div class="step-item nested-step"><span class="step-num">2.</span><span><strong>Programme Name ↕</strong> (Programme title and version badge)</span></div>
+<div class="step-item nested-step"><span class="step-num">2.</span><span><strong>Programme Name ↕</strong> (Programme title and version pill)</span></div>
 <div class="step-item nested-step"><span class="step-num">3.</span><span><strong>Level ↕</strong> (Beginner / Intermediate / Expert badge)</span></div>
 <div class="step-item nested-step"><span class="step-num">4.</span><span><strong>Duration ↕</strong> (Expected hours)</span></div>
 <div class="step-item nested-step"><span class="step-num">5.</span><span><strong>Enrolled ↕</strong> (Learner enrollment count)</span></div>
-<div class="step-item nested-step"><span class="step-num">6.</span><span><strong>Status ↕</strong> (Publication Status badge: Published, Draft, or Archived)</span></div>
-<div class="step-item nested-step"><span class="step-num">7.</span><span><strong>Active / Inactive</strong> (Centered Availability Status toggle switch)</span></div>
-<div class="step-item nested-step"><span class="step-num">8.</span><span><strong>Actions</strong> (Right-aligned View and Edit action buttons)</span></div>
+<div class="step-item nested-step"><span class="step-num">6.</span><span><strong>Status ↕</strong> (<strong>Published</strong> + <strong>Active</strong> / <strong>Inactive</strong> badges, or <strong>Draft</strong> badge — no <strong>Archived</strong>)</span></div>
+<div class="step-item nested-step"><span class="step-num">7.</span><span><strong>Actions</strong> (Right-aligned View and Edit action buttons)</span></div>
 <li class=""><strong>Programme Detail View (Management)</strong>:</li>
-<li class="nested-li"><strong>General Info Tab</strong>: Displays a 3-card summary row (<strong>Status</strong> showing Published/Draft/Archived + Active/Inactive, <strong>Expected Duration</strong>, <strong>Passing Score</strong>) with clean icon-to-text spacing, followed by detailed programme metadata.</li>
+<li class="nested-li"><strong>Left Sidebar</strong>: Displays publication &amp; availability badges, Programme Title, Category, Difficulty Level, <strong>Assign Programme</strong> button, and core summary metrics (<strong>Expected Duration</strong>, <strong>Passing Assessment Score</strong> as clean <strong>80%</strong>, <strong>Department</strong>, <strong>Enrolled Learners</strong>).</li>
+<li class="nested-li"><strong>General Info Tab (Right Panel)</strong>: Displays <strong>Learning Objectives</strong> and <strong>Completion Requirements &amp; Assessment Criteria</strong> cleanly without duplicating the sidebar summary details.</li>
 <li class="nested-li"><strong>Curriculum &amp; Modules Tab</strong>: Displays learning resources in a structured table (Module, Resource Title, Type, Resource URL, Requirement, Action).</li>
-<li class="nested-li"><strong>Enrolled Employees &amp; Status History Tabs</strong>: Tracks learner progress and complete audit history for Availability and Publication transitions (Archive / Restore modal with Confirm button).</li>
+<li class="nested-li"><strong>Enrolled Employees &amp; Status History Tabs</strong>: Tracks learner progress and complete audit history for <strong>Active</strong> / <strong>Inactive</strong> availability transitions.</li>
+<h3>4.5 System Typography Standard</h3>
+<li class=""><strong>Uniform Sans-Serif Typography</strong>: Every text element across the entire system (headings, tables, labels, duration metrics, version badges, IDs, percentages, URLs, modals, and certificates) consistently uses the exact same <strong>Sans-Serif</strong> font family (<strong>--font-sans</strong>), with no monospace or serif font overrides.</li>
   </main>
 </body>
 </html>

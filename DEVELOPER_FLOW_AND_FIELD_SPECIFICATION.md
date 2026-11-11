@@ -33,7 +33,7 @@ The left collapsible sidebar provides access to:
 1. **Employees**: Complete employee directory with profile cards and the Add Employee modal.
 2. **Training Hub**:
    - **Dashboard**: Real-time metrics (Active Learners, Total Assignments, Completion Rate, Average Score), urgent review queue, and performance analytics.
-   - **Training Management (Training Programmes)**: Full course catalogue, lifecycle status filters (All, Published, Draft, Archived), search, independent Availability Status (Active / Inactive) toggle, View action to open **Programme Detail**, and `+ Create Programme` action.
+   - **Training Management (Training Programmes)**: Full course catalogue, publication status filters (`All`, `Published`, `Draft`), search, `Status ↕` column showing `Published` + `Active` / `Inactive` badges (or `Draft`), View & Edit actions, and `+ Add Training` action. (`Archived` status has been removed; once published, only `Active` / `Inactive` toggling can be performed.)
    - **Assignments**: Central assignment register with the **ASSIGNED SCOPE** column (Employee, Department, Designation), **41 Total** assignment count, and 5-page pagination (10 items per page). Clicking a record opens **Assignment Details**.
    - **Progress**: Dual-mode tracking (1. Employee-wise Training Completion vs 2. Departmental Compliance Audit), 4 summary cards (Active Learners, Total Assignments, Completed, Avg Score), and CSV export.
    - **Certificates**: Expandable master-detail table defaulting to **collapsed** employee rows with expand/collapse chevrons, plain-text earned programmes, clickable certificate preview, and a right-aligned **Actions** column directly under **All Records**.
@@ -46,13 +46,13 @@ The left collapsible sidebar provides access to:
 ---
 
 ### Flow 3: Training Management (Create / Edit Programme Flow)
-- Accessed via **Training Programmes > + Create Programme** or **Edit Programme**.
+- Accessed via **Training Management > + Add Training** or **Edit Programme**.
 - Features an **Auto-Fill Demo** button to populate sample data.
 - Structured across three core sections:
-  1. **Core Programme Details**: Programme Name, Training Category, Difficulty Level, Expected Duration.
+  1. **Core Programme Details**: Programme Name, Training Category, Difficulty Level, Duration, Learning Objectives, and **Completion Requirements** (multi-select checkbox dropdown with options `Watch all required videos`, `Pass the assessment`, `Submit any required documents`, and `Get approval from the manager`; checkboxes toggle directly without `Clear`/`Done` buttons and the menu closes on outside click).
   2. **Learning Resources Builder**: Dynamic resource list (Video/YouTube, PDF Document, External Link, Article).
-  3. **Assessment & Questions Builder**: Enable Assessment toggle, Assessment Title, Passing Score, Max Attempts, Description, and dynamic multi-format question builder.
-- Header Actions: **Auto-Fill Demo**, **Cancel**, **Save as Draft**, and **Publish Programme** (or **Update & Publish**).
+  3. **Assessment & Questions Builder**: Enable Assessment toggle, Assessment Title, Passing Score (`Passing Score (%) *` without any `(Strictly > 80% to pass)` text), Max Assessment Attempts, Assessment Description, manual **Total Marks** numeric text field (`Total Marks:`, empty by default), and dynamic multi-format question builder with manual per-question **Marks** (empty by default), live mismatch validation against `Total Marks`, and bordered SVG-icon **Duplicate** / **Delete** buttons.
+- Header Actions: **Auto-Fill Demo**, **Cancel**, **Publish Programme** (or **Update & Publish** / **Save Changes**), and text-only **Save as Draft** dropdown option (no floppy disk icon).
 
 ---
 
@@ -83,23 +83,23 @@ The left collapsible sidebar provides access to:
 
 ### Flow 6: Employee User Role Learning Portal Flow
 - Accessed by switching user to **Tanya Kapoor** or navigating to **Training > My Training**.
-- **Dynamic State Integration**: Newly created and published programmes from Admin/HR view automatically populate in the employee's training list. **Archived programmes are excluded from all employee views** (Employee Dashboard, My Training, Employee Course Detail, and Employee Profile Training History).
+- **Dynamic State Integration**: Newly created and published programmes from Admin/HR view automatically populate in the employee's training list. **Draft programmes are excluded from all employee views** (Employee Dashboard, My Training, Employee Course Detail, and Employee Profile Training History).
 - **Inactive Programme Read-Only Handling**:
   - Programmes marked **Inactive** (including programmes **Completed** first and then set to **Inactive**) remain visible in **My Training** with an **Inactive** status pill.
   - Opening an **Inactive** programme shows an **Inactive warning banner** and disables all actions inside (Start Learning, Mark Complete, external resource links, assessment inputs/selects/checkboxes/radios, Submit Assessment, Retake Assessment, and certificate download).
-- **Employee Training History (Employee Profile > Training History)**: Displays enrollment metrics (Total Enrolled, Completed & Passed, In Progress, Certificates Earned), a compact **+ Assign New Training** button, and non-archived training records.
+- **Employee Training History (Employee Profile > Training History)**: Displays enrollment metrics (Total Enrolled, Completed & Passed, In Progress, Certificates Earned), a compact **+ Assign New Training** button, and assigned training records.
 - **3-Tab Course Learning Layout**:
-  - **Tab 1 — 1. Overview**: Progress bar, completed modules counter, course summary, and learning objectives.
+  - **Tab 1 — 1. Overview**: Progress bar, completed modules counter, course summary, learning objectives, and configured **Completion Requirements** checklist (e.g., Watch all required videos, Pass the assessment, Submit any required documents, Get approval from the manager — once all required steps are completed, the training is marked **Completed**).
   - **Tab 2 — 2. Learning Resources**: Resource checklist with external link openers, completion toggles, and mandatory indicators (disabled if programme is Inactive).
   - **Tab 3 — 3. Assessment & Questions**:
     - **Header**: Clean title **3. Assessment & Questions** (without any Unlocked tag).
     - **When Assessment Toggle is OFF**:
-      - Inside Tab 3: Renders a clean empty container ("No Assessment Configured — Assessment is disabled for this training programme. Learners achieve completion upon reviewing all mandatory learning resources"). No questions, no scoring inputs, and no submit button are shown.
+      - Inside Tab 3: Renders a clean empty container ("No Assessment Configured — Assessment is disabled for this training programme. Learners achieve completion upon completing all configured requirements"). No questions, no scoring inputs, and no submit button are shown.
       - Left Sidebar: Passing Assessment Score displays **N/A (Assessment Disabled)**. Action button displays **Start Learning Modules →** or **Programme Completed ✓** (never prompts to take an assessment).
       - Tab 2 Navigation: Bottom button displays **All Modules Completed ✓**.
     - **When Assessment Toggle is ON**:
       - Inside Tab 3: Renders the exact question types, marks, mandatory indicators, and options configured by Admin/HR.
-      - Left Sidebar: Passing Assessment Score displays **80% (Strictly > 80% to pass)**. Action button displays **Take Assessment →** (or **Download Certificate** upon passing).
+      - Left Sidebar: Passing Assessment Score displays **80%** (clean percentage without extra strictly-greater-than hint). Action button displays **Take Assessment →** (or **Download Certificate** upon passing and completing all required steps).
       - Result Status: Displays unified **Completed** badge when assessment passes and programme completes.
 
 ---
@@ -137,13 +137,24 @@ The left collapsible sidebar provides access to:
     - Intermediate
     - Expert
 
-- **Expected Duration (Hours):**
+- **Duration * (`Expected Duration (Hours)`):**
   - Mandatory: Yes (`*`)
   - Type: Numeric (Integer)
   - Max. Value: 200
   - Min. Value: 1
-  - Default value: 4
+  - Default value: Empty (Placeholder: `e.g. 4`)
   - Validation: Positive integer; decimals or negative values not permitted.
+
+- **Completion Requirements:**
+  - Mandatory: No (Optional)
+  - Type: Multi-select Checkbox Dropdown (closes on outside click or header re-click; no `Clear` or `Done` footer buttons)
+  - Default value: Empty (Placeholder: `Select completion requirements...`)
+  - Allowed Values:
+    1. `Watch all required videos`
+    2. `Pass the assessment`
+    3. `Submit any required documents`
+    4. `Get approval from the manager`
+  - Behavior: Controls what the employee must complete to finish the training. Once all selected required steps are completed, the training status transitions to **Completed**.
 
 ---
 
@@ -194,8 +205,14 @@ The left collapsible sidebar provides access to:
   - Type: Numeric (Integer)
   - Max. Value: 100
   - Min. Value: 1
-  - Default value: 80
-  - Validation: Benchmark passing percentage (Strictly > 80% to pass).
+  - Default value: Empty on create (`Auto-Fill Demo` populates `80`)
+  - Validation: Benchmark passing percentage (clean label `Passing Score (%) *` without extra `(Strictly > 80% to pass)` helper text).
+
+- **Total Marks (`Questions List` Header):**
+  - Mandatory: Yes (when Enable Assessment is Active)
+  - Type: Numeric Text Input (`inputMode: numeric`)
+  - Default value: Empty (`""`, placeholder: `e.g. 100`; never auto-calculated or auto-filled from question marks)
+  - Validation: Must be greater than `0`; user enters target Total Marks manually. Once all added questions have marks `> 0` and `questionsMarksSum !== Number(Total Marks)`, an inline error (`Total question marks (X) do not match Total Marks (Y).`) is displayed and save/publish is blocked. When equal, a `Matched ✓` pill is displayed.
 
 - **Max Assessment Attempts:**
   - Mandatory: Yes (`*`, when Enable Assessment is Active)
@@ -230,13 +247,12 @@ The left collapsible sidebar provides access to:
     5. Dropdown Selection
     6. True / False
 
-- **Marks:**
+- **Marks (Per Question):**
   - Mandatory: Yes
-  - Type: Numeric (Integer)
-  - Max. Value: 50
+  - Type: Numeric Text Input (`inputMode: numeric`)
   - Min. Value: 1
-  - Default value: 2
-  - Validation: Must be greater than 0.
+  - Default value: Empty (`""`, placeholder: `0` — marks are entered manually per question and never auto-filled or auto-distributed)
+  - Validation: Must be greater than 0; sum of all question marks must equal configured `Total Marks`.
 
 - **Mandatory Question:**
   - Mandatory: Yes
@@ -245,10 +261,10 @@ The left collapsible sidebar provides access to:
 
 - **Question Options & Correct Answers:**
   - **Single Selection (Radio), Multiple Selection (Checkbox), and Dropdown Selection**: Minimum 2 options required, each with Option Text. Single selection and dropdown require one selected Correct Answer; multiple selection requires at least one selected Correct Answer.
-  - **Short Text Answer**: Minimum 1 accepted keyword/phrase required for automated case-insensitive grading.
-  - **True / False**: Correct answer selection (True or False).
+  - **Short Text Answer (`Configured Accepted Answers (Evaluated case-insensitively with trimmed whitespace):`)**: Minimum 1 accepted keyword/phrase required (`Enter accepted correct answer...`, without extra example hints).
+  - **True / False**: Clean `Answer Option:` / Correct Answer selection (`True` or `False`).
   - **Long Text Answer**: Expected Answer / Evaluation Reference summary for manual reviewer grading.
-  - **Question Actions**: Duplicate and Delete (question reorder buttons are removed).
+  - **Question Actions**: Clean bordered **Duplicate** and **Delete** pill buttons with SVG icons (`8px` gap). (Question reorder buttons are removed.)
 
 ---
 
@@ -448,9 +464,9 @@ The left collapsible sidebar provides access to:
 | **Tab 3 Header** | 3. Assessment & Questions | 3. Assessment & Questions |
 | **Tab 3 Content** | Renders full evaluation card, attempt counter, passing criteria, and all configured questions | Empty State Container: "No Assessment Configured" message with icon; no questions, no scoring inputs, no submit button |
 | **Left Sidebar Action Button** | "Take Assessment →" (or "Download Certificate" when passed) | "Start Learning Modules →" (or "Programme Completed ✓" when all modules done) |
-| **Passing Score Display** | 80% (Strictly > 80% to pass) | N/A (Assessment Disabled) |
+| **Passing Score Display** | 80% | N/A (Assessment Disabled) |
 | **Tab 2 Navigation Button** | "Proceed to Assessment →" | "All Modules Completed ✓" |
-| **Completion Criteria** | 100% Mandatory Resources + Passing Score on Assessment | 100% Mandatory Resources Reviewed |
+| **Completion Criteria** | All configured Completion Requirements satisfied (e.g. Videos + Passing Score on Assessment + Required Docs + Manager Approval) | All configured non-assessment Completion Requirements satisfied |
 
 ### 4.2 Supported Question Formats
 1. **Short Text Answer**: Single-line text input with case-insensitive accepted keyword evaluation.
@@ -466,34 +482,31 @@ The left collapsible sidebar provides access to:
 - **Total Record Count**: **41 Total** assignments.
 - **Pagination**: Complete 5-page pagination (10 items per page with Previous/Next and page number controls).
 
-### 4.4 Training Programmes Catalogue, Archive & Availability Status Architecture
-- **Strict Separation of Statuses**:
-  - **Publication Status (Status ↕)**: Reflects the editorial lifecycle stage (**Published**, **Draft**, or **Archived**).
-    - **Published**: Emerald badge. Visible across management and employee portals.
-    - **Draft**: Amber badge. Management authoring only (Availability Status stays locked to Inactive until published).
-    - **Archived**: Slate badge. Visible only on the Management side and excluded everywhere on the Employee side.
-  - **Availability Status (Active / Inactive)**: Independent operational availability toggle in the catalogue table and Programme Detail sidebar.
-    - Toggle ON / Right: **Active**.
-    - Toggle OFF / Left: **Inactive**.
-  - **Archive vs. Inactive Independence Rule**:
-    - Archiving a programme changes only Publication Status to **Archived** and preserves Availability Status (Active stays Active; Inactive stays Inactive).
-    - Restoring an archived programme changes Publication Status back to **Published** while preserving Availability Status.
+### 4.4 Training Programmes Catalogue & Availability Status Architecture
+- **Publication & Availability Status Rules (No `Archived` Status)**:
+  - **Publication Status (`Status ↕`)**: Strictly **Published** or **Draft** (`Archived` status and archiving actions are removed).
+    - **Published**: Emerald badge + accompanying **Active** (blue) or **Inactive** (slate) availability pill in the catalogue table. Visible on Management side; Active published programmes are assignable and usable on Employee side.
+    - **Draft**: Amber badge. Management authoring only (Availability Status stays locked to Inactive until published and hidden from Employee side).
+  - **Active / Inactive Only After Publish**: Once a programme is **Published**, only **Active** / **Inactive** transitions can be performed via the cleanly spaced `Active / Inactive` toggle switch in the **Programme Detail** header.
   - **Started Learner Lock (Deactivation Guard)**:
     - Once any employee has started working on a programme (In Progress, Under Review, Submitted for Review, Changes Requested, or Overdue with progress started), that programme cannot be made **Inactive**. Attempting deactivation is blocked with a validation error.
     - Once all learners have finished (Completed at 100%) or before any learner starts (Not Started at 0%), setting **Inactive** is permitted.
   - **Inactive Action Lock**:
-    - **Management (Programme Detail)**: Displays an Inactive warning banner and disables + Assign Programme, Assign Programme, + Add Module, and Open Resource while Inactive. Archive/Restore and the Catalogue Availability Toggle remain enabled for administration.
+    - **Management (Programme Detail)**: Displays an Inactive warning banner and disables `+ Assign Programme`, `Assign Programme`, `+ Add Module`, and `Open Resource` while Inactive. The `Active / Inactive` toggle remains enabled for administration.
     - **Employee (My Training & Course Detail)**: Programmes completed first and then set to Inactive remain visible in My Training (with Completed + Inactive pills) in strict read-only mode; all interactive controls inside are disabled.
-- **Catalogue Table Column Structure (8 Columns)**:
+- **Catalogue Table Column Structure (7 Columns)**:
   1. **No.**
-  2. **Programme Name ↕** (Programme title and version badge)
+  2. **Programme Name ↕** (Programme title and version pill)
   3. **Level ↕** (Beginner / Intermediate / Expert badge)
   4. **Duration ↕** (Expected hours)
   5. **Enrolled ↕** (Learner enrollment count)
-  6. **Status ↕** (Publication Status badge: Published, Draft, or Archived)
-  7. **Active / Inactive** (Centered Availability Status toggle switch)
-  8. **Actions** (Right-aligned View and Edit action buttons)
+  6. **Status ↕** (`Published` + `Active` / `Inactive` badges, or `Draft` badge — no `Archived`)
+  7. **Actions** (Right-aligned View and Edit action buttons)
 - **Programme Detail View (Management)**:
-  - **General Info Tab**: Displays a 3-card summary row (**Status** showing Published/Draft/Archived + Active/Inactive, **Expected Duration**, **Passing Score**) with clean icon-to-text spacing, followed by detailed programme metadata.
+  - **Left Sidebar**: Displays publication & availability badges, Programme Title, Category, Difficulty Level, `Assign Programme` button, and core summary metrics (**Expected Duration**, **Passing Assessment Score** as clean `80%`, **Department**, **Enrolled Learners**).
+  - **General Info Tab (Right Panel)**: Displays **Learning Objectives** and **Completion Requirements & Assessment Criteria** cleanly without duplicating the sidebar summary details.
   - **Curriculum & Modules Tab**: Displays learning resources in a structured table (Module, Resource Title, Type, Resource URL, Requirement, Action).
-  - **Enrolled Employees & Status History Tabs**: Tracks learner progress and complete audit history for Availability and Publication transitions (Archive / Restore modal with Confirm button).
+  - **Enrolled Employees & Status History Tabs**: Tracks learner progress and complete audit history for `Active` / `Inactive` availability transitions.
+
+### 4.5 System Typography Standard
+- **Uniform Sans-Serif Typography**: Every text element across the entire system (headings, tables, labels, duration metrics, version badges, IDs, percentages, URLs, modals, and certificates) consistently uses the exact same **Sans-Serif** font family (`--font-sans`), with no monospace or serif font overrides.

@@ -143,7 +143,7 @@ def build_full_html(body_html):
   <title>CollabCRM People Training Module - Developer Flow & Field Specification</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {{
       --primary: #2563eb;
@@ -307,7 +307,7 @@ def build_full_html(body_html):
       min-width: 20px;
     }}
     code {{
-      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       font-size: 12.5px;
       background-color: #f1f5f9;
       color: #0f172a;
@@ -323,7 +323,7 @@ def build_full_html(body_html):
       overflow-x: auto;
       margin: 16px 0 20px 0;
       font-size: 12.5px;
-      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       line-height: 1.5;
     }}
     pre code {{
