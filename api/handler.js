@@ -787,7 +787,7 @@ const EMPLOYEE_TRAINING_STORE = {
       firstName: 'Tanya',
       lastName: 'Kapoor',
       designation: 'Business analyst',
-      department: 'Project',
+      department: 'Collab',
       reportingManager: 'Megha Salunkhe (Sr. Executive)',
       reportingManagerId: 'CO-5038',
       email: 'calebnguyen@maildrop.cc',
