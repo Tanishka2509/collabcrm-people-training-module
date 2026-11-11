@@ -677,6 +677,410 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){let r=e.
     ]})})
   ]});
 }
+const SKILL_QUESTION_BANK = {
+  "account management": {
+    Beginner: [
+      { type: "single_choice", marks: 5, text: "What is the primary objective of enterprise Account Management in CollabCRM?", options: ["Maximizing client retention, SLA adherence, and long-term value", "Eliminating customer onboarding documentation", "Replacing recurring account reviews with ad-hoc emails", "Bypassing stakeholder escalation matrices"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Proactive SLA tracking and regular stakeholder check-ins reduce enterprise client churn.", correctAnswer: "True" }
+    ],
+    Intermediate: [
+      { type: "single_choice", marks: 5, text: "When a key enterprise client reports declining adoption metrics, which Account Management action should be taken first?", options: ["Conduct a structured root-cause QBR with stakeholders and align an adoption recovery plan", "Wait until contract renewal quarter to address usage", "Close open support tickets without client verification", "Transfer the account to billing operations"], correctIndex: 0 },
+      { type: "multiple_choice", marks: 5, text: "Which artifacts are essential for governed Account Management health reviews? (Select all that apply)", options: ["SLA compliance scorecard", "Stakeholder engagement & risk register", "Expansion & renewal roadmap", "Unverified personal spreadsheets"], correctIndices: [0, 1, 2] }
+    ],
+    Advanced: [
+      { type: "single_choice", marks: 5, text: "How should an Account Manager structure executive governance for multi-region enterprise renewals?", options: ["Align multi-year outcome KPIs, executive sponsors, and proactive risk mitigation playbooks", "Offer flat across-the-board discounting before reviewing utilization", "Rely solely on automated renewal invoices", "Separate delivery metrics from business value realization"], correctIndex: 0 },
+      { type: "dropdown", marks: 5, text: "Select the highest-leverage retention signal for strategic Enterprise Account Management:", options: ["Executive sponsorship alignment paired with verified business ROI metrics", "Total count of promotional emails sent", "Average time spent formatting internal slides"], correctIndex: 0 }
+    ]
+  },
+  "data mining": {
+    Beginner: [
+      { type: "single_choice", marks: 5, text: "Which step prepares raw enterprise datasets by removing duplicates and handling missing values before pattern discovery?", options: ["Data cleaning and preprocessing", "Production model deprecation", "UI theme serialization", "Manual firewall provisioning"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Exploratory data profiling helps identify outliers and schema anomalies prior to mining patterns.", correctAnswer: "True" }
+    ],
+    Intermediate: [
+      { type: "multiple_choice", marks: 5, text: "Which techniques are commonly applied in Data Mining for discovering structure in large datasets? (Select all that apply)", options: ["Clustering (e.g., k-means)", "Association rule mining", "Anomaly & outlier detection", "CSS flexbox layout"], correctIndices: [0, 1, 2] },
+      { type: "single_choice", marks: 5, text: "Why is dataset splitting (train/validation/test) important when validating mined predictive patterns?", options: ["To evaluate generalization and detect overfitting before deployment", "To duplicate identical rows into production logs", "To bypass schema validation constraints", "To increase database lock contention"], correctIndex: 0 }
+    ],
+    Advanced: [
+      { type: "single_choice", marks: 5, text: "How do you handle severe class imbalance and data leakage in high-dimensional enterprise Data Mining pipelines?", options: ["Enforce pipeline-isolated resampling/cross-validation and optimize precision-recall or cost-sensitive metrics", "Oversample the entire dataset prior to train/test splitting", "Evaluate solely on raw overall accuracy", "Drop all timestamp features indiscriminately"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Feature normalization or leakage inside cross-validation folds should occur strictly on training splits only.", correctAnswer: "True" }
+    ]
+  },
+  "react": {
+    Beginner: [
+      { type: "single_choice", marks: 5, text: "Why should stable unique keys be provided when rendering lists in React?", options: ["They help React accurately identify which items changed, added, or removed during reconciliation", "They automatically encrypt component state", "They disable virtual DOM diffing completely", "They replace CSS class scoping"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: React state updates should be treated as immutable rather than mutating existing state arrays/objects in place.", correctAnswer: "True" }
+    ],
+    Intermediate: [
+      { type: "single_choice", marks: 5, text: "When should React hooks like useMemo or useCallback be introduced?", options: ["To stabilize referential identity for memoized children or avoid expensive redundant recalculations", "Around every primitive variable inside a component", "To replace API error handling", "Only inside class constructors"], correctIndex: 0 },
+      { type: "multiple_choice", marks: 5, text: "Which practices prevent stale closures and race conditions inside React useEffect hooks? (Select all that apply)", options: ["Specify accurate dependency arrays", "Return a cleanup/abort handler for async requests", "Use functional state updates (prev => ...) when deriving from prior state", "Mutate props directly inside render"], correctIndices: [0, 1, 2] }
+    ],
+    Advanced: [
+      { type: "single_choice", marks: 5, text: "Which architecture pattern minimizes unnecessary sub-tree re-renders in complex React dashboards?", options: ["Colocating state near consumers, splitting fast-changing context slices, and memoizing stable boundaries", "Lifting every keystroke into a single root provider without selectors", "Recreating component definitions inline inside parent render", "Disabling React StrictMode in development"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Derived values computable directly from props or state during render generally should not be duplicated into redundant useState + useEffect sync.", correctAnswer: "True" }
+    ]
+  },
+  "typescript": {
+    Beginner: [
+      { type: "single_choice", marks: 5, text: "What advantage does TypeScript provide over untyped JavaScript during development?", options: ["Compile-time static type checking to catch contract and nullability errors early", "Bypassing all runtime API validation automatically", "Disabling browser compatibility", "Eliminating unit tests entirely"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Strict null checks help prevent unexpected undefined/null property access bugs at compile time.", correctAnswer: "True" }
+    ],
+    Intermediate: [
+      { type: "single_choice", marks: 5, text: "How does TypeScript model exhaustive handling of discriminated unions?", options: ["By narrowing on a common literal discriminant field with a never check in the default branch", "By casting every union variable to any", "By suppressing compiler diagnostics globally", "By converting interfaces into untyped strings"], correctIndex: 0 },
+      { type: "multiple_choice", marks: 5, text: "Which TypeScript constructs improve type safety for API contracts? (Select all that apply)", options: ["Readonly & Record utility types", "Generic constraints (<T extends ...>)", "Type predicates / unknown narrowing", "Using 'any' across all service boundaries"], correctIndices: [0, 1, 2] }
+    ],
+    Advanced: [
+      { type: "single_choice", marks: 5, text: "Why is 'unknown' preferred over 'any' for parsing external JSON payloads in TypeScript?", options: ["'unknown' enforces explicit runtime type narrowing or schema validation before property access", "'unknown' skips all compiler checks", "'unknown' increases runtime memory allocation", "'unknown' disables interface inheritance"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Conditional types paired with 'infer' enable extracting return or element types cleanly across reusable library abstractions.", correctAnswer: "True" }
+    ]
+  },
+  "node.js": {
+    Beginner: [
+      { type: "single_choice", marks: 5, text: "How does Node.js handle concurrent I/O operations efficiently on a single JavaScript thread?", options: ["Via an asynchronous non-blocking event loop and underlying libuv worker/OS I/O", "By spawning a full virtual machine per HTTP header", "By blocking all requests until disk writes finish synchronously", "By disabling TCP keep-alive"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Avoiding synchronous blocking calls (like fs.readFileSync) in hot request handlers keeps Node.js event loop latency low.", correctAnswer: "True" }
+    ],
+    Intermediate: [
+      { type: "multiple_choice", marks: 5, text: "Which practices improve reliability and scalability in production Node.js APIs? (Select all that apply)", options: ["Graceful SIGTERM shutdown draining active connections", "Structured request timeouts and connection pooling", "Streaming large payloads with backpressure handling", "Catching and ignoring unhandled promise rejections silently"], correctIndices: [0, 1, 2] },
+      { type: "single_choice", marks: 5, text: "What causes Node.js Stream backpressure, and how should writable streams handle it?", options: ["Write buffer saturation; wait for the 'drain' event or use stream.pipeline()", "Slow CSS rendering; force synchronous writes", "Excess TLS certificates; restart the process", "Low DNS TTL; disable buffers"], correctIndex: 0 }
+    ],
+    Advanced: [
+      { type: "single_choice", marks: 5, text: "How should CPU-intensive workloads be offloaded so they do not starve the main Node.js HTTP event loop?", options: ["Delegate to Worker Threads, dedicated job queues, or isolated worker services", "Run heavy nested crypto loops inline inside Express middleware", "Switch all async routes to blocking readFileSync", "Increase HTTP request payload size limits"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Monitoring event-loop lag and heap growth helps detect CPU starvation and memory leaks before outages occur.", correctAnswer: "True" }
+    ]
+  },
+  "api security & oauth2": {
+    Beginner: [
+      { type: "single_choice", marks: 5, text: "Why must OAuth2 bearer access tokens (JWTs) always be validated cleanly in backend API gateways?", options: ["To verify cryptographic signature, expiration, issuer, and authorized scopes/claims", "To reduce HTML font loading speed", "To store plain-text user passwords inside URLs", "To disable HTTPS encryption"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Enforcing least-privilege RBAC scopes limits blast radius if a single integration token is compromised.", correctAnswer: "True" }
+    ],
+    Intermediate: [
+      { type: "single_choice", marks: 5, text: "Which OAuth2 enhancement mitigates authorization code interception for SPAs and mobile public clients?", options: ["Authorization Code Flow with PKCE (Proof Key for Code Exchange)", "Implicit flow returning tokens in URL hash", "Static shared API passwords in query params", "Disabling redirect_uri validation"], correctIndex: 0 },
+      { type: "multiple_choice", marks: 5, text: "Which controls are critical to secure OAuth2/JWT APIs? (Select all that apply)", options: ["Short-lived access tokens with refresh token rotation", "Strict redirect URI exact matching", "Restrictive CORS allowlists paired with TLS", "Accepting 'alg: none' JWT headers"], correctIndices: [0, 1, 2] }
+    ],
+    Advanced: [
+      { type: "single_choice", marks: 5, text: "What security risk arises if a JWT verification library trusts the token's unverified 'alg' header dynamically without pinning expected algorithms?", options: ["Algorithm confusion attacks allowing asymmetric public keys to be abused as HMAC secrets", "Slow database indexing", "Browser cookie compression failures", "Duplicate SVG rendering"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Refresh token reuse detection allows revoking an entire token family if a rotated token is replayed.", correctAnswer: "True" }
+    ]
+  },
+  "business analysis": {
+    Beginner: [
+      { type: "single_choice", marks: 5, text: "What is the primary purpose of a Business Requirements Document (BRD) and acceptance criteria?", options: ["To align business stakeholders and engineering on measurable scope and verifiable outcomes", "To prescribe CSS hex colors before problem discovery", "To bypass UAT sign-off", "To eliminate stakeholder interviews"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Well-written acceptance criteria make QA test scenarios and UAT validation unambiguous.", correctAnswer: "True" }
+    ],
+    Intermediate: [
+      { type: "multiple_choice", marks: 5, text: "Which activities belong in core Business Analysis & requirement lifecycle management? (Select all that apply)", options: ["Stakeholder elicitation & workshop facilitation", "Process modeling (as-is vs to-be workflows)", "Edge-case & non-functional requirement tracing", "Approving production deploys without UAT"], correctIndices: [0, 1, 2] },
+      { type: "single_choice", marks: 5, text: "How should conflicting requirements from multiple departments be resolved?", options: ["Evaluate business impact, compliance constraints, and align prioritization with sponsors", "Implement all conflicting paths silently", "Delete the minority stakeholder's request without notice", "Defer clarification until post-launch"], correctIndex: 0 }
+    ],
+    Advanced: [
+      { type: "single_choice", marks: 5, text: "When scoping complex enterprise workflow changes, how does a Business Analyst prevent late-stage UAT rework?", options: ["Maintain bidirectional traceability from business KPIs to edge cases, data contracts, and UAT scripts", "Skip workflow state-transition modeling", "Focus only on happy-path UI mockups", "Freeze requirements before discovery interviews"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Distinguishing policy/regulatory constraints from flexible UI preferences prevents costly scope creep.", correctAnswer: "True" }
+    ]
+  },
+  "sql": {
+    Beginner: [
+      { type: "single_choice", marks: 5, text: "Which SQL clause filters aggregated groups after GROUP BY has been evaluated?", options: ["HAVING", "WHERE", "ORDER BY", "DISTINCT"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: A LEFT JOIN preserves all rows from the left table even when no matching row exists in the right table.", correctAnswer: "True" }
+    ],
+    Intermediate: [
+      { type: "single_choice", marks: 5, text: "Why should selective indexes be placed carefully on frequently queried filter/join columns?", options: ["Indexes speed up read lookups while adding modest overhead to writes and storage", "Indexes delete duplicate rows automatically without constraints", "Indexes disable ACID transactions", "Indexes remove the need for normalized keys"], correctIndex: 0 },
+      { type: "multiple_choice", marks: 5, text: "Which SQL practices help avoid slow queries and inaccurate aggregations? (Select all that apply)", options: ["Avoiding SELECT * in high-volume reporting queries", "Using CTEs / window functions for clear ranking logic", "Checking EXPLAIN execution plans on large joins", "Joining many-to-many tables without deduplicating or grouping"], correctIndices: [0, 1, 2] }
+    ],
+    Advanced: [
+      { type: "single_choice", marks: 5, text: "When tuning a slow parameterized reporting query, what problem can occur if a leading wildcard LIKE '%term' or non-sargable function wraps an indexed column?", options: ["The optimizer cannot use a standard B-Tree index seek and falls back to full scans", "Foreign keys convert automatically to views", "The database drops transaction isolation", "GROUP BY stops accepting aggregates"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Window functions (ROW_NUMBER, SUM OVER) compute rankings and running totals without collapsing individual rows.", correctAnswer: "True" }
+    ]
+  },
+  "gdpr & data privacy": {
+    Beginner: [
+      { type: "single_choice", marks: 5, text: "Under GDPR data minimization principles, what personal data should enterprise systems collect and retain?", options: ["Only data strictly necessary, accurate, and retained no longer than its lawful purpose", "All possible user attributes indefinitely", "Sensitive PII inside public log files", "Unencrypted backups shared across teams"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Data subjects have enforceable rights to access, rectify, and request erasure of personal data under defined GDPR rules.", correctAnswer: "True" }
+    ],
+    Intermediate: [
+      { type: "multiple_choice", marks: 5, text: "Which technical & organizational controls strengthen GDPR compliance? (Select all that apply)", options: ["Role-based access controls & audit logging", "Encryption in transit and at rest", "Defined data retention & automated purge policies", "Exporting employee PII to personal USB drives"], correctIndices: [0, 1, 2] },
+      { type: "single_choice", marks: 5, text: "Within what timeframe must supervisory authorities generally be notified of a qualifying personal data breach under GDPR Article 33?", options: ["Within 72 hours of becoming aware of the breach", "Within 90 business days", "Only during annual audits", "Never if backups exist"], correctIndex: 0 }
+    ],
+    Advanced: [
+      { type: "single_choice", marks: 5, text: "When introducing a high-risk automated employee profiling feature, what GDPR governance artifact is required prior to processing?", options: ["A Data Protection Impact Assessment (DPIA) documenting risks and safeguards", "Only a marketing press release", "A CSS styleguide update", "Retroactive verbal approval"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Privacy by Design requires embedding data protection safeguards into architecture defaults from project inception.", correctAnswer: "True" }
+    ]
+  },
+  "cloud infrastructure": {
+    Beginner: [
+      { type: "single_choice", marks: 5, text: "What is the key benefit of managing Cloud Infrastructure using Infrastructure as Code (IaC)?", options: ["Version-controlled, repeatable, and peer-reviewed environment provisioning", "Manual point-and-click configuration drift across stages", "Disabling IAM least privilege", "Hardcoding cloud secrets inside browser JS"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Health probes (readiness and liveness checks) allow orchestrators to route traffic only to healthy instances.", correctAnswer: "True" }
+    ],
+    Intermediate: [
+      { type: "multiple_choice", marks: 5, text: "Which pillars support resilient multi-environment Cloud Infrastructure? (Select all that apply)", options: ["Automated CI/CD deployment pipelines", "Private subnets & scoped IAM roles", "Centralized logs, metrics, and alerting", "Shared root admin credentials across services"], correctIndices: [0, 1, 2] },
+      { type: "single_choice", marks: 5, text: "What distinguishes a Kubernetes readiness probe failure from a liveness probe failure?", options: ["Readiness stops routing new traffic to the Pod; liveness restarts the container", "Both permanently delete the database volume", "Readiness scales DNS records globally", "Liveness disables TLS termination"], correctIndex: 0 }
+    ],
+    Advanced: [
+      { type: "single_choice", marks: 5, text: "How do multi-zone deployments with Pod Disruption Budgets (PDBs) protect availability during node upgrades?", options: ["They guarantee a minimum quorum of healthy replicas remain online across failure domains", "They prevent horizontal autoscaling indefinitely", "They force all replicas onto a single host", "They disable TLS certificate rotation"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Immutable infrastructure deployments reduce configuration drift and simplify fast rollbacks.", correctAnswer: "True" }
+    ]
+  },
+  "kubernetes security": {
+    Beginner: [
+      { type: "single_choice", marks: 5, text: "What does RBAC (Role-Based Access Control) enforce inside a Kubernetes cluster?", options: ["Least-privilege permissions controlling which identities can perform actions on cluster resources", "Faster container image layer compression", "Automatic DNS load balancing across browsers", "Unrestricted cluster-admin access for all Pods"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Running containers as non-root with read-only root filesystems reduces workload compromise impact.", correctAnswer: "True" }
+    ],
+    Intermediate: [
+      { type: "single_choice", marks: 5, text: "What is the primary role of Kubernetes NetworkPolicies in multi-tenant clusters?", options: ["Restrict Pod-to-Pod and namespace ingress/egress traffic using explicit allow rules", "Encrypt source repositories inside Git", "Manage developer laptop SSH keys", "Replace container registries"], correctIndex: 0 },
+      { type: "multiple_choice", marks: 5, text: "Which controls harden Kubernetes workloads against privilege escalation? (Select all that apply)", options: ["Drop unnecessary Linux capabilities and set allowPrivilegeEscalation: false", "Scan container images for CVEs in CI/CD before admission", "Isolate ServiceAccount tokens and disable automount where unneeded", "Mount hostPath '/' read-write into application Pods"], correctIndices: [0, 1, 2] }
+    ],
+    Advanced: [
+      { type: "single_choice", marks: 5, text: "How do Admission Controllers (e.g., Pod Security Admission / OPA Gatekeeper) strengthen cluster security posture?", options: ["They intercept API requests and reject non-compliant Pod manifests before scheduling", "They run only after a container is compromised", "They bypass kube-apiserver authentication", "They store plaintext secrets inside ConfigMaps"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Encrypting etcd Secrets at rest with KMS envelope encryption protects cluster credentials against snapshot exposure.", correctAnswer: "True" }
+    ]
+  },
+  "project management (agile/scrum)": {
+    Beginner: [
+      { type: "single_choice", marks: 5, text: "Who owns maximizing product value and ordering the Product Backlog in Scrum?", options: ["The Product Owner", "Only the infrastructure vendor", "An external auditor", "The build server"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: A clear Definition of Done ensures shared quality standards for every completed Sprint increment.", correctAnswer: "True" }
+    ],
+    Intermediate: [
+      { type: "single_choice", marks: 5, text: "What is the key objective of a Sprint Retrospective?", options: ["Inspect team collaboration, tooling, and workflow to commit concrete process improvements", "Assign blame for missed story points", "Skip backlog refinement for next month", "Rewrite production database schemas"], correctIndex: 0 },
+      { type: "multiple_choice", marks: 5, text: "Which practices keep Agile delivery predictable? (Select all that apply)", options: ["Refining and slicing stories prior to Sprint Planning", "Tracking blockers early in Daily Scrums", "Demoing working increments at Sprint Review", "Adding unvetted scope silently mid-sprint"], correctIndices: [0, 1, 2] }
+    ],
+    Advanced: [
+      { type: "single_choice", marks: 5, text: "How should cross-team dependencies and flow bottlenecks be managed in scaled Agile delivery?", options: ["Visualize dependency critical paths early, limit WIP, and coordinate integration milestones", "Hide cross-team blockers until release day", "Measure individual velocity competitively across engineers", "Eliminate Sprint Reviews"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Using flow metrics (cycle time, throughput, WIP limits) alongside empirical velocity improves delivery forecasting.", correctAnswer: "True" }
+    ]
+  },
+  "ui/ux research and testing": {
+    Beginner: [
+      { type: "single_choice", marks: 5, text: "What does usability testing primarily measure with representative users?", options: ["Whether real users can complete target workflows effectively, efficiently, and without confusion", "Database query CPU consumption", "Server TLS handshake speed", "Number of CSS variables in source code"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Conducting moderated task-based tests before full implementation uncovers navigation friction early.", correctAnswer: "True" }
+    ],
+    Intermediate: [
+      { type: "multiple_choice", marks: 5, text: "Which outputs belong in actionable UX research synthesis? (Select all that apply)", options: ["Observed severity-ranked usability findings", "Task completion success & error patterns", "Design recommendations tied to user workflows", "Leading participants toward predetermined answers"], correctIndices: [0, 1, 2] },
+      { type: "single_choice", marks: 5, text: "When evaluating an enterprise workflow with Nielsen's heuristics, what does 'Visibility of system status' require?", options: ["Timely, clear UI feedback informing users of current state, progress, or saved actions", "Hiding validation errors until page reload", "Using identical colors for disabled and primary buttons", "Removing confirmation states"], correctIndex: 0 }
+    ],
+    Advanced: [
+      { type: "single_choice", marks: 5, text: "How should qualitative interviews and quantitative funnel telemetry be combined for complex B2B UX redesigns?", options: ["Use telemetry to locate drop-offs at scale and qualitative sessions to diagnose why friction occurs", "Rely solely on internal stakeholder opinions", "Ignore accessibility contrast and keyboard navigation", "Ship without measurable baseline metrics"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Testing accessibility (WCAG contrast, keyboard flow, clear focus states) during UX validation prevents costly remediation.", correctAnswer: "True" }
+    ]
+  },
+  "figma": {
+    Beginner: [
+      { type: "single_choice", marks: 5, text: "Why are Auto Layout frames and reusable Components essential in Figma design systems?", options: ["They enforce responsive spacing and allow consistent design updates across screens", "They disable prototype linking", "They remove color variables", "They prevent developer inspection"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Component variants consolidate related states (default, hover, disabled) under clear structured properties.", correctAnswer: "True" }
+    ],
+    Intermediate: [
+      { type: "single_choice", marks: 5, text: "How do Figma Variables and semantic Design Tokens improve design-to-engineering handoff?", options: ["They map reusable naming (surface, border, accent) cleanly between Figma modes and frontend code", "They flatten all vector icons into large bitmaps", "They lock frames so developers cannot read spacing", "They duplicate unlinked styles on every screen"], correctIndex: 0 },
+      { type: "multiple_choice", marks: 5, text: "What makes a Figma file Dev-Handoff ready? (Select all that apply)", options: ["Named layers & Auto Layout constraints", "Documented empty, error, and loading states", "Linked design tokens & component specs", "Detached undocumented components everywhere"], correctIndices: [0, 1, 2] }
+    ],
+    Advanced: [
+      { type: "single_choice", marks: 5, text: "How do multi-brand or themed Figma Design Systems stay maintainable at enterprise scale?", options: ["Split foundational primitives from semantic variable collections and govern library versioning", "Duplicate separate unlinked files per page", "Hardcode raw hex values on every component instance", "Disallow component properties"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Maintaining parity between Figma component props and coded React props eliminates ambiguity during implementation.", correctAnswer: "True" }
+    ]
+  },
+  "analytics": {
+    Beginner: [
+      { type: "single_choice", marks: 5, text: "What differentiates a leading behavioral KPI from a vanity metric in product analytics?", options: ["Leading KPIs reflect meaningful user activation/retention aligned with business decisions", "Vanity metrics ignore context while inflating raw pageview counts", "Leading KPIs exclude cohort behavior", "Vanity metrics replace conversion funnels"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: A clean event tracking taxonomy ensures consistent naming and properties across dashboards.", correctAnswer: "True" }
+    ],
+    Intermediate: [
+      { type: "multiple_choice", marks: 5, text: "Which analytics dimensions help diagnose onboarding drop-off accurately? (Select all that apply)", options: ["Step-by-step funnel conversion rates", "Time-to-first-value segmented by user cohort", "Error/abandonment event correlation", "Reporting unsegmented lifetime totals only"], correctIndices: [0, 1, 2] },
+      { type: "single_choice", marks: 5, text: "Why should cohort retention analysis accompany aggregate DAU/MAU reporting?", options: ["Aggregate growth can mask rising churn among newly onboarded cohorts", "Cohorts eliminate the need for clean schemas", "DAU/MAU requires disabling timestamps", "Cohorts only track offline spreadsheets"], correctIndex: 0 }
+    ],
+    Advanced: [
+      { type: "single_choice", marks: 5, text: "When designing A/B telemetry experiments for low-traffic enterprise features, what analytical guard prevents false conclusions?", options: ["Pre-compute minimum detectable effect & sample power and monitor guardrail metrics before calling winners", "Stop the test as soon as p < 0.05 on day one", "Mix pre-experiment biased cohorts", "Ignore statistical significance completely"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Instrumenting data quality checks against schema drift protects downstream executive KPI dashboards.", correctAnswer: "True" }
+    ]
+  },
+  "java kotlin": {
+    Beginner: [
+      { type: "single_choice", marks: 5, text: "How does Kotlin help eliminate common NullPointerException defects compared to legacy Java code?", options: ["Through explicit nullable (?) vs non-nullable types enforced by the compiler", "By converting every exception into empty logs", "By disabling type inference", "By removing interfaces"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Kotlin data classes automatically generate equals(), hashCode(), toString(), and copy() methods.", correctAnswer: "True" }
+    ],
+    Intermediate: [
+      { type: "multiple_choice", marks: 5, text: "Which Kotlin features produce concise, maintainable JVM backend services? (Select all that apply)", options: ["Sealed classes/interfaces for bounded domain states", "Structured concurrency with Coroutines", "Immutability via val and read-only collection interfaces", "Excessive !! non-null assertions everywhere"], correctIndices: [0, 1, 2] },
+      { type: "single_choice", marks: 5, text: "What does structured concurrency ensure when a parent Kotlin coroutine scope is cancelled?", options: ["All child coroutines are cooperatively cancelled and cleaned up without leaking work", "Child coroutines continue running indefinitely as zombies", "The JVM exits immediately with sigkill", "All threads become blocking"], correctIndex: 0 }
+    ],
+    Advanced: [
+      { type: "single_choice", marks: 5, text: "Why should blocking JDBC or I/O calls inside Kotlin coroutines be dispatched on Dispatchers.IO rather than Default/Main?", options: ["Dispatchers.IO expands for blocking wait without starving CPU-bound dispatcher threads", "Dispatchers.IO turns SQL into NoSQL automatically", "Dispatchers.IO disables garbage collection", "Dispatchers.Main executes database transactions faster"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Value classes (inline classes) in Kotlin allow stronger domain type safety with minimal runtime allocation overhead.", correctAnswer: "True" }
+    ]
+  },
+  "postgresql": {
+    Beginner: [
+      { type: "single_choice", marks: 5, text: "Which PostgreSQL constraint ensures values in a child table reference an existing primary/unique row in a parent table?", options: ["FOREIGN KEY constraint", "CHECK NULL constraint", "VIEW ALIAS", "VACUUM FULL"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: PostgreSQL supports ACID-compliant transactions with BEGIN, COMMIT, and ROLLBACK.", correctAnswer: "True" }
+    ],
+    Intermediate: [
+      { type: "multiple_choice", marks: 5, text: "Which PostgreSQL tools help diagnose and optimize query latency? (Select all that apply)", options: ["EXPLAIN (ANALYZE, BUFFERS)", "Partial & composite indexes tailored to predicates", "pg_stat_statements top-query tracking", "Disabling autovacuum permanently on high-churn tables"], correctIndices: [0, 1, 2] },
+      { type: "single_choice", marks: 5, text: "Which PostgreSQL index type is best suited for containment queries (@>) inside JSONB columns?", options: ["GIN (Generalized Inverted Index)", "Unindexed sequential table scan", "Single-column HASH on timestamp", "Disabled toast table"], correctIndex: 0 }
+    ],
+    Advanced: [
+      { type: "single_choice", marks: 5, text: "Why does PostgreSQL MVCC (Multi-Version Concurrency Control) require healthy autovacuum tuning on write-heavy tables?", options: ["To reclaim dead tuples, prevent table/index bloat, and avoid transaction ID wraparound", "To convert relational tables into CSV files", "To disable concurrent readers during writes", "To remove WAL recovery guarantees"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Using connection pooling (e.g., PgBouncer) limits backend memory overhead and lock contention under high concurrency.", correctAnswer: "True" }
+    ]
+  },
+  "architecture": {
+    Beginner: [
+      { type: "single_choice", marks: 5, text: "Why are API gateways and clear service boundaries used in modern software architecture?", options: ["To centralize authentication, rate limiting, and decouple domain responsibilities", "To duplicate business validation inconsistently in every UI component", "To force tight database coupling across unrelated teams", "To remove logging"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Separating stateless compute from managed persistent state simplifies horizontal scaling.", correctAnswer: "True" }
+    ],
+    Intermediate: [
+      { type: "multiple_choice", marks: 5, text: "Which reliability patterns prevent cascading failures across distributed services? (Select all that apply)", options: ["Bounded timeouts and jittered retries", "Circuit breakers & bulkheads", "Idempotency keys on mutating endpoints", "Unbounded synchronous fan-out chains without timeouts"], correctIndices: [0, 1, 2] },
+      { type: "single_choice", marks: 5, text: "How does multi-tenant architecture maintain strict tenant data isolation?", options: ["Enforce tenant context verification at auth middleware and row/schema isolation layers", "Trust client-supplied tenantId strings without token claims", "Share mutable global caches without tenant prefixes", "Bypass authorization checks for batch endpoints"], correctIndex: 0 }
+    ],
+    Advanced: [
+      { type: "single_choice", marks: 5, text: "When should asynchronous event-driven workflows (Outbox + Queue) be chosen over synchronous distributed two-phase commits?", options: ["When decoupling cross-service side effects while guaranteeing reliable eventual consistency", "When immediate UI button hover states need Kafka topics", "When avoiding observability tracing", "When single-table atomic updates suffice"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Architectural Decision Records (ADRs) capture trade-offs and constraints so teams understand why decisions were made.", correctAnswer: "True" }
+    ]
+  },
+  "system architecture": {
+    Beginner: [
+      { type: "single_choice", marks: 5, text: "What role does caching (e.g., Redis / CDN) play in high-read System Architecture?", options: ["Reduces latency and database load for frequently accessed, relatively stable data", "Replaces durable ACID primary storage for financial ledgers", "Eliminates authentication checks", "Increases payload serialization size"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Designing explicit failure modes and graceful degradation improves overall system availability.", correctAnswer: "True" }
+    ],
+    Intermediate: [
+      { type: "single_choice", marks: 5, text: "In event-driven architectures, what problem does the Transactional Outbox pattern solve?", options: ["Eliminates dual-write inconsistency between database commits and message broker publishes", "Replaces all HTTP endpoints with FTP", "Removes database foreign keys", "Disables consumer retries"], correctIndex: 0 },
+      { type: "multiple_choice", marks: 5, text: "Which attributes are core SLIs/SLOs when designing scalable platforms? (Select all that apply)", options: ["Tail latency (p95 / p99)", "Error rate / availability ratio", "Throughput & saturation headroom", "Count of unreviewed commits"], correctIndices: [0, 1, 2] }
+    ],
+    Advanced: [
+      { type: "single_choice", marks: 5, text: "How do idempotent consumers paired with dead-letter queues (DLQs) protect event-bus reliability?", options: ["Safe at-least-once retries without duplicate side effects plus isolated inspection of poison messages", "Immediate silent message deletion on first transient error", "Blocking the entire partition forever on invalid payloads", "Disabling schema versioning"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Backpressure controls and load shedding protect downstream databases from collapse during traffic spikes.", correctAnswer: "True" }
+    ]
+  },
+  "leadership": {
+    Beginner: [
+      { type: "single_choice", marks: 5, text: "What builds psychological safety and accountability within high-performing teams?", options: ["Clear expectations, open feedback loops, and blameless post-incident learning", "Public criticism without coaching", "Hoarding decision context from team members", "Changing priorities daily without rationale"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Regular 1:1 coaching conversations help align individual growth goals with team outcomes.", correctAnswer: "True" }
+    ],
+    Intermediate: [
+      { type: "multiple_choice", marks: 5, text: "Which behaviors characterize effective Leadership during cross-team conflict? (Select all that apply)", options: ["Facilitating objective alignment around shared user/business goals", "Listening to underlying constraints before mediating trade-offs", "Documenting clear ownership and next steps", "Avoiding difficult conversations indefinitely"], correctIndices: [0, 1, 2] },
+      { type: "single_choice", marks: 5, text: "How should a leader delegate effectively without micromanaging?", options: ["Define clear outcomes, guardrails, and check-in cadences while granting execution ownership", "Dictate every single minor implementation line", "Delegate without sharing context or authority", "Take back ownership silently without feedback"], correctIndex: 0 }
+    ],
+    Advanced: [
+      { type: "single_choice", marks: 5, text: "How do senior leaders scale organizational capability beyond their own direct bandwidth?", options: ["Develop future leaders through sponsorship, clear decision frameworks, and crisp empowerment", "Act as the sole bottleneck approving routine operational tickets", "Bypass managers to reassign tasks ad-hoc", "Measure success strictly by hours spent in meetings"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Transparent communication of 'why' behind strategic shifts strengthens team trust and execution alignment.", correctAnswer: "True" }
+    ]
+  },
+  "engineering management": {
+    Beginner: [
+      { type: "single_choice", marks: 5, text: "What is a core responsibility of Engineering Management across project delivery?", options: ["Balancing technical quality, sustainable delivery cadence, and engineer growth", "Eliminating code reviews to merge faster", "Ignoring production incident postmortems", "Writing vague unmeasurable goals"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Tracking operational health (deployment frequency, change failure rate, MTTR) guides sustainable engineering improvements.", correctAnswer: "True" }
+    ],
+    Intermediate: [
+      { type: "multiple_choice", marks: 5, text: "Which practices reduce delivery risk on technical roadmaps? (Select all that apply)", options: ["Allocating explicit capacity for tech debt and reliability", "Clear RFC/design review checkpoints before large builds", "Cross-training to prevent single-person knowledge silos", "Overcommitting 100% of sprint capacity with zero buffer"], correctIndices: [0, 1, 2] },
+      { type: "single_choice", marks: 5, text: "How should Engineering Managers partner with Product during scope pressure?", options: ["Present clear engineering trade-offs (scope vs quality vs timeline) with phased delivery options", "Cut automated tests silently to hit an arbitrary date", "Approve unplanned work without adjusting commitments", "Defer all visibility until release failure"], correctIndex: 0 }
+    ],
+    Advanced: [
+      { type: "single_choice", marks: 5, text: "How do multi-team Engineering Managers align architecture standards without creating rigid bureaucracy?", options: ["Establish paved roads, clear RFC governance, and autonomous team ownership boundaries", "Require centralized committee approval for every minor pull request", "Forbid shared platform abstractions", "Measure engineers solely by lines of code written"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Constructive career progression rubrics ensure fair, transparent calibration across engineering levels.", correctAnswer: "True" }
+    ]
+  },
+  "strategy": {
+    Beginner: [
+      { type: "single_choice", marks: 5, text: "What distinguishes organizational Strategy from a simple task to-do list?", options: ["Coherent choices about where to focus capability, differentiate, and say no to misaligned initiatives", "Listing every possible feature request simultaneously", "Copying competitors without customer validation", "Ignoring resource constraints"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Strategic objectives should translate into measurable leading indicators across departments.", correctAnswer: "True" }
+    ],
+    Intermediate: [
+      { type: "multiple_choice", marks: 5, text: "Which inputs strengthen enterprise Strategy planning? (Select all that apply)", options: ["Validated customer retention & market signals", "Realistic capability and budget constraints", "Explicit trade-offs and risk assumptions", "Ignoring competitive shifts and unit economics"], correctIndices: [0, 1, 2] },
+      { type: "single_choice", marks: 5, text: "Why must quarterly execution reviews track assumptions alongside outcomes?", options: ["To adapt initiatives rapidly when underlying market or delivery assumptions change", "To hide missed milestones", "To eliminate accountability", "To avoid cross-functional feedback"], correctIndex: 0 }
+    ],
+    Advanced: [
+      { type: "single_choice", marks: 5, text: "How should portfolio investments be balanced across core optimization and long-term capability bets?", options: ["Maintain explicit horizon allocation tied to measurable milestones and kill/pivot criteria", "Fund every pilot indefinitely regardless of traction", "Starve core reliability completely", "Avoid measurable investment hypotheses"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Strategic clarity requires explicitly naming what an organization will NOT prioritize.", correctAnswer: "True" }
+    ]
+  },
+  "executive leadership": {
+    Beginner: [
+      { type: "single_choice", marks: 5, text: "What is central to effective Executive Leadership governance?", options: ["Setting clear multi-department vision, capital allocation priorities, and risk accountability", "Micromanaging individual daily tickets across every team", "Avoiding measurable organizational OKRs", "Siloing departments against one another"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Consistent executive sponsorship is critical when driving enterprise-wide compliance or transformation programs.", correctAnswer: "True" }
+    ],
+    Intermediate: [
+      { type: "multiple_choice", marks: 5, text: "Which governance mechanisms strengthen Executive Leadership decision-making? (Select all that apply)", options: ["Outcome-based OKRs linked to customer & financial health", "Clear escalation paths & compliance oversight", "Transparent cross-department alignment cadences", "Conflicting undocumented mandates"], correctIndices: [0, 1, 2] },
+      { type: "single_choice", marks: 5, text: "How do executives maintain culture and execution speed as an organization scales?", options: ["Codify decision principles, empower accountable directors, and inspect key health metrics", "Centralize every small approval at the top", "Replace metrics with anecdote-only reviews", "Duplicate overlapping leadership mandates"], correctIndex: 0 }
+    ],
+    Advanced: [
+      { type: "single_choice", marks: 5, text: "When guiding an enterprise through major market or regulatory change, how does Executive Leadership balance speed and governance?", options: ["Establish clear risk boundaries, empowered cross-functional owners, and fast empirical feedback loops", "Freeze all product delivery until certainty is 100%", "Bypass legal and security reviews entirely", "Communicate strategy solely after completion"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Holding leaders accountable for both results and cross-team collaboration prevents destructive internal silos.", correctAnswer: "True" }
+    ]
+  },
+  "client portal operations": {
+    Beginner: [
+      { type: "single_choice", marks: 5, text: "What is the primary goal of standardized Client Portal Operations in CollabCRM?", options: ["Ensuring accurate candidate vetting, timely status visibility, and secure role-based client access", "Sharing unverified candidate PII openly without permissions", "Skipping recruiter screening documentation", "Disabling audit timestamps"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Verifying portal user permissions and NDA/compliance checklists protects client confidentiality.", correctAnswer: "True" }
+    ],
+    Intermediate: [
+      { type: "multiple_choice", marks: 5, text: "Which checks belong in structured Client Portal Operations workflows? (Select all that apply)", options: ["Validating scoped client portal access before sharing profiles", "Tracking submission-to-interview SLA turnaround times", "Maintaining clean candidate stage statuses & notes", "Granting admin permissions to external client viewers"], correctIndices: [0, 1, 2] },
+      { type: "single_choice", marks: 5, text: "What should an operator do if a client reports missing candidate profile visibility on the portal?", options: ["Verify portal role mapping, stage publication state, and client account permissions immediately", "Email raw internal HR spreadsheets publicly", "Delete the candidate record", "Disable portal authentication checks"], correctIndex: 0 }
+    ],
+    Advanced: [
+      { type: "single_choice", marks: 5, text: "How can Client Portal Operations scale multi-client workflows without SLA breaches or access leaks?", options: ["Standardize role templates, automated stage-gate checks, and periodic portal permission audits", "Share one generic client login across accounts", "Track client requests manually outside CRM audit trails", "Disable SLA escalation notifications"], correctIndex: 0 },
+      { type: "true_false", marks: 5, text: "True or False: Periodic access reviews and SLA bottleneck telemetry sustain high client trust in portal operations.", correctAnswer: "True" }
+    ]
+  }
+};
+SKILL_QUESTION_BANK["api security"] = SKILL_QUESTION_BANK["api security & oauth2"];
+SKILL_QUESTION_BANK["gdpr compliance"] = SKILL_QUESTION_BANK["gdpr & data privacy"];
+
+function buildSkillBasedQuestions(skillObj, skillLevel, startNumber){
+  let skName = String(skillObj?.name || skillObj?.id || "Skill").trim();
+  let skKey = skName.toLowerCase();
+  let skId = String(skillObj?.id || ("sk-" + skKey.replace(/[^a-z0-9]+/g,"-")));
+  let safePrefix = "skq-" + skId.replace(/[^a-zA-Z0-9_-]/g,"") + "-" + Date.now().toString(36).slice(-4);
+  let levelName = ["Beginner","Intermediate","Advanced"].includes(skillLevel) ? skillLevel : "Intermediate";
+  let bankEntry = SKILL_QUESTION_BANK[skKey];
+  let templates = bankEntry && (bankEntry[levelName] || bankEntry.Intermediate || bankEntry.Beginner);
+  if(!templates){
+    let descHint = String(skillObj?.description || "").trim();
+    let contextLine = descHint ? (" (" + descHint.replace(/\.$/,"") + ")") : "";
+    let focusLabel = levelName === "Beginner" ? "foundational practice" : levelName === "Advanced" ? "enterprise optimization and risk governance" : "applied workflow execution";
+    templates = [
+      {
+        type: "single_choice",
+        marks: 5,
+        text: "[" + skName + " • " + levelName + "] Which approach reflects recommended " + focusLabel + " for " + skName + contextLine + "?",
+        options: [
+          "Follow documented " + skName + " standards, validate quality gates, and maintain traceable records",
+          "Bypass verification checkpoints and skip stakeholder review",
+          "Apply ad-hoc unreviewed changes directly without standards",
+          "Ignore documented " + skName + " guidelines completely"
+        ],
+        correctIndex: 0
+      },
+      {
+        type: "true_false",
+        marks: 5,
+        text: "[" + skName + " • " + levelName + "] True or False: Applying structured verification and best practices in " + skName + " improves reliability and team outcomes.",
+        correctAnswer: "True"
+      }
+    ];
+  }
+  return templates.map((tpl, idx)=>{
+    let qId = safePrefix + "-" + (idx + 1);
+    let q = {
+      id: qId,
+      number: (startNumber || 1) + idx,
+      text: tpl.text,
+      type: tpl.type,
+      marks: tpl.marks || 5,
+      mandatory: true,
+      _autoSkillId: skId,
+      _autoSkillName: skName,
+      _autoSkillLevel: levelName
+    };
+    if(tpl.type === "single_choice" || tpl.type === "dropdown"){
+      let opts = (tpl.options || []).map((tText, oIdx)=>({id: qId + "-opt-" + (oIdx+1), text: tText}));
+      q.options = opts;
+      q.correctAnswer = opts[tpl.correctIndex || 0]?.id || opts[0]?.id || "";
+    } else if(tpl.type === "multiple_choice"){
+      let opts = (tpl.options || []).map((tText, oIdx)=>({id: qId + "-mopt-" + (oIdx+1), text: tText}));
+      q.options = opts;
+      q.correctAnswers = (tpl.correctIndices || [0]).map(ci=>opts[ci]?.id).filter(Boolean);
+    } else if(tpl.type === "true_false"){
+      q.correctAnswer = tpl.correctAnswer || "True";
+    } else if(tpl.type === "short_text"){
+      q.acceptedAnswers = Array.isArray(tpl.acceptedAnswers) ? [...tpl.acceptedAnswers] : [skName];
+    }
+    return q;
+  });
+}
+
 function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,skills:skillMasterList,skillLevels:skillLevelList,onSaveSkill,canManageSkills}){
   let activeCats=(0,l.useMemo)(()=>(Array.isArray(catList)&&catList.length>0?catList:DEFAULT_CATEGORIES_SEED).filter(cat=>cat.active!==!1),[catList]);
   let allSkillsMaster=(0,l.useMemo)(()=>Array.isArray(skillMasterList)&&skillMasterList.length>0?skillMasterList:DEFAULT_SKILLS_SEED,[skillMasterList]);
@@ -815,6 +1219,75 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
   let[quickSkillErr, setQuickSkillErr] = (0,l.useState)("");
   let[quickSkillBusy, setQuickSkillBusy] = (0,l.useState)(false);
 
+  let initialSkillSyncSnap = n ? JSON.stringify({on: Boolean(n.addSkillToProfile), ids: Array.isArray(n.selectedSkillIds) ? Array.from(new Set(n.selectedSkillIds)) : [], lvl: n.skillLevel || ""}) : null;
+  let prevSkillSyncRef = (0,l.useRef)(initialSkillSyncSnap);
+  let autoTotalMarksRef = (0,l.useRef)(initialAssess ? (initialAssess.totalMarks ?? "") : "");
+
+  let selectedSkillNames = (selectedSkillIds || []).map(sid => {
+    let sk = allSkillsMaster.find(m => m.id === sid);
+    return sk ? sk.name : sid;
+  });
+
+  let syncQuestionsFromSkills = (skillIdsList, isEnabled, lvlName, opts = {}) => {
+    let forceReplace = Boolean(opts.force);
+    let effLevel = lvlName || "Intermediate";
+    let manualQs = (questions || []).filter(q => !q._autoSkillId);
+    if(!isEnabled || !Array.isArray(skillIdsList) || skillIdsList.length === 0){
+      if(forceReplace || (questions || []).some(q => Boolean(q._autoSkillId))){
+        let renum = manualQs.map((q, idx) => ({...q, number: idx + 1}));
+        let nextSum = renum.reduce((sum, q) => sum + (Number(q.marks) || 0), 0);
+        setQuestions(renum);
+        if(assessTotalMarks === "" || Number(assessTotalMarks) === Number(autoTotalMarksRef.current || 0)){
+          let nextVal = nextSum > 0 ? nextSum : "";
+          setAssessTotalMarks(nextVal);
+          autoTotalMarksRef.current = nextVal;
+        }
+      }
+      return;
+    }
+    let uniqueIds = Array.from(new Set(skillIdsList.filter(Boolean)));
+    let existingAutoBySkill = {};
+    if(!forceReplace){
+      (questions || []).forEach(q => {
+        if(q._autoSkillId){
+          if(!existingAutoBySkill[q._autoSkillId]) existingAutoBySkill[q._autoSkillId] = [];
+          existingAutoBySkill[q._autoSkillId].push(q);
+        }
+      });
+    }
+    let rebuiltAutoQs = [];
+    uniqueIds.forEach(sid => {
+      let existingForSkill = existingAutoBySkill[sid];
+      if(!forceReplace && existingForSkill && existingForSkill.length > 0 && existingForSkill[0]._autoSkillLevel === effLevel){
+        rebuiltAutoQs.push(...existingForSkill);
+      } else {
+        let skObj = allSkillsMaster.find(m => m.id === sid) || {id: sid, name: sid};
+        rebuiltAutoQs.push(...buildSkillBasedQuestions(skObj, effLevel, 1));
+      }
+    });
+    let combined = [...manualQs, ...rebuiltAutoQs].map((q, idx) => ({...q, number: idx + 1}));
+    let nextSum = combined.reduce((sum, q) => sum + (Number(q.marks) || 0), 0);
+    setQuestions(combined);
+    if(rebuiltAutoQs.length > 0){
+      if(!String(assessmentTitle || "").trim()) setAssessmentTitle("Final Training Assessment");
+      if(!String(assessmentDesc || "").trim()) setAssessmentDesc("Complete the following questions to evaluate proficiency in the selected training skills.");
+      if(assessPassScore === "" || !assessPassScore){ setAssessPassScore(80); _(80); }
+      if(assessMaxAttempts === "" || !assessMaxAttempts){ setAssessMaxAttempts(3); y(3); }
+    }
+    if(assessTotalMarks === "" || Number(assessTotalMarks) === Number(autoTotalMarksRef.current || 0)){
+      let nextVal = nextSum > 0 ? nextSum : "";
+      setAssessTotalMarks(nextVal);
+      autoTotalMarksRef.current = nextVal;
+    }
+  };
+
+  (0,l.useEffect)(() => {
+    let snap = JSON.stringify({on: Boolean(addSkillToProfile), ids: Array.isArray(selectedSkillIds) ? Array.from(new Set(selectedSkillIds)) : [], lvl: awardSkillLevel || ""});
+    if(prevSkillSyncRef.current === snap) return;
+    prevSkillSyncRef.current = snap;
+    syncQuestionsFromSkills(selectedSkillIds, addSkillToProfile, awardSkillLevel);
+  }, [addSkillToProfile, selectedSkillIds, awardSkillLevel, allSkillsMaster]);
+
   let totalQuestions = questions.length;
   let questionsMarksSum = questions.reduce((sum, q) => sum + (Number(q.marks) || 0), 0);
   let totalAssessmentMarks = (assessTotalMarks !== "" && Number(assessTotalMarks) > 0) ? Number(assessTotalMarks) : 0;
@@ -837,6 +1310,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
     setAssessPassScore(80);
     setAssessMaxAttempts(3);
     setAssessTotalMarks(10);
+    autoTotalMarksRef.current = 10;
     _(80);
     y(3);
     setDuePeriod(14);
@@ -921,6 +1395,9 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
     if(!target) return;
     let duplicate = JSON.parse(JSON.stringify(target));
     duplicate.id = "q-" + Date.now();
+    delete duplicate._autoSkillId;
+    delete duplicate._autoSkillName;
+    delete duplicate._autoSkillLevel;
     let idx = questions.findIndex(q=>q.id===qId);
     let copy = [...questions];
     copy.splice(idx+1, 0, duplicate);
@@ -1286,11 +1763,137 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
       ]},res.id || idx))})
     ]}),
 
-    // 3. Assessment & Questions (Redesigned per Image 2 & Image 4)
+    // 3. Training Recognition (Placed before Assessment so selected skills automatically drive Assessment & Questions)
+    (0,P.jsxs)("div",{className:"bg-white border border-purple-200 rounded-xl p-6 shadow-sm space-y-5",style:{borderLeft:"4px solid #7c3aed"},children:[
+      (0,P.jsxs)("div",{className:"flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-purple-200 pb-3",children:[
+        (0,P.jsxs)("div",{className:"space-y-0.5",children:[
+          (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
+            (0,P.jsx)("h2",{className:"text-sm font-bold text-slate-900",children:"3. Training Recognition"}),
+            (0,P.jsx)("span",{className:"px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200",children:"Certificate & Skills"})
+          ]}),
+          (0,P.jsx)("p",{className:"text-xs text-slate-500",children:"Choose how employees are recognised upon verified completion of this Training."})
+        ]}),
+        (0,P.jsx)("div",{className:"text-[11px] font-semibold text-purple-700 bg-purple-50 border border-purple-200 px-3 py-1 rounded-full self-start sm:self-auto",children:(certificateGeneration && addSkillToProfile) ? "Certificate + Skills" : certificateGeneration ? "Certificate Only" : addSkillToProfile ? "Skill Assignment Only" : "Both Toggles OFF (Default)"})
+      ]}),
+
+      (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-2 gap-4",children:[
+        // A. Certificate Generation Toggle (Default OFF)
+        (0,P.jsxs)("div",{className:"rounded-xl border p-4 flex items-start justify-between gap-4 transition-colors " + (certificateGeneration ? "border-purple-200 bg-purple-50/60" : "border-slate-200 bg-slate-50/70"),children:[
+          (0,P.jsxs)("div",{className:"space-y-1",children:[
+            (0,P.jsxs)("div",{className:"flex items-center gap-1.5 text-xs font-bold text-slate-900",children:[
+              (0,P.jsx)("span",{children:"Certificate Generation"}),
+              (0,P.jsx)(InfoTip,{text:"When ON, an official verified Certificate is issued upon completion. When OFF, no certificate is generated."})
+            ]}),
+            (0,P.jsx)("p",{className:"text-[11px] text-slate-500 leading-relaxed",children:certificateGeneration ? "ON — Employees will receive a verified certificate upon completion." : "OFF — No certificate will be generated upon completion."})
+          ]}),
+          (0,P.jsx)("button",{type:"button",role:"switch","aria-checked":certificateGeneration,"aria-label":"Certificate Generation",onClick:()=>setCertificateGeneration(!certificateGeneration),style:{width:"40px",height:"22px",padding:"2px",border:"none",backgroundColor:certificateGeneration?"#7c3aed":"#cbd5e1"},className:"relative inline-flex shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 focus:outline-none mt-0.5",children:(0,P.jsx)("span",{style:{width:"18px",height:"18px",transform:certificateGeneration?"translateX(18px)":"translateX(0px)"},className:"pointer-events-none inline-block rounded-full bg-white shadow transition-transform duration-200"})})
+        ]}),
+
+        // B. Add Skill to Employee Profile Toggle (Default OFF)
+        (0,P.jsxs)("div",{className:"rounded-xl border p-4 flex items-start justify-between gap-4 transition-colors " + (addSkillToProfile ? "border-purple-200 bg-purple-50/60" : "border-slate-200 bg-slate-50/70"),children:[
+          (0,P.jsxs)("div",{className:"space-y-1",children:[
+            (0,P.jsxs)("div",{className:"flex items-center gap-1.5 text-xs font-bold text-slate-900",children:[
+              (0,P.jsx)("span",{children:"Add Skill to Employee Profile"}),
+              (0,P.jsx)(InfoTip,{text:"When ON, selected skills at the configured Skill Level are automatically added/upgraded on the Employee Profile after completion."})
+            ]}),
+            (0,P.jsx)("p",{className:"text-[11px] text-slate-500 leading-relaxed",children:addSkillToProfile ? "ON — Selected skills will be awarded upon verified Training completion." : "OFF — No skills will be added to employee profiles."})
+          ]}),
+          (0,P.jsx)("button",{type:"button",role:"switch","aria-checked":addSkillToProfile,"aria-label":"Add Skill to Employee Profile",onClick:()=>setAddSkillToProfile(!addSkillToProfile),style:{width:"40px",height:"22px",padding:"2px",border:"none",backgroundColor:addSkillToProfile?"#7c3aed":"#cbd5e1"},className:"relative inline-flex shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 focus:outline-none mt-0.5",children:(0,P.jsx)("span",{style:{width:"18px",height:"18px",transform:addSkillToProfile?"translateX(18px)":"translateX(0px)"},className:"pointer-events-none inline-block rounded-full bg-white shadow transition-transform duration-200"})})
+        ]})
+      ]}),
+
+      // Skill Configuration Fields (Displayed ONLY when Add Skill to Employee Profile is ON)
+      addSkillToProfile && (0,P.jsxs)("div",{className:"rounded-xl border border-purple-200 p-5 space-y-4 animate-in fade-in",style:{backgroundColor:"#faf5ff"},children:[
+        (0,P.jsxs)("div",{className:"flex flex-wrap items-center justify-between gap-2",children:[
+          (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
+            (0,P.jsx)("span",{className:"text-xs font-bold text-purple-700 uppercase tracking-wider",children:"Skill Configuration"}),
+            (0,P.jsx)("span",{className:"text-[11px] text-purple-600",children:"Loaded live from Config > Skills"})
+          ]}),
+          (canManageSkills !== !1 && onSaveSkill) && (0,P.jsx)("button",{type:"button",onClick:()=>{setQuickSkillErr("");setQuickSkillName("");setQuickSkillDesc("");setShowQuickSkillModal(true);},className:"text-xs font-bold px-3 py-1.5 rounded-lg border border-purple-200 bg-white text-purple-700 hover:bg-purple-50 transition-colors cursor-pointer",children:"+ Create New Skill in Config"})
+        ]}),
+
+        (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-3 gap-4 items-start text-xs",children:[
+          // Select Skills (Multi-select Dropdown showing selected skill names directly inside trigger)
+          (0,P.jsxs)("div",{className:"md:col-span-2 relative space-y-1.5",children:[
+            (0,P.jsxs)("label",{className:"inline-flex items-center gap-1.5 font-semibold text-slate-700",children:[
+              (0,P.jsx)("span",{children:"Select Skills"}),
+              (0,P.jsx)("span",{className:"text-rose-500",children:"*"}),
+              (0,P.jsx)(InfoTip,{text:"Choose one or more active skills from Config > Skills. Duplicate selections are prevented automatically."})
+            ]}),
+            (0,P.jsxs)("button",{type:"button",title:selectedSkillNames.length>0?selectedSkillNames.join(", "):"Select Skills from Config > Skills...",onClick:()=>setSkillDropdownOpen(!skillDropdownOpen),className:"w-full flex items-center justify-between gap-2 bg-white border border-purple-200 rounded-lg px-3 py-2 text-xs text-left focus:outline-none focus:ring-2 focus:ring-purple-500/20",children:[
+              (0,P.jsx)("span",{style:{minWidth:0,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"},className:selectedSkillNames.length>0?"text-slate-900 font-semibold":"text-slate-400",children:selectedSkillNames.length>0 ? selectedSkillNames.join(", ") : "Select Skills from Config > Skills..."}),
+              (0,P.jsx)("span",{style:{flexShrink:0},className:"text-purple-600 font-bold text-[11px]",children:skillDropdownOpen ? "▲" : "▼"})
+            ]}),
+
+            // Selected Skill Chips
+            selectedSkillIds.length > 0 && (0,P.jsx)("div",{className:"flex flex-wrap gap-1.5 pt-1",children:selectedSkillIds.map(sid => {
+              let sk = allSkillsMaster.find(m => m.id === sid) || { id: sid, name: sid };
+              return (0,P.jsxs)("span",{className:"inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-white text-purple-700 border border-purple-200 shadow-2xs",children:[
+                (0,P.jsx)("span",{children:sk.name}),
+                (0,P.jsx)("button",{type:"button",onClick:()=>setSelectedSkillIds(prev => prev.filter(x => x !== sid)),className:"text-purple-400 hover:text-rose-600 font-bold leading-none",title:"Remove skill",children:"×"})
+              ]},sid);
+            })}),
+
+            // Dropdown List
+            skillDropdownOpen && (0,P.jsxs)("div",{className:"mt-1 bg-white border border-purple-200 rounded-xl shadow-lg p-3 space-y-2 z-30",children:[
+              (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
+                (0,P.jsx)("input",{type:"text",value:skillSearch,onChange:ev=>setSkillSearch(ev.target.value),placeholder:"Search configured skills...",className:"flex-1 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-purple-500"}),
+                (0,P.jsx)("button",{type:"button",onClick:()=>setSkillDropdownOpen(false),className:"text-[11px] font-bold text-purple-700 px-2 py-1 hover:bg-purple-50 rounded",children:"Done"})
+              ]}),
+              (0,P.jsx)("div",{className:"max-h-48 overflow-y-auto divide-y divide-slate-100",children:(()=>{
+                let q = skillSearch.trim().toLowerCase();
+                let list = activeSkills.filter(sk => !q || sk.name.toLowerCase().includes(q));
+                if(list.length === 0) return (0,P.jsx)("div",{className:"py-4 text-center text-slate-400 text-xs",children:"No matching active skills found in Config > Skills."});
+                return list.map(sk => {
+                  let checked = selectedSkillIds.includes(sk.id);
+                  return (0,P.jsxs)("label",{className:"flex items-center justify-between gap-3 px-2 py-2 cursor-pointer hover:bg-purple-50/50 rounded transition-colors",children:[
+                    (0,P.jsxs)("div",{className:"flex items-center gap-2.5 shrink-0",children:[
+                      (0,P.jsx)("input",{type:"checkbox",checked:checked,onChange:()=>{
+                        setSelectedSkillIds(prev => prev.includes(sk.id) ? prev.filter(x => x !== sk.id) : Array.from(new Set([...prev, sk.id])));
+                      },className:"w-3.5 h-3.5 text-purple-600 rounded border-slate-300"}),
+                      (0,P.jsx)("span",{className:"font-semibold text-slate-800 whitespace-nowrap",children:sk.name})
+                    ]}),
+                    sk.description && (0,P.jsx)("span",{className:"text-[10px] text-slate-400 truncate max-w-[180px]",children:sk.description})
+                  ]},sk.id);
+                });
+              })()})
+            ]})
+          ]}),
+
+          // Skill Level Dropdown (Reuses Config > Skill Levels)
+          (0,P.jsxs)("div",{className:"space-y-1.5",children:[
+            (0,P.jsxs)("label",{className:"inline-flex items-center gap-1.5 font-semibold text-slate-700",children:[
+              (0,P.jsx)("span",{children:"Skill Level"}),
+              (0,P.jsx)("span",{className:"text-rose-500",children:"*"}),
+              (0,P.jsx)(InfoTip,{text:"Uses existing configured Skill Levels (Beginner, Intermediate, Advanced)."})
+            ]}),
+            (0,P.jsxs)("select",{value:awardSkillLevel,onChange:ev=>setAwardSkillLevel(ev.target.value),className:"w-full bg-white border border-purple-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-purple-500/20",children:[
+              (0,P.jsx)("option",{value:"",children:"Select Skill Level..."}),
+              configuredSkillLevels.map(lv => (0,P.jsx)("option",{value:lv.name,children:lv.name},lv.id || lv.name))
+            ]}),
+            (0,P.jsx)("p",{className:"text-[11px] text-slate-500 leading-snug",children:"Higher level upgrades an existing employee skill; lower level never downgrades it."})
+          ]})
+        ]})
+      ]}),
+
+      // Reviewer Approval Requirement Toggle
+      (0,P.jsxs)("div",{className:"rounded-xl border border-slate-200 bg-slate-50/70 p-3 flex items-center justify-between gap-4",children:[
+        (0,P.jsxs)("div",{className:"space-y-0.5",children:[
+          (0,P.jsxs)("div",{className:"flex items-center gap-1.5 text-xs font-bold text-slate-800",children:[
+            (0,P.jsx)("span",{children:"Require Reviewer / Manager Approval Before Completion"}),
+            (0,P.jsx)(InfoTip,{text:"When ON, Certificates and Skills are withheld even after passing the assessment until an authorized Manager or HR/Admin approves completion."})
+          ]}),
+          (0,P.jsx)("p",{className:"text-[11px] text-slate-500",children:reviewerApprovalRequired ? "Required — Skills and Certificates are awarded only after Reviewer approval." : "Not Required — Recognition triggers automatically when resources and assessment are passed."})
+        ]}),
+        (0,P.jsx)("button",{type:"button",role:"switch","aria-checked":reviewerApprovalRequired,"aria-label":"Require Reviewer Approval",onClick:()=>setReviewerApprovalRequired(!reviewerApprovalRequired),style:{width:"38px",height:"20px",padding:"2px",border:"none",backgroundColor:reviewerApprovalRequired?"#7c3aed":"#cbd5e1"},className:"relative inline-flex shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 focus:outline-none",children:(0,P.jsx)("span",{style:{width:"16px",height:"16px",transform:reviewerApprovalRequired?"translateX(18px)":"translateX(0px)"},className:"pointer-events-none inline-block rounded-full bg-white shadow transition-transform duration-200"})})
+      ]})
+    ]}),
+
+    // 4. Assessment & Questions (Positioned after Skills Selection; auto-syncs questions based on selected skills)
     (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-5",children:[
       (0,P.jsxs)("div",{className:"flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3",children:[
         (0,P.jsxs)("div",{children:[
-          (0,P.jsx)("h2",{className:"text-sm font-bold text-slate-900 uppercase tracking-wide",children:"3. Assessment & Questions"}),
+          (0,P.jsx)("h2",{className:"text-sm font-bold text-slate-900 uppercase tracking-wide",children:"4. Assessment & Questions"}),
           (0,P.jsx)("p",{className:"text-[11px] text-slate-500",children:"Configure test parameters, question builder, scoring criteria, and passing thresholds."})
         ]}),
         (0,P.jsxs)("div",{className:"flex items-center gap-3",children:[
@@ -1338,19 +1941,26 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
             ]}),
             assessTotalMarks !== "" && Number(assessTotalMarks) > 0 && allQuestionsHaveMarks && questionsMarksSum === Number(assessTotalMarks) && (0,P.jsx)("span",{className:"bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-semibold px-2.5 py-0.5 rounded-full",children:"Matched ✓"})
           ]}),
-          (0,P.jsxs)("button",{type:"button",onClick:handleAddQuestion,className:"bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 rounded-lg text-xs font-bold shadow-sm flex items-center gap-1.5 transition-colors self-start sm:self-auto",children:[
-            (0,P.jsx)("span",{children:"+"}),
-            (0,P.jsx)("span",{children:"Add Question"})
+          (0,P.jsxs)("div",{className:"flex items-center gap-2 flex-wrap self-start sm:self-auto",children:[
+            (addSkillToProfile && selectedSkillIds.length > 0) && (0,P.jsxs)("button",{type:"button",onClick:()=>syncQuestionsFromSkills(selectedSkillIds, addSkillToProfile, awardSkillLevel, {force:true}),className:"bg-purple-50 hover:bg-purple-200 text-purple-700 border border-purple-200 px-3 py-1.5 rounded-lg text-xs font-bold shadow-2xs flex items-center gap-1.5 transition-colors cursor-pointer",title:"Regenerate skill-aligned questions from selected skills",children:[
+              (0,P.jsx)("span",{children:"↻"}),
+              (0,P.jsx)("span",{children:"Sync Skill Questions"})
+            ]}),
+            (0,P.jsxs)("button",{type:"button",onClick:handleAddQuestion,className:"bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 rounded-lg text-xs font-bold shadow-sm flex items-center gap-1.5 transition-colors",children:[
+              (0,P.jsx)("span",{children:"+"}),
+              (0,P.jsx)("span",{children:"Add Question"})
+            ]})
           ]})
         ]}),
         hasMarksMismatch && (0,P.jsx)("div",{className:"bg-rose-50 border border-rose-200 text-rose-700 px-3.5 py-2 rounded-lg text-xs font-semibold",children:"Total question marks (" + questionsMarksSum + ") do not match Total Marks (" + Number(assessTotalMarks) + ")."}),
 
-        // Question Cards (Redesigned per Image 2: Clean, proper alignment, full-width inputs)
-        (0,P.jsx)("div",{className:"space-y-4",children:questions.length===0 ? (0,P.jsx)("div",{className:"bg-slate-50 border border-dashed border-slate-300 rounded-xl p-6 text-center text-xs text-slate-500",children:"No questions added yet. Click \"+ Add Question\" or \"⚡ Auto-Fill Demo\" to populate questions."}) : questions.map((q, qIndex)=>(0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4",children:[
+        // Question Cards (Clean, proper alignment, full-width inputs)
+        (0,P.jsx)("div",{className:"space-y-4",children:questions.length===0 ? (0,P.jsx)("div",{className:"bg-slate-50 border border-dashed border-slate-300 rounded-xl p-6 text-center text-xs text-slate-500",children:addSkillToProfile ? "Select skills above to auto-generate skill-based questions, or click \"+ Add Question\"." : "No questions added yet. Select skills above (with Add Skill ON), or click \"+ Add Question\" / \"⚡ Auto-Fill Demo\"."}) : questions.map((q, qIndex)=>(0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4",children:[
           // Question Header Toolbar
           (0,P.jsxs)("div",{className:"flex items-center justify-between flex-wrap gap-2 border-b border-slate-100 pb-3",children:[
-            (0,P.jsxs)("div",{className:"flex items-center gap-2.5",children:[
+            (0,P.jsxs)("div",{className:"flex items-center gap-2.5 flex-wrap",children:[
               (0,P.jsxs)("span",{className:"bg-blue-600 text-white font-bold text-xs px-2.5 py-1 rounded-md shadow-sm",children:["Question ", q.number || (qIndex + 1)]}),
+              q._autoSkillName && (0,P.jsxs)("span",{className:"bg-purple-50 text-purple-700 border border-purple-200 font-semibold text-[11px] px-2.5 py-0.5 rounded-full",children:["Skill: ", q._autoSkillName, q._autoSkillLevel ? (" · " + q._autoSkillLevel) : ""]}),
               (0,P.jsxs)("div",{className:"flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-md px-2 py-0.5 text-xs",children:[
                 (0,P.jsxs)("span",{className:"inline-flex items-center gap-1 text-slate-500 font-medium",children:[(0,P.jsx)("span",{children:"Marks:"}),(0,P.jsx)(InfoTip,{text:"Points awarded for answering this question correctly."})]}),
                 (0,P.jsx)("input",{type:"text",inputMode:"numeric",placeholder:"0",value:q.marks,onChange:e=>handleUpdateQuestion(q.id, "marks", e.target.value.replace(/[^0-9]/g,"")),style:{width:"42px"},className:"text-center bg-white border border-slate-300 rounded font-bold text-slate-800 text-xs py-0.5 focus:outline-none focus:ring-1 focus:ring-blue-500"})
@@ -1483,132 +2093,6 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
         (0,P.jsx)("div",{className:"text-2xl",children:"📋"}),
         (0,P.jsx)("div",{className:"text-xs font-bold text-slate-700",children:"Assessment Disabled"}),
         (0,P.jsx)("div",{className:"text-[11px] text-slate-500",children:"Employees enrolled in this training will complete it upon finishing all learning resources without requiring an assessment."})
-      ]})
-    ]}),
-
-    // Section 4: Training Recognition (Violet/Purple Differentiated Feature Section)
-    (0,P.jsxs)("div",{className:"bg-white border border-purple-200 rounded-xl p-6 shadow-sm space-y-5",style:{borderLeft:"4px solid #7c3aed"},children:[
-      (0,P.jsxs)("div",{className:"flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-purple-200 pb-3",children:[
-        (0,P.jsxs)("div",{className:"space-y-0.5",children:[
-          (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
-            (0,P.jsx)("h2",{className:"text-sm font-bold text-slate-900",children:"4. Training Recognition"}),
-            (0,P.jsx)("span",{className:"px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200",children:"Certificate & Skills"})
-          ]}),
-          (0,P.jsx)("p",{className:"text-xs text-slate-500",children:"Choose how employees are recognised upon verified completion of this Training."})
-        ]}),
-        (0,P.jsx)("div",{className:"text-[11px] font-semibold text-purple-700 bg-purple-50 border border-purple-200 px-3 py-1 rounded-full self-start sm:self-auto",children:(certificateGeneration && addSkillToProfile) ? "Certificate + Skills" : certificateGeneration ? "Certificate Only" : addSkillToProfile ? "Skill Assignment Only" : "Both Toggles OFF (Default)"})
-      ]}),
-
-      (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-2 gap-4",children:[
-        // A. Certificate Generation Toggle (Default OFF)
-        (0,P.jsxs)("div",{className:"rounded-xl border p-4 flex items-start justify-between gap-4 transition-colors " + (certificateGeneration ? "border-purple-200 bg-purple-50/60" : "border-slate-200 bg-slate-50/70"),children:[
-          (0,P.jsxs)("div",{className:"space-y-1",children:[
-            (0,P.jsxs)("div",{className:"flex items-center gap-1.5 text-xs font-bold text-slate-900",children:[
-              (0,P.jsx)("span",{children:"Certificate Generation"}),
-              (0,P.jsx)(InfoTip,{text:"When ON, an official verified Certificate is issued upon completion. When OFF, no certificate is generated."})
-            ]}),
-            (0,P.jsx)("p",{className:"text-[11px] text-slate-500 leading-relaxed",children:certificateGeneration ? "ON — Employees will receive a verified certificate upon completion." : "OFF — No certificate will be generated upon completion."})
-          ]}),
-          (0,P.jsx)("button",{type:"button",role:"switch","aria-checked":certificateGeneration,"aria-label":"Certificate Generation",onClick:()=>setCertificateGeneration(!certificateGeneration),style:{width:"40px",height:"22px",padding:"2px",border:"none",backgroundColor:certificateGeneration?"#7c3aed":"#cbd5e1"},className:"relative inline-flex shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 focus:outline-none mt-0.5",children:(0,P.jsx)("span",{style:{width:"18px",height:"18px",transform:certificateGeneration?"translateX(18px)":"translateX(0px)"},className:"pointer-events-none inline-block rounded-full bg-white shadow transition-transform duration-200"})})
-        ]}),
-
-        // B. Add Skill to Employee Profile Toggle (Default OFF)
-        (0,P.jsxs)("div",{className:"rounded-xl border p-4 flex items-start justify-between gap-4 transition-colors " + (addSkillToProfile ? "border-purple-200 bg-purple-50/60" : "border-slate-200 bg-slate-50/70"),children:[
-          (0,P.jsxs)("div",{className:"space-y-1",children:[
-            (0,P.jsxs)("div",{className:"flex items-center gap-1.5 text-xs font-bold text-slate-900",children:[
-              (0,P.jsx)("span",{children:"Add Skill to Employee Profile"}),
-              (0,P.jsx)(InfoTip,{text:"When ON, selected skills at the configured Skill Level are automatically added/upgraded on the Employee Profile after completion."})
-            ]}),
-            (0,P.jsx)("p",{className:"text-[11px] text-slate-500 leading-relaxed",children:addSkillToProfile ? "ON — Selected skills will be awarded upon verified Training completion." : "OFF — No skills will be added to employee profiles."})
-          ]}),
-          (0,P.jsx)("button",{type:"button",role:"switch","aria-checked":addSkillToProfile,"aria-label":"Add Skill to Employee Profile",onClick:()=>setAddSkillToProfile(!addSkillToProfile),style:{width:"40px",height:"22px",padding:"2px",border:"none",backgroundColor:addSkillToProfile?"#7c3aed":"#cbd5e1"},className:"relative inline-flex shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 focus:outline-none mt-0.5",children:(0,P.jsx)("span",{style:{width:"18px",height:"18px",transform:addSkillToProfile?"translateX(18px)":"translateX(0px)"},className:"pointer-events-none inline-block rounded-full bg-white shadow transition-transform duration-200"})})
-        ]})
-      ]}),
-
-      // Skill Configuration Fields (Displayed ONLY when Add Skill to Employee Profile is ON)
-      addSkillToProfile && (0,P.jsxs)("div",{className:"rounded-xl border border-purple-200 p-5 space-y-4 animate-in fade-in",style:{backgroundColor:"#faf5ff"},children:[
-        (0,P.jsxs)("div",{className:"flex flex-wrap items-center justify-between gap-2",children:[
-          (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
-            (0,P.jsx)("span",{className:"text-xs font-bold text-purple-700 uppercase tracking-wider",children:"Skill Configuration"}),
-            (0,P.jsx)("span",{className:"text-[11px] text-purple-600",children:"Loaded live from Config > Skills"})
-          ]}),
-          (canManageSkills !== !1 && onSaveSkill) && (0,P.jsx)("button",{type:"button",onClick:()=>{setQuickSkillErr("");setQuickSkillName("");setQuickSkillDesc("");setShowQuickSkillModal(true);},className:"text-xs font-bold px-3 py-1.5 rounded-lg border border-purple-200 bg-white text-purple-700 hover:bg-purple-50 transition-colors cursor-pointer",children:"+ Create New Skill in Config"})
-        ]}),
-
-        (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-3 gap-4 items-start text-xs",children:[
-          // Select Skills (Multi-select Dropdown reusing CollabCRM multi-select styling)
-          (0,P.jsxs)("div",{className:"md:col-span-2 relative space-y-1.5",children:[
-            (0,P.jsxs)("label",{className:"inline-flex items-center gap-1.5 font-semibold text-slate-700",children:[
-              (0,P.jsx)("span",{children:"Select Skills"}),
-              (0,P.jsx)("span",{className:"text-rose-500",children:"*"}),
-              (0,P.jsx)(InfoTip,{text:"Choose one or more active skills from Config > Skills. Duplicate selections are prevented automatically."})
-            ]}),
-            (0,P.jsxs)("button",{type:"button",onClick:()=>setSkillDropdownOpen(!skillDropdownOpen),className:"w-full flex items-center justify-between bg-white border border-purple-200 rounded-lg px-3 py-2 text-xs text-left focus:outline-none focus:ring-2 focus:ring-purple-500/20",children:[
-              (0,P.jsx)("span",{className:selectedSkillIds.length>0?"text-slate-900 font-semibold":"text-slate-400",children:selectedSkillIds.length>0 ? (selectedSkillIds.length + " Skill(s) Selected") : "Select Skills from Config > Skills..."}),
-              (0,P.jsx)("span",{className:"text-purple-600 font-bold text-[11px]",children:skillDropdownOpen ? "▲" : "▼"})
-            ]}),
-
-            // Selected Skill Chips
-            selectedSkillIds.length > 0 && (0,P.jsx)("div",{className:"flex flex-wrap gap-1.5 pt-1",children:selectedSkillIds.map(sid => {
-              let sk = allSkillsMaster.find(m => m.id === sid) || { id: sid, name: sid };
-              return (0,P.jsxs)("span",{className:"inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-white text-purple-700 border border-purple-200 shadow-2xs",children:[
-                (0,P.jsx)("span",{children:sk.name}),
-                (0,P.jsx)("button",{type:"button",onClick:()=>setSelectedSkillIds(prev => prev.filter(x => x !== sid)),className:"text-purple-400 hover:text-rose-600 font-bold leading-none",title:"Remove skill",children:"×"})
-              ]},sid);
-            })}),
-
-            // Dropdown List
-            skillDropdownOpen && (0,P.jsxs)("div",{className:"mt-1 bg-white border border-purple-200 rounded-xl shadow-lg p-3 space-y-2 z-30",children:[
-              (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
-                (0,P.jsx)("input",{type:"text",value:skillSearch,onChange:ev=>setSkillSearch(ev.target.value),placeholder:"Search configured skills...",className:"flex-1 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-purple-500"}),
-                (0,P.jsx)("button",{type:"button",onClick:()=>setSkillDropdownOpen(false),className:"text-[11px] font-bold text-purple-700 px-2 py-1 hover:bg-purple-50 rounded",children:"Done"})
-              ]}),
-              (0,P.jsx)("div",{className:"max-h-48 overflow-y-auto divide-y divide-slate-100",children:(()=>{
-                let q = skillSearch.trim().toLowerCase();
-                let list = activeSkills.filter(sk => !q || sk.name.toLowerCase().includes(q));
-                if(list.length === 0) return (0,P.jsx)("div",{className:"py-4 text-center text-slate-400 text-xs",children:"No matching active skills found in Config > Skills."});
-                return list.map(sk => {
-                  let checked = selectedSkillIds.includes(sk.id);
-                  return (0,P.jsxs)("label",{className:"flex items-center justify-between gap-3 px-2 py-2 cursor-pointer hover:bg-purple-50/50 rounded transition-colors",children:[
-                    (0,P.jsxs)("div",{className:"flex items-center gap-2.5 shrink-0",children:[
-                      (0,P.jsx)("input",{type:"checkbox",checked:checked,onChange:()=>{
-                        setSelectedSkillIds(prev => prev.includes(sk.id) ? prev.filter(x => x !== sk.id) : Array.from(new Set([...prev, sk.id])));
-                      },className:"w-3.5 h-3.5 text-purple-600 rounded border-slate-300"}),
-                      (0,P.jsx)("span",{className:"font-semibold text-slate-800 whitespace-nowrap",children:sk.name})
-                    ]}),
-                    sk.description && (0,P.jsx)("span",{className:"text-[10px] text-slate-400 truncate max-w-[180px]",children:sk.description})
-                  ]},sk.id);
-                });
-              })()})
-            ]})
-          ]}),
-
-          // Skill Level Dropdown (Reuses Config > Skill Levels)
-          (0,P.jsxs)("div",{className:"space-y-1.5",children:[
-            (0,P.jsxs)("label",{className:"inline-flex items-center gap-1.5 font-semibold text-slate-700",children:[
-              (0,P.jsx)("span",{children:"Skill Level"}),
-              (0,P.jsx)("span",{className:"text-rose-500",children:"*"}),
-              (0,P.jsx)(InfoTip,{text:"Uses existing configured Skill Levels (Beginner, Intermediate, Advanced)."})
-            ]}),
-            (0,P.jsxs)("select",{value:awardSkillLevel,onChange:ev=>setAwardSkillLevel(ev.target.value),className:"w-full bg-white border border-purple-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-purple-500/20",children:[
-              (0,P.jsx)("option",{value:"",children:"Select Skill Level..."}),
-              configuredSkillLevels.map(lv => (0,P.jsx)("option",{value:lv.name,children:lv.name},lv.id || lv.name))
-            ]}),
-            (0,P.jsx)("p",{className:"text-[11px] text-slate-500 leading-snug",children:"Higher level upgrades an existing employee skill; lower level never downgrades it."})
-          ]})
-        ]})
-      ]}),
-
-      // Reviewer Approval Requirement Toggle
-      (0,P.jsxs)("div",{className:"rounded-xl border border-slate-200 bg-slate-50/70 p-3 flex items-center justify-between gap-4",children:[
-        (0,P.jsxs)("div",{className:"space-y-0.5",children:[
-          (0,P.jsxs)("div",{className:"flex items-center gap-1.5 text-xs font-bold text-slate-800",children:[
-            (0,P.jsx)("span",{children:"Require Reviewer / Manager Approval Before Completion"}),
-            (0,P.jsx)(InfoTip,{text:"When ON, Certificates and Skills are withheld even after passing the assessment until an authorized Manager or HR/Admin approves completion."})
-          ]}),
-          (0,P.jsx)("p",{className:"text-[11px] text-slate-500",children:reviewerApprovalRequired ? "Required — Skills and Certificates are awarded only after Reviewer approval." : "Not Required — Recognition triggers automatically when resources and assessment are passed."})
-        ]}),
-        (0,P.jsx)("button",{type:"button",role:"switch","aria-checked":reviewerApprovalRequired,"aria-label":"Require Reviewer Approval",onClick:()=>setReviewerApprovalRequired(!reviewerApprovalRequired),style:{width:"38px",height:"20px",padding:"2px",border:"none",backgroundColor:reviewerApprovalRequired?"#7c3aed":"#cbd5e1"},className:"relative inline-flex shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 focus:outline-none",children:(0,P.jsx)("span",{style:{width:"16px",height:"16px",transform:reviewerApprovalRequired?"translateX(18px)":"translateX(0px)"},className:"pointer-events-none inline-block rounded-full bg-white shadow transition-transform duration-200"})})
       ]})
     ]}),
 

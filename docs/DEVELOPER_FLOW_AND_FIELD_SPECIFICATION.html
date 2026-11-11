@@ -299,7 +299,7 @@
 <div class="step-item"><span class="step-num">3.</span><span><strong>Left Navigation Drawer Flow</strong>:</span></div>
 <li class="nested-li"><strong>Employees</strong>: Opens the Employee Directory, Employee Profile (with <code>Skills</code> section showing Training sources &amp; <code>Skill Award History</code> modal, <code>Training History</code> tab, and <code>My Certificates</code> tab), and the Add Employee modal.</li>
 <li class="nested-li"><strong>Training Hub</strong>: Provides access to Dashboard, Training Management (Training Catalogue), Assignments, Training Progress, and Certificates.</li>
-<li class="nested-li">From <strong>Training Management</strong>: Users can open <strong>Create / Edit Training</strong> (including <strong>4. Training Recognition</strong>) or click View to open <strong>Training Detail</strong> (General Info with <code>Training Recognition</code> summary card, Curriculum &amp; Modules, Enrolled Employees, Status History).</li>
+<li class="nested-li">From <strong>Training Management</strong>: Users can open <strong>Create / Edit Training</strong> (including <strong>3. Training Recognition</strong> and <strong>4. Assessment &amp; Questions</strong>) or click View to open <strong>Training Detail</strong> (General Info with <code>Training Recognition</code> summary card, Curriculum &amp; Modules, Enrolled Employees, Status History).</li>
 <li class="nested-li">From <strong>Assignments</strong>: Users can open the <strong>Assign Training Slideover Modal</strong> or click any record to open <strong>Assignment Details</strong> (with <strong>View Assessment</strong> review support).</li>
 <li class="nested-li">From <strong>Certificates</strong>: Users can expand employee rows and open the <strong>Verified Certificate Modal</strong> (signed by Khushi Bhatt, Head of HR).</li>
 <li class="nested-li"><strong>Config Hub</strong>: Provides quick navigation to <strong>Training Categories</strong> (master category table &amp; Add Category modal), <strong>Skills &amp; Skill Levels</strong> (<code>Config &gt; Skills</code> master skills table, <code>+ Add Skill</code> modal, active/inactive toggle, and configured skill level hierarchy), and <strong>Roles &amp; Permissions</strong> (Roles Table, Add Role modal, and Role Permission Matrix).</li>
@@ -330,8 +330,8 @@
 <li class="">Structured across four core sections:</li>
 <div class="step-item nested-step"><span class="step-num">1.</span><span><strong>Core Training Details</strong>: Training Name, Training Category, Difficulty Level, Duration, Learning Objectives, and <strong>Completion Requirements</strong> (multi-select checkbox dropdown with options <code>Watch all required videos</code>, <code>Pass the assessment</code>, <code>Submit any required documents</code>, and <code>Get approval from the manager</code>; checkboxes toggle directly without <code>Clear</code>/<code>Done</code> buttons and the menu closes on outside click).</span></div>
 <div class="step-item nested-step"><span class="step-num">2.</span><span><strong>Learning Resources Builder</strong>: Dynamic resource list (Video/YouTube, PDF Document, External Link, Article).</span></div>
-<div class="step-item nested-step"><span class="step-num">3.</span><span><strong>Assessment &amp; Questions Builder</strong>: Enable Assessment toggle, Assessment Title, Passing Score (<code>Passing Score (%) *</code> without any <code>(Strictly &gt; 80% to pass)</code> text), Max Assessment Attempts, Assessment Description, manual <strong>Total Marks</strong> numeric text field (<code>Total Marks:</code>, empty by default), and dynamic multi-format question builder with manual per-question <strong>Marks</strong> (empty by default), live mismatch validation against <code>Total Marks</code>, and bordered SVG-icon <strong>Duplicate</strong> / <strong>Delete</strong> buttons.</span></div>
-<div class="step-item nested-step"><span class="step-num">4.</span><span><strong>Training Recognition</strong>: Independent toggles for <strong>Certificate Generation</strong> (default OFF) and <strong>Add Skill to Employee Profile</strong> (default OFF), plus <strong>Require Reviewer / Manager Approval Before Completion</strong> (default OFF). When <strong>Add Skill to Employee Profile</strong> is ON, displays multi-select <strong>Select Skills</strong> (populated live from active <code>Config &gt; Skills</code>, with an inline <strong>+ Create New Skill in Config</strong> action) and <strong>Skill Level</strong> (populated from configured Skill Levels).</span></div>
+<div class="step-item nested-step"><span class="step-num">3.</span><span><strong>Training Recognition</strong>: Independent toggles for <strong>Certificate Generation</strong> (default OFF) and <strong>Add Skill to Employee Profile</strong> (default OFF), plus <strong>Require Reviewer / Manager Approval Before Completion</strong> (default OFF). When <strong>Add Skill to Employee Profile</strong> is ON, displays multi-select <strong>Select Skills</strong> (populated live from active <code>Config &gt; Skills</code>, displaying the selected skill names directly inside the dropdown box and as removable chips, with an inline <strong>+ Create New Skill in Config</strong> action) and <strong>Skill Level</strong> (populated from configured Skill Levels). Positioned above Section 4 so chosen skills drive the Assessment Question List.</span></div>
+<div class="step-item nested-step"><span class="step-num">4.</span><span><strong>Assessment &amp; Questions Builder</strong>: Enable Assessment toggle, Assessment Title, Passing Score (<code>Passing Score (%) *</code>), Max Assessment Attempts, Assessment Description, <strong>Total Marks</strong> numeric text field (<code>Total Marks:</code>, auto-synced when questions are generated from selected skills), <strong>↻ Sync Skill Questions</strong> button (when skills are selected), and dynamic multi-format question builder that automatically populates &amp; maintains skill-aligned questions (<code>Skill: &lt;Name&gt; · &lt;Level&gt;</code>) from selected Skills &amp; Skill Level while preserving manually added questions and supporting manual marks, live mismatch validation against <code>Total Marks</code>, and bordered SVG-icon <strong>Duplicate</strong> / <strong>Delete</strong> buttons.</span></div>
 <li class="">Header Actions: <strong>Auto-Fill Demo</strong>, <strong>Cancel</strong>, <strong>Publish</strong> (or <strong>Update &amp; Publish</strong> / <strong>Save Changes</strong>), and text-only <strong>Save as Draft</strong> dropdown option (no floppy disk icon).</li>
 <hr />
 <h3>Flow 4: Assign Training Slideover Modal Flow</h3>
@@ -449,36 +449,68 @@
 <li class="nested-li">Default value: Empty in newly added rows (Placeholder: <code>https://...</code>)</li>
 <li class="nested-li">Validation: Must be a valid web link starting with http:// or https://.</li>
 <hr />
-<h4>Section 3: Assessment &amp; Questions Builder</h4>
+<h4>Section 3: Training Recognition (Create / Edit Training)</h4>
+<li class=""><strong>Certificate Generation:</strong></li>
+<li class="nested-li">Mandatory: No</li>
+<li class="nested-li">Type: Toggle Switch (<code>ON</code> / <code>OFF</code>)</li>
+<li class="nested-li">Default value: <code>OFF</code> (<code>false</code>)</li>
+<li class="nested-li">Behavior: Independent toggle allowing Admin/HR/Reporting Managers to enable or disable automatic certificate generation per Training. When <code>OFF</code>, no certificate is issued and certificate download prompts are hidden upon completion. When <code>ON</code>, uses the verified certificate issuance workflow (<code>TRN-YYYY-Serial</code>) upon verified completion.</li>
+<li class=""><strong>Add Skill to Employee Profile:</strong></li>
+<li class="nested-li">Mandatory: No</li>
+<li class="nested-li">Type: Toggle Switch (<code>ON</code> / <code>OFF</code>)</li>
+<li class="nested-li">Default value: <code>OFF</code> (<code>false</code>)</li>
+<li class="nested-li">Behavior: Independent toggle. When <code>OFF</code>, skill configuration fields remain hidden and no skills are awarded on completion. When <code>ON</code>, renders <strong>Select Skills \</strong><em> and <strong>Skill Level \</strong></em>. Both Certificate Generation and Add Skill to Employee Profile work independently (Certificate Only, Skill Only, Both, or Neither). Positioned directly above <strong>Section 4: Assessment &amp; Questions</strong> so selected skills drive automatic question generation.</li>
+<li class=""><strong>Select Skills (Displayed when <code>Add Skill to Employee Profile</code> is ON):</strong></li>
+<li class="nested-li">Mandatory: Yes (<code>*</code>, when <code>Add Skill to Employee Profile</code> is <code>ON</code>)</li>
+<li class="nested-li">Type: Searchable Multi-select Checkbox Dropdown (with removable skill chips &amp; <code>Done</code> close button)</li>
+<li class="nested-li">Display Format: Trigger input directly shows the comma-separated selected skill name(s) (e.g., <code>Account Management, React</code>) with overflow ellipsis + full tooltip instead of a generic count string.</li>
+<li class="nested-li">Data Source: Loaded dynamically from <strong>active</strong> skills in <code>Config &gt; Skills</code> (<code>GET /api/config/skills</code>); never hardcoded.</li>
+<li class="nested-li">Inline Creation: Authorised users can click <strong>+ Create New Skill in Config</strong> directly inside Section 3 to add a new skill via <code>Config &gt; Skills</code>; saving automatically selects and makes the skill available in the Training skill dropdown without leaving the form.</li>
+<li class="nested-li">Validation: At least 1 active skill must be selected; duplicate selections within the same Training are prevented; inactive skills from <code>Config &gt; Skills</code> are rejected on new configurations.</li>
+<li class=""><strong>Skill Level (Displayed when <code>Add Skill to Employee Profile</code> is ON):</strong></li>
+<li class="nested-li">Mandatory: Yes (<code>*</code>, when <code>Add Skill to Employee Profile</code> is <code>ON</code>)</li>
+<li class="nested-li">Type: Dropdown (Single Select)</li>
+<li class="nested-li">Allowed Values: Loaded dynamically from configured Skill Levels in <code>Config &gt; Skills</code> (<code>Beginner</code>, <code>Intermediate</code>, <code>Advanced</code> with ordering <code>1 &lt; 2 &lt; 3</code>). No separate skill-level master is created. Changing the selected <code>Skill Level</code> dynamically updates auto-generated skill questions in Section 4 to match the chosen proficiency level.</li>
+<li class="nested-li">Validation: Must select a valid configured skill level.</li>
+<li class=""><strong>Require Reviewer / Manager Approval Before Completion:</strong></li>
+<li class="nested-li">Mandatory: No</li>
+<li class="nested-li">Type: Toggle Switch (<code>ON</code> / <code>OFF</code>)</li>
+<li class="nested-li">Default value: <code>OFF</code> (<code>false</code>)</li>
+<li class="nested-li">Behavior: When <code>ON</code> (or when <code>Get approval from the manager</code> is selected in Completion Requirements), verified completion enters <code>Under Review</code> (<code>managerApprovalStatus: Pending Approval</code>) and holds Certificate Generation &amp; Skill Assignment until an authorised Admin, HR, or Reporting Manager approves via <code>Approve Completion &amp; Issue Recognition</code> (<code>POST /api/training/approve-completion</code>). Employees cannot approve their own completion (<code>HTTP 403</code>).</li>
+<hr />
+<h4>Section 4: Assessment &amp; Questions Builder</h4>
 <li class=""><strong>Enable Assessment Toggle:</strong></li>
 <li class="nested-li">Mandatory: Yes</li>
 <li class="nested-li">Type: Toggle Switch (Active / Inactive)</li>
 <li class="nested-li">Default value: Active</li>
+<li class=""><strong>Skill-Based Automatic Question Generation &amp; Sync (<code>buildSkillBasedQuestions</code>):</strong></li>
+<li class="nested-li">When <strong>Add Skill to Employee Profile</strong> is <code>ON</code> and skills are selected in <strong>Section 3: Training Recognition</strong>, <strong>Questions List</strong> automatically populates skill-aligned graded questions tailored to each selected skill (<code>Skill: &lt;Name&gt; · &lt;Level&gt;</code>) and the chosen <strong>Skill Level</strong> (<code>Beginner</code>, <code>Intermediate</code>, <code>Advanced</code>), setting clean assessment defaults (<code>Final Training Assessment</code>, Passing Score <code>80</code>, Max Attempts <code>3</code>) when blank.</li>
+<li class="nested-li">Supports curated question banks for all configured domain skills as well as dynamic contextual question generation for any newly created custom skill in <code>Config &gt; Skills</code>.</li>
+<li class="nested-li">Removing or adding skills updates only auto-generated skill questions while preserving manually added or duplicated custom questions (<code>+ Add Question</code> / <strong>Duplicate</strong>). Users can also click <strong>↻ Sync Skill Questions</strong> anytime to refresh skill-aligned questions.</li>
 <li class=""><strong>Assessment Title:</strong></li>
 <li class="nested-li">Mandatory: Yes (<code>*</code>, when Enable Assessment is Active)</li>
 <li class="nested-li">Type: Alphanumeric Text Input</li>
 <li class="nested-li">Max. Length: 120</li>
 <li class="nested-li">Min. Length: 3</li>
-<li class="nested-li">Default value: Final Training Assessment</li>
+<li class="nested-li">Default value: Final Training Assessment (auto-populated if blank when skill questions sync)</li>
 <li class=""><strong>Passing Score (%):</strong></li>
 <li class="nested-li">Mandatory: Yes (<code>*</code>, when Enable Assessment is Active)</li>
 <li class="nested-li">Type: Numeric (Integer)</li>
 <li class="nested-li">Max. Value: 100</li>
 <li class="nested-li">Min. Value: 1</li>
-<li class="nested-li">Default value: Empty on create (<code>Auto-Fill Demo</code> populates <code>80</code>)</li>
+<li class="nested-li">Default value: Empty on create (<code>Auto-Fill Demo</code> or skill-based sync populates <code>80</code> when blank)</li>
 <li class="nested-li">Validation: Benchmark passing percentage (clean label <code>Passing Score (%) *</code> without extra <code>(Strictly &gt; 80% to pass)</code> helper text).</li>
 <li class=""><strong>Total Marks (<code>Questions List</code> Header):</strong></li>
 <li class="nested-li">Mandatory: Yes (when Enable Assessment is Active)</li>
 <li class="nested-li">Type: Numeric Text Input (<code>inputMode: numeric</code>)</li>
-<li class="nested-li">Default value: Empty (<code>""</code>, placeholder: <code>e.g. 100</code>; never auto-calculated or auto-filled from question marks)</li>
-<li class="nested-li">Validation: Must be greater than <code>0</code>; user enters target Total Marks manually. Once all added questions have marks <code>&gt; 0</code> and <code>questionsMarksSum !== Number(Total Marks)</code>, an inline error (<code>Total question marks (X) do not match Total Marks (Y).</code>) is displayed and save/publish is blocked. When equal, a <code>Matched ✓</code> pill is displayed.</li>
+<li class="nested-li">Default value: Empty (<code>""</code>, placeholder: <code>e.g. 100</code>; automatically synchronized to the sum of question marks whenever skill-based questions are auto-generated/synced, displaying <code>Matched ✓</code>, while preserving manual overrides)</li>
+<li class="nested-li">Validation: Must be greater than <code>0</code>; if all added questions have marks <code>&gt; 0</code> and <code>questionsMarksSum !== Number(Total Marks)</code>, an inline error (<code>Total question marks (X) do not match Total Marks (Y).</code>) is displayed and save/publish is blocked. When equal, a <code>Matched ✓</code> pill is displayed.</li>
 <li class=""><strong>Max Assessment Attempts:</strong></li>
 <li class="nested-li">Mandatory: Yes (<code>*</code>, when Enable Assessment is Active)</li>
 <li class="nested-li">Type: Numeric (Integer)</li>
 <li class="nested-li">Max. Value: 10</li>
 <li class="nested-li">Min. Value: 1</li>
 <li class="nested-li">Default value: 3</li>
-<li class="nested-li">Validation: Maximum attempts permitted before supervisor intervention.</li>
 <li class=""><strong>Assessment Description:</strong></li>
 <li class="nested-li">Mandatory: No (Optional)</li>
 <li class="nested-li">Type: Multi-line Textarea</li>
@@ -489,11 +521,11 @@
 <li class="nested-li">Type: Alphanumeric / Multi-line Textarea</li>
 <li class="nested-li">Max. Length: 1000</li>
 <li class="nested-li">Min. Length: 5</li>
-<li class="nested-li">Default value: Empty</li>
+<li class="nested-li">Default value: Empty for manual questions; populated contextually for skill-based questions</li>
 <li class=""><strong>Question Type:</strong></li>
 <li class="nested-li">Mandatory: Yes (<code>*</code>)</li>
 <li class="nested-li">Type: Dropdown (Single Select)</li>
-<li class="nested-li">Default value: Single Selection (Radio) for newly added questions (default starter assessment includes 6 questions covering all 6 formats)</li>
+<li class="nested-li">Default value: Single Selection (Radio) for newly added questions</li>
 <li class="nested-li">Allowed Values:</li>
 <div class="step-item nested-step"><span class="step-num">1.</span><span>Short Text Answer</span></div>
 <div class="step-item nested-step"><span class="step-num">2.</span><span>Long Text Answer</span></div>
@@ -505,7 +537,7 @@
 <li class="nested-li">Mandatory: Yes</li>
 <li class="nested-li">Type: Numeric Text Input (<code>inputMode: numeric</code>)</li>
 <li class="nested-li">Min. Value: 1</li>
-<li class="nested-li">Default value: Empty (<code>""</code>, placeholder: <code>0</code> — marks are entered manually per question and never auto-filled or auto-distributed)</li>
+<li class="nested-li">Default value: <code>5</code> per auto-generated skill question; empty (<code>""</code>, placeholder: <code>0</code>) for manual <code>+ Add Question</code> entries</li>
 <li class="nested-li">Validation: Must be greater than 0; sum of all question marks must equal configured <code>Total Marks</code>.</li>
 <li class=""><strong>Mandatory Question:</strong></li>
 <li class="nested-li">Mandatory: Yes</li>
@@ -516,35 +548,7 @@
 <li class="nested-li"><strong>Short Text Answer (<code>Configured Accepted Answers (Evaluated case-insensitively with trimmed whitespace):</code>)</strong>: Minimum 1 accepted keyword/phrase required (<code>Enter accepted correct answer...</code>, without extra example hints).</li>
 <li class="nested-li"><strong>True / False</strong>: Clean <code>Answer Option:</code> / Correct Answer selection (<code>True</code> or <code>False</code>).</li>
 <li class="nested-li"><strong>Long Text Answer</strong>: Expected Answer / Evaluation Reference summary for manual reviewer grading.</li>
-<li class="nested-li"><strong>Question Actions</strong>: Clean bordered <strong>Duplicate</strong> and <strong>Delete</strong> pill buttons with SVG icons (<code>8px</code> gap). (Question reorder buttons are removed.)</li>
-<hr />
-<h4>Section 4: Training Recognition (Create / Edit Training)</h4>
-<li class=""><strong>Certificate Generation:</strong></li>
-<li class="nested-li">Mandatory: No</li>
-<li class="nested-li">Type: Toggle Switch (<code>ON</code> / <code>OFF</code>)</li>
-<li class="nested-li">Default value: <code>OFF</code> (<code>false</code>)</li>
-<li class="nested-li">Behavior: Independent toggle allowing Admin/HR/Reporting Managers to enable or disable automatic certificate generation per Training. When <code>OFF</code>, no certificate is issued and certificate download prompts are hidden upon completion. When <code>ON</code>, uses the verified certificate issuance workflow (<code>TRN-YYYY-Serial</code>) upon verified completion.</li>
-<li class=""><strong>Add Skill to Employee Profile:</strong></li>
-<li class="nested-li">Mandatory: No</li>
-<li class="nested-li">Type: Toggle Switch (<code>ON</code> / <code>OFF</code>)</li>
-<li class="nested-li">Default value: <code>OFF</code> (<code>false</code>)</li>
-<li class="nested-li">Behavior: Independent toggle. When <code>OFF</code>, skill configuration fields remain hidden and no skills are awarded on completion. When <code>ON</code>, renders <strong>Select Skills \</strong><em> and <strong>Skill Level \</strong></em>. Both Certificate Generation and Add Skill to Employee Profile work independently (Certificate Only, Skill Only, Both, or Neither).</li>
-<li class=""><strong>Select Skills (Displayed when <code>Add Skill to Employee Profile</code> is ON):</strong></li>
-<li class="nested-li">Mandatory: Yes (<code>*</code>, when <code>Add Skill to Employee Profile</code> is <code>ON</code>)</li>
-<li class="nested-li">Type: Searchable Multi-select Checkbox Dropdown (with removable skill chips &amp; <code>Done</code> close button)</li>
-<li class="nested-li">Data Source: Loaded dynamically from <strong>active</strong> skills in <code>Config &gt; Skills</code> (<code>GET /api/config/skills</code>); never hardcoded.</li>
-<li class="nested-li">Inline Creation: Authorised users can click <strong>+ Create New Skill in Config</strong> directly inside Section 4 to add a new skill via <code>Config &gt; Skills</code>; saving automatically updates the training skill dropdown without leaving the form.</li>
-<li class="nested-li">Validation: At least 1 active skill must be selected; duplicate selections within the same Training are prevented; inactive skills from <code>Config &gt; Skills</code> are rejected on new configurations.</li>
-<li class=""><strong>Skill Level (Displayed when <code>Add Skill to Employee Profile</code> is ON):</strong></li>
-<li class="nested-li">Mandatory: Yes (<code>*</code>, when <code>Add Skill to Employee Profile</code> is <code>ON</code>)</li>
-<li class="nested-li">Type: Dropdown (Single Select)</li>
-<li class="nested-li">Allowed Values: Loaded dynamically from configured Skill Levels in <code>Config &gt; Skills</code> (<code>Beginner</code>, <code>Intermediate</code>, <code>Advanced</code> with ordering <code>1 &lt; 2 &lt; 3</code>). No separate skill-level master is created.</li>
-<li class="nested-li">Validation: Must select a valid configured skill level.</li>
-<li class=""><strong>Require Reviewer / Manager Approval Before Completion:</strong></li>
-<li class="nested-li">Mandatory: No</li>
-<li class="nested-li">Type: Toggle Switch (<code>ON</code> / <code>OFF</code>)</li>
-<li class="nested-li">Default value: <code>OFF</code> (<code>false</code>)</li>
-<li class="nested-li">Behavior: When <code>ON</code> (or when <code>Get approval from the manager</code> is selected in Completion Requirements), verified completion enters <code>Under Review</code> (<code>managerApprovalStatus: Pending Approval</code>) and holds Certificate Generation &amp; Skill Assignment until an authorised Admin, HR, or Reporting Manager approves via <code>Approve Completion &amp; Issue Recognition</code> (<code>POST /api/training/approve-completion</code>). Employees cannot approve their own completion (<code>HTTP 403</code>).</li>
+<li class="nested-li"><strong>Question Actions</strong>: Clean bordered <strong>Duplicate</strong> and <strong>Delete</strong> pill buttons with SVG icons (<code>8px</code> gap). Duplicating a skill-generated question creates a custom copy preserved across skill updates. (Question reorder buttons are removed.)</li>
 <li class=""><strong>Persistence:</strong></li>
 <li class="nested-li">Persists <code>certificateGeneration</code>, <code>addSkillToProfile</code>, <code>selectedSkillIds</code>, <code>skillLevel</code>, and <code>reviewerApprovalRequired</code> across Create, Edit, Save as Draft, Publish, and full page reload (<code>POST /api/training/programmes</code> &amp; <code>GET /api/training/programmes</code>).</li>
 <hr />

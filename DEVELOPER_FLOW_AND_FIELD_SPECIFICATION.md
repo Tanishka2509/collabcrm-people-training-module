@@ -15,7 +15,7 @@ This document specifies the complete user navigation flows, screen transitions, 
 3. **Left Navigation Drawer Flow**:
    - **Employees**: Opens the Employee Directory, Employee Profile (with `Skills` section showing Training sources & `Skill Award History` modal, `Training History` tab, and `My Certificates` tab), and the Add Employee modal.
    - **Training Hub**: Provides access to Dashboard, Training Management (Training Catalogue), Assignments, Training Progress, and Certificates.
-     - From **Training Management**: Users can open **Create / Edit Training** (including **4. Training Recognition**) or click View to open **Training Detail** (General Info with `Training Recognition` summary card, Curriculum & Modules, Enrolled Employees, Status History).
+     - From **Training Management**: Users can open **Create / Edit Training** (including **3. Training Recognition** and **4. Assessment & Questions**) or click View to open **Training Detail** (General Info with `Training Recognition` summary card, Curriculum & Modules, Enrolled Employees, Status History).
      - From **Assignments**: Users can open the **Assign Training Slideover Modal** or click any record to open **Assignment Details** (with **View Assessment** review support).
      - From **Certificates**: Users can expand employee rows and open the **Verified Certificate Modal** (signed by Khushi Bhatt, Head of HR).
    - **Config Hub**: Provides quick navigation to **Training Categories** (master category table & Add Category modal), **Skills & Skill Levels** (`Config > Skills` master skills table, `+ Add Skill` modal, active/inactive toggle, and configured skill level hierarchy), and **Roles & Permissions** (Roles Table, Add Role modal, and Role Permission Matrix).
@@ -52,8 +52,8 @@ The left collapsible sidebar provides access to:
 - Structured across four core sections:
   1. **Core Training Details**: Training Name, Training Category, Difficulty Level, Duration, Learning Objectives, and **Completion Requirements** (multi-select checkbox dropdown with options `Watch all required videos`, `Pass the assessment`, `Submit any required documents`, and `Get approval from the manager`; checkboxes toggle directly without `Clear`/`Done` buttons and the menu closes on outside click).
   2. **Learning Resources Builder**: Dynamic resource list (Video/YouTube, PDF Document, External Link, Article).
-  3. **Assessment & Questions Builder**: Enable Assessment toggle, Assessment Title, Passing Score (`Passing Score (%) *` without any `(Strictly > 80% to pass)` text), Max Assessment Attempts, Assessment Description, manual **Total Marks** numeric text field (`Total Marks:`, empty by default), and dynamic multi-format question builder with manual per-question **Marks** (empty by default), live mismatch validation against `Total Marks`, and bordered SVG-icon **Duplicate** / **Delete** buttons.
-  4. **Training Recognition**: Independent toggles for **Certificate Generation** (default OFF) and **Add Skill to Employee Profile** (default OFF), plus **Require Reviewer / Manager Approval Before Completion** (default OFF). When **Add Skill to Employee Profile** is ON, displays multi-select **Select Skills** (populated live from active `Config > Skills`, with an inline **+ Create New Skill in Config** action) and **Skill Level** (populated from configured Skill Levels).
+  3. **Training Recognition**: Independent toggles for **Certificate Generation** (default OFF) and **Add Skill to Employee Profile** (default OFF), plus **Require Reviewer / Manager Approval Before Completion** (default OFF). When **Add Skill to Employee Profile** is ON, displays multi-select **Select Skills** (populated live from active `Config > Skills`, displaying the selected skill names directly inside the dropdown box and as removable chips, with an inline **+ Create New Skill in Config** action) and **Skill Level** (populated from configured Skill Levels). Positioned above Section 4 so chosen skills drive the Assessment Question List.
+  4. **Assessment & Questions Builder**: Enable Assessment toggle, Assessment Title, Passing Score (`Passing Score (%) *`), Max Assessment Attempts, Assessment Description, **Total Marks** numeric text field (`Total Marks:`, auto-synced when questions are generated from selected skills), **↻ Sync Skill Questions** button (when skills are selected), and dynamic multi-format question builder that automatically populates & maintains skill-aligned questions (`Skill: <Name> · <Level>`) from selected Skills & Skill Level while preserving manually added questions and supporting manual marks, live mismatch validation against `Total Marks`, and bordered SVG-icon **Duplicate** / **Delete** buttons.
 - Header Actions: **Auto-Fill Demo**, **Cancel**, **Publish** (or **Update & Publish** / **Save Changes**), and text-only **Save as Draft** dropdown option (no floppy disk icon).
 
 ---
@@ -191,32 +191,72 @@ The left collapsible sidebar provides access to:
 
 ---
 
-#### Section 3: Assessment & Questions Builder
+#### Section 3: Training Recognition (Create / Edit Training)
+- **Certificate Generation:**
+  - Mandatory: No
+  - Type: Toggle Switch (`ON` / `OFF`)
+  - Default value: `OFF` (`false`)
+  - Behavior: Independent toggle allowing Admin/HR/Reporting Managers to enable or disable automatic certificate generation per Training. When `OFF`, no certificate is issued and certificate download prompts are hidden upon completion. When `ON`, uses the verified certificate issuance workflow (`TRN-YYYY-Serial`) upon verified completion.
+
+- **Add Skill to Employee Profile:**
+  - Mandatory: No
+  - Type: Toggle Switch (`ON` / `OFF`)
+  - Default value: `OFF` (`false`)
+  - Behavior: Independent toggle. When `OFF`, skill configuration fields remain hidden and no skills are awarded on completion. When `ON`, renders **Select Skills \*** and **Skill Level \***. Both Certificate Generation and Add Skill to Employee Profile work independently (Certificate Only, Skill Only, Both, or Neither). Positioned directly above **Section 4: Assessment & Questions** so selected skills drive automatic question generation.
+
+- **Select Skills (Displayed when `Add Skill to Employee Profile` is ON):**
+  - Mandatory: Yes (`*`, when `Add Skill to Employee Profile` is `ON`)
+  - Type: Searchable Multi-select Checkbox Dropdown (with removable skill chips & `Done` close button)
+  - Display Format: Trigger input directly shows the comma-separated selected skill name(s) (e.g., `Account Management, React`) with overflow ellipsis + full tooltip instead of a generic count string.
+  - Data Source: Loaded dynamically from **active** skills in `Config > Skills` (`GET /api/config/skills`); never hardcoded.
+  - Inline Creation: Authorised users can click **+ Create New Skill in Config** directly inside Section 3 to add a new skill via `Config > Skills`; saving automatically selects and makes the skill available in the Training skill dropdown without leaving the form.
+  - Validation: At least 1 active skill must be selected; duplicate selections within the same Training are prevented; inactive skills from `Config > Skills` are rejected on new configurations.
+
+- **Skill Level (Displayed when `Add Skill to Employee Profile` is ON):**
+  - Mandatory: Yes (`*`, when `Add Skill to Employee Profile` is `ON`)
+  - Type: Dropdown (Single Select)
+  - Allowed Values: Loaded dynamically from configured Skill Levels in `Config > Skills` (`Beginner`, `Intermediate`, `Advanced` with ordering `1 < 2 < 3`). No separate skill-level master is created. Changing the selected `Skill Level` dynamically updates auto-generated skill questions in Section 4 to match the chosen proficiency level.
+  - Validation: Must select a valid configured skill level.
+
+- **Require Reviewer / Manager Approval Before Completion:**
+  - Mandatory: No
+  - Type: Toggle Switch (`ON` / `OFF`)
+  - Default value: `OFF` (`false`)
+  - Behavior: When `ON` (or when `Get approval from the manager` is selected in Completion Requirements), verified completion enters `Under Review` (`managerApprovalStatus: Pending Approval`) and holds Certificate Generation & Skill Assignment until an authorised Admin, HR, or Reporting Manager approves via `Approve Completion & Issue Recognition` (`POST /api/training/approve-completion`). Employees cannot approve their own completion (`HTTP 403`).
+
+---
+
+#### Section 4: Assessment & Questions Builder
 - **Enable Assessment Toggle:**
   - Mandatory: Yes
   - Type: Toggle Switch (Active / Inactive)
   - Default value: Active
+
+- **Skill-Based Automatic Question Generation & Sync (`buildSkillBasedQuestions`):**
+  - When **Add Skill to Employee Profile** is `ON` and skills are selected in **Section 3: Training Recognition**, **Questions List** automatically populates skill-aligned graded questions tailored to each selected skill (`Skill: <Name> · <Level>`) and the chosen **Skill Level** (`Beginner`, `Intermediate`, `Advanced`), setting clean assessment defaults (`Final Training Assessment`, Passing Score `80`, Max Attempts `3`) when blank.
+  - Supports curated question banks for all configured domain skills as well as dynamic contextual question generation for any newly created custom skill in `Config > Skills`.
+  - Removing or adding skills updates only auto-generated skill questions while preserving manually added or duplicated custom questions (`+ Add Question` / **Duplicate**). Users can also click **↻ Sync Skill Questions** anytime to refresh skill-aligned questions.
 
 - **Assessment Title:**
   - Mandatory: Yes (`*`, when Enable Assessment is Active)
   - Type: Alphanumeric Text Input
   - Max. Length: 120
   - Min. Length: 3
-  - Default value: Final Training Assessment
+  - Default value: Final Training Assessment (auto-populated if blank when skill questions sync)
 
 - **Passing Score (%):**
   - Mandatory: Yes (`*`, when Enable Assessment is Active)
   - Type: Numeric (Integer)
   - Max. Value: 100
   - Min. Value: 1
-  - Default value: Empty on create (`Auto-Fill Demo` populates `80`)
+  - Default value: Empty on create (`Auto-Fill Demo` or skill-based sync populates `80` when blank)
   - Validation: Benchmark passing percentage (clean label `Passing Score (%) *` without extra `(Strictly > 80% to pass)` helper text).
 
 - **Total Marks (`Questions List` Header):**
   - Mandatory: Yes (when Enable Assessment is Active)
   - Type: Numeric Text Input (`inputMode: numeric`)
-  - Default value: Empty (`""`, placeholder: `e.g. 100`; never auto-calculated or auto-filled from question marks)
-  - Validation: Must be greater than `0`; user enters target Total Marks manually. Once all added questions have marks `> 0` and `questionsMarksSum !== Number(Total Marks)`, an inline error (`Total question marks (X) do not match Total Marks (Y).`) is displayed and save/publish is blocked. When equal, a `Matched ✓` pill is displayed.
+  - Default value: Empty (`""`, placeholder: `e.g. 100`; automatically synchronized to the sum of question marks whenever skill-based questions are auto-generated/synced, displaying `Matched ✓`, while preserving manual overrides)
+  - Validation: Must be greater than `0`; if all added questions have marks `> 0` and `questionsMarksSum !== Number(Total Marks)`, an inline error (`Total question marks (X) do not match Total Marks (Y).`) is displayed and save/publish is blocked. When equal, a `Matched ✓` pill is displayed.
 
 - **Max Assessment Attempts:**
   - Mandatory: Yes (`*`, when Enable Assessment is Active)
@@ -224,7 +264,6 @@ The left collapsible sidebar provides access to:
   - Max. Value: 10
   - Min. Value: 1
   - Default value: 3
-  - Validation: Maximum attempts permitted before supervisor intervention.
 
 - **Assessment Description:**
   - Mandatory: No (Optional)
@@ -237,12 +276,12 @@ The left collapsible sidebar provides access to:
   - Type: Alphanumeric / Multi-line Textarea
   - Max. Length: 1000
   - Min. Length: 5
-  - Default value: Empty
+  - Default value: Empty for manual questions; populated contextually for skill-based questions
 
 - **Question Type:**
   - Mandatory: Yes (`*`)
   - Type: Dropdown (Single Select)
-  - Default value: Single Selection (Radio) for newly added questions (default starter assessment includes 6 questions covering all 6 formats)
+  - Default value: Single Selection (Radio) for newly added questions
   - Allowed Values:
     1. Short Text Answer
     2. Long Text Answer
@@ -255,7 +294,7 @@ The left collapsible sidebar provides access to:
   - Mandatory: Yes
   - Type: Numeric Text Input (`inputMode: numeric`)
   - Min. Value: 1
-  - Default value: Empty (`""`, placeholder: `0` — marks are entered manually per question and never auto-filled or auto-distributed)
+  - Default value: `5` per auto-generated skill question; empty (`""`, placeholder: `0`) for manual `+ Add Question` entries
   - Validation: Must be greater than 0; sum of all question marks must equal configured `Total Marks`.
 
 - **Mandatory Question:**
@@ -268,41 +307,7 @@ The left collapsible sidebar provides access to:
   - **Short Text Answer (`Configured Accepted Answers (Evaluated case-insensitively with trimmed whitespace):`)**: Minimum 1 accepted keyword/phrase required (`Enter accepted correct answer...`, without extra example hints).
   - **True / False**: Clean `Answer Option:` / Correct Answer selection (`True` or `False`).
   - **Long Text Answer**: Expected Answer / Evaluation Reference summary for manual reviewer grading.
-  - **Question Actions**: Clean bordered **Duplicate** and **Delete** pill buttons with SVG icons (`8px` gap). (Question reorder buttons are removed.)
-
----
-
-#### Section 4: Training Recognition (Create / Edit Training)
-- **Certificate Generation:**
-  - Mandatory: No
-  - Type: Toggle Switch (`ON` / `OFF`)
-  - Default value: `OFF` (`false`)
-  - Behavior: Independent toggle allowing Admin/HR/Reporting Managers to enable or disable automatic certificate generation per Training. When `OFF`, no certificate is issued and certificate download prompts are hidden upon completion. When `ON`, uses the verified certificate issuance workflow (`TRN-YYYY-Serial`) upon verified completion.
-
-- **Add Skill to Employee Profile:**
-  - Mandatory: No
-  - Type: Toggle Switch (`ON` / `OFF`)
-  - Default value: `OFF` (`false`)
-  - Behavior: Independent toggle. When `OFF`, skill configuration fields remain hidden and no skills are awarded on completion. When `ON`, renders **Select Skills \*** and **Skill Level \***. Both Certificate Generation and Add Skill to Employee Profile work independently (Certificate Only, Skill Only, Both, or Neither).
-
-- **Select Skills (Displayed when `Add Skill to Employee Profile` is ON):**
-  - Mandatory: Yes (`*`, when `Add Skill to Employee Profile` is `ON`)
-  - Type: Searchable Multi-select Checkbox Dropdown (with removable skill chips & `Done` close button)
-  - Data Source: Loaded dynamically from **active** skills in `Config > Skills` (`GET /api/config/skills`); never hardcoded.
-  - Inline Creation: Authorised users can click **+ Create New Skill in Config** directly inside Section 4 to add a new skill via `Config > Skills`; saving automatically updates the training skill dropdown without leaving the form.
-  - Validation: At least 1 active skill must be selected; duplicate selections within the same Training are prevented; inactive skills from `Config > Skills` are rejected on new configurations.
-
-- **Skill Level (Displayed when `Add Skill to Employee Profile` is ON):**
-  - Mandatory: Yes (`*`, when `Add Skill to Employee Profile` is `ON`)
-  - Type: Dropdown (Single Select)
-  - Allowed Values: Loaded dynamically from configured Skill Levels in `Config > Skills` (`Beginner`, `Intermediate`, `Advanced` with ordering `1 < 2 < 3`). No separate skill-level master is created.
-  - Validation: Must select a valid configured skill level.
-
-- **Require Reviewer / Manager Approval Before Completion:**
-  - Mandatory: No
-  - Type: Toggle Switch (`ON` / `OFF`)
-  - Default value: `OFF` (`false`)
-  - Behavior: When `ON` (or when `Get approval from the manager` is selected in Completion Requirements), verified completion enters `Under Review` (`managerApprovalStatus: Pending Approval`) and holds Certificate Generation & Skill Assignment until an authorised Admin, HR, or Reporting Manager approves via `Approve Completion & Issue Recognition` (`POST /api/training/approve-completion`). Employees cannot approve their own completion (`HTTP 403`).
+  - **Question Actions**: Clean bordered **Duplicate** and **Delete** pill buttons with SVG icons (`8px` gap). Duplicating a skill-generated question creates a custom copy preserved across skill updates. (Question reorder buttons are removed.)
 
 - **Persistence:**
   - Persists `certificateGeneration`, `addSkillToProfile`, `selectedSkillIds`, `skillLevel`, and `reviewerApprovalRequired` across Create, Edit, Save as Draft, Publish, and full page reload (`POST /api/training/programmes` & `GET /api/training/programmes`).
