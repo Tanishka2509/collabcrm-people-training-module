@@ -138,9 +138,7 @@ function buildInitialStatusHistory(p, pubStatus, availStatus) {
 }
 
 function normalizeProgrammeRecord(p) {
-  const pubStatus = ['Draft', 'Published', 'Archived'].includes(p.publicationStatus)
-    ? p.publicationStatus
-    : (['Draft', 'Published', 'Archived'].includes(p.status) ? p.status : 'Published');
+  const pubStatus = p.publicationStatus === 'Draft' || p.status === 'Draft' ? 'Draft' : 'Published';
   let availStatus;
   if (pubStatus === 'Draft') {
     availStatus = 'Inactive';
@@ -6449,14 +6447,7 @@ export async function handleApi(req, res) {
       });
     } else {
       const existing = store.programmes[idx];
-      if (existing.publicationStatus === 'Archived' && requestedPub === 'Published' && !body.allowRestore) {
-        return sendJson(res, 400, {
-          success: false,
-          message: 'Archived programmes cannot be published or activated directly. Use the Restore action first.'
-        });
-      }
-
-      let nextPub = requestedPub === 'Published' ? 'Published' : (requestedPub === 'Archived' ? 'Archived' : 'Draft');
+      let nextPub = requestedPub === 'Published' ? 'Published' : 'Draft';
       let nextAvail = existing.availabilityStatus;
       const history = Array.isArray(existing.statusHistory) ? [...existing.statusHistory] : [];
 
@@ -6526,7 +6517,7 @@ export async function handleApi(req, res) {
       return sendJson(res, 400, { success: false, message: 'Invalid availability status. Must be Active or Inactive.' });
     }
 
-    // Draft must remain Inactive until published; Published and Archived manage availability independently
+    // Draft must remain Inactive until published; Published manages availability via Active / Inactive
     if (prog.publicationStatus === 'Draft') {
       return sendJson(res, 400, {
         success: false,
@@ -6534,10 +6525,10 @@ export async function handleApi(req, res) {
         programme: prog
       });
     }
-    if (prog.publicationStatus !== 'Published' && prog.publicationStatus !== 'Archived') {
+    if (prog.publicationStatus !== 'Published') {
       return sendJson(res, 400, {
         success: false,
-        message: 'Only Published or Archived programmes can be toggled between Active and Inactive.',
+        message: 'Only Published programmes can be toggled between Active and Inactive.',
         programme: prog
       });
     }
