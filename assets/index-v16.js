@@ -313,18 +313,6 @@ const COMPLETION_REQ_OPTIONS=[`Watch all required videos`,`Pass the assessment`,
         ]}),
         (0,P.jsxs)("div",{className:"border-t border-slate-100 pt-4 space-y-4 text-xs",children:[
           (0,P.jsxs)("div",{children:[
-            (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Expected Duration"}),
-            (0,P.jsxs)("div",{className:"font-semibold text-slate-800 mt-0.5",children:[e.expectedDurationHours || 18, " Hours"]})
-          ]}),
-          (0,P.jsxs)("div",{children:[
-            (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Passing Assessment Score"}),
-            (0,P.jsx)("div",{className:"font-semibold text-slate-800 mt-0.5",children:e.assessment && e.assessment.enabled === !1 ? "N/A (Assessment Disabled)" : ((Number(e.assessment?.passingScore || e.passingScore) || 80) + "% (Strictly > " + (Number(e.assessment?.passingScore || e.passingScore) || 80) + "% to pass)")})
-          ]}),
-          (0,P.jsxs)("div",{children:[
-            (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Department"}),
-            (0,P.jsx)("div",{className:"font-semibold text-slate-800 mt-0.5",children:e.department || "Project"})
-          ]}),
-          (0,P.jsxs)("div",{children:[
             (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Enrolled Learners"}),
             (0,P.jsxs)("div",{className:"font-semibold text-slate-800 mt-0.5",children:[o.length, " Enrolled"]})
           ]}),
@@ -350,72 +338,22 @@ const COMPLETION_REQ_OPTIONS=[`Watch all required videos`,`Pass the assessment`,
           ]})
         ]}),
 
-        // Tab 1: General Info Content
+        // Tab 1: General Info Content (deduplicated single-source details)
         activeTab==="general" && (0,P.jsxs)("div",{className:"space-y-6",children:[
-          // Top 3 Stat Cards (Status, Duration, Passing Score)
-          (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-3 gap-4",children:[
-            (0,P.jsxs)("div",{style:{gap:"16px"},className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm flex items-center",children:[
-              (0,P.jsx)("div",{className:"w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center shrink-0",children:(0,P.jsx)(D,{className:"w-5 h-5"})}),
-              (0,P.jsxs)("div",{className:"min-w-0 flex-1",children:[
-                (0,P.jsx)("div",{className:"text-slate-400 font-semibold text-[11px] uppercase tracking-wider",children:"Status"}),
-                (0,P.jsxs)("div",{style:{gap:"8px"},className:"mt-1.5 flex items-center flex-wrap",children:[
-                  (0,P.jsx)("span",{className:pubBadgeClass + " text-xs px-2.5 py-0.5 rounded-full font-semibold leading-tight",children:pubStatus}),
-                  (0,P.jsx)("span",{className:availBadgeClass + " text-xs px-2.5 py-0.5 rounded-full font-semibold leading-tight",children:availStatus})
-                ]})
-              ]})
-            ]}),
-            (0,P.jsxs)("div",{style:{gap:"16px"},className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm flex items-center",children:[
-              (0,P.jsx)("div",{className:"w-10 h-10 rounded-xl bg-blue-50 text-blue-600 border border-blue-100 flex items-center justify-center shrink-0",children:(0,P.jsx)(te,{className:"w-5 h-5"})}),
-              (0,P.jsxs)("div",{className:"min-w-0 flex-1",children:[
-                (0,P.jsx)("div",{className:"text-slate-400 font-semibold text-[11px] uppercase tracking-wider",children:"Expected Duration"}),
-                (0,P.jsxs)("div",{className:"text-slate-900 font-bold text-base mt-1",children:[e.expectedDurationHours || 18, " Hours"]})
-              ]})
-            ]}),
-            (0,P.jsxs)("div",{style:{gap:"16px"},className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm flex items-center",children:[
-              (0,P.jsx)("div",{className:"w-10 h-10 rounded-xl bg-amber-50 text-amber-600 border border-amber-100 flex items-center justify-center shrink-0",children:(0,P.jsx)(me,{className:"w-5 h-5"})}),
-              (0,P.jsxs)("div",{className:"min-w-0 flex-1",children:[
-                (0,P.jsx)("div",{className:"text-slate-400 font-semibold text-[11px] uppercase tracking-wider",children:"Passing Score"}),
-                (0,P.jsxs)("div",{className:"text-slate-900 font-bold text-base mt-1 flex items-baseline gap-2 flex-wrap",children:[
-                  (0,P.jsx)("span",{children:e.assessment && e.assessment.enabled === !1 ? "N/A" : ((Number(e.assessment?.passingScore || e.passingScore) || 80) + "%")}),
-                  (0,P.jsx)("span",{className:"text-[11px] text-slate-400 font-normal",children:e.assessment && e.assessment.enabled === !1 ? "(Assessment Disabled)" : ("(> " + (Number(e.assessment?.passingScore || e.passingScore) || 80) + "% to pass)")})
-                ]})
-              ]})
-            ]})
-          ]}),
-
-          // Section Card: Programme Information (Formatted like Screenshot 4)
           (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-6",children:[
             (0,P.jsx)("h2",{className:"text-xs font-bold text-slate-400 uppercase tracking-wider",children:"Programme Information"}),
             (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-3 gap-6 text-xs",children:[
-              (0,P.jsxs)("div",{className:"space-y-4",children:[
-                (0,P.jsxs)("div",{children:[
-                  (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"PROGRAMME NAME"}),
-                  (0,P.jsx)("div",{className:"font-bold text-slate-900 mt-1",children:e.name})
-                ]}),
-                (0,P.jsxs)("div",{children:[
-                  (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"DIFFICULTY LEVEL"}),
-                  (0,P.jsx)("div",{className:"font-bold text-slate-900 mt-1",children:e.difficultyLevel || "Intermediate"})
-                ]})
+              (0,P.jsxs)("div",{children:[
+                (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"DEPARTMENT"}),
+                (0,P.jsx)("div",{className:"font-bold text-slate-900 mt-1",children:e.department || "Project"})
               ]}),
-              (0,P.jsxs)("div",{className:"space-y-4",children:[
-                (0,P.jsxs)("div",{children:[
-                  (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"TRAINING CATEGORY"}),
-                  (0,P.jsx)("div",{className:"font-bold text-slate-900 mt-1",children:e.category || "Recruitment & HR Operations"})
-                ]}),
-                (0,P.jsxs)("div",{children:[
-                  (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"EXPECTED DURATION"}),
-                  (0,P.jsxs)("div",{className:"font-bold text-slate-900 mt-1",children:[e.expectedDurationHours || 18, " Hours"]})
-                ]})
+              (0,P.jsxs)("div",{children:[
+                (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"EXPECTED DURATION"}),
+                (0,P.jsxs)("div",{className:"font-bold text-slate-900 mt-1",children:[e.expectedDurationHours || 18, " Hours"]})
               ]}),
-              (0,P.jsxs)("div",{className:"space-y-4",children:[
-                (0,P.jsxs)("div",{children:[
-                  (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"DEPARTMENT"}),
-                  (0,P.jsx)("div",{className:"font-bold text-slate-900 mt-1",children:e.department || "Project"})
-                ]}),
-                (0,P.jsxs)("div",{children:[
-                  (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"PASSING ASSESSMENT SCORE"}),
-                  (0,P.jsx)("div",{className:"font-bold text-blue-600 mt-1",children:e.assessment && e.assessment.enabled === !1 ? "N/A (Assessment Disabled)" : ((Number(e.assessment?.passingScore || e.passingScore) || 80) + "%")})
-                ]})
+              (0,P.jsxs)("div",{children:[
+                (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"PASSING ASSESSMENT SCORE"}),
+                (0,P.jsx)("div",{className:"font-bold text-blue-600 mt-1",children:e.assessment && e.assessment.enabled === !1 ? "N/A (Assessment Disabled)" : ((Number(e.assessment?.passingScore || e.passingScore) || 80) + "%")})
               ]})
             ]}),
             (0,P.jsxs)("div",{className:"border-t border-slate-100 pt-5 space-y-4 text-xs",children:[
