@@ -153,6 +153,22 @@
     li.nested-li {
       margin-left: 48px;
     }
+    .step-item {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-left: 12px;
+      margin-bottom: 6px;
+      color: var(--slate-700);
+    }
+    .step-item.nested-step {
+      margin-left: 36px;
+    }
+    .step-num {
+      font-weight: 700;
+      color: var(--slate-900);
+      min-width: 20px;
+    }
     code {
       font-family: 'JetBrains Mono', Consolas, monospace;
       font-size: 12.5px;
@@ -270,432 +286,401 @@
   </div>
 
   <main class="container">
-    <h1>CollabCRM People Training Module - Developer Flow &amp; Field Specification</h1>
+    <h1>CollabCRM People Training Module - Flow &amp; Field Specification</h1>
 <h2>Document Overview</h2>
-<p>This document specifies the exact developer architecture, screen flows, user roles, data schemas, validation rules, and dynamic interactions for the <strong>CollabCRM People &amp; Training Module</strong>. Every field, allowed value, form control, and layout matches the live implementation prototype.</p>
+<p>This document specifies the complete user navigation flows, screen transitions, form fields, allowed values, validation rules, and behavioral rules for the <strong>CollabCRM People &amp; Training Module</strong>. Every screen, field, allowed value, and interaction described below matches the live system.</p>
 <hr />
 <h2>SECTION 1: SYSTEM NAVIGATION &amp; SCREEN FLOWS</h2>
-<pre><code class="language-mermaid">flowchart TD
-    AppRoot[CollabCRM Enterprise Suite] --&gt; TopNav[Top Global Navigation &amp; Search Bar]
-    AppRoot --&gt; LeftDrawer[Left Collapsible Navigation Drawer]
-
-    LeftDrawer --&gt; PeopleModule[People / Employee Directory]
-    LeftDrawer --&gt; TrainingModule[Training Hub]
-    LeftDrawer --&gt; ConfigModule[Config Hub]
-
-    TrainingModule --&gt; TDash[Training Dashboard]
-    TrainingModule --&gt; TProg[Training Programmes Catalogue]
-    TrainingModule --&gt; TAssign[Training Assignments - 41 Total]
-    TrainingModule --&gt; TProgTrack[Progress Tracker - Dual View]
-    TrainingModule --&gt; TCert[Certificates - Expandable Master-Detail]
-
-    TProg --&gt; CreateProg[Create / Edit Programme Modal]
-    TProg --&gt; ProgDetail[Programme Detail - 2-Column Layout]
-    TAssign --&gt; AssignModal[Assign Training Slideover Modal]
-    TAssign --&gt; AssignDetail[Assignment Details View]
-    TCert --&gt; CertModal[Verified Certificate Modal - Khushi Bhatt]
-
-    ConfigModule --&gt; TConfig[Training Config - General &amp; Categories]
-    ConfigModule --&gt; TRoles[Roles &amp; Permissions Matrix]
-
-    TopNav --&gt; RoleSwitcher[User Role Switcher]
-    RoleSwitcher --&gt; AdminView[Admin / HR Operations View]
-    RoleSwitcher --&gt; EmployeeView[Employee Learning Portal]
-    EmployeeView --&gt; EmpTrainList[My Training - Dynamic State]
-    EmpTrainList --&gt; EmpCourseDetail[Course Learning Portal - 3 Tabs]</code></pre>
+<h3>Overall Navigation Flow</h3>
+<div class="step-item"><span class="step-num">1.</span><span><strong>Application Root (CollabCRM Enterprise Suite)</strong> opens to the <strong>Top Global Navigation Bar</strong> and the <strong>Left Collapsible Navigation Drawer</strong>.</span></div>
+<div class="step-item"><span class="step-num">2.</span><span><strong>Role Switching Flow (Top Navigation)</strong>:</span></div>
+<li class="nested-li">Users can switch between the <strong>Admin / HR Operations View</strong> and the <strong>Employee Learning Portal</strong>.</li>
+<li class="nested-li">Selecting Employee View navigates directly to <strong>My Training</strong>, where learners open the <strong>3-Tab Course Learning Portal</strong> (<strong>1. Overview</strong>, <strong>2. Learning Resources</strong>, <strong>3. Assessment &amp; Questions</strong>).</li>
+<div class="step-item"><span class="step-num">3.</span><span><strong>Left Navigation Drawer Flow</strong>:</span></div>
+<li class="nested-li"><strong>Employees</strong>: Opens the Employee Directory, Employee Profile (with Training History tab), and the Add Employee modal.</li>
+<li class="nested-li"><strong>Training Hub</strong>: Provides access to Dashboard, Training Management (Training Programmes Catalogue), Assignments, Progress Tracker, and Certificates.</li>
+<li class="nested-li">From <strong>Training Programmes</strong>: Users can open <strong>Create / Edit Programme</strong> or click View to open <strong>Programme Detail</strong> (General Info, Curriculum &amp; Modules, Enrolled Employees, Status History).</li>
+<li class="nested-li">From <strong>Assignments</strong>: Users can open the <strong>Assign Training Slideover Modal</strong> or click any record to open <strong>Assignment Details</strong>.</li>
+<li class="nested-li">From <strong>Certificates</strong>: Users can expand employee rows and open the <strong>Verified Certificate Modal</strong> (signed by Khushi Bhatt, Head of HR).</li>
+<li class="nested-li"><strong>Config Hub</strong>: Provides quick navigation to <strong>Training Config</strong> (General Settings &amp; Training Categories) and <strong>Roles &amp; Permissions</strong> (Roles Table, Add Role modal, and Role Permission Matrix).</li>
+<hr />
 <h3>Flow 1: Top Navigation &amp; Role Switching</h3>
-<li class=""><strong>Global Header</strong>: Contains company branding (<code>CollabCRM People</code>), global search (<code>Search employees, programmes</code>), notifications bell, and the Active User Profile indicator (<code>Tanya Kapoor - Business Analyst • Employee</code> or <code>Ishdeep Anand - Admin • Management</code>).</li>
-<li class=""><strong>Role Switching</strong>: Clicking the user badge toggles between <strong>Admin/HR View</strong> and <strong>Employee User Role View</strong>. Switching to an Employee role redirects directly to the Employee Dashboard and personal learning workflows.</li>
+<li class=""><strong>Global Header</strong>: Contains company branding (CollabCRM People), global search (Search employees, programmes), notifications bell, and the Active User Profile indicator (<strong>Tanya Kapoor - Business Analyst • Employee</strong> or <strong>Ishdeep Anand - Admin • Management</strong>).</li>
+<li class=""><strong>Role Switching</strong>: Clicking the user badge switches between <strong>Admin/HR View</strong> and <strong>Employee User Role View</strong>. Switching to an Employee role redirects directly to the Employee Dashboard and personal learning workflows.</li>
 <hr />
 <h3>Flow 2: Navigation Drawer Structure</h3>
 <p>The left collapsible sidebar provides access to:</p>
-<li class="numbered-li"><strong>Employees</strong> (<code>employees</code>): Complete employee directory with profile cards and Add Employee modal.</li>
-<li class="numbered-li"><strong>Training Hub</strong> (non-bold submenu items):</li>
-<li class="nested-li"><strong>Dashboard</strong> (<code>training-dashboard</code>): Real-time metrics (Active Learners, Total Assignments, Completion Rate, Average Score), urgent review queue, and performance analytics.</li>
-<li class="nested-li"><strong>Training Management</strong> (<code>training-programmes</code>, breadcrumb: <code>Training Programmes</code>): Full course catalogue, lifecycle status filters (<code>All</code>, <code>Published</code>, <code>Draft</code>, <code>Archived</code>), search, Availability Status (<code>Active</code> / <code>Inactive</code>) toggle, View <code>👁</code> flow to <strong>Programme Detail</strong>, and <code>+ Create Programme</code> action.</li>
-<li class="nested-li"><strong>Assignments</strong> (<code>training-assignments</code>): Central assignment register with <strong><code>ASSIGNED SCOPE</code></strong> column (Employee, Department, Designation), <code>41 Total</code> assignment count, and 5-page pagination (10 items/page). Clicking a record opens <strong>Assignment Details</strong> (without the removed <code>Automated Evaluation Active</code> header badge).</li>
-<li class="nested-li"><strong>Progress</strong> (<code>training-progress</code>): Dual-mode tracking (<code>1. Employee-wise Training Completion</code> vs <code>2. Departmental Compliance Audit</code>), 4 KPI cards (<code>ACTIVE LEARNERS</code>, <code>TOTAL ASSIGNMENTS</code>, <code>COMPLETED</code>, <code>AVG SCORE</code>), and CSV export.</li>
-<li class="nested-li"><strong>Certificates</strong> (<code>certificates</code>): Expandable master-detail table defaulting to <strong>collapsed</strong> employee rows (<code>expandedMap</code>), <code>^ / v</code> toggle chevron, plain-text earned programmes, clickable certificate card preview, and right-aligned Actions column directly under <code>All Records</code>.</li>
-<li class="numbered-li"><strong>Config Hub</strong>:</li>
-<li class="nested-li"><strong>Config Flyout</strong> (compact full-height left drawer panel): Quick access to <strong>Training Config</strong> (<code>config</code>) and <strong>Roles</strong> (<code>roles</code>).</li>
-<li class="nested-li"><strong>Training Config</strong> (<code>config</code>): Tabbed settings for <strong>General Settings</strong> (5 module access permission toggles) and <strong>Training Categories</strong> (master category table + Add Category modal with duplicate validation).</li>
-<li class="nested-li"><strong>Roles &amp; Permissions</strong> (<code>roles</code>): 11-role RBAC table (<code>Sr. Business Analyst</code>, <code>Senior Recruiter</code>, <code>CEO</code>, <code>Project Manager</code>, <code>BDE</code>, <code>Admin/HR</code>, <code>Employee</code>, <code>Team leader</code>, <code>Management</code>, <code>Recruiter</code>, <code>BDM</code>), <code>+ Add Role</code> slideover modal, and interactive Role Permission Matrix.</li>
-<p><em>(Note: The legacy "Reports" drawer item has been removed.)</em></p>
+<div class="step-item"><span class="step-num">1.</span><span><strong>Employees</strong>: Complete employee directory with profile cards and the Add Employee modal.</span></div>
+<div class="step-item"><span class="step-num">2.</span><span><strong>Training Hub</strong>:</span></div>
+<li class="nested-li"><strong>Dashboard</strong>: Real-time metrics (Active Learners, Total Assignments, Completion Rate, Average Score), urgent review queue, and performance analytics.</li>
+<li class="nested-li"><strong>Training Management (Training Programmes)</strong>: Full course catalogue, lifecycle status filters (All, Published, Draft, Archived), search, independent Availability Status (Active / Inactive) toggle, View action to open <strong>Programme Detail</strong>, and <strong>+ Create Programme</strong> action.</li>
+<li class="nested-li"><strong>Assignments</strong>: Central assignment register with the <strong>ASSIGNED SCOPE</strong> column (Employee, Department, Designation), <strong>41 Total</strong> assignment count, and 5-page pagination (10 items per page). Clicking a record opens <strong>Assignment Details</strong>.</li>
+<li class="nested-li"><strong>Progress</strong>: Dual-mode tracking (1. Employee-wise Training Completion vs 2. Departmental Compliance Audit), 4 summary cards (Active Learners, Total Assignments, Completed, Avg Score), and CSV export.</li>
+<li class="nested-li"><strong>Certificates</strong>: Expandable master-detail table defaulting to <strong>collapsed</strong> employee rows with expand/collapse chevrons, plain-text earned programmes, clickable certificate preview, and a right-aligned <strong>Actions</strong> column directly under <strong>All Records</strong>.</li>
+<div class="step-item"><span class="step-num">3.</span><span><strong>Config Hub</strong>:</span></div>
+<li class="nested-li"><strong>Config Flyout</strong>: Compact left drawer panel offering quick access to <strong>Training Config</strong> and <strong>Roles</strong>.</li>
+<li class="nested-li"><strong>Training Config</strong>: Tabbed settings for <strong>General Settings</strong> (5 module access permission toggles) and <strong>Training Categories</strong> (master category table and Add Category modal with duplicate validation).</li>
+<li class="nested-li"><strong>Roles &amp; Permissions</strong>: 11-role access control table (Sr. Business Analyst, Senior Recruiter, CEO, Project Manager, BDE, Admin/HR, Employee, Team leader, Management, Recruiter, BDM), <strong>+ Add Role</strong> slideover modal, and interactive Role Permission Matrix.</li>
+<p><em>(Note: The legacy Reports drawer item has been removed.)</em></p>
 <hr />
 <h3>Flow 3: Training Management (Create / Edit Programme Flow)</h3>
-<li class="">Access via <code>Training Programmes &gt; + Create Programme</code> or <code>Edit Programme</code>.</li>
-<li class="">Features an <strong>Auto-Fill Demo</strong> button to rapidly populate sample data.</li>
+<li class="">Accessed via <strong>Training Programmes &gt; + Create Programme</strong> or <strong>Edit Programme</strong>.</li>
+<li class="">Features an <strong>Auto-Fill Demo</strong> button to populate sample data.</li>
 <li class="">Structured across three core sections:</li>
-<li class="numbered-li"><strong>Core Programme Details</strong>: Programme Name, Category, Difficulty Level, Expected Duration.</li>
-<li class="numbered-li"><strong>Learning Resources Builder</strong>: Dynamic resource repeater (Video/YouTube, PDF Document, External Link, Article).</li>
-<li class="numbered-li"><strong>Assessment &amp; Questions Builder</strong>: Enable Assessment toggle, title, passing score, max attempts, description, and dynamic multi-format question builder.</li>
-<li class="">Header Actions: <code>Auto-Fill Demo</code>, <code>Cancel</code>, <code>Save as Draft</code>, and <code>Publish Programme</code> (or <code>Update &amp; Publish</code>).</li>
+<div class="step-item nested-step"><span class="step-num">1.</span><span><strong>Core Programme Details</strong>: Programme Name, Training Category, Difficulty Level, Expected Duration.</span></div>
+<div class="step-item nested-step"><span class="step-num">2.</span><span><strong>Learning Resources Builder</strong>: Dynamic resource list (Video/YouTube, PDF Document, External Link, Article).</span></div>
+<div class="step-item nested-step"><span class="step-num">3.</span><span><strong>Assessment &amp; Questions Builder</strong>: Enable Assessment toggle, Assessment Title, Passing Score, Max Attempts, Description, and dynamic multi-format question builder.</span></div>
+<li class="">Header Actions: <strong>Auto-Fill Demo</strong>, <strong>Cancel</strong>, <strong>Save as Draft</strong>, and <strong>Publish Programme</strong> (or <strong>Update &amp; Publish</strong>).</li>
 <hr />
 <h3>Flow 4: Assign Training Slideover Modal Flow</h3>
-<li class="">Access via <code>+ Assign Training</code> button in Header, Training Programmes, or Assignments table.</li>
+<li class="">Accessed via <strong>+ Assign Training</strong> button in Header, Training Programmes, or Assignments table.</li>
 <li class="">Configurable targeting parameters:</li>
-<li class="nested-li">Bound <strong>Training Programme</strong> display field (shows selected/first programme).</li>
-<li class="nested-li">Multi-select <strong>Department</strong> filter with <code>Select All / Deselect All</code> and dynamic count.</li>
-<li class="nested-li">Multi-select <strong>Designation</strong> filter with <code>Select All / Deselect All</code>.</li>
-<li class="nested-li">Multi-select <strong>Employee (s)</strong> list with <code>Select All / Deselect All</code> shortcut and reactive count.</li>
+<li class="nested-li">Bound <strong>Training Programme</strong> display field (shows selected or first programme).</li>
+<li class="nested-li">Multi-select <strong>Department</strong> filter with <strong>Select All / Deselect All</strong> and dynamic count.</li>
+<li class="nested-li">Multi-select <strong>Designation</strong> filter with <strong>Select All / Deselect All</strong>.</li>
+<li class="nested-li">Multi-select <strong>Employee (s)</strong> list with <strong>Select All / Deselect All</strong> shortcut and reactive count.</li>
 <li class="nested-li">Mandatory <strong>Start Date</strong> and optional <strong>End Date</strong>.</li>
-<li class="">Action Buttons: <code>Auto-Fill</code>, <code>Cancel</code>, and <code>Assign Training</code>.</li>
+<li class="">Action Buttons: <strong>Auto-Fill</strong>, <strong>Cancel</strong>, and <strong>Assign Training</strong>.</li>
 <hr />
 <h3>Flow 5: Certificates Verification Flow</h3>
 <li class=""><strong>Master-Detail Expandable Table</strong>:</li>
-<li class="nested-li">Defaults to <strong>collapsed</strong> employee rows (<code>!!expandedMap[emp.id]</code>); expanding a row reveals child sub-rows for additional certificates earned by that employee.</li>
-<li class="nested-li">Master row displays Employee Name, Department/Role, Primary Earned Programme, and an expand toggle (<code>^ / v</code>).</li>
-<li class="nested-li">Plain-text format for programme names (no select dropdowns or passed badges in cell). Clicking a certificate card also opens the verified certificate modal.</li>
-<li class="nested-li"><strong>Right-Aligned Actions</strong>: The <code>Actions</code> column header and eye icon <code>(👁)</code> buttons are aligned to the far right edge (<code>w-28 text-right pr-6</code>), positioned directly below the <code>All Records</code> category filter.</li>
+<li class="nested-li">Defaults to <strong>collapsed</strong> employee rows; expanding a row reveals child sub-rows for additional certificates earned by that employee.</li>
+<li class="nested-li">Master row displays Employee Name, Department/Role, Primary Earned Programme, and an expand/collapse toggle chevron.</li>
+<li class="nested-li">Plain-text format for programme names (no dropdowns or passed badges inside the cell). Clicking a certificate card or the view icon opens the verified certificate modal.</li>
+<li class="nested-li"><strong>Right-Aligned Actions</strong>: The <strong>Actions</strong> column header and eye icon buttons are aligned to the far right edge, positioned directly below the <strong>All Records</strong> category filter.</li>
 <li class=""><strong>Certificate Modal</strong>:</li>
-<li class="nested-li">Displays official certificate of appreciation with <strong>centered <code>CollabCRM</code> brand header</strong>, gold seal icon, and dark-navy corner accent.</li>
+<li class="nested-li">Displays the official certificate of appreciation with centered <strong>CollabCRM</strong> brand header, gold seal icon, and dark-navy corner accent.</li>
 <li class="nested-li">Dynamically bound to the exact completed programme and learner name.</li>
-<li class="nested-li"><strong>Authorized Signatory</strong>: Configured strictly as <strong><code>Khushi Bhatt, Head of HR</code></strong>.</li>
+<li class="nested-li"><strong>Authorized Signatory</strong>: Configured strictly as <strong>Khushi Bhatt, Head of HR</strong>.</li>
 <hr />
 <h3>Flow 6: Employee User Role Learning Portal Flow</h3>
-<li class="">Access by switching user to <code>Tanya Kapoor</code> or navigating to <code>Training &gt; My Training</code>.</li>
-<li class=""><strong>Dynamic State Integration</strong>: Newly created and published programmes from Admin/HR view automatically populate in the employee's training list. <strong>Archived programmes (<code>publicationStatus === "Archived"</code>) are excluded from all employee views and APIs</strong> (<code>Employee Dashboard</code>, <code>My Training</code>, <code>Employee Course Detail</code>, <code>Employee Profile &gt; Training History</code>, <code>/api/employee/training-data</code>, <code>/api/employee/history</code>).</li>
+<li class="">Accessed by switching user to <strong>Tanya Kapoor</strong> or navigating to <strong>Training &gt; My Training</strong>.</li>
+<li class=""><strong>Dynamic State Integration</strong>: Newly created and published programmes from Admin/HR view automatically populate in the employee's training list. <strong>Archived programmes are excluded from all employee views</strong> (Employee Dashboard, My Training, Employee Course Detail, and Employee Profile Training History).</li>
 <li class=""><strong>Inactive Programme Read-Only Handling</strong>:</li>
-<li class="nested-li">Programmes marked <code>Inactive</code> (including programmes <code>Completed</code> first and then set to <code>Inactive</code>) remain visible in <code>My Training</code> with an <code>Inactive</code> status pill.</li>
-<li class="nested-li">Opening an <code>Inactive</code> programme shows an <strong>Inactive warning banner</strong> and disables all actions inside (<code>Start Learning</code>, <code>Mark Complete</code>, external resource links, assessment inputs/selects/checkboxes/radios, <code>Submit Assessment</code>, <code>Retake Assessment</code>, certificate download, and backend mutation APIs).</li>
-<li class=""><strong>Employee Training History (<code>Employee Profile &gt; Training History</code>)</strong>: Displays enrollment metrics (<code>TOTAL ENROLLED</code>, <code>COMPLETED &amp; PASSED</code>, <code>IN PROGRESS</code>, <code>CERTIFICATES EARNED</code>), a compact <code>+ Assign New Training</code> button, and non-archived training records.</li>
-<li class=""><strong>3-Tab Course Learning Layout (<code>mt</code>)</strong>:</li>
-<li class="nested-li"><strong>Tab 1: 1. Overview</strong>: Progress bar, completed modules counter, course summary, and objectives.</li>
-<li class="nested-li"><strong>Tab 2: 2. Learning Resources</strong>: Resource checklist with external link openers, checkable completion toggles, and mandatory indicators (disabled if programme is <code>Inactive</code>).</li>
-<li class="nested-li"><strong>Tab 3: 3. Assessment &amp; Questions</strong>:</li>
-<li class="nested-li"><strong>Header</strong>: Clean title <strong><code>3. Assessment &amp; Questions</code></strong> with no <code>[Unlocked]</code> tag.</li>
-<li class="nested-li"><strong>When Assessment Toggle is OFF (<code>enabled: false</code>)</strong>:</li>
-<li class="nested-li">Inside Tab 3: Renders a clean empty container (<em>"No Assessment Configured — Assessment is disabled for this training programme. Learners achieve completion upon reviewing all mandatory learning resources"</em>). <strong>No questions, no scoring inputs, no submit button.</strong></li>
-<li class="nested-li">Left Sidebar: Passing Assessment Score displays <code>N/A (Assessment Disabled)</code>. Action button displays <code>Start Learning Modules →</code> or <code>Programme Completed ✓</code> (never prompts to take an assessment).</li>
-<li class="nested-li">Tab 2 Navigation: Bottom button displays <code>All Modules Completed ✓</code>.</li>
-<li class="nested-li"><strong>When Assessment Toggle is ON (<code>enabled: true</code>)</strong>:</li>
+<li class="nested-li">Programmes marked <strong>Inactive</strong> (including programmes <strong>Completed</strong> first and then set to <strong>Inactive</strong>) remain visible in <strong>My Training</strong> with an <strong>Inactive</strong> status pill.</li>
+<li class="nested-li">Opening an <strong>Inactive</strong> programme shows an <strong>Inactive warning banner</strong> and disables all actions inside (Start Learning, Mark Complete, external resource links, assessment inputs/selects/checkboxes/radios, Submit Assessment, Retake Assessment, and certificate download).</li>
+<li class=""><strong>Employee Training History (Employee Profile &gt; Training History)</strong>: Displays enrollment metrics (Total Enrolled, Completed &amp; Passed, In Progress, Certificates Earned), a compact <strong>+ Assign New Training</strong> button, and non-archived training records.</li>
+<li class=""><strong>3-Tab Course Learning Layout</strong>:</li>
+<li class="nested-li"><strong>Tab 1 — 1. Overview</strong>: Progress bar, completed modules counter, course summary, and learning objectives.</li>
+<li class="nested-li"><strong>Tab 2 — 2. Learning Resources</strong>: Resource checklist with external link openers, completion toggles, and mandatory indicators (disabled if programme is Inactive).</li>
+<li class="nested-li"><strong>Tab 3 — 3. Assessment &amp; Questions</strong>:</li>
+<li class="nested-li"><strong>Header</strong>: Clean title <strong>3. Assessment &amp; Questions</strong> (without any Unlocked tag).</li>
+<li class="nested-li"><strong>When Assessment Toggle is OFF</strong>:</li>
+<li class="nested-li">Inside Tab 3: Renders a clean empty container ("No Assessment Configured — Assessment is disabled for this training programme. Learners achieve completion upon reviewing all mandatory learning resources"). No questions, no scoring inputs, and no submit button are shown.</li>
+<li class="nested-li">Left Sidebar: Passing Assessment Score displays <strong>N/A (Assessment Disabled)</strong>. Action button displays <strong>Start Learning Modules →</strong> or <strong>Programme Completed ✓</strong> (never prompts to take an assessment).</li>
+<li class="nested-li">Tab 2 Navigation: Bottom button displays <strong>All Modules Completed ✓</strong>.</li>
+<li class="nested-li"><strong>When Assessment Toggle is ON</strong>:</li>
 <li class="nested-li">Inside Tab 3: Renders the exact question types, marks, mandatory indicators, and options configured by Admin/HR.</li>
-<li class="nested-li">Left Sidebar: Passing Assessment Score displays <code>🎯 80% (Strictly &gt; 80% to pass)</code>. Action button displays <code>Take Assessment →</code> (or <code>Download Certificate 🎓</code> upon passing).</li>
-<li class="nested-li">Result Status: Displays unified <code>Completed</code> badge when assessment passes and programme completes.</li>
+<li class="nested-li">Left Sidebar: Passing Assessment Score displays <strong>80% (Strictly &gt; 80% to pass)</strong>. Action button displays <strong>Take Assessment →</strong> (or <strong>Download Certificate</strong> upon passing).</li>
+<li class="nested-li">Result Status: Displays unified <strong>Completed</strong> badge when assessment passes and programme completes.</li>
 <hr />
 <h2>SECTION 2: FORM FIELD VALUES &amp; VALIDATION SPECIFICATIONS</h2>
-<h3>1. Create Training Programme Form (<code>Training Management &gt; Create Programme</code>)</h3>
+<h3>1. Create Training Programme Form (Training Management &gt; Create Programme)</h3>
 <h4>Section 1: Core Programme Details</h4>
 <li class=""><strong>Programme Name:</strong></li>
-<li class="nested-li">Mandatory: Yes (<code>*</code>)</li>
-<li class="nested-li">Type: Alphanumeric</li>
+<li class="nested-li">Mandatory: Yes (<strong>*</strong>)</li>
+<li class="nested-li">Type: Alphanumeric Text Input</li>
 <li class="nested-li">Max. Length: 120</li>
 <li class="nested-li">Min. Length: 3</li>
 <li class="nested-li">Default value: Empty</li>
 <li class="nested-li">Validation: Cannot be blank or whitespace-only. Must be unique across active programmes.</li>
 <li class=""><strong>Training Category:</strong></li>
-<li class="nested-li">Mandatory: Yes (<code>*</code>)</li>
+<li class="nested-li">Mandatory: Yes (<strong>*</strong>)</li>
 <li class="nested-li">Type: Dropdown (Single Select)</li>
-<li class="nested-li">Default value: <code>Recruitment &amp; HR Operations</code></li>
+<li class="nested-li">Default value: Recruitment &amp; HR Operations</li>
 <li class="nested-li">Allowed Values:</li>
-<li class="nested-li"><code>Recruitment &amp; HR Operations</code></li>
-<li class="nested-li"><code>Engineering &amp; Tech Architecture</code></li>
-<li class="nested-li"><code>Sales &amp; Business Development</code></li>
-<li class="nested-li"><code>Governance &amp; Compliance</code></li>
-<li class="nested-li"><code>Product &amp; Design</code></li>
+<li class="nested-li">Recruitment &amp; HR Operations</li>
+<li class="nested-li">Engineering &amp; Tech Architecture</li>
+<li class="nested-li">Sales &amp; Business Development</li>
+<li class="nested-li">Governance &amp; Compliance</li>
+<li class="nested-li">Product &amp; Design</li>
 <li class=""><strong>Difficulty Level:</strong></li>
-<li class="nested-li">Mandatory: Yes (<code>*</code>)</li>
+<li class="nested-li">Mandatory: Yes (<strong>*</strong>)</li>
 <li class="nested-li">Type: Dropdown (Single Select)</li>
-<li class="nested-li">Default value: <code>Intermediate</code></li>
+<li class="nested-li">Default value: Intermediate</li>
 <li class="nested-li">Allowed Values:</li>
-<li class="nested-li"><code>Beginner</code></li>
-<li class="nested-li"><code>Intermediate</code></li>
-<li class="nested-li"><code>Expert</code></li>
+<li class="nested-li">Beginner</li>
+<li class="nested-li">Intermediate</li>
+<li class="nested-li">Expert</li>
 <li class=""><strong>Expected Duration (Hours):</strong></li>
-<li class="nested-li">Mandatory: Yes (<code>*</code>)</li>
+<li class="nested-li">Mandatory: Yes (<strong>*</strong>)</li>
 <li class="nested-li">Type: Numeric (Integer)</li>
 <li class="nested-li">Max. Value: 200</li>
 <li class="nested-li">Min. Value: 1</li>
-<li class="nested-li">Default value: <code>4</code></li>
+<li class="nested-li">Default value: 4</li>
 <li class="nested-li">Validation: Positive integer; decimals or negative values not permitted.</li>
 <hr />
-<h4>Section 2: <code>2. Learning Resources (YouTube, External Courses, Websites, Videos, PDFs, Docs) *</code></h4>
+<h4>Section 2: Learning Resources (YouTube, External Courses, Websites, Videos, PDFs, Docs) *</h4>
 <li class=""><strong>Resource Type:</strong></li>
 <li class="nested-li">Mandatory: Yes</li>
 <li class="nested-li">Type: Dropdown (Single Select)</li>
-<li class="nested-li">Default value: <code>Video / YouTube</code></li>
+<li class="nested-li">Default value: Video / YouTube</li>
 <li class="nested-li">Allowed Values:</li>
-<li class="nested-li"><code>Video / YouTube</code></li>
-<li class="nested-li"><code>PDF Document</code></li>
-<li class="nested-li"><code>External Link</code></li>
-<li class="nested-li"><code>Article</code></li>
+<li class="nested-li">Video / YouTube</li>
+<li class="nested-li">PDF Document</li>
+<li class="nested-li">External Link</li>
+<li class="nested-li">Article</li>
 <li class=""><strong>Resource Title:</strong></li>
 <li class="nested-li">Mandatory: Yes</li>
-<li class="nested-li">Type: Alphanumeric</li>
+<li class="nested-li">Type: Alphanumeric Text Input</li>
 <li class="nested-li">Max. Length: 150</li>
 <li class="nested-li">Min. Length: 2</li>
-<li class="nested-li">Default value: Empty in newly added rows (Pre-populated starter rows: <code>Module 1: Architecture Video Lecture</code>, <code>Module 2: Implementation Playbook &amp; Guidelines</code>; Placeholder: <code>Module title (e.g. Architecture Lecture)...</code>)</li>
-<li class="nested-li">Validation: Clear module identifier.</li>
+<li class="nested-li">Default value: Empty in newly added rows (Pre-populated starter rows: "Module 1: Architecture Video Lecture", "Module 2: Implementation Playbook &amp; Guidelines")</li>
+<li class="nested-li">Validation: Clear module identifier required.</li>
 <li class=""><strong>Resource URL:</strong></li>
 <li class="nested-li">Mandatory: Yes</li>
-<li class="nested-li">Type: URL</li>
+<li class="nested-li">Type: URL Input</li>
 <li class="nested-li">Max. Length: 500</li>
 <li class="nested-li">Min. Length: 8</li>
-<li class="nested-li">Default value: Empty in newly added rows (Placeholder: <code>URL / link (https://...)</code>)</li>
-<li class="nested-li">Validation: Must be a valid URI (<code>http://</code> or <code>https://</code>).</li>
+<li class="nested-li">Default value: Empty in newly added rows (Placeholder: <strong>https://...</strong>)</li>
+<li class="nested-li">Validation: Must be a valid web link starting with http:// or https://.</li>
 <hr />
-<h4>Section 3: Assessment &amp; Questions Builder (<code>4. Assessment &amp; Questions</code>)</h4>
+<h4>Section 3: Assessment &amp; Questions Builder</h4>
 <li class=""><strong>Enable Assessment Toggle:</strong></li>
 <li class="nested-li">Mandatory: Yes</li>
-<li class="nested-li">Type: Boolean Toggle (Active / Inactive)</li>
-<li class="nested-li">Default value: <code>Active</code> (<code>true</code>)</li>
+<li class="nested-li">Type: Toggle Switch (Active / Inactive)</li>
+<li class="nested-li">Default value: Active</li>
 <li class=""><strong>Assessment Title:</strong></li>
-<li class="nested-li">Mandatory: Yes (<code>*</code>, when Enable Assessment is ON)</li>
-<li class="nested-li">Type: Alphanumeric</li>
+<li class="nested-li">Mandatory: Yes (<strong>*</strong>, when Enable Assessment is Active)</li>
+<li class="nested-li">Type: Alphanumeric Text Input</li>
 <li class="nested-li">Max. Length: 120</li>
 <li class="nested-li">Min. Length: 3</li>
-<li class="nested-li">Default value: <code>Final Training Assessment</code></li>
+<li class="nested-li">Default value: Final Training Assessment</li>
 <li class=""><strong>Passing Score (%):</strong></li>
-<li class="nested-li">Mandatory: Yes (<code>*</code>, when Enable Assessment is ON)</li>
+<li class="nested-li">Mandatory: Yes (<strong>*</strong>, when Enable Assessment is Active)</li>
 <li class="nested-li">Type: Numeric (Integer)</li>
 <li class="nested-li">Max. Value: 100</li>
 <li class="nested-li">Min. Value: 1</li>
-<li class="nested-li">Default value: <code>80</code></li>
-<li class="nested-li">Validation: Benchmark passing percentage (badge: <code>Strictly &gt; 80% to pass</code>).</li>
+<li class="nested-li">Default value: 80</li>
+<li class="nested-li">Validation: Benchmark passing percentage (Strictly &gt; 80% to pass).</li>
 <li class=""><strong>Max Assessment Attempts:</strong></li>
-<li class="nested-li">Mandatory: Yes (<code>*</code>, when Enable Assessment is ON)</li>
+<li class="nested-li">Mandatory: Yes (<strong>*</strong>, when Enable Assessment is Active)</li>
 <li class="nested-li">Type: Numeric (Integer)</li>
 <li class="nested-li">Max. Value: 10</li>
 <li class="nested-li">Min. Value: 1</li>
-<li class="nested-li">Default value: <code>3</code></li>
+<li class="nested-li">Default value: 3</li>
 <li class="nested-li">Validation: Maximum attempts permitted before supervisor intervention.</li>
 <li class=""><strong>Assessment Description:</strong></li>
 <li class="nested-li">Mandatory: No (Optional)</li>
-<li class="nested-li">Type: Textarea</li>
+<li class="nested-li">Type: Multi-line Textarea</li>
 <li class="nested-li">Max. Length: 500</li>
-<li class="nested-li">Default value: <code>Complete the following questions to evaluate your understanding of this training.</code></li>
+<li class="nested-li">Default value: Complete the following questions to evaluate your understanding of this training.</li>
 <li class=""><strong>Question Statement:</strong></li>
-<li class="nested-li">Mandatory: Yes (<code>*</code>)</li>
-<li class="nested-li">Type: Alphanumeric / Textarea</li>
+<li class="nested-li">Mandatory: Yes (<strong>*</strong>)</li>
+<li class="nested-li">Type: Alphanumeric / Multi-line Textarea</li>
 <li class="nested-li">Max. Length: 1000</li>
 <li class="nested-li">Min. Length: 5</li>
-<li class="nested-li">Default value: Empty (Placeholder: <code>Enter your question statement here...</code>)</li>
+<li class="nested-li">Default value: Empty</li>
 <li class=""><strong>Question Type:</strong></li>
-<li class="nested-li">Mandatory: Yes (<code>*</code>)</li>
+<li class="nested-li">Mandatory: Yes (<strong>*</strong>)</li>
 <li class="nested-li">Type: Dropdown (Single Select)</li>
-<li class="nested-li">Default value: <code>Single Selection (Radio)</code> (for newly added questions; default starter assessment includes 6 questions covering all 6 formats)</li>
+<li class="nested-li">Default value: Single Selection (Radio) for newly added questions (default starter assessment includes 6 questions covering all 6 formats)</li>
 <li class="nested-li">Allowed Values:</li>
-<li class="numbered-li"><code>Short Text Answer</code> (<code>short_text</code>)</li>
-<li class="numbered-li"><code>Long Text Answer</code> (<code>long_text</code>)</li>
-<li class="numbered-li"><code>Single Selection (Radio)</code> (<code>single_choice</code>)</li>
-<li class="numbered-li"><code>Multiple Selection (Checkbox)</code> (<code>multiple_choice</code>)</li>
-<li class="numbered-li"><code>Dropdown Selection</code> (<code>dropdown</code>)</li>
-<li class="numbered-li"><code>True / False</code> (<code>true_false</code>)</li>
+<div class="step-item nested-step"><span class="step-num">1.</span><span>Short Text Answer</span></div>
+<div class="step-item nested-step"><span class="step-num">2.</span><span>Long Text Answer</span></div>
+<div class="step-item nested-step"><span class="step-num">3.</span><span>Single Selection (Radio)</span></div>
+<div class="step-item nested-step"><span class="step-num">4.</span><span>Multiple Selection (Checkbox)</span></div>
+<div class="step-item nested-step"><span class="step-num">5.</span><span>Dropdown Selection</span></div>
+<div class="step-item nested-step"><span class="step-num">6.</span><span>True / False</span></div>
 <li class=""><strong>Marks:</strong></li>
 <li class="nested-li">Mandatory: Yes</li>
 <li class="nested-li">Type: Numeric (Integer)</li>
 <li class="nested-li">Max. Value: 50</li>
 <li class="nested-li">Min. Value: 1</li>
-<li class="nested-li">Default value: <code>2</code></li>
-<li class="nested-li">Validation: Must be &gt; 0.</li>
-<li class=""><strong>Mandatory:</strong></li>
+<li class="nested-li">Default value: 2</li>
+<li class="nested-li">Validation: Must be greater than 0.</li>
+<li class=""><strong>Mandatory Question:</strong></li>
 <li class="nested-li">Mandatory: Yes</li>
-<li class="nested-li">Type: Checkbox / Boolean Toggle</li>
-<li class="nested-li">Default value: <code>true</code></li>
-<li class=""><strong>Question Options / Answers:</strong></li>
-<li class="nested-li">For <code>single_choice</code>, <code>multiple_choice</code>, and <code>dropdown</code>: Minimum 2 options required, each with Option Text. Single choice and dropdown require a selected Correct Answer; multiple choice requires at least one selected Correct Answer.</li>
-<li class="nested-li">For <code>short_text</code>: Minimum 1 accepted keyword/phrase (<code>Configured Accepted Answers</code>, evaluated case-insensitively with trimmed whitespace).</li>
-<li class="nested-li">For <code>true_false</code>: Correct answer toggle (<code>True</code> or <code>False</code>).</li>
-<li class="nested-li">For <code>long_text</code>: <code>Expected Answer / Evaluation Reference for Reviewer</code> textarea.</li>
-<li class="nested-li">Question Actions: <code>Duplicate</code> and <code>Delete</code> (question reorder buttons are removed).</li>
+<li class="nested-li">Type: Checkbox / Toggle</li>
+<li class="nested-li">Default value: Checked / Active</li>
+<li class=""><strong>Question Options &amp; Correct Answers:</strong></li>
+<li class="nested-li"><strong>Single Selection (Radio), Multiple Selection (Checkbox), and Dropdown Selection</strong>: Minimum 2 options required, each with Option Text. Single selection and dropdown require one selected Correct Answer; multiple selection requires at least one selected Correct Answer.</li>
+<li class="nested-li"><strong>Short Text Answer</strong>: Minimum 1 accepted keyword/phrase required for automated case-insensitive grading.</li>
+<li class="nested-li"><strong>True / False</strong>: Correct answer selection (True or False).</li>
+<li class="nested-li"><strong>Long Text Answer</strong>: Expected Answer / Evaluation Reference summary for manual reviewer grading.</li>
+<li class="nested-li"><strong>Question Actions</strong>: Duplicate and Delete (question reorder buttons are removed).</li>
 <hr />
-<h3>2. Assign Training Form (<code>Assignments &gt; + Assign Training</code>)</h3>
+<h3>2. Assign Training Form (Assignments &gt; + Assign Training)</h3>
 <li class=""><strong>Training Programme:</strong></li>
-<li class="nested-li">Mandatory: Yes (<code>*</code>)</li>
+<li class="nested-li">Mandatory: Yes (<strong>*</strong>)</li>
 <li class="nested-li">Type: Read-only Programme Display Box (bound to selected or first programme)</li>
-<li class="nested-li">Default value: First programme (e.g. <code>CollabCRM Recruitment &amp; Client Portal Workflows</code>)</li>
+<li class="nested-li">Default value: First programme (e.g. CollabCRM Recruitment &amp; Client Portal Workflows)</li>
 <li class=""><strong>Department:</strong></li>
 <li class="nested-li">Mandatory: No (Optional targeting filter)</li>
-<li class="nested-li">Type: Multi-select Dropdown with <code>Select All</code> / <code>Deselect All</code></li>
-<li class="nested-li">Default value: <code>All Departments</code></li>
-<li class="nested-li">Allowed Values: <code>Project</code>, <code>Business analyst</code>, <code>Recruitment &amp; HR</code>, <code>CPA Firms</code>, <code>Admin</code> (plus any dynamic departments from employee records)</li>
+<li class="nested-li">Type: Multi-select Dropdown with Select All / Deselect All</li>
+<li class="nested-li">Default value: All Departments</li>
+<li class="nested-li">Allowed Values: Project, Business analyst, Recruitment &amp; HR, CPA Firms, Admin (plus dynamic departments from employee records)</li>
 <li class=""><strong>Designation:</strong></li>
 <li class="nested-li">Mandatory: No (Optional targeting filter)</li>
-<li class="nested-li">Type: Multi-select Dropdown with <code>Select All</code> / <code>Deselect All</code></li>
-<li class="nested-li">Default value: <code>All Designations</code></li>
-<li class="nested-li">Allowed Values: <code>Executive</code>, <code>Sr. Executive</code>, <code>Business analyst</code>, <code>Team leader</code>, <code>Manager</code>, <code>AVP</code> (plus any dynamic designations from employee records)</li>
+<li class="nested-li">Type: Multi-select Dropdown with Select All / Deselect All</li>
+<li class="nested-li">Default value: All Designations</li>
+<li class="nested-li">Allowed Values: Executive, Sr. Executive, Business analyst, Team leader, Manager, AVP (plus dynamic designations from employee records)</li>
 <li class=""><strong>Employee (s):</strong></li>
-<li class="nested-li">Mandatory: Yes (<code>*</code>)</li>
-<li class="nested-li">Type: Multi-select Dropdown with <code>Select All</code> / <code>Deselect All</code></li>
+<li class="nested-li">Mandatory: Yes (<strong>*</strong>)</li>
+<li class="nested-li">Type: Multi-select Dropdown with Select All / Deselect All</li>
 <li class="nested-li">Default value: Primary selected employee (first employee in directory)</li>
-<li class="nested-li">Validation: Must have at least 1 employee selected before assignment submission (<code>Please select at least one employee and a training programme.</code>). Displays reactive count (e.g. <code>14 selected</code>).</li>
+<li class="nested-li">Validation: Must have at least 1 employee selected before assignment submission. Displays reactive selected count.</li>
 <li class=""><strong>Start Date:</strong></li>
-<li class="nested-li">Mandatory: Yes (<code>*</code>)</li>
-<li class="nested-li">Type: Date (<code>YYYY-MM-DD</code>)</li>
-<li class="nested-li">Default value: <code>2026-11-04</code></li>
-<li class="nested-li">Validation: Required (<code>required</code>).</li>
+<li class="nested-li">Mandatory: Yes (<strong>*</strong>)</li>
+<li class="nested-li">Type: Date Picker</li>
+<li class="nested-li">Default value: 2026-11-04</li>
+<li class="nested-li">Validation: Required.</li>
 <li class=""><strong>End Date:</strong></li>
 <li class="nested-li">Mandatory: No (Optional completion deadline)</li>
-<li class="nested-li">Type: Date (<code>YYYY-MM-DD</code>)</li>
-<li class="nested-li">Default value: <code>2026-12-01</code></li>
+<li class="nested-li">Type: Date Picker</li>
+<li class="nested-li">Default value: 2026-12-01</li>
 <li class="nested-li">Validation: Must be on or after Start Date.</li>
-<li class=""><strong>Header / Footer Actions:</strong> <code>Auto-Fill</code>, <code>Cancel</code>, <code>Assign Training</code>.</li>
+<li class=""><strong>Form Actions:</strong> Auto-Fill, Cancel, Assign Training.</li>
 <hr />
-<h3>3. Add Employee Form (<code>Employees &gt; + Add New Employee</code>)</h3>
+<h3>3. Add Employee Form (Employees &gt; + Add New Employee)</h3>
 <li class=""><strong>First Name:</strong></li>
-<li class="nested-li">Mandatory: Yes (<code>*</code>)</li>
+<li class="nested-li">Mandatory: Yes (<strong>*</strong>)</li>
 <li class="nested-li">Type: Text Input (Alphabetic)</li>
 <li class="nested-li">Max. Length: 50</li>
 <li class="nested-li">Min. Length: 2</li>
-<li class="nested-li">Default value: Empty (Placeholder: <code>Enter first name (e.g. John)</code>)</li>
+<li class="nested-li">Default value: Empty</li>
 <li class=""><strong>Last Name:</strong></li>
-<li class="nested-li">Mandatory: Yes (<code>*</code>)</li>
+<li class="nested-li">Mandatory: Yes (<strong>*</strong>)</li>
 <li class="nested-li">Type: Text Input (Alphabetic)</li>
 <li class="nested-li">Max. Length: 50</li>
 <li class="nested-li">Min. Length: 2</li>
-<li class="nested-li">Default value: Empty (Placeholder: <code>Enter last name (e.g. Doe)</code>)</li>
+<li class="nested-li">Default value: Empty</li>
 <li class=""><strong>Company Email:</strong></li>
-<li class="nested-li">Mandatory: Yes (<code>*</code>)</li>
+<li class="nested-li">Mandatory: Yes (<strong>*</strong>)</li>
 <li class="nested-li">Type: Email Input</li>
 <li class="nested-li">Max. Length: 100</li>
-<li class="nested-li">Default value: Empty (Placeholder: <code>Enter corporate email address (e.g. john.doe@collabcrm.internal)</code>)</li>
-<li class="nested-li">Validation: Must be a valid corporate email format (<code>user@domain.com</code>).</li>
+<li class="nested-li">Default value: Empty</li>
+<li class="nested-li">Validation: Must be a valid corporate email format (user@domain.com).</li>
 <li class=""><strong>Department:</strong></li>
 <li class="nested-li">Mandatory: No (Optional select)</li>
 <li class="nested-li">Type: Dropdown (Single Select)</li>
-<li class="nested-li">Default value: <code>Project</code></li>
-<li class="nested-li">Allowed Values: <code>Project</code>, <code>Business analyst</code>, <code>CPA Firms</code>, <code>Recruitment &amp; HR</code></li>
+<li class="nested-li">Default value: Project</li>
+<li class="nested-li">Allowed Values: Project, Business analyst, CPA Firms, Recruitment &amp; HR</li>
 <li class=""><strong>Status:</strong></li>
 <li class="nested-li">Mandatory: No (Optional select)</li>
 <li class="nested-li">Type: Dropdown (Single Select)</li>
-<li class="nested-li">Default value: <code>Confirmed</code></li>
-<li class="nested-li">Allowed Values: <code>Confirmed</code>, <code>Intern</code>, <code>Probation</code>, <code>Notice Period</code></li>
+<li class="nested-li">Default value: Confirmed</li>
+<li class="nested-li">Allowed Values: Confirmed, Intern, Probation, Notice Period</li>
 <li class=""><strong>Designation:</strong></li>
 <li class="nested-li">Mandatory: No</li>
 <li class="nested-li">Type: Text Input</li>
-<li class="nested-li">Default value: Empty (Placeholder: <code>Enter job title / designation (e.g. Senior Executive)</code>)</li>
+<li class="nested-li">Default value: Empty</li>
 <li class=""><strong>Reporting Manager:</strong></li>
 <li class="nested-li">Mandatory: No</li>
 <li class="nested-li">Type: Text Input</li>
-<li class="nested-li">Default value: Empty (Placeholder: <code>Enter reporting manager name (e.g. Isha Patel)</code>)</li>
-<li class=""><strong>Auto-Generated / Internal Profile Defaults on Save:</strong></li>
-<li class="nested-li"><code>Company Mobile</code>: <code>+1 9005049999</code> (or <code>+1 9887654321</code> via <code>Auto-Fill</code> button)</li>
-<li class="nested-li"><code>Employee Code</code>: <code>CO-{1000-9999}</code></li>
-<li class="nested-li"><code>Joining Date</code>: <code>04-Nov-2026</code></li>
-<li class="nested-li"><code>Account Status</code>: <code>Active</code></li>
-<li class=""><strong>Header / Footer Actions:</strong> <code>Auto-Fill</code>, <code>Cancel</code>, <code>Save Employee</code>.</li>
+<li class="nested-li">Default value: Empty</li>
+<li class=""><strong>Auto-Generated Profile Defaults on Save:</strong></li>
+<li class="nested-li">Company Mobile: +1 9005049999 (or +1 9887654321 via Auto-Fill)</li>
+<li class="nested-li">Employee Code: Automatically generated</li>
+<li class="nested-li">Joining Date: 04-Nov-2026</li>
+<li class="nested-li">Account Status: Active</li>
+<li class=""><strong>Form Actions:</strong> Auto-Fill, Cancel, Save Employee.</li>
 <hr />
-<h3>4. Global Training Configuration (<code>Config &gt; Training Config</code>)</h3>
-<h4>General Settings Tab (<code>t === 'general'</code>)</h4>
+<h3>4. Global Training Configuration (Config &gt; Training Config)</h3>
+<h4>General Settings Tab</h4>
 <li class=""><strong>Enable / Disable Training Module:</strong></li>
 <li class="nested-li">Mandatory: Yes</li>
-<li class="nested-li">Type: Boolean Toggle (Active / Inactive)</li>
-<li class="nested-li">Default value: <code>Active</code> (<code>true</code>)</li>
+<li class="nested-li">Type: Toggle Switch (Active / Inactive)</li>
+<li class="nested-li">Default value: Active</li>
 <li class="nested-li">Description: Master switch to enable or disable the entire Training module access for employees across the portal.</li>
 <li class=""><strong>Allow Training Creation:</strong></li>
 <li class="nested-li">Mandatory: Yes</li>
-<li class="nested-li">Type: Boolean Toggle</li>
-<li class="nested-li">Default value: <code>Active</code> (<code>true</code>)</li>
+<li class="nested-li">Type: Toggle Switch</li>
+<li class="nested-li">Default value: Active</li>
 <li class="nested-li">Description: Permit authorized roles to author and create new training programs.</li>
 <li class=""><strong>Allow Training Editing:</strong></li>
 <li class="nested-li">Mandatory: Yes</li>
-<li class="nested-li">Type: Boolean Toggle</li>
-<li class="nested-li">Default value: <code>Active</code> (<code>true</code>)</li>
+<li class="nested-li">Type: Toggle Switch</li>
+<li class="nested-li">Default value: Active</li>
 <li class="nested-li">Description: Allow modification of existing published and draft training programs.</li>
 <li class=""><strong>Allow Training Archiving:</strong></li>
 <li class="nested-li">Mandatory: Yes</li>
-<li class="nested-li">Type: Boolean Toggle</li>
-<li class="nested-li">Default value: <code>Inactive</code> (<code>false</code>)</li>
+<li class="nested-li">Type: Toggle Switch</li>
+<li class="nested-li">Default value: Inactive</li>
 <li class="nested-li">Description: Enable archiving of obsolete or retired training courses.</li>
 <li class=""><strong>Enable Training Preview:</strong></li>
 <li class="nested-li">Mandatory: Yes</li>
-<li class="nested-li">Type: Boolean Toggle</li>
-<li class="nested-li">Default value: <code>Active</code> (<code>true</code>)</li>
+<li class="nested-li">Type: Toggle Switch</li>
+<li class="nested-li">Default value: Active</li>
 <li class="nested-li">Description: Allow creators and reviewers to preview interactive course modules.</li>
-<h4>Training Categories Tab (<code>t === 'categories'</code>)</h4>
-<li class=""><strong>Categories Table Columns:</strong> <code>Category Name</code>, <code>Description</code>, <code>Status</code>, <code>Created By &amp; Date</code>, <code>Modified By</code>, <code>Actions</code> (Edit icon + Active/Inactive toggle).</li>
-<li class=""><strong>Pre-configured Categories (9 Default Entries):</strong> <code>Engineering &amp; Architecture</code>, <code>Sales &amp; Business Development</code>, <code>Recruitment &amp; HR Operations</code>, <code>Security, Privacy &amp; Compliance</code>, <code>Leadership &amp; Management</code>, <code>Product Design &amp; UX</code>, <code>Customer Success &amp; Support</code>, <code>DevOps &amp; Cloud Operations</code>, <code>Artificial Intelligence &amp; ML</code>.</li>
-<li class=""><strong>Add Training Category Modal (<code>+ Add Category</code>):</strong></li>
-<li class="nested-li"><strong>Category Name:</strong></li>
-<li class="nested-li">Mandatory: Yes (<code>*</code>)</li>
-<li class="nested-li">Type: Text Input (Alphanumeric)</li>
-<li class="nested-li">Placeholder: <code>Enter category name (e.g. Data Science)...</code></li>
-<li class="nested-li">Validation: Case-insensitive, punctuation-normalized unique check against all existing categories. Repeating category names are rejected with an alert.</li>
-<li class="nested-li"><strong>Description:</strong></li>
-<li class="nested-li">Mandatory: No (Optional)</li>
-<li class="nested-li">Type: Textarea</li>
-<li class="nested-li">Placeholder: <code>Enter category description...</code></li>
-<li class="nested-li">Default value on save if blank: <code>New training category description.</code></li>
-<li class="nested-li"><strong>Status:</strong></li>
-<li class="nested-li">Mandatory: Yes</li>
-<li class="nested-li">Type: Boolean Toggle</li>
-<li class="nested-li">Default value: <code>Active</code> (<code>true</code>)</li>
-<li class="nested-li"><strong>Quick Action:</strong> <code>Auto-Fill</code> button populates <code>Data Science &amp; Advanced Analytics</code>.</li>
+<h4>Training Categories Tab</h4>
+<li class=""><strong>Categories Table Columns:</strong> Category Name, Description, Status, Created By &amp; Date, Modified By, Actions (Edit icon + Active/Inactive toggle).</li>
+<li class=""><strong>Pre-configured Categories (9 Default Entries):</strong> Engineering &amp; Architecture, Sales &amp; Business Development, Recruitment &amp; HR Operations, Security, Privacy &amp; Compliance, Leadership &amp; Management, Product Design &amp; UX, Customer Success &amp; Support, DevOps &amp; Cloud Operations, Artificial Intelligence &amp; ML.</li>
+<li class=""><strong>Add Training Category Modal (+ Add Category):</strong></li>
+<li class="nested-li"><strong>Category Name:</strong> Mandatory (<strong>*</strong>), Text Input (Alphanumeric). Validation: Case-insensitive unique check against all existing categories; duplicate category names are rejected with an alert.</li>
+<li class="nested-li"><strong>Description:</strong> Optional Multi-line Textarea. Default value on save if blank: "New training category description."</li>
+<li class="nested-li"><strong>Status:</strong> Mandatory, Toggle Switch, default Active.</li>
+<li class="nested-li"><strong>Quick Action:</strong> Auto-Fill button populates sample category details.</li>
 <hr />
-<h3>5. Role-Based Access Control (<code>Config &gt; Roles</code>)</h3>
-<li class=""><strong>Roles Table Columns:</strong> <code>No.</code>, <code>Role</code>, <code>Status</code>, <code>Employees</code>, <code>Remarks</code>, <code>Created By &amp; Date</code>, <code>Modified By</code>, <code>Actions</code> (View, Edit, Delete).</li>
+<h3>5. Role-Based Access Control (Config &gt; Roles)</h3>
+<li class=""><strong>Roles Table Columns:</strong> No., Role, Status, Employees, Remarks, Created By &amp; Date, Modified By, Actions (View, Edit, Delete).</li>
 <li class=""><strong>Standardized System Roles (11 Configured Roles):</strong></li>
-<li class="numbered-li"><code>Sr. Business Analyst</code> (8 employees)</li>
-<li class="numbered-li"><code>Senior Recruiter</code> (5 employees)</li>
-<li class="numbered-li"><code>CEO</code> (3 employees)</li>
-<li class="numbered-li"><code>Project Manager</code> (25 employees)</li>
-<li class="numbered-li"><code>BDE</code> (1 employee)</li>
-<li class="numbered-li"><code>Admin/HR</code> (50 employees)</li>
-<li class="numbered-li"><code>Employee</code> (51 employees)</li>
-<li class="numbered-li"><code>Team leader</code> (20 employees)</li>
-<li class="numbered-li"><code>Management</code> (7 employees)</li>
-<li class="numbered-li"><code>Recruiter</code> (1 employee)</li>
-<li class="numbered-li"><code>BDM</code> (0 employees)</li>
-<li class=""><strong>Add Role Slideover Modal (<code>+ Add Role</code>):</strong></li>
-<li class="nested-li"><strong>Title:</strong> Mandatory (<code>*</code>), Text Input, placeholder <code>Enter role title (e.g. Senior Security Architect)</code>.</li>
-<li class="nested-li"><strong>Clone Role:</strong> Optional Dropdown (<code>Select Existing Role to Clone...</code> + existing roles).</li>
-<li class="nested-li"><strong>Remarks:</strong> Optional Textarea, max length <code>255</code> (<code>0/255</code>), placeholder <code>Enter remarks or role description...</code>.</li>
-<li class="nested-li"><strong>Status:</strong> Boolean Toggle, default <code>Active</code> (<code>true</code>).</li>
-<li class=""><strong>Role Permission Matrix (<code>{Role} • Permission Matrix</code>):</strong></li>
-<li class="nested-li">Columns: <code>Module</code>, <code>Status</code>, <code>View Default</code>, <code>Global</code>, <code>Add</code>, <code>Edit</code>, <code>Delete</code>.</li>
-<li class="nested-li">Highlighted <strong>Training Module</strong> permissions: <code>Training Module</code> (parent), <code>↳ Training Programs Library</code>, <code>↳ Training Assignments</code>, <code>↳ Employee Progress Tracking</code>, <code>↳ Training Reviews &amp; Evaluations</code>, <code>↳ Certificate Generation &amp; Issuance</code>, <code>Training Analytics &amp; Reports</code>.</li>
+<div class="step-item nested-step"><span class="step-num">1.</span><span>Sr. Business Analyst (8 employees)</span></div>
+<div class="step-item nested-step"><span class="step-num">2.</span><span>Senior Recruiter (5 employees)</span></div>
+<div class="step-item nested-step"><span class="step-num">3.</span><span>CEO (3 employees)</span></div>
+<div class="step-item nested-step"><span class="step-num">4.</span><span>Project Manager (25 employees)</span></div>
+<div class="step-item nested-step"><span class="step-num">5.</span><span>BDE (1 employee)</span></div>
+<div class="step-item nested-step"><span class="step-num">6.</span><span>Admin/HR (50 employees)</span></div>
+<div class="step-item nested-step"><span class="step-num">7.</span><span>Employee (51 employees)</span></div>
+<div class="step-item nested-step"><span class="step-num">8.</span><span>Team leader (20 employees)</span></div>
+<div class="step-item nested-step"><span class="step-num">9.</span><span>Management (7 employees)</span></div>
+<div class="step-item nested-step"><span class="step-num">10.</span><span>Recruiter (1 employee)</span></div>
+<div class="step-item nested-step"><span class="step-num">11.</span><span>BDM (0 employees)</span></div>
+<li class=""><strong>Add Role Slideover Modal (+ Add Role):</strong></li>
+<li class="nested-li"><strong>Title:</strong> Mandatory (<strong>*</strong>), Text Input.</li>
+<li class="nested-li"><strong>Clone Role:</strong> Optional Dropdown to copy permissions from an existing role.</li>
+<li class="nested-li"><strong>Remarks:</strong> Optional Textarea, max length 255 characters.</li>
+<li class="nested-li"><strong>Status:</strong> Toggle Switch, default Active.</li>
+<li class=""><strong>Role Permission Matrix:</strong></li>
+<li class="nested-li">Columns: Module, Status, View Default, Global, Add, Edit, Delete.</li>
+<li class="nested-li">Training Module permissions: Training Module (parent), Training Programs Library, Training Assignments, Employee Progress Tracking, Training Reviews &amp; Evaluations, Certificate Generation &amp; Issuance, Training Analytics &amp; Reports.</li>
 <hr />
 <h3>6. Certificate Verification &amp; Credential Specifications</h3>
-<li class=""><strong>Certificate ID:</strong></li>
-<li class="nested-li">Format: <code>TRN-{YYYY}-{serial}</code> (e.g. <code>TRN-2026-0027</code>, <code>TRN-2026-0032</code>)</li>
-<li class=""><strong>Authorized Signatory:</strong></li>
-<li class="nested-li">Full Name &amp; Title: <strong><code>Khushi Bhatt, Head of HR</code></strong></li>
-<li class=""><strong>Issued Date:</strong></li>
-<li class="nested-li">Format: <code>DD-MMM-YYYY</code> (e.g. <code>27-Jan-2026</code>)</li>
+<li class=""><strong>Certificate ID:</strong> Structured format (<strong>TRN-YYYY-Serial</strong>, e.g. TRN-2026-0027, TRN-2026-0032).</li>
+<li class=""><strong>Authorized Signatory:</strong> Configured strictly as <strong>Khushi Bhatt, Head of HR</strong>.</li>
+<li class=""><strong>Issued Date:</strong> Day-Month-Year format (e.g. 27-Jan-2026).</li>
 <li class=""><strong>Master-Detail Table Layout:</strong></li>
-<li class="nested-li">Left columns: No. (<code>1, 2, 3...</code>), Employee Avatar &amp; Name, Department / Role.</li>
+<li class="nested-li">Left columns: No. (1, 2, 3...), Employee Avatar &amp; Name, Department / Role.</li>
 <li class="nested-li">Middle column: Programme Name (plain-text format, no dropdowns or passed badges).</li>
-<li class="nested-li">Far-right column: <code>Actions</code> header and eye icon <code>(👁)</code> buttons right-aligned at <code>w-28 text-right pr-6</code>, positioned directly beneath <code>All Records</code>.</li>
+<li class="nested-li">Far-right column: Actions header and eye icon buttons aligned to the right directly beneath All Records.</li>
 <hr />
-<h2>SECTION 3: SYSTEM INTEGRATIONS &amp; STATE TRANSITIONS</h2>
-<pre><code class="language-mermaid">stateDiagram-v2
-    [*] --&gt; Assigned: Training assigned to Employee, Department, or Designation
-    Assigned --&gt; In_Progress: Learner begins reviewing learning resources
-    In_Progress --&gt; Assessment_Taken: Assessment Enabled &amp; Learner submits assessment
-    In_Progress --&gt; Completed: Assessment Disabled &amp; All Mandatory Modules Completed
-    Assessment_Taken --&gt; Completed: Assessment Score &gt; 80% passing threshold
-    Completed --&gt; Certificate_Issued: System generates authenticated Certificate (Signed by Khushi Bhatt)
-    Assessment_Taken --&gt; In_Progress: Assessment Score &lt;= 80% &amp; Attempts Remaining &gt; 0
-    Assessment_Taken --&gt; Overdue: Target due date elapsed without passing
-    Certificate_Issued --&gt; [*]</code></pre>
+<h2>SECTION 3: TRAINING LIFECYCLE &amp; STATE TRANSITION FLOW</h2>
+<div class="step-item"><span class="step-num">1.</span><span><strong>Assigned</strong>: Training is assigned to an Employee, Department, or Designation.</span></div>
+<div class="step-item"><span class="step-num">2.</span><span><strong>In Progress</strong>: Learner opens the assigned course and begins reviewing the learning resources.</span></div>
+<div class="step-item"><span class="step-num">3.</span><span><strong>Completion Path (Assessment Disabled)</strong>: Once 100% of mandatory learning modules are marked complete, status transitions directly to <strong>Completed</strong>.</span></div>
+<div class="step-item"><span class="step-num">4.</span><span><strong>Completion Path (Assessment Enabled)</strong>: Learner submits the assessment (<strong>Assessment Taken</strong>).</span></div>
+<li class="nested-li"><strong>Pass</strong>: When score is strictly greater than 80% passing threshold, status transitions to <strong>Completed</strong>.</li>
+<li class="nested-li"><strong>Retake</strong>: When score is 80% or less and attempts remain, status returns to <strong>In Progress</strong> for another attempt.</li>
+<div class="step-item"><span class="step-num">5.</span><span><strong>Certificate Issued</strong>: Upon reaching <strong>Completed</strong>, the system generates the authenticated certificate signed by <strong>Khushi Bhatt, Head of HR</strong>.</span></div>
+<div class="step-item"><span class="step-num">6.</span><span><strong>Overdue</strong>: If the target due date passes without completing modules or passing the assessment, status becomes <strong>Overdue</strong>.</span></div>
 <hr />
-<h2>SECTION 4: ASSESSMENT &amp; PORTAL DYNAMIC BEHAVIORAL SPECIFICATIONS</h2>
-<h3>4.1 Assessment Toggle State Matrix</h3>
+<h2>SECTION 4: ASSESSMENT &amp; PORTAL BEHAVIORAL SPECIFICATIONS</h2>
+<h3>4.1 Assessment Toggle Behavior Matrix</h3>
 <div class="table-responsive"><table>
 <thead><tr>
 <th>System Component</th>
-<th>Assessment Toggle: ON (<code>enabled: true</code>)</th>
-<th>Assessment Toggle: OFF (<code>enabled: false</code>)</th>
+<th>Assessment Toggle: ON (Active)</th>
+<th>Assessment Toggle: OFF (Inactive)</th>
 </tr></thead><tbody>
 <tr>
 <td><strong>Tab 3 Header</strong></td>
-<td><code>3. Assessment &amp; Questions</code> (clean title; no <code>[Unlocked]</code> tag)</td>
-<td><code>3. Assessment &amp; Questions</code> (clean title; no <code>[Unlocked]</code> tag)</td>
+<td>3. Assessment &amp; Questions</td>
+<td>3. Assessment &amp; Questions</td>
 </tr>
 <tr>
 <td><strong>Tab 3 Content</strong></td>
 <td>Renders full evaluation card, attempt counter, passing criteria, and all configured questions</td>
-<td><strong>Empty State Container</strong>: "No Assessment Configured" message with icon; <strong>no questions, no scoring inputs, no submit button</strong></td>
+<td>Empty State Container: "No Assessment Configured" message with icon; no questions, no scoring inputs, no submit button</td>
 </tr>
 <tr>
 <td><strong>Left Sidebar Action Button</strong></td>
-<td>"Take Assessment →" (or "Download Certificate 🎓" when passed)</td>
+<td>"Take Assessment →" (or "Download Certificate" when passed)</td>
 <td>"Start Learning Modules →" (or "Programme Completed ✓" when all modules done)</td>
 </tr>
 <tr>
 <td><strong>Passing Score Display</strong></td>
-<td><code>🎯 {passingScore}% (Strictly &gt; 80% to pass)</code></td>
-<td><code>N/A (Assessment Disabled)</code></td>
+<td>80% (Strictly &gt; 80% to pass)</td>
+<td>N/A (Assessment Disabled)</td>
 </tr>
 <tr>
 <td><strong>Tab 2 Navigation Button</strong></td>
@@ -708,51 +693,49 @@
 <td>100% Mandatory Resources Reviewed</td>
 </tr>
 </tbody></table></div>
-<h3>4.2 Dynamic Question Format Parity</h3>
-<li class="numbered-li"><strong>Short Text (<code>short_text</code>)</strong>: Single-line text input with case-insensitive accepted answer evaluation.</li>
-<li class="numbered-li"><strong>Long Text (<code>long_text</code>)</strong>: Multi-line textarea for detailed subjective responses.</li>
-<li class="numbered-li"><strong>Single Choice (<code>single_choice</code>)</strong>: Radio group with option labels and single select state.</li>
-<li class="numbered-li"><strong>Multiple Choice (<code>multiple_choice</code>)</strong>: Checkbox group supporting multiple selections with array equality grading.</li>
-<li class="numbered-li"><strong>Dropdown (<code>dropdown</code>)</strong>: Standard select menu with placeholder <code>-- Select Answer --</code> and option values.</li>
-<li class="numbered-li"><strong>True / False (<code>true_false</code>)</strong>: Dual toggle buttons/radios for binary verification.</li>
-<li class="numbered-li"><strong>Marks &amp; Mandatory Indicators</strong>: Every question displays its designated marks (<code>X Marks</code>) and mandatory status (<code>• Mandatory</code>).</li>
-<h3>4.3 Assignments Table Specifications</h3>
-<li class=""><strong>Column Header</strong>: <strong><code>ASSIGNED SCOPE</code></strong> (synchronized across all multi-entity assignment types: Employee, Department, Designation).</li>
-<li class=""><strong>Total Record Count</strong>: <strong><code>41 Total</code></strong> assignments.</li>
-<li class=""><strong>Pagination</strong>: Complete 5-page pagination (10 items per page with reactive Previous/Next and page number indicators).</li>
+<h3>4.2 Supported Question Formats</h3>
+<div class="step-item"><span class="step-num">1.</span><span><strong>Short Text Answer</strong>: Single-line text input with case-insensitive accepted keyword evaluation.</span></div>
+<div class="step-item"><span class="step-num">2.</span><span><strong>Long Text Answer</strong>: Multi-line textarea for detailed subjective responses evaluated by reviewer.</span></div>
+<div class="step-item"><span class="step-num">3.</span><span><strong>Single Selection (Radio)</strong>: Radio group allowing one option selection.</span></div>
+<div class="step-item"><span class="step-num">4.</span><span><strong>Multiple Selection (Checkbox)</strong>: Checkbox group supporting multiple selections.</span></div>
+<div class="step-item"><span class="step-num">5.</span><span><strong>Dropdown Selection</strong>: Standard select menu with "-- Select Answer --" placeholder and option values.</span></div>
+<div class="step-item"><span class="step-num">6.</span><span><strong>True / False</strong>: Dual toggle buttons/radios for binary verification.</span></div>
+<div class="step-item"><span class="step-num">7.</span><span><strong>Marks &amp; Mandatory Indicators</strong>: Every question displays its designated marks and mandatory indicator.</span></div>
+<h3>4.3 Assignments Register Specifications</h3>
+<li class=""><strong>Scope Column Header</strong>: <strong>ASSIGNED SCOPE</strong> (displays Employee, Department, or Designation assignment scope).</li>
+<li class=""><strong>Total Record Count</strong>: <strong>41 Total</strong> assignments.</li>
+<li class=""><strong>Pagination</strong>: Complete 5-page pagination (10 items per page with Previous/Next and page number controls).</li>
 <h3>4.4 Training Programmes Catalogue, Archive &amp; Availability Status Architecture</h3>
 <li class=""><strong>Strict Separation of Statuses</strong>:</li>
-<li class="nested-li"><strong>Publication Status (<code>Status ↕</code> / <code>publicationStatus</code>)</strong>: Reflects the editorial lifecycle stage (<code>Published</code>, <code>Draft</code>, or <code>Archived</code>).</li>
-<li class="nested-li"><code>Published</code>: Emerald badge (<code>bg-emerald-50 text-emerald-700 border border-emerald-200</code>). Visible across management and employee portals.</li>
-<li class="nested-li"><code>Draft</code>: Amber badge (<code>bg-amber-50 text-amber-700 border border-amber-200</code>). Management authoring only (<code>Availability Status</code> locked to <code>Inactive</code> until published).</li>
-<li class="nested-li"><code>Archived</code>: Slate badge (<code>bg-slate-100 text-slate-600 border border-slate-200</code>). Visible <strong>only on the Management side</strong> and excluded everywhere on the Employee side.</li>
-<li class="nested-li"><strong>Availability Status (<code>Active / Inactive</code> / <code>availabilityStatus</code>)</strong>: Independent operational availability toggle in the catalogue table and Programme Detail sidebar.</li>
-<li class="nested-li">Toggle Switch: <code>h-6 w-11</code> container with <code>h-5 w-5</code> sliding knob.</li>
-<li class="nested-li">Toggle ON / Right (<code>translate-x-5</code>, <code>bg-blue-600</code>): <strong>Active</strong> (<code>availabilityStatus: "Active"</code>, <code>isActive: true</code>).</li>
-<li class="nested-li">Toggle OFF / Left (<code>translate-x-0</code>, <code>bg-slate-300</code>): <strong>Inactive</strong> (<code>availabilityStatus: "Inactive"</code>, <code>isActive: false</code>).</li>
+<li class="nested-li"><strong>Publication Status (Status ↕)</strong>: Reflects the editorial lifecycle stage (<strong>Published</strong>, <strong>Draft</strong>, or <strong>Archived</strong>).</li>
+<li class="nested-li"><strong>Published</strong>: Emerald badge. Visible across management and employee portals.</li>
+<li class="nested-li"><strong>Draft</strong>: Amber badge. Management authoring only (Availability Status stays locked to Inactive until published).</li>
+<li class="nested-li"><strong>Archived</strong>: Slate badge. Visible only on the Management side and excluded everywhere on the Employee side.</li>
+<li class="nested-li"><strong>Availability Status (Active / Inactive)</strong>: Independent operational availability toggle in the catalogue table and Programme Detail sidebar.</li>
+<li class="nested-li">Toggle ON / Right: <strong>Active</strong>.</li>
+<li class="nested-li">Toggle OFF / Left: <strong>Inactive</strong>.</li>
 <li class="nested-li"><strong>Archive vs. Inactive Independence Rule</strong>:</li>
-<li class="nested-li">Archiving a programme changes <strong>only <code>publicationStatus</code> to <code>Archived</code></strong> and <strong>preserves <code>availabilityStatus</code></strong> (<code>Active</code> stays <code>Active</code>; <code>Inactive</code> stays <code>Inactive</code>).</li>
-<li class="nested-li">Restoring an archived programme changes <code>publicationStatus</code> back to <code>Published</code> while <strong>preserving <code>availabilityStatus</code></strong>.</li>
+<li class="nested-li">Archiving a programme changes only Publication Status to <strong>Archived</strong> and preserves Availability Status (Active stays Active; Inactive stays Inactive).</li>
+<li class="nested-li">Restoring an archived programme changes Publication Status back to <strong>Published</strong> while preserving Availability Status.</li>
 <li class="nested-li"><strong>Started Learner Lock (Deactivation Guard)</strong>:</li>
-<li class="nested-li">Once any employee has started working on a programme (<code>In Progress</code>, <code>Under Review</code>, <code>submitted_for_review</code>, <code>changes_requested</code>, <code>Overdue</code> with <code>progress &gt; 0</code>, or <code>0 &lt; progress &lt; 100</code>), that programme <strong>cannot be made <code>Inactive</code></strong>. Attempting deactivation is rejected on both UI and backend (<code>POST /api/training/programmes/availability</code> returns <code>400</code>).</li>
-<li class="nested-li">Once all learners have finished (<code>Completed</code>, <code>progress: 100</code>) or before any learner starts (<code>Not Started</code>, <code>progress: 0</code>), setting <code>Inactive</code> is permitted.</li>
+<li class="nested-li">Once any employee has started working on a programme (In Progress, Under Review, Submitted for Review, Changes Requested, or Overdue with progress started), that programme cannot be made <strong>Inactive</strong>. Attempting deactivation is blocked with a validation error.</li>
+<li class="nested-li">Once all learners have finished (Completed at 100%) or before any learner starts (Not Started at 0%), setting <strong>Inactive</strong> is permitted.</li>
 <li class="nested-li"><strong>Inactive Action Lock</strong>:</li>
-<li class="nested-li">On <strong>Management (<code>Programme Detail</code>)</strong>: Shows an Inactive warning banner and disables <code>+ Assign Programme</code>, <code>Assign Programme</code>, <code>+ Add Module</code>, and <code>Open Resource →</code> while <code>availabilityStatus === "Inactive"</code>. Archive/Restore and the Catalogue Availability Toggle remain available for management administration.</li>
-<li class="nested-li">On <strong>Employee (<code>My Training</code> &amp; <code>Employee Course Detail</code>)</strong>: Programmes completed first and then made <code>Inactive</code> remain visible in <code>My Training</code> (<code>Completed</code> + <code>Inactive</code> pills) in strict read-only mode; all controls inside are disabled and employee mutation APIs (<code>/api/employee/resource-progress</code>, <code>/api/employee/assessment-submit</code>, <code>/api/employee/training-submit</code>, <code>/api/employee/training-resubmit</code>) reject requests with <code>400</code>.</li>
+<li class="nested-li"><strong>Management (Programme Detail)</strong>: Displays an Inactive warning banner and disables + Assign Programme, Assign Programme, + Add Module, and Open Resource while Inactive. Archive/Restore and the Catalogue Availability Toggle remain enabled for administration.</li>
+<li class="nested-li"><strong>Employee (My Training &amp; Course Detail)</strong>: Programmes completed first and then set to Inactive remain visible in My Training (with Completed + Inactive pills) in strict read-only mode; all interactive controls inside are disabled.</li>
 <li class=""><strong>Catalogue Table Column Structure (8 Columns)</strong>:</li>
-<li class="numbered-li"><code>No.</code> (<code>w-16</code>, tabular digits)</li>
-<li class="numbered-li"><code>Programme Name ↕</code> (Programme title + version badge)</li>
-<li class="numbered-li"><code>Level ↕</code> (Beginner / Intermediate / Expert badge)</li>
-<li class="numbered-li"><code>Duration ↕</code> (Hours in monospace)</li>
-<li class="numbered-li"><code>Enrolled ↕</code> (Learner enrollment count)</li>
-<li class="numbered-li"><code>Status ↕</code> (Publication Status badge: <code>Published</code>, <code>Draft</code>, or <code>Archived</code>)</li>
-<li class="numbered-li"><code>Active / Inactive</code> (Centered Availability Status toggle switch)</li>
-<li class="numbered-li"><code>Actions</code> (Right-aligned View <code>👁</code> and Edit <code>✏️</code> action buttons)</li>
-<li class=""><strong>Programme Detail View (Management <code>nt</code>)</strong>:</li>
-<li class="nested-li"><strong>General Info Tab</strong>: Displays a 3-card summary row (<strong>Status</strong> <code>Published</code>/<code>Draft</code>/<code>Archived</code> + <code>Active</code>/<code>Inactive</code>, <strong>Expected Duration</strong>, <strong>Passing Score</strong>) with balanced icon-to-text spacing, followed by detailed programme metadata.</li>
-<li class="nested-li"><strong>Curriculum &amp; Modules Tab</strong>: Displays learning resources in a structured table (<code>Module</code>, <code>Resource Title</code>, <code>Type</code>, <code>Resource URL</code>, <code>Requirement</code>, <code>Action</code>) with <code>Open Resource →</code> (disabled when programme is <code>Inactive</code>).</li>
-<li class="nested-li"><strong>Enrolled Employees &amp; Status History Tabs</strong>: Tracks learner progress and audit history for Availability/Publication transitions (<code>Archive</code> / <code>Restore</code> modal with high-contrast Confirm button).</li>
-<li class="nested-li"><strong>API Endpoints</strong>: <code>POST /api/training/programmes/availability</code>, <code>POST /api/training/programmes/archive</code>, <code>POST /api/training/programmes/restore</code>, <code>POST /api/training/employee-course-progress</code>.</li>
+<div class="step-item nested-step"><span class="step-num">1.</span><span><strong>No.</strong></span></div>
+<div class="step-item nested-step"><span class="step-num">2.</span><span><strong>Programme Name ↕</strong> (Programme title and version badge)</span></div>
+<div class="step-item nested-step"><span class="step-num">3.</span><span><strong>Level ↕</strong> (Beginner / Intermediate / Expert badge)</span></div>
+<div class="step-item nested-step"><span class="step-num">4.</span><span><strong>Duration ↕</strong> (Expected hours)</span></div>
+<div class="step-item nested-step"><span class="step-num">5.</span><span><strong>Enrolled ↕</strong> (Learner enrollment count)</span></div>
+<div class="step-item nested-step"><span class="step-num">6.</span><span><strong>Status ↕</strong> (Publication Status badge: Published, Draft, or Archived)</span></div>
+<div class="step-item nested-step"><span class="step-num">7.</span><span><strong>Active / Inactive</strong> (Centered Availability Status toggle switch)</span></div>
+<div class="step-item nested-step"><span class="step-num">8.</span><span><strong>Actions</strong> (Right-aligned View and Edit action buttons)</span></div>
+<li class=""><strong>Programme Detail View (Management)</strong>:</li>
+<li class="nested-li"><strong>General Info Tab</strong>: Displays a 3-card summary row (<strong>Status</strong> showing Published/Draft/Archived + Active/Inactive, <strong>Expected Duration</strong>, <strong>Passing Score</strong>) with clean icon-to-text spacing, followed by detailed programme metadata.</li>
+<li class="nested-li"><strong>Curriculum &amp; Modules Tab</strong>: Displays learning resources in a structured table (Module, Resource Title, Type, Resource URL, Requirement, Action).</li>
+<li class="nested-li"><strong>Enrolled Employees &amp; Status History Tabs</strong>: Tracks learner progress and complete audit history for Availability and Publication transitions (Archive / Restore modal with Confirm button).</li>
   </main>
 </body>
 </html>

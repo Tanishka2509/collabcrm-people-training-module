@@ -44,8 +44,8 @@ def md_to_html(md_text):
     def inline_format(text):
         # Escape html entities
         text = text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
-        # Code: `code`
-        text = re.sub(r'`([^`]+)`', r'<code>\1</code>', text)
+        # Backtick emphasis rendered as clean bold text (no code boxes)
+        text = re.sub(r'`([^`]+)`', r'<strong>\1</strong>', text)
         # Bold: **bold**
         text = re.sub(r'\*\*([^*]+)\*\*', r'<strong>\1</strong>', text)
         # Italic: *italic*
@@ -117,8 +117,12 @@ def md_to_html(md_text):
             css_class = 'nested-li' if indent >= 2 else ''
             html_lines.append(f'<li class="{css_class}">{inline_format(stripped[2:])}</li>')
         elif re.match(r'^\d+\.\s', stripped):
-            content = re.sub(r'^\d+\.\s', '', stripped)
-            html_lines.append(f'<li class="numbered-li">{inline_format(content)}</li>')
+            indent = len(line) - len(line.lstrip())
+            num_match = re.match(r'^(\d+\.)\s+(.*)', stripped)
+            step_num = num_match.group(1)
+            content = num_match.group(2)
+            css_class = 'step-item nested-step' if indent >= 2 else 'step-item'
+            html_lines.append(f'<div class="{css_class}"><span class="step-num">{step_num}</span><span>{inline_format(content)}</span></div>')
         else:
             html_lines.append(f'<p>{inline_format(stripped)}</p>')
             
@@ -285,6 +289,22 @@ def build_full_html(body_html):
     }}
     li.nested-li {{
       margin-left: 48px;
+    }}
+    .step-item {{
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-left: 12px;
+      margin-bottom: 6px;
+      color: var(--slate-700);
+    }}
+    .step-item.nested-step {{
+      margin-left: 36px;
+    }}
+    .step-num {{
+      font-weight: 700;
+      color: var(--slate-900);
+      min-width: 20px;
     }}
     code {{
       font-family: 'JetBrains Mono', Consolas, monospace;
