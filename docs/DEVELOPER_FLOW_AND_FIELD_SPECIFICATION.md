@@ -18,7 +18,7 @@ This document specifies the complete user navigation flows, screen transitions, 
      - From **Training Programmes**: Users can open **Create / Edit Programme** or click View to open **Programme Detail** (General Info, Curriculum & Modules, Enrolled Employees, Status History).
      - From **Assignments**: Users can open the **Assign Training Slideover Modal** or click any record to open **Assignment Details**.
      - From **Certificates**: Users can expand employee rows and open the **Verified Certificate Modal** (signed by Khushi Bhatt, Head of HR).
-   - **Config Hub**: Provides quick navigation to **Training Config** (General Settings & Training Categories) and **Roles & Permissions** (Roles Table, Add Role modal, and Role Permission Matrix).
+   - **Config Hub**: Provides quick navigation to **Training Categories** (master category table & Add Category modal) and **Roles & Permissions** (Roles Table, Add Role modal, and Role Permission Matrix).
 
 ---
 
@@ -38,8 +38,8 @@ The left collapsible sidebar provides access to:
    - **Progress**: Dual-mode tracking (1. Employee-wise Training Completion vs 2. Departmental Compliance Audit), 4 summary cards (Active Learners, Total Assignments, Completed, Avg Score), and CSV export.
    - **Certificates**: Expandable master-detail table defaulting to **collapsed** employee rows with expand/collapse chevrons, plain-text earned programmes, clickable certificate preview, and a right-aligned **Actions** column directly under **All Records**.
 3. **Config Hub**:
-   - **Config Flyout**: Compact left drawer panel offering quick access to **Training Config** and **Roles**.
-   - **Training Config**: Tabbed settings for **General Settings** (5 module access permission toggles) and **Training Categories** (master category table and Add Category modal with duplicate validation).
+   - **Config Flyout**: Compact left drawer panel offering quick access to **Training Categories** and **Roles**.
+   - **Training Categories**: Master category table and Add Category modal with duplicate validation (under the **Training Config** page banner, without extra sub-tab or duplicate card header bars).
    - **Roles & Permissions**: 11-role access control table (Sr. Business Analyst, Senior Recruiter, CEO, Project Manager, BDE, Admin/HR, Employee, Team leader, Management, Recruiter, BDM), `+ Add Role` slideover modal, and interactive Role Permission Matrix.
 *(Note: The legacy Reports drawer item has been removed.)*
 
@@ -363,7 +363,7 @@ The left collapsible sidebar provides access to:
 
 ---
 
-### 4. Global Training Configuration (Config > Training Config)
+### 4. Global Training Configuration (Config > Training Categories)
 
 #### General Settings Tab
 - **Enable / Disable Training Module:**
@@ -396,7 +396,7 @@ The left collapsible sidebar provides access to:
   - Default value: Active
   - Description: Allow creators and reviewers to preview interactive course modules.
 
-#### Training Categories Tab
+#### Training Categories Management
 - **Categories Table Columns:** Category Name, Description, Status, Created By & Date, Modified By, Actions (Edit icon + Active/Inactive toggle).
 - **Pre-configured Categories (9 Default Entries):** Engineering & Architecture, Sales & Business Development, Recruitment & HR Operations, Security, Privacy & Compliance, Leadership & Management, Product Design & UX, Customer Success & Support, DevOps & Cloud Operations, Artificial Intelligence & ML.
 - **Add Training Category Modal (+ Add Category):**
@@ -481,7 +481,7 @@ The left collapsible sidebar provides access to:
 - **Scope Column Header**: **ASSIGNED SCOPE** (displays Employee, Department, or Designation assignment scope).
 - **Total Record Count**: **41 Total** assignments.
 - **Pagination**: Complete 5-page pagination (10 items per page with Previous/Next and page number controls).
-- **Assignment Details View (`View Assignment`)**: Follows the two-column Employee Profile layout (Left learner sidebar with Status pill, Avatar, Name, Role, Department pill, Assigned Training, Assigned/Due dates, and Back action; Right `General Info` tab with Top 3-box summary strip, `Assignment Information` grid, and `Assigned Learning Modules & Assessment`).
+- **Assignment Details View (`View Assignment`)**: Follows the two-column Employee Profile layout (Left learner sidebar with Status pill, Avatar, Name, Role, Department pill, Assigned Training, Assigned/Due dates; Right `General Info` tab with Top 3-box summary strip, `Assignment Information` grid, and `Assigned Learning Modules & Assessment` text rows).
 
 ### 4.4 Training Programmes Catalogue & Availability Status Architecture
 - **Publication & Availability Status Rules (No `Archived` Status)**:
@@ -507,7 +507,7 @@ The left collapsible sidebar provides access to:
   - **Left Sidebar**: Displays publication badge (`Published` / `Draft`) on the top-left and the **Active / Inactive** toggle switch on the top-right, followed by Programme Title, Category, Difficulty Level, `Assign Programme` button, and core summary metrics (**Expected Duration**, **Passing Assessment Score** as clean `80%`, **Department**, **Enrolled Learners**).
   - **General Info Tab (Right Panel)**: Displays all programme details not shown on the left sidebar — **Learning Objectives**, **Completion Requirements & Assessment Criteria**, and the **Assessment & Questions** section (Assessment Enabled/Disabled state, Assessment Title, Description, Total Marks, Max Attempts, and the full Questions List with question type, marks, and configured options/answers when present) cleanly without duplicating the sidebar summary details.
   - **Curriculum & Modules Tab**: Displays learning resources in a structured table (heading **Curriculum & Modules**, `+ Add Resource` button, and columns Module, Resource Title, Type, Resource URL, Action with eye View icon linking directly to the resource).
-  - **Enrolled Employees & Status History Tabs**: Tracks enrolled learners with exact count consistency against the Training Management listing, plus audit history for `Active` / `Inactive` availability transitions (clean `Programme ID` header without redundant `Availability Status Audit History` title).
+  - **Enrolled Employees & Status History Tabs**: Tracks enrolled learners (clean right-aligned learner search bar without extra `ENROLLED EMPLOYEES` count heading) with exact count consistency against the Training Management listing, plus audit history for `Active` / `Inactive` availability transitions (clean `Programme ID` header without redundant `Availability Status Audit History` title).
 
 ### 4.5 System Typography Standard
 - **Uniform Sans-Serif Typography**: Every text element across the entire system (headings, tables, labels, duration metrics, version badges, IDs, percentages, URLs, modals, and certificates) consistently uses the exact same **Sans-Serif** font family (`--font-sans`), with no monospace or serif font overrides.

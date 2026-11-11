@@ -302,7 +302,7 @@
 <li class="nested-li">From <strong>Training Programmes</strong>: Users can open <strong>Create / Edit Programme</strong> or click View to open <strong>Programme Detail</strong> (General Info, Curriculum &amp; Modules, Enrolled Employees, Status History).</li>
 <li class="nested-li">From <strong>Assignments</strong>: Users can open the <strong>Assign Training Slideover Modal</strong> or click any record to open <strong>Assignment Details</strong>.</li>
 <li class="nested-li">From <strong>Certificates</strong>: Users can expand employee rows and open the <strong>Verified Certificate Modal</strong> (signed by Khushi Bhatt, Head of HR).</li>
-<li class="nested-li"><strong>Config Hub</strong>: Provides quick navigation to <strong>Training Config</strong> (General Settings &amp; Training Categories) and <strong>Roles &amp; Permissions</strong> (Roles Table, Add Role modal, and Role Permission Matrix).</li>
+<li class="nested-li"><strong>Config Hub</strong>: Provides quick navigation to <strong>Training Categories</strong> (master category table &amp; Add Category modal) and <strong>Roles &amp; Permissions</strong> (Roles Table, Add Role modal, and Role Permission Matrix).</li>
 <hr />
 <h3>Flow 1: Top Navigation &amp; Role Switching</h3>
 <li class=""><strong>Global Header</strong>: Contains company branding (CollabCRM People), global search (Search employees, programmes), notifications bell, and the Active User Profile indicator (<strong>Tanya Kapoor - Business Analyst • Employee</strong> or <strong>Ishdeep Anand - Admin • Management</strong>).</li>
@@ -318,8 +318,8 @@
 <li class="nested-li"><strong>Progress</strong>: Dual-mode tracking (1. Employee-wise Training Completion vs 2. Departmental Compliance Audit), 4 summary cards (Active Learners, Total Assignments, Completed, Avg Score), and CSV export.</li>
 <li class="nested-li"><strong>Certificates</strong>: Expandable master-detail table defaulting to <strong>collapsed</strong> employee rows with expand/collapse chevrons, plain-text earned programmes, clickable certificate preview, and a right-aligned <strong>Actions</strong> column directly under <strong>All Records</strong>.</li>
 <div class="step-item"><span class="step-num">3.</span><span><strong>Config Hub</strong>:</span></div>
-<li class="nested-li"><strong>Config Flyout</strong>: Compact left drawer panel offering quick access to <strong>Training Config</strong> and <strong>Roles</strong>.</li>
-<li class="nested-li"><strong>Training Config</strong>: Tabbed settings for <strong>General Settings</strong> (5 module access permission toggles) and <strong>Training Categories</strong> (master category table and Add Category modal with duplicate validation).</li>
+<li class="nested-li"><strong>Config Flyout</strong>: Compact left drawer panel offering quick access to <strong>Training Categories</strong> and <strong>Roles</strong>.</li>
+<li class="nested-li"><strong>Training Categories</strong>: Master category table and Add Category modal with duplicate validation (under the <strong>Training Config</strong> page banner, without extra sub-tab or duplicate card header bars).</li>
 <li class="nested-li"><strong>Roles &amp; Permissions</strong>: 11-role access control table (Sr. Business Analyst, Senior Recruiter, CEO, Project Manager, BDE, Admin/HR, Employee, Team leader, Management, Recruiter, BDM), <strong>+ Add Role</strong> slideover modal, and interactive Role Permission Matrix.</li>
 <p><em>(Note: The legacy Reports drawer item has been removed.)</em></p>
 <hr />
@@ -590,7 +590,7 @@
 <li class="nested-li">Account Status: Active</li>
 <li class=""><strong>Form Actions:</strong> Auto-Fill, Cancel, Save Employee.</li>
 <hr />
-<h3>4. Global Training Configuration (Config &gt; Training Config)</h3>
+<h3>4. Global Training Configuration (Config &gt; Training Categories)</h3>
 <h4>General Settings Tab</h4>
 <li class=""><strong>Enable / Disable Training Module:</strong></li>
 <li class="nested-li">Mandatory: Yes</li>
@@ -617,7 +617,7 @@
 <li class="nested-li">Type: Toggle Switch</li>
 <li class="nested-li">Default value: Active</li>
 <li class="nested-li">Description: Allow creators and reviewers to preview interactive course modules.</li>
-<h4>Training Categories Tab</h4>
+<h4>Training Categories Management</h4>
 <li class=""><strong>Categories Table Columns:</strong> Category Name, Description, Status, Created By &amp; Date, Modified By, Actions (Edit icon + Active/Inactive toggle).</li>
 <li class=""><strong>Pre-configured Categories (9 Default Entries):</strong> Engineering &amp; Architecture, Sales &amp; Business Development, Recruitment &amp; HR Operations, Security, Privacy &amp; Compliance, Leadership &amp; Management, Product Design &amp; UX, Customer Success &amp; Support, DevOps &amp; Cloud Operations, Artificial Intelligence &amp; ML.</li>
 <li class=""><strong>Add Training Category Modal (+ Add Category):</strong></li>
@@ -719,7 +719,7 @@
 <li class=""><strong>Scope Column Header</strong>: <strong>ASSIGNED SCOPE</strong> (displays Employee, Department, or Designation assignment scope).</li>
 <li class=""><strong>Total Record Count</strong>: <strong>41 Total</strong> assignments.</li>
 <li class=""><strong>Pagination</strong>: Complete 5-page pagination (10 items per page with Previous/Next and page number controls).</li>
-<li class=""><strong>Assignment Details View (<strong>View Assignment</strong>)</strong>: Follows the two-column Employee Profile layout (Left learner sidebar with Status pill, Avatar, Name, Role, Department pill, Assigned Training, Assigned/Due dates, and Back action; Right <strong>General Info</strong> tab with Top 3-box summary strip, <strong>Assignment Information</strong> grid, and <strong>Assigned Learning Modules &amp; Assessment</strong>).</li>
+<li class=""><strong>Assignment Details View (<strong>View Assignment</strong>)</strong>: Follows the two-column Employee Profile layout (Left learner sidebar with Status pill, Avatar, Name, Role, Department pill, Assigned Training, Assigned/Due dates; Right <strong>General Info</strong> tab with Top 3-box summary strip, <strong>Assignment Information</strong> grid, and <strong>Assigned Learning Modules &amp; Assessment</strong> text rows).</li>
 <h3>4.4 Training Programmes Catalogue &amp; Availability Status Architecture</h3>
 <li class=""><strong>Publication &amp; Availability Status Rules (No <strong>Archived</strong> Status)</strong>:</li>
 <li class="nested-li"><strong>Publication Status (<strong>Status ↕</strong>)</strong>: Strictly <strong>Published</strong> or <strong>Draft</strong> (<strong>Archived</strong> status and archiving actions are removed).</li>
@@ -744,7 +744,7 @@
 <li class="nested-li"><strong>Left Sidebar</strong>: Displays publication badge (<strong>Published</strong> / <strong>Draft</strong>) on the top-left and the <strong>Active / Inactive</strong> toggle switch on the top-right, followed by Programme Title, Category, Difficulty Level, <strong>Assign Programme</strong> button, and core summary metrics (<strong>Expected Duration</strong>, <strong>Passing Assessment Score</strong> as clean <strong>80%</strong>, <strong>Department</strong>, <strong>Enrolled Learners</strong>).</li>
 <li class="nested-li"><strong>General Info Tab (Right Panel)</strong>: Displays all programme details not shown on the left sidebar — <strong>Learning Objectives</strong>, <strong>Completion Requirements &amp; Assessment Criteria</strong>, and the <strong>Assessment &amp; Questions</strong> section (Assessment Enabled/Disabled state, Assessment Title, Description, Total Marks, Max Attempts, and the full Questions List with question type, marks, and configured options/answers when present) cleanly without duplicating the sidebar summary details.</li>
 <li class="nested-li"><strong>Curriculum &amp; Modules Tab</strong>: Displays learning resources in a structured table (heading <strong>Curriculum &amp; Modules</strong>, <strong>+ Add Resource</strong> button, and columns Module, Resource Title, Type, Resource URL, Action with eye View icon linking directly to the resource).</li>
-<li class="nested-li"><strong>Enrolled Employees &amp; Status History Tabs</strong>: Tracks enrolled learners with exact count consistency against the Training Management listing, plus audit history for <strong>Active</strong> / <strong>Inactive</strong> availability transitions (clean <strong>Programme ID</strong> header without redundant <strong>Availability Status Audit History</strong> title).</li>
+<li class="nested-li"><strong>Enrolled Employees &amp; Status History Tabs</strong>: Tracks enrolled learners (clean right-aligned learner search bar without extra <strong>ENROLLED EMPLOYEES</strong> count heading) with exact count consistency against the Training Management listing, plus audit history for <strong>Active</strong> / <strong>Inactive</strong> availability transitions (clean <strong>Programme ID</strong> header without redundant <strong>Availability Status Audit History</strong> title).</li>
 <h3>4.5 System Typography Standard</h3>
 <li class=""><strong>Uniform Sans-Serif Typography</strong>: Every text element across the entire system (headings, tables, labels, duration metrics, version badges, IDs, percentages, URLs, modals, and certificates) consistently uses the exact same <strong>Sans-Serif</strong> font family (<strong>--font-sans</strong>), with no monospace or serif font overrides.</li>
   </main>
