@@ -6776,7 +6776,7 @@ export async function handleApi(req, res) {
   // 24. POST Sync Employee Course Progress (Blocked if Inactive or Archived)
   if (pathname === '/api/training/employee-course-progress' && req.method === 'POST') {
     const body = await parseJsonBody(req);
-    const { employeeId, programmeId, programmeName, status, progress, completedResources, latestResult, attemptHistory } = body;
+    const { employeeId, programmeId, programmeName, status, progress, completedResources, latestResult, attemptHistory, submittedDocs, managerApprovalStatus } = body;
     const empId = employeeId || 'CO-5039';
     const store = loadProgrammeStore();
     const matched = findCatalogueProgramme(store, programmeId, programmeName);
@@ -6809,6 +6809,8 @@ export async function handleApi(req, res) {
       completedResources: completedResources || {},
       latestResult: latestResult || null,
       attemptHistory: Array.isArray(attemptHistory) ? attemptHistory : [],
+      submittedDocs: Array.isArray(submittedDocs) ? submittedDocs : [],
+      managerApprovalStatus: managerApprovalStatus || '',
       updatedAt: new Date().toISOString()
     };
     store.courseProgress[key] = nextEntry;
