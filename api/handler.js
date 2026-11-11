@@ -11,7 +11,7 @@ function getProgrammeStoreFilePath() {
 
 function buildInitialStatusHistory(p, pubStatus, availStatus) {
   const pid = p.id || 'prog-1';
-  const pname = p.name || 'Training Programme';
+  const pname = p.name || 'Training';
   const presetMap = {
     'prog-1': [
       {
@@ -41,7 +41,7 @@ function buildInitialStatusHistory(p, pubStatus, availStatus) {
         changedBy: 'Ishdeep Anand',
         changedAt: '2026-10-01T04:45:00.000Z',
         changedAtFormatted: '01-Oct-2026, 10:15:00 AM',
-        reason: 'Programme published and enabled for Business Analyst & HR onboarding'
+        reason: 'Training published and enabled for Business Analyst & HR onboarding'
       },
       {
         id: 'audit-prog-1-4',
@@ -448,8 +448,8 @@ function buildInitialStatusHistory(p, pubStatus, availStatus) {
       changedAt: '2026-10-12T04:30:00.000Z',
       changedAtFormatted: '12-Oct-2026, 10:00:00 AM',
       reason: pubStatus === 'Published'
-        ? `Programme published and set to ${availStatus} for learner enrollment`
-        : 'Programme saved as Draft (Availability locked to Inactive)'
+        ? `Training published and set to ${availStatus} for learner enrollment`
+        : 'Training saved as Draft (Availability locked to Inactive)'
     },
     {
       id: `audit-${pid}-4`,
@@ -1123,10 +1123,10 @@ function checkProgrammeEmployeeAccess(store, training) {
   const matched = findCatalogueProgramme(store, training.programmeId || training.programId, training.trainingName || training.name);
   if (!matched) return { allowed: true, programme: null };
   if (matched.publicationStatus === 'Archived') {
-    return { allowed: false, code: 'archived', message: 'This training programme has been archived and is only visible to management.', programme: matched };
+    return { allowed: false, code: 'archived', message: 'This training has been archived and is only visible to management.', programme: matched };
   }
   if (matched.availabilityStatus === 'Inactive') {
-    return { allowed: false, code: 'inactive', message: 'This programme is currently inactive and no actions can be performed inside.', programme: matched };
+    return { allowed: false, code: 'inactive', message: 'This training is currently inactive and no actions can be performed inside.', programme: matched };
   }
   return { allowed: true, programme: matched };
 }
@@ -6167,7 +6167,7 @@ export async function handleApi(req, res) {
     if (matchedProg && (matchedProg.publicationStatus !== 'Published' || matchedProg.availabilityStatus !== 'Active')) {
       return sendJson(res, 400, {
         success: false,
-        message: 'This programme is currently inactive and cannot be assigned.'
+        message: 'This training is currently inactive and cannot be assigned.'
       });
     }
 
@@ -6182,7 +6182,7 @@ export async function handleApi(req, res) {
     if (isDuplicateActive) {
       return sendJson(res, 400, {
         success: false,
-        message: `An active assignment for this training program already exists for ${store.profile.name}. Cancel or reassign the existing active record instead.`
+        message: `An active assignment for this training already exists for ${store.profile.name}. Cancel or reassign the existing active record instead.`
       });
     }
 
@@ -6406,7 +6406,7 @@ export async function handleApi(req, res) {
     if (duplicate) {
       return sendJson(res, 400, {
         success: false,
-        message: 'Cannot reassign: An active assignment already exists for this training program.'
+        message: 'Cannot reassign: An active assignment already exists for this training.'
       });
     }
 
@@ -6631,7 +6631,7 @@ export async function handleApi(req, res) {
 
     return sendJson(res, 200, {
       success: true,
-      message: `Programme updated to version v${prog.version}. Existing employee assignments remain linked to their original version without progress reset.`,
+      message: `Training updated to version v${prog.version}. Existing employee assignments remain linked to their original version without progress reset.`,
       program: prog
     });
   }
@@ -6677,7 +6677,7 @@ export async function handleApi(req, res) {
       if (!nextActive && (store.programmes || []).some(p => doesProgrammeUseCategory(p, cur.name))) {
         return sendJson(res, 400, {
           success: false,
-          message: `Cannot mark "${cur.name}" as Inactive because it is currently assigned to one or more training programmes.`,
+          message: `Cannot mark "${cur.name}" as Inactive because it is currently assigned to one or more trainings.`,
           categories: cats
         });
       }
@@ -6719,7 +6719,7 @@ export async function handleApi(req, res) {
         if (!wantsActive && isAssigned) {
           return sendJson(res, 400, {
             success: false,
-            message: `Cannot mark "${cur.name}" as Inactive because it is currently assigned to one or more training programmes.`,
+            message: `Cannot mark "${cur.name}" as Inactive because it is currently assigned to one or more trainings.`,
             categories: cats
           });
         }
@@ -6761,12 +6761,12 @@ export async function handleApi(req, res) {
     if (!canManageProgrammeAvailability(userRole || 'Admin • Management', userPermissions)) {
       return sendJson(res, 403, {
         success: false,
-        message: 'Permission Denied: You do not have permission to create or update training programmes.'
+        message: 'Permission Denied: You do not have permission to create or update trainings.'
       });
     }
 
     if (!programme || !programme.name || !String(programme.name).trim()) {
-      return sendJson(res, 400, { success: false, message: 'Programme Name is required.' });
+      return sendJson(res, 400, { success: false, message: 'Training Name is required.' });
     }
 
     const store = loadProgrammeStore();
@@ -6775,7 +6775,7 @@ export async function handleApi(req, res) {
       if (catEntry && catEntry.active === false) {
         return sendJson(res, 400, {
           success: false,
-          message: `Category "${catEntry.name}" is inactive and cannot be connected to a training programme.`
+          message: `Category "${catEntry.name}" is inactive and cannot be connected to a training.`
         });
       }
     }
@@ -6811,7 +6811,7 @@ export async function handleApi(req, res) {
           changedBy,
           changedAt: nowIso,
           changedAtFormatted: nowFormatted,
-          reason: 'Programme published (default Active)'
+          reason: 'Training published (default Active)'
         }] : []
       });
       if (created.statusHistory.length > 0) {
@@ -6847,7 +6847,7 @@ export async function handleApi(req, res) {
           changedBy,
           changedAt: nowIso,
           changedAtFormatted: nowFormatted,
-          reason: 'Programme published (default Active)'
+          reason: 'Training published (default Active)'
         };
         history.unshift(auditEntry);
         store.auditLogs.unshift(auditEntry);
@@ -6882,14 +6882,14 @@ export async function handleApi(req, res) {
     if (!canManageProgrammeAvailability(userRole, userPermissions)) {
       return sendJson(res, 403, {
         success: false,
-        message: 'Permission Denied: Only authorized Admin, HR, or Reporting Manager users can change programme availability.'
+        message: 'Permission Denied: Only authorized Admin, HR, or Reporting Manager users can change training availability.'
       });
     }
 
     const store = loadProgrammeStore();
     const idx = store.programmes.findIndex(p => p.id === programmeId);
     if (idx === -1) {
-      return sendJson(res, 404, { success: false, message: 'Programme not found.' });
+      return sendJson(res, 404, { success: false, message: 'Training not found.' });
     }
 
     const prog = store.programmes[idx];
@@ -6901,14 +6901,14 @@ export async function handleApi(req, res) {
     if (prog.publicationStatus === 'Draft') {
       return sendJson(res, 400, {
         success: false,
-        message: 'Draft programmes must remain Inactive and cannot be activated until published.',
+        message: 'Draft trainings must remain Inactive and cannot be activated until published.',
         programme: prog
       });
     }
     if (prog.publicationStatus !== 'Published') {
       return sendJson(res, 400, {
         success: false,
-        message: 'Only Published programmes can be toggled between Active and Inactive.',
+        message: 'Only Published trainings can be toggled between Active and Inactive.',
         programme: prog
       });
     }
@@ -6916,7 +6916,7 @@ export async function handleApi(req, res) {
     if (targetAvailabilityStatus === 'Inactive' && hasStartedLearnerForProgramme(store, prog)) {
       return sendJson(res, 400, {
         success: false,
-        message: 'This programme cannot be made inactive because an employee has already started working on it.',
+        message: 'This training cannot be made inactive because an employee has already started working on it.',
         programme: prog
       });
     }
@@ -6957,7 +6957,7 @@ export async function handleApi(req, res) {
 
     return sendJson(res, 200, {
       success: true,
-      message: `Programme availability updated to ${targetAvailabilityStatus}.`,
+      message: `Training availability updated to ${targetAvailabilityStatus}.`,
       programme: updated,
       programmes: store.programmes,
       auditEntry
@@ -6972,14 +6972,14 @@ export async function handleApi(req, res) {
     if (!canManageProgrammeAvailability(userRole, userPermissions)) {
       return sendJson(res, 403, {
         success: false,
-        message: 'Permission Denied: Only authorized Admin, HR, or Reporting Manager users can archive programmes.'
+        message: 'Permission Denied: Only authorized Admin, HR, or Reporting Manager users can archive trainings.'
       });
     }
 
     const store = loadProgrammeStore();
     const idx = store.programmes.findIndex(p => p.id === programmeId);
     if (idx === -1) {
-      return sendJson(res, 404, { success: false, message: 'Programme not found.' });
+      return sendJson(res, 404, { success: false, message: 'Training not found.' });
     }
 
     const prog = store.programmes[idx];
@@ -7001,7 +7001,7 @@ export async function handleApi(req, res) {
         changedBy: userName || 'Ishdeep Anand',
         changedAt: nowIso,
         changedAtFormatted: nowFormatted,
-        reason: reason && String(reason).trim() ? String(reason).trim() : 'Programme archived (Availability unchanged)'
+        reason: reason && String(reason).trim() ? String(reason).trim() : 'Training archived (Availability unchanged)'
       };
       history.unshift(auditEntry);
       store.auditLogs.unshift(auditEntry);
@@ -7021,7 +7021,7 @@ export async function handleApi(req, res) {
 
     return sendJson(res, 200, {
       success: true,
-      message: `Programme archived with Availability Status kept as ${prevAvail}. Visible on management side only.`,
+      message: `Training archived with Availability Status kept as ${prevAvail}. Visible on management side only.`,
       programme: updated,
       programmes: store.programmes
     });
@@ -7035,19 +7035,19 @@ export async function handleApi(req, res) {
     if (!canManageProgrammeAvailability(userRole, userPermissions)) {
       return sendJson(res, 403, {
         success: false,
-        message: 'Permission Denied: Only authorized Admin, HR, or Reporting Manager users can restore programmes.'
+        message: 'Permission Denied: Only authorized Admin, HR, or Reporting Manager users can restore trainings.'
       });
     }
 
     const store = loadProgrammeStore();
     const idx = store.programmes.findIndex(p => p.id === programmeId);
     if (idx === -1) {
-      return sendJson(res, 404, { success: false, message: 'Programme not found.' });
+      return sendJson(res, 404, { success: false, message: 'Training not found.' });
     }
 
     const prog = store.programmes[idx];
     if (prog.publicationStatus !== 'Archived') {
-      return sendJson(res, 400, { success: false, message: 'Only Archived programmes can be restored.' });
+      return sendJson(res, 400, { success: false, message: 'Only Archived trainings can be restored.' });
     }
 
     const currentAvail = prog.availabilityStatus || (prog.isActive === false ? 'Inactive' : 'Active');
@@ -7082,7 +7082,7 @@ export async function handleApi(req, res) {
 
     return sendJson(res, 200, {
       success: true,
-      message: `Programme restored to Published (${currentAvail}).`,
+      message: `Training restored to Published (${currentAvail}).`,
       programme: updated,
       programmes: store.programmes
     });
@@ -7096,21 +7096,21 @@ export async function handleApi(req, res) {
     const store = loadProgrammeStore();
     const idx = store.programmes.findIndex(p => p.id === programmeId);
     if (idx === -1) {
-      return sendJson(res, 404, { success: false, message: 'Selected training programme not found.' });
+      return sendJson(res, 404, { success: false, message: 'Selected training not found.' });
     }
 
     const prog = store.programmes[idx];
     if (prog.publicationStatus !== 'Published' || prog.availabilityStatus !== 'Active') {
       return sendJson(res, 400, {
         success: false,
-        message: 'This programme is currently inactive and cannot be assigned.'
+        message: 'This training is currently inactive and cannot be assigned.'
       });
     }
 
     if (!Array.isArray(targetEmployees) || targetEmployees.length === 0) {
       return sendJson(res, 400, {
         success: false,
-        message: 'Please select at least one employee and a training programme.'
+        message: 'Please select at least one employee and a training.'
       });
     }
 
@@ -7155,13 +7155,13 @@ export async function handleApi(req, res) {
     if (matched && matched.publicationStatus === 'Archived') {
       return sendJson(res, 400, {
         success: false,
-        message: 'This training programme has been archived and is only visible to management.'
+        message: 'This training has been archived and is only visible to management.'
       });
     }
     if (matched && matched.availabilityStatus === 'Inactive') {
       return sendJson(res, 400, {
         success: false,
-        message: 'This programme is currently inactive and no actions can be performed inside.'
+        message: 'This training is currently inactive and no actions can be performed inside.'
       });
     }
 
