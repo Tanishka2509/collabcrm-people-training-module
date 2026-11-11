@@ -2641,7 +2641,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,onUpdateCoursePro
 
         (0,P.jsxs)("div",{className:"border-t border-slate-100 pt-4 space-y-4 text-xs",children:[
           (0,P.jsxs)("div",{children:[
-            (0,P.jsx)("div",{className:"text-slate-400 font-medium text-[11px]",children:"Expected Duration"}),
+            (0,P.jsx)("div",{className:"text-slate-400 font-medium text-[11px]",children:"Duration"}),
             (0,P.jsx)("div",{className:"font-semibold text-slate-800 mt-0.5",children:expectedHoursLabel})
           ]}),
           (0,P.jsxs)("div",{children:[
@@ -2649,10 +2649,6 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,onUpdateCoursePro
             (0,P.jsx)("div",{className:"font-semibold text-blue-600 mt-0.5",children:
               !isAssessmentEnabled ? (0,P.jsx)("span",{className:"text-slate-400 font-normal",children:"N/A (Assessment Disabled)"}) : `🎯 ${passingScore}% (Strictly > ${passingScore}% to pass)`
             })
-          ]}),
-          (0,P.jsxs)("div",{children:[
-            (0,P.jsx)("div",{className:"text-slate-400 font-medium text-[11px]",children:"Department"}),
-            (0,P.jsx)("div",{className:"font-semibold text-slate-800 mt-0.5",children:c.department || "Business Analysis"})
           ]}),
           (0,P.jsxs)("div",{children:[
             (0,P.jsx)("div",{className:"text-slate-400 font-medium text-[11px]",children:"Assigned By"}),
@@ -2696,7 +2692,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,onUpdateCoursePro
         // Tab 1: Overview (Matching Management General Info Programme Details Format)
         n==="overview" && (0,P.jsxs)("div",{className:"space-y-4 animate-in fade-in",children:[
           (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-3",children:[
-            (0,P.jsx)("h3",{className:"text-xs font-bold text-slate-400 uppercase tracking-wide",children:"TRAINING PROGRESS & STATUS"}),
+            (0,P.jsx)("h3",{className:"text-xs font-bold text-slate-400 tracking-wide",children:"Training Progress & Status"}),
             (0,P.jsxs)("div",{className:"flex items-center justify-between text-xs font-bold",children:[
               (0,P.jsx)("span",{className:(isSubmitted || allResourcesDone)?"text-emerald-600":(doneCount>0?"text-blue-600":"text-slate-600"),children:isSubmitted?"Training Completed":(allResourcesDone?"All Learning Modules Finished":(doneCount>0?"In Progress":"Not Started"))}),
               (0,P.jsxs)("span",{className:"text-slate-500",children:[doneCount, " of ", resources.length, " Modules Finished"]})
@@ -2704,42 +2700,38 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,onUpdateCoursePro
             (0,P.jsx)("div",{className:"w-full bg-slate-100 h-2.5 rounded-full overflow-hidden",children:(0,P.jsx)("div",{className:(modulePct===100?"bg-emerald-500":"bg-blue-600") + " h-full rounded-full transition-all duration-300",style:{width: modulePct + "%"}})})
           ]}),
           (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-6",children:[
-            (0,P.jsx)("h2",{className:"text-xs font-bold text-slate-400 uppercase tracking-wider",children:"Training Information"}),
+            (0,P.jsx)("h2",{className:"text-xs font-bold text-slate-400 tracking-wider",children:"Training Information"}),
             (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-3 gap-6 text-xs",children:[
               (0,P.jsxs)("div",{className:"space-y-4",children:[
                 (0,P.jsxs)("div",{children:[
-                  (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"TRAINING NAME"}),
+                  (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Training Name"}),
                   (0,P.jsx)("div",{className:"font-bold text-slate-900 mt-1",children:c.name})
                 ]}),
                 (0,P.jsxs)("div",{children:[
-                  (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"DIFFICULTY LEVEL"}),
+                  (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Difficulty Level"}),
                   (0,P.jsx)("div",{className:"font-bold text-slate-900 mt-1",children:c.difficultyLevel || "Intermediate"})
                 ]})
               ]}),
               (0,P.jsxs)("div",{className:"space-y-4",children:[
                 (0,P.jsxs)("div",{children:[
-                  (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"TRAINING CATEGORY"}),
+                  (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Training Category"}),
                   (0,P.jsx)("div",{className:"font-bold text-slate-900 mt-1",children:c.category || c.cat || "Recruitment & HR Operations"})
                 ]}),
                 (0,P.jsxs)("div",{children:[
-                  (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"EXPECTED DURATION"}),
+                  (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Duration"}),
                   (0,P.jsx)("div",{className:"font-bold text-slate-900 mt-1",children:expectedHoursLabel})
                 ]})
               ]}),
               (0,P.jsxs)("div",{className:"space-y-4",children:[
                 (0,P.jsxs)("div",{children:[
-                  (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"DEPARTMENT"}),
-                  (0,P.jsx)("div",{className:"font-bold text-slate-900 mt-1",children:c.department || "Business Analysis"})
-                ]}),
-                (0,P.jsxs)("div",{children:[
-                  (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"PASSING ASSESSMENT SCORE"}),
+                  (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Passing Assessment Score"}),
                   (0,P.jsx)("div",{className:"font-bold text-blue-600 mt-1",children:!isAssessmentEnabled ? "N/A (Assessment Disabled)" : (passingScore + "%")})
                 ]})
               ]})
             ]}),
             (0,P.jsxs)("div",{className:"border-t border-slate-100 pt-5 space-y-4 text-xs",children:[
               (0,P.jsxs)("div",{children:[
-                (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"LEARNING OBJECTIVES"}),
+                (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Learning Objectives"}),
                 (0,P.jsx)("div",{className:"text-slate-700 mt-1 leading-relaxed",children:c.learningObjectives || "Master comprehensive workflows, key competencies, and practical execution techniques across the enterprise platform."})
               ]}),
               false && (0,P.jsxs)("div",{children:[
