@@ -3,6 +3,10 @@
   "cleanUrls": true,
   "rewrites": [
     {
+      "source": "/api/config/:path*",
+      "destination": "/api/config/[...path].js"
+    },
+    {
       "source": "/api/employee/:path*",
       "destination": "/api/employee/[...path].js"
     },
