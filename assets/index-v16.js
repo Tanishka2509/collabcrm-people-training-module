@@ -2077,12 +2077,11 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,onUpdateCoursePro
     if (/^(https?:\/\/|data:|blob:|\/)/i.test(u)) return u;
     return "https://" + u;
   };
+  let FALLBACK_YT_IDS = ["8mAITcNt710", "HXV3zeQKqGY"];
   let extractYoutubeId = rawUrl => {
     let u = String(rawUrl || "");
-    let m = u.match(/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+    let m = u.match(/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})(?:[?&#/]|$)/);
     if (m && m[1]) return m[1];
-    let qm = u.match(/[?&]v=([^&#]+)/);
-    if (qm && qm[1] && qm[1] !== "sample-video" && qm[1].length >= 6) return qm[1];
     return null;
   };
   let getResourceViewerMeta = res => {
@@ -2093,11 +2092,16 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,onUpdateCoursePro
     if (ytId) {
       return { kind: "youtube", url, embedUrl: "https://www.youtube.com/embed/" + ytId + "?rel=0", isInternalPlaceholder: false };
     }
-    if (t.includes("video") || t.includes("youtube") || /\.(mp4|webm|ogg)(\?|#|$)/i.test(url) || url.includes("youtube.com") || url.includes("youtu.be") || url.includes("vimeo.com")) {
+    if (t.includes("video") || t.includes("youtube") || url.includes("youtube.com") || url.includes("youtu.be")) {
+      let fallbackIdx = /business|analyst|sql|crm|analytics|data/i.test((res?.title || "") + " " + (c?.name || "")) ? 1 : 0;
+      let fbId = FALLBACK_YT_IDS[fallbackIdx];
+      let fbUrl = "https://www.youtube.com/watch?v=" + fbId;
+      return { kind: "youtube", url: url && !isInternalPlaceholder && !url.includes("watch?v=incident-") ? url : fbUrl, embedUrl: "https://www.youtube.com/embed/" + fbId + "?rel=0", isInternalPlaceholder: false };
+    }
+    if (/\.(mp4|webm|ogg)(\?|#|$)/i.test(url) || url.includes("vimeo.com")) {
       let vimeoMatch = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
       if (vimeoMatch) return { kind: "iframe-video", url, embedUrl: "https://player.vimeo.com/video/" + vimeoMatch[1], isInternalPlaceholder: false };
-      if (/\.(mp4|webm|ogg)(\?|#|$)/i.test(url)) return { kind: "html5-video", url, embedUrl: url, isInternalPlaceholder: false };
-      return { kind: "video-preview", url, embedUrl: url, isInternalPlaceholder };
+      return { kind: "html5-video", url, embedUrl: url, isInternalPlaceholder: false };
     }
     if (t.includes("pdf") || t.includes("doc") || /\.(pdf|docx?|pptx?)(\?|#|$)/i.test(url) || url.includes("docs.google.com") || url.includes("drive.google.com") || url.startsWith("data:application/pdf")) {
       let docUrl = url;
@@ -2404,7 +2408,6 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,onUpdateCoursePro
               (0,P.jsx)("td",{className:"py-3 px-4 text-slate-600 whitespace-nowrap",children:res.type || "-"}),
               (0,P.jsx)("td",{className:"py-3 px-4 text-slate-400 font-mono text-[11px] max-w-xs truncate",children:res.url || "-"}),
               (0,P.jsx)("td",{className:"py-3 px-4 text-right whitespace-nowrap",children:(0,P.jsxs)("div",{className:"inline-flex items-center justify-end gap-2",children:[
-                (0,P.jsx)("button",{type:"button",disabled:isCourseInactive,onClick:()=>!isCourseInactive&&setViewedResource({...res,moduleNum:idx+1}),style:isCourseInactive?{opacity:0.5}:undefined,className:(isCourseInactive?"text-slate-400 cursor-not-allowed":"text-blue-600 hover:underline cursor-pointer") + " font-semibold text-[11px]",children:"Open Resource →"}),
                 completedResources[res.id] ? (0,P.jsx)("span",{className:"px-2.5 py-1 text-[11px] font-semibold rounded-md bg-emerald-100 text-emerald-800 border border-emerald-200",children:"Completed ✓"}) :
                 idx===firstIncompleteIdx ? (0,P.jsx)("button",{type:"button",disabled:isCourseInactive,onClick:()=>handleToggleResource(res.id),style:isCourseInactive?{opacity:0.5}:undefined,className:"px-2.5 py-1 text-[11px] font-semibold rounded-md transition-colors bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100" + (isCourseInactive?" cursor-not-allowed":""),children:"Mark Done"}) :
                 (0,P.jsx)("span",{className:"px-2.5 py-1 text-[11px] font-medium rounded-md bg-slate-100 text-slate-400 border border-slate-200",children:"Pending"})
