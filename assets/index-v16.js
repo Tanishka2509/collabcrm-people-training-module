@@ -278,10 +278,10 @@ const COMPLETION_REQ_OPTIONS=[`Watch all required videos`,`Pass the assessment`,
         (0,P.jsx)("span",{children:"Back to Training Programmes"})
       ]}),
       (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
-        (0,P.jsxs)("div",{className:"flex items-center gap-2.5 bg-white border border-slate-200 px-3 py-1.5 rounded-lg shadow-sm",children:[
-          (0,P.jsx)("span",{className:"text-xs font-semibold text-slate-600",children:"Active / Inactive"}),
-          (0,P.jsx)("button",{type:"button",disabled:!isPubForAvail,"aria-checked":isAvailOn,"aria-disabled":!isPubForAvail||!canChangeAvail,role:"switch",onClick:handleAvailToggleClick,className:"relative inline-flex h-5 w-9 shrink-0 rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none " + (isAvailOn?"bg-blue-600":"bg-slate-300") + " " + (!isPubForAvail?"opacity-50 cursor-not-allowed":canChangeAvail?"cursor-pointer":"opacity-60 cursor-not-allowed"),title:availToggleTitle,children:(0,P.jsx)("span",{className:"pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out " + (isAvailOn?"translate-x-4":"translate-x-0")})}),
-          (0,P.jsx)("span",{className:"text-xs font-bold " + (isAvailOn?"text-blue-700":"text-slate-500"),children:availStatus})
+        (0,P.jsxs)("div",{style:{display:"inline-flex",alignItems:"center",gap:"10px"},className:"bg-white border border-slate-200 px-3 py-1.5 rounded-lg shadow-sm",children:[
+          (0,P.jsx)("span",{className:"text-xs font-semibold text-slate-600 whitespace-nowrap",children:"Active / Inactive"}),
+          (0,P.jsx)("button",{type:"button",disabled:!isPubForAvail,"aria-checked":isAvailOn,"aria-disabled":!isPubForAvail||!canChangeAvail,role:"switch",onClick:handleAvailToggleClick,style:{width:"36px",height:"20px",padding:"2px",border:"none"},className:"relative inline-flex shrink-0 items-center rounded-full transition-colors duration-200 ease-in-out focus:outline-none " + (isAvailOn?"bg-blue-600":"bg-slate-300") + " " + (!isPubForAvail?"opacity-50 cursor-not-allowed":canChangeAvail?"cursor-pointer":"opacity-60 cursor-not-allowed"),title:availToggleTitle,children:(0,P.jsx)("span",{style:{width:"16px",height:"16px",transform:isAvailOn?"translateX(16px)":"translateX(0px)"},className:"pointer-events-none inline-block rounded-full bg-white shadow transition-transform duration-200 ease-in-out"})}),
+          (0,P.jsx)("span",{className:"text-xs font-bold whitespace-nowrap " + (isAvailOn?"text-blue-700":"text-slate-500"),children:availStatus})
         ]}),
         pubStatus !== "Archived" && canToggle !== !1 && (0,P.jsx)("button",{type:"button",onClick:()=>{setDetailAlert("");setArchiveReason("");setArchiveModal("archive")},className:"bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-3.5 py-1.5 rounded-lg text-sm font-semibold shadow-sm transition-colors",children:"Archive Programme"}),
         pubStatus === "Archived" && canToggle !== !1 && (0,P.jsx)("button",{type:"button",onClick:()=>{setDetailAlert("");setArchiveReason("");setArchiveModal("restore")},style:{backgroundColor:"#059669",color:"#ffffff"},className:"bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-1.5 rounded-lg text-sm font-semibold shadow-sm transition-colors",children:"Restore to Published"}),
@@ -313,6 +313,18 @@ const COMPLETION_REQ_OPTIONS=[`Watch all required videos`,`Pass the assessment`,
         ]}),
         (0,P.jsxs)("div",{className:"border-t border-slate-100 pt-4 space-y-4 text-xs",children:[
           (0,P.jsxs)("div",{children:[
+            (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Expected Duration"}),
+            (0,P.jsxs)("div",{className:"font-semibold text-slate-800 mt-0.5",children:[e.expectedDurationHours || 18, " Hours"]})
+          ]}),
+          (0,P.jsxs)("div",{children:[
+            (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Passing Assessment Score"}),
+            (0,P.jsx)("div",{className:"font-semibold text-slate-800 mt-0.5",children:e.assessment && e.assessment.enabled === !1 ? "N/A (Assessment Disabled)" : ((Number(e.assessment?.passingScore || e.passingScore) || 80) + "%")})
+          ]}),
+          (0,P.jsxs)("div",{children:[
+            (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Department"}),
+            (0,P.jsx)("div",{className:"font-semibold text-slate-800 mt-0.5",children:e.department || "Project"})
+          ]}),
+          (0,P.jsxs)("div",{children:[
             (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Enrolled Learners"}),
             (0,P.jsxs)("div",{className:"font-semibold text-slate-800 mt-0.5",children:[o.length, " Enrolled"]})
           ]}),
@@ -338,25 +350,11 @@ const COMPLETION_REQ_OPTIONS=[`Watch all required videos`,`Pass the assessment`,
           ]})
         ]}),
 
-        // Tab 1: General Info Content (deduplicated single-source details)
+        // Tab 1: General Info Content (details kept on left; unique objectives & completion criteria here)
         activeTab==="general" && (0,P.jsxs)("div",{className:"space-y-6",children:[
-          (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-6",children:[
+          (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-5",children:[
             (0,P.jsx)("h2",{className:"text-xs font-bold text-slate-400 uppercase tracking-wider",children:"Programme Information"}),
-            (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-3 gap-6 text-xs",children:[
-              (0,P.jsxs)("div",{children:[
-                (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"DEPARTMENT"}),
-                (0,P.jsx)("div",{className:"font-bold text-slate-900 mt-1",children:e.department || "Project"})
-              ]}),
-              (0,P.jsxs)("div",{children:[
-                (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"EXPECTED DURATION"}),
-                (0,P.jsxs)("div",{className:"font-bold text-slate-900 mt-1",children:[e.expectedDurationHours || 18, " Hours"]})
-              ]}),
-              (0,P.jsxs)("div",{children:[
-                (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"PASSING ASSESSMENT SCORE"}),
-                (0,P.jsx)("div",{className:"font-bold text-blue-600 mt-1",children:e.assessment && e.assessment.enabled === !1 ? "N/A (Assessment Disabled)" : ((Number(e.assessment?.passingScore || e.passingScore) || 80) + "%")})
-              ]})
-            ]}),
-            (0,P.jsxs)("div",{className:"border-t border-slate-100 pt-5 space-y-4 text-xs",children:[
+            (0,P.jsxs)("div",{className:"space-y-4 text-xs",children:[
               (0,P.jsxs)("div",{children:[
                 (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"LEARNING OBJECTIVES"}),
                 (0,P.jsx)("div",{className:"text-slate-700 mt-1 leading-relaxed",children:e.learningObjectives || "Master comprehensive workflows, key competencies, and practical execution techniques across the enterprise platform."})
@@ -1041,18 +1039,24 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
         ]}),
         (0,P.jsxs)("div",{className:"space-y-1.5",children:[
           (0,P.jsx)("label",{className:"block text-xs font-semibold text-slate-700 mb-1.5",children:"Training Category *"}),
-          (0,P.jsxs)("select",{value:s,onChange:e=>c(e.target.value),className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 " + (s?"text-slate-900":"text-slate-400"),children:[
-            (0,P.jsx)("option",{value:"",children:"Select training category..."}),
-            activeCats.map(cat=>(0,P.jsx)("option",{value:cat.name,children:cat.name},cat.name))
+          (0,P.jsxs)("div",{className:"relative",children:[
+            (0,P.jsxs)("select",{value:s,onChange:e=>c(e.target.value),style:{appearance:"none",WebkitAppearance:"none",MozAppearance:"none",paddingRight:"32px"},className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 " + (s?"text-slate-900":"text-slate-400"),children:[
+              (0,P.jsx)("option",{value:"",children:"Select training category..."}),
+              activeCats.map(cat=>(0,P.jsx)("option",{value:cat.name,children:cat.name},cat.name))
+            ]}),
+            (0,P.jsx)(re,{style:{position:"absolute",right:"10px",top:"50%",transform:"translateY(-50%)"},className:"w-4 h-4 text-slate-400 pointer-events-none"})
           ]})
         ]}),
         (0,P.jsxs)("div",{className:"space-y-1.5",children:[
           (0,P.jsx)("label",{className:"block text-xs font-semibold text-slate-700 mb-1.5",children:"Difficulty Level *"}),
-          (0,P.jsxs)("select",{value:f,onChange:e=>p(e.target.value),className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 " + (f?"text-slate-900":"text-slate-400"),children:[
-            (0,P.jsx)("option",{value:"",children:"Select difficulty level..."}),
-            (0,P.jsx)("option",{value:"Beginner",children:"Beginner"}),
-            (0,P.jsx)("option",{value:"Intermediate",children:"Intermediate"}),
-            (0,P.jsx)("option",{value:"Expert",children:"Expert"})
+          (0,P.jsxs)("div",{className:"relative",children:[
+            (0,P.jsxs)("select",{value:f,onChange:e=>p(e.target.value),style:{appearance:"none",WebkitAppearance:"none",MozAppearance:"none",paddingRight:"32px"},className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 " + (f?"text-slate-900":"text-slate-400"),children:[
+              (0,P.jsx)("option",{value:"",children:"Select difficulty level..."}),
+              (0,P.jsx)("option",{value:"Beginner",children:"Beginner"}),
+              (0,P.jsx)("option",{value:"Intermediate",children:"Intermediate"}),
+              (0,P.jsx)("option",{value:"Expert",children:"Expert"})
+            ]}),
+            (0,P.jsx)(re,{style:{position:"absolute",right:"10px",top:"50%",transform:"translateY(-50%)"},className:"w-4 h-4 text-slate-400 pointer-events-none"})
           ]})
         ]}),
         (0,P.jsxs)("div",{className:"space-y-1.5",children:[
@@ -1067,11 +1071,11 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
         ]}),
         (0,P.jsxs)("div",{className:"space-y-1.5 relative",ref:compReqRef,children:[
           (0,P.jsx)("label",{className:"block text-xs font-semibold text-slate-700 mb-1.5",children:"Completion Requirements"}),
-          (0,P.jsxs)("button",{type:"button",onClick:()=>setShowCompReqDrop(!showCompReqDrop),className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs text-left flex items-center justify-between gap-2 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500",children:[
+          (0,P.jsxs)("button",{type:"button",onClick:()=>setShowCompReqDrop(!showCompReqDrop),style:{paddingRight:"10px"},className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs text-left flex items-center justify-between gap-2 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500",children:[
             (0,P.jsx)("span",{className:"truncate " + (compReqList.length>0?"text-slate-900 font-medium":"text-slate-400"),children:compReqList.length>0?compReqList.join(", "):"Select completion requirements..."}),
-            (0,P.jsxs)("span",{className:"flex items-center gap-1.5 shrink-0",children:[
+            (0,P.jsxs)("span",{style:{display:"inline-flex",alignItems:"center",gap:"6px"},className:"shrink-0",children:[
               compReqList.length>0 && (0,P.jsx)("span",{className:"bg-blue-100 text-blue-700 text-[10px] font-bold px-1.5 py-0.5 rounded-full",children:compReqList.length}),
-              (0,P.jsx)("span",{className:"text-slate-400 text-[10px]",children:"▾"})
+              (0,P.jsx)(re,{style:{transition:"transform 150ms",transform:showCompReqDrop?"rotate(180deg)":"rotate(0deg)"},className:"w-4 h-4 text-slate-400"})
             ]})
           ]}),
           showCompReqDrop && (0,P.jsxs)("div",{className:"absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl z-40 py-2 px-1 space-y-1 animate-in fade-in duration-100",children:[
@@ -1157,17 +1161,17 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
 
         // Question Builder Header & Stats
         (0,P.jsxs)("div",{className:"flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2",children:[
-          (0,P.jsxs)("div",{className:"flex items-center gap-2.5 flex-wrap",children:[
+          (0,P.jsxs)("div",{style:{display:"flex",alignItems:"center",gap:"10px",flexWrap:"wrap"},children:[
             (0,P.jsx)("span",{className:"text-xs font-bold text-slate-900 uppercase tracking-wide",children:"Questions List"}),
             (0,P.jsxs)("span",{className:"bg-blue-50 text-blue-700 border border-blue-200 text-xs font-bold px-2.5 py-0.5 rounded-full",children:[totalQuestions," Questions"]}),
-            (0,P.jsxs)("div",{className:"inline-flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 rounded-full pl-3 pr-1.5 py-0.5 text-xs",children:[
-              (0,P.jsx)("span",{className:"font-bold text-emerald-800 whitespace-nowrap",children:"Total Marks:"}),
-              (0,P.jsx)("input",{type:"number",min:1,value:assessTotalMarks,onChange:e=>setAssessTotalMarks(e.target.value),placeholder:String(questionsMarksSum || 0),title:"Set target total marks for this assessment",className:"w-16 text-center bg-white border border-emerald-300 rounded-full font-bold text-emerald-800 text-xs py-0.5 px-1.5 focus:outline-none focus:ring-1 focus:ring-emerald-500"})
+            (0,P.jsxs)("div",{style:{display:"inline-flex",alignItems:"center",gap:"8px"},children:[
+              (0,P.jsx)("label",{className:"text-xs font-semibold text-slate-700 whitespace-nowrap",children:"Total Marks:"}),
+              (0,P.jsx)("input",{type:"text",inputMode:"numeric",value:assessTotalMarks,onChange:e=>setAssessTotalMarks(e.target.value.replace(/[^0-9]/g,"")),placeholder:String(questionsMarksSum || 0),title:"Set target total marks for this assessment",style:{width:"68px"},className:"bg-white border border-slate-300 rounded-lg px-2.5 py-1 text-center font-bold text-slate-800 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500"})
             ]}),
-            questions.length > 0 && assessTotalMarks !== "" && Number(assessTotalMarks) > 0 && questionsMarksSum !== Number(assessTotalMarks) ? (0,P.jsxs)("div",{className:"inline-flex items-center gap-2",children:[
+            questions.length > 0 && assessTotalMarks !== "" && Number(assessTotalMarks) > 0 && questionsMarksSum !== Number(assessTotalMarks) ? (0,P.jsxs)("div",{style:{display:"inline-flex",alignItems:"center",gap:"8px"},children:[
               (0,P.jsxs)("span",{className:"bg-amber-50 text-amber-800 border border-amber-200 text-[11px] font-semibold px-2.5 py-0.5 rounded-full",children:["Allocated: ", questionsMarksSum, " / ", Number(assessTotalMarks)]}),
-              (0,P.jsx)("button",{type:"button",onClick:handleDistributeTotalMarks,className:"text-[11px] font-bold text-blue-700 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-2.5 py-0.5 rounded-full transition-colors",children:"Distribute Equally"})
-            ]}) : (questions.length > 0 && assessTotalMarks !== "" && Number(assessTotalMarks) > 0 && (0,P.jsx)("span",{className:"bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-semibold px-2 py-0.5 rounded-full",children:"Matched ✓"}))
+              (0,P.jsx)("button",{type:"button",onClick:handleDistributeTotalMarks,className:"text-[11px] font-bold text-blue-700 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-2.5 py-1 rounded-lg transition-colors",children:"Distribute Equally"})
+            ]}) : (questions.length > 0 && assessTotalMarks !== "" && Number(assessTotalMarks) > 0 && (0,P.jsx)("span",{className:"bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-semibold px-2.5 py-0.5 rounded-full",children:"Matched ✓"}))
           ]}),
           (0,P.jsxs)("button",{type:"button",onClick:handleAddQuestion,className:"bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 rounded-lg text-xs font-bold shadow-sm flex items-center gap-1.5 transition-colors self-start sm:self-auto",children:[
             (0,P.jsx)("span",{children:"+"}),
@@ -1225,7 +1229,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
                 (0,P.jsx)("button",{type:"button",onClick:()=>handleAddAcceptedAnswer(q.id),className:"text-blue-600 hover:text-blue-700 font-semibold text-xs",children:"+ Add Accepted Answer"})
               ]}),
               (0,P.jsx)("div",{className:"space-y-2",children:(q.acceptedAnswers||[""]).map((ans, aIdx)=>(0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
-                (0,P.jsx)("input",{type:"text",value:ans,onChange:e=>handleUpdateAcceptedAnswer(q.id, aIdx, e.target.value),placeholder:"Enter accepted correct answer (e.g. Customer Relationship Management)...",className:"flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:ring-1 focus:ring-blue-500"}),
+                (0,P.jsx)("input",{type:"text",value:ans,onChange:e=>handleUpdateAcceptedAnswer(q.id, aIdx, e.target.value),placeholder:"Enter accepted correct answer...",className:"flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:ring-1 focus:ring-blue-500"}),
                 (q.acceptedAnswers||[]).length > 1 && (0,P.jsx)("button",{type:"button",onClick:()=>handleRemoveAcceptedAnswer(q.id, aIdx),className:"text-slate-400 hover:text-rose-600 p-1.5 rounded hover:bg-slate-100 text-xs",title:"Remove",children:"✕"})
               ]},aIdx))})
             ]}),
