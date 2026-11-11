@@ -152,8 +152,24 @@ function normalizeProgrammeRecord(p) {
   const existingHistory = Array.isArray(p.statusHistory) && p.statusHistory.length > 0
     ? p.statusHistory
     : buildInitialStatusHistory(p, pubStatus, availStatus);
+  const cleanedResources = Array.isArray(p.resources)
+    ? p.resources.filter(r => r && (String(r.title || '').trim() || String(r.url || '').trim() || String(r.type || '').trim()))
+    : [];
+  const effectivePassingScore = p.assessment && p.assessment.passingScore != null
+    ? (Number(p.assessment.passingScore) || Number(p.passingScore) || 80)
+    : (Number(p.passingScore) || 80);
+  const effectiveMaxAttempts = p.assessment && p.assessment.maxAttempts != null
+    ? (Number(p.assessment.maxAttempts) || Number(p.maxAttempts) || 3)
+    : (Number(p.maxAttempts) || 3);
+  const normalizedAssessment = p.assessment
+    ? { ...p.assessment, passingScore: effectivePassingScore, maxAttempts: effectiveMaxAttempts }
+    : undefined;
   return {
     ...p,
+    passingScore: effectivePassingScore,
+    maxAttempts: effectiveMaxAttempts,
+    resources: cleanedResources,
+    ...(normalizedAssessment ? { assessment: normalizedAssessment } : {}),
     publicationStatus: pubStatus,
     availabilityStatus: availStatus,
     status: pubStatus,
@@ -380,7 +396,10 @@ function getDefaultProgrammesSeed() {
       status: 'Published',
       isActive: true,
       enrolledCount: 25,
-      resources: [],
+      resources: [
+        { id: 'res-7-1', type: 'Video / YouTube', title: 'Module 1: OAuth2 Grant Types & PKCE Flow', url: 'https://youtube.com/watch?v=oauth2-pkce' },
+        { id: 'res-7-2', type: 'PDF Document', title: 'Module 2: API Security & JWT Validation Playbook', url: 'https://docs.collabcrm.internal/api-security-playbook.pdf' }
+      ],
       statusHistory: []
     },
     {
@@ -408,7 +427,10 @@ function getDefaultProgrammesSeed() {
       status: 'Published',
       isActive: true,
       enrolledCount: 1,
-      resources: [],
+      resources: [
+        { id: 'res-8-1', type: 'Video / YouTube', title: 'Module 1: Enterprise Security Awareness & Phishing Defense', url: 'https://youtube.com/watch?v=gdpr-security-2026' },
+        { id: 'res-8-2', type: 'PDF Document', title: 'Module 2: GDPR Data Handling & Breach Reporting Handbook', url: 'https://docs.collabcrm.internal/gdpr-compliance-2026.pdf' }
+      ],
       statusHistory: []
     },
     {
@@ -436,7 +458,10 @@ function getDefaultProgrammesSeed() {
       status: 'Published',
       isActive: true,
       enrolledCount: 1,
-      resources: [],
+      resources: [
+        { id: 'res-9-1', type: 'Video / YouTube', title: 'Module 1: Multi-Tenant System Topology & Event Bus', url: 'https://youtube.com/watch?v=collabcrm-arch' },
+        { id: 'res-9-2', type: 'PDF Document', title: 'Module 2: Architecture Reference Blueprint', url: 'https://docs.collabcrm.internal/architecture-deep-dive.pdf' }
+      ],
       statusHistory: []
     },
     {
@@ -464,7 +489,10 @@ function getDefaultProgrammesSeed() {
       status: 'Published',
       isActive: true,
       enrolledCount: 2,
-      resources: [],
+      resources: [
+        { id: 'res-10-1', type: 'Video / YouTube', title: 'Module 1: Executive Alignment & Stakeholder Mapping', url: 'https://youtube.com/watch?v=stakeholder-comm' },
+        { id: 'res-10-2', type: 'PDF Document', title: 'Module 2: Cross-Functional Communication Toolkit', url: 'https://docs.collabcrm.internal/stakeholder-toolkit.pdf' }
+      ],
       statusHistory: []
     },
     {
@@ -492,7 +520,10 @@ function getDefaultProgrammesSeed() {
       status: 'Published',
       isActive: true,
       enrolledCount: 1,
-      resources: [],
+      resources: [
+        { id: 'res-11-1', type: 'Video / YouTube', title: 'Module 1: POSH Act Guidelines & Workplace Standards', url: 'https://youtube.com/watch?v=posh-compliance' },
+        { id: 'res-11-2', type: 'PDF Document', title: 'Module 2: Workplace Safety & Code of Conduct Handbook', url: 'https://docs.collabcrm.internal/posh-handbook.pdf' }
+      ],
       statusHistory: []
     },
     {
@@ -520,7 +551,10 @@ function getDefaultProgrammesSeed() {
       status: 'Published',
       isActive: true,
       enrolledCount: 2,
-      resources: [],
+      resources: [
+        { id: 'res-12-1', type: 'Video / YouTube', title: 'Module 1: P1/P2 Triage & SLA Escalation Matrix', url: 'https://youtube.com/watch?v=incident-sla' },
+        { id: 'res-12-2', type: 'PDF Document', title: 'Module 2: Incident Response Runbook', url: 'https://docs.collabcrm.internal/incident-runbook.pdf' }
+      ],
       statusHistory: []
     }
   ];
