@@ -52,7 +52,7 @@ The left collapsible sidebar provides access to:
   1. **Core Programme Details**: Training Name, Training Category, Difficulty Level, Duration, Learning Objectives, and **Completion Requirements** (multi-select checkbox dropdown with options `Watch all required videos`, `Pass the assessment`, `Submit any required documents`, and `Get approval from the manager`; checkboxes toggle directly without `Clear`/`Done` buttons and the menu closes on outside click).
   2. **Learning Resources Builder**: Dynamic resource list (Video/YouTube, PDF Document, External Link, Article).
   3. **Assessment & Questions Builder**: Enable Assessment toggle, Assessment Title, Passing Score (`Passing Score (%) *` without any `(Strictly > 80% to pass)` text), Max Assessment Attempts, Assessment Description, manual **Total Marks** numeric text field (`Total Marks:`, empty by default), and dynamic multi-format question builder with manual per-question **Marks** (empty by default), live mismatch validation against `Total Marks`, and bordered SVG-icon **Duplicate** / **Delete** buttons.
-- Header Actions: **Auto-Fill Demo**, **Cancel**, **Publish Programme** (or **Update & Publish** / **Save Changes**), and text-only **Save as Draft** dropdown option (no floppy disk icon).
+- Header Actions: **Auto-Fill Demo**, **Cancel**, **Publish** (or **Update & Publish** / **Save Changes**), and text-only **Save as Draft** dropdown option (no floppy disk icon).
 
 ---
 
