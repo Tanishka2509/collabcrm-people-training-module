@@ -280,30 +280,30 @@ Error generating stack: `+e.message+`
         // Tab 1: General Info Content
         activeTab==="general" && (0,P.jsxs)("div",{className:"space-y-6",children:[
           // Top 3 Stat Cards (Status, Duration, Passing Score)
-          (0,P.jsx)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm",children:[
-            (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-3 gap-6",children:[
-              (0,P.jsxs)("div",{className:"flex items-center gap-3.5",children:[
+          (0,P.jsx)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm",children:
+            (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-3 gap-6 md:divide-x md:divide-slate-100 items-center",children:[
+              (0,P.jsxs)("div",{className:"flex items-center gap-3.5 min-w-0",children:[
                 (0,P.jsx)("div",{className:"w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center shrink-0",children:(0,P.jsx)(D,{className:"w-5 h-5"})}),
-                (0,P.jsxs)("div",{children:[
-                  (0,P.jsx)("div",{className:"text-slate-400 font-medium text-[11px]",children:"Publication / Availability"}),
-                  (0,P.jsxs)("div",{className:"mt-0.5 flex items-center gap-1.5 flex-wrap",children:[
-                    (0,P.jsx)("span",{className:pubBadgeClass + " text-xs px-2.5 py-0.5 rounded-full font-bold",children:pubStatus}),
-                    (0,P.jsx)("span",{className:availBadgeClass + " text-xs px-2.5 py-0.5 rounded-full font-bold",children:availStatus})
+                (0,P.jsxs)("div",{className:"min-w-0",children:[
+                  (0,P.jsx)("div",{className:"text-slate-400 font-medium text-[11px] leading-tight",children:"Status"}),
+                  (0,P.jsxs)("div",{className:"mt-1 flex items-center gap-1.5 flex-wrap",children:[
+                    (0,P.jsx)("span",{className:pubBadgeClass + " text-xs px-2.5 py-0.5 rounded-full font-semibold leading-tight",children:pubStatus}),
+                    (0,P.jsx)("span",{className:availBadgeClass + " text-xs px-2.5 py-0.5 rounded-full font-semibold leading-tight",children:availStatus})
                   ]})
                 ]})
               ]}),
-              (0,P.jsxs)("div",{className:"flex items-center gap-3.5",children:[
+              (0,P.jsxs)("div",{className:"flex items-center gap-3.5 min-w-0 md:pl-6",children:[
                 (0,P.jsx)("div",{className:"w-10 h-10 rounded-xl bg-blue-50 text-blue-600 border border-blue-100 flex items-center justify-center shrink-0",children:(0,P.jsx)(te,{className:"w-5 h-5"})}),
-                (0,P.jsxs)("div",{children:[
-                  (0,P.jsx)("div",{className:"text-slate-400 font-medium text-[11px]",children:"Expected Duration"}),
-                  (0,P.jsxs)("div",{className:"text-slate-900 font-bold text-sm",children:[e.expectedDurationHours || 18, " Hours"]})
+                (0,P.jsxs)("div",{className:"min-w-0",children:[
+                  (0,P.jsx)("div",{className:"text-slate-400 font-medium text-[11px] leading-tight",children:"Expected Duration"}),
+                  (0,P.jsxs)("div",{className:"text-slate-900 font-bold text-sm mt-1",children:[e.expectedDurationHours || 18, " Hours"]})
                 ]})
               ]}),
-              (0,P.jsxs)("div",{className:"flex items-center gap-3.5",children:[
+              (0,P.jsxs)("div",{className:"flex items-center gap-3.5 min-w-0 md:pl-6",children:[
                 (0,P.jsx)("div",{className:"w-10 h-10 rounded-xl bg-amber-50 text-amber-600 border border-amber-100 flex items-center justify-center shrink-0",children:(0,P.jsx)(me,{className:"w-5 h-5"})}),
-                (0,P.jsxs)("div",{children:[
-                  (0,P.jsx)("div",{className:"text-slate-400 font-medium text-[11px]",children:"Passing Assessment Score"}),
-                  (0,P.jsxs)("div",{className:"text-slate-900 font-bold text-sm",children:[
+                (0,P.jsxs)("div",{className:"min-w-0",children:[
+                  (0,P.jsx)("div",{className:"text-slate-400 font-medium text-[11px] leading-tight",children:"Passing Assessment Score"}),
+                  (0,P.jsxs)("div",{className:"text-slate-900 font-bold text-sm mt-1",children:[
                     e.passingScore || 80,
                     "%",
                     (0,P.jsx)("span",{className:"text-xs text-slate-400 font-normal ml-1",children:"(Strictly > 80% to pass)"})
@@ -311,7 +311,7 @@ Error generating stack: `+e.message+`
                 ]})
               ]})
             ]})
-          ]}),
+          }),
 
           // Section Card: Programme Information (Formatted like Screenshot 4)
           (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-6",children:[
@@ -367,21 +367,27 @@ Error generating stack: `+e.message+`
             (0,P.jsxs)("h2",{className:"text-xs font-bold text-slate-400 uppercase tracking-wider",children:["Curriculum & Learning Resources (", resources.length, " Modules)"]}),
             (0,P.jsx)("button",{onClick:a,className:"text-xs font-semibold text-blue-600 hover:underline",children:"+ Add Module"})
           ]}),
-          (0,P.jsx)("div",{className:"grid grid-cols-1 md:grid-cols-2 gap-4",children:resources.map((res, idx)=>(0,P.jsxs)("div",{className:"bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between space-y-3 relative hover:border-slate-300 transition-colors",children:[
-            (0,P.jsxs)("div",{className:"space-y-2",children:[
-              (0,P.jsxs)("div",{className:"flex items-center justify-between",children:[
-                (0,P.jsx)("span",{className:"text-blue-600 font-bold",children:idx===0?(0,P.jsx)(te,{className:"w-4 h-4"}):idx===1?(0,P.jsx)(me,{className:"w-4 h-4"}):idx===2?(0,P.jsx)(pe,{className:"w-4 h-4"}):(0,P.jsx)(C,{className:"w-4 h-4"})}),
-                (0,P.jsxs)("span",{className:"text-[11px] font-semibold text-slate-400",children:["Module ", idx+1]})
-              ]}),
-              (0,P.jsx)("h3",{className:"text-xs font-bold text-slate-900 leading-snug line-clamp-2",children:res.title}),
-              (0,P.jsx)("div",{className:"text-[11px] text-slate-500",children:res.type}),
-              (0,P.jsx)("div",{className:"text-[10px] text-slate-400 font-mono truncate",children:res.url})
-            ]}),
-            (0,P.jsxs)("div",{className:"flex items-center justify-between pt-2 border-t border-slate-200/60 text-xs",children:[
-              (0,P.jsx)("span",{className:"text-[10px] font-bold px-2 py-0.5 rounded " + (res.mandatory!==false?"text-rose-700 bg-rose-50 border border-rose-200":"text-slate-600 bg-slate-100"),children:res.mandatory!==false?"Mandatory":"Optional"}),
-              (0,P.jsx)("a",{href:"https://" + res.url,target:"_blank",rel:"noreferrer",className:"text-blue-600 hover:underline font-semibold text-[11px]",children:"Open Resource →"})
-            ]})
-          ]}, res.id))})
+          (0,P.jsx)("div",{className:"overflow-x-auto",children:(0,P.jsxs)("table",{className:"w-full text-left border-collapse",children:[
+            (0,P.jsx)("thead",{children:(0,P.jsxs)("tr",{className:"border-b border-slate-200 text-[11px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50",children:[
+              (0,P.jsx)("th",{className:"py-3 px-4 w-24",children:"Module"}),
+              (0,P.jsx)("th",{className:"py-3 px-4",children:"Resource Title"}),
+              (0,P.jsx)("th",{className:"py-3 px-4",children:"Type"}),
+              (0,P.jsx)("th",{className:"py-3 px-4",children:"Resource URL"}),
+              (0,P.jsx)("th",{className:"py-3 px-4",children:"Requirement"}),
+              (0,P.jsx)("th",{className:"py-3 px-4 text-right",children:"Action"})
+            ]})}),
+            (0,P.jsx)("tbody",{className:"divide-y divide-slate-100 text-xs",children:resources.map((res, idx)=>(0,P.jsxs)("tr",{className:"hover:bg-slate-50/80 transition-colors",children:[
+              (0,P.jsx)("td",{className:"py-3 px-4 font-semibold text-slate-500 whitespace-nowrap",children:["Module ", idx+1]}),
+              (0,P.jsx)("td",{className:"py-3 px-4",children:(0,P.jsxs)("div",{className:"flex items-center gap-2.5",children:[
+                (0,P.jsx)("span",{className:"text-blue-600 shrink-0",children:idx===0?(0,P.jsx)(te,{className:"w-4 h-4"}):idx===1?(0,P.jsx)(me,{className:"w-4 h-4"}):idx===2?(0,P.jsx)(pe,{className:"w-4 h-4"}):(0,P.jsx)(C,{className:"w-4 h-4"})}),
+                (0,P.jsx)("span",{className:"font-bold text-slate-900",children:res.title})
+              ]})}),
+              (0,P.jsx)("td",{className:"py-3 px-4 text-slate-600 whitespace-nowrap",children:res.type}),
+              (0,P.jsx)("td",{className:"py-3 px-4 text-slate-400 font-mono text-[11px] max-w-xs truncate",children:res.url}),
+              (0,P.jsx)("td",{className:"py-3 px-4 whitespace-nowrap",children:(0,P.jsx)("span",{className:"text-[10px] font-bold px-2 py-0.5 rounded " + (res.mandatory!==false?"text-rose-700 bg-rose-50 border border-rose-200":"text-slate-600 bg-slate-100 border border-slate-200"),children:res.mandatory!==false?"Mandatory":"Optional"})}),
+              (0,P.jsx)("td",{className:"py-3 px-4 text-right whitespace-nowrap",children:(0,P.jsx)("a",{href:res.url&&res.url.startsWith("http")?res.url:"https://" + res.url,target:"_blank",rel:"noreferrer",className:"text-blue-600 hover:underline font-semibold text-[11px]",children:"Open Resource →"})})
+            ]}, res.id || idx))})
+          ]})})
         ]}),
 
         // Tab 3: Enrolled Employees
@@ -1314,7 +1320,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n}){
       ]})
     ]})
   ]});
-}function at({assignment:e,onBack:t,onEvaluate:n}){let r=e||{id:`132`,name:`Tanya Kapoor`,role:`Project`,dept:`Project`,training:`API Security & OAuth2 Best Practices`,level:`Intermediate • 4 hrs`,assigned:`01-Jan-2026`,due:`20-Jan-2026`,type:`Elective`,progress:100,status:`Completed`};return(0,P.jsxs)(`div`,{className:`p-6 space-y-6 max-w-[1600px] mx-auto w-full`,children:[(0,P.jsxs)(`div`,{className:`flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white border border-slate-200 rounded-xl p-4 shadow-sm`,children:[(0,P.jsxs)(`div`,{className:`flex items-center gap-3`,children:[(0,P.jsxs)(`button`,{onClick:t,className:`flex items-center gap-1.5 text-xs font-semibold text-slate-700 hover:text-slate-900 bg-white border border-slate-300 px-3 py-1.5 rounded-lg shadow-sm transition-colors`,children:[(0,P.jsx)(S,{className:`w-3.5 h-3.5`}),(0,P.jsx)(`span`,{children:`Back to Assignments`})]}),(0,P.jsx)(`span`,{className:`font-bold text-slate-900 text-sm md:text-base`,children:r.training})]}),(0,P.jsx)(`div`,{className:`flex items-center gap-3`,children:(0,P.jsx)(`span`,{className:`text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-lg`,children:`Automated Evaluation Active`})})]}),(0,P.jsxs)(`div`,{className:`bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-6`,children:[(0,P.jsxs)(`div`,{className:`flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5`,children:[(0,P.jsxs)(`div`,{className:`flex items-center gap-3.5`,children:[(0,P.jsx)(`div`,{className:`w-12 h-12 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-base shadow-inner`,children:r.name?r.name[0]:`T`}),(0,P.jsxs)(`div`,{children:[(0,P.jsx)(`h2`,{className:`font-bold text-slate-900 text-base`,children:r.name}),(0,P.jsxs)(`div`,{className:`text-xs text-slate-500`,children:[`Business Analyst`,` • `,`Project`]})]})]}),(0,P.jsxs)(`div`,{className:`flex items-center gap-2`,children:[(0,P.jsxs)(`span`,{className:`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200`,children:[(0,P.jsx)(D,{className:`w-3.5 h-3.5 text-emerald-500`}),(0,P.jsx)(`span`,{children:r.status||`Completed`})]})]})]}),(0,P.jsxs)(`div`,{className:`grid grid-cols-2 md:grid-cols-4 gap-4 bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs`,children:[(0,P.jsxs)(`div`,{children:[(0,P.jsx)(`span`,{className:`text-slate-400 font-medium block mb-1`,children:`Assignment ID`}),(0,P.jsxs)(`div`,{className:`font-mono font-bold text-purple-700 text-sm`,children:[`TRN-ASSIGN-`,r.id]})]}),(0,P.jsxs)(`div`,{children:[(0,P.jsx)(`span`,{className:`text-slate-400 font-medium block mb-1`,children:`Assigned Training`}),(0,P.jsx)(`div`,{className:`font-bold text-slate-900 text-sm`,children:r.training})]}),(0,P.jsxs)(`div`,{children:[(0,P.jsx)(`span`,{className:`text-slate-400 font-medium block mb-1`,children:`Assigned Date`}),(0,P.jsx)(`div`,{className:`font-semibold text-slate-800 tabular-nums text-sm`,children:r.assigned})]}),(0,P.jsxs)(`div`,{children:[(0,P.jsx)(`span`,{className:`text-slate-400 font-medium block mb-1`,children:`Due Date`}),(0,P.jsx)(`div`,{className:`font-semibold text-slate-800 tabular-nums text-sm`,children:r.due})]})]}),(0,P.jsxs)(`div`,{className:`grid grid-cols-1 md:grid-cols-2 gap-4`,children:[(0,P.jsxs)(`div`,{className:`border border-slate-200 rounded-xl p-4 bg-white`,children:[(0,P.jsxs)(`div`,{className:`flex justify-between text-xs font-semibold mb-2`,children:[(0,P.jsx)(`span`,{className:`text-slate-700`,children:`Overall Course Progress`}),(0,P.jsxs)(`span`,{className:`font-mono font-bold text-slate-900`,children:[r.progress||100,`%`]})]}),(0,P.jsx)(`div`,{className:`w-full bg-slate-100 h-2.5 rounded-full overflow-hidden`,children:(0,P.jsx)(`div`,{className:`bg-emerald-500 h-full rounded-full transition-all`,style:{width:`${r.progress||100}%`}})})]}),(0,P.jsxs)(`div`,{className:`border border-slate-200 rounded-xl p-4 bg-white flex items-center justify-between text-xs`,children:[(0,P.jsxs)(`div`,{className:`flex items-center gap-2.5`,children:[(0,P.jsx)(C,{className:`w-5 h-5 text-amber-600`}),(0,P.jsxs)(`div`,{children:[(0,P.jsx)(`div`,{className:`font-semibold text-slate-900`,children:`Certificate Credential`}),(0,P.jsx)(`div`,{className:`text-[11px] text-slate-500 font-mono`,children:`TRN-2026-0032 • Automated Issuance`})]})]}),(0,P.jsx)(`span`,{className:`px-2.5 py-1 rounded bg-purple-50 text-purple-700 font-bold text-xs border border-purple-200`,children:`Earned`})]})]}),(0,P.jsxs)(`div`,{className:`space-y-3 pt-2`,children:[(0,P.jsx)(`h3`,{className:`text-xs font-bold uppercase tracking-wider text-slate-400`,children:`Assigned Learning Modules & Assessment`}),(0,P.jsxs)(`div`,{className:`space-y-2 text-xs`,children:[(0,P.jsxs)(`div`,{className:`p-3 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between`,children:[(0,P.jsxs)(`div`,{className:`flex items-center gap-2`,children:[(0,P.jsx)(te,{className:`w-4 h-4 text-blue-600`}),(0,P.jsx)(`span`,{className:`font-medium text-slate-800`,children:`Module 1: Architecture Video Lecture`})]}),(0,P.jsx)(`span`,{className:`text-emerald-700 font-bold`,children:`Completed (100%)`})]}),(0,P.jsxs)(`div`,{className:`p-3 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between`,children:[(0,P.jsxs)(`div`,{className:`flex items-center gap-2`,children:[(0,P.jsx)(me,{className:`w-4 h-4 text-indigo-600`}),(0,P.jsx)(`span`,{className:`font-medium text-slate-800`,children:`Module 2: Implementation Playbook (PDF)`})]}),(0,P.jsx)(`span`,{className:`text-emerald-700 font-bold`,children:`Completed (100%)`})]}),(0,P.jsxs)(`div`,{className:`p-3 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between`,children:[(0,P.jsxs)(`div`,{className:`flex items-center gap-2`,children:[(0,P.jsx)(pe,{className:`w-4 h-4 text-emerald-600`}),(0,P.jsx)(`span`,{className:`font-medium text-slate-800`,children:`Final Assessment: API Security & OAuth2`})]}),(0,P.jsx)(`span`,{className:`text-emerald-700 font-bold`,children:`Passed (94% Score)`})]})]})]})]})]})}function ot(){
+}function at({assignment:e,onBack:t,onEvaluate:n}){let r=e||{id:`132`,name:`Tanya Kapoor`,role:`Project`,dept:`Project`,training:`API Security & OAuth2 Best Practices`,level:`Intermediate • 4 hrs`,assigned:`01-Jan-2026`,due:`20-Jan-2026`,type:`Elective`,progress:100,status:`Completed`};return(0,P.jsxs)(`div`,{className:`p-6 space-y-6 max-w-[1600px] mx-auto w-full`,children:[(0,P.jsxs)(`div`,{className:`bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-3`,children:[(0,P.jsxs)(`div`,{className:`flex items-center justify-between gap-4`,children:[(0,P.jsxs)(`button`,{onClick:t,className:`flex items-center gap-1.5 text-xs font-semibold text-slate-700 hover:text-slate-900 bg-white border border-slate-300 px-3 py-1.5 rounded-lg shadow-sm transition-colors`,children:[(0,P.jsx)(S,{className:`w-3.5 h-3.5`}),(0,P.jsx)(`span`,{children:`Back to Assignments`})]}),(0,P.jsx)(`span`,{className:`text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-lg`,children:`Automated Evaluation Active`})]}),(0,P.jsx)(`div`,{className:`font-bold text-slate-900 text-sm md:text-base pt-2 border-t border-slate-100`,children:r.training})]}),(0,P.jsxs)(`div`,{className:`bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-6`,children:[(0,P.jsxs)(`div`,{className:`flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5`,children:[(0,P.jsxs)(`div`,{className:`flex items-center gap-3.5`,children:[(0,P.jsx)(`div`,{className:`w-12 h-12 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-base shadow-inner`,children:r.name?r.name[0]:`T`}),(0,P.jsxs)(`div`,{children:[(0,P.jsx)(`h2`,{className:`font-bold text-slate-900 text-base`,children:r.name}),(0,P.jsxs)(`div`,{className:`text-xs text-slate-500`,children:[`Business Analyst`,` • `,`Project`]})]})]}),(0,P.jsxs)(`div`,{className:`flex items-center gap-2`,children:[(0,P.jsxs)(`span`,{className:`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200`,children:[(0,P.jsx)(D,{className:`w-3.5 h-3.5 text-emerald-500`}),(0,P.jsx)(`span`,{children:r.status||`Completed`})]})]})]}),(0,P.jsxs)(`div`,{className:`grid grid-cols-2 md:grid-cols-4 gap-4 bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs`,children:[(0,P.jsxs)(`div`,{children:[(0,P.jsx)(`span`,{className:`text-slate-400 font-medium block mb-1`,children:`Assignment ID`}),(0,P.jsxs)(`div`,{className:`font-mono font-bold text-purple-700 text-sm`,children:[`TRN-ASSIGN-`,r.id]})]}),(0,P.jsxs)(`div`,{children:[(0,P.jsx)(`span`,{className:`text-slate-400 font-medium block mb-1`,children:`Assigned Training`}),(0,P.jsx)(`div`,{className:`font-bold text-slate-900 text-sm`,children:r.training})]}),(0,P.jsxs)(`div`,{children:[(0,P.jsx)(`span`,{className:`text-slate-400 font-medium block mb-1`,children:`Assigned Date`}),(0,P.jsx)(`div`,{className:`font-semibold text-slate-800 tabular-nums text-sm`,children:r.assigned})]}),(0,P.jsxs)(`div`,{children:[(0,P.jsx)(`span`,{className:`text-slate-400 font-medium block mb-1`,children:`Due Date`}),(0,P.jsx)(`div`,{className:`font-semibold text-slate-800 tabular-nums text-sm`,children:r.due})]})]}),(0,P.jsxs)(`div`,{className:`grid grid-cols-1 md:grid-cols-2 gap-4`,children:[(0,P.jsxs)(`div`,{className:`border border-slate-200 rounded-xl p-4 bg-white`,children:[(0,P.jsxs)(`div`,{className:`flex justify-between text-xs font-semibold mb-2`,children:[(0,P.jsx)(`span`,{className:`text-slate-700`,children:`Overall Course Progress`}),(0,P.jsxs)(`span`,{className:`font-mono font-bold text-slate-900`,children:[r.progress||100,`%`]})]}),(0,P.jsx)(`div`,{className:`w-full bg-slate-100 h-2.5 rounded-full overflow-hidden`,children:(0,P.jsx)(`div`,{className:`bg-emerald-500 h-full rounded-full transition-all`,style:{width:`${r.progress||100}%`}})})]}),(0,P.jsxs)(`div`,{className:`border border-slate-200 rounded-xl p-4 bg-white flex items-center justify-between text-xs`,children:[(0,P.jsxs)(`div`,{className:`flex items-center gap-2.5`,children:[(0,P.jsx)(C,{className:`w-5 h-5 text-amber-600`}),(0,P.jsxs)(`div`,{children:[(0,P.jsx)(`div`,{className:`font-semibold text-slate-900`,children:`Certificate Credential`}),(0,P.jsx)(`div`,{className:`text-[11px] text-slate-500 font-mono`,children:`TRN-2026-0032 • Automated Issuance`})]})]}),(0,P.jsx)(`span`,{className:`px-2.5 py-1 rounded bg-purple-50 text-purple-700 font-bold text-xs border border-purple-200`,children:`Earned`})]})]}),(0,P.jsxs)(`div`,{className:`space-y-3 pt-2`,children:[(0,P.jsx)(`h3`,{className:`text-xs font-bold uppercase tracking-wider text-slate-400`,children:`Assigned Learning Modules & Assessment`}),(0,P.jsxs)(`div`,{className:`space-y-2 text-xs`,children:[(0,P.jsxs)(`div`,{className:`p-3 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between`,children:[(0,P.jsxs)(`div`,{className:`flex items-center gap-2`,children:[(0,P.jsx)(te,{className:`w-4 h-4 text-blue-600`}),(0,P.jsx)(`span`,{className:`font-medium text-slate-800`,children:`Module 1: Architecture Video Lecture`})]}),(0,P.jsx)(`span`,{className:`text-emerald-700 font-bold`,children:`Completed (100%)`})]}),(0,P.jsxs)(`div`,{className:`p-3 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between`,children:[(0,P.jsxs)(`div`,{className:`flex items-center gap-2`,children:[(0,P.jsx)(me,{className:`w-4 h-4 text-indigo-600`}),(0,P.jsx)(`span`,{className:`font-medium text-slate-800`,children:`Module 2: Implementation Playbook (PDF)`})]}),(0,P.jsx)(`span`,{className:`text-emerald-700 font-bold`,children:`Completed (100%)`})]}),(0,P.jsxs)(`div`,{className:`p-3 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between`,children:[(0,P.jsxs)(`div`,{className:`flex items-center gap-2`,children:[(0,P.jsx)(pe,{className:`w-4 h-4 text-emerald-600`}),(0,P.jsx)(`span`,{className:`font-medium text-slate-800`,children:`Final Assessment: API Security & OAuth2`})]}),(0,P.jsx)(`span`,{className:`text-emerald-700 font-bold`,children:`Passed (94% Score)`})]})]})]})]})]})}function ot(){
   let [viewMode, setViewMode] = (0,l.useState)("employee");
   let [searchQuery, setSearchQuery] = (0,l.useState)("");
   let [trainingStatusFilter, setTrainingStatusFilter] = (0,l.useState)("All Training Statuses");
@@ -1323,6 +1329,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n}){
   let [progStatusFilter, setProgStatusFilter] = (0,l.useState)("All Statuses");
   let [selectedLearner, setSelectedLearner] = (0,l.useState)(null);
   let [selectedProg, setSelectedProg] = (0,l.useState)(null);
+  let [viewCert, setViewCert] = (0,l.useState)(null);
 
   let employeeRecords = [
     {name:'Tanya Kapoor',email:'calebnguyen@maildrop.cc',dept:'Project',training:'API Security & OAuth2 Best Practices',assigned:'01-Jan-2026',due:'20-Jan-2026',completion:100,trainingStatus:'Completed',subStatus:'Approved',certStatus:'Received'},
@@ -1529,7 +1536,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n}){
         ]}),
         (0,P.jsxs)('div',{className:'grid grid-cols-2 gap-3',children:[
           (0,P.jsxs)('div',{className:'p-3 bg-slate-50 rounded-lg border border-slate-200',children:[(0,P.jsx)('div',{className:'text-[10px] font-bold text-slate-400 uppercase',children:'TRAINING STATUS'}),(0,P.jsx)('div',{className:'font-bold text-slate-800 text-xs mt-1',children:selectedLearner.trainingStatus})]}),
-          (0,P.jsxs)('div',{className:'p-3 bg-slate-50 rounded-lg border border-slate-200',children:[(0,P.jsx)('div',{className:'text-[10px] font-bold text-slate-400 uppercase',children:'CERTIFICATE'}),(0,P.jsx)('div',{className:'font-bold text-slate-800 text-xs mt-1',children:selectedLearner.certStatus})]})
+          (0,P.jsxs)('div',{onClick:()=>{selectedLearner.certStatus==='Received'&&setViewCert({certificateId:'TRN-2026-0032',programmeName:selectedLearner.training,employeeName:selectedLearner.name,employeeCode:'EMP-1042',issueDate:'20-Jan-2026',signatory:'Khushi Bhatt, Head of HR'})},className:`p-3 bg-slate-50 rounded-lg border ${selectedLearner.certStatus==='Received'?'border-blue-200 hover:border-blue-400 hover:bg-blue-50/40 cursor-pointer transition-colors':'border-slate-200'}`,children:[(0,P.jsx)('div',{className:'text-[10px] font-bold text-slate-400 uppercase',children:'CERTIFICATE'}),(0,P.jsxs)('div',{className:'font-bold text-slate-800 text-xs mt-1 flex items-center justify-between',children:[(0,P.jsx)('span',{children:selectedLearner.certStatus}),selectedLearner.certStatus==='Received'&&(0,P.jsx)('span',{className:'text-[11px] font-semibold text-blue-600',children:'View →'})]})]})
         ]})
       ]}),
       (0,P.jsx)('div',{className:'p-4 border-t border-slate-200 bg-slate-50 flex justify-end',children:(0,P.jsx)('button',{onClick:()=>setSelectedLearner(null),className:'px-4 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-100',children:'Close'})})
@@ -1567,7 +1574,8 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n}){
         ]},i))})
       ]}),
       (0,P.jsx)('div',{className:'p-4 border-t border-slate-200 bg-slate-50 flex justify-end',children:(0,P.jsx)('button',{onClick:()=>setSelectedProg(null),className:'px-4 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-100',children:'Close'})})
-    ]})})
+    ]})}),
+    viewCert && (0,P.jsx)(Ze,{...viewCert,onClose:()=>setViewCert(null)})
   ]});
 }function st(){return null;}function ct({assignments:e}){
   let [selectedCertModal, setSelectedCertModal] = (0,l.useState)(null);
