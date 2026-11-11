@@ -343,8 +343,7 @@ const COMPLETION_REQ_OPTIONS=[`Watch all required videos`,`Pass the assessment`,
           (0,P.jsxs)("div",{children:[
             (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Enrolled Employees"}),
             (0,P.jsxs)("div",{className:"font-semibold text-slate-800 mt-0.5",children:[o.length, " Enrolled"]})
-          ]}),
-          (0,P.jsx)("button",{onClick:n,className:"w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg py-2 text-xs font-bold transition-colors shadow-sm cursor-pointer",children:"View All Trainings"})
+          ]})
         ]})
       ]}),
 
@@ -1746,7 +1745,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
       (0,P.jsxs)("div",{className:"flex-1 min-w-0 w-full space-y-5",children:[
         (0,P.jsx)("div",{className:"bg-white border border-slate-200 rounded-xl px-4 py-2.5 shadow-sm flex items-center gap-2",children:(0,P.jsx)("button",{type:"button",className:"px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 text-xs font-bold",children:"General Info"})}),
 
-        (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl shadow-sm grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-200 text-xs",children:[
+        (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl shadow-sm grid grid-cols-1 md:grid-cols-3 text-xs",children:[
           (0,P.jsxs)("div",{className:"p-4 space-y-2",children:[
             (0,P.jsx)("div",{className:"w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-600",children:(0,P.jsx)(te,{className:"w-4 h-4"})}),
             (0,P.jsxs)("div",{children:[
