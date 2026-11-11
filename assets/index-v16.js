@@ -1251,7 +1251,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
             // Short Text Answer setup
             q.type==="short_text" && (0,P.jsxs)("div",{className:"space-y-2.5",children:[
               (0,P.jsxs)("div",{className:"flex items-center justify-between",children:[
-                (0,P.jsx)("span",{className:"font-semibold text-slate-700",children:"Configured Accepted Answers (Evaluated case-insensitively with trimmed whitespace):"}),
+                (0,P.jsx)("span",{className:"font-semibold text-slate-700",children:"Configured Accepted Answers:"}),
                 (0,P.jsx)("button",{type:"button",onClick:()=>handleAddAcceptedAnswer(q.id),className:"text-blue-600 hover:text-blue-700 font-semibold text-xs",children:"+ Add Accepted Answer"})
               ]}),
               (0,P.jsx)("div",{className:"space-y-2",children:(q.acceptedAnswers||[""]).map((ans, aIdx)=>(0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
@@ -1324,7 +1324,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
 
             // True / False setup
             q.type==="true_false" && (0,P.jsxs)("div",{className:"space-y-2",children:[
-              (0,P.jsx)("span",{className:"font-semibold text-slate-700 block",children:"Select the Correct Statement Answer:"}),
+              (0,P.jsx)("span",{className:"font-semibold text-slate-700 block",children:"Select the Correct Answer:"}),
               (0,P.jsxs)("div",{className:"flex items-center gap-6 pt-1",children:[
                 (0,P.jsxs)("label",{className:"flex items-center gap-2 cursor-pointer bg-slate-50 px-4 py-2 rounded-lg border border-slate-200",children:[
                   (0,P.jsx)("input",{type:"radio",name:"tf-" + q.id,checked:q.correctAnswer==="True",onChange:()=>handleUpdateQuestion(q.id, "correctAnswer", "True"),className:"w-4 h-4 text-blue-600"}),
