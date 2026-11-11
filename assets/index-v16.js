@@ -139,6 +139,15 @@ Error generating stack: `+e.message+`
   let isLockedInactive = pubStatus !== "Draft" && availStatus === "Inactive";
   let isAssignable = pubStatus === "Published" && availStatus === "Active";
   let statusHistory = Array.isArray(e.statusHistory) ? e.statusHistory : [];
+  let fmtEnrolledDate = d => {
+    if (!d || typeof d !== "string") return d || "-";
+    let m = d.trim().match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (m) {
+      let months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+      return `${m[3]}-${months[parseInt(m[2], 10) - 1] || m[2]}-${m[1]}`;
+    }
+    return d.trim();
+  };
 
   let baseEnrolled = e.id === "prog-1" ? [
     {emp:t[1]||t[0],assigned:"2026-10-01",due:"2026-11-15",progress:75,status:"In Progress"},
@@ -386,7 +395,7 @@ Error generating stack: `+e.message+`
               (0,P.jsx)("th",{className:"py-3 px-4",children:"Resource Title"}),
               (0,P.jsx)("th",{className:"py-3 px-4",children:"Type"}),
               (0,P.jsx)("th",{className:"py-3 px-4",children:"Resource URL"}),
-              (0,P.jsx)("th",{className:"py-3 px-4",children:"Requirement"}),
+              
               (0,P.jsx)("th",{className:"py-3 px-4 text-right",children:"Action"})
             ]})}),
             (0,P.jsx)("tbody",{className:"divide-y divide-slate-100 text-xs",children:resources.map((res, idx)=>(0,P.jsxs)("tr",{className:"hover:bg-slate-50/80 transition-colors",children:[
@@ -397,7 +406,7 @@ Error generating stack: `+e.message+`
               ]})}),
               (0,P.jsx)("td",{className:"py-3 px-4 text-slate-600 whitespace-nowrap",children:res.type}),
               (0,P.jsx)("td",{className:"py-3 px-4 text-slate-400 font-mono text-[11px] max-w-xs truncate",children:res.url}),
-              (0,P.jsx)("td",{className:"py-3 px-4 whitespace-nowrap",children:(0,P.jsx)("span",{className:"text-[10px] font-bold px-2 py-0.5 rounded " + (res.mandatory!==false?"text-rose-700 bg-rose-50 border border-rose-200":"text-slate-600 bg-slate-100 border border-slate-200"),children:res.mandatory!==false?"Mandatory":"Optional"})}),
+              
               (0,P.jsx)("td",{className:"py-3 px-4 text-right whitespace-nowrap",children:isLockedInactive?(0,P.jsx)("button",{type:"button",disabled:!0,style:{opacity:0.5},className:"text-slate-400 font-semibold text-[11px] cursor-not-allowed",children:"Open Resource →"}):(0,P.jsx)("a",{href:res.url&&res.url.startsWith("http")?res.url:"https://" + res.url,target:"_blank",rel:"noreferrer",className:"text-blue-600 hover:underline font-semibold text-[11px]",children:"Open Resource →"})})
             ]}, res.id || idx))})
           ]})})
@@ -434,8 +443,8 @@ Error generating stack: `+e.message+`
                 ]})
               ]})}),
               (0,P.jsx)("td",{className:"py-3 px-4 text-xs font-medium text-slate-600",children:item.emp.department || "Engineering"}),
-              (0,P.jsx)("td",{className:"py-3 px-4 text-xs text-slate-500 tabular-nums",children:item.assigned}),
-              (0,P.jsx)("td",{className:"py-3 px-4 text-xs text-slate-500 tabular-nums",children:item.due}),
+              (0,P.jsx)("td",{className:"py-3 px-4 text-xs text-slate-500 tabular-nums",children:fmtEnrolledDate(item.assigned)}),
+              (0,P.jsx)("td",{className:"py-3 px-4 text-xs text-slate-500 tabular-nums",children:fmtEnrolledDate(item.due)}),
               (0,P.jsx)("td",{className:"py-3 px-4",children:(0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
                 (0,P.jsx)("div",{className:"w-16 bg-slate-100 rounded-full h-1.5 overflow-hidden",children:(0,P.jsx)("div",{className:"bg-blue-600 h-full rounded-full",style:{width:item.progress+"%"}})}),
                 (0,P.jsxs)("span",{className:"text-xs font-bold text-slate-700 tabular-nums",children:[item.progress,"%",]})

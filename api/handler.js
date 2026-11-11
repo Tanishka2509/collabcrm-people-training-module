@@ -9,6 +9,134 @@ function getProgrammeStoreFilePath() {
   return '/tmp/.collabcrm-programmes-state.json';
 }
 
+function buildInitialStatusHistory(p, pubStatus, availStatus) {
+  const pid = p.id || 'prog-1';
+  const pname = p.name || 'Training Programme';
+  const presetMap = {
+    'prog-1': [
+      {
+        id: 'audit-prog-1-2',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Inactive',
+        newAvailabilityStatus: 'Active',
+        previousPublicationStatus: 'Draft',
+        newPublicationStatus: 'Published',
+        changedBy: 'Ishdeep Anand',
+        changedAt: '2026-10-01T04:45:00.000Z',
+        changedAtFormatted: '01 Oct 2026, 10:15:00 AM',
+        reason: 'Programme published and enabled for Business Analyst & HR onboarding'
+      },
+      {
+        id: 'audit-prog-1-1',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Inactive',
+        newAvailabilityStatus: 'Inactive',
+        previousPublicationStatus: 'Draft',
+        newPublicationStatus: 'Draft',
+        changedBy: 'Khushi Bhatt',
+        changedAt: '2026-09-28T10:50:00.000Z',
+        changedAtFormatted: '28 Sep 2026, 04:20:00 PM',
+        reason: 'Initial curriculum drafted (Availability locked to Inactive)'
+      }
+    ],
+    'prog-2': [
+      {
+        id: 'audit-prog-2-1',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Inactive',
+        newAvailabilityStatus: 'Active',
+        previousPublicationStatus: 'Draft',
+        newPublicationStatus: 'Published',
+        changedBy: 'Ishdeep Anand',
+        changedAt: '2026-10-05T05:30:00.000Z',
+        changedAtFormatted: '05 Oct 2026, 11:00:00 AM',
+        reason: 'Published for Engineering cluster & Node services certification'
+      }
+    ],
+    'prog-3': [
+      {
+        id: 'audit-prog-3-1',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Inactive',
+        newAvailabilityStatus: 'Active',
+        previousPublicationStatus: 'Draft',
+        newPublicationStatus: 'Published',
+        changedBy: 'Khushi Bhatt',
+        changedAt: '2026-09-20T04:00:00.000Z',
+        changedAtFormatted: '20 Sep 2026, 09:30:00 AM',
+        reason: 'Approved GDPR/ISO compliance module activated for all staff'
+      }
+    ],
+    'prog-4': [
+      {
+        id: 'audit-prog-4-1',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Inactive',
+        newAvailabilityStatus: 'Active',
+        previousPublicationStatus: 'Draft',
+        newPublicationStatus: 'Published',
+        changedBy: 'Ishdeep Anand',
+        changedAt: '2026-10-01T06:15:00.000Z',
+        changedAtFormatted: '01 Oct 2026, 11:45:00 AM',
+        reason: 'Published & activated for Sales & BD client communication track'
+      }
+    ],
+    'prog-5': [
+      {
+        id: 'audit-prog-5-1',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Inactive',
+        newAvailabilityStatus: 'Inactive',
+        previousPublicationStatus: 'Draft',
+        newPublicationStatus: 'Draft',
+        changedBy: 'Megha Salunkhe',
+        changedAt: '2026-10-18T09:10:00.000Z',
+        changedAtFormatted: '18 Oct 2026, 02:40:00 PM',
+        reason: 'Created in Draft state (Availability locked to Inactive until published)'
+      }
+    ],
+    'prog-6': [
+      {
+        id: 'audit-prog-6-1',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Inactive',
+        newAvailabilityStatus: 'Inactive',
+        previousPublicationStatus: 'Draft',
+        newPublicationStatus: 'Draft',
+        changedBy: 'Ishdeep Anand',
+        changedAt: '2026-10-22T07:05:00.000Z',
+        changedAtFormatted: '22 Oct 2026, 12:35:00 PM',
+        reason: 'Saved as Draft pending Operations ETL curriculum sign-off'
+      }
+    ]
+  };
+  if (presetMap[pid]) return presetMap[pid];
+  return [
+    {
+      id: `audit-${pid}-init`,
+      programmeId: pid,
+      programmeName: pname,
+      previousAvailabilityStatus: 'Inactive',
+      newAvailabilityStatus: availStatus,
+      previousPublicationStatus: pubStatus === 'Published' ? 'Draft' : pubStatus,
+      newPublicationStatus: pubStatus,
+      changedBy: 'Ishdeep Anand',
+      changedAt: '2026-10-12T04:30:00.000Z',
+      changedAtFormatted: '12 Oct 2026, 10:00:00 AM',
+      reason: pubStatus === 'Published'
+        ? `Programme published and set to ${availStatus} for learner enrollment`
+        : 'Programme saved as Draft (Availability locked to Inactive)'
+    }
+  ];
+}
+
 function normalizeProgrammeRecord(p) {
   const pubStatus = ['Draft', 'Published', 'Archived'].includes(p.publicationStatus)
     ? p.publicationStatus
@@ -21,13 +149,16 @@ function normalizeProgrammeRecord(p) {
   } else {
     availStatus = p.isActive === false ? 'Inactive' : 'Active';
   }
+  const existingHistory = Array.isArray(p.statusHistory) && p.statusHistory.length > 0
+    ? p.statusHistory
+    : buildInitialStatusHistory(p, pubStatus, availStatus);
   return {
     ...p,
     publicationStatus: pubStatus,
     availabilityStatus: availStatus,
     status: pubStatus,
     isActive: availStatus === 'Active',
-    statusHistory: Array.isArray(p.statusHistory) ? p.statusHistory : []
+    statusHistory: existingHistory
   };
 }
 
