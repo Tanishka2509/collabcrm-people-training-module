@@ -90,7 +90,7 @@ The left collapsible sidebar provides access to:
 - **Employee Training History (Employee Profile > Training History)**: Displays enrollment metrics (Total Enrolled, Completed & Passed, In Progress, Certificates Earned), a compact **+ Assign New Training** button, and assigned training records.
 - **3-Tab Course Learning Layout**:
   - **Tab 1 — 1. Overview**: Progress bar, completed modules counter, course summary, learning objectives, and configured **Completion Requirements** checklist (e.g., Watch all required videos, Pass the assessment, Submit any required documents, Get approval from the manager — once all required steps are completed, the training is marked **Completed**).
-  - **Tab 2 — 2. Learning Resources**: Resource checklist with external link openers, completion toggles, and mandatory indicators (disabled if programme is Inactive).
+  - **Tab 2 — 2. Learning Resources**: Resource checklist with external link openers and completion toggles (disabled if programme is Inactive).
   - **Tab 3 — 3. Assessment & Questions**:
     - **Header**: Clean title **3. Assessment & Questions** (without any Unlocked tag).
     - **When Assessment Toggle is OFF**:
@@ -98,7 +98,7 @@ The left collapsible sidebar provides access to:
       - Left Sidebar: Passing Assessment Score displays **N/A (Assessment Disabled)**. Action button displays **Start Learning Modules →** or **Programme Completed ✓** (never prompts to take an assessment).
       - Tab 2 Navigation: Bottom button displays **All Modules Completed ✓**.
     - **When Assessment Toggle is ON**:
-      - Inside Tab 3: Renders the exact question types, marks, mandatory indicators, and options configured by Admin/HR.
+      - Inside Tab 3: Renders the exact question types, marks, and options configured by Admin/HR (without per-question Mandatory checkboxes or labels).
       - Left Sidebar: Passing Assessment Score displays **80%** (clean percentage without extra strictly-greater-than hint). Action button displays **Take Assessment →** (or **Download Certificate** upon passing and completing all required steps).
       - Result Status: Displays unified **Completed** badge when assessment passes and programme completes.
 
@@ -475,12 +475,13 @@ The left collapsible sidebar provides access to:
 4. **Multiple Selection (Checkbox)**: Checkbox group supporting multiple selections.
 5. **Dropdown Selection**: Standard select menu with "-- Select Answer --" placeholder and option values.
 6. **True / False**: Dual toggle buttons/radios for binary verification.
-7. **Marks & Mandatory Indicators**: Every question displays its designated marks and mandatory indicator.
+7. **Question Marks**: Every question displays its designated marks (the per-question Mandatory checkbox and tag have been removed from Create/Edit Programme, Programme Detail, and Employee Assessment).
 
 ### 4.3 Assignments Register Specifications
 - **Scope Column Header**: **ASSIGNED SCOPE** (displays Employee, Department, or Designation assignment scope).
 - **Total Record Count**: **41 Total** assignments.
 - **Pagination**: Complete 5-page pagination (10 items per page with Previous/Next and page number controls).
+- **Assignment Details View (`View Assignment`)**: Follows the two-column Employee Profile layout (Left learner sidebar with Status pill, Avatar, Name, Role, Department pill, Assigned Training, Assigned/Due dates, and Back action; Right `General Info` tab with Top 3-box summary strip, `Assignment Information` grid, and `Assigned Learning Modules & Assessment`).
 
 ### 4.4 Training Programmes Catalogue & Availability Status Architecture
 - **Publication & Availability Status Rules (No `Archived` Status)**:
@@ -504,7 +505,7 @@ The left collapsible sidebar provides access to:
   7. **Actions** (Right-aligned View and Edit action buttons)
 - **Programme Detail View (Management)**:
   - **Left Sidebar**: Displays publication badge (`Published` / `Draft`) on the top-left and the **Active / Inactive** toggle switch on the top-right, followed by Programme Title, Category, Difficulty Level, `Assign Programme` button, and core summary metrics (**Expected Duration**, **Passing Assessment Score** as clean `80%`, **Department**, **Enrolled Learners**).
-  - **General Info Tab (Right Panel)**: Displays all programme details not shown on the left sidebar — **Learning Objectives**, **Completion Requirements & Assessment Criteria**, and the **Assessment & Questions** section (Assessment Enabled/Disabled state, Assessment Title, Description, Total Marks, Max Attempts, and the full Questions List with question type, marks, mandatory/optional status, and configured options/answers when present) cleanly without duplicating the sidebar summary details.
+  - **General Info Tab (Right Panel)**: Displays all programme details not shown on the left sidebar — **Learning Objectives**, **Completion Requirements & Assessment Criteria**, and the **Assessment & Questions** section (Assessment Enabled/Disabled state, Assessment Title, Description, Total Marks, Max Attempts, and the full Questions List with question type, marks, and configured options/answers when present) cleanly without duplicating the sidebar summary details.
   - **Curriculum & Modules Tab**: Displays learning resources in a structured table (Module, Resource Title, Type, Resource URL, Action with eye View icon linking directly to the resource).
   - **Enrolled Employees & Status History Tabs**: Tracks enrolled learners with exact count consistency against the Training Management listing, plus audit history for `Active` / `Inactive` availability transitions.
 

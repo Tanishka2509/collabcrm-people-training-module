@@ -387,8 +387,7 @@ const COMPLETION_REQ_OPTIONS=[`Watch all required videos`,`Pass the assessment`,
                       (0,P.jsxs)("span",{className:"bg-blue-600 text-white font-bold text-[11px] px-2.5 py-0.5 rounded-md",children:["Question ", q.number || (qIdx + 1)]}),
                       (0,P.jsx)("span",{className:"bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-[11px] font-semibold",children:qTypeLabel(q.type)}),
                       (0,P.jsxs)("span",{className:"bg-slate-50 border border-slate-200 text-slate-700 px-2 py-0.5 rounded text-[11px] font-semibold",children:["Marks: ", Number(q.marks) || 0]})
-                    ]}),
-                    (0,P.jsx)("span",{className:((q.mandatory ?? true) ? "bg-blue-50 text-blue-700 border-blue-200" : "bg-slate-50 text-slate-500 border-slate-200") + " border px-2 py-0.5 rounded text-[10px] font-semibold",children:(q.mandatory ?? true) ? "Mandatory" : "Optional"})
+                    ]})
                   ]}),
                   (0,P.jsx)("div",{className:"text-slate-900 font-semibold leading-relaxed",children:q.text || "(Untitled question)"}),
                   q.type === "short_text" && (0,P.jsxs)("div",{className:"space-y-1.5 pt-1",children:[
@@ -1213,10 +1212,6 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
               (0,P.jsxs)("div",{className:"flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-md px-2 py-0.5 text-xs",children:[
                 (0,P.jsx)("span",{className:"text-slate-500 font-medium",children:"Marks:"}),
                 (0,P.jsx)("input",{type:"text",inputMode:"numeric",placeholder:"0",value:q.marks,onChange:e=>handleUpdateQuestion(q.id, "marks", e.target.value.replace(/[^0-9]/g,"")),style:{width:"42px"},className:"text-center bg-white border border-slate-300 rounded font-bold text-slate-800 text-xs py-0.5 focus:outline-none focus:ring-1 focus:ring-blue-500"})
-              ]}),
-              (0,P.jsxs)("label",{className:"flex items-center gap-1.5 cursor-pointer bg-slate-50 border border-slate-200 rounded-md px-2 py-1 text-xs",children:[
-                (0,P.jsx)("input",{type:"checkbox",checked:q.mandatory??true,onChange:e=>handleUpdateQuestion(q.id, "mandatory", e.target.checked),className:"w-3.5 h-3.5 text-blue-600 rounded"}),
-                (0,P.jsx)("span",{className:"text-[11px] font-semibold text-slate-700",children:"Mandatory"})
               ]})
             ]}),
             (0,P.jsxs)("div",{style:{display:"inline-flex",alignItems:"center",gap:"8px"},children:[
@@ -1369,7 +1364,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
       ]}),
       (0,P.jsx)("div",{className:"space-y-4 max-h-[55vh] overflow-y-auto pr-1",children:questions.map((q, idx)=>(0,P.jsxs)("div",{className:"p-3.5 rounded-xl border border-slate-200 bg-white space-y-2 text-xs",children:[
         (0,P.jsxs)("div",{className:"flex items-center justify-between",children:[
-          (0,P.jsxs)("span",{className:"font-bold text-slate-900",children:["Question ", idx+1, q.mandatory?" *":""]}),
+          (0,P.jsxs)("span",{className:"font-bold text-slate-900",children:["Question ", idx+1]}),
           (0,P.jsxs)("span",{className:"bg-slate-100 text-slate-600 px-2 py-0.5 rounded text-[10px] font-semibold",children:[q.marks, " Marks"]})
         ]}),
         (0,P.jsx)("div",{className:"text-slate-800 font-medium",children:q.text || "(Untitled question)"}),
@@ -2863,8 +2858,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,onUpdateCoursePro
               (0,P.jsxs)("div",{className:"flex items-center justify-between border-b border-slate-100 pb-2.5",children:[
                 (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
                   (0,P.jsx)("span",{className:"bg-blue-50 text-blue-700 text-xs font-bold px-2 py-0.5 rounded",children:"Question " + (idx+1)}),
-                  (0,P.jsx)("span",{className:"text-[11px] font-semibold text-slate-500",children:q.marks + " Marks"}),
-                  q.mandatory ? (0,P.jsx)("span",{className:"text-[10px] text-rose-600 font-bold",children:"* Mandatory"}):null
+                  (0,P.jsx)("span",{className:"text-[11px] font-semibold text-slate-500",children:q.marks + " Marks"})
                 ]}),
                 (0,P.jsx)("span",{className:"text-[11px] text-slate-400 capitalize",children:q.type.replace(/_/g, " ")})
               ]}),
@@ -2895,7 +2889,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,onUpdateCoursePro
             ]},q.id)),
 
             (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex items-center justify-between",children:[
-              (0,P.jsx)("span",{className:"text-xs text-slate-500",children:"Ensure all mandatory questions are answered before submitting."}),
+              (0,P.jsx)("span",{className:"text-xs text-slate-500",children:"Review your answers carefully before submitting."}),
               (0,P.jsx)("button",{type:"button",disabled:isCourseInactive,onClick:()=>{
                 if(isCourseInactive) return;
                 if(window.confirm("Are you sure you want to submit your assessment?")){
