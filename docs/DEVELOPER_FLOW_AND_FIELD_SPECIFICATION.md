@@ -504,7 +504,7 @@ The left collapsible sidebar provides access to:
   7. **Actions** (Right-aligned View and Edit action buttons)
 - **Programme Detail View (Management)**:
   - **Left Sidebar**: Displays publication badge (`Published` / `Draft`) on the top-left and the **Active / Inactive** toggle switch on the top-right, followed by Programme Title, Category, Difficulty Level, `Assign Programme` button, and core summary metrics (**Expected Duration**, **Passing Assessment Score** as clean `80%`, **Department**, **Enrolled Learners**).
-  - **General Info Tab (Right Panel)**: Displays **Learning Objectives** and **Completion Requirements & Assessment Criteria** cleanly without duplicating the sidebar summary details.
+  - **General Info Tab (Right Panel)**: Displays all programme details not shown on the left sidebar — **Learning Objectives**, **Completion Requirements & Assessment Criteria**, and the **Assessment & Questions** section (Assessment Enabled/Disabled state, Assessment Title, Description, Total Marks, Max Attempts, and the full Questions List with question type, marks, mandatory/optional status, and configured options/answers when present) cleanly without duplicating the sidebar summary details.
   - **Curriculum & Modules Tab**: Displays learning resources in a structured table (Module, Resource Title, Type, Resource URL, Action with eye View icon linking directly to the resource).
   - **Enrolled Employees & Status History Tabs**: Tracks enrolled learners with exact count consistency against the Training Management listing, plus audit history for `Active` / `Inactive` availability transitions.
 

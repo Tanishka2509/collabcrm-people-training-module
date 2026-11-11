@@ -175,6 +175,24 @@ const COMPLETION_REQ_OPTIONS=[`Watch all required videos`,`Pass the assessment`,
     {id:"res-3",title:"Interactive Client Portal Demonstration Sandbox",type:"Interactive Sandbox",url:"collabcrm.com/demo/client-portal",mandatory:true},
     {id:"res-4",title:"Advanced Candidate Sourcing Masterclass",type:"Masterclass",url:"coursera.org/learn/recruitment-ops",mandatory:false}
   ];
+  let assessCfg = e.assessment || null;
+  let isAssessDisabled = !!(assessCfg && assessCfg.enabled === !1);
+  let assessQuestions = Array.isArray(assessCfg?.questions) ? assessCfg.questions : [];
+  let assessTotalMarks = assessCfg && Number(assessCfg.totalMarks) > 0
+    ? Number(assessCfg.totalMarks)
+    : assessQuestions.reduce((sum, q) => sum + (Number(q.marks) || 0), 0);
+  let assessMaxAttempts = Number(assessCfg?.maxAttempts ?? e.maxAttempts) || 3;
+  let qTypeLabel = tp => ({
+    short_text: "Short Text Answer",
+    long_text: "Long Text Answer",
+    single_choice: "Single Selection (Radio)",
+    multiple_choice: "Multiple Selection (Checkbox)",
+    dropdown: "Dropdown Selection",
+    true_false: "True / False"
+  })[tp] || tp;
+  let compReqItems = Array.isArray(e.completionRequirementsList) && e.completionRequirementsList.length > 0
+    ? e.completionRequirementsList
+    : [];
 
   let handleAssignClick = () => {
     setDetailAlert("");
@@ -319,7 +337,7 @@ const COMPLETION_REQ_OPTIONS=[`Watch all required videos`,`Pass the assessment`,
           ]})
         ]}),
 
-        // Tab 1: General Info Content (details kept on left; unique objectives & completion criteria here)
+        // Tab 1: General Info Content (all programme details not on the left sidebar: objectives, completion requirements, & assessment questions)
         activeTab==="general" && (0,P.jsxs)("div",{className:"space-y-6",children:[
           (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-5",children:[
             (0,P.jsx)("h2",{className:"text-xs font-bold text-slate-400 uppercase tracking-wider",children:"Programme Information"}),
@@ -330,8 +348,89 @@ const COMPLETION_REQ_OPTIONS=[`Watch all required videos`,`Pass the assessment`,
               ]}),
               (0,P.jsxs)("div",{children:[
                 (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"COMPLETION REQUIREMENTS & ASSESSMENT CRITERIA"}),
-                (0,P.jsx)("div",{className:"text-slate-700 mt-1 leading-relaxed",children:e.completionRequirements || e.completionCriteria || (e.assessment && e.assessment.enabled === !1 ? "Complete 100% learning modules (Assessment Disabled)" : ("Complete 100% learning modules + achieve > " + (Number(e.assessment?.passingScore || e.passingScore) || 80) + "% on assessment"))})
+                compReqItems.length > 0 ? (0,P.jsx)("div",{className:"flex flex-wrap gap-2 mt-2",children:compReqItems.map((reqItem, rIdx)=>(0,P.jsxs)("span",{className:"inline-flex items-center gap-1.5 bg-slate-50 border border-slate-200 text-slate-700 px-2.5 py-1 rounded-lg font-medium text-xs",children:[
+                  (0,P.jsx)("span",{className:"text-emerald-600 font-bold",children:"✓"}),
+                  (0,P.jsx)("span",{children:reqItem})
+                ]},"creq-" + rIdx))}) : (0,P.jsx)("div",{className:"text-slate-700 mt-1 leading-relaxed",children:e.completionRequirements || e.completionCriteria || (isAssessDisabled ? "Complete 100% learning modules (Assessment Disabled)" : ("Complete 100% learning modules + achieve > " + (Number(assessCfg?.passingScore || e.passingScore) || 80) + "% on assessment"))})
               ]})
+            ]})
+          ]}),
+
+          (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-5",children:[
+            (0,P.jsxs)("div",{className:"flex items-center justify-between flex-wrap gap-3 border-b border-slate-100 pb-3",children:[
+              (0,P.jsx)("h2",{className:"text-xs font-bold text-slate-400 uppercase tracking-wider",children:"Assessment & Questions"}),
+              (0,P.jsxs)("div",{className:"flex items-center flex-wrap gap-2 text-xs",children:[
+                (0,P.jsx)("span",{className:(isAssessDisabled ? "bg-slate-100 text-slate-600 border-slate-200" : "bg-emerald-50 text-emerald-700 border-emerald-200") + " border px-2.5 py-0.5 rounded-full font-semibold",children:isAssessDisabled ? "Disabled" : "Enabled"}),
+                !isAssessDisabled && (0,P.jsxs)("span",{className:"bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-0.5 rounded-full font-semibold",children:[assessQuestions.length, " Questions"]}),
+                !isAssessDisabled && assessTotalMarks > 0 && (0,P.jsxs)("span",{className:"bg-slate-100 text-slate-700 border border-slate-200 px-2.5 py-0.5 rounded-full font-semibold",children:[assessTotalMarks, " Total Marks"]}),
+                !isAssessDisabled && (0,P.jsxs)("span",{className:"bg-slate-100 text-slate-700 border border-slate-200 px-2.5 py-0.5 rounded-full font-semibold",children:["Max ", assessMaxAttempts, " Attempts"]})
+              ]})
+            ]}),
+
+            isAssessDisabled ? (0,P.jsx)("div",{className:"p-5 bg-slate-50 border border-dashed border-slate-200 rounded-xl text-xs text-slate-600",children:"Assessment is disabled for this training programme. Learners complete this programme upon finishing all required modules and completion requirements."}) : (0,P.jsxs)("div",{className:"space-y-5 text-xs",children:[
+              (assessCfg?.title || assessCfg?.description) && (0,P.jsxs)("div",{className:"bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2.5",children:[
+                assessCfg?.title && (0,P.jsxs)("div",{children:[
+                  (0,P.jsx)("div",{className:"text-slate-400 font-medium text-[11px]",children:"ASSESSMENT TITLE"}),
+                  (0,P.jsx)("div",{className:"font-bold text-slate-900 mt-0.5",children:assessCfg.title})
+                ]}),
+                assessCfg?.description && (0,P.jsxs)("div",{children:[
+                  (0,P.jsx)("div",{className:"text-slate-400 font-medium text-[11px]",children:"ASSESSMENT DESCRIPTION"}),
+                  (0,P.jsx)("div",{className:"text-slate-700 mt-0.5 leading-relaxed",children:assessCfg.description})
+                ]})
+              ]}),
+
+              assessQuestions.length > 0 ? (0,P.jsxs)("div",{className:"space-y-3",children:[
+                (0,P.jsxs)("div",{className:"text-slate-400 font-medium uppercase tracking-wider text-[11px]",children:["Questions List (", assessQuestions.length, ")"]}),
+                (0,P.jsx)("div",{className:"space-y-3",children:assessQuestions.map((q, qIdx)=>(0,P.jsxs)("div",{className:"border border-slate-200 rounded-xl p-4 bg-white space-y-3",children:[
+                  (0,P.jsxs)("div",{className:"flex items-center justify-between flex-wrap gap-2 border-b border-slate-100 pb-2.5",children:[
+                    (0,P.jsxs)("div",{className:"flex items-center flex-wrap gap-2",children:[
+                      (0,P.jsxs)("span",{className:"bg-blue-600 text-white font-bold text-[11px] px-2.5 py-0.5 rounded-md",children:["Question ", q.number || (qIdx + 1)]}),
+                      (0,P.jsx)("span",{className:"bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-[11px] font-semibold",children:qTypeLabel(q.type)}),
+                      (0,P.jsxs)("span",{className:"bg-slate-50 border border-slate-200 text-slate-700 px-2 py-0.5 rounded text-[11px] font-semibold",children:["Marks: ", Number(q.marks) || 0]})
+                    ]}),
+                    (0,P.jsx)("span",{className:((q.mandatory ?? true) ? "bg-blue-50 text-blue-700 border-blue-200" : "bg-slate-50 text-slate-500 border-slate-200") + " border px-2 py-0.5 rounded text-[10px] font-semibold",children:(q.mandatory ?? true) ? "Mandatory" : "Optional"})
+                  ]}),
+                  (0,P.jsx)("div",{className:"text-slate-900 font-semibold leading-relaxed",children:q.text || "(Untitled question)"}),
+                  q.type === "short_text" && (0,P.jsxs)("div",{className:"space-y-1.5 pt-1",children:[
+                    (0,P.jsx)("div",{className:"text-[11px] font-medium text-slate-400",children:"ACCEPTED ANSWERS"}),
+                    (0,P.jsx)("div",{className:"flex flex-wrap gap-1.5",children:(q.acceptedAnswers || []).filter(ans=>String(ans||"").trim()).map((ans, aIdx)=>(0,P.jsx)("span",{className:"bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-md text-xs font-medium",children:ans},"ans-" + aIdx))})
+                  ]}),
+                  q.type === "long_text" && (0,P.jsxs)("div",{className:"space-y-1 pt-1",children:[
+                    (0,P.jsx)("div",{className:"text-[11px] font-medium text-slate-400",children:"EXPECTED ANSWER / EVALUATION REFERENCE"}),
+                    (0,P.jsx)("div",{className:"bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-700 leading-relaxed",children:q.expectedAnswer || "Evaluated manually by reviewer."})
+                  ]}),
+                  (q.type === "single_choice" || q.type === "dropdown") && (0,P.jsxs)("div",{className:"space-y-1.5 pt-1",children:[
+                    (0,P.jsx)("div",{className:"text-[11px] font-medium text-slate-400",children:"ANSWER OPTIONS"}),
+                    (0,P.jsx)("div",{className:"space-y-1.5",children:(q.options || []).map((opt, oIdx)=>{
+                      let isCorrect = q.correctAnswer === opt.id;
+                      return (0,P.jsxs)("div",{className:"flex items-center justify-between gap-2 px-3 py-1.5 rounded-lg border " + (isCorrect ? "bg-emerald-50/70 border-emerald-200 text-emerald-900 font-semibold" : "bg-slate-50 border-slate-200 text-slate-700"),children:[
+                        (0,P.jsxs)("span",{children:[String.fromCharCode(65 + oIdx), ". ", opt.text]}),
+                        isCorrect && (0,P.jsx)("span",{className:"text-[10px] font-bold text-emerald-700 bg-white border border-emerald-200 px-2 py-0.5 rounded",children:"Correct Answer"})
+                      ]},opt.id || oIdx);
+                    })})
+                  ]}),
+                  q.type === "multiple_choice" && (0,P.jsxs)("div",{className:"space-y-1.5 pt-1",children:[
+                    (0,P.jsx)("div",{className:"text-[11px] font-medium text-slate-400",children:"ANSWER OPTIONS (MULTIPLE CORRECT)"}),
+                    (0,P.jsx)("div",{className:"space-y-1.5",children:(q.options || []).map((opt, oIdx)=>{
+                      let isCorrect = Array.isArray(q.correctAnswers) && q.correctAnswers.includes(opt.id);
+                      return (0,P.jsxs)("div",{className:"flex items-center justify-between gap-2 px-3 py-1.5 rounded-lg border " + (isCorrect ? "bg-emerald-50/70 border-emerald-200 text-emerald-900 font-semibold" : "bg-slate-50 border-slate-200 text-slate-700"),children:[
+                        (0,P.jsxs)("span",{children:[String.fromCharCode(65 + oIdx), ". ", opt.text]}),
+                        isCorrect && (0,P.jsx)("span",{className:"text-[10px] font-bold text-emerald-700 bg-white border border-emerald-200 px-2 py-0.5 rounded",children:"Correct"})
+                      ]},opt.id || oIdx);
+                    })})
+                  ]}),
+                  q.type === "true_false" && (0,P.jsxs)("div",{className:"space-y-1.5 pt-1",children:[
+                    (0,P.jsx)("div",{className:"text-[11px] font-medium text-slate-400",children:"ANSWER OPTIONS"}),
+                    (0,P.jsx)("div",{className:"flex items-center gap-2.5",children:["True","False"].map(tfVal=>{
+                      let isCorrect = q.correctAnswer === tfVal;
+                      return (0,P.jsxs)("div",{className:"flex items-center gap-2 px-3 py-1.5 rounded-lg border " + (isCorrect ? "bg-emerald-50/70 border-emerald-200 text-emerald-900 font-semibold" : "bg-slate-50 border-slate-200 text-slate-700"),children:[
+                        (0,P.jsx)("span",{children:tfVal}),
+                        isCorrect && (0,P.jsx)("span",{className:"text-[10px] font-bold text-emerald-700 bg-white border border-emerald-200 px-1.5 py-0.5 rounded",children:"Correct Answer"})
+                      ]},tfVal);
+                    })})
+                  ]})
+                ]},q.id || ("q-" + qIdx)))})
+              ]}) : (0,P.jsx)("div",{className:"p-4 bg-slate-50 border border-dashed border-slate-200 rounded-xl text-xs text-slate-500",children:"No assessment questions have been configured for this programme yet."})
             ]})
           ]})
         ]}),
