@@ -24,7 +24,7 @@ function buildInitialStatusHistory(p, pubStatus, availStatus) {
         newPublicationStatus: 'Published',
         changedBy: 'Ishdeep Anand',
         changedAt: '2026-10-01T04:45:00.000Z',
-        changedAtFormatted: '01 Oct 2026, 10:15:00 AM',
+        changedAtFormatted: '01-Oct-2026, 10:15:00 AM',
         reason: 'Programme published and enabled for Business Analyst & HR onboarding'
       },
       {
@@ -37,7 +37,7 @@ function buildInitialStatusHistory(p, pubStatus, availStatus) {
         newPublicationStatus: 'Draft',
         changedBy: 'Khushi Bhatt',
         changedAt: '2026-09-28T10:50:00.000Z',
-        changedAtFormatted: '28 Sep 2026, 04:20:00 PM',
+        changedAtFormatted: '28-Sep-2026, 04:20:00 PM',
         reason: 'Initial curriculum drafted (Availability locked to Inactive)'
       }
     ],
@@ -52,7 +52,7 @@ function buildInitialStatusHistory(p, pubStatus, availStatus) {
         newPublicationStatus: 'Published',
         changedBy: 'Ishdeep Anand',
         changedAt: '2026-10-05T05:30:00.000Z',
-        changedAtFormatted: '05 Oct 2026, 11:00:00 AM',
+        changedAtFormatted: '05-Oct-2026, 11:00:00 AM',
         reason: 'Published for Engineering cluster & Node services certification'
       }
     ],
@@ -67,7 +67,7 @@ function buildInitialStatusHistory(p, pubStatus, availStatus) {
         newPublicationStatus: 'Published',
         changedBy: 'Khushi Bhatt',
         changedAt: '2026-09-20T04:00:00.000Z',
-        changedAtFormatted: '20 Sep 2026, 09:30:00 AM',
+        changedAtFormatted: '20-Sep-2026, 09:30:00 AM',
         reason: 'Approved GDPR/ISO compliance module activated for all staff'
       }
     ],
@@ -82,7 +82,7 @@ function buildInitialStatusHistory(p, pubStatus, availStatus) {
         newPublicationStatus: 'Published',
         changedBy: 'Ishdeep Anand',
         changedAt: '2026-10-01T06:15:00.000Z',
-        changedAtFormatted: '01 Oct 2026, 11:45:00 AM',
+        changedAtFormatted: '01-Oct-2026, 11:45:00 AM',
         reason: 'Published & activated for Sales & BD client communication track'
       }
     ],
@@ -97,7 +97,7 @@ function buildInitialStatusHistory(p, pubStatus, availStatus) {
         newPublicationStatus: 'Draft',
         changedBy: 'Megha Salunkhe',
         changedAt: '2026-10-18T09:10:00.000Z',
-        changedAtFormatted: '18 Oct 2026, 02:40:00 PM',
+        changedAtFormatted: '18-Oct-2026, 02:40:00 PM',
         reason: 'Created in Draft state (Availability locked to Inactive until published)'
       }
     ],
@@ -112,7 +112,7 @@ function buildInitialStatusHistory(p, pubStatus, availStatus) {
         newPublicationStatus: 'Draft',
         changedBy: 'Ishdeep Anand',
         changedAt: '2026-10-22T07:05:00.000Z',
-        changedAtFormatted: '22 Oct 2026, 12:35:00 PM',
+        changedAtFormatted: '22-Oct-2026, 12:35:00 PM',
         reason: 'Saved as Draft pending Operations ETL curriculum sign-off'
       }
     ]
@@ -129,7 +129,7 @@ function buildInitialStatusHistory(p, pubStatus, availStatus) {
       newPublicationStatus: pubStatus,
       changedBy: 'Ishdeep Anand',
       changedAt: '2026-10-12T04:30:00.000Z',
-      changedAtFormatted: '12 Oct 2026, 10:00:00 AM',
+      changedAtFormatted: '12-Oct-2026, 10:00:00 AM',
       reason: pubStatus === 'Published'
         ? `Programme published and set to ${availStatus} for learner enrollment`
         : 'Programme saved as Draft (Availability locked to Inactive)'
@@ -560,6 +560,73 @@ function getDefaultProgrammesSeed() {
   ];
 }
 
+const SYS_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+function formatSystemDate(val) {
+  if (!val) return '-';
+  if (val instanceof Date) {
+    const dd = String(val.getDate()).padStart(2, '0');
+    return `${dd}-${SYS_MONTHS[val.getMonth()]}-${val.getFullYear()}`;
+  }
+  const s = String(val).trim();
+  if (!s || s === '-') return s || '-';
+  const dmyDash = s.match(/^(\d{1,2})[- ]([A-Za-z]{3,})[- ](\d{4})$/);
+  if (dmyDash) {
+    const mon = dmyDash[2].slice(0, 3);
+    const monTitle = mon.charAt(0).toUpperCase() + mon.slice(1).toLowerCase();
+    return `${String(dmyDash[1]).padStart(2, '0')}-${monTitle}-${dmyDash[3]}`;
+  }
+  const ymd = s.match(/^(\d{4})-(\d{2})-(\d{2})(?:[T\s].*)?$/);
+  if (ymd) {
+    const mi = Number(ymd[2]) - 1;
+    if (mi >= 0 && mi < 12) return `${ymd[3]}-${SYS_MONTHS[mi]}-${ymd[1]}`;
+  }
+  const parsed = new Date(s);
+  if (!Number.isNaN(parsed.getTime())) {
+    const dd = String(parsed.getDate()).padStart(2, '0');
+    return `${dd}-${SYS_MONTHS[parsed.getMonth()]}-${parsed.getFullYear()}`;
+  }
+  return s;
+}
+
+function normCategoryKey(str) {
+  return String(str || '').toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]/g, '').trim();
+}
+
+const CATEGORY_ALIAS_MAP = {
+  engineeringandarchitecture: ['engineering', 'architecture', 'engineeringandtecharchitecture', 'engineeringandarchitecture'],
+  salesandbusinessdevelopment: ['salesandbd', 'salesandbusinessdevelopment'],
+  recruitmentandhroperations: ['recruitmentandhr', 'recruitmentandhroperations'],
+  securityprivacyandcompliance: ['security', 'compliance', 'governanceandcompliance', 'securityprivacyandcompliance'],
+  leadershipandmanagement: ['softskills', 'leadership', 'leadershipandmanagement'],
+  devopsandcloudoperations: ['operations', 'cloudanddevops', 'devopsandcloudoperations'],
+  customersuccessandsupport: ['support', 'customersuccessandsupport']
+};
+
+function doesProgrammeUseCategory(prog, catName) {
+  if (!prog || !catName) return false;
+  const pKey = normCategoryKey(prog.category || prog.cat);
+  const cKey = normCategoryKey(catName);
+  if (!pKey || !cKey) return false;
+  if (pKey === cKey) return true;
+  const aliases = CATEGORY_ALIAS_MAP[cKey];
+  return Array.isArray(aliases) && aliases.includes(pKey);
+}
+
+function getDefaultCategoriesSeed() {
+  return [
+    { name: 'Engineering & Architecture', desc: 'Software engineering, distributed systems, clean code, cloud infrastructure, and CI/CD.', creator: 'Isha Patel', date: '15-Jan-2026', modified: 'Isha Patel (05-Mar-2026)', active: true },
+    { name: 'Sales & Business Development', desc: 'Enterprise deal closing, client discovery, objection handling, and CRM pipeline governance.', creator: 'Isha Patel', date: '15-Jan-2026', modified: 'Isha Patel (10-Feb-2026)', active: true },
+    { name: 'Recruitment & HR Operations', desc: 'Candidate sourcing, interview compliance, ATS workflows, onboarding, and payroll.', creator: 'Shivam Sharma', date: '01-Feb-2026', modified: 'Shivam Sharma (12-Feb-2026)', active: true },
+    { name: 'Security, Privacy & Compliance', desc: 'GDPR, SOC 2 Type II, secure coding standards, data retention policies, and credential security.', creator: 'Isha Patel', date: '10-Feb-2026', modified: 'Isha Patel (20-Feb-2026)', active: true },
+    { name: 'Leadership & Management', desc: '1-on-1 coaching, agile performance reviews, cross-functional alignment, and conflict resolution.', creator: 'Isha Patel', date: '20-Feb-2026', modified: 'Isha Patel (25-Feb-2026)', active: true },
+    { name: 'Product Design & UX', desc: 'Design systems, user accessibility WCAG 2.1, Figma component libraries, and usability testing.', creator: 'Shivam Sharma', date: '01-Mar-2026', modified: 'Shivam Sharma (05-Mar-2026)', active: true },
+    { name: 'Customer Success & Support', desc: 'SLA management, escalation resolution, client onboarding, and proactive churn mitigation.', creator: 'Shivam Sharma', date: '15-Mar-2026', modified: 'Shivam Sharma (20-Mar-2026)', active: true },
+    { name: 'DevOps & Cloud Operations', desc: 'Kubernetes orchestration, Terraform infrastructure-as-code, and incident on-call response.', creator: 'Ashish Kumar', date: '01-Apr-2026', modified: 'Ashish Kumar (10-Apr-2026)', active: true },
+    { name: 'Artificial Intelligence & ML', desc: 'LLM prompt engineering, fine-tuning, RAG pipelines, model evaluation, and ethical AI safeguards.', creator: 'Isha Patel', date: '18-Apr-2026', modified: 'Isha Patel (25-Apr-2026)', active: true }
+  ];
+}
+
 let PROGRAMME_STORE_CACHE = null;
 
 function loadProgrammeStore() {
@@ -574,6 +641,9 @@ function loadProgrammeStore() {
       if (parsed && Array.isArray(parsed.programmes)) {
         PROGRAMME_STORE_CACHE = {
           programmes: parsed.programmes.map(normalizeProgrammeRecord),
+          categories: Array.isArray(parsed.categories) && parsed.categories.length > 0
+            ? parsed.categories.map(c => ({ ...c, date: formatSystemDate(c.date) }))
+            : getDefaultCategoriesSeed(),
           auditLogs: Array.isArray(parsed.auditLogs) ? parsed.auditLogs : [],
           assignments: Array.isArray(parsed.assignments) ? parsed.assignments : [],
           courseProgress: parsed.courseProgress && typeof parsed.courseProgress === 'object' ? parsed.courseProgress : {}
@@ -585,6 +655,7 @@ function loadProgrammeStore() {
 
   PROGRAMME_STORE_CACHE = {
     programmes: getDefaultProgrammesSeed().map(normalizeProgrammeRecord),
+    categories: getDefaultCategoriesSeed(),
     auditLogs: [],
     assignments: [],
     courseProgress: {}
@@ -702,7 +773,7 @@ function canManageProgrammeAvailability(userRole, userPermissions) {
 }
 
 function formatAuditTimestamp(date = new Date()) {
-  const datePart = date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+  const datePart = formatSystemDate(date);
   const timePart = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
   return `${datePart}, ${timePart}`;
 }
@@ -5417,7 +5488,7 @@ export async function handleApi(req, res) {
     }
 
     const now = new Date();
-    const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const dateStr = formatSystemDate(now);
     const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
     resource.isCompleted = !!isCompleted;
@@ -5488,7 +5559,7 @@ export async function handleApi(req, res) {
     asm.bestScore = Math.max(asm.bestScore || 0, score);
 
     const now = new Date();
-    const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const dateStr = formatSystemDate(now);
     const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
     if (!asm.previousAttempts) asm.previousAttempts = [];
@@ -5552,7 +5623,7 @@ export async function handleApi(req, res) {
     }
 
     const now = new Date();
-    const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const dateStr = formatSystemDate(now);
     const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
     training.submission = {
@@ -5607,7 +5678,7 @@ export async function handleApi(req, res) {
     }
 
     const now = new Date();
-    const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const dateStr = formatSystemDate(now);
     const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
     training.submission.completionRemarks = remarks || training.submission.completionRemarks;
@@ -5751,7 +5822,7 @@ export async function handleApi(req, res) {
     }
 
     const now = new Date();
-    const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const dateStr = formatSystemDate(now);
     const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
     store.notifications.unshift({
       id: `notif_${Date.now()}`,
@@ -5798,7 +5869,7 @@ export async function handleApi(req, res) {
     }
 
     const now = new Date();
-    const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const dateStr = formatSystemDate(now);
     const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
     if (action === 'approve') {
@@ -5821,7 +5892,7 @@ export async function handleApi(req, res) {
           name: `${training.trainingName} Credential`,
           trainingName: training.trainingName,
           issueDate: dateStr,
-          expiryDate: new Date(Date.now() + 2 * 365 * 24 * 60 * 60 * 1000).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+          expiryDate: formatSystemDate(new Date(Date.now() + 2 * 365 * 24 * 60 * 60 * 1000)),
           status: 'issued',
           recipientName: store.profile.name,
           recipientId: store.profile.id || store.profile.employeeId,
@@ -5895,7 +5966,7 @@ export async function handleApi(req, res) {
     }
 
     const now = new Date();
-    const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const dateStr = formatSystemDate(now);
     const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
     training.trainingStatus = 'cancelled';
@@ -5962,10 +6033,10 @@ export async function handleApi(req, res) {
     }
 
     const now = new Date();
-    const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const dateStr = formatSystemDate(now);
     const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
-    training.dueDate = newDueDate;
+    training.dueDate = formatSystemDate(newDueDate);
     training.trainingStatus = (training.completionPercentage > 0) ? 'in_progress' : 'not_started';
     training.status = (training.completionPercentage > 0) ? 'In Progress' : 'Not Started';
     training.reassignedAt = `${dateStr}, ${timeStr}`;
@@ -6011,7 +6082,7 @@ export async function handleApi(req, res) {
     }
 
     const now = new Date();
-    const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const dateStr = formatSystemDate(now);
     const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
     training.reviewerId = reviewerId;
@@ -6046,7 +6117,7 @@ export async function handleApi(req, res) {
     const expiry = (training && training.certificate && training.certificate.expiryDate) || 'Expiring soon';
 
     const now = new Date();
-    const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const dateStr = formatSystemDate(now);
     const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
     store.notifications.unshift({
@@ -6080,9 +6151,9 @@ export async function handleApi(req, res) {
     }
 
     const now = new Date();
-    const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const dateStr = formatSystemDate(now);
     const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-    const defaultDue = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const defaultDue = formatSystemDate(new Date(Date.now() + 14 * 24 * 60 * 60 * 1000));
 
     const progMeta = programId ? TRAINING_PROGRAMS_REGISTRY[programId] : null;
     const progVersion = (progMeta && progMeta.version) || 1;
@@ -6164,7 +6235,7 @@ export async function handleApi(req, res) {
     }
 
     const now = new Date();
-    const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const dateStr = formatSystemDate(now);
 
     // If already published and updating, create new version snapshot
     if (prog.status === 'published' && status === 'published') {
@@ -6193,10 +6264,115 @@ export async function handleApi(req, res) {
     return sendJson(res, 200, {
       success: true,
       programmes: store.programmes,
+      categories: store.categories || getDefaultCategoriesSeed(),
       auditLogs: store.auditLogs,
       assignments: store.assignments,
       courseProgress: store.courseProgress || {}
     });
+  }
+
+  // 18b. GET / POST Training Categories (Enforces: assigned categories cannot be made Inactive; Inactive cannot be assigned)
+  if (pathname === '/api/training/categories' && req.method === 'GET') {
+    const store = loadProgrammeStore();
+    return sendJson(res, 200, {
+      success: true,
+      categories: store.categories || getDefaultCategoriesSeed()
+    });
+  }
+
+  if (pathname === '/api/training/categories' && req.method === 'POST') {
+    const body = await parseJsonBody(req);
+    const { action, name, originalName, category, userName } = body;
+    const store = loadProgrammeStore();
+    const cats = Array.isArray(store.categories) ? [...store.categories] : getDefaultCategoriesSeed();
+    const actor = userName || 'Ishdeep Anand';
+    const todayStr = formatSystemDate(new Date());
+
+    if (action === 'toggle') {
+      const targetKey = normCategoryKey(name);
+      const idx = cats.findIndex(c => normCategoryKey(c.name) === targetKey);
+      if (idx === -1) {
+        return sendJson(res, 404, { success: false, message: 'Category not found.', categories: cats });
+      }
+      const cur = cats[idx];
+      const nextActive = cur.active === false;
+      if (!nextActive && (store.programmes || []).some(p => doesProgrammeUseCategory(p, cur.name))) {
+        return sendJson(res, 400, {
+          success: false,
+          message: `Cannot mark "${cur.name}" as Inactive because it is currently assigned to one or more training programmes.`,
+          categories: cats
+        });
+      }
+      cats[idx] = {
+        ...cur,
+        active: nextActive,
+        modified: `${actor} (${todayStr})`
+      };
+      store.categories = cats;
+      saveProgrammeStore(store);
+      return sendJson(res, 200, { success: true, category: cats[idx], categories: cats });
+    }
+
+    if (action === 'add' || action === 'edit') {
+      const catObj = category || {};
+      const nextName = String(catObj.name || '').trim();
+      if (!nextName) {
+        return sendJson(res, 400, { success: false, message: 'Category name is required.', categories: cats });
+      }
+      const nextKey = normCategoryKey(nextName);
+      const origKey = action === 'edit' ? normCategoryKey(originalName || nextName) : '';
+      const dup = cats.some(c => normCategoryKey(c.name) === nextKey && normCategoryKey(c.name) !== origKey);
+      if (dup) {
+        return sendJson(res, 400, {
+          success: false,
+          message: 'A category with this name already exists (case-insensitive check). Repeating categories are not allowed.',
+          categories: cats
+        });
+      }
+
+      if (action === 'edit') {
+        const idx = cats.findIndex(c => normCategoryKey(c.name) === origKey);
+        if (idx === -1) {
+          return sendJson(res, 404, { success: false, message: 'Category not found.', categories: cats });
+        }
+        const cur = cats[idx];
+        const wantsActive = catObj.active !== false;
+        const isAssigned = (store.programmes || []).some(p => doesProgrammeUseCategory(p, cur.name));
+        if (!wantsActive && isAssigned) {
+          return sendJson(res, 400, {
+            success: false,
+            message: `Cannot mark "${cur.name}" as Inactive because it is currently assigned to one or more training programmes.`,
+            categories: cats
+          });
+        }
+        cats[idx] = {
+          ...cur,
+          name: nextName,
+          desc: catObj.desc !== undefined ? catObj.desc : cur.desc,
+          active: wantsActive,
+          modified: `${actor} (${todayStr})`
+        };
+        if (cur.name !== nextName && isAssigned) {
+          store.programmes = store.programmes.map(p => doesProgrammeUseCategory(p, cur.name) ? { ...p, category: nextName } : p);
+        }
+      } else {
+        const created = {
+          name: nextName,
+          desc: catObj.desc || 'New training category description.',
+          creator: actor,
+          date: todayStr,
+          modified: `${actor} (${todayStr})`,
+          active: catObj.active !== false
+        };
+        cats.unshift(created);
+      }
+
+      store.categories = cats;
+      saveProgrammeStore(store);
+      return sendJson(res, 200, { success: true, categories: cats, programmes: store.programmes });
+    }
+
+    return sendJson(res, 400, { success: false, message: 'Unsupported category action.' });
   }
 
   // 19. POST Create / Save / Publish Training Programme
@@ -6216,6 +6392,15 @@ export async function handleApi(req, res) {
     }
 
     const store = loadProgrammeStore();
+    if (programme.category) {
+      const catEntry = (store.categories || []).find(c => normCategoryKey(c.name) === normCategoryKey(programme.category));
+      if (catEntry && catEntry.active === false) {
+        return sendJson(res, 400, {
+          success: false,
+          message: `Category "${catEntry.name}" is inactive and cannot be connected to a training programme.`
+        });
+      }
+    }
     const idx = store.programmes.findIndex(p => p.id === programme.id);
     const requestedPub = programme.publicationStatus || programme.status || 'Draft';
     const changedBy = userName || 'Ishdeep Anand';
@@ -6566,8 +6751,8 @@ export async function handleApi(req, res) {
       programmeName: prog.name,
       assignmentMethod: assignmentMethod || (targetEmployees.length > 1 ? 'bulk' : 'individual'),
       assignedBy: assignedBy || 'Ishdeep Anand',
-      assignedDate: startDate || '2026-11-04',
-      dueDate: endDate || '2026-12-01',
+      assignedDate: formatSystemDate(startDate || '04-Nov-2026'),
+      dueDate: formatSystemDate(endDate || '01-Dec-2026'),
       progress: 0,
       status: 'Not Started'
     }));
