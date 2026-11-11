@@ -33,7 +33,7 @@ The left collapsible sidebar provides access to:
 1. **Employees**: Complete employee directory with profile cards and the Add Employee modal.
 2. **Training Hub**:
    - **Dashboard**: Real-time metrics (Active Learners, Total Assignments, Completion Rate, Average Score), urgent review queue, and performance analytics.
-   - **Training Management (Training Programmes)**: Full course catalogue, publication status filters (`All`, `Published`, `Draft`), search, `Status ↕` column showing `Published` + `Active` / `Inactive` badges (or `Draft`), View & Edit actions, and `+ Add Training` action. (`Archived` status has been removed; once published, only `Active` / `Inactive` toggling can be performed.)
+   - **Training Management (Training Programmes)**: Full course catalogue, publication status filters (`All`, `Published`, `Draft`), search, `Status ↕` column (`Published` / `Draft` badges), View & Edit actions, and `+ Add Training` action. (`Archived` status has been removed; once published, only `Active` / `Inactive` toggling can be performed inside Programme Detail.)
    - **Assignments**: Central assignment register with the **ASSIGNED SCOPE** column (Employee, Department, Designation), **41 Total** assignment count, and 5-page pagination (10 items per page). Clicking a record opens **Assignment Details**.
    - **Progress**: Dual-mode tracking (1. Employee-wise Training Completion vs 2. Departmental Compliance Audit), 4 summary cards (Active Learners, Total Assignments, Completed, Avg Score), and CSV export.
    - **Certificates**: Expandable master-detail table defaulting to **collapsed** employee rows with expand/collapse chevrons, plain-text earned programmes, clickable certificate preview, and a right-aligned **Actions** column directly under **All Records**.
@@ -485,28 +485,28 @@ The left collapsible sidebar provides access to:
 ### 4.4 Training Programmes Catalogue & Availability Status Architecture
 - **Publication & Availability Status Rules (No `Archived` Status)**:
   - **Publication Status (`Status ↕`)**: Strictly **Published** or **Draft** (`Archived` status and archiving actions are removed).
-    - **Published**: Emerald badge + accompanying **Active** (blue) or **Inactive** (slate) availability pill in the catalogue table. Visible on Management side; Active published programmes are assignable and usable on Employee side.
+    - **Published**: Emerald badge in the catalogue table. Visible on Management side; Active published programmes are assignable and usable on Employee side.
     - **Draft**: Amber badge. Management authoring only (Availability Status stays locked to Inactive until published and hidden from Employee side).
-  - **Active / Inactive Only After Publish**: Once a programme is **Published**, only **Active** / **Inactive** transitions can be performed via the cleanly spaced `Active / Inactive` toggle switch in the **Programme Detail** header.
+  - **Active / Inactive Only After Publish**: Once a programme is **Published**, only **Active** / **Inactive** transitions can be performed via the compact toggle switch placed at the top-right of the **Programme Detail** left sidebar card.
   - **Started Learner Lock (Deactivation Guard)**:
     - Once any employee has started working on a programme (In Progress, Under Review, Submitted for Review, Changes Requested, or Overdue with progress started), that programme cannot be made **Inactive**. Attempting deactivation is blocked with a validation error.
     - Once all learners have finished (Completed at 100%) or before any learner starts (Not Started at 0%), setting **Inactive** is permitted.
   - **Inactive Action Lock**:
-    - **Management (Programme Detail)**: Displays an Inactive warning banner and disables `+ Assign Programme`, `Assign Programme`, `+ Add Module`, and `Open Resource` while Inactive. The `Active / Inactive` toggle remains enabled for administration.
+    - **Management (Programme Detail)**: Displays an Inactive warning banner and disables `+ Assign Programme`, `Assign Programme`, `+ Add Module`, and curriculum View action while Inactive. The sidebar availability toggle remains enabled for administration.
     - **Employee (My Training & Course Detail)**: Programmes completed first and then set to Inactive remain visible in My Training (with Completed + Inactive pills) in strict read-only mode; all interactive controls inside are disabled.
 - **Catalogue Table Column Structure (7 Columns)**:
   1. **No.**
   2. **Programme Name ↕** (Programme title and version pill)
   3. **Level ↕** (Beginner / Intermediate / Expert badge)
   4. **Duration ↕** (Expected hours)
-  5. **Enrolled ↕** (Learner enrollment count)
-  6. **Status ↕** (`Published` + `Active` / `Inactive` badges, or `Draft` badge — no `Archived`)
+  5. **Enrolled ↕** (Consistent enrolled learner count matching Programme Detail's Enrolled Employees list)
+  6. **Status ↕** (`Published` or `Draft` badge — no `Archived` or extra `Active` pill)
   7. **Actions** (Right-aligned View and Edit action buttons)
 - **Programme Detail View (Management)**:
-  - **Left Sidebar**: Displays publication & availability badges, Programme Title, Category, Difficulty Level, `Assign Programme` button, and core summary metrics (**Expected Duration**, **Passing Assessment Score** as clean `80%`, **Department**, **Enrolled Learners**).
+  - **Left Sidebar**: Displays publication badge (`Published` / `Draft`) on the top-left and the **Active / Inactive** toggle switch on the top-right, followed by Programme Title, Category, Difficulty Level, `Assign Programme` button, and core summary metrics (**Expected Duration**, **Passing Assessment Score** as clean `80%`, **Department**, **Enrolled Learners**).
   - **General Info Tab (Right Panel)**: Displays **Learning Objectives** and **Completion Requirements & Assessment Criteria** cleanly without duplicating the sidebar summary details.
-  - **Curriculum & Modules Tab**: Displays learning resources in a structured table (Module, Resource Title, Type, Resource URL, Requirement, Action).
-  - **Enrolled Employees & Status History Tabs**: Tracks learner progress and complete audit history for `Active` / `Inactive` availability transitions.
+  - **Curriculum & Modules Tab**: Displays learning resources in a structured table (Module, Resource Title, Type, Resource URL, Action with eye View icon linking directly to the resource).
+  - **Enrolled Employees & Status History Tabs**: Tracks enrolled learners with exact count consistency against the Training Management listing, plus audit history for `Active` / `Inactive` availability transitions.
 
 ### 4.5 System Typography Standard
 - **Uniform Sans-Serif Typography**: Every text element across the entire system (headings, tables, labels, duration metrics, version badges, IDs, percentages, URLs, modals, and certificates) consistently uses the exact same **Sans-Serif** font family (`--font-sans`), with no monospace or serif font overrides.

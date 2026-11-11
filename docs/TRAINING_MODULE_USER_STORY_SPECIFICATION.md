@@ -74,7 +74,7 @@
    3. `Level ↕` (Beginner, Intermediate, Advanced)
    4. `Duration ↕` (Hours)
    5. `Enrolled ↕` (Count of currently enrolled learners)
-   6. `Status ↕` (`Published` + `Active` / `Inactive` badges, or `Draft` badge — `Archived` removed)
+   6. `Status ↕` (`Published` or `Draft` badge — `Archived` removed)
    7. `Actions` (View Programme icon, Edit Programme icon)
 3. Header controls include:
    - Filter buttons: `All`, `Published`, `Draft` (no `Archived` tab).

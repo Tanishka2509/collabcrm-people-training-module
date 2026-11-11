@@ -393,7 +393,7 @@ function getDefaultProgrammesSeed() {
       availabilityStatus: 'Active',
       status: 'Published',
       isActive: true,
-      enrolledCount: 25,
+      enrolledCount: 1,
       resources: [
         { id: 'res-7-1', type: 'Video / YouTube', title: 'Module 1: OAuth2 Grant Types & PKCE Flow', url: 'https://youtube.com/watch?v=oauth2-pkce' },
         { id: 'res-7-2', type: 'PDF Document', title: 'Module 2: API Security & JWT Validation Playbook', url: 'https://docs.collabcrm.internal/api-security-playbook.pdf' }
