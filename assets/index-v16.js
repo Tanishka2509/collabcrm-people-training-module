@@ -1727,7 +1727,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n}){
           }),
           (0,P.jsx)("tbody", {className: "divide-y divide-slate-100 text-sm", children: 
             filteredEmployees.map((emp, idx) => {
-              let isExpanded = expandedMap[emp.id] !== false;
+              let isExpanded = !!expandedMap[emp.id];
               let firstProg = emp.programmes[0];
               let otherProgs = emp.programmes.slice(1);
               return (0,P.jsxs)(P.Fragment, {key: emp.id, children: [
