@@ -542,12 +542,24 @@ function normalizeProgrammeRecord(p) {
   const normalizedAssessment = p.assessment
     ? { ...p.assessment, passingScore: effectivePassingScore, maxAttempts: effectiveMaxAttempts }
     : undefined;
+  const selectedSkillIds = Array.isArray(p.selectedSkillIds)
+    ? Array.from(new Set(p.selectedSkillIds.map(id => String(id || '').trim()).filter(Boolean)))
+    : [];
+  const addSkillToProfile = Boolean(p.addSkillToProfile ?? p.addSkillToEmployeeProfile);
+  const certificateGeneration = Boolean(p.certificateGeneration);
+  const skillLevel = String(p.skillLevel || '').trim();
+  const reviewerApprovalRequired = Boolean(p.reviewerApprovalRequired);
   return {
     ...p,
     passingScore: effectivePassingScore,
     maxAttempts: effectiveMaxAttempts,
     resources: cleanedResources,
     ...(normalizedAssessment ? { assessment: normalizedAssessment } : {}),
+    certificateGeneration,
+    addSkillToProfile,
+    selectedSkillIds,
+    skillLevel,
+    reviewerApprovalRequired,
     publicationStatus: pubStatus,
     availabilityStatus: availStatus,
     status: pubStatus,
@@ -991,6 +1003,118 @@ function doesProgrammeUseCategory(prog, catName) {
   return Array.isArray(aliases) && aliases.includes(pKey);
 }
 
+function getDefaultSkillLevelsSeed() {
+  return [
+    { id: 'lvl-1', name: 'Beginner', order: 1 },
+    { id: 'lvl-2', name: 'Intermediate', order: 2 },
+    { id: 'lvl-3', name: 'Advanced', order: 3 }
+  ];
+}
+
+function getDefaultSkillsSeed() {
+  return [
+    { id: 'skill-1', name: 'Data Mining', description: 'Extracting structured patterns and insights from enterprise datasets.', active: true, createdBy: 'Ishdeep Anand', createdAt: '15-Jan-2026', modifiedAt: 'Ishdeep Anand (15-Jan-2026)' },
+    { id: 'skill-2', name: 'UI/UX Research and Testing', description: 'Usability testing, heuristic evaluations, and Figma prototype validation.', active: true, createdBy: 'Ishdeep Anand', createdAt: '15-Jan-2026', modifiedAt: 'Ishdeep Anand (15-Jan-2026)' },
+    { id: 'skill-3', name: 'Account Management', description: 'Enterprise client relationship retention and SLA governance.', active: true, createdBy: 'Isha Patel', createdAt: '18-Jan-2026', modifiedAt: 'Isha Patel (18-Jan-2026)' },
+    { id: 'skill-4', name: 'Analytics', description: 'Product telemetry, funnel metrics, and executive KPI reporting.', active: true, createdBy: 'Isha Patel', createdAt: '20-Jan-2026', modifiedAt: 'Isha Patel (20-Jan-2026)' },
+    { id: 'skill-5', name: 'Project Management (Agile/Scrum)', description: 'Sprint execution, backlog prioritization, and stakeholder delivery.', active: true, createdBy: 'Isha Patel', createdAt: '22-Jan-2026', modifiedAt: 'Isha Patel (22-Jan-2026)' },
+    { id: 'skill-6', name: 'JAVA Kotlin', description: 'JVM backend services and modern Kotlin Android/server development.', active: true, createdBy: 'Ashish Kumar', createdAt: '25-Jan-2026', modifiedAt: 'Ashish Kumar (25-Jan-2026)' },
+    { id: 'skill-7', name: 'React', description: 'Component architecture, hooks, and modern frontend state flows.', active: true, createdBy: 'Ashish Kumar', createdAt: '01-Feb-2026', modifiedAt: 'Ashish Kumar (01-Feb-2026)' },
+    { id: 'skill-8', name: 'TypeScript', description: 'Static typing, API contracts, and scalable JavaScript architectures.', active: true, createdBy: 'Ashish Kumar', createdAt: '01-Feb-2026', modifiedAt: 'Ashish Kumar (01-Feb-2026)' },
+    { id: 'skill-9', name: 'Node.js', description: 'Event-driven backend APIs, microservices, and performance profiling.', active: true, createdBy: 'Ashish Kumar', createdAt: '02-Feb-2026', modifiedAt: 'Ashish Kumar (02-Feb-2026)' },
+    { id: 'skill-10', name: 'Business Analysis', description: 'Requirement elicitation, BRDs, workflow modeling, and UAT planning.', active: true, createdBy: 'Isha Patel', createdAt: '05-Feb-2026', modifiedAt: 'Isha Patel (05-Feb-2026)' },
+    { id: 'skill-11', name: 'SQL', description: 'Relational query optimization, schema modeling, and reporting.', active: true, createdBy: 'Isha Patel', createdAt: '05-Feb-2026', modifiedAt: 'Isha Patel (05-Feb-2026)' },
+    { id: 'skill-12', name: 'Figma', description: 'Design systems, interactive flows, and developer handoff specs.', active: true, createdBy: 'Shivam Sharma', createdAt: '10-Feb-2026', modifiedAt: 'Shivam Sharma (10-Feb-2026)' },
+    { id: 'skill-13', name: 'Architecture', description: 'Distributed systems topology, multi-tenancy, and API gateways.', active: true, createdBy: 'Ashish Kumar', createdAt: '15-Feb-2026', modifiedAt: 'Ashish Kumar (15-Feb-2026)' },
+    { id: 'skill-14', name: 'PostgreSQL', description: 'Transactional indexing, query tuning, and replication.', active: true, createdBy: 'Ashish Kumar', createdAt: '15-Feb-2026', modifiedAt: 'Ashish Kumar (15-Feb-2026)' },
+    { id: 'skill-15', name: 'Leadership', description: 'People coaching, conflict resolution, and team alignment.', active: true, createdBy: 'Isha Patel', createdAt: '20-Feb-2026', modifiedAt: 'Isha Patel (20-Feb-2026)' },
+    { id: 'skill-16', name: 'System Architecture', description: 'Scalable fault-tolerant platform blueprints and event buses.', active: true, createdBy: 'Ashish Kumar', createdAt: '25-Feb-2026', modifiedAt: 'Ashish Kumar (25-Feb-2026)' },
+    { id: 'skill-17', name: 'Engineering Management', description: 'Delivery governance, mentorship, and technical roadmaps.', active: true, createdBy: 'Isha Patel', createdAt: '01-Mar-2026', modifiedAt: 'Isha Patel (01-Mar-2026)' },
+    { id: 'skill-18', name: 'Strategy', description: 'Long-term product and organizational capability planning.', active: true, createdBy: 'Isha Patel', createdAt: '05-Mar-2026', modifiedAt: 'Isha Patel (05-Mar-2026)' },
+    { id: 'skill-19', name: 'Executive Leadership', description: 'Cross-department vision, governance, and strategic oversight.', active: true, createdBy: 'Isha Patel', createdAt: '10-Mar-2026', modifiedAt: 'Isha Patel (10-Mar-2026)' },
+    { id: 'skill-20', name: 'Cloud Infrastructure', description: 'Kubernetes orchestration, cloud networking, and CI/CD.', active: true, createdBy: 'Ashish Kumar', createdAt: '15-Mar-2026', modifiedAt: 'Ashish Kumar (15-Mar-2026)' },
+    { id: 'skill-21', name: 'GDPR & Data Privacy', description: 'Global data protection compliance, retention, and incident response.', active: true, createdBy: 'Isha Patel', createdAt: '20-Mar-2026', modifiedAt: 'Isha Patel (20-Mar-2026)' },
+    { id: 'skill-22', name: 'API Security & OAuth2', description: 'Token validation, RBAC claims, OAuth2/PKCE, and CORS policies.', active: true, createdBy: 'Megha Salunkhe', createdAt: '25-Mar-2026', modifiedAt: 'Megha Salunkhe (25-Mar-2026)' },
+    { id: 'skill-23', name: 'Kubernetes Security', description: 'Multi-tenant RBAC hardening and zero-trust workloads.', active: true, createdBy: 'Megha Salunkhe', createdAt: '01-Apr-2026', modifiedAt: 'Megha Salunkhe (01-Apr-2026)' },
+    { id: 'skill-24', name: 'Client Portal Operations', description: 'End-to-end CollabCRM candidate vetting and portal access workflows.', active: true, createdBy: 'Ishdeep Anand', createdAt: '05-Apr-2026', modifiedAt: 'Ishdeep Anand (05-Apr-2026)' }
+  ];
+}
+
+function getDefaultEmployeeSkillsSeed() {
+  const mk = (employeeId, skillId, skillName, level, date = '15-Jan-2026') => ({
+    id: `empsk-${employeeId}-${skillId}`,
+    employeeId,
+    skillId,
+    skillName,
+    skillLevel: level,
+    level,
+    sources: [],
+    createdDate: date,
+    updatedDate: date
+  });
+  return {
+    'emp-1': [
+      mk('emp-1', 'skill-1', 'Data Mining', 'Advanced'),
+      mk('emp-1', 'skill-2', 'UI/UX Research and Testing', 'Intermediate'),
+      mk('emp-1', 'skill-3', 'Account Management', 'Advanced'),
+      mk('emp-1', 'skill-4', 'Analytics', 'Advanced'),
+      mk('emp-1', 'skill-5', 'Project Management (Agile/Scrum)', 'Advanced'),
+      mk('emp-1', 'skill-6', 'JAVA Kotlin', 'Intermediate')
+    ],
+    'emp-2': [
+      mk('emp-2', 'skill-7', 'React', 'Intermediate'),
+      mk('emp-2', 'skill-8', 'TypeScript', 'Beginner'),
+      mk('emp-2', 'skill-9', 'Node.js', 'Beginner')
+    ],
+    'CO-5039': [
+      mk('CO-5039', 'skill-10', 'Business Analysis', 'Intermediate'),
+      mk('CO-5039', 'skill-11', 'SQL', 'Beginner'),
+      mk('CO-5039', 'skill-12', 'Figma', 'Advanced')
+    ],
+    'emp-4': [
+      mk('emp-4', 'skill-13', 'Architecture', 'Advanced'),
+      mk('emp-4', 'skill-9', 'Node.js', 'Advanced'),
+      mk('emp-4', 'skill-14', 'PostgreSQL', 'Intermediate')
+    ],
+    'emp-5': [
+      mk('emp-5', 'skill-15', 'Leadership', 'Intermediate'),
+      mk('emp-5', 'skill-16', 'System Architecture', 'Advanced'),
+      mk('emp-5', 'skill-7', 'React', 'Advanced')
+    ],
+    'emp-6': [
+      mk('emp-6', 'skill-17', 'Engineering Management', 'Advanced'),
+      mk('emp-6', 'skill-18', 'Strategy', 'Intermediate')
+    ],
+    'emp-7': [
+      mk('emp-7', 'skill-19', 'Executive Leadership', 'Advanced'),
+      mk('emp-7', 'skill-20', 'Cloud Infrastructure', 'Intermediate')
+    ]
+  };
+}
+
+function canonicalEmployeeSkillKey(empId) {
+  const s = String(empId || '').trim();
+  if (!s || s === 'emp-3' || s === 'CO-5039' || s === 'EMP-5039') return 'CO-5039';
+  if (s === 'YOP-073') return 'emp-1';
+  if (s === 'COINT-5040') return 'emp-2';
+  if (s === 'CO-5038') return 'emp-4';
+  if (s === 'CO-5037') return 'emp-5';
+  if (s === 'CO-5036') return 'emp-6';
+  if (s === 'CO-5035') return 'emp-7';
+  if (s === 'CO-5034') return 'emp-8';
+  if (s === 'CO-5033') return 'emp-9';
+  if (s === 'CO-5032') return 'emp-10';
+  return s;
+}
+
+function getSkillLevelRank(levelName, skillLevels) {
+  const levels = Array.isArray(skillLevels) && skillLevels.length > 0 ? skillLevels : getDefaultSkillLevelsSeed();
+  const target = String(levelName || '').trim().toLowerCase();
+  const found = levels.find(l => String(l.name || '').trim().toLowerCase() === target);
+  if (found && Number.isFinite(Number(found.order))) return Number(found.order);
+  return 0;
+}
+
 function getDefaultCategoriesSeed() {
   return [
     { name: 'Engineering & Architecture', desc: 'Software engineering, distributed systems, clean code, cloud infrastructure, and CI/CD.', creator: 'Isha Patel', date: '15-Jan-2026', modified: 'Isha Patel (05-Mar-2026)', active: true },
@@ -1022,6 +1146,17 @@ function loadProgrammeStore() {
           categories: Array.isArray(parsed.categories) && parsed.categories.length > 0
             ? parsed.categories.map(c => ({ ...c, date: formatSystemDate(c.date) }))
             : getDefaultCategoriesSeed(),
+          skills: Array.isArray(parsed.skills) && parsed.skills.length > 0
+            ? parsed.skills
+            : getDefaultSkillsSeed(),
+          skillLevels: Array.isArray(parsed.skillLevels) && parsed.skillLevels.length > 0
+            ? parsed.skillLevels
+            : getDefaultSkillLevelsSeed(),
+          employeeSkills: parsed.employeeSkills && typeof parsed.employeeSkills === 'object'
+            ? parsed.employeeSkills
+            : getDefaultEmployeeSkillsSeed(),
+          skillAwardHistory: Array.isArray(parsed.skillAwardHistory) ? parsed.skillAwardHistory : [],
+          issuedCertificates: Array.isArray(parsed.issuedCertificates) ? parsed.issuedCertificates : [],
           auditLogs: Array.isArray(parsed.auditLogs) ? parsed.auditLogs : [],
           assignments: Array.isArray(parsed.assignments) ? parsed.assignments : [],
           courseProgress: parsed.courseProgress && typeof parsed.courseProgress === 'object' ? parsed.courseProgress : {}
@@ -1034,6 +1169,11 @@ function loadProgrammeStore() {
   PROGRAMME_STORE_CACHE = {
     programmes: getDefaultProgrammesSeed().map(normalizeProgrammeRecord),
     categories: getDefaultCategoriesSeed(),
+    skills: getDefaultSkillsSeed(),
+    skillLevels: getDefaultSkillLevelsSeed(),
+    employeeSkills: getDefaultEmployeeSkillsSeed(),
+    skillAwardHistory: [],
+    issuedCertificates: [],
     auditLogs: [],
     assignments: [],
     courseProgress: {}
@@ -1055,6 +1195,274 @@ function findCatalogueProgramme(store, progId, progName) {
   return (store.programmes || []).find(
     p => (progId && p.id === progId) || (nameLower && p.name && p.name.trim().toLowerCase() === nameLower)
   ) || null;
+}
+
+function parseCompletionRequirementsList(prog) {
+  const raw = prog?.completionRequirement;
+  if (Array.isArray(raw)) return raw.map(x => String(x || '').trim()).filter(Boolean);
+  if (typeof raw === 'string' && raw.trim()) return raw.split(',').map(x => x.trim()).filter(Boolean);
+  return [];
+}
+
+function verifyTrainingCompletionEligibility({ programme, progressEntry }) {
+  if (!programme || !progressEntry) {
+    return { eligible: false, reason: 'Training or progress entry not found.' };
+  }
+  const resources = Array.isArray(programme.resources)
+    ? programme.resources.filter(r => r && (r.title || r.url || r.type))
+    : [];
+  const mandatoryResources = resources.filter(r => r.isMandatory !== false && r.mandatory !== false);
+  const completedResources = progressEntry.completedResources && typeof progressEntry.completedResources === 'object'
+    ? progressEntry.completedResources
+    : {};
+  const reqList = parseCompletionRequirementsList(programme);
+  const reqVideos = reqList.length === 0 || reqList.includes('Watch all required videos');
+  const reqAssess = reqList.length === 0 || reqList.includes('Pass the assessment');
+  const reqDocs = reqList.includes('Submit any required documents');
+  const reqManager = reqList.includes('Get approval from the manager') || Boolean(programme.reviewerApprovalRequired);
+
+  const stepVideosDone = mandatoryResources.length === 0 || mandatoryResources.every((r, i) => {
+    const k = r.id || `res-${i}`;
+    return Boolean(completedResources[k] || completedResources[r.id]);
+  });
+
+  const isAssessmentEnabled = programme.assessment
+    ? programme.assessment.enabled !== false
+    : (programme.hasAssessment !== false);
+  const stepAssessDone = !isAssessmentEnabled || Boolean(progressEntry.latestResult && progressEntry.latestResult.isPassed === true);
+  const stepDocsDone = !reqDocs || (Array.isArray(progressEntry.submittedDocs) && progressEntry.submittedDocs.length > 0);
+  const stepManagerDone = !reqManager || progressEntry.managerApprovalStatus === 'Approved';
+
+  if (reqVideos && !stepVideosDone) {
+    return { eligible: false, reason: 'Mandatory learning resources are not completed.' };
+  }
+  if (reqAssess && !stepAssessDone) {
+    return { eligible: false, reason: 'Assessment has not been passed.' };
+  }
+  if (!stepDocsDone) {
+    return { eligible: false, reason: 'Required documents have not been submitted.' };
+  }
+  if (!stepManagerDone) {
+    return { eligible: false, reason: 'Required reviewer/manager approval is pending.' };
+  }
+  if (progressEntry.status !== 'Completed') {
+    return { eligible: false, reason: 'Training completion requirements are not finalized.' };
+  }
+  return { eligible: true, reason: 'All completion and approval conditions satisfied.' };
+}
+
+function resolveEmployeeDisplayName(empKey) {
+  const empStore = EMPLOYEE_TRAINING_STORE[empKey] || EMPLOYEE_TRAINING_STORE['CO-5039'];
+  if (empStore && empStore.profile && empStore.profile.name && empKey === 'CO-5039') {
+    return empStore.profile.name;
+  }
+  const map = {
+    'CO-5039': 'Tanya Kapoor',
+    'emp-1': 'Ishdeep Anand',
+    'emp-2': 'Vaishnav Nair',
+    'emp-4': 'Kratika Solanki',
+    'emp-5': 'Siddharth Nair',
+    'emp-6': 'Ashish Kumar',
+    'emp-7': 'Isha Patel',
+    'emp-8': 'Kriti Mehta',
+    'emp-9': 'Aarav Sharma',
+    'emp-10': 'Siddharth Menon'
+  };
+  return map[empKey] || empKey;
+}
+
+function processTrainingRecognitionOnCompletion({ store, employeeId, programme, progressEntry, actorName }) {
+  const eligibility = verifyTrainingCompletionEligibility({ programme, progressEntry });
+  if (!eligibility.eligible) {
+    return {
+      awarded: false,
+      reason: eligibility.reason,
+      skillsAwarded: [],
+      certificateIssued: null
+    };
+  }
+
+  const empKey = canonicalEmployeeSkillKey(employeeId);
+  const now = new Date();
+  const todayStr = formatSystemDate(now);
+  const nowIso = now.toISOString();
+
+  // 1. Certificate Generation (completely independent of Skill Assignment)
+  let certificateIssued = null;
+  if (Boolean(programme.certificateGeneration)) {
+    if (!Array.isArray(store.issuedCertificates)) store.issuedCertificates = [];
+    const existingCert = store.issuedCertificates.find(
+      c => canonicalEmployeeSkillKey(c.employeeId) === empKey && c.trainingId === programme.id
+    );
+    if (existingCert) {
+      certificateIssued = existingCert;
+    } else {
+      certificateIssued = {
+        id: `CERT-${now.getFullYear()}-${String(1000 + (store.issuedCertificates.length * 37) % 9000)}-${Date.now().toString().slice(-4)}`,
+        employeeId: empKey,
+        recipientName: resolveEmployeeDisplayName(empKey),
+        trainingId: programme.id,
+        trainingName: programme.name,
+        name: `${programme.name} Certificate`,
+        issueDate: todayStr,
+        expiryDate: formatSystemDate(new Date(Date.now() + 2 * 365 * 24 * 60 * 60 * 1000)),
+        status: 'issued',
+        signatoryName: 'Isha Patel',
+        signatoryTitle: 'Head of People & Org Development',
+        score: progressEntry.latestResult?.scorePercentage ?? null,
+        issuedBy: actorName || 'System'
+      };
+      store.issuedCertificates.unshift(certificateIssued);
+    }
+  }
+
+  // 2. Automatic Skill Assignment (completely independent of Certificate Generation)
+  const skillsAwarded = [];
+  if (Boolean(programme.addSkillToProfile)) {
+    if (!store.employeeSkills || typeof store.employeeSkills !== 'object') {
+      store.employeeSkills = getDefaultEmployeeSkillsSeed();
+    }
+    if (!Array.isArray(store.employeeSkills[empKey])) {
+      store.employeeSkills[empKey] = [];
+    }
+    if (!Array.isArray(store.skillAwardHistory)) {
+      store.skillAwardHistory = [];
+    }
+
+    const masterSkills = Array.isArray(store.skills) ? store.skills : getDefaultSkillsSeed();
+    const skillLevels = Array.isArray(store.skillLevels) && store.skillLevels.length > 0
+      ? store.skillLevels
+      : getDefaultSkillLevelsSeed();
+    const awardedLevel = String(programme.skillLevel || '').trim() || (skillLevels[0]?.name || 'Beginner');
+    const awardedRank = getSkillLevelRank(awardedLevel, skillLevels);
+    const selectedIds = Array.isArray(programme.selectedSkillIds)
+      ? Array.from(new Set(programme.selectedSkillIds.map(s => String(s || '').trim()).filter(Boolean)))
+      : [];
+
+    for (const skillId of selectedIds) {
+      const skillMaster = masterSkills.find(s => s.id === skillId || String(s.name || '').trim().toLowerCase() === skillId.toLowerCase());
+      const resolvedSkillId = skillMaster ? skillMaster.id : skillId;
+      const skillName = skillMaster ? skillMaster.name : skillId;
+      const empSkillList = store.employeeSkills[empKey];
+      const existingIdx = empSkillList.findIndex(
+        es => es.skillId === resolvedSkillId || String(es.skillName || '').trim().toLowerCase() === skillName.trim().toLowerCase()
+      );
+
+      if (existingIdx === -1) {
+        const newSkillRecord = {
+          id: `es-${empKey}-${resolvedSkillId}-${Date.now()}`,
+          employeeId: empKey,
+          skillId: resolvedSkillId,
+          skillName,
+          skillLevel: awardedLevel,
+          sourceTrainingId: programme.id,
+          sourceTrainingName: programme.name,
+          sourceTrainingIds: [programme.id],
+          sources: [{
+            trainingId: programme.id,
+            trainingName: programme.name,
+            level: awardedLevel,
+            awardedDate: todayStr
+          }],
+          awardedDate: todayStr,
+          createdDate: nowIso,
+          updatedDate: nowIso
+        };
+        empSkillList.push(newSkillRecord);
+        const histEntry = {
+          id: `sah-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+          employeeId: empKey,
+          skillId: resolvedSkillId,
+          skillName,
+          awardedSkillLevel: awardedLevel,
+          previousLevel: null,
+          finalLevel: awardedLevel,
+          outcome: 'added',
+          sourceTrainingId: programme.id,
+          sourceTrainingName: programme.name,
+          awardedDate: todayStr,
+          createdDate: nowIso,
+          updatedDate: nowIso
+        };
+        store.skillAwardHistory.unshift(histEntry);
+        skillsAwarded.push({ skillId: resolvedSkillId, skillName, awardedLevel, previousLevel: null, finalLevel: awardedLevel, outcome: 'added' });
+      } else {
+        const existingRec = empSkillList[existingIdx];
+        const existingLevel = existingRec.skillLevel || existingRec.level || 'Beginner';
+        const existingRank = getSkillLevelRank(existingLevel, skillLevels);
+        const prevSourceIds = Array.isArray(existingRec.sourceTrainingIds) ? [...existingRec.sourceTrainingIds] : (existingRec.sourceTrainingId ? [existingRec.sourceTrainingId] : []);
+        const prevSources = Array.isArray(existingRec.sources) ? [...existingRec.sources] : (existingRec.sourceTrainingId ? [{
+          trainingId: existingRec.sourceTrainingId,
+          trainingName: existingRec.sourceTrainingName || existingRec.sourceTrainingId,
+          level: existingLevel,
+          awardedDate: existingRec.awardedDate || todayStr
+        }] : []);
+        const alreadyRecordedFromSameTraining = store.skillAwardHistory.some(
+          h => canonicalEmployeeSkillKey(h.employeeId) === empKey &&
+               h.skillId === resolvedSkillId &&
+               h.sourceTrainingId === programme.id &&
+               h.awardedSkillLevel === awardedLevel
+        );
+
+        let finalLevel = existingLevel;
+        let outcome = 'retained';
+        if (awardedRank > existingRank) {
+          finalLevel = awardedLevel;
+          outcome = 'upgraded';
+          existingRec.skillLevel = awardedLevel;
+          existingRec.level = awardedLevel;
+          existingRec.awardedDate = todayStr;
+        } else if (!existingRec.skillLevel) {
+          existingRec.skillLevel = existingLevel;
+        }
+        if (!prevSourceIds.includes(programme.id)) {
+          prevSourceIds.push(programme.id);
+        }
+        if (!prevSources.some(src => src.trainingId === programme.id && src.level === awardedLevel)) {
+          prevSources.push({
+            trainingId: programme.id,
+            trainingName: programme.name,
+            level: awardedLevel,
+            awardedDate: todayStr
+          });
+        }
+        existingRec.sourceTrainingId = existingRec.sourceTrainingId || programme.id;
+        existingRec.sourceTrainingName = existingRec.sourceTrainingName || programme.name;
+        existingRec.latestSourceTrainingId = programme.id;
+        existingRec.latestSourceTrainingName = programme.name;
+        existingRec.sourceTrainingIds = prevSourceIds;
+        existingRec.sources = prevSources;
+        existingRec.updatedDate = nowIso;
+
+        if (!alreadyRecordedFromSameTraining) {
+          const histEntry = {
+            id: `sah-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+            employeeId: empKey,
+            skillId: resolvedSkillId,
+            skillName,
+            awardedSkillLevel: awardedLevel,
+            previousLevel: existingLevel,
+            finalLevel,
+            outcome,
+            sourceTrainingId: programme.id,
+            sourceTrainingName: programme.name,
+            awardedDate: todayStr,
+            createdDate: nowIso,
+            updatedDate: nowIso
+          };
+          store.skillAwardHistory.unshift(histEntry);
+          skillsAwarded.push({ skillId: resolvedSkillId, skillName, awardedLevel, previousLevel: existingLevel, finalLevel, outcome });
+        }
+      }
+    }
+  }
+
+  return {
+    awarded: Boolean(certificateIssued || skillsAwarded.length > 0),
+    reason: 'Recognition processed.',
+    skillsAwarded,
+    certificateIssued
+  };
 }
 
 function isLearnerStatusStarted(status, progress) {
@@ -6262,27 +6670,67 @@ export async function handleApi(req, res) {
         reviewDate: `${dateStr}, ${timeStr}`,
         feedback: feedback || 'Submission approved. All mandatory resources and assessment requirements verified.'
       };
-      if (certificate) {
-        training.certificate = certificate;
-      } else if (!training.certificate) {
-        training.certificate = {
-          id: `CERT-${new Date().getFullYear()}-${String(Math.floor(1000 + Math.random() * 9000))}`,
-          name: `${training.trainingName} Credential`,
-          trainingName: training.trainingName,
-          issueDate: dateStr,
-          expiryDate: formatSystemDate(new Date(Date.now() + 2 * 365 * 24 * 60 * 60 * 1000)),
-          status: 'issued',
-          recipientName: store.profile.name,
-          recipientId: store.profile.id || store.profile.employeeId,
-          signatoryName: 'Isha Patel',
-          signatoryTitle: 'Head of People & Org Development'
+      const pStore = loadProgrammeStore();
+      const matchedProg = findCatalogueProgramme(pStore, training.programmeId || training.programId, training.trainingName);
+      const allowCert = matchedProg ? Boolean(matchedProg.certificateGeneration) : true;
+      if (allowCert) {
+        if (certificate) {
+          training.certificate = certificate;
+        } else if (!training.certificate) {
+          training.certificate = {
+            id: `CERT-${new Date().getFullYear()}-${String(Math.floor(1000 + Math.random() * 9000))}`,
+            name: `${training.trainingName} Credential`,
+            trainingName: training.trainingName,
+            issueDate: dateStr,
+            expiryDate: formatSystemDate(new Date(Date.now() + 2 * 365 * 24 * 60 * 60 * 1000)),
+            status: 'issued',
+            recipientName: store.profile.name,
+            recipientId: store.profile.id || store.profile.employeeId,
+            signatoryName: 'Isha Patel',
+            signatoryTitle: 'Head of People & Org Development'
+          };
+        }
+      } else {
+        training.certificate = null;
+      }
+      if (matchedProg) {
+        const empKey = canonicalEmployeeSkillKey(employeeId || 'CO-5039');
+        const targetProgId = matchedProg.id;
+        if (!pStore.courseProgress || typeof pStore.courseProgress !== 'object') pStore.courseProgress = {};
+        const cpKey = `${empKey}::${targetProgId}`;
+        const existingCp = pStore.courseProgress[cpKey] || {
+          employeeId: empKey,
+          programmeId: targetProgId,
+          programmeName: matchedProg.name,
+          completedResources: {},
+          submittedDocs: [],
+          attemptHistory: [],
+          latestResult: { isPassed: true, scorePercentage: 95 }
         };
+        const approvedCp = {
+          ...existingCp,
+          status: 'Completed',
+          progress: 100,
+          managerApprovalStatus: 'Approved',
+          updatedAt: new Date().toISOString()
+        };
+        pStore.courseProgress[cpKey] = approvedCp;
+        processTrainingRecognitionOnCompletion({
+          store: pStore,
+          employeeId: empKey,
+          programme: matchedProg,
+          progressEntry: approvedCp,
+          actorName: training.review.reviewerName
+        });
+        saveProgrammeStore(pStore);
       }
       store.notifications.unshift({
         id: `notif_${Date.now()}`,
         title: 'Training Approved & Completed',
-        message: `Your submission for "${training.trainingName}" was approved by ${training.review.reviewerName}. Official certificate issued!`,
-        type: 'certificate',
+        message: allowCert
+          ? `Your submission for "${training.trainingName}" was approved by ${training.review.reviewerName}. Official certificate issued!`
+          : `Your submission for "${training.trainingName}" was approved by ${training.review.reviewerName}.`,
+        type: allowCert ? 'certificate' : 'approval',
         timestamp: `${dateStr}, ${timeStr}`,
         trainingId: training.id,
         read: false
@@ -6643,10 +7091,232 @@ export async function handleApi(req, res) {
       success: true,
       programmes: store.programmes,
       categories: store.categories || getDefaultCategoriesSeed(),
+      skills: store.skills || getDefaultSkillsSeed(),
+      skillLevels: store.skillLevels || getDefaultSkillLevelsSeed(),
+      employeeSkills: store.employeeSkills || getDefaultEmployeeSkillsSeed(),
+      skillAwardHistory: store.skillAwardHistory || [],
+      issuedCertificates: store.issuedCertificates || [],
       auditLogs: store.auditLogs,
       assignments: store.assignments,
       courseProgress: store.courseProgress || {}
     });
+  }
+
+  // 18c. GET / POST Config > Skills & Skill Levels
+  if (pathname === '/api/config/skills' && req.method === 'GET') {
+    const store = loadProgrammeStore();
+    return sendJson(res, 200, {
+      success: true,
+      skills: store.skills || getDefaultSkillsSeed(),
+      skillLevels: store.skillLevels || getDefaultSkillLevelsSeed()
+    });
+  }
+
+  if (pathname === '/api/config/skills' && req.method === 'POST') {
+    const body = await parseJsonBody(req);
+    const { action, skillId, skill, userRole, userName, userPermissions } = body;
+    if (!canManageProgrammeAvailability(userRole, userPermissions)) {
+      return sendJson(res, 403, {
+        success: false,
+        message: 'Permission Denied: Only authorized Admin, HR, or Reporting Manager users can configure skills.'
+      });
+    }
+    const store = loadProgrammeStore();
+    const skills = Array.isArray(store.skills) && store.skills.length > 0 ? [...store.skills] : getDefaultSkillsSeed();
+    const skillLevels = Array.isArray(store.skillLevels) && store.skillLevels.length > 0 ? store.skillLevels : getDefaultSkillLevelsSeed();
+    const actor = userName || 'Ishdeep Anand';
+    const todayStr = formatSystemDate(new Date());
+
+    if (action === 'toggle') {
+      const idx = skills.findIndex(s => s.id === skillId || normCategoryKey(s.name) === normCategoryKey(body.name));
+      if (idx === -1) {
+        return sendJson(res, 404, { success: false, message: 'Skill not found.', skills, skillLevels });
+      }
+      const cur = skills[idx];
+      const nextActive = cur.active === false;
+      skills[idx] = {
+        ...cur,
+        active: nextActive,
+        modifiedBy: actor,
+        modifiedAt: `${actor} (${todayStr})`
+      };
+      store.skills = skills;
+      saveProgrammeStore(store);
+      return sendJson(res, 200, { success: true, skill: skills[idx], skills, skillLevels });
+    }
+
+    if (action === 'add' || action === 'edit') {
+      const sObj = skill || {};
+      const nextName = String(sObj.name || '').trim();
+      if (!nextName) {
+        return sendJson(res, 400, { success: false, message: 'Skill name is required.', skills, skillLevels });
+      }
+      const nextKey = normCategoryKey(nextName);
+      const dup = skills.some(s => normCategoryKey(s.name) === nextKey && (action !== 'edit' || s.id !== (skillId || sObj.id)));
+      if (dup) {
+        return sendJson(res, 400, {
+          success: false,
+          message: 'A skill with this name already exists. Duplicate skill names are not allowed.',
+          skills,
+          skillLevels
+        });
+      }
+      if (action === 'edit') {
+        const targetId = skillId || sObj.id;
+        const idx = skills.findIndex(s => s.id === targetId);
+        if (idx === -1) {
+          return sendJson(res, 404, { success: false, message: 'Skill not found.', skills, skillLevels });
+        }
+        skills[idx] = {
+          ...skills[idx],
+          name: nextName,
+          description: String(sObj.description || '').trim(),
+          active: sObj.active !== false,
+          modifiedBy: actor,
+          modifiedAt: `${actor} (${todayStr})`
+        };
+        store.skills = skills;
+        saveProgrammeStore(store);
+        return sendJson(res, 200, { success: true, skill: skills[idx], skills, skillLevels });
+      }
+      const createdSkill = {
+        id: `skill-${Date.now()}-${Math.random().toString(36).slice(2, 5)}`,
+        name: nextName,
+        description: String(sObj.description || '').trim(),
+        active: sObj.active !== false,
+        createdBy: actor,
+        createdAt: todayStr,
+        modifiedBy: actor,
+        modifiedAt: `${actor} (${todayStr})`
+      };
+      skills.unshift(createdSkill);
+      store.skills = skills;
+      saveProgrammeStore(store);
+      return sendJson(res, 200, { success: true, skill: createdSkill, skills, skillLevels });
+    }
+
+    return sendJson(res, 400, { success: false, message: 'Unsupported skill configuration action.', skills, skillLevels });
+  }
+
+  // 18d. POST Authorized Employee Skill Management (Admin/HR/Manager only; blocks employee self-award)
+  if (pathname === '/api/employee/skills' && req.method === 'POST') {
+    const body = await parseJsonBody(req);
+    const { action, employeeId, skillId, skillLevel, userRole, userName, userPermissions } = body;
+    if (!canManageProgrammeAvailability(userRole, userPermissions)) {
+      return sendJson(res, 403, {
+        success: false,
+        message: 'Permission Denied: Employees cannot manually award or modify skills. Only authorized Admin, HR, or Reporting Managers can manage employee skills.'
+      });
+    }
+    const store = loadProgrammeStore();
+    if (!store.employeeSkills || typeof store.employeeSkills !== 'object') {
+      store.employeeSkills = getDefaultEmployeeSkillsSeed();
+    }
+    if (!Array.isArray(store.skillAwardHistory)) {
+      store.skillAwardHistory = [];
+    }
+    const empKey = canonicalEmployeeSkillKey(employeeId);
+    if (!Array.isArray(store.employeeSkills[empKey])) {
+      store.employeeSkills[empKey] = [];
+    }
+    const empSkills = store.employeeSkills[empKey];
+    const masterSkills = Array.isArray(store.skills) ? store.skills : getDefaultSkillsSeed();
+    const skillLevels = Array.isArray(store.skillLevels) && store.skillLevels.length > 0 ? store.skillLevels : getDefaultSkillLevelsSeed();
+    const actor = userName || 'Admin';
+    const now = new Date();
+    const todayStr = formatSystemDate(now);
+    const nowIso = now.toISOString();
+
+    if (action === 'remove') {
+      const nextList = empSkills.filter(es => es.skillId !== skillId && es.id !== skillId);
+      if (nextList.length === empSkills.length) {
+        return sendJson(res, 404, { success: false, message: 'Employee skill not found.' });
+      }
+      store.employeeSkills[empKey] = nextList;
+      saveProgrammeStore(store);
+      return sendJson(res, 200, {
+        success: true,
+        employeeSkills: store.employeeSkills,
+        skillAwardHistory: store.skillAwardHistory
+      });
+    }
+
+    if (action === 'add' || action === 'update') {
+      const skillMaster = masterSkills.find(s => s.id === skillId || String(s.name || '').trim().toLowerCase() === String(skillId || '').trim().toLowerCase());
+      if (!skillMaster) {
+        return sendJson(res, 400, { success: false, message: 'Selected skill does not exist in Config > Skills.' });
+      }
+      const chosenLevel = String(skillLevel || '').trim();
+      if (!skillLevels.some(l => l.name.toLowerCase() === chosenLevel.toLowerCase())) {
+        return sendJson(res, 400, { success: false, message: 'Please select a valid configured Skill Level.' });
+      }
+      const resolvedLevelName = skillLevels.find(l => l.name.toLowerCase() === chosenLevel.toLowerCase()).name;
+      const existingIdx = empSkills.findIndex(es => es.skillId === skillMaster.id);
+      if (existingIdx !== -1) {
+        if (action === 'add') {
+          return sendJson(res, 400, { success: false, message: `Employee already has "${skillMaster.name}" (duplicate employee skill records are not allowed).` });
+        }
+        const prevLevel = empSkills[existingIdx].skillLevel;
+        empSkills[existingIdx] = {
+          ...empSkills[existingIdx],
+          skillLevel: resolvedLevelName,
+          updatedDate: nowIso
+        };
+        store.skillAwardHistory.unshift({
+          id: `sah-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+          employeeId: empKey,
+          skillId: skillMaster.id,
+          skillName: skillMaster.name,
+          awardedSkillLevel: resolvedLevelName,
+          previousLevel: prevLevel,
+          finalLevel: resolvedLevelName,
+          outcome: 'manual_update',
+          sourceTrainingId: null,
+          sourceTrainingName: `Manual Update by ${actor}`,
+          awardedDate: todayStr,
+          createdDate: nowIso,
+          updatedDate: nowIso
+        });
+      } else {
+        empSkills.push({
+          id: `es-${empKey}-${skillMaster.id}-${Date.now()}`,
+          employeeId: empKey,
+          skillId: skillMaster.id,
+          skillName: skillMaster.name,
+          skillLevel: resolvedLevelName,
+          sourceTrainingId: null,
+          sourceTrainingName: `Manual Assignment by ${actor}`,
+          sourceTrainingIds: [],
+          sources: [{ trainingId: null, trainingName: `Manual Assignment by ${actor}`, level: resolvedLevelName, awardedDate: todayStr }],
+          awardedDate: todayStr,
+          createdDate: nowIso,
+          updatedDate: nowIso
+        });
+        store.skillAwardHistory.unshift({
+          id: `sah-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+          employeeId: empKey,
+          skillId: skillMaster.id,
+          skillName: skillMaster.name,
+          awardedSkillLevel: resolvedLevelName,
+          previousLevel: null,
+          finalLevel: resolvedLevelName,
+          outcome: 'manual_add',
+          sourceTrainingId: null,
+          sourceTrainingName: `Manual Assignment by ${actor}`,
+          awardedDate: todayStr,
+          createdDate: nowIso,
+          updatedDate: nowIso
+        });
+      }
+      saveProgrammeStore(store);
+      return sendJson(res, 200, {
+        success: true,
+        employeeSkills: store.employeeSkills,
+        skillAwardHistory: store.skillAwardHistory
+      });
+    }
+
+    return sendJson(res, 400, { success: false, message: 'Unsupported employee skill action.' });
   }
 
   // 18b. GET / POST Training Categories (Enforces: assigned categories cannot be made Inactive; Inactive cannot be assigned)
@@ -6779,7 +7449,56 @@ export async function handleApi(req, res) {
         });
       }
     }
+
     const idx = store.programmes.findIndex(p => p.id === programme.id);
+    const existingProg = idx !== -1 ? store.programmes[idx] : null;
+    const rawSkillIds = Array.isArray(programme.selectedSkillIds)
+      ? programme.selectedSkillIds.map(s => String(s || '').trim()).filter(Boolean)
+      : [];
+    const dedupedSkillIds = Array.from(new Set(rawSkillIds));
+    if (dedupedSkillIds.length !== rawSkillIds.length) {
+      return sendJson(res, 400, {
+        success: false,
+        message: 'Duplicate skill selection is not allowed within the same Training.'
+      });
+    }
+    if (Boolean(programme.addSkillToProfile)) {
+      if (dedupedSkillIds.length === 0) {
+        return sendJson(res, 400, {
+          success: false,
+          message: 'Please select at least one skill when "Add Skill to Employee Profile" is enabled.'
+        });
+      }
+      const validLevels = Array.isArray(store.skillLevels) && store.skillLevels.length > 0 ? store.skillLevels : getDefaultSkillLevelsSeed();
+      const chosenLevel = String(programme.skillLevel || '').trim();
+      if (!chosenLevel || !validLevels.some(l => l.name.toLowerCase() === chosenLevel.toLowerCase())) {
+        return sendJson(res, 400, {
+          success: false,
+          message: 'Please select a valid Skill Level from configuration.'
+        });
+      }
+      const masterSkills = Array.isArray(store.skills) && store.skills.length > 0 ? store.skills : getDefaultSkillsSeed();
+      const prevSkillSet = new Set(Array.isArray(existingProg?.selectedSkillIds) ? existingProg.selectedSkillIds : []);
+      for (const sid of dedupedSkillIds) {
+        const sk = masterSkills.find(m => m.id === sid);
+        if (!sk) {
+          return sendJson(res, 400, {
+            success: false,
+            message: `Selected skill "${sid}" does not exist in Config > Skills.`
+          });
+        }
+        if (sk.active === false && !prevSkillSet.has(sid)) {
+          return sendJson(res, 400, {
+            success: false,
+            message: `Skill "${sk.name}" is currently Inactive in Config > Skills and cannot be selected for new configurations.`
+          });
+        }
+      }
+    }
+    programme.selectedSkillIds = dedupedSkillIds;
+    programme.certificateGeneration = Boolean(programme.certificateGeneration);
+    programme.addSkillToProfile = Boolean(programme.addSkillToProfile);
+    programme.reviewerApprovalRequired = Boolean(programme.reviewerApprovalRequired);
     const requestedPub = programme.publicationStatus || programme.status || 'Draft';
     const changedBy = userName || 'Ishdeep Anand';
     const nowIso = new Date().toISOString();
@@ -7144,11 +7863,26 @@ export async function handleApi(req, res) {
     });
   }
 
-  // 24. POST Sync Employee Course Progress (Blocked if Inactive or Archived)
+  // 24. POST Sync Employee Course Progress (Blocked if Inactive or Archived; triggers Training Recognition only on verified completion)
   if (pathname === '/api/training/employee-course-progress' && req.method === 'POST') {
     const body = await parseJsonBody(req);
-    const { employeeId, programmeId, programmeName, status, progress, completedResources, latestResult, attemptHistory, submittedDocs, managerApprovalStatus } = body;
+    const {
+      employeeId,
+      programmeId,
+      programmeName,
+      status,
+      progress,
+      completedResources,
+      latestResult,
+      attemptHistory,
+      submittedDocs,
+      managerApprovalStatus,
+      userRole,
+      userName,
+      userPermissions
+    } = body;
     const empId = employeeId || 'CO-5039';
+    const empKey = canonicalEmployeeSkillKey(empId);
     const store = loadProgrammeStore();
     const matched = findCatalogueProgramme(store, programmeId, programmeName);
 
@@ -7170,18 +7904,48 @@ export async function handleApi(req, res) {
     }
     const targetProgId = matched ? matched.id : (programmeId || programmeName);
     const targetProgName = matched ? matched.name : (programmeName || '');
-    const key = `${empId}::${targetProgId}`;
+    const key = `${empKey}::${targetProgId}`;
+    const existingCp = store.courseProgress[key] || null;
+
+    const reqList = matched ? parseCompletionRequirementsList(matched) : [];
+    const reqManager = Boolean(matched && (reqList.includes('Get approval from the manager') || matched.reviewerApprovalRequired));
+    const incomingApproval = managerApprovalStatus || existingCp?.managerApprovalStatus || '';
+    if (
+      reqManager &&
+      incomingApproval === 'Approved' &&
+      existingCp?.managerApprovalStatus !== 'Approved' &&
+      !canManageProgrammeAvailability(userRole, userPermissions)
+    ) {
+      return sendJson(res, 403, {
+        success: false,
+        message: 'Permission Denied: Employees cannot self-approve completion when reviewer/manager approval is required.'
+      });
+    }
+
+    let resolvedStatus = status || 'In Progress';
+    let resolvedProgress = Number(progress) || 0;
+    let resolvedApproval = incomingApproval;
+
+    // Enforce server-side reviewer approval gating even if client claims Completed
+    if (reqManager && resolvedApproval !== 'Approved') {
+      if (resolvedStatus === 'Completed') {
+        resolvedStatus = 'Under Review';
+        resolvedProgress = Math.min(resolvedProgress || 95, 95);
+        resolvedApproval = 'Pending Approval';
+      }
+    }
+
     const nextEntry = {
-      employeeId: empId,
+      employeeId: empKey,
       programmeId: targetProgId,
       programmeName: targetProgName,
-      status: status || 'In Progress',
-      progress: Number(progress) || 0,
+      status: resolvedStatus,
+      progress: resolvedProgress,
       completedResources: completedResources || {},
       latestResult: latestResult || null,
       attemptHistory: Array.isArray(attemptHistory) ? attemptHistory : [],
       submittedDocs: Array.isArray(submittedDocs) ? submittedDocs : [],
-      managerApprovalStatus: managerApprovalStatus || '',
+      managerApprovalStatus: resolvedApproval,
       updatedAt: new Date().toISOString()
     };
     store.courseProgress[key] = nextEntry;
@@ -7190,7 +7954,7 @@ export async function handleApi(req, res) {
       store.assignments = store.assignments.map(a => {
         const sameProg = (targetProgId && a.programmeId === targetProgId) ||
                          (targetProgName && a.programmeName && a.programmeName.trim().toLowerCase() === targetProgName.trim().toLowerCase());
-        const sameEmp = !a.employeeId || a.employeeId === empId || empId === 'CO-5039' && (a.employeeId === 'emp-3' || a.employeeName === 'Tanya Kapoor');
+        const sameEmp = !a.employeeId || canonicalEmployeeSkillKey(a.employeeId) === empKey;
         if (sameProg && sameEmp) {
           return { ...a, status: nextEntry.status, progress: nextEntry.progress };
         }
@@ -7198,7 +7962,7 @@ export async function handleApi(req, res) {
       });
     }
 
-    const empStore = EMPLOYEE_TRAINING_STORE[empId] || EMPLOYEE_TRAINING_STORE['CO-5039'];
+    const empStore = EMPLOYEE_TRAINING_STORE[empKey] || EMPLOYEE_TRAINING_STORE['CO-5039'];
     if (empStore && Array.isArray(empStore.trainings)) {
       const lowerName = targetProgName.trim().toLowerCase();
       empStore.trainings.forEach(t => {
@@ -7211,12 +7975,114 @@ export async function handleApi(req, res) {
       });
     }
 
+    const awardedRecognition = matched
+      ? processTrainingRecognitionOnCompletion({
+          store,
+          employeeId: empKey,
+          programme: matched,
+          progressEntry: nextEntry,
+          actorName: userName || resolveEmployeeDisplayName(empKey)
+        })
+      : { awarded: false, reason: 'Training catalogue entry not found.', skillsAwarded: [], certificateIssued: null };
+
     saveProgrammeStore(store);
     return sendJson(res, 200, {
       success: true,
       entry: nextEntry,
       courseProgress: store.courseProgress,
-      assignments: store.assignments
+      assignments: store.assignments,
+      awardedRecognition,
+      employeeSkills: store.employeeSkills || getDefaultEmployeeSkillsSeed(),
+      skillAwardHistory: store.skillAwardHistory || [],
+      issuedCertificates: store.issuedCertificates || []
+    });
+  }
+
+  // 25. POST Approve or Request Changes on Employee Course Completion (Authorized Reviewer/Manager/HR/Admin only)
+  if (pathname === '/api/training/approve-completion' && req.method === 'POST') {
+    const body = await parseJsonBody(req);
+    const { employeeId, programmeId, programmeName, decision, feedback, userRole, userName, userPermissions } = body;
+
+    if (!canManageProgrammeAvailability(userRole, userPermissions)) {
+      return sendJson(res, 403, {
+        success: false,
+        message: 'Permission Denied: Employees cannot approve their own training completion. Only Admin, HR, or Reporting Managers can approve.'
+      });
+    }
+
+    const empKey = canonicalEmployeeSkillKey(employeeId || 'CO-5039');
+    const store = loadProgrammeStore();
+    const matched = findCatalogueProgramme(store, programmeId, programmeName);
+    if (!matched) {
+      return sendJson(res, 404, { success: false, message: 'Training not found.' });
+    }
+    if (!store.courseProgress || typeof store.courseProgress !== 'object') {
+      store.courseProgress = {};
+    }
+    const key = `${empKey}::${matched.id}`;
+    const existingCp = store.courseProgress[key];
+    if (!existingCp) {
+      return sendJson(res, 404, { success: false, message: 'No employee submission/progress found for this training.' });
+    }
+
+    const isApprove = decision !== 'reject' && decision !== 'request_changes';
+    const nextEntry = {
+      ...existingCp,
+      status: isApprove ? 'Completed' : 'In Progress',
+      progress: isApprove ? 100 : Math.min(Number(existingCp.progress) || 85, 90),
+      managerApprovalStatus: isApprove ? 'Approved' : 'Changes Requested',
+      reviewerFeedback: String(feedback || '').trim(),
+      reviewedBy: userName || 'Admin',
+      reviewedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    store.courseProgress[key] = nextEntry;
+
+    if (Array.isArray(store.assignments)) {
+      store.assignments = store.assignments.map(a => {
+        const sameProg = a.programmeId === matched.id ||
+          (matched.name && a.programmeName && a.programmeName.trim().toLowerCase() === matched.name.trim().toLowerCase());
+        const sameEmp = !a.employeeId || canonicalEmployeeSkillKey(a.employeeId) === empKey;
+        if (sameProg && sameEmp) {
+          return { ...a, status: nextEntry.status, progress: nextEntry.progress };
+        }
+        return a;
+      });
+    }
+
+    const empStore = EMPLOYEE_TRAINING_STORE[empKey] || EMPLOYEE_TRAINING_STORE['CO-5039'];
+    if (empStore && Array.isArray(empStore.trainings)) {
+      const lowerName = (matched.name || '').trim().toLowerCase();
+      empStore.trainings.forEach(t => {
+        if ((t.programmeId === matched.id || t.programId === matched.id) ||
+            (lowerName && t.trainingName && t.trainingName.trim().toLowerCase() === lowerName)) {
+          t.completionPercentage = nextEntry.progress;
+          t.status = nextEntry.status;
+          t.trainingStatus = nextEntry.status === 'Completed' ? 'completed' : 'in_progress';
+        }
+      });
+    }
+
+    const awardedRecognition = isApprove
+      ? processTrainingRecognitionOnCompletion({
+          store,
+          employeeId: empKey,
+          programme: matched,
+          progressEntry: nextEntry,
+          actorName: userName || 'Reviewer'
+        })
+      : { awarded: false, reason: 'Changes requested by reviewer.', skillsAwarded: [], certificateIssued: null };
+
+    saveProgrammeStore(store);
+    return sendJson(res, 200, {
+      success: true,
+      entry: nextEntry,
+      courseProgress: store.courseProgress,
+      assignments: store.assignments,
+      awardedRecognition,
+      employeeSkills: store.employeeSkills || getDefaultEmployeeSkillsSeed(),
+      skillAwardHistory: store.skillAwardHistory || [],
+      issuedCertificates: store.issuedCertificates || []
     });
   }
 
