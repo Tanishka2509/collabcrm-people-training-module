@@ -15,7 +15,23 @@ function buildInitialStatusHistory(p, pubStatus, availStatus) {
   const presetMap = {
     'prog-1': [
       {
-        id: 'audit-prog-1-2',
+        id: 'audit-prog-1-6',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Active',
+        newAvailabilityStatus: 'Active',
+        previousPublicationStatus: 'Published',
+        newPublicationStatus: 'Published',
+        fieldLabel: 'Passing Score',
+        previousValue: '75%',
+        newValue: '80%',
+        changedBy: 'Ishdeep Anand',
+        changedAt: '2026-10-04T08:00:00.000Z',
+        changedAtFormatted: '04-Oct-2026, 01:30:00 PM',
+        reason: 'Updated final assessment passing threshold per HR quality review'
+      },
+      {
+        id: 'audit-prog-1-5',
         programmeId: pid,
         programmeName: pname,
         previousAvailabilityStatus: 'Inactive',
@@ -26,6 +42,45 @@ function buildInitialStatusHistory(p, pubStatus, availStatus) {
         changedAt: '2026-10-01T04:45:00.000Z',
         changedAtFormatted: '01-Oct-2026, 10:15:00 AM',
         reason: 'Programme published and enabled for Business Analyst & HR onboarding'
+      },
+      {
+        id: 'audit-prog-1-4',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Active',
+        newAvailabilityStatus: 'Inactive',
+        previousPublicationStatus: 'Published',
+        newPublicationStatus: 'Published',
+        changedBy: 'Megha Salunkhe',
+        changedAt: '2026-09-30T11:40:00.000Z',
+        changedAtFormatted: '30-Sep-2026, 05:10:00 PM',
+        reason: 'Temporarily paused to add client portal sandbox & updated SOP playbook'
+      },
+      {
+        id: 'audit-prog-1-3',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Inactive',
+        newAvailabilityStatus: 'Active',
+        previousPublicationStatus: 'Published',
+        newPublicationStatus: 'Published',
+        changedBy: 'Ishdeep Anand',
+        changedAt: '2026-09-29T06:00:00.000Z',
+        changedAtFormatted: '29-Sep-2026, 11:30:00 AM',
+        reason: 'Pilot release enabled for Business Analyst review group'
+      },
+      {
+        id: 'audit-prog-1-2',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Inactive',
+        newAvailabilityStatus: 'Inactive',
+        previousPublicationStatus: 'Draft',
+        newPublicationStatus: 'Published',
+        changedBy: 'Megha Salunkhe',
+        changedAt: '2026-09-28T14:00:00.000Z',
+        changedAtFormatted: '28-Sep-2026, 07:30:00 PM',
+        reason: 'Curriculum reviewed and promoted from Draft to Published'
       },
       {
         id: 'audit-prog-1-1',
@@ -43,22 +98,74 @@ function buildInitialStatusHistory(p, pubStatus, availStatus) {
     ],
     'prog-2': [
       {
-        id: 'audit-prog-2-1',
+        id: 'audit-prog-2-5',
         programmeId: pid,
         programmeName: pname,
         previousAvailabilityStatus: 'Inactive',
         newAvailabilityStatus: 'Active',
-        previousPublicationStatus: 'Draft',
+        previousPublicationStatus: 'Published',
         newPublicationStatus: 'Published',
         changedBy: 'Ishdeep Anand',
         changedAt: '2026-10-05T05:30:00.000Z',
         changedAtFormatted: '05-Oct-2026, 11:00:00 AM',
         reason: 'Published for Engineering cluster & Node services certification'
+      },
+      {
+        id: 'audit-prog-2-4',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Active',
+        newAvailabilityStatus: 'Inactive',
+        previousPublicationStatus: 'Published',
+        newPublicationStatus: 'Published',
+        changedBy: 'Ashish Kumar',
+        changedAt: '2026-10-03T09:15:00.000Z',
+        changedAtFormatted: '03-Oct-2026, 02:45:00 PM',
+        reason: 'Paused to update distributed tracing and Redis cluster lab modules'
+      },
+      {
+        id: 'audit-prog-2-3',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Inactive',
+        newAvailabilityStatus: 'Active',
+        previousPublicationStatus: 'Published',
+        newPublicationStatus: 'Published',
+        changedBy: 'Ishdeep Anand',
+        changedAt: '2026-10-01T07:20:00.000Z',
+        changedAtFormatted: '01-Oct-2026, 12:50:00 PM',
+        reason: 'Activated for backend engineering leads'
+      },
+      {
+        id: 'audit-prog-2-2',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Inactive',
+        newAvailabilityStatus: 'Inactive',
+        previousPublicationStatus: 'Draft',
+        newPublicationStatus: 'Published',
+        changedBy: 'Ashish Kumar',
+        changedAt: '2026-09-29T10:10:00.000Z',
+        changedAtFormatted: '29-Sep-2026, 03:40:00 PM',
+        reason: 'Technical architecture peer review approved and published'
+      },
+      {
+        id: 'audit-prog-2-1',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Inactive',
+        newAvailabilityStatus: 'Inactive',
+        previousPublicationStatus: 'Draft',
+        newPublicationStatus: 'Draft',
+        changedBy: 'Khushi Bhatt',
+        changedAt: '2026-09-25T05:00:00.000Z',
+        changedAtFormatted: '25-Sep-2026, 10:30:00 AM',
+        reason: 'Initial curriculum drafted (Availability locked to Inactive)'
       }
     ],
     'prog-3': [
       {
-        id: 'audit-prog-3-1',
+        id: 'audit-prog-3-5',
         programmeId: pid,
         programmeName: pname,
         previousAvailabilityStatus: 'Inactive',
@@ -69,11 +176,63 @@ function buildInitialStatusHistory(p, pubStatus, availStatus) {
         changedAt: '2026-09-20T04:00:00.000Z',
         changedAtFormatted: '20-Sep-2026, 09:30:00 AM',
         reason: 'Approved GDPR/ISO compliance module activated for all staff'
+      },
+      {
+        id: 'audit-prog-3-4',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Active',
+        newAvailabilityStatus: 'Inactive',
+        previousPublicationStatus: 'Published',
+        newPublicationStatus: 'Published',
+        changedBy: 'Isha Patel',
+        changedAt: '2026-09-18T11:20:00.000Z',
+        changedAtFormatted: '18-Sep-2026, 04:50:00 PM',
+        reason: 'Paused to incorporate Q4 EU AI Act data handling updates'
+      },
+      {
+        id: 'audit-prog-3-3',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Inactive',
+        newAvailabilityStatus: 'Active',
+        previousPublicationStatus: 'Published',
+        newPublicationStatus: 'Published',
+        changedBy: 'Ishdeep Anand',
+        changedAt: '2026-09-15T06:00:00.000Z',
+        changedAtFormatted: '15-Sep-2026, 11:30:00 AM',
+        reason: 'Activated after Legal & Security sign-off'
+      },
+      {
+        id: 'audit-prog-3-2',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Inactive',
+        newAvailabilityStatus: 'Inactive',
+        previousPublicationStatus: 'Draft',
+        newPublicationStatus: 'Published',
+        changedBy: 'Isha Patel',
+        changedAt: '2026-09-12T08:45:00.000Z',
+        changedAtFormatted: '12-Sep-2026, 02:15:00 PM',
+        reason: 'Compliance quiz & handbooks finalized for publication'
+      },
+      {
+        id: 'audit-prog-3-1',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Inactive',
+        newAvailabilityStatus: 'Inactive',
+        previousPublicationStatus: 'Draft',
+        newPublicationStatus: 'Draft',
+        changedBy: 'Khushi Bhatt',
+        changedAt: '2026-09-10T04:30:00.000Z',
+        changedAtFormatted: '10-Sep-2026, 10:00:00 AM',
+        reason: 'Initial compliance training drafted (Availability locked to Inactive)'
       }
     ],
     'prog-4': [
       {
-        id: 'audit-prog-4-1',
+        id: 'audit-prog-4-5',
         programmeId: pid,
         programmeName: pname,
         previousAvailabilityStatus: 'Inactive',
@@ -84,11 +243,63 @@ function buildInitialStatusHistory(p, pubStatus, availStatus) {
         changedAt: '2026-10-01T06:15:00.000Z',
         changedAtFormatted: '01-Oct-2026, 11:45:00 AM',
         reason: 'Published & activated for Sales & BD client communication track'
+      },
+      {
+        id: 'audit-prog-4-4',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Active',
+        newAvailabilityStatus: 'Inactive',
+        previousPublicationStatus: 'Published',
+        newPublicationStatus: 'Published',
+        changedBy: 'Megha Salunkhe',
+        changedAt: '2026-09-29T09:00:00.000Z',
+        changedAtFormatted: '29-Sep-2026, 02:30:00 PM',
+        reason: 'Paused to refresh enterprise escalation & SLA communication playbooks'
+      },
+      {
+        id: 'audit-prog-4-3',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Inactive',
+        newAvailabilityStatus: 'Active',
+        previousPublicationStatus: 'Published',
+        newPublicationStatus: 'Published',
+        changedBy: 'Ishdeep Anand',
+        changedAt: '2026-09-25T05:45:00.000Z',
+        changedAtFormatted: '25-Sep-2026, 11:15:00 AM',
+        reason: 'Enabled for pilot customer success cohort'
+      },
+      {
+        id: 'audit-prog-4-2',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Inactive',
+        newAvailabilityStatus: 'Inactive',
+        previousPublicationStatus: 'Draft',
+        newPublicationStatus: 'Published',
+        changedBy: 'Isha Patel',
+        changedAt: '2026-09-22T07:30:00.000Z',
+        changedAtFormatted: '22-Sep-2026, 01:00:00 PM',
+        reason: 'Approved by Leadership & Communication review panel'
+      },
+      {
+        id: 'audit-prog-4-1',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Inactive',
+        newAvailabilityStatus: 'Inactive',
+        previousPublicationStatus: 'Draft',
+        newPublicationStatus: 'Draft',
+        changedBy: 'Khushi Bhatt',
+        changedAt: '2026-09-19T04:15:00.000Z',
+        changedAtFormatted: '19-Sep-2026, 09:45:00 AM',
+        reason: 'Initial training created (Availability locked to Inactive)'
       }
     ],
     'prog-5': [
       {
-        id: 'audit-prog-5-1',
+        id: 'audit-prog-5-5',
         programmeId: pid,
         programmeName: pname,
         previousAvailabilityStatus: 'Inactive',
@@ -99,11 +310,72 @@ function buildInitialStatusHistory(p, pubStatus, availStatus) {
         changedAt: '2026-10-18T09:10:00.000Z',
         changedAtFormatted: '18-Oct-2026, 02:40:00 PM',
         reason: 'Created in Draft state (Availability locked to Inactive until published)'
+      },
+      {
+        id: 'audit-prog-5-4',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Inactive',
+        newAvailabilityStatus: 'Inactive',
+        previousPublicationStatus: 'Draft',
+        newPublicationStatus: 'Draft',
+        fieldLabel: 'Duration',
+        previousValue: '16h 0mins',
+        newValue: '20h 0mins',
+        changedBy: 'Ashish Kumar',
+        changedAt: '2026-10-15T10:30:00.000Z',
+        changedAtFormatted: '15-Oct-2026, 04:00:00 PM',
+        reason: 'Added React Server Actions lab and adjusted estimated duration'
+      },
+      {
+        id: 'audit-prog-5-3',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Inactive',
+        newAvailabilityStatus: 'Inactive',
+        previousPublicationStatus: 'Draft',
+        newPublicationStatus: 'Draft',
+        fieldLabel: 'Difficulty Level',
+        previousValue: 'Intermediate',
+        newValue: 'Expert',
+        changedBy: 'Megha Salunkhe',
+        changedAt: '2026-10-12T06:00:00.000Z',
+        changedAtFormatted: '12-Oct-2026, 11:30:00 AM',
+        reason: 'Aligned difficulty level with advanced NextJS 15 architecture scope'
+      },
+      {
+        id: 'audit-prog-5-2',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Inactive',
+        newAvailabilityStatus: 'Inactive',
+        previousPublicationStatus: 'Draft',
+        newPublicationStatus: 'Draft',
+        fieldLabel: 'Passing Score',
+        previousValue: '80%',
+        newValue: '85%',
+        changedBy: 'Ishdeep Anand',
+        changedAt: '2026-10-10T08:15:00.000Z',
+        changedAtFormatted: '10-Oct-2026, 01:45:00 PM',
+        reason: 'Updated certification benchmark for senior UI leads'
+      },
+      {
+        id: 'audit-prog-5-1',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Inactive',
+        newAvailabilityStatus: 'Inactive',
+        previousPublicationStatus: 'Draft',
+        newPublicationStatus: 'Draft',
+        changedBy: 'Khushi Bhatt',
+        changedAt: '2026-10-08T04:45:00.000Z',
+        changedAtFormatted: '08-Oct-2026, 10:15:00 AM',
+        reason: 'Initial curriculum drafted (Availability locked to Inactive)'
       }
     ],
     'prog-6': [
       {
-        id: 'audit-prog-6-1',
+        id: 'audit-prog-6-5',
         programmeId: pid,
         programmeName: pname,
         previousAvailabilityStatus: 'Inactive',
@@ -114,6 +386,51 @@ function buildInitialStatusHistory(p, pubStatus, availStatus) {
         changedAt: '2026-10-22T07:05:00.000Z',
         changedAtFormatted: '22-Oct-2026, 12:35:00 PM',
         reason: 'Saved as Draft pending Operations ETL curriculum sign-off'
+      },
+      {
+        id: 'audit-prog-6-4',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Inactive',
+        newAvailabilityStatus: 'Inactive',
+        previousPublicationStatus: 'Draft',
+        newPublicationStatus: 'Draft',
+        fieldLabel: 'Duration',
+        previousValue: '8h 0mins',
+        newValue: '10h 0mins',
+        changedBy: 'Ashish Kumar',
+        changedAt: '2026-10-20T09:15:00.000Z',
+        changedAtFormatted: '20-Oct-2026, 02:45:00 PM',
+        reason: 'Expanded database rollback & zero-downtime migration exercises'
+      },
+      {
+        id: 'audit-prog-6-3',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Inactive',
+        newAvailabilityStatus: 'Inactive',
+        previousPublicationStatus: 'Draft',
+        newPublicationStatus: 'Draft',
+        fieldLabel: 'Passing Score',
+        previousValue: '70%',
+        newValue: '75%',
+        changedBy: 'Megha Salunkhe',
+        changedAt: '2026-10-18T05:30:00.000Z',
+        changedAtFormatted: '18-Oct-2026, 11:00:00 AM',
+        reason: 'Adjusted minimum passing assessment threshold'
+      },
+      {
+        id: 'audit-prog-6-2',
+        programmeId: pid,
+        programmeName: pname,
+        previousAvailabilityStatus: 'Inactive',
+        newAvailabilityStatus: 'Inactive',
+        previousPublicationStatus: 'Draft',
+        newPublicationStatus: 'Draft',
+        changedBy: 'Khushi Bhatt',
+        changedAt: '2026-10-14T04:30:00.000Z',
+        changedAtFormatted: '14-Oct-2026, 10:00:00 AM',
+        reason: 'Initial curriculum drafted (Availability locked to Inactive)'
       }
     ]
   };
@@ -133,6 +450,58 @@ function buildInitialStatusHistory(p, pubStatus, availStatus) {
       reason: pubStatus === 'Published'
         ? `Programme published and set to ${availStatus} for learner enrollment`
         : 'Programme saved as Draft (Availability locked to Inactive)'
+    },
+    {
+      id: `audit-${pid}-4`,
+      programmeId: pid,
+      programmeName: pname,
+      previousAvailabilityStatus: 'Active',
+      newAvailabilityStatus: 'Inactive',
+      previousPublicationStatus: pubStatus,
+      newPublicationStatus: pubStatus,
+      changedBy: 'Megha Salunkhe',
+      changedAt: '2026-10-10T10:15:00.000Z',
+      changedAtFormatted: '10-Oct-2026, 03:45:00 PM',
+      reason: 'Paused briefly to verify module links & updated assessment questions'
+    },
+    {
+      id: `audit-${pid}-3`,
+      programmeId: pid,
+      programmeName: pname,
+      previousAvailabilityStatus: 'Inactive',
+      newAvailabilityStatus: 'Active',
+      previousPublicationStatus: pubStatus,
+      newPublicationStatus: pubStatus,
+      changedBy: 'Ishdeep Anand',
+      changedAt: '2026-10-08T06:30:00.000Z',
+      changedAtFormatted: '08-Oct-2026, 12:00:00 PM',
+      reason: 'Enabled for internal stakeholder QA & pilot review'
+    },
+    {
+      id: `audit-${pid}-2`,
+      programmeId: pid,
+      programmeName: pname,
+      previousAvailabilityStatus: 'Inactive',
+      newAvailabilityStatus: 'Inactive',
+      previousPublicationStatus: 'Draft',
+      newPublicationStatus: pubStatus,
+      changedBy: 'Isha Patel',
+      changedAt: '2026-10-06T08:45:00.000Z',
+      changedAtFormatted: '06-Oct-2026, 02:15:00 PM',
+      reason: 'Learning objectives and assessment criteria approved'
+    },
+    {
+      id: `audit-${pid}-1`,
+      programmeId: pid,
+      programmeName: pname,
+      previousAvailabilityStatus: 'Inactive',
+      newAvailabilityStatus: 'Inactive',
+      previousPublicationStatus: 'Draft',
+      newPublicationStatus: 'Draft',
+      changedBy: 'Khushi Bhatt',
+      changedAt: '2026-10-04T04:00:00.000Z',
+      changedAtFormatted: '04-Oct-2026, 09:30:00 AM',
+      reason: 'Initial curriculum drafted (Availability locked to Inactive)'
     }
   ];
 }
@@ -147,9 +516,20 @@ function normalizeProgrammeRecord(p) {
   } else {
     availStatus = p.isActive === false ? 'Inactive' : 'Active';
   }
-  const existingHistory = Array.isArray(p.statusHistory) && p.statusHistory.length > 0
-    ? p.statusHistory
-    : buildInitialStatusHistory(p, pubStatus, availStatus);
+  const seededHistory = buildInitialStatusHistory(p, pubStatus, availStatus);
+  let existingHistory;
+  if (Array.isArray(p.statusHistory) && p.statusHistory.length > 0) {
+    const existingIds = new Set(p.statusHistory.map(h => h && h.id).filter(Boolean));
+    const hasSeedMarker = p.statusHistory.some(h => h && /^audit-prog-\d+-(1|init)$/.test(String(h.id || '')));
+    if (hasSeedMarker && p.statusHistory.length < 5) {
+      const missingSeeds = seededHistory.filter(h => !existingIds.has(h.id));
+      existingHistory = [...p.statusHistory, ...missingSeeds];
+    } else {
+      existingHistory = p.statusHistory;
+    }
+  } else {
+    existingHistory = seededHistory;
+  }
   const cleanedResources = Array.isArray(p.resources)
     ? p.resources.filter(r => r && (String(r.title || '').trim() || String(r.url || '').trim() || String(r.type || '').trim()))
     : [];

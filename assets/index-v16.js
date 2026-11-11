@@ -590,10 +590,10 @@ const COMPLETION_REQ_OPTIONS=[`Watch all required videos`,`Pass the assessment`,
                   (0,P.jsx)("span",{className:"font-bold text-slate-800",children:"Title:"}),
                   (0,P.jsx)("span",{className:"text-slate-500",children:log.programmeName || e.name})
                 ]}) : (0,P.jsxs)("div",{className:"flex flex-wrap items-center gap-1.5 text-slate-600",children:[
-                  (0,P.jsx)("span",{className:"font-bold text-slate-800",children:"Status:"}),
-                  (0,P.jsx)("span",{className:"line-through text-slate-400",children:showFrom}),
+                  (0,P.jsxs)("span",{className:"font-bold text-slate-800",children:[log.fieldLabel || "Status", ":"]}),
+                  (0,P.jsx)("span",{className:"line-through text-slate-400",children:log.previousValue || showFrom}),
                   (0,P.jsx)("span",{className:"text-slate-400",children:"›"}),
-                  (0,P.jsx)("span",{className:"text-slate-600",children:showTo})
+                  (0,P.jsx)("span",{className:"text-slate-600",children:log.newValue || showTo})
                 ]}),
                 log.reason && (0,P.jsxs)("div",{className:"flex flex-wrap items-center gap-1.5 text-slate-500",children:[
                   (0,P.jsx)("span",{className:"font-bold text-slate-700",children:"Reason:"}),
@@ -1706,9 +1706,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
       (0,P.jsxs)("div",{className:"flex items-center gap-2 text-xs text-slate-500 font-medium",children:[
         (0,P.jsx)("button",{type:"button",onClick:t,className:"hover:text-blue-600 transition-colors font-semibold",children:"Assignments"}),
         (0,P.jsx)("span",{children:"›"}),
-        (0,P.jsx)("span",{className:"text-slate-600",children:"View Assignment"}),
-        (0,P.jsx)("span",{children:"›"}),
-        (0,P.jsx)("span",{className:"text-blue-600 font-semibold",children:"General Info"})
+        (0,P.jsx)("span",{className:"text-blue-600 font-semibold",children:"View Assignment"})
       ]}),
       (0,P.jsxs)("button",{type:"button",onClick:t,className:"flex items-center gap-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 px-3.5 py-1.5 rounded-lg shadow-sm transition-colors",children:[
         (0,P.jsx)(S,{className:"w-3.5 h-3.5"}),
@@ -1716,37 +1714,37 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
       ]})
     ]}),
 
-    (0,P.jsxs)("div",{className:"grid grid-cols-1 lg:grid-cols-4 gap-6 items-start",children:[
-      (0,P.jsxs)("div",{className:"lg:col-span-1 bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden",children:[
-        (0,P.jsxs)("div",{className:"p-5 text-center border-b border-slate-100",children:[
+    (0,P.jsxs)("div",{className:"flex flex-col lg:flex-row gap-6 items-start",children:[
+      (0,P.jsxs)("div",{style:{maxWidth:"240px"},className:"w-full shrink-0 bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden",children:[
+        (0,P.jsxs)("div",{className:"p-4 text-center border-b border-slate-100",children:[
           (0,P.jsx)("div",{className:"flex justify-start",children:(0,P.jsxs)("span",{className:"inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200",children:[
             (0,P.jsx)(D,{className:"w-3 h-3 text-emerald-500"}),
             (0,P.jsx)("span",{children:statusText})
           ]})}),
-          (0,P.jsx)("div",{className:"w-24 h-24 rounded-full bg-blue-50 border border-blue-100 text-blue-600 font-bold flex items-center justify-center text-3xl mx-auto mt-3 shadow-inner",children:r.name?r.name[0]:"T"}),
-          (0,P.jsx)("h2",{className:"font-bold text-slate-900 text-base mt-3",children:r.name}),
+          (0,P.jsx)("div",{className:"w-16 h-16 rounded-full bg-blue-50 border border-blue-100 text-blue-600 font-bold flex items-center justify-center text-xl mx-auto mt-3 shadow-inner",children:r.name?r.name[0]:"T"}),
+          (0,P.jsx)("h2",{className:"font-bold text-slate-900 text-sm mt-2.5",children:r.name}),
           (0,P.jsx)("div",{className:"text-xs text-slate-500 mt-0.5",children:empRole}),
-          (0,P.jsx)("div",{className:"inline-block mt-2 bg-slate-50 border border-slate-200 text-slate-700 px-3 py-0.5 rounded text-xs font-medium",children:empDept})
+          (0,P.jsx)("div",{className:"inline-block mt-2 bg-slate-50 border border-slate-200 text-slate-700 px-2.5 py-0.5 rounded text-[11px] font-medium",children:empDept})
         ]}),
         (0,P.jsxs)("div",{className:"divide-y divide-slate-100 text-xs",children:[
-          (0,P.jsxs)("div",{className:"p-4",children:[
+          (0,P.jsxs)("div",{className:"p-3.5",children:[
             (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Assigned Training"}),
             (0,P.jsx)("div",{className:"font-bold text-slate-900 mt-1 leading-snug",children:r.training})
           ]}),
-          (0,P.jsxs)("div",{className:"p-4 grid grid-cols-2 gap-3",children:[
+          (0,P.jsxs)("div",{className:"p-3.5 grid grid-cols-2 gap-2.5",children:[
             (0,P.jsxs)("div",{children:[
-              (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Assigned Date"}),
+              (0,P.jsx)("div",{className:"text-slate-400 font-medium text-[11px]",children:"Assigned Date"}),
               (0,P.jsx)("div",{className:"font-semibold text-slate-800 mt-1",children:fmtSysDate(r.assigned)})
             ]}),
             (0,P.jsxs)("div",{children:[
-              (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Due Date"}),
+              (0,P.jsx)("div",{className:"text-slate-400 font-medium text-[11px]",children:"Due Date"}),
               (0,P.jsx)("div",{className:"font-semibold text-slate-800 mt-1",children:fmtSysDate(r.due)})
             ]})
           ]})
         ]})
       ]}),
 
-      (0,P.jsxs)("div",{className:"lg:col-span-3 space-y-5",children:[
+      (0,P.jsxs)("div",{className:"flex-1 min-w-0 w-full space-y-5",children:[
         (0,P.jsx)("div",{className:"bg-white border border-slate-200 rounded-xl px-4 py-2.5 shadow-sm flex items-center gap-2",children:(0,P.jsx)("button",{type:"button",className:"px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 text-xs font-bold",children:"General Info"})}),
 
         (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl shadow-sm grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-200 text-xs",children:[
@@ -1759,19 +1757,13 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
           ]}),
           (0,P.jsxs)("div",{className:"p-4 space-y-2",children:[
             (0,P.jsx)("div",{className:"w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-emerald-600",children:(0,P.jsx)(D,{className:"w-4 h-4"})}),
-            (0,P.jsxs)("div",{className:"space-y-1.5",children:[
-              (0,P.jsxs)("div",{className:"flex items-center justify-between",children:[
-                (0,P.jsx)("span",{className:"text-slate-400 font-medium",children:"Overall Course Progress"}),
-                (0,P.jsxs)("span",{className:"font-bold text-slate-900",children:[progressVal,"%"]})
-              ]}),
-              (0,P.jsx)("div",{className:"w-full bg-slate-100 h-2 rounded-full overflow-hidden",children:(0,P.jsx)("div",{className:"bg-emerald-500 h-full rounded-full transition-all",style:{width:`${progressVal}%`}})})
+            (0,P.jsxs)("div",{children:[
+              (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Overall Course Progress"}),
+              (0,P.jsxs)("div",{className:"font-bold text-slate-900 text-sm mt-0.5",children:[progressVal,"%"]})
             ]})
           ]}),
           (0,P.jsxs)("div",{className:"p-4 space-y-2",children:[
-            (0,P.jsxs)("div",{className:"flex items-center justify-between",children:[
-              (0,P.jsx)("div",{className:"w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-amber-600",children:(0,P.jsx)(C,{className:"w-4 h-4"})}),
-              (0,P.jsx)("span",{className:"px-2.5 py-0.5 rounded bg-purple-50 text-purple-700 font-bold text-[11px] border border-purple-200",children:"Earned"})
-            ]}),
+            (0,P.jsx)("div",{className:"w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-amber-600",children:(0,P.jsx)(C,{className:"w-4 h-4"})}),
             (0,P.jsxs)("div",{children:[
               (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Certificate Credential"}),
               (0,P.jsx)("div",{className:"font-semibold text-slate-800 mt-0.5",children:"TRN-2026-0032 • Automated Issuance"})
