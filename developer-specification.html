@@ -298,7 +298,7 @@
 <li class="nested-li">Selecting Employee View navigates directly to <strong>My Training</strong>, where learners open the <strong>3-Tab Course Learning Portal</strong> (<strong>1. Overview</strong>, <strong>2. Learning Resources</strong>, <strong>3. Assessment &amp; Questions</strong>).</li>
 <div class="step-item"><span class="step-num">3.</span><span><strong>Left Navigation Drawer Flow</strong>:</span></div>
 <li class="nested-li"><strong>Employees</strong>: Opens the Employee Directory, Employee Profile (with Training History tab), and the Add Employee modal.</li>
-<li class="nested-li"><strong>Training Hub</strong>: Provides access to Dashboard, Training Management (Training Programmes Catalogue), Assignments, Progress Tracker, and Certificates.</li>
+<li class="nested-li"><strong>Training Hub</strong>: Provides access to Dashboard, Training (Training Programmes Catalogue), Assignments, Progress Tracker, and Certificates.</li>
 <li class="nested-li">From <strong>Training Programmes</strong>: Users can open <strong>Create / Edit Programme</strong> or click View to open <strong>Programme Detail</strong> (General Info, Curriculum &amp; Modules, Enrolled Employees, Status History).</li>
 <li class="nested-li">From <strong>Assignments</strong>: Users can open the <strong>Assign Training Slideover Modal</strong> or click any record to open <strong>Assignment Details</strong>.</li>
 <li class="nested-li">From <strong>Certificates</strong>: Users can expand employee rows and open the <strong>Verified Certificate Modal</strong> (signed by Khushi Bhatt, Head of HR).</li>
@@ -323,11 +323,11 @@
 <li class="nested-li"><strong>Roles &amp; Permissions</strong>: 11-role access control table (Sr. Business Analyst, Senior Recruiter, CEO, Project Manager, BDE, Admin/HR, Employee, Team leader, Management, Recruiter, BDM), <strong>+ Add Role</strong> slideover modal, and interactive Role Permission Matrix.</li>
 <p><em>(Note: The legacy Reports drawer item has been removed.)</em></p>
 <hr />
-<h3>Flow 3: Training Management (Create / Edit Programme Flow)</h3>
-<li class="">Accessed via <strong>Training Management &gt; + Add Training</strong> or <strong>Edit Programme</strong>.</li>
+<h3>Flow 3: Training (Create / Edit Programme Flow)</h3>
+<li class="">Accessed via <strong>Training &gt; + Add Training</strong> or <strong>Edit Programme</strong>.</li>
 <li class="">Features an <strong>Auto-Fill Demo</strong> button to populate sample data.</li>
 <li class="">Structured across three core sections:</li>
-<div class="step-item nested-step"><span class="step-num">1.</span><span><strong>Core Programme Details</strong>: Programme Name, Training Category, Difficulty Level, Duration, Learning Objectives, and <strong>Completion Requirements</strong> (multi-select checkbox dropdown with options <strong>Watch all required videos</strong>, <strong>Pass the assessment</strong>, <strong>Submit any required documents</strong>, and <strong>Get approval from the manager</strong>; checkboxes toggle directly without <strong>Clear</strong>/<strong>Done</strong> buttons and the menu closes on outside click).</span></div>
+<div class="step-item nested-step"><span class="step-num">1.</span><span><strong>Core Programme Details</strong>: Training Name, Training Category, Difficulty Level, Duration, Learning Objectives, and <strong>Completion Requirements</strong> (multi-select checkbox dropdown with options <strong>Watch all required videos</strong>, <strong>Pass the assessment</strong>, <strong>Submit any required documents</strong>, and <strong>Get approval from the manager</strong>; checkboxes toggle directly without <strong>Clear</strong>/<strong>Done</strong> buttons and the menu closes on outside click).</span></div>
 <div class="step-item nested-step"><span class="step-num">2.</span><span><strong>Learning Resources Builder</strong>: Dynamic resource list (Video/YouTube, PDF Document, External Link, Article).</span></div>
 <div class="step-item nested-step"><span class="step-num">3.</span><span><strong>Assessment &amp; Questions Builder</strong>: Enable Assessment toggle, Assessment Title, Passing Score (<strong>Passing Score (%) *</strong> without any <strong>(Strictly &gt; 80% to pass)</strong> text), Max Assessment Attempts, Assessment Description, manual <strong>Total Marks</strong> numeric text field (<strong>Total Marks:</strong>, empty by default), and dynamic multi-format question builder with manual per-question <strong>Marks</strong> (empty by default), live mismatch validation against <strong>Total Marks</strong>, and bordered SVG-icon <strong>Duplicate</strong> / <strong>Delete</strong> buttons.</span></div>
 <li class="">Header Actions: <strong>Auto-Fill Demo</strong>, <strong>Cancel</strong>, <strong>Publish Programme</strong> (or <strong>Update &amp; Publish</strong> / <strong>Save Changes</strong>), and text-only <strong>Save as Draft</strong> dropdown option (no floppy disk icon).</li>
@@ -375,9 +375,9 @@
 <li class="nested-li">Result Status: Displays unified <strong>Completed</strong> badge when assessment passes and programme completes.</li>
 <hr />
 <h2>SECTION 2: FORM FIELD VALUES &amp; VALIDATION SPECIFICATIONS</h2>
-<h3>1. Create Training Programme Form (Training Management &gt; Create Programme)</h3>
+<h3>1. Create Training Programme Form (Training &gt; Create Programme)</h3>
 <h4>Section 1: Core Programme Details</h4>
-<li class=""><strong>Programme Name:</strong></li>
+<li class=""><strong>Training Name:</strong></li>
 <li class="nested-li">Mandatory: Yes (<strong>*</strong>)</li>
 <li class="nested-li">Type: Alphanumeric Text Input</li>
 <li class="nested-li">Max. Length: 120</li>
@@ -655,7 +655,7 @@
 <li class=""><strong>Issued Date:</strong> Day-Month-Year format (e.g. 27-Jan-2026).</li>
 <li class=""><strong>Master-Detail Table Layout:</strong></li>
 <li class="nested-li">Left columns: No. (1, 2, 3...), Employee Avatar &amp; Name, Department / Role.</li>
-<li class="nested-li">Middle column: Programme Name (plain-text format, no dropdowns or passed badges).</li>
+<li class="nested-li">Middle column: Training Name (plain-text format, no dropdowns or passed badges).</li>
 <li class="nested-li">Far-right column: Actions header and eye icon buttons aligned to the right directly beneath All Records.</li>
 <hr />
 <h2>SECTION 3: TRAINING LIFECYCLE &amp; STATE TRANSITION FLOW</h2>
@@ -734,7 +734,7 @@
 <li class="nested-li"><strong>Employee (My Training &amp; Course Detail)</strong>: Programmes completed first and then set to Inactive remain visible in My Training (with Completed + Inactive pills) in strict read-only mode; all interactive controls inside are disabled.</li>
 <li class=""><strong>Catalogue Table Column Structure (7 Columns)</strong>:</li>
 <div class="step-item nested-step"><span class="step-num">1.</span><span><strong>No.</strong></span></div>
-<div class="step-item nested-step"><span class="step-num">2.</span><span><strong>Programme Name ↕</strong> (Programme title and version pill)</span></div>
+<div class="step-item nested-step"><span class="step-num">2.</span><span><strong>Training Name ↕</strong> (Programme title and version pill)</span></div>
 <div class="step-item nested-step"><span class="step-num">3.</span><span><strong>Level ↕</strong> (Beginner / Intermediate / Expert badge)</span></div>
 <div class="step-item nested-step"><span class="step-num">4.</span><span><strong>Duration ↕</strong> (Expected hours)</span></div>
 <div class="step-item nested-step"><span class="step-num">5.</span><span><strong>Enrolled ↕</strong> (Consistent enrolled learner count matching Programme Detail's Enrolled Employees list)</span></div>
@@ -744,7 +744,7 @@
 <li class="nested-li"><strong>Left Sidebar</strong>: Displays publication badge (<strong>Published</strong> / <strong>Draft</strong>) on the top-left and the <strong>Active / Inactive</strong> toggle switch on the top-right, followed by Programme Title, Category, Difficulty Level, <strong>Assign Programme</strong> button, and core summary metrics (<strong>Expected Duration</strong>, <strong>Passing Assessment Score</strong> as clean <strong>80%</strong>, <strong>Department</strong>, <strong>Enrolled Learners</strong>).</li>
 <li class="nested-li"><strong>General Info Tab (Right Panel)</strong>: Displays all programme details not shown on the left sidebar — <strong>Learning Objectives</strong>, <strong>Completion Requirements &amp; Assessment Criteria</strong>, and the <strong>Assessment &amp; Questions</strong> section (Assessment Enabled/Disabled state, Assessment Title, Description, Total Marks, Max Attempts, and the full Questions List with question type, marks, and configured options/answers when present) cleanly without duplicating the sidebar summary details.</li>
 <li class="nested-li"><strong>Curriculum &amp; Modules Tab</strong>: Displays learning resources in a structured table (heading <strong>Curriculum &amp; Modules</strong>, <strong>+ Add Resource</strong> button, and columns Module, Resource Title, Type, Resource URL, Action with eye View icon linking directly to the resource).</li>
-<li class="nested-li"><strong>Enrolled Employees &amp; Status History Tabs</strong>: Tracks enrolled learners (clean full-width learner search bar without extra <strong>ENROLLED EMPLOYEES</strong> count heading) with exact count consistency against the Training Management listing, plus audit history for <strong>Active</strong> / <strong>Inactive</strong> availability transitions (clean full-width status history search bar without redundant <strong>Availability Status Audit History</strong> title or <strong>Programme ID</strong> header).</li>
+<li class="nested-li"><strong>Enrolled Employees &amp; Status History Tabs</strong>: Tracks enrolled learners (clean full-width learner search bar without extra <strong>ENROLLED EMPLOYEES</strong> count heading) with exact count consistency against the Training listing, plus audit history for <strong>Active</strong> / <strong>Inactive</strong> availability transitions (clean full-width status history search bar without redundant <strong>Availability Status Audit History</strong> title or <strong>Programme ID</strong> header).</li>
 <li class="nested-li"><strong>Uniform Employee Column Standard</strong>: Across all employee-centric tables (Employees Directory, Assignments, Programme Detail &gt; Enrolled Employees, Progress, and Certificates), the employee identity column uses the uniform <strong>Employee Name</strong> label (<strong>Employee Name ↕</strong> where sortable).</li>
 <h3>4.5 System Typography Standard</h3>
 <li class=""><strong>Uniform Sans-Serif Typography</strong>: Every text element across the entire system (headings, tables, labels, duration metrics, version badges, IDs, percentages, URLs, modals, and certificates) consistently uses the exact same <strong>Sans-Serif</strong> font family (<strong>--font-sans</strong>), with no monospace or serif font overrides.</li>
