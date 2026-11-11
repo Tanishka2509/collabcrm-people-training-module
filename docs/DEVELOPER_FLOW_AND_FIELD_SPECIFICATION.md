@@ -14,7 +14,7 @@ This document specifies the complete user navigation flows, screen transitions, 
    - Selecting Employee View navigates directly to **My Training**, where learners open the **3-Tab Course Learning Portal** (`1. Overview`, `2. Learning Resources`, `3. Assessment & Questions`).
 3. **Left Navigation Drawer Flow**:
    - **Employees**: Opens the Employee Directory, Employee Profile (with Training History tab), and the Add Employee modal.
-   - **Training Hub**: Provides access to Dashboard, Training (Training Programmes Catalogue), Assignments, Progress Tracker, and Certificates.
+   - **Training Hub**: Provides access to Dashboard, Training Management (Training Programmes Catalogue), Assignments, Progress Tracker, and Certificates.
      - From **Training Programmes**: Users can open **Create / Edit Programme** or click View to open **Programme Detail** (General Info, Curriculum & Modules, Enrolled Employees, Status History).
      - From **Assignments**: Users can open the **Assign Training Slideover Modal** or click any record to open **Assignment Details**.
      - From **Certificates**: Users can expand employee rows and open the **Verified Certificate Modal** (signed by Khushi Bhatt, Head of HR).
@@ -45,8 +45,8 @@ The left collapsible sidebar provides access to:
 
 ---
 
-### Flow 3: Training (Create / Edit Programme Flow)
-- Accessed via **Training > + Add Training** or **Edit Programme**.
+### Flow 3: Training Management (Create / Edit Programme Flow)
+- Accessed via **Training Management > + Add Training** or **Edit Programme**.
 - Features an **Auto-Fill Demo** button to populate sample data.
 - Structured across three core sections:
   1. **Core Programme Details**: Training Name, Training Category, Difficulty Level, Duration, Learning Objectives, and **Completion Requirements** (multi-select checkbox dropdown with options `Watch all required videos`, `Pass the assessment`, `Submit any required documents`, and `Get approval from the manager`; checkboxes toggle directly without `Clear`/`Done` buttons and the menu closes on outside click).
@@ -106,7 +106,7 @@ The left collapsible sidebar provides access to:
 
 ## SECTION 2: FORM FIELD VALUES & VALIDATION SPECIFICATIONS
 
-### 1. Create Training Programme Form (Training > Create Programme)
+### 1. Create Training Programme Form (Training Management > Create Programme)
 
 #### Section 1: Core Programme Details
 - **Training Name:**
@@ -507,7 +507,7 @@ The left collapsible sidebar provides access to:
   - **Left Sidebar**: Displays publication badge (`Published` / `Draft`) on the top-left and the **Active / Inactive** toggle switch on the top-right, followed by Programme Title, Category, Difficulty Level, `Assign Programme` button, and core summary metrics (**Expected Duration**, **Passing Assessment Score** as clean `80%`, **Department**, **Enrolled Learners**).
   - **General Info Tab (Right Panel)**: Displays all programme details not shown on the left sidebar — **Learning Objectives**, **Completion Requirements & Assessment Criteria**, and the **Assessment & Questions** section (Assessment Enabled/Disabled state, Assessment Title, Description, Total Marks, Max Attempts, and the full Questions List with question type, marks, and configured options/answers when present) cleanly without duplicating the sidebar summary details.
   - **Curriculum & Modules Tab**: Displays learning resources in a structured table (heading **Curriculum & Modules**, `+ Add Resource` button, and columns Module, Resource Title, Type, Resource URL, Action with eye View icon linking directly to the resource).
-  - **Enrolled Employees & Status History Tabs**: Tracks enrolled learners (clean full-width learner search bar without extra `ENROLLED EMPLOYEES` count heading) with exact count consistency against the Training listing, plus audit history for `Active` / `Inactive` availability transitions (clean full-width status history search bar without redundant `Availability Status Audit History` title or `Programme ID` header).
+  - **Enrolled Employees & Status History Tabs**: Tracks enrolled learners (clean full-width learner search bar without extra `ENROLLED EMPLOYEES` count heading) with exact count consistency against the Training Management listing, plus audit history for `Active` / `Inactive` availability transitions (clean full-width status history search bar without redundant `Availability Status Audit History` title or `Programme ID` header).
   - **Uniform Employee Column Standard**: Across all employee-centric tables (Employees Directory, Assignments, Programme Detail > Enrolled Employees, Progress, and Certificates), the employee identity column uses the uniform **Employee Name** label (`Employee Name ↕` where sortable).
 
 ### 4.5 System Typography Standard
