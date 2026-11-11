@@ -138,6 +138,10 @@ const COMPLETION_REQ_OPTIONS=[`Watch all required videos`,`Pass the assessment`,
   let[activeTab, setActiveTab]=(0,l.useState)("general");
   let[searchEmployee, setSearchEmployee]=(0,l.useState)("");
   let[searchHistory, setSearchHistory]=(0,l.useState)("");
+  let[histSortOrder, setHistSortOrder]=(0,l.useState)("desc");
+  let[histDateFrom, setHistDateFrom]=(0,l.useState)("");
+  let[histDateTo, setHistDateTo]=(0,l.useState)("");
+  let[showHistRange, setShowHistRange]=(0,l.useState)(!1);
   let[detailAlert, setDetailAlert]=(0,l.useState)("");
   let[archiveModal, setArchiveModal]=(0,l.useState)(null);
   let[archiveReason, setArchiveReason]=(0,l.useState)("");
@@ -153,11 +157,32 @@ const COMPLETION_REQ_OPTIONS=[`Watch all required videos`,`Pass the assessment`,
   let isLockedInactive = pubStatus !== "Draft" && availStatus === "Inactive";
   let isAssignable = pubStatus === "Published" && availStatus === "Active";
   let statusHistory = Array.isArray(e.statusHistory) ? e.statusHistory : [];
+  let parseHistTs = log => {
+    let raw = log.changedAt || log.changedAtFormatted || "";
+    if (!raw) return 0;
+    let d = new Date(raw);
+    if (!isNaN(d.getTime())) return d.getTime();
+    let d2 = new Date(String(raw).replace(/-/g, " "));
+    return isNaN(d2.getTime()) ? 0 : d2.getTime();
+  };
+  let fmtHistDT = log => {
+    let s = fmtSysDate(log.changedAtFormatted || log.changedAt) || "";
+    return s.replace(/^(\d{2}-[A-Za-z]{3}-\d{4},\s*\d{1,2}:\d{2}):\d{2}(\s*(?:AM|PM))$/i, "$1$2");
+  };
   let filteredHistory = statusHistory.filter(log => {
+    let ts = parseHistTs(log);
+    if (histDateFrom) {
+      let fTs = new Date(histDateFrom + "T00:00:00").getTime();
+      if (ts && ts < fTs) return false;
+    }
+    if (histDateTo) {
+      let tTs = new Date(histDateTo + "T23:59:59").getTime();
+      if (ts && ts > tTs) return false;
+    }
     if (!searchHistory) return true;
     let q = searchHistory.toLowerCase();
-    return [log.programmeId || e.id, log.previousAvailabilityStatus || "", log.newAvailabilityStatus || "", log.changedBy || "", fmtSysDate(log.changedAtFormatted || log.changedAt) || "", log.reason || ""].some(val => String(val).toLowerCase().includes(q));
-  });
+    return [log.programmeId || e.id, log.programmeName || e.name || "", log.previousAvailabilityStatus || "", log.newAvailabilityStatus || "", log.changedBy || "", fmtHistDT(log), log.reason || ""].some(val => String(val).toLowerCase().includes(q));
+  }).slice().sort((a, b) => histSortOrder === "asc" ? (parseHistTs(a) - parseHistTs(b)) : (parseHistTs(b) - parseHistTs(a)));
   let fmtEnrolledDate = d => {
     if (!d || typeof d !== "string") return d || "-";
     let m = d.trim().match(/^(\d{4})-(\d{2})-(\d{2})$/);
@@ -509,31 +534,78 @@ const COMPLETION_REQ_OPTIONS=[`Watch all required videos`,`Pass the assessment`,
         ]}),
 
         // Tab 4: Status History & Audit Trail
-        activeTab==="history" && (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-3",children:[
-          (0,P.jsx)("div",{className:"flex items-center border-b border-slate-100 pb-3",children:
-            (0,P.jsxs)("div",{className:"relative w-full",children:[
-              (0,P.jsx)(ue,{className:"w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"}),
-              (0,P.jsx)("input",{type:"text",value:searchHistory,onChange:ev=>setSearchHistory(ev.target.value),placeholder:"Search status history...",style:{paddingLeft:"32px"},className:"w-full pl-8 pr-3 py-1.5 border border-slate-200 rounded-lg text-xs focus:outline-hidden focus:border-blue-500"})
+        activeTab==="history" && (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl shadow-sm",children:[
+          (0,P.jsxs)("div",{className:"px-6 py-3.5 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3",children:[
+            (0,P.jsx)("h2",{className:"text-sm font-bold text-slate-900",children:"History"}),
+            (0,P.jsxs)("div",{className:"flex flex-wrap items-center gap-4 text-xs relative",children:[
+              (0,P.jsxs)("div",{className:"relative",children:[
+                (0,P.jsxs)("button",{type:"button",onClick:()=>setShowHistRange(!showHistRange),className:"inline-flex items-center justify-between gap-3 px-3 py-1.5 border border-slate-200 rounded-lg text-xs bg-white hover:bg-slate-50 transition-colors min-w-[180px] " + ((histDateFrom||histDateTo)?"text-slate-800 font-medium":"text-slate-400"),children:[
+                  (0,P.jsx)("span",{children:(histDateFrom||histDateTo)?((histDateFrom?fmtSysDate(histDateFrom):"...") + " – " + (histDateTo?fmtSysDate(histDateTo):"...")):"Select custom range"}),
+                  (0,P.jsxs)("svg",{viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2",strokeLinecap:"round",strokeLinejoin:"round",className:"w-3.5 h-3.5 text-slate-400 shrink-0",children:[
+                    (0,P.jsx)("rect",{x:"3",y:"4",width:"18",height:"18",rx:"2",ry:"2"}),
+                    (0,P.jsx)("line",{x1:"16",y1:"2",x2:"16",y2:"6"}),
+                    (0,P.jsx)("line",{x1:"8",y1:"2",x2:"8",y2:"6"}),
+                    (0,P.jsx)("line",{x1:"3",y1:"10",x2:"21",y2:"10"})
+                  ]})
+                ]}),
+                showHistRange && (0,P.jsxs)("div",{className:"absolute right-0 top-full mt-1.5 w-64 bg-white border border-slate-200 rounded-xl shadow-xl z-40 p-3 space-y-2.5 text-xs",children:[
+                  (0,P.jsxs)("div",{children:[
+                    (0,P.jsx)("label",{className:"block text-[11px] font-semibold text-slate-600 mb-1",children:"From Date"}),
+                    (0,P.jsx)("input",{type:"date",value:histDateFrom,onChange:ev=>setHistDateFrom(ev.target.value),className:"w-full border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800"})
+                  ]}),
+                  (0,P.jsxs)("div",{children:[
+                    (0,P.jsx)("label",{className:"block text-[11px] font-semibold text-slate-600 mb-1",children:"To Date"}),
+                    (0,P.jsx)("input",{type:"date",value:histDateTo,onChange:ev=>setHistDateTo(ev.target.value),className:"w-full border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800"})
+                  ]}),
+                  (0,P.jsxs)("div",{className:"flex items-center justify-end gap-2 pt-1 border-t border-slate-100",children:[
+                    (0,P.jsx)("button",{type:"button",onClick:()=>{setHistDateFrom("");setHistDateTo("");setShowHistRange(false);},className:"px-2.5 py-1 text-slate-500 hover:text-slate-800 font-medium",children:"Clear"}),
+                    (0,P.jsx)("button",{type:"button",onClick:()=>setShowHistRange(false),className:"px-3 py-1 bg-blue-600 text-white rounded-md font-semibold hover:bg-blue-700",children:"Apply"})
+                  ]})
+                ]})
+              ]}),
+              (0,P.jsxs)("button",{type:"button",onClick:()=>setHistSortOrder(prev=>prev==="desc"?"asc":"desc"),className:"inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 hover:text-slate-900 cursor-pointer select-none",children:[
+                (0,P.jsx)("span",{children:histSortOrder==="desc"?"Newest First":"Oldest First"}),
+                (0,P.jsxs)("svg",{viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2",strokeLinecap:"round",strokeLinejoin:"round",className:"w-3.5 h-3.5 text-slate-500",children:[
+                  (0,P.jsx)("path",{d:"m3 16 4 4 4-4"}),
+                  (0,P.jsx)("path",{d:"M7 20V4"}),
+                  (0,P.jsx)("path",{d:"M11 4h10"}),
+                  (0,P.jsx)("path",{d:"M11 8h7"}),
+                  (0,P.jsx)("path",{d:"M11 12h4"})
+                ]})
+              ]})
             ]})
-          }),
-          (0,P.jsx)("div",{className:"overflow-x-auto",children:(0,P.jsxs)("table",{className:"w-full text-left border-collapse",children:[
-            (0,P.jsx)("thead",{children:(0,P.jsxs)("tr",{className:"border-b border-slate-200 text-[11px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50",children:[
-              (0,P.jsx)("th",{className:"py-3 px-4",children:"Training ID"}),
-              (0,P.jsx)("th",{className:"py-3 px-4",children:"Previous Status"}),
-              (0,P.jsx)("th",{className:"py-3 px-4",children:"New Status"}),
-              (0,P.jsx)("th",{className:"py-3 px-4",children:"Changed By"}),
-              (0,P.jsx)("th",{className:"py-3 px-4",children:"Changed Date & Time"}),
-              (0,P.jsx)("th",{className:"py-3 px-4",children:"Reason"})
-            ]})}),
-            (0,P.jsx)("tbody",{className:"divide-y divide-slate-100 text-xs",children:filteredHistory.length > 0 ? filteredHistory.map((log, idx)=>(0,P.jsxs)("tr",{key:log.id || idx,className:"hover:bg-slate-50/80 transition-colors",children:[
-              (0,P.jsx)("td",{className:"py-3 px-4 font-mono text-slate-600",children:log.programmeId || e.id}),
-              (0,P.jsx)("td",{className:"py-3 px-4",children:(0,P.jsx)("span",{className:"inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold " + (log.previousAvailabilityStatus==="Active"?"bg-blue-50 text-blue-700 border border-blue-200":"bg-slate-100 text-slate-600 border border-slate-200"),children:log.previousAvailabilityStatus || "Inactive"})}),
-              (0,P.jsx)("td",{className:"py-3 px-4",children:(0,P.jsx)("span",{className:"inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold " + (log.newAvailabilityStatus==="Active"?"bg-emerald-50 text-emerald-700 border border-emerald-200":"bg-slate-100 text-slate-600 border border-slate-200"),children:log.newAvailabilityStatus || "Inactive"})}),
-              (0,P.jsx)("td",{className:"py-3 px-4 font-semibold text-slate-800",children:log.changedBy || "System"}),
-              (0,P.jsx)("td",{className:"py-3 px-4 text-slate-500 tabular-nums",children:fmtSysDate(log.changedAtFormatted || log.changedAt)}),
-              (0,P.jsx)("td",{className:"py-3 px-4 text-slate-600",children:log.reason || "—"})
-            ]})) : (0,P.jsx)("tr",{children:(0,P.jsx)("td",{colSpan:6,className:"py-8 text-center text-slate-400 text-xs",children:"No availability status changes recorded yet for this training."})})})
-          ]})})
+          ]}),
+          (0,P.jsx)("div",{className:"divide-y divide-slate-100",children:filteredHistory.length > 0 ? filteredHistory.map((log, idx)=>{
+            let prevAvail = log.previousAvailabilityStatus || "Inactive";
+            let nextAvail = log.newAvailabilityStatus || "Inactive";
+            let prevPub = log.previousPublicationStatus || "";
+            let nextPub = log.newPublicationStatus || "";
+            let isCreated = (log.reason && /initial|created|drafted/i.test(log.reason)) || (prevAvail === nextAvail && prevPub === "Draft" && nextPub === "Draft");
+            let showFrom = prevAvail !== nextAvail ? prevAvail : (prevPub || prevAvail);
+            let showTo = prevAvail !== nextAvail ? nextAvail : (nextPub || nextAvail);
+            return (0,P.jsxs)("div",{className:"px-6 py-4 flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-12 hover:bg-slate-50/50 transition-colors text-xs",children:[
+              (0,P.jsxs)("div",{className:"w-44 sm:w-48 shrink-0 leading-relaxed",children:[
+                (0,P.jsx)("div",{className:"text-slate-600 font-medium",children:log.changedBy || "System"}),
+                (0,P.jsx)("div",{className:"text-slate-500 mt-0.5 tabular-nums",children:fmtHistDT(log)})
+              ]}),
+              (0,P.jsxs)("div",{className:"flex-1 min-w-0 space-y-1 leading-relaxed",children:[
+                (0,P.jsx)("div",{style:{color:"#4f46e5"},className:"font-semibold",children:isCreated?"Training Created.":"Training Updated."}),
+                isCreated ? (0,P.jsxs)("div",{className:"flex flex-wrap items-center gap-1.5 text-slate-600",children:[
+                  (0,P.jsx)("span",{className:"font-bold text-slate-800",children:"Title:"}),
+                  (0,P.jsx)("span",{className:"text-slate-500",children:log.programmeName || e.name})
+                ]}) : (0,P.jsxs)("div",{className:"flex flex-wrap items-center gap-1.5 text-slate-600",children:[
+                  (0,P.jsx)("span",{className:"font-bold text-slate-800",children:"Status:"}),
+                  (0,P.jsx)("span",{className:"line-through text-slate-400",children:showFrom}),
+                  (0,P.jsx)("span",{className:"text-slate-400",children:"›"}),
+                  (0,P.jsx)("span",{className:"text-slate-600",children:showTo})
+                ]}),
+                log.reason && (0,P.jsxs)("div",{className:"flex flex-wrap items-center gap-1.5 text-slate-500",children:[
+                  (0,P.jsx)("span",{className:"font-bold text-slate-700",children:"Reason:"}),
+                  (0,P.jsx)("span",{className:"text-slate-500",children:log.reason})
+                ]})
+              ]})
+            ]},log.id || idx);
+          }) : (0,P.jsx)("div",{className:"px-6 py-8 text-center text-slate-400 text-xs",children:"No availability status changes recorded yet for this training."})})
         ]})
       ]})
     ]}),
