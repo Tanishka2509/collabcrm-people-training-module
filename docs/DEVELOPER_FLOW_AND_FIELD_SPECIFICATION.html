@@ -215,6 +215,10 @@
       color: var(--slate-900);
     }
     /* Print Styles */
+    @page {
+      size: A4;
+      margin: 14mm 15mm;
+    }
     @media print {
       .top-toolbar {
         display: none !important;
@@ -308,13 +312,13 @@
 <li class="numbered-li"><strong>Employees</strong> (<code>employees</code>): Complete employee directory with profile cards and Add Employee modal.</li>
 <li class="numbered-li"><strong>Training Hub</strong>:</li>
 <li class="nested-li"><strong>Dashboard</strong> (<code>training-dashboard</code>): Real-time metrics (Active Learners, Total Assignments, Completion Rate, Average Score), urgent review queue, and performance analytics.</li>
-<li class="nested-li"><strong>Training Programmes</strong> (<code>training-programmes</code>): Full course catalogue, status filters (All, Published, Draft), search, and "+ Create Programme" action.</li>
+<li class="nested-li"><strong>Training Management</strong> (<code>training-programmes</code>, breadcrumb: <code>Training Programmes</code>): Full course catalogue, status filters (All, Published, Draft), search, and <code>+ Create Programme</code> action.</li>
 <li class="nested-li"><strong>Assignments</strong> (<code>training-assignments</code>): Central assignment register with <strong><code>ASSIGNED SCOPE</code></strong> column (Employee, Department, Designation), <code>41 Total</code> assignment count, and 5-page pagination (10 items/page).</li>
-<li class="nested-li"><strong>Progress</strong> (<code>training-progress</code>): Dual-mode tracking (Department Analytics vs Employee-wise Completion view).</li>
+<li class="nested-li"><strong>Progress</strong> (<code>training-progress</code>): Dual-mode tracking (<code>1. Employee-wise Training Completion</code> vs <code>2. Departmental Compliance Audit</code>), 4 KPI cards (<code>ACTIVE LEARNERS</code>, <code>TOTAL ASSIGNMENTS</code>, <code>COMPLETED</code>, <code>AVG SCORE</code>), and CSV export.</li>
 <li class="nested-li"><strong>Certificates</strong> (<code>certificates</code>): Expandable master-detail table matching Screenshot 3 format (<code>^ / v</code> toggle chevron, plain-text earned programmes, and right-aligned Actions column directly under <code>All Records</code>).</li>
 <li class="numbered-li"><strong>Config Hub</strong>:</li>
 <li class="nested-li"><strong>Training Config</strong> (<code>config</code>): Tabbed settings for <strong>General Settings</strong> (5 module access permission toggles) and <strong>Training Categories</strong> (master category table + Add Category modal with duplicate validation).</li>
-<li class="nested-li"><strong>Roles &amp; Permissions</strong> (<code>roles</code>): System roles matrix (Administrator, Senior Recruiter, CEO, Project Manager, BDE, Admin/HR, Employee, Team Leader, Management).</li>
+<li class="nested-li"><strong>Roles &amp; Permissions</strong> (<code>roles</code>): 11-role RBAC table (<code>Sr. Business Analyst</code>, <code>Senior Recruiter</code>, <code>CEO</code>, <code>Project Manager</code>, <code>BDE</code>, <code>Admin/HR</code>, <code>Employee</code>, <code>Team leader</code>, <code>Management</code>, <code>Recruiter</code>, <code>BDM</code>), <code>+ Add Role</code> slideover modal, and interactive Role Permission Matrix.</li>
 <p><em>(Note: The legacy "Reports" drawer item has been removed.)</em></p>
 <hr />
 <h3>Flow 3: Training Management (Create / Edit Programme Flow)</h3>
@@ -329,12 +333,12 @@
 <h3>Flow 4: Assign Training Slideover Modal Flow</h3>
 <li class="">Access via <code>+ Assign Training</code> button in Header, Training Programmes, or Assignments table.</li>
 <li class="">Configurable targeting parameters:</li>
-<li class="nested-li">Select Programme dropdown.</li>
-<li class="nested-li">Multi-select Department filter with dynamic employee counter.</li>
-<li class="nested-li">Multi-select Designation filter.</li>
-<li class="nested-li">Multi-select Employee list with "Select All / Deselect All" shortcut.</li>
-<li class="nested-li">Mandatory Start Date and optional End Date.</li>
-<li class="">Action Buttons: <code>Cancel</code> and <code>Assign Training</code>.</li>
+<li class="nested-li">Bound <strong>Training Programme</strong> display field (shows selected/first programme).</li>
+<li class="nested-li">Multi-select <strong>Department</strong> filter with <code>Select All / Deselect All</code> and dynamic count.</li>
+<li class="nested-li">Multi-select <strong>Designation</strong> filter with <code>Select All / Deselect All</code>.</li>
+<li class="nested-li">Multi-select <strong>Employee (s)</strong> list with <code>Select All / Deselect All</code> shortcut and reactive count.</li>
+<li class="nested-li">Mandatory <strong>Start Date</strong> and optional <strong>End Date</strong>.</li>
+<li class="">Action Buttons: <code>Auto-Fill</code>, <code>Cancel</code>, and <code>Assign Training</code>.</li>
 <hr />
 <h3>Flow 5: Certificates Verification Flow</h3>
 <li class=""><strong>Master-Detail Expandable Table</strong>:</li>
@@ -399,7 +403,7 @@
 <li class="nested-li">Default value: <code>4</code></li>
 <li class="nested-li">Validation: Positive integer; decimals or negative values not permitted.</li>
 <hr />
-<h4>Section 2: Learning Resources Builder</h4>
+<h4>Section 2: <code>2. Learning Resources (YouTube, External Courses, Websites, Videos, PDFs, Docs) *</code></h4>
 <li class=""><strong>Resource Type:</strong></li>
 <li class="nested-li">Mandatory: Yes</li>
 <li class="nested-li">Type: Dropdown (Single Select)</li>
@@ -414,36 +418,36 @@
 <li class="nested-li">Type: Alphanumeric</li>
 <li class="nested-li">Max. Length: 150</li>
 <li class="nested-li">Min. Length: 2</li>
-<li class="nested-li">Default value: Empty (Placeholder: <code>e.g. Module 1: Architecture Video Lecture</code>)</li>
+<li class="nested-li">Default value: Empty in newly added rows (Pre-populated starter rows: <code>Module 1: Architecture Video Lecture</code>, <code>Module 2: Implementation Playbook &amp; Guidelines</code>; Placeholder: <code>Module title (e.g. Architecture Lecture)...</code>)</li>
 <li class="nested-li">Validation: Clear module identifier.</li>
 <li class=""><strong>Resource URL:</strong></li>
 <li class="nested-li">Mandatory: Yes</li>
 <li class="nested-li">Type: URL</li>
 <li class="nested-li">Max. Length: 500</li>
 <li class="nested-li">Min. Length: 8</li>
-<li class="nested-li">Default value: Empty (Placeholder: <code>https://...</code>)</li>
+<li class="nested-li">Default value: Empty in newly added rows (Placeholder: <code>URL / link (https://...)</code>)</li>
 <li class="nested-li">Validation: Must be a valid URI (<code>http://</code> or <code>https://</code>).</li>
 <hr />
-<h4>Section 3: Assessment &amp; Questions Builder</h4>
+<h4>Section 3: Assessment &amp; Questions Builder (<code>4. Assessment &amp; Questions</code>)</h4>
 <li class=""><strong>Enable Assessment Toggle:</strong></li>
 <li class="nested-li">Mandatory: Yes</li>
 <li class="nested-li">Type: Boolean Toggle (Active / Inactive)</li>
 <li class="nested-li">Default value: <code>Active</code> (<code>true</code>)</li>
 <li class=""><strong>Assessment Title:</strong></li>
-<li class="nested-li">Mandatory: Yes (when Enable Assessment is ON)</li>
+<li class="nested-li">Mandatory: Yes (<code>*</code>, when Enable Assessment is ON)</li>
 <li class="nested-li">Type: Alphanumeric</li>
 <li class="nested-li">Max. Length: 120</li>
 <li class="nested-li">Min. Length: 3</li>
 <li class="nested-li">Default value: <code>Final Training Assessment</code></li>
 <li class=""><strong>Passing Score (%):</strong></li>
-<li class="nested-li">Mandatory: Yes (when Enable Assessment is ON)</li>
+<li class="nested-li">Mandatory: Yes (<code>*</code>, when Enable Assessment is ON)</li>
 <li class="nested-li">Type: Numeric (Integer)</li>
 <li class="nested-li">Max. Value: 100</li>
 <li class="nested-li">Min. Value: 1</li>
 <li class="nested-li">Default value: <code>80</code></li>
-<li class="nested-li">Validation: Benchmark passing percentage (strictly &gt; 80% required for automatic certification).</li>
+<li class="nested-li">Validation: Benchmark passing percentage (badge: <code>Strictly &gt; 80% to pass</code>).</li>
 <li class=""><strong>Max Assessment Attempts:</strong></li>
-<li class="nested-li">Mandatory: Yes (when Enable Assessment is ON)</li>
+<li class="nested-li">Mandatory: Yes (<code>*</code>, when Enable Assessment is ON)</li>
 <li class="nested-li">Type: Numeric (Integer)</li>
 <li class="nested-li">Max. Value: 10</li>
 <li class="nested-li">Min. Value: 1</li>
@@ -459,107 +463,111 @@
 <li class="nested-li">Type: Alphanumeric / Textarea</li>
 <li class="nested-li">Max. Length: 1000</li>
 <li class="nested-li">Min. Length: 5</li>
-<li class="nested-li">Default value: Empty</li>
+<li class="nested-li">Default value: Empty (Placeholder: <code>Enter your question statement here...</code>)</li>
 <li class=""><strong>Question Type:</strong></li>
 <li class="nested-li">Mandatory: Yes (<code>*</code>)</li>
 <li class="nested-li">Type: Dropdown (Single Select)</li>
-<li class="nested-li">Default value: <code>Single Selection (Radio)</code></li>
+<li class="nested-li">Default value: <code>Single Selection (Radio)</code> (for newly added questions; default starter assessment includes 6 questions covering all 6 formats)</li>
 <li class="nested-li">Allowed Values:</li>
 <li class="numbered-li"><code>Short Text Answer</code> (<code>short_text</code>)</li>
 <li class="numbered-li"><code>Long Text Answer</code> (<code>long_text</code>)</li>
 <li class="numbered-li"><code>Single Selection (Radio)</code> (<code>single_choice</code>)</li>
 <li class="numbered-li"><code>Multiple Selection (Checkbox)</code> (<code>multiple_choice</code>)</li>
-<li class="numbered-li"><code>Dropdown Menu</code> (<code>dropdown</code>)</li>
+<li class="numbered-li"><code>Dropdown Selection</code> (<code>dropdown</code>)</li>
 <li class="numbered-li"><code>True / False</code> (<code>true_false</code>)</li>
-<li class=""><strong>Question Marks:</strong></li>
+<li class=""><strong>Marks:</strong></li>
 <li class="nested-li">Mandatory: Yes</li>
 <li class="nested-li">Type: Numeric (Integer)</li>
 <li class="nested-li">Max. Value: 50</li>
 <li class="nested-li">Min. Value: 1</li>
 <li class="nested-li">Default value: <code>2</code></li>
-<li class=""><strong>Mandatory Question Toggle:</strong></li>
+<li class="nested-li">Validation: Must be &gt; 0.</li>
+<li class=""><strong>Mandatory:</strong></li>
 <li class="nested-li">Mandatory: Yes</li>
-<li class="nested-li">Type: Boolean Toggle</li>
+<li class="nested-li">Type: Checkbox / Boolean Toggle</li>
 <li class="nested-li">Default value: <code>true</code></li>
 <li class=""><strong>Question Options / Answers:</strong></li>
 <li class="nested-li">For <code>single_choice</code>, <code>multiple_choice</code>, and <code>dropdown</code>: Minimum 2 options required, each with Option Text. Single choice and dropdown require a selected Correct Answer; multiple choice requires at least one selected Correct Answer.</li>
-<li class="nested-li">For <code>short_text</code>: Minimum 1 accepted keyword/phrase for automated grading.</li>
+<li class="nested-li">For <code>short_text</code>: Minimum 1 accepted keyword/phrase (<code>Configured Accepted Answers</code>, evaluated case-insensitively with trimmed whitespace).</li>
 <li class="nested-li">For <code>true_false</code>: Correct answer toggle (<code>True</code> or <code>False</code>).</li>
-<li class="nested-li">For <code>long_text</code>: Expected response rubric summary.</li>
+<li class="nested-li">For <code>long_text</code>: <code>Expected Answer / Evaluation Reference for Reviewer</code> textarea.</li>
+<li class="nested-li">Question Actions: <code>Duplicate</code> and <code>Delete</code> (question reorder buttons are removed).</li>
 <hr />
 <h3>2. Assign Training Form (<code>Assignments &gt; + Assign Training</code>)</h3>
 <li class=""><strong>Training Programme:</strong></li>
 <li class="nested-li">Mandatory: Yes (<code>*</code>)</li>
-<li class="nested-li">Type: Dropdown (Single Select bound to published programmes)</li>
-<li class="nested-li">Default value: First active published programme</li>
-<li class=""><strong>Department Filter:</strong></li>
+<li class="nested-li">Type: Read-only Programme Display Box (bound to selected or first programme)</li>
+<li class="nested-li">Default value: First programme (e.g. <code>CollabCRM Recruitment &amp; Client Portal Workflows</code>)</li>
+<li class=""><strong>Department:</strong></li>
 <li class="nested-li">Mandatory: No (Optional targeting filter)</li>
-<li class="nested-li">Type: Multi-select Dropdown with Select All</li>
+<li class="nested-li">Type: Multi-select Dropdown with <code>Select All</code> / <code>Deselect All</code></li>
 <li class="nested-li">Default value: <code>All Departments</code></li>
-<li class="nested-li">Allowed Values: <code>Project</code>, <code>Business analyst</code>, <code>Recruitment &amp; HR</code>, <code>CPA Firms</code>, <code>Admin</code></li>
-<li class=""><strong>Designation Filter:</strong></li>
+<li class="nested-li">Allowed Values: <code>Project</code>, <code>Business analyst</code>, <code>Recruitment &amp; HR</code>, <code>CPA Firms</code>, <code>Admin</code> (plus any dynamic departments from employee records)</li>
+<li class=""><strong>Designation:</strong></li>
 <li class="nested-li">Mandatory: No (Optional targeting filter)</li>
-<li class="nested-li">Type: Multi-select Dropdown with Select All</li>
+<li class="nested-li">Type: Multi-select Dropdown with <code>Select All</code> / <code>Deselect All</code></li>
 <li class="nested-li">Default value: <code>All Designations</code></li>
-<li class="nested-li">Allowed Values: <code>Executive</code>, <code>Sr. Executive</code>, <code>Business analyst</code>, <code>Team leader</code>, <code>Manager</code>, <code>AVP</code></li>
-<li class=""><strong>Employee(s):</strong></li>
+<li class="nested-li">Allowed Values: <code>Executive</code>, <code>Sr. Executive</code>, <code>Business analyst</code>, <code>Team leader</code>, <code>Manager</code>, <code>AVP</code> (plus any dynamic designations from employee records)</li>
+<li class=""><strong>Employee (s):</strong></li>
 <li class="nested-li">Mandatory: Yes (<code>*</code>)</li>
-<li class="nested-li">Type: Multi-select Dropdown with Select All / Deselect All</li>
-<li class="nested-li">Default value: Primary selected employee</li>
-<li class="nested-li">Validation: Must have at least 1 employee selected before assignment submission. Displays reactive count (e.g. <code>14 selected</code>).</li>
+<li class="nested-li">Type: Multi-select Dropdown with <code>Select All</code> / <code>Deselect All</code></li>
+<li class="nested-li">Default value: Primary selected employee (first employee in directory)</li>
+<li class="nested-li">Validation: Must have at least 1 employee selected before assignment submission (<code>Please select at least one employee and a training programme.</code>). Displays reactive count (e.g. <code>14 selected</code>).</li>
 <li class=""><strong>Start Date:</strong></li>
 <li class="nested-li">Mandatory: Yes (<code>*</code>)</li>
-<li class="nested-li">Type: Date (YYYY-MM-DD)</li>
-<li class="nested-li">Default value: Current system date (<code>2026-11-04</code>)</li>
-<li class="nested-li">Validation: Cannot be empty.</li>
+<li class="nested-li">Type: Date (<code>YYYY-MM-DD</code>)</li>
+<li class="nested-li">Default value: <code>2026-11-04</code></li>
+<li class="nested-li">Validation: Required (<code>required</code>).</li>
 <li class=""><strong>End Date:</strong></li>
 <li class="nested-li">Mandatory: No (Optional completion deadline)</li>
-<li class="nested-li">Type: Date (YYYY-MM-DD)</li>
-<li class="nested-li">Default value: Current date + default assignment period (<code>2026-12-01</code>)</li>
+<li class="nested-li">Type: Date (<code>YYYY-MM-DD</code>)</li>
+<li class="nested-li">Default value: <code>2026-12-01</code></li>
 <li class="nested-li">Validation: Must be on or after Start Date.</li>
+<li class=""><strong>Header / Footer Actions:</strong> <code>Auto-Fill</code>, <code>Cancel</code>, <code>Assign Training</code>.</li>
 <hr />
 <h3>3. Add Employee Form (<code>Employees &gt; + Add New Employee</code>)</h3>
 <li class=""><strong>First Name:</strong></li>
 <li class="nested-li">Mandatory: Yes (<code>*</code>)</li>
-<li class="nested-li">Type: Alphabetic</li>
+<li class="nested-li">Type: Text Input (Alphabetic)</li>
 <li class="nested-li">Max. Length: 50</li>
 <li class="nested-li">Min. Length: 2</li>
-<li class="nested-li">Default value: Empty</li>
+<li class="nested-li">Default value: Empty (Placeholder: <code>Enter first name (e.g. John)</code>)</li>
 <li class=""><strong>Last Name:</strong></li>
 <li class="nested-li">Mandatory: Yes (<code>*</code>)</li>
-<li class="nested-li">Type: Alphabetic</li>
+<li class="nested-li">Type: Text Input (Alphabetic)</li>
 <li class="nested-li">Max. Length: 50</li>
 <li class="nested-li">Min. Length: 2</li>
-<li class="nested-li">Default value: Empty</li>
+<li class="nested-li">Default value: Empty (Placeholder: <code>Enter last name (e.g. Doe)</code>)</li>
 <li class=""><strong>Company Email:</strong></li>
 <li class="nested-li">Mandatory: Yes (<code>*</code>)</li>
-<li class="nested-li">Type: Email address</li>
+<li class="nested-li">Type: Email Input</li>
 <li class="nested-li">Max. Length: 100</li>
-<li class="nested-li">Default value: Empty</li>
+<li class="nested-li">Default value: Empty (Placeholder: <code>Enter corporate email address (e.g. john.doe@collabcrm.internal)</code>)</li>
 <li class="nested-li">Validation: Must be a valid corporate email format (<code>user@domain.com</code>).</li>
 <li class=""><strong>Department:</strong></li>
-<li class="nested-li">Mandatory: Yes (<code>*</code>)</li>
+<li class="nested-li">Mandatory: No (Optional select)</li>
 <li class="nested-li">Type: Dropdown (Single Select)</li>
 <li class="nested-li">Default value: <code>Project</code></li>
-<li class="nested-li">Allowed Values: <code>Project</code>, <code>Business analyst</code>, <code>Recruitment &amp; HR</code>, <code>CPA Firms</code>, <code>Admin</code></li>
-<li class=""><strong>Designation:</strong></li>
-<li class="nested-li">Mandatory: Yes (<code>*</code>)</li>
-<li class="nested-li">Type: Dropdown (Single Select)</li>
-<li class="nested-li">Default value: <code>Executive</code></li>
-<li class="nested-li">Allowed Values: <code>Executive</code>, <code>Sr. Executive</code>, <code>Business analyst</code>, <code>Team leader</code>, <code>Manager</code>, <code>AVP</code></li>
+<li class="nested-li">Allowed Values: <code>Project</code>, <code>Business analyst</code>, <code>CPA Firms</code>, <code>Recruitment &amp; HR</code></li>
 <li class=""><strong>Status:</strong></li>
-<li class="nested-li">Mandatory: Yes (<code>*</code>)</li>
+<li class="nested-li">Mandatory: No (Optional select)</li>
 <li class="nested-li">Type: Dropdown (Single Select)</li>
 <li class="nested-li">Default value: <code>Confirmed</code></li>
-<li class="nested-li">Allowed Values: <code>Confirmed</code>, <code>Probation</code>, <code>Notice Period</code></li>
-<li class=""><strong>Reporting To:</strong></li>
-<li class="nested-li">Mandatory: Yes (<code>*</code>)</li>
-<li class="nested-li">Type: Dropdown (Single Select bound to management users)</li>
-<li class="nested-li">Default value: <code>Isha Patel</code></li>
-<li class=""><strong>Company Mobile:</strong></li>
-<li class="nested-li">Mandatory: No (Optional)</li>
-<li class="nested-li">Type: Phone number</li>
-<li class="nested-li">Default value: <code>+1 9005049999</code></li>
+<li class="nested-li">Allowed Values: <code>Confirmed</code>, <code>Intern</code>, <code>Probation</code>, <code>Notice Period</code></li>
+<li class=""><strong>Designation:</strong></li>
+<li class="nested-li">Mandatory: No</li>
+<li class="nested-li">Type: Text Input</li>
+<li class="nested-li">Default value: Empty (Placeholder: <code>Enter job title / designation (e.g. Senior Executive)</code>)</li>
+<li class=""><strong>Reporting Manager:</strong></li>
+<li class="nested-li">Mandatory: No</li>
+<li class="nested-li">Type: Text Input</li>
+<li class="nested-li">Default value: Empty (Placeholder: <code>Enter reporting manager name (e.g. Isha Patel)</code>)</li>
+<li class=""><strong>Auto-Generated / Internal Profile Defaults on Save:</strong></li>
+<li class="nested-li"><code>Company Mobile</code>: <code>+1 9005049999</code> (or <code>+1 9887654321</code> via <code>Auto-Fill</code> button)</li>
+<li class="nested-li"><code>Employee Code</code>: <code>CO-{1000-9999}</code></li>
+<li class="nested-li"><code>Joining Date</code>: <code>04-Nov-2026</code></li>
+<li class="nested-li"><code>Account Status</code>: <code>Active</code></li>
+<li class=""><strong>Header / Footer Actions:</strong> <code>Auto-Fill</code>, <code>Cancel</code>, <code>Save Employee</code>.</li>
 <hr />
 <h3>4. Global Training Configuration (<code>Config &gt; Training Config</code>)</h3>
 <h4>General Settings Tab (<code>t === 'general'</code>)</h4>
@@ -567,50 +575,69 @@
 <li class="nested-li">Mandatory: Yes</li>
 <li class="nested-li">Type: Boolean Toggle (Active / Inactive)</li>
 <li class="nested-li">Default value: <code>Active</code> (<code>true</code>)</li>
-<li class="nested-li">Description: Master switch to enable or disable the entire Training module access across the portal.</li>
+<li class="nested-li">Description: Master switch to enable or disable the entire Training module access for employees across the portal.</li>
 <li class=""><strong>Allow Training Creation:</strong></li>
 <li class="nested-li">Mandatory: Yes</li>
 <li class="nested-li">Type: Boolean Toggle</li>
 <li class="nested-li">Default value: <code>Active</code> (<code>true</code>)</li>
-<li class="nested-li">Description: Permit authorized roles to author and create new training programmes.</li>
+<li class="nested-li">Description: Permit authorized roles to author and create new training programs.</li>
 <li class=""><strong>Allow Training Editing:</strong></li>
 <li class="nested-li">Mandatory: Yes</li>
 <li class="nested-li">Type: Boolean Toggle</li>
 <li class="nested-li">Default value: <code>Active</code> (<code>true</code>)</li>
-<li class="nested-li">Description: Allow modification of existing published and draft training programmes.</li>
+<li class="nested-li">Description: Allow modification of existing published and draft training programs.</li>
 <li class=""><strong>Allow Training Archiving:</strong></li>
 <li class="nested-li">Mandatory: Yes</li>
 <li class="nested-li">Type: Boolean Toggle</li>
 <li class="nested-li">Default value: <code>Inactive</code> (<code>false</code>)</li>
-<li class="nested-li">Description: Allow archiving and retiring deprecated curriculum records.</li>
-<li class=""><strong>Enable Preview Mode:</strong></li>
+<li class="nested-li">Description: Enable archiving of obsolete or retired training courses.</li>
+<li class=""><strong>Enable Training Preview:</strong></li>
 <li class="nested-li">Mandatory: Yes</li>
 <li class="nested-li">Type: Boolean Toggle</li>
 <li class="nested-li">Default value: <code>Active</code> (<code>true</code>)</li>
-<li class="nested-li">Description: Permit author preview before publishing changes.</li>
+<li class="nested-li">Description: Allow creators and reviewers to preview interactive course modules.</li>
 <h4>Training Categories Tab (<code>t === 'categories'</code>)</h4>
-<li class=""><strong>Category Name:</strong></li>
+<li class=""><strong>Categories Table Columns:</strong> <code>Category Name</code>, <code>Description</code>, <code>Status</code>, <code>Created By &amp; Date</code>, <code>Modified By</code>, <code>Actions</code> (Edit icon + Active/Inactive toggle).</li>
+<li class=""><strong>Pre-configured Categories (9 Default Entries):</strong> <code>Engineering &amp; Architecture</code>, <code>Sales &amp; Business Development</code>, <code>Recruitment &amp; HR Operations</code>, <code>Security, Privacy &amp; Compliance</code>, <code>Leadership &amp; Management</code>, <code>Product Design &amp; UX</code>, <code>Customer Success &amp; Support</code>, <code>DevOps &amp; Cloud Operations</code>, <code>Artificial Intelligence &amp; ML</code>.</li>
+<li class=""><strong>Add Training Category Modal (<code>+ Add Category</code>):</strong></li>
+<li class="nested-li"><strong>Category Name:</strong></li>
 <li class="nested-li">Mandatory: Yes (<code>*</code>)</li>
-<li class="nested-li">Type: Alphanumeric</li>
-<li class="nested-li">Max. Length: 80</li>
-<li class="nested-li">Min. Length: 3</li>
-<li class="nested-li">Validation: Case-insensitive unique check against all existing categories. Repeating category names are rejected with an alert.</li>
-<li class=""><strong>Description:</strong></li>
+<li class="nested-li">Type: Text Input (Alphanumeric)</li>
+<li class="nested-li">Placeholder: <code>Enter category name (e.g. Data Science)...</code></li>
+<li class="nested-li">Validation: Case-insensitive, punctuation-normalized unique check against all existing categories. Repeating category names are rejected with an alert.</li>
+<li class="nested-li"><strong>Description:</strong></li>
 <li class="nested-li">Mandatory: No (Optional)</li>
 <li class="nested-li">Type: Textarea</li>
-<li class="nested-li">Max. Length: 300</li>
-<li class="nested-li">Default value: <code>New training category description.</code></li>
-<li class=""><strong>Status:</strong></li>
+<li class="nested-li">Placeholder: <code>Enter category description...</code></li>
+<li class="nested-li">Default value on save if blank: <code>New training category description.</code></li>
+<li class="nested-li"><strong>Status:</strong></li>
 <li class="nested-li">Mandatory: Yes</li>
 <li class="nested-li">Type: Boolean Toggle</li>
 <li class="nested-li">Default value: <code>Active</code> (<code>true</code>)</li>
+<li class="nested-li"><strong>Quick Action:</strong> <code>Auto-Fill</code> button populates <code>Data Science &amp; Advanced Analytics</code>.</li>
 <hr />
 <h3>5. Role-Based Access Control (<code>Config &gt; Roles</code>)</h3>
-<li class="">Standardized System Roles Matrix:</li>
-<li class="numbered-li"><strong>Administrator</strong>: Full access across all modules, configuration, and employee management.</li>
-<li class="numbered-li"><strong>Manager / Reviewer</strong>: Access to team assignments, progress tracking, and evaluation review queue.</li>
-<li class="numbered-li"><strong>Standard Employee</strong>: Personal learning portal, assigned coursework, and earned certificates.</li>
-<li class="numbered-li">Specialized Roles: Sr. Business Analyst, Senior Recruiter, CEO, Project Manager, BDE, Team Leader, Management.</li>
+<li class=""><strong>Roles Table Columns:</strong> <code>No.</code>, <code>Role</code>, <code>Status</code>, <code>Employees</code>, <code>Remarks</code>, <code>Created By &amp; Date</code>, <code>Modified By</code>, <code>Actions</code> (View, Edit, Delete).</li>
+<li class=""><strong>Standardized System Roles (11 Configured Roles):</strong></li>
+<li class="numbered-li"><code>Sr. Business Analyst</code> (8 employees)</li>
+<li class="numbered-li"><code>Senior Recruiter</code> (5 employees)</li>
+<li class="numbered-li"><code>CEO</code> (3 employees)</li>
+<li class="numbered-li"><code>Project Manager</code> (25 employees)</li>
+<li class="numbered-li"><code>BDE</code> (1 employee)</li>
+<li class="numbered-li"><code>Admin/HR</code> (50 employees)</li>
+<li class="numbered-li"><code>Employee</code> (51 employees)</li>
+<li class="numbered-li"><code>Team leader</code> (20 employees)</li>
+<li class="numbered-li"><code>Management</code> (7 employees)</li>
+<li class="numbered-li"><code>Recruiter</code> (1 employee)</li>
+<li class="numbered-li"><code>BDM</code> (0 employees)</li>
+<li class=""><strong>Add Role Slideover Modal (<code>+ Add Role</code>):</strong></li>
+<li class="nested-li"><strong>Title:</strong> Mandatory (<code>*</code>), Text Input, placeholder <code>Enter role title (e.g. Senior Security Architect)</code>.</li>
+<li class="nested-li"><strong>Clone Role:</strong> Optional Dropdown (<code>Select Existing Role to Clone...</code> + existing roles).</li>
+<li class="nested-li"><strong>Remarks:</strong> Optional Textarea, max length <code>255</code> (<code>0/255</code>), placeholder <code>Enter remarks or role description...</code>.</li>
+<li class="nested-li"><strong>Status:</strong> Boolean Toggle, default <code>Active</code> (<code>true</code>).</li>
+<li class=""><strong>Role Permission Matrix (<code>{Role} • Permission Matrix</code>):</strong></li>
+<li class="nested-li">Columns: <code>Module</code>, <code>Status</code>, <code>View Default</code>, <code>Global</code>, <code>Add</code>, <code>Edit</code>, <code>Delete</code>.</li>
+<li class="nested-li">Highlighted <strong>Training Module</strong> permissions: <code>Training Module</code> (parent), <code>↳ Training Programs Library</code>, <code>↳ Training Assignments</code>, <code>↳ Employee Progress Tracking</code>, <code>↳ Training Reviews &amp; Evaluations</code>, <code>↳ Certificate Generation &amp; Issuance</code>, <code>Training Analytics &amp; Reports</code>.</li>
 <hr />
 <h3>6. Certificate Verification &amp; Credential Specifications</h3>
 <li class=""><strong>Certificate ID:</strong></li>

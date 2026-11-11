@@ -49,13 +49,13 @@ The left collapsible sidebar provides access to:
 1. **Employees** (`employees`): Complete employee directory with profile cards and Add Employee modal.
 2. **Training Hub**:
    - **Dashboard** (`training-dashboard`): Real-time metrics (Active Learners, Total Assignments, Completion Rate, Average Score), urgent review queue, and performance analytics.
-   - **Training Programmes** (`training-programmes`): Full course catalogue, status filters (All, Published, Draft), search, and "+ Create Programme" action.
+   - **Training Management** (`training-programmes`, breadcrumb: `Training Programmes`): Full course catalogue, status filters (All, Published, Draft), search, and `+ Create Programme` action.
    - **Assignments** (`training-assignments`): Central assignment register with **`ASSIGNED SCOPE`** column (Employee, Department, Designation), `41 Total` assignment count, and 5-page pagination (10 items/page).
-   - **Progress** (`training-progress`): Dual-mode tracking (Department Analytics vs Employee-wise Completion view).
+   - **Progress** (`training-progress`): Dual-mode tracking (`1. Employee-wise Training Completion` vs `2. Departmental Compliance Audit`), 4 KPI cards (`ACTIVE LEARNERS`, `TOTAL ASSIGNMENTS`, `COMPLETED`, `AVG SCORE`), and CSV export.
    - **Certificates** (`certificates`): Expandable master-detail table matching Screenshot 3 format (`^ / v` toggle chevron, plain-text earned programmes, and right-aligned Actions column directly under `All Records`).
 3. **Config Hub**:
    - **Training Config** (`config`): Tabbed settings for **General Settings** (5 module access permission toggles) and **Training Categories** (master category table + Add Category modal with duplicate validation).
-   - **Roles & Permissions** (`roles`): System roles matrix (Administrator, Senior Recruiter, CEO, Project Manager, BDE, Admin/HR, Employee, Team Leader, Management).
+   - **Roles & Permissions** (`roles`): 11-role RBAC table (`Sr. Business Analyst`, `Senior Recruiter`, `CEO`, `Project Manager`, `BDE`, `Admin/HR`, `Employee`, `Team leader`, `Management`, `Recruiter`, `BDM`), `+ Add Role` slideover modal, and interactive Role Permission Matrix.
 *(Note: The legacy "Reports" drawer item has been removed.)*
 
 ---
@@ -74,12 +74,12 @@ The left collapsible sidebar provides access to:
 ### Flow 4: Assign Training Slideover Modal Flow
 - Access via `+ Assign Training` button in Header, Training Programmes, or Assignments table.
 - Configurable targeting parameters:
-  - Select Programme dropdown.
-  - Multi-select Department filter with dynamic employee counter.
-  - Multi-select Designation filter.
-  - Multi-select Employee list with "Select All / Deselect All" shortcut.
-  - Mandatory Start Date and optional End Date.
-- Action Buttons: `Cancel` and `Assign Training`.
+  - Bound **Training Programme** display field (shows selected/first programme).
+  - Multi-select **Department** filter with `Select All / Deselect All` and dynamic count.
+  - Multi-select **Designation** filter with `Select All / Deselect All`.
+  - Multi-select **Employee (s)** list with `Select All / Deselect All` shortcut and reactive count.
+  - Mandatory **Start Date** and optional **End Date**.
+- Action Buttons: `Auto-Fill`, `Cancel`, and `Assign Training`.
 
 ---
 
@@ -157,7 +157,7 @@ The left collapsible sidebar provides access to:
 
 ---
 
-#### Section 2: Learning Resources Builder
+#### Section 2: `2. Learning Resources (YouTube, External Courses, Websites, Videos, PDFs, Docs) *`
 - **Resource Type:**
   - Mandatory: Yes
   - Type: Dropdown (Single Select)
@@ -173,7 +173,7 @@ The left collapsible sidebar provides access to:
   - Type: Alphanumeric
   - Max. Length: 150
   - Min. Length: 2
-  - Default value: Empty (Placeholder: `e.g. Module 1: Architecture Video Lecture`)
+  - Default value: Empty in newly added rows (Pre-populated starter rows: `Module 1: Architecture Video Lecture`, `Module 2: Implementation Playbook & Guidelines`; Placeholder: `Module title (e.g. Architecture Lecture)...`)
   - Validation: Clear module identifier.
 
 - **Resource URL:**
@@ -181,34 +181,34 @@ The left collapsible sidebar provides access to:
   - Type: URL
   - Max. Length: 500
   - Min. Length: 8
-  - Default value: Empty (Placeholder: `https://...`)
+  - Default value: Empty in newly added rows (Placeholder: `URL / link (https://...)`)
   - Validation: Must be a valid URI (`http://` or `https://`).
 
 ---
 
-#### Section 3: Assessment & Questions Builder
+#### Section 3: Assessment & Questions Builder (`4. Assessment & Questions`)
 - **Enable Assessment Toggle:**
   - Mandatory: Yes
   - Type: Boolean Toggle (Active / Inactive)
   - Default value: `Active` (`true`)
 
 - **Assessment Title:**
-  - Mandatory: Yes (when Enable Assessment is ON)
+  - Mandatory: Yes (`*`, when Enable Assessment is ON)
   - Type: Alphanumeric
   - Max. Length: 120
   - Min. Length: 3
   - Default value: `Final Training Assessment`
 
 - **Passing Score (%):**
-  - Mandatory: Yes (when Enable Assessment is ON)
+  - Mandatory: Yes (`*`, when Enable Assessment is ON)
   - Type: Numeric (Integer)
   - Max. Value: 100
   - Min. Value: 1
   - Default value: `80`
-  - Validation: Benchmark passing percentage (strictly > 80% required for automatic certification).
+  - Validation: Benchmark passing percentage (badge: `Strictly > 80% to pass`).
 
 - **Max Assessment Attempts:**
-  - Mandatory: Yes (when Enable Assessment is ON)
+  - Mandatory: Yes (`*`, when Enable Assessment is ON)
   - Type: Numeric (Integer)
   - Max. Value: 10
   - Min. Value: 1
@@ -226,37 +226,39 @@ The left collapsible sidebar provides access to:
   - Type: Alphanumeric / Textarea
   - Max. Length: 1000
   - Min. Length: 5
-  - Default value: Empty
+  - Default value: Empty (Placeholder: `Enter your question statement here...`)
 
 - **Question Type:**
   - Mandatory: Yes (`*`)
   - Type: Dropdown (Single Select)
-  - Default value: `Single Selection (Radio)`
+  - Default value: `Single Selection (Radio)` (for newly added questions; default starter assessment includes 6 questions covering all 6 formats)
   - Allowed Values:
     1. `Short Text Answer` (`short_text`)
     2. `Long Text Answer` (`long_text`)
     3. `Single Selection (Radio)` (`single_choice`)
     4. `Multiple Selection (Checkbox)` (`multiple_choice`)
-    5. `Dropdown Menu` (`dropdown`)
+    5. `Dropdown Selection` (`dropdown`)
     6. `True / False` (`true_false`)
 
-- **Question Marks:**
+- **Marks:**
   - Mandatory: Yes
   - Type: Numeric (Integer)
   - Max. Value: 50
   - Min. Value: 1
   - Default value: `2`
+  - Validation: Must be > 0.
 
-- **Mandatory Question Toggle:**
+- **Mandatory:**
   - Mandatory: Yes
-  - Type: Boolean Toggle
+  - Type: Checkbox / Boolean Toggle
   - Default value: `true`
 
 - **Question Options / Answers:**
   - For `single_choice`, `multiple_choice`, and `dropdown`: Minimum 2 options required, each with Option Text. Single choice and dropdown require a selected Correct Answer; multiple choice requires at least one selected Correct Answer.
-  - For `short_text`: Minimum 1 accepted keyword/phrase for automated grading.
+  - For `short_text`: Minimum 1 accepted keyword/phrase (`Configured Accepted Answers`, evaluated case-insensitively with trimmed whitespace).
   - For `true_false`: Correct answer toggle (`True` or `False`).
-  - For `long_text`: Expected response rubric summary.
+  - For `long_text`: `Expected Answer / Evaluation Reference for Reviewer` textarea.
+  - Question Actions: `Duplicate` and `Delete` (question reorder buttons are removed).
 
 ---
 
@@ -264,38 +266,40 @@ The left collapsible sidebar provides access to:
 
 - **Training Programme:**
   - Mandatory: Yes (`*`)
-  - Type: Dropdown (Single Select bound to published programmes)
-  - Default value: First active published programme
+  - Type: Read-only Programme Display Box (bound to selected or first programme)
+  - Default value: First programme (e.g. `CollabCRM Recruitment & Client Portal Workflows`)
 
-- **Department Filter:**
+- **Department:**
   - Mandatory: No (Optional targeting filter)
-  - Type: Multi-select Dropdown with Select All
+  - Type: Multi-select Dropdown with `Select All` / `Deselect All`
   - Default value: `All Departments`
-  - Allowed Values: `Project`, `Business analyst`, `Recruitment & HR`, `CPA Firms`, `Admin`
+  - Allowed Values: `Project`, `Business analyst`, `Recruitment & HR`, `CPA Firms`, `Admin` (plus any dynamic departments from employee records)
 
-- **Designation Filter:**
+- **Designation:**
   - Mandatory: No (Optional targeting filter)
-  - Type: Multi-select Dropdown with Select All
+  - Type: Multi-select Dropdown with `Select All` / `Deselect All`
   - Default value: `All Designations`
-  - Allowed Values: `Executive`, `Sr. Executive`, `Business analyst`, `Team leader`, `Manager`, `AVP`
+  - Allowed Values: `Executive`, `Sr. Executive`, `Business analyst`, `Team leader`, `Manager`, `AVP` (plus any dynamic designations from employee records)
 
-- **Employee(s):**
+- **Employee (s):**
   - Mandatory: Yes (`*`)
-  - Type: Multi-select Dropdown with Select All / Deselect All
-  - Default value: Primary selected employee
-  - Validation: Must have at least 1 employee selected before assignment submission. Displays reactive count (e.g. `14 selected`).
+  - Type: Multi-select Dropdown with `Select All` / `Deselect All`
+  - Default value: Primary selected employee (first employee in directory)
+  - Validation: Must have at least 1 employee selected before assignment submission (`Please select at least one employee and a training programme.`). Displays reactive count (e.g. `14 selected`).
 
 - **Start Date:**
   - Mandatory: Yes (`*`)
-  - Type: Date (YYYY-MM-DD)
-  - Default value: Current system date (`2026-11-04`)
-  - Validation: Cannot be empty.
+  - Type: Date (`YYYY-MM-DD`)
+  - Default value: `2026-11-04`
+  - Validation: Required (`required`).
 
 - **End Date:**
   - Mandatory: No (Optional completion deadline)
-  - Type: Date (YYYY-MM-DD)
-  - Default value: Current date + default assignment period (`2026-12-01`)
+  - Type: Date (`YYYY-MM-DD`)
+  - Default value: `2026-12-01`
   - Validation: Must be on or after Start Date.
+
+- **Header / Footer Actions:** `Auto-Fill`, `Cancel`, `Assign Training`.
 
 ---
 
@@ -303,52 +307,53 @@ The left collapsible sidebar provides access to:
 
 - **First Name:**
   - Mandatory: Yes (`*`)
-  - Type: Alphabetic
+  - Type: Text Input (Alphabetic)
   - Max. Length: 50
   - Min. Length: 2
-  - Default value: Empty
+  - Default value: Empty (Placeholder: `Enter first name (e.g. John)`)
 
 - **Last Name:**
   - Mandatory: Yes (`*`)
-  - Type: Alphabetic
+  - Type: Text Input (Alphabetic)
   - Max. Length: 50
   - Min. Length: 2
-  - Default value: Empty
+  - Default value: Empty (Placeholder: `Enter last name (e.g. Doe)`)
 
 - **Company Email:**
   - Mandatory: Yes (`*`)
-  - Type: Email address
+  - Type: Email Input
   - Max. Length: 100
-  - Default value: Empty
+  - Default value: Empty (Placeholder: `Enter corporate email address (e.g. john.doe@collabcrm.internal)`)
   - Validation: Must be a valid corporate email format (`user@domain.com`).
 
 - **Department:**
-  - Mandatory: Yes (`*`)
+  - Mandatory: No (Optional select)
   - Type: Dropdown (Single Select)
   - Default value: `Project`
-  - Allowed Values: `Project`, `Business analyst`, `Recruitment & HR`, `CPA Firms`, `Admin`
-
-- **Designation:**
-  - Mandatory: Yes (`*`)
-  - Type: Dropdown (Single Select)
-  - Default value: `Executive`
-  - Allowed Values: `Executive`, `Sr. Executive`, `Business analyst`, `Team leader`, `Manager`, `AVP`
+  - Allowed Values: `Project`, `Business analyst`, `CPA Firms`, `Recruitment & HR`
 
 - **Status:**
-  - Mandatory: Yes (`*`)
+  - Mandatory: No (Optional select)
   - Type: Dropdown (Single Select)
   - Default value: `Confirmed`
-  - Allowed Values: `Confirmed`, `Probation`, `Notice Period`
+  - Allowed Values: `Confirmed`, `Intern`, `Probation`, `Notice Period`
 
-- **Reporting To:**
-  - Mandatory: Yes (`*`)
-  - Type: Dropdown (Single Select bound to management users)
-  - Default value: `Isha Patel`
+- **Designation:**
+  - Mandatory: No
+  - Type: Text Input
+  - Default value: Empty (Placeholder: `Enter job title / designation (e.g. Senior Executive)`)
 
-- **Company Mobile:**
-  - Mandatory: No (Optional)
-  - Type: Phone number
-  - Default value: `+1 9005049999`
+- **Reporting Manager:**
+  - Mandatory: No
+  - Type: Text Input
+  - Default value: Empty (Placeholder: `Enter reporting manager name (e.g. Isha Patel)`)
+
+- **Auto-Generated / Internal Profile Defaults on Save:**
+  - `Company Mobile`: `+1 9005049999` (or `+1 9887654321` via `Auto-Fill` button)
+  - `Employee Code`: `CO-{1000-9999}`
+  - `Joining Date`: `04-Nov-2026`
+  - `Account Status`: `Active`
+- **Header / Footer Actions:** `Auto-Fill`, `Cancel`, `Save Employee`.
 
 ---
 
@@ -359,57 +364,76 @@ The left collapsible sidebar provides access to:
   - Mandatory: Yes
   - Type: Boolean Toggle (Active / Inactive)
   - Default value: `Active` (`true`)
-  - Description: Master switch to enable or disable the entire Training module access across the portal.
+  - Description: Master switch to enable or disable the entire Training module access for employees across the portal.
 
 - **Allow Training Creation:**
   - Mandatory: Yes
   - Type: Boolean Toggle
   - Default value: `Active` (`true`)
-  - Description: Permit authorized roles to author and create new training programmes.
+  - Description: Permit authorized roles to author and create new training programs.
 
 - **Allow Training Editing:**
   - Mandatory: Yes
   - Type: Boolean Toggle
   - Default value: `Active` (`true`)
-  - Description: Allow modification of existing published and draft training programmes.
+  - Description: Allow modification of existing published and draft training programs.
 
 - **Allow Training Archiving:**
   - Mandatory: Yes
   - Type: Boolean Toggle
   - Default value: `Inactive` (`false`)
-  - Description: Allow archiving and retiring deprecated curriculum records.
+  - Description: Enable archiving of obsolete or retired training courses.
 
-- **Enable Preview Mode:**
+- **Enable Training Preview:**
   - Mandatory: Yes
   - Type: Boolean Toggle
   - Default value: `Active` (`true`)
-  - Description: Permit author preview before publishing changes.
+  - Description: Allow creators and reviewers to preview interactive course modules.
 
 #### Training Categories Tab (`t === 'categories'`)
-- **Category Name:**
-  - Mandatory: Yes (`*`)
-  - Type: Alphanumeric
-  - Max. Length: 80
-  - Min. Length: 3
-  - Validation: Case-insensitive unique check against all existing categories. Repeating category names are rejected with an alert.
-- **Description:**
-  - Mandatory: No (Optional)
-  - Type: Textarea
-  - Max. Length: 300
-  - Default value: `New training category description.`
-- **Status:**
-  - Mandatory: Yes
-  - Type: Boolean Toggle
-  - Default value: `Active` (`true`)
+- **Categories Table Columns:** `Category Name`, `Description`, `Status`, `Created By & Date`, `Modified By`, `Actions` (Edit icon + Active/Inactive toggle).
+- **Pre-configured Categories (9 Default Entries):** `Engineering & Architecture`, `Sales & Business Development`, `Recruitment & HR Operations`, `Security, Privacy & Compliance`, `Leadership & Management`, `Product Design & UX`, `Customer Success & Support`, `DevOps & Cloud Operations`, `Artificial Intelligence & ML`.
+- **Add Training Category Modal (`+ Add Category`):**
+  - **Category Name:**
+    - Mandatory: Yes (`*`)
+    - Type: Text Input (Alphanumeric)
+    - Placeholder: `Enter category name (e.g. Data Science)...`
+    - Validation: Case-insensitive, punctuation-normalized unique check against all existing categories. Repeating category names are rejected with an alert.
+  - **Description:**
+    - Mandatory: No (Optional)
+    - Type: Textarea
+    - Placeholder: `Enter category description...`
+    - Default value on save if blank: `New training category description.`
+  - **Status:**
+    - Mandatory: Yes
+    - Type: Boolean Toggle
+    - Default value: `Active` (`true`)
+  - **Quick Action:** `Auto-Fill` button populates `Data Science & Advanced Analytics`.
 
 ---
 
 ### 5. Role-Based Access Control (`Config > Roles`)
-- Standardized System Roles Matrix:
-  1. **Administrator**: Full access across all modules, configuration, and employee management.
-  2. **Manager / Reviewer**: Access to team assignments, progress tracking, and evaluation review queue.
-  3. **Standard Employee**: Personal learning portal, assigned coursework, and earned certificates.
-  4. Specialized Roles: Sr. Business Analyst, Senior Recruiter, CEO, Project Manager, BDE, Team Leader, Management.
+- **Roles Table Columns:** `No.`, `Role`, `Status`, `Employees`, `Remarks`, `Created By & Date`, `Modified By`, `Actions` (View, Edit, Delete).
+- **Standardized System Roles (11 Configured Roles):**
+  1. `Sr. Business Analyst` (8 employees)
+  2. `Senior Recruiter` (5 employees)
+  3. `CEO` (3 employees)
+  4. `Project Manager` (25 employees)
+  5. `BDE` (1 employee)
+  6. `Admin/HR` (50 employees)
+  7. `Employee` (51 employees)
+  8. `Team leader` (20 employees)
+  9. `Management` (7 employees)
+  10. `Recruiter` (1 employee)
+  11. `BDM` (0 employees)
+- **Add Role Slideover Modal (`+ Add Role`):**
+  - **Title:** Mandatory (`*`), Text Input, placeholder `Enter role title (e.g. Senior Security Architect)`.
+  - **Clone Role:** Optional Dropdown (`Select Existing Role to Clone...` + existing roles).
+  - **Remarks:** Optional Textarea, max length `255` (`0/255`), placeholder `Enter remarks or role description...`.
+  - **Status:** Boolean Toggle, default `Active` (`true`).
+- **Role Permission Matrix (`{Role} • Permission Matrix`):**
+  - Columns: `Module`, `Status`, `View Default`, `Global`, `Add`, `Edit`, `Delete`.
+  - Highlighted **Training Module** permissions: `Training Module` (parent), `↳ Training Programs Library`, `↳ Training Assignments`, `↳ Employee Progress Tracking`, `↳ Training Reviews & Evaluations`, `↳ Certificate Generation & Issuance`, `Training Analytics & Reports`.
 
 ---
 

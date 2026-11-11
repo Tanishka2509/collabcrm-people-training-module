@@ -348,6 +348,10 @@ def build_full_html(body_html):
       color: var(--slate-900);
     }}
     /* Print Styles */
+    @page {{
+      size: A4;
+      margin: 14mm 15mm;
+    }}
     @media print {{
       .top-toolbar {{
         display: none !important;
@@ -439,6 +443,7 @@ def main():
         "--headless",
         "--disable-gpu",
         "--no-sandbox",
+        "--no-pdf-header-footer",
         f"--print-to-pdf={pdf_target_root}",
         html_target_root
     ], check=True)
