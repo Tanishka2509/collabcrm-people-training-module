@@ -1434,8 +1434,8 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
       (0,P.jsx)("div",{className:"flex justify-end pt-2 border-t border-slate-100",children:(0,P.jsx)("button",{onClick:()=>setShowPreviewModal(false),className:"bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-lg text-xs font-semibold shadow-sm",children:"Close Preview"})})
     ]})})
   ]});
-}function it({assignments:e,employees:empList,onOpenAssignTraining:t,onEvaluate:n,onSelectAssignment:r}){
-  let rawList = [{"id": "132", "name": "Tanya Kapoor", "role": "Business Analyst", "dept": "Collab", "training": "API Security & OAuth2 Best Practices", "level": "Intermediate \u2022 4 hrs", "assigned": "01-Jan-2026", "due": "20-Jan-2026", "progress": 100, "status": "Completed", "scope": "Department: Collab"}, {"id": "133", "name": "Rihan R.", "role": "Software Engineer", "dept": "Web", "training": "CollabCRM Recruitment & Client Portal Workflows", "level": "Intermediate \u2022 18 hrs", "assigned": "01-Oct-2026", "due": "15-Nov-2026", "progress": 75, "status": "In Progress", "scope": "Department: Web"}, {"id": "134", "name": "Priya Nair", "role": "Frontend Developer", "dept": "Web", "training": "Cloud Infrastructure & High-Performance Node Services", "level": "Advanced \u2022 16 hrs", "assigned": "10-Oct-2026", "due": "20-Nov-2026", "progress": 40, "status": "In Progress", "scope": "Designation: Frontend Developer"}, {"id": "135", "name": "Suresh Prasad", "role": "Senior Talent Partner", "dept": "Business Analysis", "training": "CollabCRM Recruitment & Client Portal Workflows", "level": "Intermediate \u2022 18 hrs", "assigned": "05-Oct-2026", "due": "25-Oct-2026", "progress": 0, "status": "Not Started", "scope": "Department: Business Analysis"}, {"id": "136", "name": "Ashish Kumar", "role": "Technical Lead & Reporting Manager", "dept": "Web", "training": "Cloud Infrastructure & High-Performance Node Services", "level": "Advanced \u2022 16 hrs", "assigned": "15-Sep-2026", "due": "20-Oct-2026", "progress": 100, "status": "Completed", "scope": "Designation: Technical Lead"}, {"id": "137", "name": "Vikram Malhotra", "role": "Enterprise Account Executive", "dept": "Collab", "training": "Enterprise CRM Communication & Client Delight", "level": "Intermediate \u2022 12 hrs", "assigned": "01-Oct-2026", "due": "30-Nov-2026", "progress": 0, "status": "Not Started", "scope": "Department: Collab"}, {"id": "138", "name": "Ishdeep Anand", "role": "Admin", "dept": "Business Analysis", "training": "Enterprise Security & Data Protection Compliance", "level": "Advanced \u2022 20 hrs", "assigned": "01-Sep-2026", "due": "15-Oct-2026", "progress": 100, "status": "Completed", "scope": "Employee: Ishdeep Anand"}, {"id": "139", "name": "Sanjana Ghosh", "role": "Executive", "dept": "Collab", "training": "Agile Project Delivery & Sprint Planning", "level": "Intermediate \u2022 8 hrs", "assigned": "01-Oct-2026", "due": "10-Nov-2026", "progress": 65, "status": "In Progress", "scope": "Department: Collab"}, {"id": "140", "name": "Megha Salunkhe", "role": "Sr. Executive", "dept": "Collab", "training": "Client Stakeholder Relationship Management", "level": "Intermediate \u2022 6 hrs", "assigned": "20-Sep-2026", "due": "30-Oct-2026", "progress": 90, "status": "In Progress", "scope": "Department: Collab"}, {"id": "141", "name": "Kunal Barve", "role": "Team leader", "dept": "Collab", "training": "Incident Response & SLA Management", "level": "Advanced \u2022 10 hrs", "assigned": "15-Oct-2026", "due": "25-Nov-2026", "progress": 50, "status": "In Progress", "scope": "Designation: Team Leader"}, {"id": "142", "name": "Ananya Sridhar", "role": "Manager", "dept": "Collab", "training": "Executive Leadership & Strategic Governance", "level": "Advanced \u2022 14 hrs", "assigned": "10-Sep-2026", "due": "20-Oct-2026", "progress": 100, "status": "Completed", "scope": "Designation: Manager"}, {"id": "143", "name": "Vikram Anand", "role": "AVP", "dept": "Collab", "training": "Enterprise Resource Scaling & Budgeting", "level": "Advanced \u2022 12 hrs", "assigned": "15-Aug-2026", "due": "30-Sep-2026", "progress": 100, "status": "Completed", "scope": "Employee: Vikram Anand"}, {"id": "144", "name": "Rahul Khanna", "role": "Executive", "dept": "Game", "training": "Automated End-to-End Regression Testing", "level": "Intermediate \u2022 15 hrs", "assigned": "01-Oct-2026", "due": "15-Nov-2026", "progress": 80, "status": "In Progress", "scope": "Department: Game"}, {"id": "145", "name": "Deepa Ramaswamy", "role": "Executive", "dept": "Web", "training": "Kubernetes Multi-Cluster Orchestration", "level": "Advanced \u2022 18 hrs", "assigned": "10-Oct-2026", "due": "20-Nov-2026", "progress": 30, "status": "In Progress", "scope": "Department: Web"}, {"id": "146", "name": "Trevor Lindqvist", "role": "Sr. Executive", "dept": "Data analytics", "training": "Zero Trust Architecture & Threat Mitigation", "level": "Advanced \u2022 22 hrs", "assigned": "25-Sep-2026", "due": "05-Nov-2026", "progress": 100, "status": "Completed", "scope": "Department: Data analytics"}, {"id": "147", "name": "Devin Patel", "role": "Backend Architect", "dept": "Web", "training": "High-Throughput Microservices in Go", "level": "Advanced \u2022 16 hrs", "assigned": "05-Oct-2026", "due": "25-Nov-2026", "progress": 45, "status": "In Progress", "scope": "Designation: Backend Architect"}, {"id": "148", "name": "Sneha Verma", "role": "Talent Acquisition Specialist", "dept": "Business Analysis", "training": "Interview Compliance & Bias Mitigation", "level": "Intermediate \u2022 6 hrs", "assigned": "12-Oct-2026", "due": "18-Nov-2026", "progress": 20, "status": "In Progress", "scope": "Department: Business Analysis"}, {"id": "149", "name": "Aarav Shah", "role": "Business Development Representative", "dept": "Collab", "training": "Cold Outreach & Objection Mastery", "level": "Beginner \u2022 8 hrs", "assigned": "08-Oct-2026", "due": "12-Nov-2026", "progress": 95, "status": "In Progress", "scope": "Department: Collab"}, {"id": "150", "name": "Maya Krishnan", "role": "Systems Administrator", "dept": "Business Analysis", "training": "Linux Kernel Hardening & Audit Logging", "level": "Advanced \u2022 14 hrs", "assigned": "18-Sep-2026", "due": "28-Oct-2026", "progress": 100, "status": "Completed", "scope": "Department: Business Analysis"}, {"id": "151", "name": "Rohan Desai", "role": "QA Automation Engineer", "dept": "Game", "training": "Performance & Load Testing with k6", "level": "Intermediate \u2022 10 hrs", "assigned": "14-Oct-2026", "due": "22-Nov-2026", "progress": 60, "status": "In Progress", "scope": "Designation: QA Automation Engineer"}, {"id": "152", "name": "Zara Haddad", "role": "Executive", "dept": "Collab", "training": "Risk Management & Change Control Procedures", "level": "Intermediate \u2022 7 hrs", "assigned": "02-Oct-2026", "due": "14-Nov-2026", "progress": 85, "status": "In Progress", "scope": "Department: Collab"}, {"id": "153", "name": "Caleb Nguyen", "role": "Business Analyst", "dept": "Collab", "training": "Business Requirements Document (BRD) Standards", "level": "Intermediate \u2022 9 hrs", "assigned": "28-Sep-2026", "due": "02-Nov-2026", "progress": 100, "status": "Completed", "scope": "Designation: Business Analyst"}, {"id": "154", "name": "Naomi Tanaka", "role": "Sr. Executive", "dept": "Collab", "training": "Agile Kanban Optimization & Velocity Tracking", "level": "Intermediate \u2022 5 hrs", "assigned": "16-Oct-2026", "due": "28-Nov-2026", "progress": 15, "status": "In Progress", "scope": "Department: Collab"}, {"id": "155", "name": "Jordan Ellis", "role": "Team leader", "dept": "Collab", "training": "Team Velocity & Burn-Down Chart Diagnostics", "level": "Intermediate \u2022 8 hrs", "assigned": "04-Oct-2026", "due": "16-Nov-2026", "progress": 70, "status": "In Progress", "scope": "Designation: Team Leader"}, {"id": "156", "name": "Sasha Petrov", "role": "Manager", "dept": "Collab", "training": "Cross-Functional Dependency Governance", "level": "Advanced \u2022 11 hrs", "assigned": "12-Sep-2026", "due": "22-Oct-2026", "progress": 100, "status": "Completed", "scope": "Employee: Sasha Petrov"}, {"id": "157", "name": "Elliot Sharpe", "role": "Executive", "dept": "Game", "training": "API Contract Testing with Postman & Pact", "level": "Intermediate \u2022 12 hrs", "assigned": "11-Oct-2026", "due": "21-Nov-2026", "progress": 55, "status": "In Progress", "scope": "Department: Game"}, {"id": "158", "name": "Bianca Moreau", "role": "Executive", "dept": "Web", "training": "Terraform Cloud & GitOps Pipelines", "level": "Advanced \u2022 16 hrs", "assigned": "07-Oct-2026", "due": "19-Nov-2026", "progress": 90, "status": "In Progress", "scope": "Department: Web"}, {"id": "159", "name": "Aditya Joshi", "role": "Security Analyst", "dept": "Data analytics", "training": "Penetration Testing & Vulnerability Assessment", "level": "Advanced \u2022 20 hrs", "assigned": "30-Sep-2026", "due": "10-Nov-2026", "progress": 65, "status": "In Progress", "scope": "Department: Data analytics"}, {"id": "160", "name": "Kavita Rao", "role": "Full-Stack Engineer", "dept": "Web", "training": "React 19 Server Components & State Management", "level": "Advanced \u2022 14 hrs", "assigned": "03-Oct-2026", "due": "17-Nov-2026", "progress": 80, "status": "In Progress", "scope": "Designation: Full-Stack Engineer"}, {"id": "161", "name": "Manish Gupta", "role": "HR Generalist", "dept": "Business Analysis", "training": "Payroll Compliance & Labor Law Fundamentals", "level": "Intermediate \u2022 10 hrs", "assigned": "22-Sep-2026", "due": "25-Oct-2026", "progress": 100, "status": "Completed", "scope": "Department: Business Analysis"}, {"id": "162", "name": "Pooja Hegde", "role": "Account Manager", "dept": "Collab", "training": "SaaS Customer Retention & Upselling Frameworks", "level": "Intermediate \u2022 8 hrs", "assigned": "09-Oct-2026", "due": "23-Nov-2026", "progress": 40, "status": "In Progress", "scope": "Department: Collab"}, {"id": "163", "name": "Karan Mehra", "role": "Network Engineer", "dept": "Business Analysis", "training": "Software Defined Networking (SDN) & BGP", "level": "Advanced \u2022 16 hrs", "assigned": "14-Sep-2026", "due": "24-Oct-2026", "progress": 100, "status": "Completed", "scope": "Designation: Network Engineer"}, {"id": "164", "name": "Simran Kaur", "role": "QA Lead", "dept": "Game", "training": "Test Strategy Design & QA Metrics Reporting", "level": "Advanced \u2022 10 hrs", "assigned": "06-Oct-2026", "due": "18-Nov-2026", "progress": 75, "status": "In Progress", "scope": "Designation: QA Lead"}, {"id": "165", "name": "Farhan Akhtar", "role": "DevOps Engineer", "dept": "Web", "training": "Docker Container Hardening & CIS Benchmarks", "level": "Intermediate \u2022 12 hrs", "assigned": "13-Oct-2026", "due": "26-Nov-2026", "progress": 35, "status": "In Progress", "scope": "Department: Web"}, {"id": "166", "name": "Nisha Singhania", "role": "SOC Lead", "dept": "Data analytics", "training": "SIEM Alert Triage & Incident Escalation", "level": "Advanced \u2022 18 hrs", "assigned": "19-Sep-2026", "due": "29-Oct-2026", "progress": 100, "status": "Completed", "scope": "Designation: SOC Lead"}, {"id": "167", "name": "Tarun Roy", "role": "Data Engineer", "dept": "Web", "training": "Apache Kafka Event Streaming at Scale", "level": "Advanced \u2022 18 hrs", "assigned": "02-Oct-2026", "due": "16-Nov-2026", "progress": 50, "status": "In Progress", "scope": "Department: Web"}, {"id": "168", "name": "Geeta Nair", "role": "People Partner", "dept": "Business Analysis", "training": "Employee Engagement & Retention Strategies", "level": "Intermediate \u2022 6 hrs", "assigned": "15-Oct-2026", "due": "30-Nov-2026", "progress": 10, "status": "In Progress", "scope": "Department: Business Analysis"}, {"id": "169", "name": "Harsh Vardhan", "role": "Sales Director", "dept": "Collab", "training": "Enterprise Revenue Forecasting & Sales Leadership", "level": "Advanced \u2022 12 hrs", "assigned": "08-Sep-2026", "due": "18-Oct-2026", "progress": 100, "status": "Completed", "scope": "Designation: Sales Director"}, {"id": "170", "name": "Isha Roy", "role": "Cloud Architect", "dept": "Business Analysis", "training": "Multi-Region Disaster Recovery on AWS/GCP", "level": "Advanced \u2022 20 hrs", "assigned": "16-Sep-2026", "due": "26-Oct-2026", "progress": 100, "status": "Completed", "scope": "Employee: Isha Roy"}, {"id": "171", "name": "Jayesh Tiwari", "role": "Automation Engineer", "dept": "Game", "training": "Cypress & Playwright Modern Web Automation", "level": "Intermediate \u2022 14 hrs", "assigned": "08-Oct-2026", "due": "20-Nov-2026", "progress": 70, "status": "In Progress", "scope": "Department: Game"}, {"id": "172", "name": "Lavanya Swaminathan", "role": "Compliance Officer", "dept": "Data analytics", "training": "ISO 27001 ISMS Implementation & Internal Audit", "level": "Advanced \u2022 16 hrs", "assigned": "25-Sep-2026", "due": "05-Nov-2026", "progress": 95, "status": "In Progress", "scope": "Employee: Lavanya Swaminathan"}];
+}function it({assignments:e,employees:empList,programmes:progs,courseProgress,onOpenAssignTraining:t,onEvaluate:n,onSelectAssignment:r}){
+  let rawList = [{"id": "132", "name": "Tanya Kapoor", "role": "Business Analyst", "dept": "Collab", "training": "API Security & OAuth2 Best Practices", "level": "Intermediate \u2022 4 hrs", "assigned": "01-Jan-2026", "due": "20-Jan-2026", "progress": 100, "status": "Completed", "scope": "Department: Collab"}, {"id": "133", "name": "Rihan R.", "role": "Software Engineer", "dept": "Web", "training": "CollabCRM Recruitment & Client Portal Workflows", "level": "Intermediate \u2022 18 hrs", "assigned": "01-Oct-2026", "due": "15-Nov-2026", "progress": 75, "status": "In Progress", "scope": "Department: Web"}, {"id": "134", "name": "Priya Nair", "role": "Frontend Developer", "dept": "Web", "training": "Cloud Infrastructure & High-Performance Node Services", "level": "Advanced \u2022 16 hrs", "assigned": "10-Oct-2026", "due": "20-Nov-2026", "progress": 80, "status": "Failed", "scope": "Designation: Frontend Developer"}, {"id": "135", "name": "Suresh Prasad", "role": "Senior Talent Partner", "dept": "Business Analysis", "training": "CollabCRM Recruitment & Client Portal Workflows", "level": "Intermediate \u2022 18 hrs", "assigned": "05-Oct-2026", "due": "25-Oct-2026", "progress": 0, "status": "Not Started", "scope": "Department: Business Analysis"}, {"id": "136", "name": "Ashish Kumar", "role": "Technical Lead & Reporting Manager", "dept": "Web", "training": "Cloud Infrastructure & High-Performance Node Services", "level": "Advanced \u2022 16 hrs", "assigned": "15-Sep-2026", "due": "20-Oct-2026", "progress": 100, "status": "Completed", "scope": "Designation: Technical Lead"}, {"id": "137", "name": "Vikram Malhotra", "role": "Enterprise Account Executive", "dept": "Collab", "training": "Enterprise CRM Communication & Client Delight", "level": "Intermediate \u2022 12 hrs", "assigned": "01-Oct-2026", "due": "30-Nov-2026", "progress": 0, "status": "Not Started", "scope": "Department: Collab"}, {"id": "138", "name": "Ishdeep Anand", "role": "Admin", "dept": "Business Analysis", "training": "Enterprise Security & Data Protection Compliance", "level": "Advanced \u2022 20 hrs", "assigned": "01-Sep-2026", "due": "15-Oct-2026", "progress": 100, "status": "Completed", "scope": "Employee: Ishdeep Anand"}, {"id": "139", "name": "Sanjana Ghosh", "role": "Executive", "dept": "Collab", "training": "Agile Project Delivery & Sprint Planning", "level": "Intermediate \u2022 8 hrs", "assigned": "01-Oct-2026", "due": "10-Nov-2026", "progress": 65, "status": "In Progress", "scope": "Department: Collab"}, {"id": "140", "name": "Megha Salunkhe", "role": "Sr. Executive", "dept": "Collab", "training": "Client Stakeholder Relationship Management", "level": "Intermediate \u2022 6 hrs", "assigned": "20-Sep-2026", "due": "30-Oct-2026", "progress": 90, "status": "In Progress", "scope": "Department: Collab"}, {"id": "141", "name": "Kunal Barve", "role": "Team leader", "dept": "Collab", "training": "Incident Response & SLA Management", "level": "Advanced \u2022 10 hrs", "assigned": "15-Oct-2026", "due": "25-Nov-2026", "progress": 50, "status": "In Progress", "scope": "Designation: Team Leader"}, {"id": "142", "name": "Ananya Sridhar", "role": "Manager", "dept": "Collab", "training": "Executive Leadership & Strategic Governance", "level": "Advanced \u2022 14 hrs", "assigned": "10-Sep-2026", "due": "20-Oct-2026", "progress": 100, "status": "Completed", "scope": "Designation: Manager"}, {"id": "143", "name": "Vikram Anand", "role": "AVP", "dept": "Collab", "training": "Enterprise Resource Scaling & Budgeting", "level": "Advanced \u2022 12 hrs", "assigned": "15-Aug-2026", "due": "30-Sep-2026", "progress": 100, "status": "Completed", "scope": "Employee: Vikram Anand"}, {"id": "144", "name": "Rahul Khanna", "role": "Executive", "dept": "Game", "training": "Automated End-to-End Regression Testing", "level": "Intermediate \u2022 15 hrs", "assigned": "01-Oct-2026", "due": "15-Nov-2026", "progress": 80, "status": "In Progress", "scope": "Department: Game"}, {"id": "145", "name": "Deepa Ramaswamy", "role": "Executive", "dept": "Web", "training": "Kubernetes Multi-Cluster Orchestration", "level": "Advanced \u2022 18 hrs", "assigned": "10-Oct-2026", "due": "20-Nov-2026", "progress": 30, "status": "In Progress", "scope": "Department: Web"}, {"id": "146", "name": "Trevor Lindqvist", "role": "Sr. Executive", "dept": "Data analytics", "training": "Zero Trust Architecture & Threat Mitigation", "level": "Advanced \u2022 22 hrs", "assigned": "25-Sep-2026", "due": "05-Nov-2026", "progress": 100, "status": "Completed", "scope": "Department: Data analytics"}, {"id": "147", "name": "Devin Patel", "role": "Backend Architect", "dept": "Web", "training": "High-Throughput Microservices in Go", "level": "Advanced \u2022 16 hrs", "assigned": "05-Oct-2026", "due": "25-Nov-2026", "progress": 45, "status": "In Progress", "scope": "Designation: Backend Architect"}, {"id": "148", "name": "Sneha Verma", "role": "Talent Acquisition Specialist", "dept": "Business Analysis", "training": "Interview Compliance & Bias Mitigation", "level": "Intermediate \u2022 6 hrs", "assigned": "12-Oct-2026", "due": "18-Nov-2026", "progress": 20, "status": "In Progress", "scope": "Department: Business Analysis"}, {"id": "149", "name": "Aarav Shah", "role": "Business Development Representative", "dept": "Collab", "training": "Cold Outreach & Objection Mastery", "level": "Beginner \u2022 8 hrs", "assigned": "08-Oct-2026", "due": "12-Nov-2026", "progress": 95, "status": "In Progress", "scope": "Department: Collab"}, {"id": "150", "name": "Maya Krishnan", "role": "Systems Administrator", "dept": "Business Analysis", "training": "Linux Kernel Hardening & Audit Logging", "level": "Advanced \u2022 14 hrs", "assigned": "18-Sep-2026", "due": "28-Oct-2026", "progress": 100, "status": "Completed", "scope": "Department: Business Analysis"}, {"id": "151", "name": "Rohan Desai", "role": "QA Automation Engineer", "dept": "Game", "training": "Performance & Load Testing with k6", "level": "Intermediate \u2022 10 hrs", "assigned": "14-Oct-2026", "due": "22-Nov-2026", "progress": 60, "status": "In Progress", "scope": "Designation: QA Automation Engineer"}, {"id": "152", "name": "Zara Haddad", "role": "Executive", "dept": "Collab", "training": "Risk Management & Change Control Procedures", "level": "Intermediate \u2022 7 hrs", "assigned": "02-Oct-2026", "due": "14-Nov-2026", "progress": 85, "status": "In Progress", "scope": "Department: Collab"}, {"id": "153", "name": "Caleb Nguyen", "role": "Business Analyst", "dept": "Collab", "training": "Business Requirements Document (BRD) Standards", "level": "Intermediate \u2022 9 hrs", "assigned": "28-Sep-2026", "due": "02-Nov-2026", "progress": 100, "status": "Completed", "scope": "Designation: Business Analyst"}, {"id": "154", "name": "Naomi Tanaka", "role": "Sr. Executive", "dept": "Collab", "training": "Agile Kanban Optimization & Velocity Tracking", "level": "Intermediate \u2022 5 hrs", "assigned": "16-Oct-2026", "due": "28-Nov-2026", "progress": 15, "status": "In Progress", "scope": "Department: Collab"}, {"id": "155", "name": "Jordan Ellis", "role": "Team leader", "dept": "Collab", "training": "Team Velocity & Burn-Down Chart Diagnostics", "level": "Intermediate \u2022 8 hrs", "assigned": "04-Oct-2026", "due": "16-Nov-2026", "progress": 70, "status": "In Progress", "scope": "Designation: Team Leader"}, {"id": "156", "name": "Sasha Petrov", "role": "Manager", "dept": "Collab", "training": "Cross-Functional Dependency Governance", "level": "Advanced \u2022 11 hrs", "assigned": "12-Sep-2026", "due": "22-Oct-2026", "progress": 100, "status": "Completed", "scope": "Employee: Sasha Petrov"}, {"id": "157", "name": "Elliot Sharpe", "role": "Executive", "dept": "Game", "training": "API Contract Testing with Postman & Pact", "level": "Intermediate \u2022 12 hrs", "assigned": "11-Oct-2026", "due": "21-Nov-2026", "progress": 55, "status": "In Progress", "scope": "Department: Game"}, {"id": "158", "name": "Bianca Moreau", "role": "Executive", "dept": "Web", "training": "Terraform Cloud & GitOps Pipelines", "level": "Advanced \u2022 16 hrs", "assigned": "07-Oct-2026", "due": "19-Nov-2026", "progress": 90, "status": "In Progress", "scope": "Department: Web"}, {"id": "159", "name": "Aditya Joshi", "role": "Security Analyst", "dept": "Data analytics", "training": "Penetration Testing & Vulnerability Assessment", "level": "Advanced \u2022 20 hrs", "assigned": "30-Sep-2026", "due": "10-Nov-2026", "progress": 65, "status": "In Progress", "scope": "Department: Data analytics"}, {"id": "160", "name": "Kavita Rao", "role": "Full-Stack Engineer", "dept": "Web", "training": "React 19 Server Components & State Management", "level": "Advanced \u2022 14 hrs", "assigned": "03-Oct-2026", "due": "17-Nov-2026", "progress": 80, "status": "In Progress", "scope": "Designation: Full-Stack Engineer"}, {"id": "161", "name": "Manish Gupta", "role": "HR Generalist", "dept": "Business Analysis", "training": "Payroll Compliance & Labor Law Fundamentals", "level": "Intermediate \u2022 10 hrs", "assigned": "22-Sep-2026", "due": "25-Oct-2026", "progress": 100, "status": "Completed", "scope": "Department: Business Analysis"}, {"id": "162", "name": "Pooja Hegde", "role": "Account Manager", "dept": "Collab", "training": "SaaS Customer Retention & Upselling Frameworks", "level": "Intermediate \u2022 8 hrs", "assigned": "09-Oct-2026", "due": "23-Nov-2026", "progress": 40, "status": "In Progress", "scope": "Department: Collab"}, {"id": "163", "name": "Karan Mehra", "role": "Network Engineer", "dept": "Business Analysis", "training": "Software Defined Networking (SDN) & BGP", "level": "Advanced \u2022 16 hrs", "assigned": "14-Sep-2026", "due": "24-Oct-2026", "progress": 100, "status": "Completed", "scope": "Designation: Network Engineer"}, {"id": "164", "name": "Simran Kaur", "role": "QA Lead", "dept": "Game", "training": "Test Strategy Design & QA Metrics Reporting", "level": "Advanced \u2022 10 hrs", "assigned": "06-Oct-2026", "due": "18-Nov-2026", "progress": 75, "status": "In Progress", "scope": "Designation: QA Lead"}, {"id": "165", "name": "Farhan Akhtar", "role": "DevOps Engineer", "dept": "Web", "training": "Docker Container Hardening & CIS Benchmarks", "level": "Intermediate \u2022 12 hrs", "assigned": "13-Oct-2026", "due": "26-Nov-2026", "progress": 35, "status": "In Progress", "scope": "Department: Web"}, {"id": "166", "name": "Nisha Singhania", "role": "SOC Lead", "dept": "Data analytics", "training": "SIEM Alert Triage & Incident Escalation", "level": "Advanced \u2022 18 hrs", "assigned": "19-Sep-2026", "due": "29-Oct-2026", "progress": 100, "status": "Completed", "scope": "Designation: SOC Lead"}, {"id": "167", "name": "Tarun Roy", "role": "Data Engineer", "dept": "Web", "training": "Apache Kafka Event Streaming at Scale", "level": "Advanced \u2022 18 hrs", "assigned": "02-Oct-2026", "due": "16-Nov-2026", "progress": 50, "status": "In Progress", "scope": "Department: Web"}, {"id": "168", "name": "Geeta Nair", "role": "People Partner", "dept": "Business Analysis", "training": "Employee Engagement & Retention Strategies", "level": "Intermediate \u2022 6 hrs", "assigned": "15-Oct-2026", "due": "30-Nov-2026", "progress": 10, "status": "In Progress", "scope": "Department: Business Analysis"}, {"id": "169", "name": "Harsh Vardhan", "role": "Sales Director", "dept": "Collab", "training": "Enterprise Revenue Forecasting & Sales Leadership", "level": "Advanced \u2022 12 hrs", "assigned": "08-Sep-2026", "due": "18-Oct-2026", "progress": 100, "status": "Completed", "scope": "Designation: Sales Director"}, {"id": "170", "name": "Isha Roy", "role": "Cloud Architect", "dept": "Business Analysis", "training": "Multi-Region Disaster Recovery on AWS/GCP", "level": "Advanced \u2022 20 hrs", "assigned": "16-Sep-2026", "due": "26-Oct-2026", "progress": 100, "status": "Completed", "scope": "Employee: Isha Roy"}, {"id": "171", "name": "Jayesh Tiwari", "role": "Automation Engineer", "dept": "Game", "training": "Cypress & Playwright Modern Web Automation", "level": "Intermediate \u2022 14 hrs", "assigned": "08-Oct-2026", "due": "20-Nov-2026", "progress": 70, "status": "In Progress", "scope": "Department: Game"}, {"id": "172", "name": "Lavanya Swaminathan", "role": "Compliance Officer", "dept": "Data analytics", "training": "ISO 27001 ISMS Implementation & Internal Audit", "level": "Advanced \u2022 16 hrs", "assigned": "25-Sep-2026", "due": "05-Nov-2026", "progress": 95, "status": "In Progress", "scope": "Employee: Lavanya Swaminathan"}];
   let [searchQuery, setSearchQuery] = (0, l.useState)("");
   let [selectedDept, setSelectedDept] = (0, l.useState)("All Departments");
   let [currentPage, setCurrentPage] = (0, l.useState)(1);
@@ -1481,6 +1481,8 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
         }));
         dynamicGroups.push({
           id: first.id,
+          employeeId: first.employeeId || matched?.id || "",
+          programmeId: first.programmeId || "",
           name: first.employeeName || matched?.name || "Employee",
           role: matched?.role || "Employee",
           dept: matched?.dept || "Collab",
@@ -1510,13 +1512,39 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
       return dedupeEmps([base, ...rolePeers, ...deptPeers]).slice(0, 3);
     };
 
-    let enrichedStatic = rawList.map(item => ({
+    let applyCourseProgress = item => {
+      if (!courseProgress || typeof courseProgress !== "object") return item;
+      let tNorm = String(item.training || "").trim().toLowerCase();
+      let matchedProg = (Array.isArray(progs) ? progs : []).find(pr => (item.programmeId && pr.id === item.programmeId) || (tNorm && String(pr.name || "").trim().toLowerCase() === tNorm));
+      let pid = matchedProg?.id || item.programmeId || "";
+      let empNameNorm = String(item.name || "").trim().toLowerCase();
+      let cpEntry = null;
+      if (item.employeeId && pid && courseProgress[`${item.employeeId}::${pid}`]) {
+        cpEntry = courseProgress[`${item.employeeId}::${pid}`];
+      } else if (empNameNorm === "tanya kapoor" || item.employeeId === "CO-5039" || item.employeeId === "emp-3") {
+        if (pid && courseProgress[`CO-5039::${pid}`]) cpEntry = courseProgress[`CO-5039::${pid}`];
+        else if (pid && courseProgress[pid]) cpEntry = courseProgress[pid];
+        else if (tNorm) {
+          cpEntry = Object.values(courseProgress).find(cp => cp && cp.programmeName && cp.programmeName.trim().toLowerCase() === tNorm && (cp.employeeId === "CO-5039" || !cp.employeeId)) || null;
+        }
+      }
+      if (!cpEntry) return item;
+      return {
+        ...item,
+        progress: cpEntry.progress != null ? Number(cpEntry.progress) : item.progress,
+        status: cpEntry.status || item.status,
+        programmeId: matchedProg?.id || item.programmeId,
+        cpEntry
+      };
+    };
+
+    let enrichedStatic = rawList.map(item => applyCourseProgress({
       ...item,
       enrolledEmployees: resolveStaticEnrolled(item)
     }));
 
-    return [...dynamicGroups, ...enrichedStatic];
-  }, [e, empList]);
+    return [...dynamicGroups.map(applyCourseProgress), ...enrichedStatic];
+  }, [e, empList, progs, courseProgress]);
 
   let filtered = allList.filter(item => {
     let q = searchQuery.toLowerCase().trim();
@@ -1621,8 +1649,11 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
                   (0, P.jsx)("td", {className: "py-3 px-4 text-slate-600 text-xs tabular-nums", children: fmtSysDate(item.assigned)}),
                   (0, P.jsx)("td", {className: "py-3 px-4 text-xs tabular-nums font-medium text-slate-700", children: fmtSysDate(item.due)}),
                   (0, P.jsxs)("td", {className: "py-3 px-4 w-36", children: [
-                    (0, P.jsx)("div", {className: "flex items-center justify-between text-xs font-mono font-bold mb-1 text-slate-700", children: (0, P.jsxs)("span", {children: [item.progress, "%"]})}),
-                    (0, P.jsx)("div", {className: "w-full bg-slate-100 h-2 rounded-full overflow-hidden", children: (0, P.jsx)("div", {className: `h-full rounded-full ${item.progress === 100 ? "bg-emerald-500" : "bg-blue-600"}`, style: {width: `${item.progress}%`} })})
+                    (0, P.jsxs)("div", {className: "flex items-center justify-between text-xs font-mono font-bold mb-1 text-slate-700", children: [
+                      (0, P.jsxs)("span", {children: [item.progress, "%"]}),
+                      item.status === "Failed" && (0, P.jsx)("span", {className: "text-[10px] font-sans font-bold text-rose-700 bg-rose-50 border border-rose-200 px-1.5 py-0.5 rounded", children: "Failed"})
+                    ]}),
+                    (0, P.jsx)("div", {className: "w-full bg-slate-100 h-2 rounded-full overflow-hidden", children: (0, P.jsx)("div", {className: `h-full rounded-full ${item.status === "Failed" ? "bg-rose-500" : item.progress === 100 ? "bg-emerald-500" : "bg-blue-600"}`, style: {width: `${item.progress}%`} })})
                   ]}),
                   (0, P.jsx)("td", {className: "py-3 px-4 text-right", onClick: ev => ev.stopPropagation(), children: 
                     (0, P.jsx)("div", {className: "flex items-center justify-end gap-1.5", children: 
@@ -1693,12 +1724,215 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
       ]
     })
   ]});
-}function at({assignment:e,onBack:t,onEvaluate:n}){
+}
+let DEFAULT_ASSESSMENT_QUESTIONS = [
+  { id: "q-1", number: 1, text: "What does CRM stand for in CollabCRM?", type: "short_text", marks: 2, mandatory: true, acceptedAnswers: ["Customer Relationship Management", "customer relationship management"] },
+  { id: "q-2", number: 2, text: "Which protocol is primarily used for real-time notifications in CollabCRM?", type: "single_choice", marks: 2, mandatory: true, options: [{ id: "opt-1", text: "WebSocket" }, { id: "opt-2", text: "FTP" }, { id: "opt-3", text: "SMTP" }, { id: "opt-4", text: "Telnet" }], correctAnswer: "opt-1" },
+  { id: "q-3", number: 3, text: "Which of the following are core platforms used in this curriculum? (Select all that apply)", type: "multiple_choice", marks: 2, mandatory: true, options: [{ id: "mopt-1", text: "Unreal Engine" }, { id: "mopt-2", text: "Unity" }, { id: "mopt-3", text: "Blender" }, { id: "mopt-4", text: "Godot" }], correctAnswers: ["mopt-1", "mopt-2", "mopt-4"] },
+  { id: "q-4", number: 4, text: "Select the primary department responsible for candidate onboarding workflows:", type: "dropdown", marks: 2, mandatory: true, options: [{ id: "dopt-1", text: "Recruitment & HR Operations" }, { id: "dopt-2", text: "Hardware Engineering" }, { id: "dopt-3", text: "Facilities Management" }], correctAnswer: "dopt-1" },
+  { id: "q-5", number: 5, text: "Employees must complete all learning resources before they can access the final assessment.", type: "true_false", marks: 1, mandatory: true, correctAnswer: "True" },
+  { id: "q-6", number: 6, text: "Summarize the architectural flow of token-based authentication and explain how JWT tokens are validated.", type: "long_text", marks: 1, mandatory: false, expectedAnswer: "JWT tokens validated via Gateway middleware, checking signature, expiry, and RBAC claims." }
+];
+
+function formatQuestionResponse(q, idx, ans) {
+  let qMarks = Number(q.marks) || 0;
+  let qType = q.type || "short_text";
+  let opts = Array.isArray(q.options) ? q.options : [];
+  let optLabel = oid => {
+    let found = opts.find(o => o.id === oid);
+    return found ? found.text : (oid ? String(oid) : "");
+  };
+  let isCorrect = false;
+  let userAnswerText = "Not Answered";
+  let correctAnswerText = "—";
+
+  if (qType === "short_text") {
+    let accepted = (q.acceptedAnswers || []).map(a => String(a).trim()).filter(Boolean);
+    let cleanUser = ans && typeof ans === "string" ? ans.trim() : "";
+    userAnswerText = cleanUser || "Not Answered";
+    correctAnswerText = accepted.length > 0 ? accepted.join(" / ") : "—";
+    if (cleanUser && accepted.map(a => a.toLowerCase()).includes(cleanUser.toLowerCase())) {
+      isCorrect = true;
+    }
+  } else if (qType === "single_choice" || qType === "dropdown") {
+    userAnswerText = ans ? optLabel(ans) : "Not Answered";
+    correctAnswerText = q.correctAnswer ? optLabel(q.correctAnswer) : "—";
+    if (ans && ans === q.correctAnswer) isCorrect = true;
+  } else if (qType === "multiple_choice") {
+    let userArr = Array.isArray(ans) ? ans : [];
+    let corrArr = Array.isArray(q.correctAnswers) ? q.correctAnswers : [];
+    userAnswerText = userArr.length > 0 ? userArr.map(optLabel).join(", ") : "Not Answered";
+    correctAnswerText = corrArr.length > 0 ? corrArr.map(optLabel).join(", ") : "—";
+    let sortedUser = [...userArr].sort();
+    let sortedCorrect = [...corrArr].sort();
+    if (sortedUser.length === sortedCorrect.length && sortedUser.length > 0 && sortedUser.every((val, i) => val === sortedCorrect[i])) {
+      isCorrect = true;
+    }
+  } else if (qType === "true_false") {
+    userAnswerText = ans ? String(ans) : "Not Answered";
+    correctAnswerText = q.correctAnswer ? String(q.correctAnswer) : "True";
+    if (ans && ans === q.correctAnswer) isCorrect = true;
+  } else if (qType === "long_text") {
+    let cleanLong = ans ? String(ans).trim() : "";
+    userAnswerText = cleanLong || "Not Answered";
+    correctAnswerText = q.expectedAnswer || "Detailed architectural explanation (>10 characters)";
+    if (cleanLong.length > 10) isCorrect = true;
+  }
+
+  return {
+    questionId: q.id || `q-${idx + 1}`,
+    number: q.number || idx + 1,
+    text: q.text || "",
+    type: qType,
+    marks: qMarks,
+    earnedMarks: isCorrect ? qMarks : 0,
+    isCorrect,
+    userAnswerRaw: ans !== undefined ? ans : null,
+    userAnswerText,
+    correctAnswerText
+  };
+}
+
+function gradeAssessmentSubmission(questions, userAnswers, passingScore, attemptNumber) {
+  let qList = Array.isArray(questions) ? questions : [];
+  let ansMap = userAnswers && typeof userAnswers === "object" ? userAnswers : {};
+  let responses = qList.map((q, idx) => formatQuestionResponse(q, idx, ansMap[q.id]));
+  let totalMarks = responses.reduce((sum, r) => sum + (Number(r.marks) || 0), 0);
+  let earnedMarks = responses.reduce((sum, r) => sum + (Number(r.earnedMarks) || 0), 0);
+  let scorePercentage = totalMarks > 0 ? Math.round((earnedMarks / totalMarks) * 100) : 100;
+  let isPassed = scorePercentage > (Number(passingScore) || 80);
+  return {
+    attemptNumber: attemptNumber || 1,
+    earnedMarks,
+    totalMarks,
+    scorePercentage,
+    isPassed,
+    evalStatus: isPassed ? "Passed" : "Failed",
+    submittedAt: new Date().toISOString(),
+    answers: { ...ansMap },
+    questionResponses: responses
+  };
+}
+
+function synthesizeFallbackAttempts(questions, passingScore, maxAttempts, isCompleted, isFailed) {
+  let qList = Array.isArray(questions) && questions.length > 0 ? questions : DEFAULT_ASSESSMENT_QUESTIONS;
+  let buildAnswer = (q, wantCorrect) => {
+    let qt = q.type || "short_text";
+    if (qt === "short_text") return wantCorrect ? ((q.acceptedAnswers && q.acceptedAnswers[0]) || "Customer Relationship Management") : "Manual Client Database";
+    if (qt === "single_choice" || qt === "dropdown") {
+      if (wantCorrect) return q.correctAnswer || q.options?.[0]?.id || "";
+      let wrongOpt = (q.options || []).find(o => o.id !== q.correctAnswer);
+      return wrongOpt ? wrongOpt.id : "opt-wrong";
+    }
+    if (qt === "multiple_choice") {
+      if (wantCorrect) return Array.isArray(q.correctAnswers) ? [...q.correctAnswers] : [];
+      let wrongOpts = (q.options || []).filter(o => !(q.correctAnswers || []).includes(o.id)).map(o => o.id);
+      return wrongOpts.length > 0 ? [wrongOpts[0]] : [];
+    }
+    if (qt === "true_false") return wantCorrect ? (q.correctAnswer || "True") : (q.correctAnswer === "False" ? "True" : "False");
+    if (qt === "long_text") return wantCorrect ? (q.expectedAnswer || "JWT tokens validated via Gateway middleware checking signature, expiry, and RBAC claims.") : "Skipped.";
+    return "";
+  };
+
+  if (isCompleted) {
+    let ans = {};
+    qList.forEach(q => { ans[q.id] = buildAnswer(q, true); });
+    return [gradeAssessmentSubmission(qList, ans, passingScore, 1)];
+  }
+  if (isFailed) {
+    let count = Math.max(1, Number(maxAttempts) || 2);
+    let hist = [];
+    for (let att = count; att >= 1; att--) {
+      let ans = {};
+      let correctCutoff = att === count ? Math.floor(qList.length * 0.5) : Math.max(1, Math.floor(qList.length * 0.3));
+      qList.forEach((q, idx) => { ans[q.id] = buildAnswer(q, idx < correctCutoff); });
+      let graded = gradeAssessmentSubmission(qList, ans, passingScore, att);
+      if (graded.isPassed) {
+        let lowAns = {};
+        qList.forEach((q, idx) => { lowAns[q.id] = buildAnswer(q, idx === 0 && qList.length > 2); });
+        graded = gradeAssessmentSubmission(qList, lowAns, passingScore, att);
+      }
+      hist.push(graded);
+    }
+    return hist;
+  }
+  return [];
+}
+
+function at({assignment:e,programmes:progs,courseProgress,onBack:t,onEvaluate:n}){
   let r=e||{id:"132",name:"Tanya Kapoor",role:"Business Analyst",dept:"Project",training:"API Security & OAuth2 Best Practices",level:"Intermediate • 4 hrs",assigned:"01-Jan-2026",due:"20-Jan-2026",type:"Elective",progress:100,status:"Completed"};
+  let [showAssessmentModal, setShowAssessmentModal] = (0, l.useState)(false);
+  let [selectedAttemptIdx, setSelectedAttemptIdx] = (0, l.useState)(0);
+
   let empRole=(r.role&&r.role!=="Project")?r.role:"Business Analyst";
-  let empDept=r.dept|| "Business Analysis";
-  let progressVal=r.progress??100;
-  let statusText=r.status||"Completed";
+  let empDept=r.dept||"Business Analysis";
+
+  let tNorm = String(r.training || r.programmeName || "").trim().toLowerCase();
+  let matchedProg = (Array.isArray(progs) ? progs : []).find(pr => (r.programmeId && pr.id === r.programmeId) || (tNorm && String(pr.name || "").trim().toLowerCase() === tNorm));
+  let pid = matchedProg?.id || r.programmeId || "";
+  let empNameNorm = String(r.name || "").trim().toLowerCase();
+
+  let cpEntry = r.cpEntry || null;
+  if (!cpEntry && courseProgress && typeof courseProgress === "object") {
+    if (r.employeeId && pid && courseProgress[`${r.employeeId}::${pid}`]) {
+      cpEntry = courseProgress[`${r.employeeId}::${pid}`];
+    } else if (empNameNorm === "tanya kapoor" || r.employeeId === "CO-5039" || r.employeeId === "emp-3") {
+      if (pid && courseProgress[`CO-5039::${pid}`]) cpEntry = courseProgress[`CO-5039::${pid}`];
+      else if (pid && courseProgress[pid]) cpEntry = courseProgress[pid];
+      else if (tNorm) {
+        cpEntry = Object.values(courseProgress).find(cp => cp && cp.programmeName && cp.programmeName.trim().toLowerCase() === tNorm && (cp.employeeId === "CO-5039" || !cp.employeeId)) || null;
+      }
+    }
+  }
+
+  let progressVal = cpEntry?.progress != null ? Number(cpEntry.progress) : (r.progress ?? 100);
+  let statusText = cpEntry?.status || r.status || "Completed";
+
+  let isAssessmentEnabled = matchedProg?.assessment ? matchedProg.assessment.enabled !== false : (matchedProg?.hasAssessment !== false);
+  let passingScore = Number(matchedProg?.assessment?.passingScore || matchedProg?.passingScore) || 80;
+  let maxAttempts = Number(matchedProg?.assessment?.maxAttempts || matchedProg?.maxAttempts) || 3;
+  let questions = (matchedProg?.assessment?.questions && matchedProg.assessment.questions.length > 0) ? matchedProg.assessment.questions : DEFAULT_ASSESSMENT_QUESTIONS;
+
+  let rawHistory = Array.isArray(cpEntry?.attemptHistory) && cpEntry.attemptHistory.length > 0
+    ? cpEntry.attemptHistory
+    : (cpEntry?.latestResult ? [cpEntry.latestResult] : []);
+  let isCompleted = statusText === "Completed" || progressVal === 100 || Boolean(cpEntry?.latestResult?.isPassed);
+  let isFailed = statusText === "Failed";
+  let isAttemptsDone = rawHistory.length >= maxAttempts && maxAttempts > 0;
+  let attempts = rawHistory.length > 0
+    ? rawHistory
+    : ((isCompleted || isFailed) && isAssessmentEnabled ? synthesizeFallbackAttempts(questions, passingScore, maxAttempts, isCompleted, isFailed) : []);
+  let latestAttempt = attempts[0] || null;
+  let attemptsUsed = attempts.length;
+  let canViewAssessment = isAssessmentEnabled && (isCompleted || isFailed || attemptsUsed >= maxAttempts);
+  let activeAttempt = attempts[selectedAttemptIdx] || latestAttempt;
+
+  let badgeStyle = statusText === "Completed"
+    ? { wrap: "bg-emerald-50 text-emerald-700 border-emerald-200", icon: "text-emerald-500" }
+    : statusText === "Failed"
+      ? { wrap: "bg-rose-50 text-rose-700 border-rose-200", icon: "text-rose-500" }
+      : statusText === "Under Review"
+        ? { wrap: "bg-amber-50 text-amber-700 border-amber-200", icon: "text-amber-500" }
+        : statusText === "In Progress"
+          ? { wrap: "bg-blue-50 text-blue-700 border-blue-200", icon: "text-blue-500" }
+          : { wrap: "bg-slate-100 text-slate-700 border-slate-200", icon: "text-slate-400" };
+
+  let resources = (Array.isArray(matchedProg?.resources) && matchedProg.resources.length > 0)
+    ? matchedProg.resources
+    : [
+        { id: "res-1", title: "Module 1: Architecture Video Lecture" },
+        { id: "res-2", title: "Module 2: Implementation Playbook (PDF)" }
+      ];
+  let completedResMap = cpEntry?.completedResources || null;
+
+  let questionTypeLabel = qt => qt === "short_text" ? "Short Text" : qt === "single_choice" ? "Single Choice" : qt === "multiple_choice" ? "Multiple Choice" : qt === "dropdown" ? "Dropdown" : qt === "true_false" ? "True / False" : "Long Text";
+
+  let activeResponses = activeAttempt
+    ? (Array.isArray(activeAttempt.questionResponses) && activeAttempt.questionResponses.length > 0
+        ? activeAttempt.questionResponses
+        : questions.map((q, idx) => formatQuestionResponse(q, idx, activeAttempt.answers?.[q.id])))
+    : [];
+
   return (0,P.jsxs)("div",{className:"p-6 space-y-5 max-w-[1600px] mx-auto w-full",children:[
     (0,P.jsxs)("div",{className:"flex items-center justify-between flex-wrap gap-3",children:[
       (0,P.jsxs)("div",{className:"flex items-center gap-2 text-xs text-slate-500 font-medium",children:[
@@ -1715,8 +1949,8 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
     (0,P.jsxs)("div",{className:"grid grid-cols-1 lg:grid-cols-4 gap-6 items-start",children:[
       (0,P.jsxs)("div",{className:"lg:col-span-1 bg-white border border-slate-200 rounded-xl p-6 space-y-6 shadow-sm",children:[
         (0,P.jsxs)("div",{className:"text-center relative",children:[
-          (0,P.jsx)("div",{className:"flex items-center justify-between gap-2 mb-2",children:(0,P.jsxs)("span",{className:"inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200",children:[
-            (0,P.jsx)(D,{className:"w-3.5 h-3.5 text-emerald-500"}),
+          (0,P.jsx)("div",{className:"flex items-center justify-between gap-2 mb-2",children:(0,P.jsxs)("span",{className:`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${badgeStyle.wrap}`,children:[
+            (0,P.jsx)(D,{className:`w-3.5 h-3.5 ${badgeStyle.icon}`}),
             (0,P.jsx)("span",{children:statusText})
           ]})}),
           (0,P.jsx)("div",{className:"w-24 h-24 rounded-full bg-blue-50 border border-blue-100 text-blue-600 font-bold flex items-center justify-center text-3xl mx-auto shadow-inner mt-2",children:(r.name||"T").trim().split(/\s+/).map(x=>x[0]).slice(0,2).join("").toUpperCase()}),
@@ -1751,7 +1985,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
             ]})
           ]}),
           (0,P.jsxs)("div",{className:"p-4 space-y-2",children:[
-            (0,P.jsx)("div",{className:"w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-emerald-600",children:(0,P.jsx)(D,{className:"w-4 h-4"})}),
+            (0,P.jsx)("div",{className:`w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center ${isFailed ? "text-rose-600" : "text-emerald-600"}`,children:(0,P.jsx)(D,{className:"w-4 h-4"})}),
             (0,P.jsxs)("div",{children:[
               (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Overall Course Progress"}),
               (0,P.jsxs)("div",{className:"font-bold text-slate-900 text-sm mt-0.5",children:[progressVal,"%"]})
@@ -1762,22 +1996,138 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
         (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden",children:[
           (0,P.jsx)("div",{className:"px-5 py-3.5 border-b border-slate-100",children:(0,P.jsx)("h3",{className:"text-xs font-bold text-slate-900",children:"Assigned Learning Modules & Assessment"})}),
           (0,P.jsxs)("div",{className:"p-5 space-y-2.5 text-xs",children:[
-            (0,P.jsxs)("div",{className:"p-3 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between",children:[
-              (0,P.jsx)("span",{className:"font-medium text-slate-800",children:"Module 1: Architecture Video Lecture"}),
-              (0,P.jsx)("span",{className:"text-emerald-700 font-bold",children:"Completed (100%)"})
-            ]}),
-            (0,P.jsxs)("div",{className:"p-3 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between",children:[
-              (0,P.jsx)("span",{className:"font-medium text-slate-800",children:"Module 2: Implementation Playbook (PDF)"}),
-              (0,P.jsx)("span",{className:"text-emerald-700 font-bold",children:"Completed (100%)"})
-            ]}),
-            (0,P.jsxs)("div",{className:"p-3 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between",children:[
-              (0,P.jsx)("span",{className:"font-medium text-slate-800",children:"Final Assessment: API Security & OAuth2"}),
-              (0,P.jsx)("span",{className:"text-emerald-700 font-bold",children:"Completed (94% Score)"})
+            ...resources.map((res, mIdx) => {
+              let resDone = completedResMap ? Boolean(completedResMap[res.id]) : (isCompleted || isFailed || progressVal >= 80 || (progressVal > 0 && mIdx === 0));
+              let modStatusText = resDone ? "Completed (100%)" : (progressVal > 0 && mIdx === 0 ? "In Progress" : "Not Started");
+              let modStatusCls = resDone ? "text-emerald-700 font-bold" : (progressVal > 0 && mIdx === 0 ? "text-blue-700 font-semibold" : "text-slate-500 font-semibold");
+              return (0,P.jsxs)("div",{className:"p-3 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between gap-3",children:[
+                (0,P.jsx)("span",{className:"font-medium text-slate-800",children:res.title || `Module ${mIdx + 1}`}),
+                (0,P.jsx)("span",{className:modStatusCls,children:modStatusText})
+              ]}, res.id || mIdx);
+            }),
+            isAssessmentEnabled && (0,P.jsxs)("div",{className:"p-3.5 bg-slate-50 border border-slate-200 rounded-lg flex flex-wrap items-center justify-between gap-3",children:[
+              (0,P.jsxs)("div",{className:"space-y-0.5",children:[
+                (0,P.jsxs)("div",{className:"font-medium text-slate-800",children:["Final Assessment: ", r.training]}),
+                (0,P.jsxs)("div",{className:"text-[11px] text-slate-500",children:[
+                  "Passing Score: >", passingScore, "% • Attempts Used: ", attemptsUsed, "/", maxAttempts
+                ]})
+              ]}),
+              (0,P.jsxs)("div",{className:"flex items-center gap-3",children:[
+                latestAttempt && latestAttempt.isPassed
+                  ? (0,P.jsxs)("span",{className:"text-emerald-700 font-bold",children:["Completed (", latestAttempt.scorePercentage, "% Score)"]})
+                  : (isFailed || isAttemptsDone)
+                    ? (0,P.jsxs)("span",{className:"text-rose-700 font-bold",children:["Failed (", latestAttempt ? latestAttempt.scorePercentage : 0, "% Score)"]})
+                    : attemptsUsed > 0
+                      ? (0,P.jsxs)("span",{className:"text-amber-700 font-semibold",children:["Attempt ", attemptsUsed, "/", maxAttempts, " (", latestAttempt.scorePercentage, "% — In Progress)"]})
+                      : (0,P.jsx)("span",{className:"text-slate-500 font-semibold",children:"Pending"}),
+                canViewAssessment && (0,P.jsx)("button",{
+                  type:"button",
+                  onClick:()=>{ setSelectedAttemptIdx(0); setShowAssessmentModal(true); },
+                  className:"px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-xs transition-colors cursor-pointer",
+                  children:"View Assessment"
+                })
+              ]})
             ]})
           ]})
         ]})
       ]})
-    ]})
+    ]}),
+
+    showAssessmentModal && activeAttempt && (0,P.jsx)("div",{
+      className:"fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 flex justify-end animate-in fade-in duration-150",
+      onClick:()=>setShowAssessmentModal(false),
+      children:(0,P.jsxs)("div",{
+        className:"bg-white w-full max-w-3xl h-full shadow-2xl flex flex-col justify-between border-l border-slate-200 animate-in slide-in-from-right duration-200 overflow-hidden",
+        onClick:ev=>ev.stopPropagation(),
+        children:[
+          (0,P.jsxs)("div",{className:"p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50 shrink-0",children:[
+            (0,P.jsxs)("div",{className:"min-w-0",children:[
+              (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
+                (0,P.jsx)(Me,{className:"w-5 h-5 text-blue-600 shrink-0"}),
+                (0,P.jsxs)("h2",{className:"font-bold text-slate-900 text-base truncate",children:["Assessment Review — ", r.name]})
+              ]}),
+              (0,P.jsxs)("p",{className:"text-xs text-slate-500 mt-0.5 truncate",children:[r.training, " • Passing Criteria: Strictly > ", passingScore, "%"]})
+            ]}),
+            (0,P.jsx)("button",{type:"button",onClick:()=>setShowAssessmentModal(false),className:"p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 transition-colors cursor-pointer",title:"Close Assessment Review",children:(0,P.jsx)(N,{className:"w-5 h-5"})})
+          ]}),
+
+          (0,P.jsxs)("div",{className:"p-6 space-y-5 flex-1 overflow-y-auto",children:[
+            (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-3 gap-4",children:[
+              (0,P.jsxs)("div",{className:`rounded-xl p-4 border ${activeAttempt.isPassed ? "bg-emerald-50 border-emerald-200" : "bg-rose-50 border-rose-200"}`,children:[
+                (0,P.jsx)("div",{className:"text-[10px] font-bold uppercase tracking-wider text-slate-500",children:"ASSESSMENT RESULT"}),
+                (0,P.jsx)("div",{className:`text-xl font-black mt-1 ${activeAttempt.isPassed ? "text-emerald-700" : "text-rose-700"}`,children:activeAttempt.isPassed ? "Passed ✓" : "Failed ✕"}),
+                (0,P.jsx)("div",{className:`text-[11px] font-semibold mt-1 ${activeAttempt.isPassed ? "text-emerald-700" : "text-rose-700"}`,children:activeAttempt.isPassed ? `Scored above >${passingScore}%` : `Did not exceed >${passingScore}%`})
+              ]}),
+              (0,P.jsxs)("div",{className:"bg-slate-50 border border-slate-200 rounded-xl p-4",children:[
+                (0,P.jsx)("div",{className:"text-[10px] font-bold uppercase tracking-wider text-slate-400",children:"SCORE ACHIEVED"}),
+                (0,P.jsxs)("div",{className:`text-xl font-black mt-1 tabular-nums ${activeAttempt.isPassed ? "text-emerald-700" : "text-rose-700"}`,children:[activeAttempt.scorePercentage, "%"]}),
+                (0,P.jsxs)("div",{className:"text-[11px] text-slate-600 font-semibold mt-1",children:[activeAttempt.earnedMarks, " / ", activeAttempt.totalMarks, " Marks"]})
+              ]}),
+              (0,P.jsxs)("div",{className:"bg-slate-50 border border-slate-200 rounded-xl p-4",children:[
+                (0,P.jsx)("div",{className:"text-[10px] font-bold uppercase tracking-wider text-slate-400",children:"ATTEMPTS USED"}),
+                (0,P.jsxs)("div",{className:"text-xl font-black text-slate-900 mt-1 tabular-nums",children:[attemptsUsed, " / ", maxAttempts]}),
+                (0,P.jsx)("div",{className:"text-[11px] text-slate-600 font-semibold mt-1",children:activeAttempt.isPassed ? "Assessment Passed" : (attemptsUsed >= maxAttempts ? "All Attempts Exhausted" : "Attempts Remaining")})
+              ]})
+            ]}),
+
+            attempts.length > 1 && (0,P.jsxs)("div",{className:"space-y-2",children:[
+              (0,P.jsx)("div",{className:"text-[11px] font-bold uppercase tracking-wider text-slate-500",children:"Select Submitted Attempt"}),
+              (0,P.jsx)("div",{className:"flex flex-wrap gap-2",children:attempts.map((att, aIdx) => {
+                let isSel = aIdx === selectedAttemptIdx;
+                return (0,P.jsxs)("button",{
+                  type:"button",
+                  onClick:()=>setSelectedAttemptIdx(aIdx),
+                  className:`px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${isSel ? "bg-blue-600 text-white border-blue-600 shadow-xs" : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"}`,
+                  children:[
+                    "Attempt ", att.attemptNumber || (attempts.length - aIdx),
+                    " (", att.scorePercentage, "% ", att.isPassed ? "Passed" : "Failed", ")",
+                    aIdx === 0 ? " • Latest" : ""
+                  ]
+                }, aIdx);
+              })})
+            ]}),
+
+            (0,P.jsxs)("div",{className:"space-y-3",children:[
+              (0,P.jsxs)("div",{className:"flex items-center justify-between",children:[
+                (0,P.jsxs)("h3",{className:"text-xs font-bold uppercase tracking-wider text-slate-500",children:["Employee Responses (", activeResponses.length, " Questions)"]}),
+                (0,P.jsxs)("span",{className:"text-[11px] font-semibold text-slate-500",children:[activeResponses.filter(x=>x.isCorrect).length, " Correct • ", activeResponses.filter(x=>!x.isCorrect).length, " Incorrect"]})
+              ]}),
+              activeResponses.map((qr, qIdx) => (0,P.jsxs)("div",{
+                className:`bg-white border rounded-xl p-4 space-y-2.5 ${qr.isCorrect ? "border-emerald-200" : "border-rose-200"}`,
+                children:[
+                  (0,P.jsxs)("div",{className:"flex items-center justify-between flex-wrap gap-2",children:[
+                    (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
+                      (0,P.jsxs)("span",{className:"px-2 py-0.5 rounded bg-blue-600 text-white text-[11px] font-bold",children:["Question ", qr.number || (qIdx + 1)]}),
+                      (0,P.jsx)("span",{className:"px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-[11px] font-semibold",children:questionTypeLabel(qr.type)})
+                    ]}),
+                    (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
+                      (0,P.jsx)("span",{className:`px-2 py-0.5 rounded text-[11px] font-bold border ${qr.isCorrect ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-rose-50 text-rose-700 border-rose-200"}`,children:qr.isCorrect ? "Correct ✓" : "Incorrect ✕"}),
+                      (0,P.jsxs)("span",{className:"px-2 py-0.5 rounded bg-slate-100 text-slate-700 text-[11px] font-bold tabular-nums",children:[qr.earnedMarks, "/", qr.marks, " Marks"]})
+                    ]})
+                  ]}),
+                  (0,P.jsx)("div",{className:"text-xs font-bold text-slate-900 leading-relaxed",children:qr.text}),
+                  (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-2 gap-3 pt-1",children:[
+                    (0,P.jsxs)("div",{className:"space-y-1",children:[
+                      (0,P.jsx)("div",{className:"text-[10px] font-bold uppercase tracking-wider text-slate-400",children:"Employee's Answer"}),
+                      (0,P.jsx)("div",{className:`p-2.5 rounded-lg border text-xs font-semibold ${qr.isCorrect ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-rose-50 text-rose-700 border-rose-200"}`,children:qr.userAnswerText})
+                    ]}),
+                    (0,P.jsxs)("div",{className:"space-y-1",children:[
+                      (0,P.jsx)("div",{className:"text-[10px] font-bold uppercase tracking-wider text-slate-400",children:"Correct / Accepted Answer"}),
+                      (0,P.jsx)("div",{className:"p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700",children:qr.correctAnswerText})
+                    ]})
+                  ]})
+                ]
+              }, qr.questionId || qIdx))
+            ]})
+          ]}),
+
+          (0,P.jsxs)("div",{className:"p-5 border-t border-slate-200 bg-slate-50 flex items-center justify-between shrink-0",children:[
+            (0,P.jsxs)("span",{className:"text-xs text-slate-500 font-medium",children:["Viewing Attempt ", activeAttempt.attemptNumber || 1, " of ", attemptsUsed]}),
+            (0,P.jsx)("button",{type:"button",onClick:()=>setShowAssessmentModal(false),className:"px-4 py-2 text-xs font-semibold text-slate-700 hover:text-slate-900 bg-white border border-slate-300 rounded-lg shadow-xs transition-colors cursor-pointer",children:"Close"})
+          ]})
+        ]
+      })
+    })
   ]});
 }function ot({categories:catList}){
   let activeCats=(0,l.useMemo)(()=>(Array.isArray(catList)&&catList.length>0?catList:DEFAULT_CATEGORIES_SEED).filter(c=>c.active!==!1),[catList]);
@@ -2417,14 +2767,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,onUpdateCoursePro
             {id:"res-2",type:"PDF Document",title:"Module 2: Standard Operating Procedure Handbook",url:"https://docs.collabcrm.internal/sample-handbook.pdf"}
           ]);
 
-  let defaultQuestions = [
-    { id: "q-1", number: 1, text: "What does CRM stand for in CollabCRM?", type: "short_text", marks: 2, mandatory: true, acceptedAnswers: ["Customer Relationship Management", "customer relationship management"] },
-    { id: "q-2", number: 2, text: "Which protocol is primarily used for real-time notifications in CollabCRM?", type: "single_choice", marks: 2, mandatory: true, options: [{ id: "opt-1", text: "WebSocket" }, { id: "opt-2", text: "FTP" }, { id: "opt-3", text: "SMTP" }, { id: "opt-4", text: "Telnet" }], correctAnswer: "opt-1" },
-    { id: "q-3", number: 3, text: "Which of the following are core platforms used in this curriculum? (Select all that apply)", type: "multiple_choice", marks: 2, mandatory: true, options: [{ id: "mopt-1", text: "Unreal Engine" }, { id: "mopt-2", text: "Unity" }, { id: "mopt-3", text: "Blender" }, { id: "mopt-4", text: "Godot" }], correctAnswers: ["mopt-1", "mopt-2", "mopt-4"] },
-    { id: "q-4", number: 4, text: "Select the primary department responsible for candidate onboarding workflows:", type: "dropdown", marks: 2, mandatory: true, options: [{ id: "dopt-1", text: "Recruitment & HR Operations" }, { id: "dopt-2", text: "Hardware Engineering" }, { id: "dopt-3", text: "Facilities Management" }], correctAnswer: "dopt-1" },
-    { id: "q-5", number: 5, text: "Employees must complete all learning resources before they can access the final assessment.", type: "true_false", marks: 1, mandatory: true, correctAnswer: "True" },
-    { id: "q-6", number: 6, text: "Summarize the architectural flow of token-based authentication and explain how JWT tokens are validated.", type: "long_text", marks: 1, mandatory: false, expectedAnswer: "JWT tokens validated via Gateway middleware, checking signature, expiry, and RBAC claims." }
-  ];
+  let defaultQuestions = DEFAULT_ASSESSMENT_QUESTIONS;
 
   let isAssessmentEnabled = c?.assessment ? c.assessment.enabled !== false : (c?.hasAssessment !== false);
   let passingScore = Number(c?.assessment?.passingScore || c.passingScore) || 80;
@@ -2488,7 +2831,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,onUpdateCoursePro
   let expectedHoursLabel = fmtDurationHM(c.expectedDurationHours || c.expectedDuration || c.hours || 4);
   let courseStatusLabel = isSubmitted ? "Completed ✓" : ((reqManager && preManagerStepsDone && !stepManagerDone) ? "Pending Approval" : (latestResult?.isPassed ? "Assessment Passed ✓" : (attemptsExhausted ? "Re-learning Required" : ((allResourcesDone && isAssessmentEnabled) ? "Ready for Assessment" : (doneCount > 0 || attemptHistory.length > 0 || submittedDocs.length > 0 || c.status === "In Progress" ? "In Progress" : "Not Started")))));
 
-  let resolveCourseState=(nextComp, nextRes, nextDocs, nextAppr)=>{
+  let resolveCourseState=(nextComp, nextRes, nextDocs, nextAppr, nextHistLen)=>{
     let dc = resources.filter(item => nextComp[item.id]).length;
     let mPct = resources.length > 0 ? Math.round((dc / resources.length) * 100) : 0;
     let vOk = resources.length === 0 || (resources.length > 0 && dc === resources.length);
@@ -2499,6 +2842,10 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,onUpdateCoursePro
     let allOk = hasChecklist ? (preOk && mOk) : preOk;
     if(allOk) return { status:"Completed", progress:100, managerApprovalStatus: reqManager ? "Approved" : nextAppr };
     if(reqManager && preOk && nextAppr !== "Approved") return { status:"Under Review", progress:Math.max(mPct, 90), managerApprovalStatus:"Pending Approval" };
+    let usedLen = typeof nextHistLen === "number" ? nextHistLen : attemptHistory.length;
+    if(isAssessmentEnabled && nextRes && !nextRes.isPassed && usedLen >= maxAttempts) {
+      return { status:"Failed", progress:Math.min(95, Math.max(mPct, 80)), managerApprovalStatus: nextAppr };
+    }
     let started = dc > 0 || (nextDocs && nextDocs.length > 0) || Boolean(nextRes);
     let prog = Math.min(95, Math.max(mPct, nextRes?.isPassed ? 75 : (nextDocs && nextDocs.length > 0 ? 50 : mPct)));
     return { status: started ? "In Progress" : "Not Started", progress: prog, managerApprovalStatus: nextAppr };
@@ -2600,48 +2947,10 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,onUpdateCoursePro
 
   let evaluateAssessment=()=>{
     if(isCourseInactive || isCourseArchived || attemptsUsed >= maxAttempts) return;
-    let earnedMarks = 0;
-
-    questions.forEach(q=>{
-      let ans = userAnswers[q.id];
-      if(q.type==="short_text"){
-        if(ans && typeof ans==="string"){
-          let cleanAns = ans.trim().toLowerCase();
-          let accepted = (q.acceptedAnswers||[]).map(a=>String(a).trim().toLowerCase()).filter(Boolean);
-          if(accepted.includes(cleanAns)){
-            earnedMarks += Number(q.marks) || 0;
-          }
-        }
-      } else if(q.type==="single_choice" || q.type==="dropdown"){
-        if(ans && ans === q.correctAnswer){
-          earnedMarks += Number(q.marks) || 0;
-        }
-      } else if(q.type==="multiple_choice"){
-        if(Array.isArray(ans) && Array.isArray(q.correctAnswers)){
-          let sortedUser = [...ans].sort();
-          let sortedCorrect = [...q.correctAnswers].sort();
-          if(sortedUser.length === sortedCorrect.length && sortedUser.every((val, i)=>val===sortedCorrect[i])){
-            earnedMarks += Number(q.marks) || 0;
-          }
-        }
-      } else if(q.type==="true_false"){
-        if(ans && ans === q.correctAnswer){
-          earnedMarks += Number(q.marks) || 0;
-        }
-      } else if(q.type==="long_text"){
-        if(ans && String(ans).trim().length > 10){
-          earnedMarks += Number(q.marks) || 0;
-        }
-      }
-    });
-
-    let scorePercentage = totalAssessmentMarks > 0 ? Math.round((earnedMarks / totalAssessmentMarks) * 100) : 100;
-    let isPassed = scorePercentage > passingScore;
-    let evalStatus = isPassed ? "Passed" : "Failed";
-    let resultRecord = { attemptNumber: attemptHistory.length + 1, earnedMarks, totalMarks: totalAssessmentMarks, scorePercentage, isPassed, evalStatus, submittedAt: new Date().toISOString() };
+    let resultRecord = gradeAssessmentSubmission(questions, userAnswers, passingScore, attemptHistory.length + 1);
 
     let nextHist = [resultRecord, ...attemptHistory];
-    let resolved = resolveCourseState(completedResources, resultRecord, submittedDocs, managerApprovalStatus);
+    let resolved = resolveCourseState(completedResources, resultRecord, submittedDocs, managerApprovalStatus, nextHist.length);
     setLatestResult(resultRecord);
     setAttemptHistory(nextHist);
     setSubmittedState(true);
@@ -3168,4 +3477,4 @@ function ht({onClose:e,onAddEmployee:t}){let[n,r]=(0,l.useState)(``),[i,a]=(0,l.
     ]})
   ]})});
 }
-function vt(){let[e,t]=(0,l.useState)(`employees`),[n,r]=(0,l.useState)(d),[i,a]=(0,l.useState)(null),[o,s]=(0,l.useState)(f),[c,u]=(0,l.useState)(null),[m,h]=(0,l.useState)(null),[g,_]=(0,l.useState)(null),[v,y]=(0,l.useState)(p),[b,x]=(0,l.useState)({name:`Ishdeep Anand`,role:`Admin / HR / Reporting Manager`,initials:`IA`,canChangeAvailability:!0}),[S,ee]=(0,l.useState)(!1),[C,w]=(0,l.useState)(!1),[te,T]=(0,l.useState)(!1),[ne,re]=(0,l.useState)(``),[ie,E]=(0,l.useState)(!1),[ae,oe]=(0,l.useState)(!1),[se,D]=(0,l.useState)(null),[courseProgress,setCourseProgress]=(0,l.useState)({}),[categories,setCategories]=(0,l.useState)(DEFAULT_CATEGORIES_SEED);(0,l.useEffect)(()=>{let cancelled=!1;fetch(`/api/training/programmes`).then(r=>r.json()).then(data=>{if(!cancelled&&data?.success&&Array.isArray(data.programmes)){s(data.programmes);if(Array.isArray(data.categories)&&data.categories.length>0)setCategories(data.categories);if(data.courseProgress&&typeof data.courseProgress===`object`)setCourseProgress(data.courseProgress);if(Array.isArray(data.assignments)&&data.assignments.length>0){y(prev=>{let ids=new Set(prev.map(x=>x.id));let extra=data.assignments.filter(x=>!ids.has(x.id));return extra.length>0?[...extra,...prev]:prev})}}}).catch(()=>{});return()=>{cancelled=!0}},[]);let isLearnerStarted=(st,pct)=>{let k=String(st||``).trim().toLowerCase(),pr=Number(pct)||0;if(k===`completed`||k===`cancelled`)return!1;if(k===`in progress`||k===`in_progress`||k===`under review`||k===`under_review`||k===`submitted_for_review`||k===`changes_requested`)return!0;if(k===`overdue`&&pr>0)return!0;return pr>0&&pr<100},hasStartedLearnerFn=prog=>{if(!prog)return!1;let pname=(prog.name||``).trim().toLowerCase(),cpVals=Object.values(courseProgress||{}).filter(entry=>entry&&((entry.programmeId&&entry.programmeId===prog.id)||(entry.programmeName&&pname&&entry.programmeName.trim().toLowerCase()===pname)));if(cpVals.some(entry=>isLearnerStarted(entry.status,entry.progress)))return!0;let matchingAsg=(v||[]).filter(a=>(a.programmeId&&a.programmeId===prog.id)||(a.programmeName&&pname&&a.programmeName.trim().toLowerCase()===pname));if(matchingAsg.some(a=>{let ov=courseProgress[(a.employeeId||"CO-5039")+"::"+prog.id]||courseProgress[prog.id];return isLearnerStarted(ov?ov.status:a.status,ov?ov.progress:a.progress)}))return!0;if(prog.id===`prog-7`){let ov7=courseProgress[`CO-5039::prog-7`]||courseProgress[`prog-7`];return ov7?isLearnerStarted(ov7.status,ov7.progress):!0}if([`prog-1`,`prog-2`,`prog-3`,`prog-8`,`prog-11`,`prog-12`].includes(prog.id)){let ovS=courseProgress[`CO-5039::${prog.id}`]||courseProgress[prog.id];if((prog.id===`prog-8`||prog.id===`prog-11`)&&ovS&&!isLearnerStarted(ovS.status,ovS.progress))return!1;return!0}return!1},updateCourseProgressApi=async(prog,status,progress,completedResources,latestResult,attemptHistory,extra)=>{let pid=prog.id||prog.name,pname=prog.name||``,key=`CO-5039::${pid}`,entry={employeeId:`CO-5039`,programmeId:pid,programmeName:pname,status,progress,completedResources,latestResult,attemptHistory,submittedDocs:extra?.submittedDocs||[],managerApprovalStatus:extra?.managerApprovalStatus||``};setCourseProgress(prev=>({...prev,[key]:entry}));y(prev=>prev.map(a=>((pid&&a.programmeId===pid)||(pname&&a.programmeName&&a.programmeName.trim().toLowerCase()===pname.trim().toLowerCase()))&&(a.employeeId===`emp-3`||a.employeeId===`CO-5039`||a.employeeName===`Tanya Kapoor`||a.employeeId===`emp-1`||!0)?(a.employeeId===`emp-3`||a.employeeId===`CO-5039`||a.employeeName===`Tanya Kapoor`?{...a,status,progress}:a):a));try{await fetch(`/api/training/employee-course-progress`,{method:`POST`,headers:{"Content-Type":"application/json"},body:JSON.stringify(entry)})}catch{}},approveCompletionApi=async(prog,empId)=>{let pid=prog.id||prog.name,pname=prog.name||``,empKey=(empId===`emp-3`||!empId)?`CO-5039`:empId,key=`${empKey}::${pid}`,prevEntry=courseProgress[key]||courseProgress[`CO-5039::${pid}`]||courseProgress[pid]||{};let entry={...prevEntry,employeeId:`CO-5039`,programmeId:pid,programmeName:pname,status:`Completed`,progress:100,managerApprovalStatus:`Approved`};setCourseProgress(prev=>({...prev,[`CO-5039::${pid}`]:entry,[key]:entry}));y(prev=>prev.map(a=>((pid&&a.programmeId===pid)||(pname&&a.programmeName&&a.programmeName.trim().toLowerCase()===pname.trim().toLowerCase()))&&(a.employeeId===empId||a.employeeId===`emp-3`||a.employeeName===`Tanya Kapoor`)?{...a,status:`Completed`,progress:100}:a));try{await fetch(`/api/training/employee-course-progress`,{method:`POST`,headers:{"Content-Type":"application/json"},body:JSON.stringify(entry)})}catch{}};let toggleCategoryApi=async(catName)=>{if((o||[]).some(pr=>doesProgUseCategory(pr,catName))){let cur=categories.find(c=>normCatKey(c.name)===normCatKey(catName));if(cur&&cur.active!==!1){return{success:!1,message:`Cannot mark "${cur.name}" as Inactive because it is currently assigned to one or more trainings.`}}}let res=await fetch(`/api/training/categories`,{method:`POST`,headers:{"Content-Type":"application/json"},body:JSON.stringify({action:`toggle`,name:catName,userName:b.name})});let data=await res.json();if(data?.categories)setCategories(data.categories);return data},saveCategoryApi=async(payload)=>{let res=await fetch(`/api/training/categories`,{method:`POST`,headers:{"Content-Type":"application/json"},body:JSON.stringify({...payload,userName:b.name})});let data=await res.json();if(data?.categories)setCategories(data.categories);if(data?.programmes)s(data.programmes);return data};let canToggleProg=usr=>{if(!usr||usr.canChangeAvailability===!1)return!1;let rs=(usr.role||``).toLowerCase();return!(rs.includes(`employee`)||rs.includes(`viewer`)||rs.includes(`view only`))&&(rs.includes(`admin`)||rs.includes(`hr`)||rs.includes(`reporting manager`)||rs.includes(`management`))},canManageAvail=canToggleProg(b),syncProgList=(list,updated)=>{Array.isArray(list)&&s(list),updated&&c&&c.id===updated.id&&u(updated)},ce=e=>{a(e),t(`employee-detail`)},le=e=>{u(e),t(`programme-detail`)},ue=e=>{h(e),t(`assignment-detail`)},de=e=>{let p=(o||[]).find(x=>(e.id&&x.id===e.id)||(e.name&&x.name&&x.name.trim().toLowerCase()===e.name.trim().toLowerCase()));_(p?{...e,...p,status:e.status||"Not Started",progress:e.progress!=null?e.progress:0,assignedBy:e.assignedBy,assignedDate:e.assignedDate,dueDate:e.dueDate,assessment:p.assessment||e.assessment,resources:Array.isArray(p.resources)?p.resources:e.resources}:e),t(`employee-course-detail`)},fe=usr=>{let wasEmp=b.name===`Tanya Kapoor`||b.role.includes(`Employee`),nextIsEmp=usr.role.includes(`Employee`)||usr.name===`Tanya Kapoor`;x(usr),nextIsEmp?t(`employee-dashboard`):wasEmp&&t(`employees`)},pe=e=>{r([e,...n]),E(!1)},saveProgApi=async(progPayload,isEdit)=>{let res=await fetch(`/api/training/programmes`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programme:progPayload,userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canManageAvail}})});let data=await res.json().catch(()=>({success:!1,message:`Failed to communicate with backend.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`Unable to save training.`};syncProgList(data.programmes,isEdit?data.programme:null),isEdit&&data.programme&&u(data.programme),t(`training-programmes`);return{success:!0,programme:data.programme}},me=e=>saveProgApi(e,!1),he=e=>saveProgApi(e,!0),toggleAvailabilityApi=async(prog,targetStatus,reason)=>{let res=await fetch(`/api/training/programmes/availability`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programmeId:prog.id,targetAvailabilityStatus:targetStatus,reason,userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canManageAvail}})});let data=await res.json().catch(()=>({success:!1,message:`Network error updating availability.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`Failed to update availability status.`};syncProgList(data.programmes,data.programme);return{success:!0,programme:data.programme}},archiveProgApi=async(prog,reason)=>{let res=await fetch(`/api/training/programmes/archive`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programmeId:prog.id,reason,userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canManageAvail}})});let data=await res.json().catch(()=>({success:!1,message:`Network error archiving training.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`Failed to archive training.`};syncProgList(data.programmes,data.programme);return{success:!0,programme:data.programme}},restoreProgApi=async(prog,reason)=>{let res=await fetch(`/api/training/programmes/restore`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programmeId:prog.id,reason,userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canManageAvail}})});let data=await res.json().catch(()=>({success:!1,message:`Network error restoring training.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`Failed to restore training.`};syncProgList(data.programmes,data.programme);return{success:!0,programme:data.programme}},ge=async payload=>{let res=await fetch(`/api/training/assign`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programmeId:payload.programme.id,employees:payload.employees,assignmentMethod:payload.assignmentMethod,startDate:payload.startDate,endDate:payload.endDate,assignedBy:b.name})});let data=await res.json().catch(()=>({success:!1,message:`Network error assigning training.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`This training is currently inactive and cannot be assigned.`};Array.isArray(data.assignments)&&y(prev=>[...data.assignments,...prev]),syncProgList(data.programmes,data.programme),oe(!1);return{success:!0}},_e=e=>{y(v.map(t=>t.id===e.id?e:t)),D(null)},ve=e=>{let n=o.find(t=>t.name.toLowerCase()===e.toLowerCase()||t.id===e);u(n||{...o[0],name:e}),(b.name===`Tanya Kapoor`||b.role.includes(`Employee`))&&x({name:`Ishdeep Anand`,role:`Admin / HR / Reporting Manager`,initials:`IA`,canChangeAvailability:!0}),t(`programme-detail`)},ye=b.name===`Tanya Kapoor`||b.role.includes(`Employee`),activeSelectedProgramme=(c&&o.find(x=>x.id===c.id))||c||o[0];return(0,P.jsxs)(`div`,{className:`flex h-screen bg-slate-100 font-sans text-slate-900 overflow-hidden select-none`,children:[(0,P.jsx)(Je,{currentTab:e,onSelectTab:e=>{e===`employees`&&a(null),t(e)},isTrainingFlyoutOpen:S,onToggleTrainingFlyout:ee,isConfigFlyoutOpen:C,onToggleConfigFlyout:w,collapsed:te,onToggleCollapse:()=>T(!te),currentUser:b}),(0,P.jsxs)(`div`,{className:`flex-1 flex flex-col min-w-0 overflow-hidden relative`,children:[(0,P.jsx)(Ye,{currentTab:e,onOpenNewEmployee:()=>E(!0),onOpenCreateProgramme:()=>{ee(!1),t(`training-management`)},onOpenAssignTraining:()=>oe(!0),searchQuery:ne,onSearchChange:re,currentUser:b,onSwitchUser:fe,onOpenMyProfile:()=>{let e=n.find(e=>e.firstName===`Tanya`)||n[0];a(e),t(`employee-profile`)}}),(0,P.jsx)(`main`,{className:`flex-1 overflow-y-auto`,children:ye?(0,P.jsxs)(P.Fragment,{children:[e===`employee-dashboard`&&(0,P.jsx)(ft,{onGoToTraining:()=>t(`employee-training`),onSelectCourse:de,employeeName:b.name,programmes:o,assignments:v,courseProgress:courseProgress}),e===`employee-training`&&(0,P.jsx)(pt,{onSelectCourse:de,programmes:o,assignments:v,courseProgress:courseProgress}),e===`employee-course-detail`&&(0,P.jsx)(mt,{course:g,programmes:o,courseProgress:courseProgress,onUpdateCourseProgress:updateCourseProgressApi,onBack:()=>t(`employee-training`)}),e===`employee-profile`&&i&&(0,P.jsx)($e,{employee:i,assignments:v,programmes:o,isEmployeeSide:!0,onBack:()=>t(`employee-training`),onOpenAssignTraining:()=>oe(!0),onNavigateToProgrammeDetail:ve})]}):(0,P.jsxs)(P.Fragment,{children:[e===`employees`&&(0,P.jsx)(Xe,{employees:n,onSelectEmployee:ce,onOpenNewEmployee:()=>E(!0),searchQuery:ne}),e===`employee-detail`&&i&&(0,P.jsx)($e,{employee:i,assignments:v,onBack:()=>t(`employees`),onOpenAssignTraining:()=>oe(!0),onNavigateToProgrammeDetail:ve}),e===`training-dashboard`&&(0,P.jsx)(et,{assignments:v,onOpenReviewQueue:()=>t(`training-review`),onEvaluateSubmission:e=>D(e)}),e===`training-programmes`&&(0,P.jsx)(tt,{programmes:o,employees:n,assignments:v,courseProgress:courseProgress,onOpenCreateProgramme:()=>t(`training-management`),onSelectProgramme:le,onEditProgramme:e=>{u(e),t(`edit-programme`)},onToggleAvailability:toggleAvailabilityApi,currentUser:b,canToggleAvailability:canManageAvail,hasStartedLearner:hasStartedLearnerFn}),e===`programme-detail`&&(0,P.jsx)(nt,{programme:activeSelectedProgramme,employees:n,assignments:v,courseProgress:courseProgress,onBack:()=>t(`training-programmes`),onOpenAssignTraining:()=>oe(!0),onSelectEmployee:ce,onEditProgramme:()=>t(`edit-programme`),onArchiveProgramme:archiveProgApi,onRestoreProgramme:restoreProgApi,onToggleAvailability:toggleAvailabilityApi,canToggleAvailability:canManageAvail,hasStartedLearner:hasStartedLearnerFn,onApproveCompletion:approveCompletionApi}),e===`training-management`&&(0,P.jsx)(rt,{categories:categories,onCancel:()=>t(`training-programmes`),onSaveProgramme:me},`new-programme`),e===`edit-programme`&&(0,P.jsx)(rt,{categories:categories,programmeToEdit:activeSelectedProgramme,onCancel:()=>t(`training-programmes`),onSaveProgramme:he},activeSelectedProgramme?.id||`edit-prog`),e===`training-assignments`&&(0,P.jsx)(it,{assignments:v,employees:n,onOpenAssignTraining:()=>oe(!0),onEvaluate:e=>D(e),onSelectAssignment:ue}),e===`assignment-detail`&&(0,P.jsx)(at,{assignment:m,onBack:()=>t(`training-assignments`),onEvaluate:()=>{let e=v[0];e&&D(e)}}),e===`training-progress`&&(0,P.jsx)(ot,{categories:categories}),e===`certificates`&&(0,P.jsx)(ct,{assignments:v}),e===`config`&&(0,P.jsx)(ut,{currentTab:e,categories:categories,programmes:o,onToggleCategory:toggleCategoryApi,onSaveCategory:saveCategoryApi}),e===`roles`&&(0,P.jsx)(dt,{onSelectRole:e=>alert(`Selected role: ${e}`)})]})})]}),ie&&(0,P.jsx)(ht,{onClose:()=>E(!1),onAddEmployee:pe}),ae&&(0,P.jsx)(gt,{employees:n,programmes:o,initialProgrammeId:e===`programme-detail`?activeSelectedProgramme?.id:void 0,onClose:()=>oe(!1),onAssign:ge}),se&&(0,P.jsx)(_t,{assignment:se,onClose:()=>D(null),onSaveEvaluation:_e})]})}(0,u.createRoot)(document.getElementById(`root`)).render((0,P.jsx)(vt,{}));
+function vt(){let[e,t]=(0,l.useState)(`employees`),[n,r]=(0,l.useState)(d),[i,a]=(0,l.useState)(null),[o,s]=(0,l.useState)(f),[c,u]=(0,l.useState)(null),[m,h]=(0,l.useState)(null),[g,_]=(0,l.useState)(null),[v,y]=(0,l.useState)(p),[b,x]=(0,l.useState)({name:`Ishdeep Anand`,role:`Admin / HR / Reporting Manager`,initials:`IA`,canChangeAvailability:!0}),[S,ee]=(0,l.useState)(!1),[C,w]=(0,l.useState)(!1),[te,T]=(0,l.useState)(!1),[ne,re]=(0,l.useState)(``),[ie,E]=(0,l.useState)(!1),[ae,oe]=(0,l.useState)(!1),[se,D]=(0,l.useState)(null),[courseProgress,setCourseProgress]=(0,l.useState)({}),[categories,setCategories]=(0,l.useState)(DEFAULT_CATEGORIES_SEED);(0,l.useEffect)(()=>{let cancelled=!1;fetch(`/api/training/programmes`).then(r=>r.json()).then(data=>{if(!cancelled&&data?.success&&Array.isArray(data.programmes)){s(data.programmes);if(Array.isArray(data.categories)&&data.categories.length>0)setCategories(data.categories);if(data.courseProgress&&typeof data.courseProgress===`object`)setCourseProgress(data.courseProgress);if(Array.isArray(data.assignments)&&data.assignments.length>0){y(prev=>{let ids=new Set(prev.map(x=>x.id));let extra=data.assignments.filter(x=>!ids.has(x.id));return extra.length>0?[...extra,...prev]:prev})}}}).catch(()=>{});return()=>{cancelled=!0}},[]);let isLearnerStarted=(st,pct)=>{let k=String(st||``).trim().toLowerCase(),pr=Number(pct)||0;if(k===`completed`||k===`cancelled`)return!1;if(k===`in progress`||k===`in_progress`||k===`under review`||k===`under_review`||k===`submitted_for_review`||k===`changes_requested`)return!0;if(k===`overdue`&&pr>0)return!0;return pr>0&&pr<100},hasStartedLearnerFn=prog=>{if(!prog)return!1;let pname=(prog.name||``).trim().toLowerCase(),cpVals=Object.values(courseProgress||{}).filter(entry=>entry&&((entry.programmeId&&entry.programmeId===prog.id)||(entry.programmeName&&pname&&entry.programmeName.trim().toLowerCase()===pname)));if(cpVals.some(entry=>isLearnerStarted(entry.status,entry.progress)))return!0;let matchingAsg=(v||[]).filter(a=>(a.programmeId&&a.programmeId===prog.id)||(a.programmeName&&pname&&a.programmeName.trim().toLowerCase()===pname));if(matchingAsg.some(a=>{let ov=courseProgress[(a.employeeId||"CO-5039")+"::"+prog.id]||courseProgress[prog.id];return isLearnerStarted(ov?ov.status:a.status,ov?ov.progress:a.progress)}))return!0;if(prog.id===`prog-7`){let ov7=courseProgress[`CO-5039::prog-7`]||courseProgress[`prog-7`];return ov7?isLearnerStarted(ov7.status,ov7.progress):!0}if([`prog-1`,`prog-2`,`prog-3`,`prog-8`,`prog-11`,`prog-12`].includes(prog.id)){let ovS=courseProgress[`CO-5039::${prog.id}`]||courseProgress[prog.id];if((prog.id===`prog-8`||prog.id===`prog-11`)&&ovS&&!isLearnerStarted(ovS.status,ovS.progress))return!1;return!0}return!1},updateCourseProgressApi=async(prog,status,progress,completedResources,latestResult,attemptHistory,extra)=>{let pid=prog.id||prog.name,pname=prog.name||``,key=`CO-5039::${pid}`,entry={employeeId:`CO-5039`,programmeId:pid,programmeName:pname,status,progress,completedResources,latestResult,attemptHistory,submittedDocs:extra?.submittedDocs||[],managerApprovalStatus:extra?.managerApprovalStatus||``};setCourseProgress(prev=>({...prev,[key]:entry}));y(prev=>prev.map(a=>((pid&&a.programmeId===pid)||(pname&&a.programmeName&&a.programmeName.trim().toLowerCase()===pname.trim().toLowerCase()))&&(a.employeeId===`emp-3`||a.employeeId===`CO-5039`||a.employeeName===`Tanya Kapoor`||a.employeeId===`emp-1`||!0)?(a.employeeId===`emp-3`||a.employeeId===`CO-5039`||a.employeeName===`Tanya Kapoor`?{...a,status,progress}:a):a));try{await fetch(`/api/training/employee-course-progress`,{method:`POST`,headers:{"Content-Type":"application/json"},body:JSON.stringify(entry)})}catch{}},approveCompletionApi=async(prog,empId)=>{let pid=prog.id||prog.name,pname=prog.name||``,empKey=(empId===`emp-3`||!empId)?`CO-5039`:empId,key=`${empKey}::${pid}`,prevEntry=courseProgress[key]||courseProgress[`CO-5039::${pid}`]||courseProgress[pid]||{};let entry={...prevEntry,employeeId:`CO-5039`,programmeId:pid,programmeName:pname,status:`Completed`,progress:100,managerApprovalStatus:`Approved`};setCourseProgress(prev=>({...prev,[`CO-5039::${pid}`]:entry,[key]:entry}));y(prev=>prev.map(a=>((pid&&a.programmeId===pid)||(pname&&a.programmeName&&a.programmeName.trim().toLowerCase()===pname.trim().toLowerCase()))&&(a.employeeId===empId||a.employeeId===`emp-3`||a.employeeName===`Tanya Kapoor`)?{...a,status:`Completed`,progress:100}:a));try{await fetch(`/api/training/employee-course-progress`,{method:`POST`,headers:{"Content-Type":"application/json"},body:JSON.stringify(entry)})}catch{}};let toggleCategoryApi=async(catName)=>{if((o||[]).some(pr=>doesProgUseCategory(pr,catName))){let cur=categories.find(c=>normCatKey(c.name)===normCatKey(catName));if(cur&&cur.active!==!1){return{success:!1,message:`Cannot mark "${cur.name}" as Inactive because it is currently assigned to one or more trainings.`}}}let res=await fetch(`/api/training/categories`,{method:`POST`,headers:{"Content-Type":"application/json"},body:JSON.stringify({action:`toggle`,name:catName,userName:b.name})});let data=await res.json();if(data?.categories)setCategories(data.categories);return data},saveCategoryApi=async(payload)=>{let res=await fetch(`/api/training/categories`,{method:`POST`,headers:{"Content-Type":"application/json"},body:JSON.stringify({...payload,userName:b.name})});let data=await res.json();if(data?.categories)setCategories(data.categories);if(data?.programmes)s(data.programmes);return data};let canToggleProg=usr=>{if(!usr||usr.canChangeAvailability===!1)return!1;let rs=(usr.role||``).toLowerCase();return!(rs.includes(`employee`)||rs.includes(`viewer`)||rs.includes(`view only`))&&(rs.includes(`admin`)||rs.includes(`hr`)||rs.includes(`reporting manager`)||rs.includes(`management`))},canManageAvail=canToggleProg(b),syncProgList=(list,updated)=>{Array.isArray(list)&&s(list),updated&&c&&c.id===updated.id&&u(updated)},ce=e=>{a(e),t(`employee-detail`)},le=e=>{u(e),t(`programme-detail`)},ue=e=>{h(e),t(`assignment-detail`)},de=e=>{let p=(o||[]).find(x=>(e.id&&x.id===e.id)||(e.name&&x.name&&x.name.trim().toLowerCase()===e.name.trim().toLowerCase()));_(p?{...e,...p,status:e.status||"Not Started",progress:e.progress!=null?e.progress:0,assignedBy:e.assignedBy,assignedDate:e.assignedDate,dueDate:e.dueDate,assessment:p.assessment||e.assessment,resources:Array.isArray(p.resources)?p.resources:e.resources}:e),t(`employee-course-detail`)},fe=usr=>{let wasEmp=b.name===`Tanya Kapoor`||b.role.includes(`Employee`),nextIsEmp=usr.role.includes(`Employee`)||usr.name===`Tanya Kapoor`;x(usr),nextIsEmp?t(`employee-dashboard`):wasEmp&&t(`employees`)},pe=e=>{r([e,...n]),E(!1)},saveProgApi=async(progPayload,isEdit)=>{let res=await fetch(`/api/training/programmes`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programme:progPayload,userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canManageAvail}})});let data=await res.json().catch(()=>({success:!1,message:`Failed to communicate with backend.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`Unable to save training.`};syncProgList(data.programmes,isEdit?data.programme:null),isEdit&&data.programme&&u(data.programme),t(`training-programmes`);return{success:!0,programme:data.programme}},me=e=>saveProgApi(e,!1),he=e=>saveProgApi(e,!0),toggleAvailabilityApi=async(prog,targetStatus,reason)=>{let res=await fetch(`/api/training/programmes/availability`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programmeId:prog.id,targetAvailabilityStatus:targetStatus,reason,userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canManageAvail}})});let data=await res.json().catch(()=>({success:!1,message:`Network error updating availability.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`Failed to update availability status.`};syncProgList(data.programmes,data.programme);return{success:!0,programme:data.programme}},archiveProgApi=async(prog,reason)=>{let res=await fetch(`/api/training/programmes/archive`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programmeId:prog.id,reason,userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canManageAvail}})});let data=await res.json().catch(()=>({success:!1,message:`Network error archiving training.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`Failed to archive training.`};syncProgList(data.programmes,data.programme);return{success:!0,programme:data.programme}},restoreProgApi=async(prog,reason)=>{let res=await fetch(`/api/training/programmes/restore`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programmeId:prog.id,reason,userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canManageAvail}})});let data=await res.json().catch(()=>({success:!1,message:`Network error restoring training.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`Failed to restore training.`};syncProgList(data.programmes,data.programme);return{success:!0,programme:data.programme}},ge=async payload=>{let res=await fetch(`/api/training/assign`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programmeId:payload.programme.id,employees:payload.employees,assignmentMethod:payload.assignmentMethod,startDate:payload.startDate,endDate:payload.endDate,assignedBy:b.name})});let data=await res.json().catch(()=>({success:!1,message:`Network error assigning training.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`This training is currently inactive and cannot be assigned.`};Array.isArray(data.assignments)&&y(prev=>[...data.assignments,...prev]),syncProgList(data.programmes,data.programme),oe(!1);return{success:!0}},_e=e=>{y(v.map(t=>t.id===e.id?e:t)),D(null)},ve=e=>{let n=o.find(t=>t.name.toLowerCase()===e.toLowerCase()||t.id===e);u(n||{...o[0],name:e}),(b.name===`Tanya Kapoor`||b.role.includes(`Employee`))&&x({name:`Ishdeep Anand`,role:`Admin / HR / Reporting Manager`,initials:`IA`,canChangeAvailability:!0}),t(`programme-detail`)},ye=b.name===`Tanya Kapoor`||b.role.includes(`Employee`),activeSelectedProgramme=(c&&o.find(x=>x.id===c.id))||c||o[0];return(0,P.jsxs)(`div`,{className:`flex h-screen bg-slate-100 font-sans text-slate-900 overflow-hidden select-none`,children:[(0,P.jsx)(Je,{currentTab:e,onSelectTab:e=>{e===`employees`&&a(null),t(e)},isTrainingFlyoutOpen:S,onToggleTrainingFlyout:ee,isConfigFlyoutOpen:C,onToggleConfigFlyout:w,collapsed:te,onToggleCollapse:()=>T(!te),currentUser:b}),(0,P.jsxs)(`div`,{className:`flex-1 flex flex-col min-w-0 overflow-hidden relative`,children:[(0,P.jsx)(Ye,{currentTab:e,onOpenNewEmployee:()=>E(!0),onOpenCreateProgramme:()=>{ee(!1),t(`training-management`)},onOpenAssignTraining:()=>oe(!0),searchQuery:ne,onSearchChange:re,currentUser:b,onSwitchUser:fe,onOpenMyProfile:()=>{let e=n.find(e=>e.firstName===`Tanya`)||n[0];a(e),t(`employee-profile`)}}),(0,P.jsx)(`main`,{className:`flex-1 overflow-y-auto`,children:ye?(0,P.jsxs)(P.Fragment,{children:[e===`employee-dashboard`&&(0,P.jsx)(ft,{onGoToTraining:()=>t(`employee-training`),onSelectCourse:de,employeeName:b.name,programmes:o,assignments:v,courseProgress:courseProgress}),e===`employee-training`&&(0,P.jsx)(pt,{onSelectCourse:de,programmes:o,assignments:v,courseProgress:courseProgress}),e===`employee-course-detail`&&(0,P.jsx)(mt,{course:g,programmes:o,courseProgress:courseProgress,onUpdateCourseProgress:updateCourseProgressApi,onBack:()=>t(`employee-training`)}),e===`employee-profile`&&i&&(0,P.jsx)($e,{employee:i,assignments:v,programmes:o,isEmployeeSide:!0,onBack:()=>t(`employee-training`),onOpenAssignTraining:()=>oe(!0),onNavigateToProgrammeDetail:ve})]}):(0,P.jsxs)(P.Fragment,{children:[e===`employees`&&(0,P.jsx)(Xe,{employees:n,onSelectEmployee:ce,onOpenNewEmployee:()=>E(!0),searchQuery:ne}),e===`employee-detail`&&i&&(0,P.jsx)($e,{employee:i,assignments:v,onBack:()=>t(`employees`),onOpenAssignTraining:()=>oe(!0),onNavigateToProgrammeDetail:ve}),e===`training-dashboard`&&(0,P.jsx)(et,{assignments:v,onOpenReviewQueue:()=>t(`training-review`),onEvaluateSubmission:e=>D(e)}),e===`training-programmes`&&(0,P.jsx)(tt,{programmes:o,employees:n,assignments:v,courseProgress:courseProgress,onOpenCreateProgramme:()=>t(`training-management`),onSelectProgramme:le,onEditProgramme:e=>{u(e),t(`edit-programme`)},onToggleAvailability:toggleAvailabilityApi,currentUser:b,canToggleAvailability:canManageAvail,hasStartedLearner:hasStartedLearnerFn}),e===`programme-detail`&&(0,P.jsx)(nt,{programme:activeSelectedProgramme,employees:n,assignments:v,courseProgress:courseProgress,onBack:()=>t(`training-programmes`),onOpenAssignTraining:()=>oe(!0),onSelectEmployee:ce,onEditProgramme:()=>t(`edit-programme`),onArchiveProgramme:archiveProgApi,onRestoreProgramme:restoreProgApi,onToggleAvailability:toggleAvailabilityApi,canToggleAvailability:canManageAvail,hasStartedLearner:hasStartedLearnerFn,onApproveCompletion:approveCompletionApi}),e===`training-management`&&(0,P.jsx)(rt,{categories:categories,onCancel:()=>t(`training-programmes`),onSaveProgramme:me},`new-programme`),e===`edit-programme`&&(0,P.jsx)(rt,{categories:categories,programmeToEdit:activeSelectedProgramme,onCancel:()=>t(`training-programmes`),onSaveProgramme:he},activeSelectedProgramme?.id||`edit-prog`),e===`training-assignments`&&(0,P.jsx)(it,{assignments:v,employees:n,programmes:o,courseProgress:courseProgress,onOpenAssignTraining:()=>oe(!0),onEvaluate:e=>D(e),onSelectAssignment:ue}),e===`assignment-detail`&&(0,P.jsx)(at,{assignment:m,programmes:o,courseProgress:courseProgress,onBack:()=>t(`training-assignments`),onEvaluate:()=>{let e=v[0];e&&D(e)}}),e===`training-progress`&&(0,P.jsx)(ot,{categories:categories}),e===`certificates`&&(0,P.jsx)(ct,{assignments:v}),e===`config`&&(0,P.jsx)(ut,{currentTab:e,categories:categories,programmes:o,onToggleCategory:toggleCategoryApi,onSaveCategory:saveCategoryApi}),e===`roles`&&(0,P.jsx)(dt,{onSelectRole:e=>alert(`Selected role: ${e}`)})]})})]}),ie&&(0,P.jsx)(ht,{onClose:()=>E(!1),onAddEmployee:pe}),ae&&(0,P.jsx)(gt,{employees:n,programmes:o,initialProgrammeId:e===`programme-detail`?activeSelectedProgramme?.id:void 0,onClose:()=>oe(!1),onAssign:ge}),se&&(0,P.jsx)(_t,{assignment:se,onClose:()=>D(null),onSaveEvaluation:_e})]})}(0,u.createRoot)(document.getElementById(`root`)).render((0,P.jsx)(vt,{}));
