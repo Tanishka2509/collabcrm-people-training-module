@@ -1,4 +1,464 @@
 // Shared API handler for Localhost and Vercel Serverless Functions
+import fs from 'fs';
+import path from 'path';
+
+// =============================================================================
+// BACKEND PERSISTENT STORE FOR TRAINING PROGRAMMES & AVAILABILITY AUDIT LOGS
+// =============================================================================
+function getProgrammeStoreFilePath() {
+  return '/tmp/.collabcrm-programmes-state.json';
+}
+
+function normalizeProgrammeRecord(p) {
+  const pubStatus = ['Draft', 'Published', 'Archived'].includes(p.publicationStatus)
+    ? p.publicationStatus
+    : (['Draft', 'Published', 'Archived'].includes(p.status) ? p.status : 'Published');
+  let availStatus;
+  if (pubStatus === 'Draft' || pubStatus === 'Archived') {
+    availStatus = 'Inactive';
+  } else if (p.availabilityStatus === 'Active' || p.availabilityStatus === 'Inactive') {
+    availStatus = p.availabilityStatus;
+  } else {
+    availStatus = p.isActive === false ? 'Inactive' : 'Active';
+  }
+  return {
+    ...p,
+    publicationStatus: pubStatus,
+    availabilityStatus: availStatus,
+    status: pubStatus,
+    isActive: availStatus === 'Active',
+    statusHistory: Array.isArray(p.statusHistory) ? p.statusHistory : []
+  };
+}
+
+function getDefaultProgrammesSeed() {
+  return [
+    {
+      id: 'prog-1',
+      name: 'CollabCRM Recruitment & Client Portal Workflows',
+      version: 'v1',
+      department: 'Business analyst',
+      category: 'Recruitment & HR Operations',
+      difficultyLevel: 'Intermediate',
+      expectedDurationHours: 18,
+      passingScore: 80,
+      maxAttempts: 3,
+      maxEnrollmentLimit: 50,
+      maxEnrollment: 50,
+      defaultDuePeriod: 14,
+      defaultDueDays: 14,
+      defaultAssignmentType: 'Mandatory',
+      certificateExpiryMonths: 24,
+      reminderFrequencyDays: 7,
+      mandatoryResourceCompletion: true,
+      reviewerApprovalRequired: true,
+      mandatoryEvidenceUpload: true,
+      certificateGeneration: true,
+      learningObjectives: 'Master end-to-end recruitment pipelines, candidate vetting, and client portal access control.',
+      completionRequirements: 'Complete 100% mandatory modules + achieve >= 80% on assessment',
+      publicationStatus: 'Published',
+      availabilityStatus: 'Active',
+      status: 'Published',
+      isActive: true,
+      enrolledCount: 3,
+      resources: [
+        { id: 'res-1', type: 'Video / YouTube', title: 'Module 1: Architecture Video Lecture', url: 'https://youtube.com/watch?v=sample-video', mandatory: true },
+        { id: 'res-2', type: 'PDF Document', title: 'Module 2: Standard Operating Procedure Handbook', url: 'https://docs.collabcrm.internal/sample-handbook.pdf', mandatory: true }
+      ],
+      assessment: {
+        enabled: true,
+        title: 'Final Training Assessment',
+        description: 'Complete the following questions to evaluate your understanding of this training.',
+        passingScore: 80,
+        maxAttempts: 3,
+        shuffleQuestions: false,
+        showResultAfterSubmission: true,
+        questions: [
+          { id: 'q-1', number: 1, text: 'What does CRM stand for in CollabCRM?', type: 'short_text', marks: 2, mandatory: true, acceptedAnswers: ['Customer Relationship Management', 'customer relationship management'] },
+          { id: 'q-2', number: 2, text: 'Which protocol is primarily used for real-time notifications in CollabCRM?', type: 'single_choice', marks: 2, mandatory: true, options: [{ id: 'opt-1', text: 'WebSocket' }, { id: 'opt-2', text: 'FTP' }, { id: 'opt-3', text: 'SMTP' }, { id: 'opt-4', text: 'Telnet' }], correctAnswer: 'opt-1' },
+          { id: 'q-3', number: 3, text: 'Which of the following are core platforms used in this curriculum? (Select all that apply)', type: 'multiple_choice', marks: 2, mandatory: true, options: [{ id: 'mopt-1', text: 'Unreal Engine' }, { id: 'mopt-2', text: 'Unity' }, { id: 'mopt-3', text: 'Blender' }, { id: 'mopt-4', text: 'Godot' }], correctAnswers: ['mopt-1', 'mopt-2', 'mopt-4'] },
+          { id: 'q-4', number: 4, text: 'Select the primary department responsible for candidate onboarding workflows:', type: 'dropdown', marks: 2, mandatory: true, options: [{ id: 'dopt-1', text: 'Recruitment & HR Operations' }, { id: 'dopt-2', text: 'Hardware Engineering' }, { id: 'dopt-3', text: 'Facilities Management' }], correctAnswer: 'dopt-1' },
+          { id: 'q-5', number: 5, text: 'Employees must complete all mandatory learning resources before they can access the final assessment.', type: 'true_false', marks: 1, mandatory: true, correctAnswer: 'True' },
+          { id: 'q-6', number: 6, text: 'Summarize the architectural flow of token-based authentication and explain how JWT tokens are validated.', type: 'long_text', marks: 1, mandatory: false, expectedAnswer: 'JWT tokens validated via Gateway middleware, checking signature, expiry, and RBAC claims.', requiresManualReview: true }
+        ]
+      },
+      statusHistory: []
+    },
+    {
+      id: 'prog-2',
+      name: 'Cloud Infrastructure & High-Performance Node Services',
+      version: 'v1',
+      department: 'Engineering',
+      category: 'Engineering',
+      difficultyLevel: 'Expert',
+      expectedDurationHours: 16,
+      passingScore: 85,
+      learningObjectives: 'Advanced cluster management, microservices scaling, and Node.js performance optimization.',
+      completionRequirements: 'Complete 100% mandatory modules + pass coding exam',
+      maxEnrollment: 30,
+      defaultDueDays: 21,
+      maxAttempts: 2,
+      certificateExpiryMonths: 12,
+      reminderFrequencyDays: 5,
+      defaultAssignmentType: 'Mandatory',
+      reviewerApprovalRequired: true,
+      mandatoryEvidenceUpload: true,
+      certificateGeneration: true,
+      publicationStatus: 'Published',
+      availabilityStatus: 'Active',
+      status: 'Published',
+      isActive: true,
+      enrolledCount: 2,
+      resources: [{ id: 'res-3', type: 'Video / YouTube', title: 'Kubernetes & Node.js Cluster Scaling', url: 'https://youtube.com/watch?v=k8s-node', mandatory: true }],
+      statusHistory: []
+    },
+    {
+      id: 'prog-3',
+      name: 'Information Security & Global Data Privacy (GDPR/ISO)',
+      version: 'v1',
+      department: 'Recruitment & HR',
+      category: 'Governance & Compliance',
+      difficultyLevel: 'Beginner',
+      expectedDurationHours: 6,
+      passingScore: 80,
+      learningObjectives: 'Understand GDPR mandates, ISO 27001 data protection protocols, and enterprise incident reporting.',
+      completionRequirements: 'Complete all video chapters and final compliance quiz',
+      maxEnrollment: 100,
+      defaultDueDays: 10,
+      maxAttempts: 3,
+      certificateExpiryMonths: 12,
+      reminderFrequencyDays: 3,
+      defaultAssignmentType: 'Mandatory',
+      reviewerApprovalRequired: false,
+      mandatoryEvidenceUpload: false,
+      certificateGeneration: true,
+      publicationStatus: 'Published',
+      availabilityStatus: 'Active',
+      status: 'Published',
+      isActive: true,
+      enrolledCount: 3,
+      resources: [{ id: 'res-4', type: 'PDF Document', title: 'GDPR & ISO Compliance Handbook', url: 'https://docs.collabcrm.internal/gdpr.pdf', mandatory: true }],
+      statusHistory: []
+    },
+    {
+      id: 'prog-4',
+      name: 'Enterprise CRM Communication & Client Delight',
+      version: 'v1',
+      department: 'Sales & BD',
+      category: 'Sales & BD',
+      difficultyLevel: 'Intermediate',
+      expectedDurationHours: 12,
+      passingScore: 75,
+      learningObjectives: 'Client escalation mastery, empathetic negotiation, and enterprise account retention.',
+      completionRequirements: 'Complete roleplay rubric & quiz',
+      maxEnrollment: 40,
+      defaultDueDays: 14,
+      maxAttempts: 3,
+      certificateExpiryMonths: 24,
+      reminderFrequencyDays: 7,
+      defaultAssignmentType: 'Mandatory',
+      reviewerApprovalRequired: true,
+      mandatoryEvidenceUpload: false,
+      certificateGeneration: true,
+      publicationStatus: 'Published',
+      availabilityStatus: 'Active',
+      status: 'Published',
+      isActive: true,
+      enrolledCount: 1,
+      resources: [{ id: 'res-5', type: 'Video / YouTube', title: 'Client Delight Masterclass', url: 'https://youtube.com/watch?v=delight', mandatory: true }],
+      statusHistory: []
+    },
+    {
+      id: 'prog-5',
+      name: 'NextJS 15 & Modern UI State Architecture',
+      version: 'v1',
+      department: 'Engineering',
+      category: 'Engineering',
+      difficultyLevel: 'Expert',
+      expectedDurationHours: 20,
+      passingScore: 85,
+      learningObjectives: 'Server components, app router, streaming, and state management best practices.',
+      completionRequirements: 'Submit capstone project repo',
+      maxEnrollment: 25,
+      defaultDueDays: 30,
+      maxAttempts: 2,
+      certificateExpiryMonths: 12,
+      reminderFrequencyDays: 7,
+      defaultAssignmentType: 'Optional',
+      reviewerApprovalRequired: true,
+      mandatoryEvidenceUpload: true,
+      certificateGeneration: true,
+      publicationStatus: 'Draft',
+      availabilityStatus: 'Inactive',
+      status: 'Draft',
+      isActive: false,
+      enrolledCount: 0,
+      resources: [],
+      statusHistory: []
+    },
+    {
+      id: 'prog-6',
+      name: 'Legacy ATS Database Migration Protocols',
+      version: 'v1',
+      department: 'Operations',
+      category: 'Operations',
+      difficultyLevel: 'Intermediate',
+      expectedDurationHours: 10,
+      passingScore: 80,
+      learningObjectives: 'Safe ETL processes for applicant tracking systems.',
+      completionRequirements: 'Pass audit exam',
+      maxEnrollment: 20,
+      defaultDueDays: 14,
+      maxAttempts: 3,
+      certificateExpiryMonths: 24,
+      reminderFrequencyDays: 7,
+      defaultAssignmentType: 'Mandatory',
+      reviewerApprovalRequired: false,
+      mandatoryEvidenceUpload: false,
+      certificateGeneration: true,
+      publicationStatus: 'Draft',
+      availabilityStatus: 'Inactive',
+      status: 'Draft',
+      isActive: false,
+      enrolledCount: 0,
+      resources: [],
+      statusHistory: []
+    },
+    {
+      id: 'prog-7',
+      name: 'API Security & Oauth2 Best Practices',
+      version: 'v1',
+      department: 'Technical Architecture',
+      category: 'Security',
+      difficultyLevel: 'Intermediate',
+      expectedDurationHours: 4,
+      passingScore: 85,
+      learningObjectives: 'Token management, CORS policies, OAuth2 scopes and PKCE flow implementation.',
+      completionRequirements: 'Pass security lab assessment',
+      maxEnrollment: 50,
+      defaultDueDays: 7,
+      maxAttempts: 3,
+      certificateExpiryMonths: 12,
+      reminderFrequencyDays: 3,
+      defaultAssignmentType: 'Mandatory',
+      reviewerApprovalRequired: true,
+      mandatoryEvidenceUpload: true,
+      certificateGeneration: true,
+      publicationStatus: 'Published',
+      availabilityStatus: 'Active',
+      status: 'Published',
+      isActive: true,
+      enrolledCount: 25,
+      resources: [],
+      statusHistory: []
+    },
+    {
+      id: 'prog-8',
+      name: 'Security Awareness & GDPR Compliance 2026',
+      version: 'v1',
+      department: 'Governance & Compliance',
+      category: 'Compliance',
+      difficultyLevel: 'Beginner',
+      expectedDurationHours: 2,
+      passingScore: 80,
+      learningObjectives: 'Annual mandatory security refresher for all enterprise employees.',
+      completionRequirements: 'Complete video and score >= 80%',
+      maxEnrollment: 200,
+      defaultDueDays: 7,
+      maxAttempts: 5,
+      certificateExpiryMonths: 12,
+      reminderFrequencyDays: 2,
+      defaultAssignmentType: 'Mandatory',
+      reviewerApprovalRequired: false,
+      mandatoryEvidenceUpload: false,
+      certificateGeneration: true,
+      publicationStatus: 'Published',
+      availabilityStatus: 'Active',
+      status: 'Published',
+      isActive: true,
+      enrolledCount: 1,
+      resources: [],
+      statusHistory: []
+    },
+    {
+      id: 'prog-9',
+      name: 'CollabCRM Platform Architecture Deep Dive',
+      version: 'v1',
+      department: 'Technical Architecture',
+      category: 'Architecture',
+      difficultyLevel: 'Expert',
+      expectedDurationHours: 6,
+      passingScore: 90,
+      learningObjectives: 'System topology, multi-tenant databases, event-driven message buses.',
+      completionRequirements: 'Architecture review board approval',
+      maxEnrollment: 15,
+      defaultDueDays: 14,
+      maxAttempts: 2,
+      certificateExpiryMonths: 24,
+      reminderFrequencyDays: 7,
+      defaultAssignmentType: 'Mandatory',
+      reviewerApprovalRequired: true,
+      mandatoryEvidenceUpload: true,
+      certificateGeneration: true,
+      publicationStatus: 'Published',
+      availabilityStatus: 'Active',
+      status: 'Published',
+      isActive: true,
+      enrolledCount: 1,
+      resources: [],
+      statusHistory: []
+    },
+    {
+      id: 'prog-10',
+      name: 'Effective Cross-Functional Stakeholder Communication',
+      version: 'v1',
+      department: 'Professional Skills',
+      category: 'Soft Skills',
+      difficultyLevel: 'Beginner',
+      expectedDurationHours: 3,
+      passingScore: 70,
+      learningObjectives: 'Managing expectations across engineering, product, and sales teams.',
+      completionRequirements: 'Case study submission',
+      maxEnrollment: 60,
+      defaultDueDays: 21,
+      maxAttempts: 3,
+      certificateExpiryMonths: 36,
+      reminderFrequencyDays: 10,
+      defaultAssignmentType: 'Optional',
+      reviewerApprovalRequired: false,
+      mandatoryEvidenceUpload: false,
+      certificateGeneration: true,
+      publicationStatus: 'Published',
+      availabilityStatus: 'Active',
+      status: 'Published',
+      isActive: true,
+      enrolledCount: 2,
+      resources: [],
+      statusHistory: []
+    },
+    {
+      id: 'prog-11',
+      name: 'Q4 2025 Workplace Safety & POSH Re-Certification',
+      version: 'v1',
+      department: 'Governance & Compliance',
+      category: 'Compliance',
+      difficultyLevel: 'Beginner',
+      expectedDurationHours: 2,
+      passingScore: 80,
+      learningObjectives: 'Prevention of Sexual Harassment and workplace safety standards.',
+      completionRequirements: 'Quiz completion',
+      maxEnrollment: 150,
+      defaultDueDays: 10,
+      maxAttempts: 3,
+      certificateExpiryMonths: 12,
+      reminderFrequencyDays: 3,
+      defaultAssignmentType: 'Mandatory',
+      reviewerApprovalRequired: false,
+      mandatoryEvidenceUpload: false,
+      certificateGeneration: true,
+      publicationStatus: 'Published',
+      availabilityStatus: 'Active',
+      status: 'Published',
+      isActive: true,
+      enrolledCount: 1,
+      resources: [],
+      statusHistory: []
+    },
+    {
+      id: 'prog-12',
+      name: 'Incident Response & SLA Management',
+      version: 'v1',
+      department: 'Support & Operations',
+      category: 'Support',
+      difficultyLevel: 'Intermediate',
+      expectedDurationHours: 3,
+      passingScore: 85,
+      learningObjectives: 'Severity grading, paging duty protocols, and SLA clock management.',
+      completionRequirements: 'Simulation test >= 85%',
+      maxEnrollment: 40,
+      defaultDueDays: 10,
+      maxAttempts: 3,
+      certificateExpiryMonths: 12,
+      reminderFrequencyDays: 5,
+      defaultAssignmentType: 'Mandatory',
+      reviewerApprovalRequired: true,
+      mandatoryEvidenceUpload: true,
+      certificateGeneration: true,
+      publicationStatus: 'Published',
+      availabilityStatus: 'Active',
+      status: 'Published',
+      isActive: true,
+      enrolledCount: 2,
+      resources: [],
+      statusHistory: []
+    }
+  ];
+}
+
+let PROGRAMME_STORE_CACHE = null;
+
+function loadProgrammeStore() {
+  if (PROGRAMME_STORE_CACHE) {
+    return PROGRAMME_STORE_CACHE;
+  }
+  const filePath = getProgrammeStoreFilePath();
+  try {
+    if (fs.existsSync(filePath)) {
+      const raw = fs.readFileSync(filePath, 'utf8');
+      const parsed = JSON.parse(raw);
+      if (parsed && Array.isArray(parsed.programmes)) {
+        PROGRAMME_STORE_CACHE = {
+          programmes: parsed.programmes.map(normalizeProgrammeRecord),
+          auditLogs: Array.isArray(parsed.auditLogs) ? parsed.auditLogs : [],
+          assignments: Array.isArray(parsed.assignments) ? parsed.assignments : []
+        };
+        return PROGRAMME_STORE_CACHE;
+      }
+    }
+  } catch (e) {}
+
+  PROGRAMME_STORE_CACHE = {
+    programmes: getDefaultProgrammesSeed().map(normalizeProgrammeRecord),
+    auditLogs: [],
+    assignments: []
+  };
+  saveProgrammeStore(PROGRAMME_STORE_CACHE);
+  return PROGRAMME_STORE_CACHE;
+}
+
+function saveProgrammeStore(store) {
+  PROGRAMME_STORE_CACHE = store;
+  try {
+    const filePath = getProgrammeStoreFilePath();
+    fs.writeFileSync(filePath, JSON.stringify(store, null, 2), 'utf8');
+  } catch (e) {}
+}
+
+function canManageProgrammeAvailability(userRole, userPermissions) {
+  if (userPermissions && userPermissions.canChangeAvailability === false) {
+    return false;
+  }
+  const roleStr = String(userRole || '').toLowerCase();
+  if (!roleStr) return false;
+  if (roleStr.includes('employee') || roleStr.includes('viewer') || roleStr.includes('restricted')) {
+    return false;
+  }
+  return (
+    roleStr.includes('admin') ||
+    roleStr.includes('hr') ||
+    roleStr.includes('reporting manager') ||
+    roleStr.includes('manager') ||
+    roleStr.includes('management') ||
+    roleStr.includes('team leader')
+  );
+}
+
+function formatAuditTimestamp(date = new Date()) {
+  const datePart = date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+  const timePart = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  return `${datePart}, ${timePart}`;
+}
+
 // =============================================================================
 // BACKEND IN-MEMORY TRAINING DATABASE FOR EMPLOYEES
 // =============================================================================
@@ -4955,6 +5415,21 @@ export async function handleApi(req, res) {
       });
     }
 
+    // Validation 1b: Reject assignment if target programme is Inactive, Draft, or Archived
+    const catalogueStore = loadProgrammeStore();
+    const targetProgId = training.programmeId || training.programId;
+    const matchedProg = catalogueStore.programmes.find(
+      p => (targetProgId && p.id === targetProgId) ||
+           (training.trainingName && p.name && p.name.trim().toLowerCase() === training.trainingName.trim().toLowerCase()) ||
+           (training.programmeName && p.name && p.name.trim().toLowerCase() === training.programmeName.trim().toLowerCase())
+    );
+    if (matchedProg && (matchedProg.publicationStatus !== 'Published' || matchedProg.availabilityStatus !== 'Active')) {
+      return sendJson(res, 400, {
+        success: false,
+        message: 'This programme is currently inactive and cannot be assigned.'
+      });
+    }
+
     // Validation 2: Prevent duplicate active assignments
     const isDuplicateActive = store.trainings.some(t => {
       const sameProg = (t.programId && training.programId && t.programId === training.programId) ||
@@ -5417,6 +5892,404 @@ export async function handleApi(req, res) {
       success: true,
       message: `Programme updated to version v${prog.version}. Existing employee assignments remain linked to their original version without progress reset.`,
       program: prog
+    });
+  }
+
+  // 18. GET Training Programmes (with separate publicationStatus, availabilityStatus & statusHistory)
+  if (pathname === '/api/training/programmes' && req.method === 'GET') {
+    const store = loadProgrammeStore();
+    return sendJson(res, 200, {
+      success: true,
+      programmes: store.programmes,
+      auditLogs: store.auditLogs,
+      assignments: store.assignments
+    });
+  }
+
+  // 19. POST Create / Save / Publish Training Programme
+  if (pathname === '/api/training/programmes' && req.method === 'POST') {
+    const body = await parseJsonBody(req);
+    const { programme, userRole, userName, userPermissions } = body;
+
+    if (!canManageProgrammeAvailability(userRole || 'Admin • Management', userPermissions)) {
+      return sendJson(res, 403, {
+        success: false,
+        message: 'Permission Denied: You do not have permission to create or update training programmes.'
+      });
+    }
+
+    if (!programme || !programme.name || !String(programme.name).trim()) {
+      return sendJson(res, 400, { success: false, message: 'Programme Name is required.' });
+    }
+
+    const store = loadProgrammeStore();
+    const idx = store.programmes.findIndex(p => p.id === programme.id);
+    const requestedPub = programme.publicationStatus || programme.status || 'Draft';
+    const changedBy = userName || 'Ishdeep Anand';
+    const nowIso = new Date().toISOString();
+    const nowFormatted = formatAuditTimestamp();
+
+    if (idx === -1) {
+      // Rule 1 & Rule 2:
+      // Created as Draft => publicationStatus: Draft, availabilityStatus: Inactive.
+      // Published => publicationStatus: Published, availabilityStatus: Active by default.
+      const pubStatus = requestedPub === 'Published' ? 'Published' : 'Draft';
+      const availStatus = pubStatus === 'Published' ? 'Active' : 'Inactive';
+      const created = normalizeProgrammeRecord({
+        ...programme,
+        id: programme.id || `prog-${Date.now()}`,
+        version: programme.version || 'v1',
+        publicationStatus: pubStatus,
+        availabilityStatus: availStatus,
+        status: pubStatus,
+        isActive: availStatus === 'Active',
+        enrolledCount: Number(programme.enrolledCount) || 0,
+        statusHistory: pubStatus === 'Published' ? [{
+          id: `audit-${Date.now()}`,
+          programmeId: programme.id,
+          programmeName: programme.name,
+          previousAvailabilityStatus: 'Inactive',
+          newAvailabilityStatus: 'Active',
+          previousPublicationStatus: 'Draft',
+          newPublicationStatus: 'Published',
+          changedBy,
+          changedAt: nowIso,
+          changedAtFormatted: nowFormatted,
+          reason: 'Programme published (default Active)'
+        }] : []
+      });
+      if (created.statusHistory.length > 0) {
+        created.statusHistory[0].programmeId = created.id;
+        store.auditLogs.unshift(created.statusHistory[0]);
+      }
+      store.programmes.unshift(created);
+      saveProgrammeStore(store);
+      return sendJson(res, 200, {
+        success: true,
+        programme: created,
+        programmes: store.programmes
+      });
+    } else {
+      const existing = store.programmes[idx];
+      if (existing.publicationStatus === 'Archived' && requestedPub === 'Published' && !body.allowRestore) {
+        return sendJson(res, 400, {
+          success: false,
+          message: 'Archived programmes cannot be published or activated directly. Use the Restore action first.'
+        });
+      }
+
+      let nextPub = requestedPub === 'Published' ? 'Published' : (requestedPub === 'Archived' ? 'Archived' : 'Draft');
+      let nextAvail = existing.availabilityStatus;
+      const history = Array.isArray(existing.statusHistory) ? [...existing.statusHistory] : [];
+
+      if (nextPub === 'Draft' || nextPub === 'Archived') {
+        nextAvail = 'Inactive';
+      } else if (existing.publicationStatus === 'Draft' && nextPub === 'Published') {
+        // Rule 2: Publishing a Draft defaults Availability Status to Active
+        nextAvail = 'Active';
+        const auditEntry = {
+          id: `audit-${Date.now()}`,
+          programmeId: existing.id,
+          programmeName: programme.name || existing.name,
+          previousAvailabilityStatus: existing.availabilityStatus || 'Inactive',
+          newAvailabilityStatus: 'Active',
+          previousPublicationStatus: 'Draft',
+          newPublicationStatus: 'Published',
+          changedBy,
+          changedAt: nowIso,
+          changedAtFormatted: nowFormatted,
+          reason: 'Programme published (default Active)'
+        };
+        history.unshift(auditEntry);
+        store.auditLogs.unshift(auditEntry);
+      }
+
+      const updated = normalizeProgrammeRecord({
+        ...existing,
+        ...programme,
+        id: existing.id,
+        publicationStatus: nextPub,
+        availabilityStatus: nextAvail,
+        status: nextPub,
+        isActive: nextAvail === 'Active',
+        statusHistory: history
+      });
+
+      store.programmes[idx] = updated;
+      saveProgrammeStore(store);
+      return sendJson(res, 200, {
+        success: true,
+        programme: updated,
+        programmes: store.programmes
+      });
+    }
+  }
+
+  // 20. POST Toggle Programme Availability Status (Active / Inactive)
+  if (pathname === '/api/training/programmes/availability' && req.method === 'POST') {
+    const body = await parseJsonBody(req);
+    const { programmeId, targetAvailabilityStatus, reason, userRole, userName, userPermissions } = body;
+
+    if (!canManageProgrammeAvailability(userRole, userPermissions)) {
+      return sendJson(res, 403, {
+        success: false,
+        message: 'Permission Denied: Only authorized Admin, HR, or Reporting Manager users can change programme availability.'
+      });
+    }
+
+    const store = loadProgrammeStore();
+    const idx = store.programmes.findIndex(p => p.id === programmeId);
+    if (idx === -1) {
+      return sendJson(res, 404, { success: false, message: 'Programme not found.' });
+    }
+
+    const prog = store.programmes[idx];
+    if (!['Active', 'Inactive'].includes(targetAvailabilityStatus)) {
+      return sendJson(res, 400, { success: false, message: 'Invalid availability status. Must be Active or Inactive.' });
+    }
+
+    // Rule 2.4 & 2.5 & 1.6: Draft and Archived cannot be activated directly
+    if (prog.publicationStatus === 'Draft') {
+      return sendJson(res, 400, {
+        success: false,
+        message: 'Draft programmes must remain Inactive and cannot be activated until published.',
+        programme: prog
+      });
+    }
+    if (prog.publicationStatus === 'Archived') {
+      return sendJson(res, 400, {
+        success: false,
+        message: 'Archived programmes cannot be activated directly. Restore the programme to Published first.',
+        programme: prog
+      });
+    }
+    if (prog.publicationStatus !== 'Published') {
+      return sendJson(res, 400, {
+        success: false,
+        message: 'Only Published programmes can be toggled between Active and Inactive.',
+        programme: prog
+      });
+    }
+
+    const prevAvail = prog.availabilityStatus;
+    if (prevAvail === targetAvailabilityStatus) {
+      return sendJson(res, 200, { success: true, programme: prog, programmes: store.programmes });
+    }
+
+    const nowIso = new Date().toISOString();
+    const nowFormatted = formatAuditTimestamp();
+    const auditEntry = {
+      id: `audit-${Date.now()}`,
+      programmeId: prog.id,
+      programmeName: prog.name,
+      previousAvailabilityStatus: prevAvail,
+      newAvailabilityStatus: targetAvailabilityStatus,
+      previousPublicationStatus: prog.publicationStatus,
+      newPublicationStatus: prog.publicationStatus,
+      changedBy: userName || 'Ishdeep Anand',
+      changedAt: nowIso,
+      changedAtFormatted: nowFormatted,
+      reason: reason && String(reason).trim() ? String(reason).trim() : ''
+    };
+
+    const updated = normalizeProgrammeRecord({
+      ...prog,
+      // Rule 1.3 & 1.4: Publication Status remains Published
+      publicationStatus: 'Published',
+      status: 'Published',
+      availabilityStatus: targetAvailabilityStatus,
+      isActive: targetAvailabilityStatus === 'Active',
+      statusHistory: [auditEntry, ...(prog.statusHistory || [])]
+    });
+
+    store.programmes[idx] = updated;
+    store.auditLogs.unshift(auditEntry);
+    saveProgrammeStore(store);
+
+    return sendJson(res, 200, {
+      success: true,
+      message: `Programme availability updated to ${targetAvailabilityStatus}.`,
+      programme: updated,
+      programmes: store.programmes,
+      auditEntry
+    });
+  }
+
+  // 21. POST Archive Programme (Rule 1.5: Archived + Inactive, existing assignments untouched)
+  if (pathname === '/api/training/programmes/archive' && req.method === 'POST') {
+    const body = await parseJsonBody(req);
+    const { programmeId, reason, userRole, userName, userPermissions } = body;
+
+    if (!canManageProgrammeAvailability(userRole, userPermissions)) {
+      return sendJson(res, 403, {
+        success: false,
+        message: 'Permission Denied: Only authorized Admin, HR, or Reporting Manager users can archive programmes.'
+      });
+    }
+
+    const store = loadProgrammeStore();
+    const idx = store.programmes.findIndex(p => p.id === programmeId);
+    if (idx === -1) {
+      return sendJson(res, 404, { success: false, message: 'Programme not found.' });
+    }
+
+    const prog = store.programmes[idx];
+    const prevAvail = prog.availabilityStatus;
+    const prevPub = prog.publicationStatus;
+    const history = Array.isArray(prog.statusHistory) ? [...prog.statusHistory] : [];
+
+    if (prevAvail !== 'Inactive' || prevPub !== 'Archived') {
+      const nowIso = new Date().toISOString();
+      const nowFormatted = formatAuditTimestamp();
+      const auditEntry = {
+        id: `audit-${Date.now()}`,
+        programmeId: prog.id,
+        programmeName: prog.name,
+        previousAvailabilityStatus: prevAvail,
+        newAvailabilityStatus: 'Inactive',
+        previousPublicationStatus: prevPub,
+        newPublicationStatus: 'Archived',
+        changedBy: userName || 'Ishdeep Anand',
+        changedAt: nowIso,
+        changedAtFormatted: nowFormatted,
+        reason: reason && String(reason).trim() ? String(reason).trim() : 'Programme archived'
+      };
+      history.unshift(auditEntry);
+      store.auditLogs.unshift(auditEntry);
+    }
+
+    const updated = normalizeProgrammeRecord({
+      ...prog,
+      publicationStatus: 'Archived',
+      status: 'Archived',
+      availabilityStatus: 'Inactive',
+      isActive: false,
+      statusHistory: history
+    });
+
+    store.programmes[idx] = updated;
+    saveProgrammeStore(store);
+
+    return sendJson(res, 200, {
+      success: true,
+      message: 'Programme archived. Availability set to Inactive while existing assignments remain unaffected.',
+      programme: updated,
+      programmes: store.programmes
+    });
+  }
+
+  // 22. POST Restore Archived Programme to Published (Rule 1.6)
+  if (pathname === '/api/training/programmes/restore' && req.method === 'POST') {
+    const body = await parseJsonBody(req);
+    const { programmeId, reason, userRole, userName, userPermissions } = body;
+
+    if (!canManageProgrammeAvailability(userRole, userPermissions)) {
+      return sendJson(res, 403, {
+        success: false,
+        message: 'Permission Denied: Only authorized Admin, HR, or Reporting Manager users can restore programmes.'
+      });
+    }
+
+    const store = loadProgrammeStore();
+    const idx = store.programmes.findIndex(p => p.id === programmeId);
+    if (idx === -1) {
+      return sendJson(res, 404, { success: false, message: 'Programme not found.' });
+    }
+
+    const prog = store.programmes[idx];
+    if (prog.publicationStatus !== 'Archived') {
+      return sendJson(res, 400, { success: false, message: 'Only Archived programmes can be restored.' });
+    }
+
+    const nowIso = new Date().toISOString();
+    const nowFormatted = formatAuditTimestamp();
+    const auditEntry = {
+      id: `audit-${Date.now()}`,
+      programmeId: prog.id,
+      programmeName: prog.name,
+      previousAvailabilityStatus: prog.availabilityStatus || 'Inactive',
+      newAvailabilityStatus: 'Inactive',
+      previousPublicationStatus: 'Archived',
+      newPublicationStatus: 'Published',
+      changedBy: userName || 'Ishdeep Anand',
+      changedAt: nowIso,
+      changedAtFormatted: nowFormatted,
+      reason: reason && String(reason).trim() ? String(reason).trim() : 'Restored from Archived to Published'
+    };
+
+    const updated = normalizeProgrammeRecord({
+      ...prog,
+      publicationStatus: 'Published',
+      status: 'Published',
+      availabilityStatus: 'Inactive',
+      isActive: false,
+      statusHistory: [auditEntry, ...(prog.statusHistory || [])]
+    });
+
+    store.programmes[idx] = updated;
+    store.auditLogs.unshift(auditEntry);
+    saveProgrammeStore(store);
+
+    return sendJson(res, 200, {
+      success: true,
+      message: 'Programme restored to Published (Inactive). You can now activate it if needed.',
+      programme: updated,
+      programmes: store.programmes
+    });
+  }
+
+  // 23. POST Assign Programme (Individual, Bulk, Department-Based with Active & Published Validation)
+  if (pathname === '/api/training/assign' && req.method === 'POST') {
+    const body = await parseJsonBody(req);
+    const { programmeId, employees: targetEmployees, assignmentMethod, startDate, endDate, assignedBy } = body;
+
+    const store = loadProgrammeStore();
+    const idx = store.programmes.findIndex(p => p.id === programmeId);
+    if (idx === -1) {
+      return sendJson(res, 404, { success: false, message: 'Selected training programme not found.' });
+    }
+
+    const prog = store.programmes[idx];
+    if (prog.publicationStatus !== 'Published' || prog.availabilityStatus !== 'Active') {
+      return sendJson(res, 400, {
+        success: false,
+        message: 'This programme is currently inactive and cannot be assigned.'
+      });
+    }
+
+    if (!Array.isArray(targetEmployees) || targetEmployees.length === 0) {
+      return sendJson(res, 400, {
+        success: false,
+        message: 'Please select at least one employee and a training programme.'
+      });
+    }
+
+    const createdAssignments = targetEmployees.map((emp, i) => ({
+      id: `asg-${Date.now()}-${i}-${Math.random().toString(36).slice(2, 6)}`,
+      employeeId: emp.id,
+      employeeName: emp.name || `${emp.firstName || ''} ${emp.lastName || ''}`.trim(),
+      programmeId: prog.id,
+      programmeName: prog.name,
+      assignmentMethod: assignmentMethod || (targetEmployees.length > 1 ? 'bulk' : 'individual'),
+      assignedBy: assignedBy || 'Ishdeep Anand',
+      assignedDate: startDate || '2026-11-04',
+      dueDate: endDate || '2026-12-01',
+      status: 'In Progress'
+    }));
+
+    store.assignments.unshift(...createdAssignments);
+    store.programmes[idx] = {
+      ...prog,
+      enrolledCount: (Number(prog.enrolledCount) || 0) + createdAssignments.length
+    };
+    saveProgrammeStore(store);
+
+    return sendJson(res, 200, {
+      success: true,
+      message: `Training assigned to ${createdAssignments.length} employee(s).`,
+      assignments: createdAssignments,
+      programme: store.programmes[idx],
+      programmes: store.programmes
     });
   }
 
