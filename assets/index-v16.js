@@ -306,7 +306,7 @@ const COMPLETION_REQ_OPTIONS=[`Watch all required videos`,`Pass the assessment`,
         (0,P.jsx)("span",{children:"Back to Training Management"})
       ]}),
       (0,P.jsx)("div",{className:"flex items-center gap-2",children:[
-        (0,P.jsx)("button",{type:"button",disabled:isLockedInactive,onClick:handleAssignClick,style:isLockedInactive?{opacity:0.5}:undefined,className:"bg-blue-600 text-white px-4 py-1.5 rounded-lg text-sm font-semibold shadow-sm transition-colors " + (isLockedInactive?"cursor-not-allowed":"hover:bg-blue-700"),children:"+ Assign Programme"})
+        (0,P.jsx)("button",{type:"button",disabled:isLockedInactive,onClick:handleAssignClick,style:isLockedInactive?{opacity:0.5}:undefined,className:"bg-blue-600 text-white px-4 py-1.5 rounded-lg text-sm font-semibold shadow-sm transition-colors " + (isLockedInactive?"cursor-not-allowed":"hover:bg-blue-700"),children:"+ Assign Training"})
       ]})
     ]}),
 
@@ -329,8 +329,7 @@ const COMPLETION_REQ_OPTIONS=[`Watch all required videos`,`Pass the assessment`,
           (0,P.jsx)("div",{className:"w-24 h-24 bg-blue-50 border border-blue-100 rounded-full mx-auto flex items-center justify-center text-3xl font-bold text-blue-600 shadow-inner mt-2",children:(0,P.jsx)(te,{className:"w-10 h-10 text-blue-600"})}),
           (0,P.jsx)("h2",{className:"text-base font-bold text-slate-900 mt-4 leading-snug",children:e.name}),
           (0,P.jsx)("div",{className:"text-xs text-slate-500 mt-1",children:e.category || "Recruitment & HR Operations"}),
-          (0,P.jsx)("div",{className:"inline-block mt-2 bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded text-xs font-semibold",children:e.difficultyLevel || "Intermediate"}),
-          (0,P.jsx)("button",{type:"button",disabled:isLockedInactive,onClick:handleAssignClick,style:isLockedInactive?{opacity:0.5}:undefined,className:"mt-4 w-full bg-blue-50 text-blue-600 border border-blue-200 rounded-lg py-2 text-xs font-bold transition-colors " + (isLockedInactive?"cursor-not-allowed":"hover:bg-blue-100"),children:"Assign Training"})
+          (0,P.jsx)("div",{className:"inline-block mt-2 bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded text-xs font-semibold",children:e.difficultyLevel || "Intermediate"})
         ]}),
         (0,P.jsxs)("div",{className:"border-t border-slate-100 pt-4 space-y-4 text-xs",children:[
           (0,P.jsxs)("div",{children:[
