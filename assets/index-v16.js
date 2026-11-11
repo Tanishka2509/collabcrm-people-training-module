@@ -1141,10 +1141,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList})
               (0,P.jsx)("input",{type:"text",value:assessmentTitle,onChange:e=>setAssessmentTitle(e.target.value),placeholder:"e.g. Final Training Assessment",className:"w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs placeholder-slate-400 focus:ring-1 focus:ring-blue-500"})
             ]}),
             (0,P.jsxs)("div",{className:"space-y-1",children:[
-              (0,P.jsxs)("label",{className:"font-semibold text-slate-700 flex items-center justify-between",children:[
-                (0,P.jsx)("span",{children:"Passing Score (%) *"}),
-                (0,P.jsx)("span",{className:"text-[10px] text-amber-600 font-bold",children:["Strictly > ", (Number(assessPassScore)||80), "% to pass"]})
-              ]}),
+              (0,P.jsx)("label",{className:"block text-xs font-semibold text-slate-700 mb-1.5",children:"Passing Score (%) *"}),
               (0,P.jsx)("input",{type:"number",min:1,max:100,value:assessPassScore,onChange:e=>setAssessPassScore(e.target.value),placeholder:"e.g. 80",className:"w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs placeholder-slate-400 focus:ring-1 focus:ring-blue-500"})
             ]}),
             (0,P.jsxs)("div",{className:"space-y-1",children:[
@@ -2160,8 +2157,9 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,onUpdateCoursePro
   let modulePct = resources.length > 0 ? Math.round((doneCount / resources.length) * 100) : (isSubmitted ? 100 : 0);
   let attemptsUsed = attemptHistory.length;
   let hasAttemptsRemaining = attemptsUsed < maxAttempts;
+  let attemptsExhausted = isAssessmentEnabled && !latestResult?.isPassed && attemptsUsed >= maxAttempts;
   let expectedHoursLabel = c.expectedDurationHours ? (c.expectedDurationHours + " Hours") : (c.hours || "4 Hours");
-  let courseStatusLabel = isSubmitted ? "Completed ✓" : (latestResult?.isPassed ? "Assessment Passed ✓" : ((allResourcesDone && isAssessmentEnabled) ? "Ready for Assessment" : (doneCount > 0 || attemptHistory.length > 0 || c.status === "In Progress" ? "In Progress" : "Not Started")));
+  let courseStatusLabel = isSubmitted ? "Completed ✓" : (latestResult?.isPassed ? "Assessment Passed ✓" : (attemptsExhausted ? "Re-learning Required" : ((allResourcesDone && isAssessmentEnabled) ? "Ready for Assessment" : (doneCount > 0 || attemptHistory.length > 0 || c.status === "In Progress" ? "In Progress" : "Not Started"))));
 
   let syncCourseState=(nextStatus, nextPct, nextCompletedMap, nextResult, nextHistory)=>{
     if(onSyncProg){
@@ -2245,7 +2243,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,onUpdateCoursePro
   };
 
   let evaluateAssessment=()=>{
-    if(isCourseInactive || isCourseArchived) return;
+    if(isCourseInactive || isCourseArchived || attemptsUsed >= maxAttempts) return;
     let earnedMarks = 0;
 
     questions.forEach(q=>{
@@ -2311,10 +2309,23 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,onUpdateCoursePro
   };
 
   let retakeAssessment=()=>{
-    if(isCourseInactive || isCourseArchived) return;
+    if(isCourseInactive || isCourseArchived || !hasAttemptsRemaining) return;
     setUserAnswers({});
     setSubmittedState(false);
     setLatestResult(null);
+  };
+
+  let restartProgramme=()=>{
+    if(isCourseInactive || isCourseArchived) return;
+    setCompletedResources({});
+    setViewedResource(null);
+    setUserAnswers({});
+    setAttemptHistory([]);
+    setLatestResult(null);
+    setSubmittedState(false);
+    setIsSubmitted(false);
+    syncCourseState("In Progress", 0, {}, null, []);
+    r("resources");
   };
 
   if (isCourseArchived) {
@@ -2363,6 +2374,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,onUpdateCoursePro
               (0,P.jsx)("button",{type:"button",disabled:isCourseInactive,onClick:()=>!isCourseInactive&&r("resources"),style:isCourseInactive?{opacity:0.5}:undefined,className:"w-full bg-blue-600 text-white rounded-lg py-2.5 text-xs font-bold shadow-sm transition-colors " + (isCourseInactive?"cursor-not-allowed":"hover:bg-blue-700"),children:"Start Learning Modules →"})
             ) : (
               latestResult?.isPassed ? (0,P.jsx)("button",{type:"button",disabled:isCourseInactive,onClick:()=>!isCourseInactive&&alert("Downloading Certificate PDF for " + c.name + "..."),style:isCourseInactive?{opacity:0.5}:undefined,className:"w-full bg-emerald-600 text-white rounded-lg py-2.5 text-xs font-bold shadow-sm transition-colors " + (isCourseInactive?"cursor-not-allowed":"hover:bg-emerald-700"),children:"Download Certificate 🎓"}):
+              attemptsExhausted ? (0,P.jsx)("button",{type:"button",disabled:isCourseInactive,onClick:restartProgramme,style:isCourseInactive?{opacity:0.5}:undefined,className:"w-full bg-rose-600 text-white rounded-lg py-2.5 text-xs font-bold shadow-sm transition-colors " + (isCourseInactive?"cursor-not-allowed":"hover:bg-rose-700"),children:"Go Through Programme Again ↺"}):
               (0,P.jsx)("button",{type:"button",disabled:isCourseInactive,onClick:()=>!isCourseInactive&&r("assessment"),style:isCourseInactive?{opacity:0.5}:undefined,className:"w-full bg-blue-600 text-white rounded-lg py-2.5 text-xs font-bold shadow-sm transition-colors " + (isCourseInactive?"cursor-not-allowed":"hover:bg-blue-700"),children:"Take Assessment →"})
             )
           })
@@ -2570,9 +2582,18 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,onUpdateCoursePro
                 (0,P.jsxs)("p",{className:"text-xs text-slate-600",children:["You have ", maxAttempts - attemptsUsed, " attempt(s) remaining."]}),
                 (0,P.jsx)("button",{type:"button",disabled:isCourseInactive,onClick:retakeAssessment,style:isCourseInactive?{opacity:0.5}:undefined,className:"bg-blue-600 text-white px-5 py-2.5 rounded-lg text-xs font-bold shadow-sm transition-colors " + (isCourseInactive?"cursor-not-allowed":"hover:bg-blue-700"),children:"Retake Assessment ↺"})
               ]}):
-              (0,P.jsx)("p",{className:"text-xs text-rose-600 font-bold",children:"Maximum attempts exceeded. Please contact your reporting manager."})
+              (0,P.jsxs)("div",{className:"pt-3 space-y-3",children:[
+                (0,P.jsxs)("p",{className:"text-xs text-rose-700 font-bold max-w-md mx-auto leading-relaxed",children:["All ", maxAttempts, " assessment attempt(s) used without passing. You are not considered as Pass and must go through the programme again before retaking the assessment."]}),
+                (0,P.jsx)("button",{type:"button",disabled:isCourseInactive,onClick:restartProgramme,style:isCourseInactive?{opacity:0.5}:undefined,className:"bg-rose-600 text-white px-5 py-2.5 rounded-lg text-xs font-bold shadow-sm transition-colors " + (isCourseInactive?"cursor-not-allowed":"hover:bg-rose-700"),children:"Go Through Programme Again ↺"})
+              ]})
             ]})
           ]}) :
+          attemptsExhausted ? (0,P.jsx)("div",{className:"bg-white border border-slate-200 rounded-xl p-6 shadow-sm",children:(0,P.jsxs)("div",{className:"bg-rose-50 border border-rose-200 rounded-xl p-6 text-center space-y-3",children:[
+            (0,P.jsx)("div",{className:"text-4xl",children:"🔄"}),
+            (0,P.jsx)("h2",{className:"text-lg font-bold text-rose-900",children:"Assessment Not Passed — Programme Re-run Required"}),
+            (0,P.jsxs)("p",{className:"text-xs text-rose-700 font-medium max-w-md mx-auto leading-relaxed",children:["All ", maxAttempts, " assessment attempt(s) have been used without passing. You are not considered as Pass and must go through the programme again."]}),
+            (0,P.jsx)("button",{type:"button",disabled:isCourseInactive,onClick:restartProgramme,style:isCourseInactive?{opacity:0.5}:undefined,className:"bg-rose-600 text-white px-5 py-2.5 rounded-lg text-xs font-bold shadow-sm transition-colors " + (isCourseInactive?"cursor-not-allowed":"hover:bg-rose-700"),children:"Go Through Programme Again ↺"})
+          ]})}) :
           (0,P.jsxs)("div",{className:"space-y-4",children:[
             questions.map((q, idx)=>(0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-3.5",children:[
               (0,P.jsxs)("div",{className:"flex items-center justify-between border-b border-slate-100 pb-2.5",children:[
