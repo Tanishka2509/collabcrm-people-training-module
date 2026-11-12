@@ -1870,18 +1870,6 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
             (0,P.jsx)("p",{className:"text-[11px] text-slate-500 leading-snug",children:"Higher level upgrades an existing employee skill; lower level never downgrades it."})
           ]})
         ]})
-      ]}),
-
-      // Reviewer Approval Requirement Toggle
-      (0,P.jsxs)("div",{className:"rounded-xl border border-slate-200 bg-slate-50/70 p-3 flex items-center justify-between gap-4",children:[
-        (0,P.jsxs)("div",{className:"space-y-0.5",children:[
-          (0,P.jsxs)("div",{className:"flex items-center gap-1.5 text-xs font-bold text-slate-800",children:[
-            (0,P.jsx)("span",{children:"Require Reviewer / Manager Approval Before Completion"}),
-            (0,P.jsx)(InfoTip,{text:"When ON, Certificates and Skills are withheld even after passing the assessment until an authorized Manager or HR/Admin approves completion."})
-          ]}),
-          (0,P.jsx)("p",{className:"text-[11px] text-slate-500",children:reviewerApprovalRequired ? "Required — Skills and Certificates are awarded only after Reviewer approval." : "Not Required — Recognition triggers automatically when resources and assessment are passed."})
-        ]}),
-        (0,P.jsx)("button",{type:"button",role:"switch","aria-checked":reviewerApprovalRequired,"aria-label":"Require Reviewer Approval",onClick:()=>setReviewerApprovalRequired(!reviewerApprovalRequired),style:{width:"38px",height:"20px",padding:"2px",border:"none",backgroundColor:reviewerApprovalRequired?"#7c3aed":"#cbd5e1"},className:"relative inline-flex shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 focus:outline-none",children:(0,P.jsx)("span",{style:{width:"16px",height:"16px",transform:reviewerApprovalRequired?"translateX(18px)":"translateX(0px)"},className:"pointer-events-none inline-block rounded-full bg-white shadow transition-transform duration-200"})})
       ]})
     ]}),
 
