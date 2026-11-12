@@ -1812,27 +1812,21 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
 
       (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-2 gap-4",children:[
         // A. Certificate Generation Toggle (Default OFF)
-        (0,P.jsxs)("div",{className:"rounded-xl border p-4 flex items-start justify-between gap-4 transition-colors " + (certificateGeneration ? "border-purple-200 bg-purple-50/60" : "border-slate-200 bg-slate-50/70"),children:[
-          (0,P.jsxs)("div",{className:"space-y-1",children:[
-            (0,P.jsxs)("div",{className:"flex items-center gap-1.5 text-xs font-bold text-slate-900",children:[
-              (0,P.jsx)("span",{children:"Certificate Generation"}),
-              (0,P.jsx)(InfoTip,{text:"When ON, an official verified Certificate is issued upon completion. When OFF, no certificate is generated."})
-            ]}),
-            (0,P.jsx)("p",{className:"text-[11px] text-slate-500 leading-relaxed",children:certificateGeneration ? "ON — Employees will receive a verified certificate upon completion." : "OFF — No certificate will be generated upon completion."})
+        (0,P.jsxs)("div",{className:"rounded-xl border p-4 flex items-center justify-between gap-4 transition-colors " + (certificateGeneration ? "border-purple-200 bg-purple-50/60" : "border-slate-200 bg-slate-50/70"),children:[
+          (0,P.jsxs)("div",{className:"flex items-center gap-1.5 text-xs font-bold text-slate-900",children:[
+            (0,P.jsx)("span",{children:"Certificate Generation"}),
+            (0,P.jsx)(InfoTip,{text:certificateGeneration ? "ON — Employees will receive a verified certificate upon completion." : "OFF — No certificate will be generated upon completion."})
           ]}),
-          (0,P.jsx)("button",{type:"button",role:"switch","aria-checked":certificateGeneration,"aria-label":"Certificate Generation",onClick:()=>{if(certificateGeneration&&!addSkillToProfile){setValidationError("Training Recognition: At least one option (Certificate Generation or Skills) is compulsory.");return;}setCertificateGeneration(!certificateGeneration);},style:{width:"40px",height:"22px",padding:"2px",border:"none",backgroundColor:certificateGeneration?"#7c3aed":"#cbd5e1"},className:"relative inline-flex shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 focus:outline-none mt-0.5",children:(0,P.jsx)("span",{style:{width:"18px",height:"18px",transform:certificateGeneration?"translateX(18px)":"translateX(0px)"},className:"pointer-events-none inline-block rounded-full bg-white shadow transition-transform duration-200"})})
+          (0,P.jsx)("button",{type:"button",role:"switch","aria-checked":certificateGeneration,"aria-label":"Certificate Generation",onClick:()=>{if(certificateGeneration&&!addSkillToProfile){setValidationError("Training Recognition: At least one option (Certificate Generation or Skills) is compulsory.");return;}setCertificateGeneration(!certificateGeneration);},style:{width:"40px",height:"22px",padding:"2px",border:"none",backgroundColor:certificateGeneration?"#7c3aed":"#cbd5e1"},className:"relative inline-flex shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 focus:outline-none",children:(0,P.jsx)("span",{style:{width:"18px",height:"18px",transform:certificateGeneration?"translateX(18px)":"translateX(0px)"},className:"pointer-events-none inline-block rounded-full bg-white shadow transition-transform duration-200"})})
         ]}),
 
         // B. Skills Toggle (Default OFF)
-        (0,P.jsxs)("div",{className:"rounded-xl border p-4 flex items-start justify-between gap-4 transition-colors " + (addSkillToProfile ? "border-purple-200 bg-purple-50/60" : "border-slate-200 bg-slate-50/70"),children:[
-          (0,P.jsxs)("div",{className:"space-y-1",children:[
-            (0,P.jsxs)("div",{className:"flex items-center gap-1.5 text-xs font-bold text-slate-900",children:[
-              (0,P.jsx)("span",{children:"Skills"}),
-              (0,P.jsx)(InfoTip,{text:"When ON, selected skills at the configured Skill Level are automatically added/upgraded on the Employee Profile after completion."})
-            ]}),
-            (0,P.jsx)("p",{className:"text-[11px] text-slate-500 leading-relaxed",children:addSkillToProfile ? "ON — Selected skills will be awarded upon verified Training completion." : "OFF — No skills will be added to employee profiles."})
+        (0,P.jsxs)("div",{className:"rounded-xl border p-4 flex items-center justify-between gap-4 transition-colors " + (addSkillToProfile ? "border-purple-200 bg-purple-50/60" : "border-slate-200 bg-slate-50/70"),children:[
+          (0,P.jsxs)("div",{className:"flex items-center gap-1.5 text-xs font-bold text-slate-900",children:[
+            (0,P.jsx)("span",{children:"Skills"}),
+            (0,P.jsx)(InfoTip,{text:addSkillToProfile ? "ON — Selected skills will be awarded upon verified Training completion." : "OFF — No skills will be added to employee profiles."})
           ]}),
-          (0,P.jsx)("button",{type:"button",role:"switch","aria-checked":addSkillToProfile,"aria-label":"Skills",onClick:()=>{if(addSkillToProfile&&!certificateGeneration){setValidationError("Training Recognition: At least one option (Certificate Generation or Skills) is compulsory.");return;}setAddSkillToProfile(!addSkillToProfile);},style:{width:"40px",height:"22px",padding:"2px",border:"none",backgroundColor:addSkillToProfile?"#7c3aed":"#cbd5e1"},className:"relative inline-flex shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 focus:outline-none mt-0.5",children:(0,P.jsx)("span",{style:{width:"18px",height:"18px",transform:addSkillToProfile?"translateX(18px)":"translateX(0px)"},className:"pointer-events-none inline-block rounded-full bg-white shadow transition-transform duration-200"})})
+          (0,P.jsx)("button",{type:"button",role:"switch","aria-checked":addSkillToProfile,"aria-label":"Skills",onClick:()=>{if(addSkillToProfile&&!certificateGeneration){setValidationError("Training Recognition: At least one option (Certificate Generation or Skills) is compulsory.");return;}setAddSkillToProfile(!addSkillToProfile);},style:{width:"40px",height:"22px",padding:"2px",border:"none",backgroundColor:addSkillToProfile?"#7c3aed":"#cbd5e1"},className:"relative inline-flex shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 focus:outline-none",children:(0,P.jsx)("span",{style:{width:"18px",height:"18px",transform:addSkillToProfile?"translateX(18px)":"translateX(0px)"},className:"pointer-events-none inline-block rounded-full bg-white shadow transition-transform duration-200"})})
         ]})
       ]}),
 
