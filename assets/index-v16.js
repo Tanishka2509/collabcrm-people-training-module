@@ -4098,7 +4098,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
   };
   let firstIncompleteIdx = resources.findIndex(item => !completedResources[item.id]);
   let handleToggleResource=(resId)=>{
-    if(isCourseInactive || isCourseArchived) return;
+    if(isCourseInactive || isCourseArchived || (isAssessmentEnabled && !stepAssessDone)) return;
     let targetIdx = resources.findIndex(item => item.id === resId);
     if(targetIdx === -1 || targetIdx !== firstIncompleteIdx) return;
     let next = {...completedResources, [resId]: true};
@@ -4362,7 +4362,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
               (0,P.jsx)("td",{className:"py-3 px-4 text-slate-400 font-mono text-[11px] max-w-xs truncate",children:res.url || "-"}),
               (0,P.jsx)("td",{className:"py-3 px-4 text-center whitespace-nowrap",children:(0,P.jsxs)("div",{className:"inline-flex items-center justify-end gap-2",children:[
                 completedResources[res.id] ? (0,P.jsx)("span",{className:"px-2.5 py-1 text-[11px] font-semibold rounded-md bg-emerald-100 text-emerald-800 border border-emerald-200",children:"Completed ✓"}) :
-                idx===firstIncompleteIdx ? (0,P.jsx)("button",{type:"button",disabled:isCourseInactive,onClick:()=>handleToggleResource(res.id),style:isCourseInactive?{opacity:0.5}:undefined,className:"px-2.5 py-1 text-[11px] font-semibold rounded-md transition-colors bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100" + (isCourseInactive?" cursor-not-allowed":""),children:"Mark Done"}) :
+                idx===firstIncompleteIdx ? (()=>{let locked=isCourseInactive||(isAssessmentEnabled&&!stepAssessDone);return (0,P.jsx)("button",{type:"button",disabled:locked,title:(isAssessmentEnabled&&!stepAssessDone)?"Complete the assessment first to enable this action":undefined,onClick:()=>handleToggleResource(res.id),style:locked?{opacity:0.5}:undefined,className:"px-2.5 py-1 text-[11px] font-semibold rounded-md transition-colors " + (locked?"bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed":"bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100"),children:"Mark Done"})})() :
                 (0,P.jsx)("span",{className:"px-2.5 py-1 text-[11px] font-medium rounded-md bg-slate-100 text-slate-400 border border-slate-200",children:"Pending"})
               ]})})
             ]},res.id || idx))})
