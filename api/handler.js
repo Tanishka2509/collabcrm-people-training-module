@@ -1352,11 +1352,16 @@ function processTrainingRecognitionOnCompletion({ store, employeeId, programme, 
       : [];
 
     if (awardedLevel && awardedRank > 0) {
+      const skillLevelsMap = programme.skillLevels && typeof programme.skillLevels === "object" ? programme.skillLevels : {};
       for (const skillId of selectedIds) {
         const skillMaster = masterSkills.find(s => s.id === skillId || normSkillKey(s.name) === normSkillKey(skillId));
         if (!skillMaster) continue;
         const resolvedSkillId = skillMaster.id;
         const skillName = skillMaster.name;
+        const perSkillRaw = String(skillLevelsMap[skillId] || skillLevelsMap[resolvedSkillId] || "").trim();
+        const effEntry = perSkillRaw ? skillLevels.find(l => String(l.name || "").trim().toLowerCase() === perSkillRaw.toLowerCase()) : null;
+        const effLevel = effEntry ? effEntry.name : awardedLevel;
+        const effRank = effEntry ? getSkillLevelRank(effLevel, skillLevels) : awardedRank;
         const empSkillList = store.employeeSkills[empKey];
         const existingIdx = empSkillList.findIndex(
           es => es.skillId === resolvedSkillId || normSkillKey(es.skillName) === normSkillKey(skillName)
@@ -1370,7 +1375,7 @@ function processTrainingRecognitionOnCompletion({ store, employeeId, programme, 
             employeeId: empKey,
             skillId: resolvedSkillId,
             skillName,
-            skillLevel: awardedLevel,
+            skillLevel: effLevel,
             sourceTrainingId: programme.id,
             sourceTrainingName: programme.name,
             latestSourceTrainingId: programme.id,
@@ -1379,7 +1384,7 @@ function processTrainingRecognitionOnCompletion({ store, employeeId, programme, 
             sources: [{
               trainingId: programme.id,
               trainingName: programme.name,
-              level: awardedLevel,
+              level: effLevel,
               awardedDate: todayStr
             }],
             remarks: `Earned via Training: ${programme.name}`,
@@ -1397,9 +1402,9 @@ function processTrainingRecognitionOnCompletion({ store, employeeId, programme, 
             employeeId: empKey,
             skillId: resolvedSkillId,
             skillName,
-            awardedSkillLevel: awardedLevel,
+            awardedSkillLevel: effLevel,
             previousLevel: null,
-            finalLevel: awardedLevel,
+            finalLevel: effLevel,
             outcome: 'added',
             sourceTrainingId: programme.id,
             sourceTrainingName: programme.name,
@@ -1408,7 +1413,7 @@ function processTrainingRecognitionOnCompletion({ store, employeeId, programme, 
             updatedDate: nowIso
           };
           store.skillAwardHistory.unshift(histEntry);
-          skillsAwarded.push({ skillId: resolvedSkillId, skillName, awardedLevel, previousLevel: null, finalLevel: awardedLevel, outcome: 'added' });
+          skillsAwarded.push({ skillId: resolvedSkillId, skillName, effLevel: effLevel, previousLevel: null, finalLevel: effLevel, outcome: 'added' });
         } else {
           const existingRec = empSkillList[existingIdx];
           const existingLevel = existingRec.skillLevel || existingRec.level || (skillLevels[0]?.name || 'Beginner');
@@ -1417,10 +1422,10 @@ function processTrainingRecognitionOnCompletion({ store, employeeId, programme, 
             h => canonicalEmployeeSkillKey(h.employeeId) === empKey &&
                  (h.skillId === resolvedSkillId || normSkillKey(h.skillName) === normSkillKey(skillName)) &&
                  h.sourceTrainingId === programme.id &&
-                 String(h.awardedSkillLevel || '').trim().toLowerCase() === awardedLevel.toLowerCase()
+                 String(h.awardedSkillLevel || '').trim().toLowerCase() === effLevel.toLowerCase()
           );
 
-          if (alreadyRecordedFromSameTraining && awardedRank <= existingRank) {
+          if (alreadyRecordedFromSameTraining && effRank <= existingRank) {
             continue;
           }
 
@@ -1434,11 +1439,11 @@ function processTrainingRecognitionOnCompletion({ store, employeeId, programme, 
 
           let finalLevel = existingLevel;
           let outcome = 'retained';
-          if (awardedRank > existingRank) {
-            finalLevel = awardedLevel;
+          if (effRank > existingRank) {
+            finalLevel = effLevel;
             outcome = 'upgraded';
-            existingRec.skillLevel = awardedLevel;
-            existingRec.level = awardedLevel;
+            existingRec.skillLevel = effLevel;
+            existingRec.level = effLevel;
             existingRec.awardedDate = todayStr;
             existingRec.remarks = `Earned via Training: ${programme.name}`;
           } else if (!existingRec.skillLevel) {
@@ -1447,11 +1452,11 @@ function processTrainingRecognitionOnCompletion({ store, employeeId, programme, 
           if (!prevSourceIds.includes(programme.id)) {
             prevSourceIds.push(programme.id);
           }
-          if (!prevSources.some(src => src.trainingId === programme.id && String(src.level || '').toLowerCase() === awardedLevel.toLowerCase())) {
+          if (!prevSources.some(src => src.trainingId === programme.id && String(src.level || '').toLowerCase() === effLevel.toLowerCase())) {
             prevSources.push({
               trainingId: programme.id,
               trainingName: programme.name,
-              level: awardedLevel,
+              level: effLevel,
               awardedDate: todayStr
             });
           }
@@ -1471,7 +1476,7 @@ function processTrainingRecognitionOnCompletion({ store, employeeId, programme, 
               employeeId: empKey,
               skillId: resolvedSkillId,
               skillName,
-              awardedSkillLevel: awardedLevel,
+              awardedSkillLevel: effLevel,
               previousLevel: existingLevel,
               finalLevel,
               outcome,
@@ -1482,7 +1487,7 @@ function processTrainingRecognitionOnCompletion({ store, employeeId, programme, 
               updatedDate: nowIso
             };
             store.skillAwardHistory.unshift(histEntry);
-            skillsAwarded.push({ skillId: resolvedSkillId, skillName, awardedLevel, previousLevel: existingLevel, finalLevel, outcome });
+            skillsAwarded.push({ skillId: resolvedSkillId, skillName, effLevel: effLevel, previousLevel: existingLevel, finalLevel, outcome });
           }
         }
       }

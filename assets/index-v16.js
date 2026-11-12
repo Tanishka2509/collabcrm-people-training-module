@@ -1200,6 +1200,14 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
   let[addSkillToProfile, setAddSkillToProfile] = (0,l.useState)(Boolean(n?.addSkillToProfile));
   let[selectedSkillIds, setSelectedSkillIds] = (0,l.useState)(Array.isArray(n?.selectedSkillIds) ? n.selectedSkillIds.filter(Boolean) : []);
   let[awardSkillLevel, setAwardSkillLevel] = (0,l.useState)(n?.skillLevel || (configuredSkillLevels[0]?.name || "Beginner"));
+  let[skillLevelsMap, setSkillLevelsMap] = (0,l.useState)(() => {
+    let base = n?.skillLevels && typeof n.skillLevels === "object" ? { ...n.skillLevels } : {};
+    let fallback = n?.skillLevel || (configuredSkillLevels[0]?.name || "Beginner");
+    (Array.isArray(n?.selectedSkillIds) ? n.selectedSkillIds : []).forEach(sid => {
+      if (sid && !base[sid]) base[sid] = fallback;
+    });
+    return base;
+  });
   let[reviewerApprovalRequired, setReviewerApprovalRequired] = (0,l.useState)(Boolean(n?.reviewerApprovalRequired));
   let[skillDropdownOpen, setSkillDropdownOpen] = (0,l.useState)(false);
   let[skillSearch, setSkillSearch] = (0,l.useState)("");
@@ -1499,8 +1507,12 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
         setValidationError("Training Recognition: Please select at least one skill when 'Skills' is enabled.");
         return;
       }
-      if(!awardSkillLevel || !configuredSkillLevels.some(lv => lv.name === awardSkillLevel)){
-        setValidationError("Training Recognition: Please select a valid Skill Level.");
+      let missingLvSkill = dedupedSkills.find(sid => {
+        let lv = skillLevelsMap[sid] || awardSkillLevel;
+        return !lv || !configuredSkillLevels.some(c => c.name === lv);
+      });
+      if(missingLvSkill){
+        setValidationError("Training Recognition: Please select a valid Skill Level for every selected skill.");
         return;
       }
       let prevSkillSet = new Set(Array.isArray(n?.selectedSkillIds) ? n.selectedSkillIds : []);
@@ -1621,7 +1633,11 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
         certificateGeneration: Boolean(certificateGeneration),
         addSkillToProfile: Boolean(addSkillToProfile),
         selectedSkillIds: addSkillToProfile ? Array.from(new Set(selectedSkillIds)) : [],
-        skillLevel: addSkillToProfile ? awardSkillLevel : "",
+        skillLevel: addSkillToProfile ? (skillLevelsMap[selectedSkillIds[0]] || awardSkillLevel || (configuredSkillLevels[0]?.name || "Beginner")) : "",
+        skillLevels: addSkillToProfile ? Array.from(new Set(selectedSkillIds)).reduce((acc, sid) => {
+          acc[sid] = skillLevelsMap[sid] || awardSkillLevel || (configuredSkillLevels[0]?.name || "Beginner");
+          return acc;
+        }, {}) : {},
         reviewerApprovalRequired: Boolean(reviewerApprovalRequired),
         resources: cleanedResources,
         assessment: compiledAssessment,
@@ -1810,9 +1826,9 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
           (canManageSkills !== !1 && onSaveSkill) && (0,P.jsx)("button",{type:"button",onClick:()=>{setQuickSkillErr("");setQuickSkillName("");setQuickSkillDesc("");setShowQuickSkillModal(true);},className:"text-xs font-bold px-3 py-1.5 rounded-lg border border-purple-200 bg-white text-purple-700 hover:bg-purple-50 transition-colors cursor-pointer",children:"Add New Skill"})
         ]}),
 
-        (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-3 gap-4 items-start text-xs",children:[
+        (0,P.jsxs)("div",{className:"grid grid-cols-1 gap-4 items-start text-xs",children:[
           // Select Skills (Multi-select dropdown populated from Administration > Master Data > Skills)
-          (0,P.jsxs)("div",{className:"md:col-span-2 space-y-1.5 relative",children:[
+          (0,P.jsxs)("div",{className:"space-y-2 relative",children:[
             (0,P.jsxs)("label",{className:"inline-flex items-center gap-1.5 font-semibold text-slate-700",children:[
               (0,P.jsx)("span",{children:"Select Skills"}),
               (0,P.jsx)("span",{className:"text-rose-500",children:"*"}),
@@ -1834,7 +1850,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
                 if(list.length===0) return (0,P.jsx)("div",{className:"p-3 text-center text-slate-400 text-xs",children:"No matching skills found."});
                 return list.map(sk => {
                   let checked = selectedSkillIds.includes(sk.id);
-                  return (0,P.jsxs)("div",{onClick:()=>setSelectedSkillIds(prev => prev.includes(sk.id) ? prev.filter(id => id !== sk.id) : [...prev, sk.id]),className:"px-3 py-2 flex items-center justify-between hover:bg-purple-50/50 cursor-pointer text-xs",children:[
+                  return (0,P.jsxs)("div",{onClick:()=>{setSelectedSkillIds(prev => {if(prev.includes(sk.id)) return prev.filter(id => id !== sk.id); setSkillLevelsMap(m => m[sk.id] ? m : {...m, [sk.id]: awardSkillLevel || (configuredSkillLevels[0]?.name || "Beginner")}); return [...prev, sk.id];});},className:"px-3 py-2 flex items-center justify-between hover:bg-purple-50/50 cursor-pointer text-xs",children:[
                     (0,P.jsx)("span",{className:checked?"font-bold text-purple-700":"font-medium text-slate-700",children:sk.name + (sk.active === !1 ? " (Inactive)" : "")}),
                     (0,P.jsx)("span",{className:"w-4 h-4 rounded border flex items-center justify-center text-[10px] font-bold "+(checked?"bg-purple-600 border-purple-600 text-white":"border-slate-300 bg-white"),children:checked?"✓":""})
                   ]},sk.id);
@@ -1845,27 +1861,16 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
                 (0,P.jsx)("button",{type:"button",onClick:()=>setSkillDropdownOpen(false),className:"text-purple-700 font-bold hover:underline cursor-pointer",children:"Done"})
               ]})
             ]}),
-            selectedSkillIds.length>0 && (0,P.jsx)("div",{className:"flex flex-wrap gap-1.5 pt-1",children:selectedSkillIds.map(sid => {
+            selectedSkillIds.length>0 && (0,P.jsx)("div",{className:"flex flex-wrap gap-2 pt-1",children:selectedSkillIds.map(sid => {
               let skObj = allSkillsMaster.find(m => m.id === sid);
               let label = skObj ? skObj.name : sid;
-              return (0,P.jsxs)("span",{className:"inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white border border-purple-200 text-purple-700 text-[11px] font-semibold",children:[
+              let curLv = skillLevelsMap[sid] || awardSkillLevel || (configuredSkillLevels[0]?.name || "Beginner");
+              return (0,P.jsxs)("div",{className:"inline-flex items-center gap-2 px-2.5 py-1 rounded-lg bg-white border border-purple-200 text-purple-800 text-xs font-semibold shadow-sm",children:[
                 (0,P.jsx)("span",{children:label}),
-                (0,P.jsx)("button",{type:"button",onClick:()=>setSelectedSkillIds(prev => prev.filter(id => id !== sid)),className:"text-purple-400 hover:text-rose-600 font-bold cursor-pointer",children:"×"})
+                (0,P.jsx)("select",{value:curLv,"aria-label":"Skill level for "+label,onChange:ev=>setSkillLevelsMap(prev=>({...prev,[sid]:ev.target.value})),className:"bg-purple-50 border border-purple-200 rounded px-2 py-0.5 text-[11px] font-bold text-purple-700 focus:outline-none focus:ring-1 focus:ring-purple-500 cursor-pointer",children:configuredSkillLevels.map(lv=>(0,P.jsx)("option",{value:lv.name,children:lv.name},lv.id||lv.name))}),
+                (0,P.jsx)("button",{type:"button",onClick:()=>setSelectedSkillIds(prev => prev.filter(id => id !== sid)),className:"text-purple-400 hover:text-rose-600 font-bold cursor-pointer",title:"Remove "+label,children:"×"})
               ]},sid);
             })})
-          ]}),
-
-          // Skill Level Dropdown (Reuses Config > Skill Levels)
-          (0,P.jsxs)("div",{className:"space-y-1.5",children:[
-            (0,P.jsxs)("label",{className:"inline-flex items-center gap-1.5 font-semibold text-slate-700",children:[
-              (0,P.jsx)("span",{children:"Skill Level"}),
-              (0,P.jsx)("span",{className:"text-rose-500",children:"*"}),
-              (0,P.jsx)(InfoTip,{text:"Uses existing configured Skill Levels (Beginner, Intermediate, Advanced)."})
-            ]}),
-            (0,P.jsxs)("select",{value:awardSkillLevel,onChange:ev=>setAwardSkillLevel(ev.target.value),className:"w-full bg-white border border-purple-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-purple-500/20",children:[
-              (0,P.jsx)("option",{value:"",children:"Select Skill Level..."}),
-              configuredSkillLevels.map(lv => (0,P.jsx)("option",{value:lv.name,children:lv.name},lv.id || lv.name))
-            ]})
           ]})
         ]})
       ]})
@@ -3124,7 +3129,7 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,ca
       (0,P.jsx)('div',{className:'p-4 border-t border-slate-200 bg-slate-50 flex justify-end',children:(0,P.jsx)('button',{onClick:()=>setSelectedProg(null),className:'px-4 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-100',children:'Close'})})
     ]})})
   ]});
-}function st(){return null;}function ct({assignments:e,issuedCertificates:dynCerts}){
+}function st(){return null;}function ct({assignments:e,issuedCertificates:dynCerts,programmes:progs}){
   let [selectedCertModal, setSelectedCertModal] = (0,l.useState)(null);
   let [categoryFilter, setCategoryFilter] = (0,l.useState)("All Records");
   let [expandedMap, setExpandedMap] = (0,l.useState)({});
@@ -3266,21 +3271,71 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,ca
     return list;
   }, [dynCerts]);
 
-  let filteredEmployees = mergedEmployees.filter(emp => {
+  let [skillsMaster, setSkillsMaster] = (0,l.useState)([]);
+  (0,l.useEffect)(() => {
+    let alive = !0;
+    fetch("/api/config/skills").then(r => r.ok ? r.json() : null).then(d => {
+      if (alive && d && Array.isArray(d.skills)) setSkillsMaster(d.skills);
+    }).catch(() => {});
+    return () => { alive = !1; };
+  }, []);
+
+  let trainingGroups = (0,l.useMemo)(() => {
+    let map = new Map();
+    let progList = Array.isArray(progs) ? progs : [];
+    mergedEmployees.forEach(emp => {
+      (emp.programmes || []).forEach(prog => {
+        let tName = String(prog.name || "").trim();
+        if (!tName) return;
+        let key = tName.toLowerCase();
+        if (!map.has(key)) {
+          let matchedProg = progList.find(pr => String(pr.name || "").trim().toLowerCase() === key);
+          let resolvedSkills = [];
+          if (matchedProg && matchedProg.addSkillToProfile && Array.isArray(matchedProg.selectedSkillIds)) {
+            resolvedSkills = matchedProg.selectedSkillIds.map(sid => {
+              let sk = skillsMaster.find(m => m.id === sid);
+              let lv = (matchedProg.skillLevels && matchedProg.skillLevels[sid]) || matchedProg.skillLevel || "Beginner";
+              return { id: sid, name: sk ? sk.name : sid, level: lv };
+            });
+          }
+          map.set(key, {
+            id: key,
+            trainingName: tName,
+            skills: resolvedSkills,
+            recipients: []
+          });
+        }
+        let grp = map.get(key);
+        if (!grp.recipients.some(r => r.empName.toLowerCase() === emp.name.toLowerCase() && r.certNum === prog.certNum)) {
+          grp.recipients.push({
+            empId: emp.id,
+            empName: emp.name,
+            role: emp.role,
+            avatarBg: emp.avatarBg,
+            certNum: prog.certNum,
+            date: prog.date,
+            score: prog.score
+          });
+        }
+      });
+    });
+    return Array.from(map.values());
+  }, [mergedEmployees, progs, skillsMaster]);
+
+  let filteredTrainings = trainingGroups.filter(tr => {
     if (categoryFilter === "All Records") return true;
-    return emp.programmes.some(p => p.name.toLowerCase().includes(categoryFilter.toLowerCase()));
+    return tr.trainingName.toLowerCase().includes(categoryFilter.toLowerCase());
   });
-  let totalCertCount = mergedEmployees.reduce((sum, emp) => sum + emp.programmes.length, 0) + 12;
+  let totalCertCount = trainingGroups.reduce((sum, tr) => sum + tr.recipients.length, 0);
 
   return (0,P.jsxs)("div", {className: "p-6 space-y-6 max-w-[1600px] mx-auto w-full", children: [
-    
     (0,P.jsxs)("div", {className: "bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden", children: [
       (0,P.jsxs)("div", {className: "p-4 border-b border-slate-200 flex items-center justify-between", children: [
         (0,P.jsxs)("div", {className: "flex items-center gap-3", children: [
           (0,P.jsx)("h2", {className: "font-bold text-slate-900 text-base", children: "Certificates"}),
           (0,P.jsx)("span", {className: "bg-blue-50 text-blue-700 text-xs font-bold px-2 py-0.5 rounded-full", children: totalCertCount + " Certificates"})
         ]}),
-        (0,P.jsxs)("div", {className: "flex items-center gap-3", children: [
+        (0,P.jsx)("div", {className: "flex items-center gap-3", children: 
           (0,P.jsxs)("select", {
             value: categoryFilter,
             onChange: e => setCategoryFilter(e.target.value),
@@ -3292,80 +3347,97 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,ca
               (0,P.jsx)("option", {value: "Leadership", children: "Leadership Trainings"})
             ]
           })
-        ]})
+        })
       ]}),
       (0,P.jsx)("div", {className: "overflow-x-auto", children: 
         (0,P.jsxs)("table", {className: "w-full text-left border-collapse", children: [
           (0,P.jsx)("thead", {children: 
             (0,P.jsxs)("tr", {className: "border-b border-slate-200 text-[11px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50", children: [
               (0,P.jsx)("th", {className: "py-3 px-4 w-20", children: "No."}),
-              (0,P.jsx)("th", {className: "py-3 px-4 w-56", children: "Employee Name"}),
-              (0,P.jsx)("th", {className: "py-3 px-4", children: "Training Name (Earned Trainings)"}),
+              (0,P.jsx)("th", {className: "py-3 px-4", children: "Training Name"}),
+              (0,P.jsx)("th", {className: "py-3 px-4", children: "Skills Earned"}),
+              (0,P.jsx)("th", {className: "py-3 px-4 w-64", children: "Employees Certified"}),
               (0,P.jsx)("th", {className: "py-3 px-6 w-28 text-right", children: "Actions"})
             ]})
           }),
           (0,P.jsx)("tbody", {className: "divide-y divide-slate-100 text-sm", children: 
-            filteredEmployees.map((emp, idx) => {
-              let isExpanded = !!expandedMap[emp.id];
-              let firstProg = emp.programmes[0];
-              let otherProgs = emp.programmes.slice(1);
-              return (0,P.jsxs)(P.Fragment, {key: emp.id, children: [
-                // Master Row (Matching Screenshot 3 format with chevron beside No./Name)
+            filteredTrainings.map((tr, idx) => {
+              let isExpanded = !!expandedMap[tr.id];
+              let firstRec = tr.recipients[0];
+              let extraCount = tr.recipients.length - 1;
+              return (0,P.jsxs)(P.Fragment, {key: tr.id, children: [
                 (0,P.jsxs)("tr", {
                   className: "hover:bg-slate-50/80 transition-colors bg-white",
                   children: [
                     (0,P.jsx)("td", {className: "py-3 px-4", children: 
                       (0,P.jsxs)("div", {className: "flex items-center gap-1.5", children: [
-                        otherProgs.length > 0 && (0,P.jsx)("button", {
+                        (0,P.jsx)("button", {
                           type: "button",
-                          onClick: () => toggleExpand(emp.id),
+                          onClick: () => toggleExpand(tr.id),
                           className: "text-slate-400 hover:text-blue-600 transition-colors p-0.5 rounded cursor-pointer",
-                          title: isExpanded ? "Collapse earned trainings" : "Expand earned trainings",
+                          title: isExpanded ? "Collapse certified employees" : "Expand certified employees",
                           children: isExpanded ? (0,P.jsx)(ae, {className: "w-3.5 h-3.5"}) : (0,P.jsx)(re, {className: "w-3.5 h-3.5"})
                         }),
                         (0,P.jsx)("span", {className: "text-slate-500 tabular-nums font-medium text-xs", children: idx + 1})
                       ]})
                     }),
                     (0,P.jsx)("td", {className: "py-3 px-4", children: 
-                      (0,P.jsxs)("div", {className: "flex items-center gap-2.5", children: [
-                        (0,P.jsx)("div", {className: `w-8 h-8 rounded-full ${emp.avatarBg} font-bold flex items-center justify-center text-xs shrink-0`, children: emp.name[0]}),
-                        (0,P.jsxs)("div", {children: [
-                          (0,P.jsx)("div", {className: "font-bold text-slate-900 text-xs", children: emp.name}),
-                          (0,P.jsx)("div", {className: "text-[11px] text-slate-500", children: emp.role})
-                        ]})
+                      (0,P.jsxs)("div", {className: "flex items-center gap-2 flex-wrap", children: [
+                        (0,P.jsx)("span", {className: "text-xs font-semibold text-slate-900", children: tr.trainingName}),
+                        (0,P.jsx)("span", {className: "px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200", children: tr.recipients.length + (tr.recipients.length === 1 ? " Certificate" : " Certificates")})
                       ]})
                     }),
                     (0,P.jsx)("td", {className: "py-3 px-4", children: 
-                      (0,P.jsx)("div", {className: "text-xs font-semibold text-slate-900", children: firstProg.name})
+                      tr.skills.length > 0 ? (0,P.jsx)("div", {className: "flex flex-wrap gap-1.5", children: tr.skills.map(sk => (0,P.jsx)("span", {className: "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-purple-50 text-purple-700 border border-purple-200", children: sk.name + " · " + sk.level}, sk.id))})
+                      : (0,P.jsx)("span", {className: "inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-slate-100 text-slate-500 border border-slate-200", children: "Certificate Only"})
+                    }),
+                    (0,P.jsx)("td", {className: "py-3 px-4", children: 
+                      firstRec && (0,P.jsxs)("div", {className: "flex items-center gap-2", children: [
+                        (0,P.jsx)("div", {className: `w-7 h-7 rounded-full ${firstRec.avatarBg} font-bold flex items-center justify-center text-[11px] shrink-0`, children: firstRec.empName[0]}),
+                        (0,P.jsx)("span", {className: "text-xs font-semibold text-slate-800 truncate", children: firstRec.empName}),
+                        extraCount > 0 && (0,P.jsx)("span", {className: "px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 text-[10px] font-bold shrink-0", children: "+" + extraCount + " more"})
+                      ]})
                     }),
                     (0,P.jsx)("td", {className: "py-3 px-6 w-28 text-right", children: 
-                      (0,P.jsx)("button", {
+                      tr.recipients.length === 1 && firstRec ? (0,P.jsx)("button", {
                         type: "button",
-                        onClick: () => handleViewCert(emp, firstProg),
+                        onClick: () => handleViewCert({ name: firstRec.empName, role: firstRec.role }, { name: tr.trainingName, certNum: firstRec.certNum, date: firstRec.date, score: firstRec.score }),
                         className: "p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer inline-flex items-center justify-center",
-                        title: `View Certificate for ${firstProg.name}`,
+                        title: `View Certificate for ${firstRec.empName}`,
                         children: (0,P.jsx)(pe, {className: "w-4 h-4"})
+                      }) : (0,P.jsx)("button", {
+                        type: "button",
+                        onClick: () => toggleExpand(tr.id),
+                        className: "px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 cursor-pointer",
+                        children: isExpanded ? "Hide" : "View (" + tr.recipients.length + ")"
                       })
                     })
                   ]
                 }),
-
-                // Child Sub-Rows (Matching Screenshot 3: empty No., empty Candidate Name, view text format only)
-                isExpanded && otherProgs.map((prog, pIdx) => (0,P.jsxs)("tr", {
-                  key: emp.id + "-" + pIdx,
-                  className: "hover:bg-slate-50/70 transition-colors bg-slate-50/30",
+                isExpanded && tr.recipients.map((rec, rIdx) => (0,P.jsxs)("tr", {
+                  key: tr.id + "-" + rIdx,
+                  className: "hover:bg-slate-50/70 transition-colors bg-slate-50/40",
                   children: [
                     (0,P.jsx)("td", {className: "py-2.5 px-4"}),
-                    (0,P.jsx)("td", {className: "py-2.5 px-4"}),
                     (0,P.jsx)("td", {className: "py-2.5 px-4", children: 
-                      (0,P.jsx)("div", {className: "text-xs font-normal text-slate-700 pl-2 border-l-2 border-slate-200", children: prog.name})
+                      (0,P.jsxs)("div", {className: "flex items-center gap-2.5 pl-3 border-l-2 border-blue-200", children: [
+                        (0,P.jsx)("div", {className: `w-7 h-7 rounded-full ${rec.avatarBg} font-bold flex items-center justify-center text-[11px] shrink-0`, children: rec.empName[0]}),
+                        (0,P.jsxs)("div", {children: [
+                          (0,P.jsx)("div", {className: "text-xs font-semibold text-slate-900", children: rec.empName}),
+                          (0,P.jsx)("div", {className: "text-[11px] text-slate-500", children: rec.role})
+                        ]})
+                      ]})
+                    }),
+                    (0,P.jsx)("td", {className: "py-2.5 px-4 text-xs text-slate-500", children: "Issued: " + rec.date}),
+                    (0,P.jsx)("td", {className: "py-2.5 px-4", children: 
+                      (0,P.jsx)("span", {className: "px-2 py-0.5 rounded bg-slate-100 text-slate-700 text-[11px] font-semibold border border-slate-200", children: rec.certNum})
                     }),
                     (0,P.jsx)("td", {className: "py-2.5 px-6 w-28 text-right", children: 
                       (0,P.jsx)("button", {
                         type: "button",
-                        onClick: () => handleViewCert(emp, prog),
+                        onClick: () => handleViewCert({ name: rec.empName, role: rec.role }, { name: tr.trainingName, certNum: rec.certNum, date: rec.date, score: rec.score }),
                         className: "p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer inline-flex items-center justify-center",
-                        title: `View Certificate for ${prog.name}`,
+                        title: `View Certificate for ${rec.empName}`,
                         children: (0,P.jsx)(pe, {className: "w-4 h-4"})
                       })
                     })
@@ -5018,4 +5090,4 @@ function SkillMatrixPage({employees,employeeSkills,skillAwardHistory,skillsConfi
     ]})})
   ]});
 }
-function vt(){let[e,t]=(0,l.useState)(`employees`),[n,r]=(0,l.useState)(d),[i,a]=(0,l.useState)(null),[o,s]=(0,l.useState)(f),[c,u]=(0,l.useState)(null),[m,h]=(0,l.useState)(null),[g,_]=(0,l.useState)(null),[v,y]=(0,l.useState)(p),[b,x]=(0,l.useState)({name:`Ishdeep Anand`,role:`Admin / HR / Reporting Manager`,initials:`IA`,canChangeAvailability:!0}),[S,ee]=(0,l.useState)(!1),[C,w]=(0,l.useState)(!1),[admFlyout,setAdmFlyout]=(0,l.useState)(!1),[te,T]=(0,l.useState)(!1),[ne,re]=(0,l.useState)(``),[ie,E]=(0,l.useState)(!1),[ae,oe]=(0,l.useState)(!1),[se,D]=(0,l.useState)(null),[courseProgress,setCourseProgress]=(0,l.useState)({}),[categories,setCategories]=(0,l.useState)(DEFAULT_CATEGORIES_SEED),[skills,setSkills]=(0,l.useState)(DEFAULT_SKILLS_SEED),[skillLevels,setSkillLevels]=(0,l.useState)(DEFAULT_SKILL_LEVELS_SEED),[employeeSkills,setEmployeeSkills]=(0,l.useState)({}),[skillAwardHistory,setSkillAwardHistory]=(0,l.useState)([]),[issuedCertificates,setIssuedCertificates]=(0,l.useState)([]);(0,l.useEffect)(()=>{let cancelled=!1;fetch(`/api/training/programmes`).then(r=>r.json()).then(data=>{if(!cancelled&&data?.success&&Array.isArray(data.programmes)){s(data.programmes);if(Array.isArray(data.categories)&&data.categories.length>0)setCategories(data.categories);if(Array.isArray(data.skills)&&data.skills.length>0)setSkills(data.skills);if(Array.isArray(data.skillLevels)&&data.skillLevels.length>0)setSkillLevels(data.skillLevels);if(data.employeeSkills&&typeof data.employeeSkills===`object`)setEmployeeSkills(data.employeeSkills);if(Array.isArray(data.skillAwardHistory))setSkillAwardHistory(data.skillAwardHistory);if(Array.isArray(data.issuedCertificates))setIssuedCertificates(data.issuedCertificates);if(data.courseProgress&&typeof data.courseProgress===`object`)setCourseProgress(data.courseProgress);if(Array.isArray(data.assignments)&&data.assignments.length>0){y(prev=>{let ids=new Set(prev.map(x=>x.id));let extra=data.assignments.filter(x=>!ids.has(x.id));return extra.length>0?[...extra,...prev]:prev})}}}).catch(()=>{});return()=>{cancelled=!0}},[]);let isLearnerStarted=(st,pct)=>{let k=String(st||``).trim().toLowerCase(),pr=Number(pct)||0;if(k===`completed`||k===`cancelled`)return!1;if(k===`in progress`||k===`in_progress`||k===`under review`||k===`under_review`||k===`submitted_for_review`||k===`changes_requested`)return!0;if(k===`overdue`&&pr>0)return!0;return pr>0&&pr<100},hasStartedLearnerFn=prog=>{if(!prog)return!1;let pname=(prog.name||``).trim().toLowerCase(),cpVals=Object.values(courseProgress||{}).filter(entry=>entry&&((entry.programmeId&&entry.programmeId===prog.id)||(entry.programmeName&&pname&&entry.programmeName.trim().toLowerCase()===pname)));if(cpVals.some(entry=>isLearnerStarted(entry.status,entry.progress)))return!0;let matchingAsg=(v||[]).filter(a=>(a.programmeId&&a.programmeId===prog.id)||(a.programmeName&&pname&&a.programmeName.trim().toLowerCase()===pname));if(matchingAsg.some(a=>{let ov=courseProgress[(a.employeeId||"CO-5039")+"::"+prog.id]||courseProgress[prog.id];return isLearnerStarted(ov?ov.status:a.status,ov?ov.progress:a.progress)}))return!0;if(prog.id===`prog-7`){let ov7=courseProgress[`CO-5039::prog-7`]||courseProgress[`prog-7`];return ov7?isLearnerStarted(ov7.status,ov7.progress):!0}if([`prog-1`,`prog-2`,`prog-3`,`prog-8`,`prog-11`,`prog-12`].includes(prog.id)){let ovS=courseProgress[`CO-5039::${prog.id}`]||courseProgress[prog.id];if((prog.id===`prog-8`||prog.id===`prog-11`)&&ovS&&!isLearnerStarted(ovS.status,ovS.progress))return!1;return!0}return!1},updateCourseProgressApi=async(prog,status,progress,completedResources,latestResult,attemptHistory,extra)=>{let pid=prog.id||prog.name,pname=prog.name||"",key="CO-5039::"+pid,entry={employeeId:"CO-5039",programmeId:pid,programmeName:pname,status,progress,completedResources,latestResult,attemptHistory,submittedDocs:extra?.submittedDocs||[],managerApprovalStatus:extra?.managerApprovalStatus||"",userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canToggleProg(b)}};setCourseProgress(prev=>({...prev,[key]:entry}));y(prev=>prev.map(a=>((pid&&a.programmeId===pid)||(pname&&a.programmeName&&a.programmeName.trim().toLowerCase()===pname.trim().toLowerCase()))&&(a.employeeId==="emp-3"||a.employeeId==="CO-5039"||a.employeeName==="Tanya Kapoor")?{...a,status,progress}:a));try{let r=await fetch("/api/training/employee-course-progress",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(entry)});let data=await r.json();if(data?.entry){setCourseProgress(prev=>({...prev,[key]:data.entry}));}if(Array.isArray(data?.assignments)&&data.assignments.length>0)y(data.assignments);if(data?.employeeSkills)setEmployeeSkills(data.employeeSkills);if(Array.isArray(data?.skillAwardHistory))setSkillAwardHistory(data.skillAwardHistory);if(Array.isArray(data?.issuedCertificates))setIssuedCertificates(data.issuedCertificates);return data;}catch{return null;}},approveCompletionApi=async(prog,empId)=>{let pid=prog.id||prog.name,pname=prog.name||"",empKey=canonicalEmpSkillKey(empId||"CO-5039"),key=empKey+"::"+pid;try{let r=await fetch("/api/training/approve-completion",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({employeeId:empKey,programmeId:pid,programmeName:pname,decision:"approve",userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canToggleProg(b)}})});let data=await r.json();if(data?.entry){setCourseProgress(prev=>({...prev,[key]:data.entry,["CO-5039::"+pid]:empKey==="CO-5039"?data.entry:prev["CO-5039::"+pid]}));}if(Array.isArray(data?.assignments)&&data.assignments.length>0)y(data.assignments);if(data?.employeeSkills)setEmployeeSkills(data.employeeSkills);if(Array.isArray(data?.skillAwardHistory))setSkillAwardHistory(data.skillAwardHistory);if(Array.isArray(data?.issuedCertificates))setIssuedCertificates(data.issuedCertificates);return data;}catch{return null;}};let saveSkillApi=async(payload)=>{let res=await fetch("/api/config/skills",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...payload,userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canToggleProg(b)}})});let data=await res.json();if(Array.isArray(data?.skills))setSkills(data.skills);if(Array.isArray(data?.skillLevels))setSkillLevels(data.skillLevels);return data},toggleSkillApi=async(skillId)=>{return saveSkillApi({action:"toggle",skillId})},deleteSkillApi=async(skillId)=>{return saveSkillApi({action:"delete",skillId})},manageEmployeeSkillApi=async(payload)=>{let res=await fetch("/api/employee/skills",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...payload,userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canToggleProg(b)}})});let data=await res.json();if(data?.employeeSkills)setEmployeeSkills(data.employeeSkills);if(Array.isArray(data?.skillAwardHistory))setSkillAwardHistory(data.skillAwardHistory);return data};let toggleCategoryApi=async(catName)=>{if((o||[]).some(pr=>doesProgUseCategory(pr,catName))){let cur=categories.find(c=>normCatKey(c.name)===normCatKey(catName));if(cur&&cur.active!==!1){return{success:!1,message:`Cannot mark "${cur.name}" as Inactive because it is currently assigned to one or more trainings.`}}}let res=await fetch(`/api/training/categories`,{method:`POST`,headers:{"Content-Type":"application/json"},body:JSON.stringify({action:`toggle`,name:catName,userName:b.name})});let data=await res.json();if(data?.categories)setCategories(data.categories);return data},saveCategoryApi=async(payload)=>{let res=await fetch(`/api/training/categories`,{method:`POST`,headers:{"Content-Type":"application/json"},body:JSON.stringify({...payload,userName:b.name})});let data=await res.json();if(data?.categories)setCategories(data.categories);if(data?.programmes)s(data.programmes);return data};let canToggleProg=usr=>{if(!usr||usr.canChangeAvailability===!1)return!1;let rs=(usr.role||``).toLowerCase();return!(rs.includes(`employee`)||rs.includes(`viewer`)||rs.includes(`view only`))&&(rs.includes(`admin`)||rs.includes(`hr`)||rs.includes(`reporting manager`)||rs.includes(`management`))},canManageAvail=canToggleProg(b),syncProgList=(list,updated)=>{Array.isArray(list)&&s(list),updated&&c&&c.id===updated.id&&u(updated)},ce=e=>{a(e),t(`employee-detail`)},le=e=>{u(e),t(`programme-detail`)},ue=e=>{h(e),t(`assignment-detail`)},de=e=>{let p=(o||[]).find(x=>(e.id&&x.id===e.id)||(e.name&&x.name&&x.name.trim().toLowerCase()===e.name.trim().toLowerCase()));_(p?{...e,...p,status:e.status||"Not Started",progress:e.progress!=null?e.progress:0,assignedBy:e.assignedBy,assignedDate:e.assignedDate,dueDate:e.dueDate,assessment:p.assessment||e.assessment,resources:Array.isArray(p.resources)?p.resources:e.resources}:e),t(`employee-course-detail`)},fe=usr=>{let wasEmp=b.name===`Tanya Kapoor`||b.role.includes(`Employee`),wasAdm=b.name===`Kushal Khandwala`||(b.role||``).includes(`Administration`),nextIsEmp=usr.role.includes(`Employee`)||usr.name===`Tanya Kapoor`;x(usr),ee(!1),w(!1),setAdmFlyout(!1),nextIsEmp?t(`employee-dashboard`):usr.defaultTab?t(usr.defaultTab):(wasEmp||wasAdm||e===`admin-skills`||e===`skill-matrix`)&&t(`employees`)},pe=e=>{r([e,...n]),E(!1)},saveProgApi=async(progPayload,isEdit)=>{let res=await fetch(`/api/training/programmes`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programme:progPayload,userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canManageAvail}})});let data=await res.json().catch(()=>({success:!1,message:`Failed to communicate with backend.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`Unable to save training.`};syncProgList(data.programmes,isEdit?data.programme:null),isEdit&&data.programme&&u(data.programme),t(`training-programmes`);return{success:!0,programme:data.programme}},me=e=>saveProgApi(e,!1),he=e=>saveProgApi(e,!0),toggleAvailabilityApi=async(prog,targetStatus,reason)=>{let res=await fetch(`/api/training/programmes/availability`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programmeId:prog.id,targetAvailabilityStatus:targetStatus,reason,userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canManageAvail}})});let data=await res.json().catch(()=>({success:!1,message:`Network error updating availability.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`Failed to update availability status.`};syncProgList(data.programmes,data.programme);return{success:!0,programme:data.programme}},archiveProgApi=async(prog,reason)=>{let res=await fetch(`/api/training/programmes/archive`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programmeId:prog.id,reason,userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canManageAvail}})});let data=await res.json().catch(()=>({success:!1,message:`Network error archiving training.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`Failed to archive training.`};syncProgList(data.programmes,data.programme);return{success:!0,programme:data.programme}},restoreProgApi=async(prog,reason)=>{let res=await fetch(`/api/training/programmes/restore`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programmeId:prog.id,reason,userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canManageAvail}})});let data=await res.json().catch(()=>({success:!1,message:`Network error restoring training.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`Failed to restore training.`};syncProgList(data.programmes,data.programme);return{success:!0,programme:data.programme}},ge=async payload=>{let res=await fetch(`/api/training/assign`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programmeId:payload.programme.id,employees:payload.employees,assignmentMethod:payload.assignmentMethod,startDate:payload.startDate,endDate:payload.endDate,assignedBy:b.name})});let data=await res.json().catch(()=>({success:!1,message:`Network error assigning training.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`This training is currently inactive and cannot be assigned.`};Array.isArray(data.assignments)&&y(prev=>[...data.assignments,...prev]),syncProgList(data.programmes,data.programme),oe(!1);return{success:!0}},_e=e=>{y(v.map(t=>t.id===e.id?e:t)),D(null)},ve=e=>{let n=o.find(t=>t.name.toLowerCase()===e.toLowerCase()||t.id===e);u(n||{...o[0],name:e}),(b.name===`Tanya Kapoor`||b.role.includes(`Employee`))&&x({name:`Ishdeep Anand`,role:`Admin / HR / Reporting Manager`,initials:`IA`,canChangeAvailability:!0}),t(`programme-detail`)},ye=b.name===`Tanya Kapoor`||b.role.includes(`Employee`),activeSelectedProgramme=(c&&o.find(x=>x.id===c.id))||c||o[0];return(0,P.jsxs)(`div`,{className:`flex h-screen bg-slate-100 font-sans text-slate-900 overflow-hidden select-none`,children:[(0,P.jsx)(Je,{currentTab:e,onSelectTab:e=>{e===`employees`&&a(null),t(e)},isTrainingFlyoutOpen:S,onToggleTrainingFlyout:v=>{ee(v),v&&(w(!1),setAdmFlyout(!1))},isConfigFlyoutOpen:C,onToggleConfigFlyout:v=>{w(v),v&&(ee(!1),setAdmFlyout(!1))},isAdminFlyoutOpen:admFlyout,onToggleAdminFlyout:v=>{setAdmFlyout(v),v&&(ee(!1),w(!1))},collapsed:te,onToggleCollapse:()=>T(!te),currentUser:b}),(0,P.jsxs)(`div`,{className:`flex-1 flex flex-col min-w-0 overflow-hidden relative`,children:[(0,P.jsx)(Ye,{currentTab:e,onOpenNewEmployee:()=>E(!0),onOpenCreateProgramme:()=>{ee(!1),t(`training-management`)},onOpenAssignTraining:()=>oe(!0),searchQuery:ne,onSearchChange:re,currentUser:b,onSwitchUser:fe,onOpenMyProfile:()=>{let e=n.find(e=>e.firstName===`Tanya`)||n[0];a(e),t(`employee-profile`)}}),(0,P.jsx)(`main`,{className:`flex-1 overflow-y-auto`,children:ye?(0,P.jsxs)(P.Fragment,{children:[e===`employee-dashboard`&&(0,P.jsx)(ft,{onGoToTraining:()=>t(`employee-training`),onSelectCourse:de,employeeName:b.name,programmes:o,assignments:v,courseProgress:courseProgress}),e===`employee-training`&&(0,P.jsx)(pt,{onSelectCourse:de,programmes:o,assignments:v,courseProgress:courseProgress}),e===`employee-course-detail`&&(0,P.jsx)(mt,{course:g,programmes:o,courseProgress:courseProgress,skills:skills,employees:n,employeeSkills:employeeSkills,issuedCertificates:issuedCertificates,onUpdateCourseProgress:updateCourseProgressApi,onBack:()=>t(`employee-training`)}),e===`employee-profile`&&i&&(0,P.jsx)($e,{employee:i,assignments:v,programmes:o,isEmployeeSide:!0,employeeSkills:employeeSkills,skillAwardHistory:skillAwardHistory,skillsConfig:skills,skillLevels:skillLevels,issuedCertificates:issuedCertificates,onManageEmployeeSkill:manageEmployeeSkillApi,canManageSkills:canManageAvail,onBack:()=>t(`employee-training`),onOpenAssignTraining:()=>oe(!0),onNavigateToProgrammeDetail:ve}),e===`skill-matrix`&&(0,P.jsx)(SkillMatrixPage,{employees:n,employeeSkills:employeeSkills,skillAwardHistory:skillAwardHistory,skillsConfig:skills,skillLevels:skillLevels,currentUser:b,programmes:o,onManageEmployeeSkill:manageEmployeeSkillApi,canManageSkills:canManageAvail,onNavigateToProgramme:de})]}):(0,P.jsxs)(P.Fragment,{children:[e===`employees`&&(0,P.jsx)(Xe,{employees:n,onSelectEmployee:ce,onOpenNewEmployee:()=>E(!0),searchQuery:ne}),e===`employee-detail`&&i&&(0,P.jsx)($e,{employee:i,assignments:v,programmes:o,isEmployeeSide:!1,employeeSkills:employeeSkills,skillAwardHistory:skillAwardHistory,skillsConfig:skills,skillLevels:skillLevels,issuedCertificates:issuedCertificates,onManageEmployeeSkill:manageEmployeeSkillApi,canManageSkills:canManageAvail,onBack:()=>t(`employees`),onOpenAssignTraining:()=>oe(!0),onNavigateToProgrammeDetail:ve}),e===`training-dashboard`&&(0,P.jsx)(et,{assignments:v,onOpenReviewQueue:()=>t(`training-review`),onEvaluateSubmission:e=>D(e)}),e===`training-programmes`&&(0,P.jsx)(tt,{programmes:o,employees:n,assignments:v,courseProgress:courseProgress,onOpenCreateProgramme:()=>t(`training-management`),onSelectProgramme:le,onEditProgramme:e=>{u(e),t(`edit-programme`)},onToggleAvailability:toggleAvailabilityApi,currentUser:b,canToggleAvailability:canManageAvail,hasStartedLearner:hasStartedLearnerFn}),e===`programme-detail`&&(0,P.jsx)(nt,{programme:activeSelectedProgramme,employees:n,assignments:v,courseProgress:courseProgress,skills:skills,onBack:()=>t(`training-programmes`),onOpenAssignTraining:()=>oe(!0),onSelectEmployee:ce,onEditProgramme:()=>t(`edit-programme`),onArchiveProgramme:archiveProgApi,onRestoreProgramme:restoreProgApi,onToggleAvailability:toggleAvailabilityApi,canToggleAvailability:canManageAvail,hasStartedLearner:hasStartedLearnerFn,onApproveCompletion:approveCompletionApi}),e===`training-management`&&(0,P.jsx)(rt,{categories:categories,skills:skills,skillLevels:skillLevels,onSaveSkill:saveSkillApi,canManageSkills:canManageAvail,onCancel:()=>t(`training-programmes`),onSaveProgramme:me},`new-programme`),e===`edit-programme`&&(0,P.jsx)(rt,{categories:categories,skills:skills,skillLevels:skillLevels,onSaveSkill:saveSkillApi,canManageSkills:canManageAvail,programmeToEdit:activeSelectedProgramme,onCancel:()=>t(`training-programmes`),onSaveProgramme:he},activeSelectedProgramme?.id||`edit-prog`),e===`training-assignments`&&(0,P.jsx)(it,{assignments:v,employees:n,programmes:o,courseProgress:courseProgress,onOpenAssignTraining:()=>oe(!0),onEvaluate:e=>D(e),onSelectAssignment:ue}),e===`assignment-detail`&&(0,P.jsx)(at,{assignment:m,programmes:o,courseProgress:courseProgress,skills:skills,canManageSkills:canManageAvail,onApproveCompletion:approveCompletionApi,onBack:()=>t(`training-assignments`),onEvaluate:()=>{let e=v[0];e&&D(e)}}),e===`training-progress`&&(0,P.jsx)(ot,{categories:categories}),e===`certificates`&&(0,P.jsx)(ct,{assignments:v,issuedCertificates:issuedCertificates}),(e===`config`||e===`config-skills`||(e===`admin-skills`&&(b.name===`Kushal Khandwala`||(b.role||``).includes(`Administration`))))&&(0,P.jsx)(ut,{currentTab:e,categories:categories,skills:skills,skillLevels:skillLevels,programmes:o,onToggleCategory:toggleCategoryApi,onSaveCategory:saveCategoryApi,onSaveSkill:saveSkillApi,onToggleSkill:toggleSkillApi,onDeleteSkill:deleteSkillApi}),e===`roles`&&(0,P.jsx)(dt,{onSelectRole:e=>alert(`Selected role: ${e}`)})]})})]}),ie&&(0,P.jsx)(ht,{onClose:()=>E(!1),onAddEmployee:pe}),ae&&(0,P.jsx)(gt,{employees:n,programmes:o,initialProgrammeId:e===`programme-detail`?activeSelectedProgramme?.id:void 0,employeeSkills:employeeSkills,skillsConfig:skills,skillLevels:skillLevels,onClose:()=>oe(!1),onAssign:ge}),se&&(0,P.jsx)(_t,{assignment:se,onClose:()=>D(null),onSaveEvaluation:_e})]})}(0,u.createRoot)(document.getElementById(`root`)).render((0,P.jsx)(vt,{}));
+function vt(){let[e,t]=(0,l.useState)(`employees`),[n,r]=(0,l.useState)(d),[i,a]=(0,l.useState)(null),[o,s]=(0,l.useState)(f),[c,u]=(0,l.useState)(null),[m,h]=(0,l.useState)(null),[g,_]=(0,l.useState)(null),[v,y]=(0,l.useState)(p),[b,x]=(0,l.useState)({name:`Ishdeep Anand`,role:`Admin / HR / Reporting Manager`,initials:`IA`,canChangeAvailability:!0}),[S,ee]=(0,l.useState)(!1),[C,w]=(0,l.useState)(!1),[admFlyout,setAdmFlyout]=(0,l.useState)(!1),[te,T]=(0,l.useState)(!1),[ne,re]=(0,l.useState)(``),[ie,E]=(0,l.useState)(!1),[ae,oe]=(0,l.useState)(!1),[se,D]=(0,l.useState)(null),[courseProgress,setCourseProgress]=(0,l.useState)({}),[categories,setCategories]=(0,l.useState)(DEFAULT_CATEGORIES_SEED),[skills,setSkills]=(0,l.useState)(DEFAULT_SKILLS_SEED),[skillLevels,setSkillLevels]=(0,l.useState)(DEFAULT_SKILL_LEVELS_SEED),[employeeSkills,setEmployeeSkills]=(0,l.useState)({}),[skillAwardHistory,setSkillAwardHistory]=(0,l.useState)([]),[issuedCertificates,setIssuedCertificates]=(0,l.useState)([]);(0,l.useEffect)(()=>{let cancelled=!1;fetch(`/api/training/programmes`).then(r=>r.json()).then(data=>{if(!cancelled&&data?.success&&Array.isArray(data.programmes)){s(data.programmes);if(Array.isArray(data.categories)&&data.categories.length>0)setCategories(data.categories);if(Array.isArray(data.skills)&&data.skills.length>0)setSkills(data.skills);if(Array.isArray(data.skillLevels)&&data.skillLevels.length>0)setSkillLevels(data.skillLevels);if(data.employeeSkills&&typeof data.employeeSkills===`object`)setEmployeeSkills(data.employeeSkills);if(Array.isArray(data.skillAwardHistory))setSkillAwardHistory(data.skillAwardHistory);if(Array.isArray(data.issuedCertificates))setIssuedCertificates(data.issuedCertificates);if(data.courseProgress&&typeof data.courseProgress===`object`)setCourseProgress(data.courseProgress);if(Array.isArray(data.assignments)&&data.assignments.length>0){y(prev=>{let ids=new Set(prev.map(x=>x.id));let extra=data.assignments.filter(x=>!ids.has(x.id));return extra.length>0?[...extra,...prev]:prev})}}}).catch(()=>{});return()=>{cancelled=!0}},[]);let isLearnerStarted=(st,pct)=>{let k=String(st||``).trim().toLowerCase(),pr=Number(pct)||0;if(k===`completed`||k===`cancelled`)return!1;if(k===`in progress`||k===`in_progress`||k===`under review`||k===`under_review`||k===`submitted_for_review`||k===`changes_requested`)return!0;if(k===`overdue`&&pr>0)return!0;return pr>0&&pr<100},hasStartedLearnerFn=prog=>{if(!prog)return!1;let pname=(prog.name||``).trim().toLowerCase(),cpVals=Object.values(courseProgress||{}).filter(entry=>entry&&((entry.programmeId&&entry.programmeId===prog.id)||(entry.programmeName&&pname&&entry.programmeName.trim().toLowerCase()===pname)));if(cpVals.some(entry=>isLearnerStarted(entry.status,entry.progress)))return!0;let matchingAsg=(v||[]).filter(a=>(a.programmeId&&a.programmeId===prog.id)||(a.programmeName&&pname&&a.programmeName.trim().toLowerCase()===pname));if(matchingAsg.some(a=>{let ov=courseProgress[(a.employeeId||"CO-5039")+"::"+prog.id]||courseProgress[prog.id];return isLearnerStarted(ov?ov.status:a.status,ov?ov.progress:a.progress)}))return!0;if(prog.id===`prog-7`){let ov7=courseProgress[`CO-5039::prog-7`]||courseProgress[`prog-7`];return ov7?isLearnerStarted(ov7.status,ov7.progress):!0}if([`prog-1`,`prog-2`,`prog-3`,`prog-8`,`prog-11`,`prog-12`].includes(prog.id)){let ovS=courseProgress[`CO-5039::${prog.id}`]||courseProgress[prog.id];if((prog.id===`prog-8`||prog.id===`prog-11`)&&ovS&&!isLearnerStarted(ovS.status,ovS.progress))return!1;return!0}return!1},updateCourseProgressApi=async(prog,status,progress,completedResources,latestResult,attemptHistory,extra)=>{let pid=prog.id||prog.name,pname=prog.name||"",key="CO-5039::"+pid,entry={employeeId:"CO-5039",programmeId:pid,programmeName:pname,status,progress,completedResources,latestResult,attemptHistory,submittedDocs:extra?.submittedDocs||[],managerApprovalStatus:extra?.managerApprovalStatus||"",userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canToggleProg(b)}};setCourseProgress(prev=>({...prev,[key]:entry}));y(prev=>prev.map(a=>((pid&&a.programmeId===pid)||(pname&&a.programmeName&&a.programmeName.trim().toLowerCase()===pname.trim().toLowerCase()))&&(a.employeeId==="emp-3"||a.employeeId==="CO-5039"||a.employeeName==="Tanya Kapoor")?{...a,status,progress}:a));try{let r=await fetch("/api/training/employee-course-progress",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(entry)});let data=await r.json();if(data?.entry){setCourseProgress(prev=>({...prev,[key]:data.entry}));}if(Array.isArray(data?.assignments)&&data.assignments.length>0)y(data.assignments);if(data?.employeeSkills)setEmployeeSkills(data.employeeSkills);if(Array.isArray(data?.skillAwardHistory))setSkillAwardHistory(data.skillAwardHistory);if(Array.isArray(data?.issuedCertificates))setIssuedCertificates(data.issuedCertificates);return data;}catch{return null;}},approveCompletionApi=async(prog,empId)=>{let pid=prog.id||prog.name,pname=prog.name||"",empKey=canonicalEmpSkillKey(empId||"CO-5039"),key=empKey+"::"+pid;try{let r=await fetch("/api/training/approve-completion",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({employeeId:empKey,programmeId:pid,programmeName:pname,decision:"approve",userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canToggleProg(b)}})});let data=await r.json();if(data?.entry){setCourseProgress(prev=>({...prev,[key]:data.entry,["CO-5039::"+pid]:empKey==="CO-5039"?data.entry:prev["CO-5039::"+pid]}));}if(Array.isArray(data?.assignments)&&data.assignments.length>0)y(data.assignments);if(data?.employeeSkills)setEmployeeSkills(data.employeeSkills);if(Array.isArray(data?.skillAwardHistory))setSkillAwardHistory(data.skillAwardHistory);if(Array.isArray(data?.issuedCertificates))setIssuedCertificates(data.issuedCertificates);return data;}catch{return null;}};let saveSkillApi=async(payload)=>{let res=await fetch("/api/config/skills",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...payload,userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canToggleProg(b)}})});let data=await res.json();if(Array.isArray(data?.skills))setSkills(data.skills);if(Array.isArray(data?.skillLevels))setSkillLevels(data.skillLevels);return data},toggleSkillApi=async(skillId)=>{return saveSkillApi({action:"toggle",skillId})},deleteSkillApi=async(skillId)=>{return saveSkillApi({action:"delete",skillId})},manageEmployeeSkillApi=async(payload)=>{let res=await fetch("/api/employee/skills",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...payload,userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canToggleProg(b)}})});let data=await res.json();if(data?.employeeSkills)setEmployeeSkills(data.employeeSkills);if(Array.isArray(data?.skillAwardHistory))setSkillAwardHistory(data.skillAwardHistory);return data};let toggleCategoryApi=async(catName)=>{if((o||[]).some(pr=>doesProgUseCategory(pr,catName))){let cur=categories.find(c=>normCatKey(c.name)===normCatKey(catName));if(cur&&cur.active!==!1){return{success:!1,message:`Cannot mark "${cur.name}" as Inactive because it is currently assigned to one or more trainings.`}}}let res=await fetch(`/api/training/categories`,{method:`POST`,headers:{"Content-Type":"application/json"},body:JSON.stringify({action:`toggle`,name:catName,userName:b.name})});let data=await res.json();if(data?.categories)setCategories(data.categories);return data},saveCategoryApi=async(payload)=>{let res=await fetch(`/api/training/categories`,{method:`POST`,headers:{"Content-Type":"application/json"},body:JSON.stringify({...payload,userName:b.name})});let data=await res.json();if(data?.categories)setCategories(data.categories);if(data?.programmes)s(data.programmes);return data};let canToggleProg=usr=>{if(!usr||usr.canChangeAvailability===!1)return!1;let rs=(usr.role||``).toLowerCase();return!(rs.includes(`employee`)||rs.includes(`viewer`)||rs.includes(`view only`))&&(rs.includes(`admin`)||rs.includes(`hr`)||rs.includes(`reporting manager`)||rs.includes(`management`))},canManageAvail=canToggleProg(b),syncProgList=(list,updated)=>{Array.isArray(list)&&s(list),updated&&c&&c.id===updated.id&&u(updated)},ce=e=>{a(e),t(`employee-detail`)},le=e=>{u(e),t(`programme-detail`)},ue=e=>{h(e),t(`assignment-detail`)},de=e=>{let p=(o||[]).find(x=>(e.id&&x.id===e.id)||(e.name&&x.name&&x.name.trim().toLowerCase()===e.name.trim().toLowerCase()));_(p?{...e,...p,status:e.status||"Not Started",progress:e.progress!=null?e.progress:0,assignedBy:e.assignedBy,assignedDate:e.assignedDate,dueDate:e.dueDate,assessment:p.assessment||e.assessment,resources:Array.isArray(p.resources)?p.resources:e.resources}:e),t(`employee-course-detail`)},fe=usr=>{let wasEmp=b.name===`Tanya Kapoor`||b.role.includes(`Employee`),wasAdm=b.name===`Kushal Khandwala`||(b.role||``).includes(`Administration`),nextIsEmp=usr.role.includes(`Employee`)||usr.name===`Tanya Kapoor`;x(usr),ee(!1),w(!1),setAdmFlyout(!1),nextIsEmp?t(`employee-dashboard`):usr.defaultTab?t(usr.defaultTab):(wasEmp||wasAdm||e===`admin-skills`||e===`skill-matrix`)&&t(`employees`)},pe=e=>{r([e,...n]),E(!1)},saveProgApi=async(progPayload,isEdit)=>{let res=await fetch(`/api/training/programmes`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programme:progPayload,userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canManageAvail}})});let data=await res.json().catch(()=>({success:!1,message:`Failed to communicate with backend.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`Unable to save training.`};syncProgList(data.programmes,isEdit?data.programme:null),isEdit&&data.programme&&u(data.programme),t(`training-programmes`);return{success:!0,programme:data.programme}},me=e=>saveProgApi(e,!1),he=e=>saveProgApi(e,!0),toggleAvailabilityApi=async(prog,targetStatus,reason)=>{let res=await fetch(`/api/training/programmes/availability`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programmeId:prog.id,targetAvailabilityStatus:targetStatus,reason,userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canManageAvail}})});let data=await res.json().catch(()=>({success:!1,message:`Network error updating availability.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`Failed to update availability status.`};syncProgList(data.programmes,data.programme);return{success:!0,programme:data.programme}},archiveProgApi=async(prog,reason)=>{let res=await fetch(`/api/training/programmes/archive`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programmeId:prog.id,reason,userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canManageAvail}})});let data=await res.json().catch(()=>({success:!1,message:`Network error archiving training.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`Failed to archive training.`};syncProgList(data.programmes,data.programme);return{success:!0,programme:data.programme}},restoreProgApi=async(prog,reason)=>{let res=await fetch(`/api/training/programmes/restore`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programmeId:prog.id,reason,userRole:b.role,userName:b.name,userPermissions:{canChangeAvailability:canManageAvail}})});let data=await res.json().catch(()=>({success:!1,message:`Network error restoring training.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`Failed to restore training.`};syncProgList(data.programmes,data.programme);return{success:!0,programme:data.programme}},ge=async payload=>{let res=await fetch(`/api/training/assign`,{method:`POST`,headers:{'Content-Type':`application/json`},body:JSON.stringify({programmeId:payload.programme.id,employees:payload.employees,assignmentMethod:payload.assignmentMethod,startDate:payload.startDate,endDate:payload.endDate,assignedBy:b.name})});let data=await res.json().catch(()=>({success:!1,message:`Network error assigning training.`}));if(!res.ok||!data.success)return{success:!1,message:data?.message||`This training is currently inactive and cannot be assigned.`};Array.isArray(data.assignments)&&y(prev=>[...data.assignments,...prev]),syncProgList(data.programmes,data.programme),oe(!1);return{success:!0}},_e=e=>{y(v.map(t=>t.id===e.id?e:t)),D(null)},ve=e=>{let n=o.find(t=>t.name.toLowerCase()===e.toLowerCase()||t.id===e);u(n||{...o[0],name:e}),(b.name===`Tanya Kapoor`||b.role.includes(`Employee`))&&x({name:`Ishdeep Anand`,role:`Admin / HR / Reporting Manager`,initials:`IA`,canChangeAvailability:!0}),t(`programme-detail`)},ye=b.name===`Tanya Kapoor`||b.role.includes(`Employee`),activeSelectedProgramme=(c&&o.find(x=>x.id===c.id))||c||o[0];return(0,P.jsxs)(`div`,{className:`flex h-screen bg-slate-100 font-sans text-slate-900 overflow-hidden select-none`,children:[(0,P.jsx)(Je,{currentTab:e,onSelectTab:e=>{e===`employees`&&a(null),t(e)},isTrainingFlyoutOpen:S,onToggleTrainingFlyout:v=>{ee(v),v&&(w(!1),setAdmFlyout(!1))},isConfigFlyoutOpen:C,onToggleConfigFlyout:v=>{w(v),v&&(ee(!1),setAdmFlyout(!1))},isAdminFlyoutOpen:admFlyout,onToggleAdminFlyout:v=>{setAdmFlyout(v),v&&(ee(!1),w(!1))},collapsed:te,onToggleCollapse:()=>T(!te),currentUser:b}),(0,P.jsxs)(`div`,{className:`flex-1 flex flex-col min-w-0 overflow-hidden relative`,children:[(0,P.jsx)(Ye,{currentTab:e,onOpenNewEmployee:()=>E(!0),onOpenCreateProgramme:()=>{ee(!1),t(`training-management`)},onOpenAssignTraining:()=>oe(!0),searchQuery:ne,onSearchChange:re,currentUser:b,onSwitchUser:fe,onOpenMyProfile:()=>{let e=n.find(e=>e.firstName===`Tanya`)||n[0];a(e),t(`employee-profile`)}}),(0,P.jsx)(`main`,{className:`flex-1 overflow-y-auto`,children:ye?(0,P.jsxs)(P.Fragment,{children:[e===`employee-dashboard`&&(0,P.jsx)(ft,{onGoToTraining:()=>t(`employee-training`),onSelectCourse:de,employeeName:b.name,programmes:o,assignments:v,courseProgress:courseProgress}),e===`employee-training`&&(0,P.jsx)(pt,{onSelectCourse:de,programmes:o,assignments:v,courseProgress:courseProgress}),e===`employee-course-detail`&&(0,P.jsx)(mt,{course:g,programmes:o,courseProgress:courseProgress,skills:skills,employees:n,employeeSkills:employeeSkills,issuedCertificates:issuedCertificates,onUpdateCourseProgress:updateCourseProgressApi,onBack:()=>t(`employee-training`)}),e===`employee-profile`&&i&&(0,P.jsx)($e,{employee:i,assignments:v,programmes:o,isEmployeeSide:!0,employeeSkills:employeeSkills,skillAwardHistory:skillAwardHistory,skillsConfig:skills,skillLevels:skillLevels,issuedCertificates:issuedCertificates,onManageEmployeeSkill:manageEmployeeSkillApi,canManageSkills:canManageAvail,onBack:()=>t(`employee-training`),onOpenAssignTraining:()=>oe(!0),onNavigateToProgrammeDetail:ve}),e===`skill-matrix`&&(0,P.jsx)(SkillMatrixPage,{employees:n,employeeSkills:employeeSkills,skillAwardHistory:skillAwardHistory,skillsConfig:skills,skillLevels:skillLevels,currentUser:b,programmes:o,onManageEmployeeSkill:manageEmployeeSkillApi,canManageSkills:canManageAvail,onNavigateToProgramme:de})]}):(0,P.jsxs)(P.Fragment,{children:[e===`employees`&&(0,P.jsx)(Xe,{employees:n,onSelectEmployee:ce,onOpenNewEmployee:()=>E(!0),searchQuery:ne}),e===`employee-detail`&&i&&(0,P.jsx)($e,{employee:i,assignments:v,programmes:o,isEmployeeSide:!1,employeeSkills:employeeSkills,skillAwardHistory:skillAwardHistory,skillsConfig:skills,skillLevels:skillLevels,issuedCertificates:issuedCertificates,onManageEmployeeSkill:manageEmployeeSkillApi,canManageSkills:canManageAvail,onBack:()=>t(`employees`),onOpenAssignTraining:()=>oe(!0),onNavigateToProgrammeDetail:ve}),e===`training-dashboard`&&(0,P.jsx)(et,{assignments:v,onOpenReviewQueue:()=>t(`training-review`),onEvaluateSubmission:e=>D(e)}),e===`training-programmes`&&(0,P.jsx)(tt,{programmes:o,employees:n,assignments:v,courseProgress:courseProgress,onOpenCreateProgramme:()=>t(`training-management`),onSelectProgramme:le,onEditProgramme:e=>{u(e),t(`edit-programme`)},onToggleAvailability:toggleAvailabilityApi,currentUser:b,canToggleAvailability:canManageAvail,hasStartedLearner:hasStartedLearnerFn}),e===`programme-detail`&&(0,P.jsx)(nt,{programme:activeSelectedProgramme,employees:n,assignments:v,courseProgress:courseProgress,skills:skills,onBack:()=>t(`training-programmes`),onOpenAssignTraining:()=>oe(!0),onSelectEmployee:ce,onEditProgramme:()=>t(`edit-programme`),onArchiveProgramme:archiveProgApi,onRestoreProgramme:restoreProgApi,onToggleAvailability:toggleAvailabilityApi,canToggleAvailability:canManageAvail,hasStartedLearner:hasStartedLearnerFn,onApproveCompletion:approveCompletionApi}),e===`training-management`&&(0,P.jsx)(rt,{categories:categories,skills:skills,skillLevels:skillLevels,onSaveSkill:saveSkillApi,canManageSkills:canManageAvail,onCancel:()=>t(`training-programmes`),onSaveProgramme:me},`new-programme`),e===`edit-programme`&&(0,P.jsx)(rt,{categories:categories,skills:skills,skillLevels:skillLevels,onSaveSkill:saveSkillApi,canManageSkills:canManageAvail,programmeToEdit:activeSelectedProgramme,onCancel:()=>t(`training-programmes`),onSaveProgramme:he},activeSelectedProgramme?.id||`edit-prog`),e===`training-assignments`&&(0,P.jsx)(it,{assignments:v,employees:n,programmes:o,courseProgress:courseProgress,onOpenAssignTraining:()=>oe(!0),onEvaluate:e=>D(e),onSelectAssignment:ue}),e===`assignment-detail`&&(0,P.jsx)(at,{assignment:m,programmes:o,courseProgress:courseProgress,skills:skills,canManageSkills:canManageAvail,onApproveCompletion:approveCompletionApi,onBack:()=>t(`training-assignments`),onEvaluate:()=>{let e=v[0];e&&D(e)}}),e===`training-progress`&&(0,P.jsx)(ot,{categories:categories}),e===`certificates`&&(0,P.jsx)(ct,{assignments:v,issuedCertificates:issuedCertificates,programmes:o}),(e===`config`||e===`config-skills`||(e===`admin-skills`&&(b.name===`Kushal Khandwala`||(b.role||``).includes(`Administration`))))&&(0,P.jsx)(ut,{currentTab:e,categories:categories,skills:skills,skillLevels:skillLevels,programmes:o,onToggleCategory:toggleCategoryApi,onSaveCategory:saveCategoryApi,onSaveSkill:saveSkillApi,onToggleSkill:toggleSkillApi,onDeleteSkill:deleteSkillApi}),e===`roles`&&(0,P.jsx)(dt,{onSelectRole:e=>alert(`Selected role: ${e}`)})]})})]}),ie&&(0,P.jsx)(ht,{onClose:()=>E(!1),onAddEmployee:pe}),ae&&(0,P.jsx)(gt,{employees:n,programmes:o,initialProgrammeId:e===`programme-detail`?activeSelectedProgramme?.id:void 0,employeeSkills:employeeSkills,skillsConfig:skills,skillLevels:skillLevels,onClose:()=>oe(!1),onAssign:ge}),se&&(0,P.jsx)(_t,{assignment:se,onClose:()=>D(null),onSaveEvaluation:_e})]})}(0,u.createRoot)(document.getElementById(`root`)).render((0,P.jsx)(vt,{}));
