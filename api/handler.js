@@ -983,6 +983,10 @@ function normCategoryKey(str) {
   return String(str || '').toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]/g, '').trim();
 }
 
+function normSkillKey(str) {
+  return String(str || '').trim().replace(/\s+/g, ' ').replace(/\s*\/\s*/g, '/').toLowerCase();
+}
+
 const CATEGORY_ALIAS_MAP = {
   engineeringandarchitecture: ['engineering', 'architecture', 'engineeringandtecharchitecture', 'engineeringandarchitecture'],
   salesandbusinessdevelopment: ['salesandbd', 'salesandbusinessdevelopment'],
@@ -7134,7 +7138,7 @@ export async function handleApi(req, res) {
     const todayStr = formatSystemDate(new Date());
 
     if (action === 'toggle') {
-      const idx = skills.findIndex(s => s.id === skillId || normCategoryKey(s.name) === normCategoryKey(body.name));
+      const idx = skills.findIndex(s => s.id === skillId || normSkillKey(s.name) === normSkillKey(body.name));
       if (idx === -1) {
         return sendJson(res, 404, { success: false, message: 'Skill not found.', skills, skillLevels });
       }
@@ -7179,16 +7183,16 @@ export async function handleApi(req, res) {
 
     if (action === 'add' || action === 'edit') {
       const sObj = skill || {};
-      const nextName = String(sObj.name || '').trim();
+      const nextName = String(sObj.name || '').trim().replace(/\s+/g, ' ');
       if (!nextName) {
         return sendJson(res, 400, { success: false, message: 'Skill name is required.', skills, skillLevels });
       }
-      const nextKey = normCategoryKey(nextName);
-      const dup = skills.some(s => normCategoryKey(s.name) === nextKey && (action !== 'edit' || s.id !== (skillId || sObj.id)));
-      if (dup) {
+      const nextKey = normSkillKey(nextName);
+      const dupSkill = skills.find(s => normSkillKey(s.name) === nextKey && (action !== 'edit' || s.id !== (skillId || sObj.id)));
+      if (dupSkill) {
         return sendJson(res, 400, {
           success: false,
-          message: 'A skill with this name already exists. Duplicate skill names are not allowed.',
+          message: `Skill "${dupSkill.name}" already exists in Administration > Master Data > Skills. Duplicate skills (including case-insensitive matches) are not allowed.`,
           skills,
           skillLevels
         });
@@ -7277,9 +7281,9 @@ export async function handleApi(req, res) {
     }
 
     if (action === 'add' || action === 'update') {
-      const skillMaster = masterSkills.find(s => s.id === skillId || String(s.name || '').trim().toLowerCase() === String(skillId || '').trim().toLowerCase());
+      const skillMaster = masterSkills.find(s => s.id === skillId || normSkillKey(s.name) === normSkillKey(skillId));
       if (!skillMaster) {
-        return sendJson(res, 400, { success: false, message: 'Selected skill does not exist in Config > Skills.' });
+        return sendJson(res, 400, { success: false, message: 'Selected skill does not exist in Administration > Master Data > Skills.' });
       }
       const chosenLevel = String(skillLevel || '').trim();
       if (!skillLevels.some(l => l.name.toLowerCase() === chosenLevel.toLowerCase())) {
@@ -7519,13 +7523,13 @@ export async function handleApi(req, res) {
         if (!sk) {
           return sendJson(res, 400, {
             success: false,
-            message: `Selected skill "${sid}" does not exist in Config > Skills.`
+            message: `Selected skill "${sid}" does not exist in Administration > Master Data > Skills.`
           });
         }
         if (sk.active === false && !prevSkillSet.has(sid)) {
           return sendJson(res, 400, {
             success: false,
-            message: `Skill "${sk.name}" is currently Inactive in Config > Skills and cannot be selected for new configurations.`
+            message: `Skill "${sk.name}" is currently Inactive in Administration > Master Data > Skills and cannot be selected for new configurations.`
           });
         }
       }
