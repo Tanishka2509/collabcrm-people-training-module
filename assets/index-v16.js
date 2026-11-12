@@ -3147,6 +3147,7 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,ca
   let [statusFilter, setStatusFilter] = (0,l.useState)("All Statuses");
   let [issueDateFilter, setIssueDateFilter] = (0,l.useState)("All Dates");
   let [expandedMap, setExpandedMap] = (0,l.useState)({});
+  let [showFilterMenu, setShowFilterMenu] = (0,l.useState)(false);
 
   let toggleExpand = (key) => {
     setExpandedMap(prev => ({...prev, [key]: !prev[key]}));
@@ -3431,14 +3432,14 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,ca
       (0,P.jsx)("span", {className: "text-slate-400", children: "›"}),
       (0,P.jsx)("span", {className: "text-blue-600 font-semibold", children: "Certificates"})
     ]}),
-    (0,P.jsxs)("div", {className: "bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden", children: [
+    (0,P.jsxs)("div", {className: "bg-white border border-slate-200 rounded-xl shadow-sm", children: [
       (0,P.jsxs)("div", {className: "p-4 border-b border-slate-200 space-y-3", children: [
-        (0,P.jsxs)("div", {className: "flex flex-wrap items-center justify-between gap-3", children: [
+        (0,P.jsxs)("div", {className: "flex flex-wrap items-center justify-between gap-3 relative", children: [
           (0,P.jsxs)("div", {className: "flex items-center gap-3", children: [
             (0,P.jsx)("h2", {className: "font-bold text-slate-900 text-base", children: "Certificates"}),
             (0,P.jsx)("span", {className: "bg-blue-50 text-blue-700 text-xs font-bold px-2.5 py-0.5 rounded-full", children: totalCertCount + (totalCertCount === 1 ? " Certificate" : " Certificates")})
           ]}),
-          (0,P.jsxs)("div", {className: "flex flex-wrap items-center gap-2", children: [
+          (0,P.jsxs)("div", {className: "flex flex-wrap items-center gap-2 relative", children: [
             (0,P.jsx)("input", {
               type: "text",
               value: searchQuery,
@@ -3457,60 +3458,101 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,ca
                 (0,P.jsx)("option", {value: "Leadership", children: "Leadership Trainings"})
               ]
             }),
-            hasActiveFilters && (0,P.jsx)("button", {
+            (0,P.jsxs)("button", {
               type: "button",
-              onClick: () => { setSearchQuery(""); setCategoryFilter("All Records"); setTrainingFilter("All Trainings"); setEmployeeFilter("All Employees"); setDeptFilter("All Departments"); setStatusFilter("All Statuses"); setIssueDateFilter("All Dates"); },
-              className: "text-xs font-semibold text-blue-600 hover:text-blue-800 px-2 py-1 cursor-pointer",
-              children: "Clear Filters"
+              onClick: () => setShowFilterMenu(v => !v),
+              className: "inline-flex items-center gap-1.5 text-xs border rounded-lg px-3 py-1.5 font-semibold transition-colors cursor-pointer " + ((trainingFilter !== "All Trainings" || employeeFilter !== "All Employees" || deptFilter !== "All Departments" || statusFilter !== "All Statuses" || issueDateFilter !== "All Dates") ? "border-blue-300 bg-blue-50 text-blue-700" : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"),
+              children: [
+                (0,P.jsx)("span", {children: "Filters"}),
+                (0,P.jsx)(re, {className: "w-3.5 h-3.5 transition-transform " + (showFilterMenu ? "rotate-180" : "")})
+              ]
+            }),
+            showFilterMenu && (0,P.jsxs)("div", {
+              style: {position: "absolute", right: 0, top: "100%", marginTop: "8px", width: "320px", zIndex: 40},
+              className: "bg-white border border-slate-200 rounded-xl shadow-xl p-4 space-y-3",
+              children: [
+                (0,P.jsxs)("div", {className: "flex items-center justify-between border-b border-slate-100 pb-2", children: [
+                  (0,P.jsx)("span", {className: "text-xs font-bold text-slate-800", children: "Filter Certificates"}),
+                  hasActiveFilters && (0,P.jsx)("button", {
+                    type: "button",
+                    onClick: () => { setSearchQuery(""); setCategoryFilter("All Records"); setTrainingFilter("All Trainings"); setEmployeeFilter("All Employees"); setDeptFilter("All Departments"); setStatusFilter("All Statuses"); setIssueDateFilter("All Dates"); },
+                    className: "text-[11px] font-semibold text-blue-600 hover:underline cursor-pointer",
+                    children: "Reset All"
+                  })
+                ]}),
+                (0,P.jsxs)("div", {className: "space-y-1", children: [
+                  (0,P.jsx)("label", {className: "text-[11px] font-semibold text-slate-500", children: "Training Name"}),
+                  (0,P.jsxs)("select", {
+                    value: trainingFilter,
+                    onChange: ev => setTrainingFilter(ev.target.value),
+                    className: "w-full text-xs border border-slate-200 rounded-lg px-2.5 py-1.5 bg-slate-50 text-slate-700 font-medium focus:outline-none focus:ring-1 focus:ring-blue-500",
+                    children: [
+                      (0,P.jsx)("option", {value: "All Trainings", children: "All Trainings"}),
+                      trainingOptions.map(t => (0,P.jsx)("option", {value: t, children: t}, t))
+                    ]
+                  })
+                ]}),
+                (0,P.jsxs)("div", {className: "space-y-1", children: [
+                  (0,P.jsx)("label", {className: "text-[11px] font-semibold text-slate-500", children: "Employee Name"}),
+                  (0,P.jsxs)("select", {
+                    value: employeeFilter,
+                    onChange: ev => setEmployeeFilter(ev.target.value),
+                    className: "w-full text-xs border border-slate-200 rounded-lg px-2.5 py-1.5 bg-slate-50 text-slate-700 font-medium focus:outline-none focus:ring-1 focus:ring-blue-500",
+                    children: [
+                      (0,P.jsx)("option", {value: "All Employees", children: "All Employees"}),
+                      employeeOptions.map(em => (0,P.jsx)("option", {value: em, children: em}, em))
+                    ]
+                  })
+                ]}),
+                (0,P.jsxs)("div", {style: {display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px"}, children: [
+                  (0,P.jsxs)("div", {className: "space-y-1", children: [
+                    (0,P.jsx)("label", {className: "text-[11px] font-semibold text-slate-500", children: "Department"}),
+                    (0,P.jsxs)("select", {
+                      value: deptFilter,
+                      onChange: ev => setDeptFilter(ev.target.value),
+                      className: "w-full text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-slate-50 text-slate-700 font-medium focus:outline-none focus:ring-1 focus:ring-blue-500",
+                      children: [
+                        (0,P.jsx)("option", {value: "All Departments", children: "All Departments"}),
+                        deptOptions.map(d => (0,P.jsx)("option", {value: d, children: d}, d))
+                      ]
+                    })
+                  ]}),
+                  (0,P.jsxs)("div", {className: "space-y-1", children: [
+                    (0,P.jsx)("label", {className: "text-[11px] font-semibold text-slate-500", children: "Certificate Status"}),
+                    (0,P.jsxs)("select", {
+                      value: statusFilter,
+                      onChange: ev => setStatusFilter(ev.target.value),
+                      className: "w-full text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-slate-50 text-slate-700 font-medium focus:outline-none focus:ring-1 focus:ring-blue-500",
+                      children: [
+                        (0,P.jsx)("option", {value: "All Statuses", children: "All Statuses"}),
+                        statusOptions.map(st => (0,P.jsx)("option", {value: st, children: st}, st))
+                      ]
+                    })
+                  ]})
+                ]}),
+                (0,P.jsxs)("div", {className: "space-y-1", children: [
+                  (0,P.jsx)("label", {className: "text-[11px] font-semibold text-slate-500", children: "Issue Date"}),
+                  (0,P.jsxs)("select", {
+                    value: issueDateFilter,
+                    onChange: ev => setIssueDateFilter(ev.target.value),
+                    className: "w-full text-xs border border-slate-200 rounded-lg px-2.5 py-1.5 bg-slate-50 text-slate-700 font-medium focus:outline-none focus:ring-1 focus:ring-blue-500",
+                    children: [
+                      (0,P.jsx)("option", {value: "All Dates", children: "All Issue Dates"}),
+                      dateOptions.map(dt => (0,P.jsx)("option", {value: dt, children: dt}, dt))
+                    ]
+                  })
+                ]}),
+                (0,P.jsx)("div", {className: "pt-1 flex justify-end", children: 
+                  (0,P.jsx)("button", {
+                    type: "button",
+                    onClick: () => setShowFilterMenu(false),
+                    className: "px-3 py-1 rounded-lg bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 cursor-pointer",
+                    children: "Done"
+                  })
+                })
+              ]
             })
           ]})
-        ]}),
-        (0,P.jsxs)("div", {className: "grid grid-cols-2 md:grid-cols-5 gap-2.5", children: [
-          (0,P.jsxs)("select", {
-            value: trainingFilter,
-            onChange: ev => setTrainingFilter(ev.target.value),
-            className: "text-xs border border-slate-200 rounded-lg px-2.5 py-1.5 bg-slate-50 text-slate-700 font-medium focus:outline-none focus:ring-1 focus:ring-blue-500",
-            children: [
-              (0,P.jsx)("option", {value: "All Trainings", children: "All Trainings"}),
-              trainingOptions.map(t => (0,P.jsx)("option", {value: t, children: t}, t))
-            ]
-          }),
-          (0,P.jsxs)("select", {
-            value: employeeFilter,
-            onChange: ev => setEmployeeFilter(ev.target.value),
-            className: "text-xs border border-slate-200 rounded-lg px-2.5 py-1.5 bg-slate-50 text-slate-700 font-medium focus:outline-none focus:ring-1 focus:ring-blue-500",
-            children: [
-              (0,P.jsx)("option", {value: "All Employees", children: "All Employees"}),
-              employeeOptions.map(em => (0,P.jsx)("option", {value: em, children: em}, em))
-            ]
-          }),
-          (0,P.jsxs)("select", {
-            value: deptFilter,
-            onChange: ev => setDeptFilter(ev.target.value),
-            className: "text-xs border border-slate-200 rounded-lg px-2.5 py-1.5 bg-slate-50 text-slate-700 font-medium focus:outline-none focus:ring-1 focus:ring-blue-500",
-            children: [
-              (0,P.jsx)("option", {value: "All Departments", children: "All Departments"}),
-              deptOptions.map(d => (0,P.jsx)("option", {value: d, children: d}, d))
-            ]
-          }),
-          (0,P.jsxs)("select", {
-            value: statusFilter,
-            onChange: ev => setStatusFilter(ev.target.value),
-            className: "text-xs border border-slate-200 rounded-lg px-2.5 py-1.5 bg-slate-50 text-slate-700 font-medium focus:outline-none focus:ring-1 focus:ring-blue-500",
-            children: [
-              (0,P.jsx)("option", {value: "All Statuses", children: "All Statuses"}),
-              statusOptions.map(st => (0,P.jsx)("option", {value: st, children: st}, st))
-            ]
-          }),
-          (0,P.jsxs)("select", {
-            value: issueDateFilter,
-            onChange: ev => setIssueDateFilter(ev.target.value),
-            className: "text-xs border border-slate-200 rounded-lg px-2.5 py-1.5 bg-slate-50 text-slate-700 font-medium focus:outline-none focus:ring-1 focus:ring-blue-500",
-            children: [
-              (0,P.jsx)("option", {value: "All Dates", children: "All Issue Dates"}),
-              dateOptions.map(dt => (0,P.jsx)("option", {value: dt, children: dt}, dt))
-            ]
-          })
         ]})
       ]}),
       (0,P.jsx)("div", {className: "overflow-x-auto", children: 
@@ -3558,8 +3600,9 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,ca
                       (0,P.jsx)("button", {
                         type: "button",
                         onClick: ev => { ev.stopPropagation(); toggleExpand(tr.id); },
-                        className: "px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 cursor-pointer",
-                        children: isExpanded ? "Hide" : "View (" + tr.records.length + ")"
+                        className: "p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer inline-flex items-center justify-center",
+                        title: isExpanded ? "Hide certificate records" : "View certificate records",
+                        children: (0,P.jsx)(pe, {className: "w-4 h-4"})
                       })
                     })
                   ]
