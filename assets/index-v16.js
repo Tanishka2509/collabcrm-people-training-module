@@ -1754,17 +1754,14 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
           (0,P.jsx)("option",{value:"PDF Document",children:"PDF Document"})
         ]}),
         (0,P.jsx)("input",{type:"text",value:res.title,onChange:e=>{let val=e.target.value;E(ie.map(r=>r.id===res.id?{...r,title:val}:r))},placeholder:"Module title (e.g. Architecture Lecture)...",className:"flex-1 w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-800 placeholder-slate-400"}),
-        res.type==="PDF Document"?(0,P.jsxs)("div",{className:"flex-1 w-full flex flex-col gap-1.5",children:[
-          (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
-            (0,P.jsx)("input",{type:"text",value:res.url,onChange:e=>{let val=e.target.value;E(ie.map(r=>r.id===res.id?{...r,url:val}:r))},placeholder:"PDF link (https://...) or upload below",className:"flex-1 min-w-0 bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-800 placeholder-slate-400"}),
-            (0,P.jsxs)("label",{className:"inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-semibold cursor-pointer shrink-0 whitespace-nowrap transition-colors",children:[
-              (0,P.jsx)("span",{children:res.fileName?"Replace PDF":"Upload PDF"}),
-              (0,P.jsx)("input",{type:"file",accept:"application/pdf,.pdf",style:{display:"none"},onChange:e=>{let f=e.target.files?.[0];if(f)handlePdfResourceUpload(res.id,f);e.target.value="";}})
-            ]})
-          ]}),
-          res.fileName&&(0,P.jsxs)("div",{className:"inline-flex items-center justify-between gap-2 px-2.5 py-1 rounded-md bg-blue-50/70 border border-blue-200 text-[11px] text-blue-800",children:[
+        res.type==="PDF Document"?(0,P.jsxs)("div",{className:"flex-1 w-full flex items-center gap-2",children:[
+          res.fileName?(0,P.jsxs)("div",{className:"flex-1 min-w-0 inline-flex items-center justify-between gap-2 px-3 py-2 rounded-lg bg-blue-50/70 border border-blue-200 text-xs text-blue-800",children:[
             (0,P.jsx)("span",{className:"truncate font-medium",children:"📄 "+res.fileName}),
-            (0,P.jsx)("button",{type:"button",onClick:()=>E(ie.map(r=>r.id===res.id?{...r,fileName:undefined,fileSize:undefined,fileDataUrl:undefined}:r)),className:"text-rose-500 hover:text-rose-700 font-bold cursor-pointer",title:"Remove uploaded PDF",children:"✕"})
+            (0,P.jsx)("button",{type:"button",onClick:()=>E(ie.map(r=>r.id===res.id?{...r,fileName:undefined,fileSize:undefined,fileDataUrl:undefined}:r)),className:"text-rose-500 hover:text-rose-700 font-bold cursor-pointer shrink-0",title:"Remove uploaded PDF",children:"✕"})
+          ]}):(0,P.jsx)("input",{type:"text",value:res.url,onChange:e=>{let val=e.target.value;E(ie.map(r=>r.id===res.id?{...r,url:val}:r))},placeholder:"PDF link (https://...) or upload PDF",className:"flex-1 min-w-0 bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-800 placeholder-slate-400"}),
+          (0,P.jsxs)("label",{className:"inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-semibold cursor-pointer shrink-0 whitespace-nowrap transition-colors",children:[
+            (0,P.jsx)("span",{children:res.fileName?"Replace PDF":"Upload PDF"}),
+            (0,P.jsx)("input",{type:"file",accept:"application/pdf,.pdf",style:{display:"none"},onChange:e=>{let f=e.target.files?.[0];if(f)handlePdfResourceUpload(res.id,f);e.target.value="";}})
           ]})
         ]}):(0,P.jsx)("input",{type:"text",value:res.url,onChange:e=>{let val=e.target.value;E(ie.map(r=>r.id===res.id?{...r,url:val}:r))},placeholder:"URL / link (https://...)",className:"flex-1 w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-800 placeholder-slate-400"}),
         (0,P.jsx)("button",{onClick:()=>se(res.id),type:"button",className:"p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors",title:"Delete Resource",children:"✕"})
