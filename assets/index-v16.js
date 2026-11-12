@@ -1199,7 +1199,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
   // Section 4: Training Recognition (Certificate Generation + Add Skill to Employee Profile, both default OFF on new Trainings)
   let[certificateGeneration, setCertificateGeneration] = (0,l.useState)(Boolean(n?.certificateGeneration));
   let[addSkillToProfile, setAddSkillToProfile] = (0,l.useState)(Boolean(n?.addSkillToProfile));
-  let[selectedSkillIds, setSelectedSkillIds] = (0,l.useState)(Array.isArray(n?.selectedSkillIds) && n.selectedSkillIds.length > 0 ? [n.selectedSkillIds[0]].filter(Boolean) : []);
+  let[selectedSkillIds, setSelectedSkillIds] = (0,l.useState)(Array.isArray(n?.selectedSkillIds) ? n.selectedSkillIds.filter(Boolean) : []);
   let[awardSkillLevel, setAwardSkillLevel] = (0,l.useState)(n?.skillLevel || (configuredSkillLevels[0]?.name || "Beginner"));
   let[reviewerApprovalRequired, setReviewerApprovalRequired] = (0,l.useState)(Boolean(n?.reviewerApprovalRequired));
   let[skillDropdownOpen, setSkillDropdownOpen] = (0,l.useState)(false);
@@ -1272,12 +1272,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
     }
   };
 
-  (0,l.useEffect)(() => {
-    let snap = JSON.stringify({on: Boolean(addSkillToProfile), ids: Array.isArray(selectedSkillIds) ? Array.from(new Set(selectedSkillIds)) : [], lvl: awardSkillLevel || ""});
-    if(prevSkillSyncRef.current === snap) return;
-    prevSkillSyncRef.current = snap;
-    syncQuestionsFromSkills(selectedSkillIds, addSkillToProfile, awardSkillLevel);
-  }, [addSkillToProfile, selectedSkillIds, awardSkillLevel, allSkillsMaster]);
+  // Auto-question generation on skill selection disabled per user request
 
   let totalQuestions = questions.length;
   let questionsMarksSum = questions.reduce((sum, q) => sum + (Number(q.marks) || 0), 0);
