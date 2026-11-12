@@ -1209,7 +1209,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
   let[certificateGeneration, setCertificateGeneration] = (0,l.useState)(Boolean(n?.certificateGeneration));
   let[addSkillToProfile, setAddSkillToProfile] = (0,l.useState)(Boolean(n?.addSkillToProfile));
   let[selectedSkillIds, setSelectedSkillIds] = (0,l.useState)(Array.isArray(n?.selectedSkillIds) ? Array.from(new Set(n.selectedSkillIds)) : []);
-  let[awardSkillLevel, setAwardSkillLevel] = (0,l.useState)(n?.skillLevel || "");
+  let[awardSkillLevel, setAwardSkillLevel] = (0,l.useState)(n?.skillLevel || (configuredSkillLevels[0]?.name || "Beginner"));
   let[reviewerApprovalRequired, setReviewerApprovalRequired] = (0,l.useState)(Boolean(n?.reviewerApprovalRequired));
   let[skillDropdownOpen, setSkillDropdownOpen] = (0,l.useState)(false);
   let[skillSearch, setSkillSearch] = (0,l.useState)("");
@@ -1492,7 +1492,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
     if(addSkillToProfile){
       let dedupedSkills = Array.from(new Set((selectedSkillIds || []).filter(Boolean)));
       if(dedupedSkills.length === 0){
-        setValidationError("Training Recognition: Please select at least one skill when 'Add Skill to Employee Profile' is enabled.");
+        setValidationError("Training Recognition: Please select at least one skill when 'Skills' is enabled.");
         return;
       }
       if(!awardSkillLevel || !configuredSkillLevels.some(lv => lv.name === awardSkillLevel)){
@@ -1788,27 +1788,27 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
           (0,P.jsx)("button",{type:"button",role:"switch","aria-checked":certificateGeneration,"aria-label":"Certificate Generation",onClick:()=>setCertificateGeneration(!certificateGeneration),style:{width:"40px",height:"22px",padding:"2px",border:"none",backgroundColor:certificateGeneration?"#7c3aed":"#cbd5e1"},className:"relative inline-flex shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 focus:outline-none mt-0.5",children:(0,P.jsx)("span",{style:{width:"18px",height:"18px",transform:certificateGeneration?"translateX(18px)":"translateX(0px)"},className:"pointer-events-none inline-block rounded-full bg-white shadow transition-transform duration-200"})})
         ]}),
 
-        // B. Add Skill to Employee Profile Toggle (Default OFF)
+        // B. Skills Toggle (Default OFF)
         (0,P.jsxs)("div",{className:"rounded-xl border p-4 flex items-start justify-between gap-4 transition-colors " + (addSkillToProfile ? "border-purple-200 bg-purple-50/60" : "border-slate-200 bg-slate-50/70"),children:[
           (0,P.jsxs)("div",{className:"space-y-1",children:[
             (0,P.jsxs)("div",{className:"flex items-center gap-1.5 text-xs font-bold text-slate-900",children:[
-              (0,P.jsx)("span",{children:"Add Skill to Employee Profile"}),
+              (0,P.jsx)("span",{children:"Skills"}),
               (0,P.jsx)(InfoTip,{text:"When ON, selected skills at the configured Skill Level are automatically added/upgraded on the Employee Profile after completion."})
             ]}),
             (0,P.jsx)("p",{className:"text-[11px] text-slate-500 leading-relaxed",children:addSkillToProfile ? "ON — Selected skills will be awarded upon verified Training completion." : "OFF — No skills will be added to employee profiles."})
           ]}),
-          (0,P.jsx)("button",{type:"button",role:"switch","aria-checked":addSkillToProfile,"aria-label":"Add Skill to Employee Profile",onClick:()=>setAddSkillToProfile(!addSkillToProfile),style:{width:"40px",height:"22px",padding:"2px",border:"none",backgroundColor:addSkillToProfile?"#7c3aed":"#cbd5e1"},className:"relative inline-flex shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 focus:outline-none mt-0.5",children:(0,P.jsx)("span",{style:{width:"18px",height:"18px",transform:addSkillToProfile?"translateX(18px)":"translateX(0px)"},className:"pointer-events-none inline-block rounded-full bg-white shadow transition-transform duration-200"})})
+          (0,P.jsx)("button",{type:"button",role:"switch","aria-checked":addSkillToProfile,"aria-label":"Skills",onClick:()=>setAddSkillToProfile(!addSkillToProfile),style:{width:"40px",height:"22px",padding:"2px",border:"none",backgroundColor:addSkillToProfile?"#7c3aed":"#cbd5e1"},className:"relative inline-flex shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 focus:outline-none mt-0.5",children:(0,P.jsx)("span",{style:{width:"18px",height:"18px",transform:addSkillToProfile?"translateX(18px)":"translateX(0px)"},className:"pointer-events-none inline-block rounded-full bg-white shadow transition-transform duration-200"})})
         ]})
       ]}),
 
-      // Skill Configuration Fields (Displayed ONLY when Add Skill to Employee Profile is ON)
+      // Purple Skills Configuration Section (Displayed ONLY when Skills toggle is ON)
       addSkillToProfile && (0,P.jsxs)("div",{className:"rounded-xl border border-purple-200 p-5 space-y-4 animate-in fade-in",style:{backgroundColor:"#faf5ff"},children:[
         (0,P.jsxs)("div",{className:"flex flex-wrap items-center justify-between gap-2",children:[
           (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
-            (0,P.jsx)("span",{className:"text-xs font-bold text-purple-700 uppercase tracking-wider",children:"Skill Configuration"}),
-            (0,P.jsx)("span",{className:"text-[11px] text-purple-600",children:"Loaded live from Config > Skills"})
+            (0,P.jsx)("span",{className:"text-xs font-bold text-purple-700 uppercase tracking-wider",children:"Skills Configuration"}),
+            (0,P.jsx)("span",{className:"text-[11px] text-purple-600",children:"Loaded live from People > Config > Skills"})
           ]}),
-          (canManageSkills !== !1 && onSaveSkill) && (0,P.jsx)("button",{type:"button",onClick:()=>{setQuickSkillErr("");setQuickSkillName("");setQuickSkillDesc("");setShowQuickSkillModal(true);},className:"text-xs font-bold px-3 py-1.5 rounded-lg border border-purple-200 bg-white text-purple-700 hover:bg-purple-50 transition-colors cursor-pointer",children:"+ Create New Skill in Config"})
+          (canManageSkills !== !1 && onSaveSkill) && (0,P.jsx)("button",{type:"button",onClick:()=>{setQuickSkillErr("");setQuickSkillName("");setQuickSkillDesc("");setShowQuickSkillModal(true);},className:"text-xs font-bold px-3 py-1.5 rounded-lg border border-purple-200 bg-white text-purple-700 hover:bg-purple-50 transition-colors cursor-pointer",children:"Add New Skill"})
         ]}),
 
         (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-3 gap-4 items-start text-xs",children:[
@@ -2084,8 +2084,8 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
     showQuickSkillModal && (0,P.jsx)("div",{className:"fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4",children:(0,P.jsxs)("div",{className:"bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-purple-200",children:[
       (0,P.jsxs)("div",{className:"px-5 py-4 border-b border-purple-200 flex items-center justify-between",style:{backgroundColor:"#faf5ff"},children:[
         (0,P.jsxs)("div",{children:[
-          (0,P.jsx)("span",{className:"text-[10px] font-bold uppercase tracking-wider text-purple-700",children:"Config > Skills"}),
-          (0,P.jsx)("h3",{className:"text-sm font-bold text-slate-900",children:"Add Skill to Skills Configuration"})
+          (0,P.jsx)("span",{className:"text-[10px] font-bold uppercase tracking-wider text-purple-700",children:"People > Config > Skills"}),
+          (0,P.jsx)("h3",{className:"text-sm font-bold text-slate-900",children:"Add New Skill"})
         ]}),
         (0,P.jsx)("button",{type:"button",onClick:()=>setShowQuickSkillModal(false),className:"text-slate-400 hover:text-slate-700 text-sm font-bold px-2 py-1",children:"✕"})
       ]}),
