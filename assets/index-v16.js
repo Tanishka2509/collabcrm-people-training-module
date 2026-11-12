@@ -330,10 +330,7 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){let r=e.
       // LEFT COLUMN: Sidebar Card (matching Screenshot 4 format)
       (0,P.jsxs)("div",{className:"lg:col-span-1 bg-white border border-slate-200 rounded-xl p-6 space-y-6 shadow-sm",children:[
         (0,P.jsxs)("div",{className:"text-center relative",children:[
-          (0,P.jsxs)("div",{className:"flex items-center justify-between gap-2 mb-2",children:[
-            (0,P.jsx)("span",{className:pubBadgeClass + " text-xs px-2 py-0.5 rounded font-medium",children:pubStatus}),
-            (0,P.jsx)("button",{type:"button",disabled:!isPubForAvail,"aria-checked":isAvailOn,"aria-disabled":!isPubForAvail||!canChangeAvail,"aria-label":"Training availability: " + availStatus,role:"switch",onClick:handleAvailToggleClick,style:{width:"36px",height:"20px",padding:"2px",border:"none"},className:"relative inline-flex shrink-0 items-center rounded-full transition-colors duration-200 ease-in-out focus:outline-none " + (isAvailOn?"bg-blue-600":"bg-slate-300") + " " + (!isPubForAvail?"opacity-50 cursor-not-allowed":canChangeAvail?"cursor-pointer":"opacity-60 cursor-not-allowed"),title:availToggleTitle,children:(0,P.jsx)("span",{style:{width:"16px",height:"16px",transform:isAvailOn?"translateX(16px)":"translateX(0px)"},className:"pointer-events-none inline-block rounded-full bg-white shadow transition-transform duration-200 ease-in-out"})})
-          ]}),
+          (0,P.jsx)("div",{className:"flex items-center justify-between gap-2 mb-2",children:(0,P.jsx)("span",{className:pubBadgeClass + " text-xs px-2 py-0.5 rounded font-medium",children:pubStatus})}),
           (0,P.jsx)("div",{className:"w-24 h-24 bg-blue-50 border border-blue-100 rounded-full mx-auto flex items-center justify-center text-3xl font-bold text-blue-600 shadow-inner mt-2",children:(0,P.jsx)(te,{className:"w-10 h-10 text-blue-600"})}),
           (0,P.jsx)("h2",{className:"text-base font-bold text-slate-900 mt-4 leading-snug",children:e.name}),
           (0,P.jsx)("div",{className:"text-xs text-slate-500 mt-1",children:e.category || "Recruitment & HR Operations"}),
@@ -367,7 +364,7 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){let r=e.
               (0,P.jsxs)("span",{className:"bg-slate-100 text-slate-600 text-[10px] px-1.5 py-0.5 rounded-full font-bold",children:[o.length]})
             ]}),
             (0,P.jsxs)("button",{onClick:()=>setActiveTab("history"),className:"py-4 border-b-2 transition-colors whitespace-nowrap flex items-center gap-1.5 " + (activeTab==="history"?"border-blue-600 text-blue-600":"border-transparent text-slate-500 hover:text-slate-800"),children:[
-              (0,P.jsx)("span",{children:"Status History"}),
+              (0,P.jsx)("span",{children:"History"}),
               (0,P.jsxs)("span",{className:"bg-slate-100 text-slate-600 text-[10px] px-1.5 py-0.5 rounded-full font-bold",children:[statusHistory.length]})
             ]})
           ]})
@@ -1490,6 +1487,10 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
     let totalDurMins=(Number(durH)||0)*60+(Number(durM)||0);
     if((durH===""&&durM==="")||totalDurMins<=0){
       setValidationError("Please select Duration (Hours & Minutes) greater than 0.");
+      return;
+    }
+    if(!certificateGeneration && !addSkillToProfile){
+      setValidationError("Training Recognition: Please enable at least one option (Certificate Generation or Skills).");
       return;
     }
     if(addSkillToProfile){
