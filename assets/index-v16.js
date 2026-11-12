@@ -1751,9 +1751,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
         (0,P.jsxs)("select",{value:res.type,onChange:e=>{let val=e.target.value;E(ie.map(r=>r.id===res.id?{...r,type:val}:r))},className:"w-full md:w-44 bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium " + (res.type?"text-slate-800":"text-slate-400"),children:[
           (0,P.jsx)("option",{value:"",children:"Select resource type..."}),
           (0,P.jsx)("option",{value:"Video / YouTube",children:"Video / YouTube"}),
-          (0,P.jsx)("option",{value:"PDF Document",children:"PDF Document"}),
-          (0,P.jsx)("option",{value:"External Link",children:"External Link"}),
-          (0,P.jsx)("option",{value:"Article",children:"Article"})
+          (0,P.jsx)("option",{value:"PDF Document",children:"PDF Document"})
         ]}),
         (0,P.jsx)("input",{type:"text",value:res.title,onChange:e=>{let val=e.target.value;E(ie.map(r=>r.id===res.id?{...r,title:val}:r))},placeholder:"Module title (e.g. Architecture Lecture)...",className:"flex-1 w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-800 placeholder-slate-400"}),
         res.type==="PDF Document"?(0,P.jsxs)("div",{className:"flex-1 w-full flex flex-col gap-1.5",children:[
