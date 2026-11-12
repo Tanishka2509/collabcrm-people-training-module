@@ -1931,13 +1931,12 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
             ]}),
             assessTotalMarks !== "" && Number(assessTotalMarks) > 0 && allQuestionsHaveMarks && questionsMarksSum === Number(assessTotalMarks) && (0,P.jsx)("span",{className:"bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-semibold px-2.5 py-0.5 rounded-full",children:"Matched ✓"})
           ]}),
-          (0,P.jsxs)("div",{className:"flex items-center gap-2 flex-wrap self-start sm:self-auto",children:[
-            (addSkillToProfile && selectedSkillIds.length > 0) && 
-            (0,P.jsxs)("button",{type:"button",onClick:handleAddQuestion,className:"bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 rounded-lg text-xs font-bold shadow-sm flex items-center gap-1.5 transition-colors",children:[
+          (0,P.jsx)("div",{className:"flex items-center gap-2 flex-wrap self-start sm:self-auto",children:
+            (0,P.jsxs)("button",{type:"button",onClick:handleAddQuestion,className:"bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 rounded-lg text-xs font-bold shadow-sm flex items-center gap-1.5 transition-colors cursor-pointer",children:[
               (0,P.jsx)("span",{children:"+"}),
               (0,P.jsx)("span",{children:"Add Question"})
             ]})
-          ]})
+          })
         ]}),
 
         // Question Cards (Clean, proper alignment, full-width inputs)
