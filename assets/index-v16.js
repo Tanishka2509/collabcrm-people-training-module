@@ -2416,7 +2416,6 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
               (0, P.jsx)("th", {className: "py-3 px-4", children: "Assigned Training"}),
               (0, P.jsx)("th", {className: "py-3 px-4", children: "Recognition"}),
               (0, P.jsx)("th", {className: "py-3 px-4", children: "Assigned Date"}),
-              (0, P.jsx)("th", {className: "py-3 px-4", children: "Due Date"}),
               (0, P.jsx)("th", {className: "py-3 px-4", children: "Progress"}),
               (0, P.jsx)("th", {className: "py-3 px-4 text-center", children: "Actions"})
             ]})
@@ -2446,7 +2445,6 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
                   ]}),
                   (0, P.jsx)("td", {className: "py-3 px-4 whitespace-nowrap", children: (0, P.jsx)("span", {className: `inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${recBadge.cls}`, children: recBadge.label})}),
                   (0, P.jsx)("td", {className: "py-3 px-4 text-slate-600 text-xs tabular-nums", children: fmtSysDate(item.assigned)}),
-                  (0, P.jsx)("td", {className: "py-3 px-4 text-xs tabular-nums font-medium text-slate-700", children: fmtSysDate(item.due)}),
                   (0, P.jsxs)("td", {className: "py-3 px-4 w-36", children: [
                     (0, P.jsxs)("div", {className: "flex items-center justify-between text-xs font-mono font-bold mb-1 text-slate-700", children: [
                       (0, P.jsxs)("span", {children: [item.progress, "%"]}),
