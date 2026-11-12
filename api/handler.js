@@ -1359,6 +1359,8 @@ function processTrainingRecognitionOnCompletion({ store, employeeId, programme, 
       );
 
       if (existingIdx === -1) {
+        const tsFormatted = formatSkillTimestamp(now);
+        const actorLabel = actorName || 'Training System';
         const newSkillRecord = {
           id: `es-${empKey}-${resolvedSkillId}-${Date.now()}`,
           employeeId: empKey,
@@ -1367,6 +1369,8 @@ function processTrainingRecognitionOnCompletion({ store, employeeId, programme, 
           skillLevel: awardedLevel,
           sourceTrainingId: programme.id,
           sourceTrainingName: programme.name,
+          latestSourceTrainingId: programme.id,
+          latestSourceTrainingName: programme.name,
           sourceTrainingIds: [programme.id],
           sources: [{
             trainingId: programme.id,
@@ -1374,6 +1378,11 @@ function processTrainingRecognitionOnCompletion({ store, employeeId, programme, 
             level: awardedLevel,
             awardedDate: todayStr
           }],
+          remarks: `Earned via Training: ${programme.name}`,
+          createdBy: actorLabel,
+          createdAt: tsFormatted,
+          updatedBy: actorLabel,
+          updatedAt: tsFormatted,
           awardedDate: todayStr,
           createdDate: nowIso,
           updatedDate: nowIso
@@ -1442,6 +1451,9 @@ function processTrainingRecognitionOnCompletion({ store, employeeId, programme, 
         existingRec.latestSourceTrainingName = programme.name;
         existingRec.sourceTrainingIds = prevSourceIds;
         existingRec.sources = prevSources;
+        existingRec.remarks = `Earned via Training: ${programme.name}`;
+        existingRec.updatedBy = actorName || 'Training System';
+        existingRec.updatedAt = formatSkillTimestamp(now);
         existingRec.updatedDate = nowIso;
 
         if (!alreadyRecordedFromSameTraining) {
@@ -7240,7 +7252,7 @@ export async function handleApi(req, res) {
   // 18d. POST Authorized Employee Skill Management (Admin/HR/Manager only; blocks employee self-award)
   if (pathname === '/api/employee/skills' && req.method === 'POST') {
     const body = await parseJsonBody(req);
-    const { action, employeeId, skillId, skillLevel, userRole, userName, userPermissions } = body;
+    const { action, employeeId, skillId, skillLevel, remarks, userRole, userName, userPermissions } = body;
     if (!canManageProgrammeAvailability(userRole, userPermissions)) {
       return sendJson(res, 403, {
         success: false,
@@ -7296,9 +7308,14 @@ export async function handleApi(req, res) {
           return sendJson(res, 400, { success: false, message: `Employee already has "${skillMaster.name}" (duplicate employee skill records are not allowed).` });
         }
         const prevLevel = empSkills[existingIdx].skillLevel;
+        const tsFormatted = formatSkillTimestamp(now);
+        const cleanRemarks = remarks !== undefined ? String(remarks || '').trim() : empSkills[existingIdx].remarks;
         empSkills[existingIdx] = {
           ...empSkills[existingIdx],
           skillLevel: resolvedLevelName,
+          remarks: cleanRemarks || '',
+          updatedBy: actor,
+          updatedAt: tsFormatted,
           updatedDate: nowIso
         };
         store.skillAwardHistory.unshift({
@@ -7311,12 +7328,14 @@ export async function handleApi(req, res) {
           finalLevel: resolvedLevelName,
           outcome: 'manual_update',
           sourceTrainingId: null,
-          sourceTrainingName: `Manual Update by ${actor}`,
+          sourceTrainingName: cleanRemarks ? `Manual Update by ${actor} (${cleanRemarks})` : `Manual Update by ${actor}`,
           awardedDate: todayStr,
           createdDate: nowIso,
           updatedDate: nowIso
         });
       } else {
+        const tsFormatted = formatSkillTimestamp(now);
+        const cleanRemarks = String(remarks || '').trim();
         empSkills.push({
           id: `es-${empKey}-${skillMaster.id}-${Date.now()}`,
           employeeId: empKey,
@@ -7327,6 +7346,11 @@ export async function handleApi(req, res) {
           sourceTrainingName: `Manual Assignment by ${actor}`,
           sourceTrainingIds: [],
           sources: [{ trainingId: null, trainingName: `Manual Assignment by ${actor}`, level: resolvedLevelName, awardedDate: todayStr }],
+          remarks: cleanRemarks,
+          createdBy: actor,
+          createdAt: tsFormatted,
+          updatedBy: null,
+          updatedAt: null,
           awardedDate: todayStr,
           createdDate: nowIso,
           updatedDate: nowIso
