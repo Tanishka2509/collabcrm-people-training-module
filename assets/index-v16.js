@@ -1087,6 +1087,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
   let[durM,setDurM]=(0,l.useState)(n?String(_initDur.m):"");
   let[dept,setDept]=(0,l.useState)(n?.department||"");
   let[learnObj,setLearnObj]=(0,l.useState)(n?.learningObjectives||"");
+  let[isTrainingActive,setIsTrainingActive]=(0,l.useState)(n?(n.availabilityStatus?n.availabilityStatus==="Active":n.isActive!==!1):!0);
   let[g,_]=(0,l.useState)(n?(n.assessment?.passingScore||n.passingScore||80):"");
   let[v,y]=(0,l.useState)(n?(n.assessment?.maxAttempts||n.maxAttempts||3):"");
   let[duePeriod,setDuePeriod]=(0,l.useState)(n?(n.defaultDuePeriod||14):14);
@@ -1608,9 +1609,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
     let pubStatus = status;
     let availStatus = pubStatus === "Draft"
       ? "Inactive"
-      : (n && existingPub !== "Draft"
-          ? (n.availabilityStatus || (n.isActive === !1 ? "Inactive" : "Active"))
-          : "Active");
+      : (isTrainingActive ? "Active" : "Inactive");
 
     try{
       let cleanedResources = (ie || []).filter(r => r && (String(r.title||"").trim() || String(r.url||"").trim() || String(r.fileDataUrl||"").trim() || String(r.type||"").trim()));
@@ -1751,10 +1750,24 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
             (0,P.jsx)(re,{style:{position:"absolute",right:"10px",top:"50%",transform:"translateY(-50%)"},className:"w-4 h-4 text-slate-400 pointer-events-none"})
           ]})
         ]}),
-        (0,P.jsxs)("div",{className:"md:col-span-2 space-y-1.5",children:[
-          (0,P.jsxs)("label",{className:"inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 mb-1.5",children:[(0,P.jsx)("span",{children:"Learning Objectives"}),(0,P.jsx)(InfoTip,{text:"Key skills and outcomes employees will gain upon completion."})]}),
-          (0,P.jsx)("input",{type:"text",value:learnObj,onChange:e=>setLearnObj(e.target.value),placeholder:"Key skills and learning outcomes...",className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"})
+        (0,P.jsxs)("div",{className:"space-y-1.5",children:[
+          (0,P.jsxs)("label",{className:"inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 mb-1.5",children:[(0,P.jsx)("span",{children:"Status"}),(0,P.jsx)(InfoTip,{text:"Toggle whether this training is Active or Inactive."})]}),
+          (0,P.jsxs)("div",{className:"flex items-center gap-3 h-[34px]",children:[
+            (0,P.jsx)("button",{
+              type:"button",
+              role:"switch",
+              "aria-checked":isTrainingActive,
+              onClick:()=>setIsTrainingActive(!isTrainingActive),
+              className:"relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none "+(isTrainingActive?"bg-blue-600":"bg-slate-300"),
+              children:(0,P.jsx)("span",{className:"pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out "+(isTrainingActive?"translate-x-5":"translate-x-0")})
+            }),
+            (0,P.jsx)("span",{className:"text-xs font-semibold "+(isTrainingActive?"text-emerald-700":"text-slate-500"),children:isTrainingActive?"Active":"Inactive"})
+          ]})
         ]})
+      ]}),
+      (0,P.jsxs)("div",{className:"space-y-1.5 text-xs pt-2 border-t border-slate-100",children:[
+        (0,P.jsxs)("label",{className:"inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 mb-1.5",children:[(0,P.jsx)("span",{children:"Learning Objectives"}),(0,P.jsx)(InfoTip,{text:"Key skills and outcomes employees will gain upon completion."})]}),
+        (0,P.jsx)("textarea",{rows:3,value:learnObj,onChange:e=>setLearnObj(e.target.value),placeholder:"Key skills and learning outcomes...",className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 resize-y min-h-[76px]"})
       ]})
     ]}),
 
