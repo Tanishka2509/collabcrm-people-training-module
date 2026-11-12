@@ -391,27 +391,22 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){let r=e.
             let skillIds = Array.isArray(e.selectedSkillIds) ? e.selectedSkillIds : [];
             let masterSkills = Array.isArray(skillsConfig) && skillsConfig.length > 0 ? skillsConfig : DEFAULT_SKILLS_SEED;
             let resolvedSkills = skillIds.map(sid => masterSkills.find(m => m.id === sid) || { id: sid, name: sid });
-            let isReviewerReq = Boolean(e.reviewerApprovalRequired);
             return (0,P.jsxs)("div",{className:"bg-white border border-purple-200 rounded-xl p-6 shadow-sm space-y-4",style:{borderLeft:"4px solid #7c3aed"},children:[
               (0,P.jsxs)("div",{className:"flex items-center justify-between flex-wrap gap-2 border-b border-purple-200 pb-3",children:[
                 (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
                   (0,P.jsx)("span",{className:"w-2 h-2 rounded-full",style:{backgroundColor:"#7c3aed"}}),
                   (0,P.jsx)("h2",{className:"text-xs font-bold uppercase tracking-wider text-purple-700",children:"Training Recognition"})
                 ]}),
-                (0,P.jsx)("span",{className:"text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200",children:(isCertOn && isSkillOn) ? "Certificate + Skills" : isCertOn ? "Certificate Only" : isSkillOn ? "Skills Only" : "No Recognition Configured"})
+                (0,P.jsx)("span",{className:"text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200",children:(isCertOn && isSkillOn) ? "Certificate & Skills" : isCertOn ? "Certificate" : isSkillOn ? "Skills" : "None"})
               ]}),
-              (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-3 gap-4 text-xs",children:[
+              (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-2 gap-4 text-xs",children:[
                 (0,P.jsxs)("div",{className:"p-3 rounded-lg border border-purple-200",style:{backgroundColor:"#faf5ff"},children:[
                   (0,P.jsx)("div",{className:"text-[11px] font-medium text-slate-500",children:"Certificate Generation"}),
                   (0,P.jsx)("div",{className:"mt-1 font-bold " + (isCertOn ? "text-purple-700" : "text-slate-600"),children:isCertOn ? "Enabled (ON)" : "Disabled (OFF)"})
                 ]}),
                 (0,P.jsxs)("div",{className:"p-3 rounded-lg border border-purple-200",style:{backgroundColor:"#faf5ff"},children:[
-                  (0,P.jsx)("div",{className:"text-[11px] font-medium text-slate-500",children:"Add Skill to Employee Profile"}),
+                  (0,P.jsx)("div",{className:"text-[11px] font-medium text-slate-500",children:"Skills"}),
                   (0,P.jsx)("div",{className:"mt-1 font-bold " + (isSkillOn ? "text-purple-700" : "text-slate-600"),children:isSkillOn ? "Enabled (ON)" : "Disabled (OFF)"})
-                ]}),
-                (0,P.jsxs)("div",{className:"p-3 rounded-lg border border-purple-200",style:{backgroundColor:"#faf5ff"},children:[
-                  (0,P.jsx)("div",{className:"text-[11px] font-medium text-slate-500",children:"Reviewer Approval Before Award"}),
-                  (0,P.jsx)("div",{className:"mt-1 font-bold " + (isReviewerReq ? "text-purple-700" : "text-slate-600"),children:isReviewerReq ? "Required" : "Not Required"})
                 ]})
               ]}),
               isSkillOn && (0,P.jsxs)("div",{className:"pt-1 space-y-2 text-xs",children:[
@@ -420,7 +415,7 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){let r=e.
                   (0,P.jsx)("span",{className:"px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-50 text-purple-700 border border-purple-200",children:e.skillLevel || "Beginner"})
                 ]}),
                 (0,P.jsxs)("div",{className:"flex items-center gap-1.5 flex-wrap",children:[
-                  (0,P.jsx)("span",{className:"text-slate-500 font-semibold mr-1",children:"Skills to Assign:"}),
+                  (0,P.jsx)("span",{className:"text-slate-500 font-semibold mr-1",children:"Selected Skill:"}),
                   resolvedSkills.length > 0 ? resolvedSkills.map(sk => (0,P.jsx)("span",{className:"px-2.5 py-1 rounded-md text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200",children:sk.name},sk.id)) : (0,P.jsx)("span",{className:"text-slate-400 italic",children:"None selected"})
                 ]})
               ]})
@@ -1208,7 +1203,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
   // Section 4: Training Recognition (Certificate Generation + Add Skill to Employee Profile, both default OFF on new Trainings)
   let[certificateGeneration, setCertificateGeneration] = (0,l.useState)(Boolean(n?.certificateGeneration));
   let[addSkillToProfile, setAddSkillToProfile] = (0,l.useState)(Boolean(n?.addSkillToProfile));
-  let[selectedSkillIds, setSelectedSkillIds] = (0,l.useState)(Array.isArray(n?.selectedSkillIds) ? Array.from(new Set(n.selectedSkillIds)) : []);
+  let[selectedSkillIds, setSelectedSkillIds] = (0,l.useState)(Array.isArray(n?.selectedSkillIds) && n.selectedSkillIds.length > 0 ? [n.selectedSkillIds[0]].filter(Boolean) : []);
   let[awardSkillLevel, setAwardSkillLevel] = (0,l.useState)(n?.skillLevel || (configuredSkillLevels[0]?.name || "Beginner"));
   let[reviewerApprovalRequired, setReviewerApprovalRequired] = (0,l.useState)(Boolean(n?.reviewerApprovalRequired));
   let[skillDropdownOpen, setSkillDropdownOpen] = (0,l.useState)(false);
@@ -1804,55 +1799,26 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
       // Purple Skills Configuration Section (Displayed ONLY when Skills toggle is ON)
       addSkillToProfile && (0,P.jsxs)("div",{className:"rounded-xl border border-purple-200 p-5 space-y-4 animate-in fade-in",style:{backgroundColor:"#faf5ff"},children:[
         (0,P.jsxs)("div",{className:"flex flex-wrap items-center justify-between gap-2",children:[
-          (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
-            (0,P.jsx)("span",{className:"text-xs font-bold text-purple-700 uppercase tracking-wider",children:"Skills Configuration"}),
-            (0,P.jsx)("span",{className:"text-[11px] text-purple-600",children:"Loaded live from People > Config > Skills"})
-          ]}),
+          (0,P.jsx)("span",{className:"text-xs font-bold text-purple-700 uppercase tracking-wider",children:"Skills Configuration"}),
           (canManageSkills !== !1 && onSaveSkill) && (0,P.jsx)("button",{type:"button",onClick:()=>{setQuickSkillErr("");setQuickSkillName("");setQuickSkillDesc("");setShowQuickSkillModal(true);},className:"text-xs font-bold px-3 py-1.5 rounded-lg border border-purple-200 bg-white text-purple-700 hover:bg-purple-50 transition-colors cursor-pointer",children:"Add New Skill"})
         ]}),
 
         (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-3 gap-4 items-start text-xs",children:[
-          // Select Skills (Multi-select Dropdown showing selected skill names directly inside trigger)
-          (0,P.jsxs)("div",{className:"md:col-span-2 relative space-y-1.5",children:[
+          // Select Skill (Single selection from People > Config > Skills)
+          (0,P.jsxs)("div",{className:"md:col-span-2 space-y-1.5",children:[
             (0,P.jsxs)("label",{className:"inline-flex items-center gap-1.5 font-semibold text-slate-700",children:[
-              (0,P.jsx)("span",{children:"Select Skills"}),
+              (0,P.jsx)("span",{children:"Select Skill"}),
               (0,P.jsx)("span",{className:"text-rose-500",children:"*"}),
-              (0,P.jsx)(InfoTip,{text:"Choose one or more active skills from Config > Skills. Duplicate selections are prevented automatically."})
+              (0,P.jsx)(InfoTip,{text:"Choose an active skill from People > Config > Skills."})
             ]}),
-            (0,P.jsxs)("div",{role:"button",tabIndex:0,"aria-expanded":skillDropdownOpen,title:selectedSkillNames.length>0?selectedSkillNames.join(", "):"Select Skills from Config > Skills...",onClick:()=>setSkillDropdownOpen(!skillDropdownOpen),onKeyDown:ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();setSkillDropdownOpen(!skillDropdownOpen);}},className:"w-full flex items-center justify-between gap-2 bg-white border border-purple-200 rounded-lg px-3 py-1.5 text-xs text-left cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-500/20",style:{minHeight:"36px"},children:[
-              selectedSkillIds.length > 0 ? (0,P.jsx)("div",{className:"flex flex-wrap items-center gap-1.5",style:{minWidth:0,flex:1},children:selectedSkillIds.map(sid => {
-                let sk = allSkillsMaster.find(m => m.id === sid) || { id: sid, name: sid };
-                return (0,P.jsxs)("span",{className:"inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-purple-50 text-purple-700 border border-purple-200",children:[
-                  (0,P.jsx)("span",{children:sk.name}),
-                  (0,P.jsx)("button",{type:"button",onClick:ev=>{ev.stopPropagation();setSelectedSkillIds(prev => prev.filter(x => x !== sid));},className:"text-purple-400 hover:text-rose-600 font-bold leading-none cursor-pointer",title:"Remove skill",children:"×"})
-                ]},sid);
-              })}) : (0,P.jsx)("span",{className:"text-slate-400",children:"Select Skills from Config > Skills..."}),
-              (0,P.jsx)("span",{style:{flexShrink:0},className:"text-purple-600 font-bold text-[11px]",children:skillDropdownOpen ? "▲" : "▼"})
-            ]}),
-
-            // Dropdown List
-            skillDropdownOpen && (0,P.jsxs)("div",{className:"mt-1 bg-white border border-purple-200 rounded-xl shadow-lg p-3 space-y-2 z-30",children:[
-              (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
-                (0,P.jsx)("input",{type:"text",value:skillSearch,onChange:ev=>setSkillSearch(ev.target.value),placeholder:"Search configured skills...",className:"flex-1 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-purple-500"}),
-                (0,P.jsx)("button",{type:"button",onClick:()=>setSkillDropdownOpen(false),className:"text-[11px] font-bold text-purple-700 px-2 py-1 hover:bg-purple-50 rounded",children:"Done"})
-              ]}),
-              (0,P.jsx)("div",{className:"max-h-48 overflow-y-auto divide-y divide-slate-100",children:(()=>{
-                let q = skillSearch.trim().toLowerCase();
-                let list = activeSkills.filter(sk => !q || sk.name.toLowerCase().includes(q));
-                if(list.length === 0) return (0,P.jsx)("div",{className:"py-4 text-center text-slate-400 text-xs",children:"No matching active skills found in Config > Skills."});
-                return list.map(sk => {
-                  let checked = selectedSkillIds.includes(sk.id);
-                  return (0,P.jsxs)("label",{className:"flex items-center justify-between gap-3 px-2 py-2 cursor-pointer hover:bg-purple-50/50 rounded transition-colors",children:[
-                    (0,P.jsxs)("div",{className:"flex items-center gap-2.5 shrink-0",children:[
-                      (0,P.jsx)("input",{type:"checkbox",checked:checked,onChange:()=>{
-                        setSelectedSkillIds(prev => prev.includes(sk.id) ? prev.filter(x => x !== sk.id) : Array.from(new Set([...prev, sk.id])));
-                      },className:"w-3.5 h-3.5 text-purple-600 rounded border-slate-300"}),
-                      (0,P.jsx)("span",{className:"font-semibold text-slate-800 whitespace-nowrap",children:sk.name})
-                    ]}),
-                    sk.description && (0,P.jsx)("span",{className:"text-[10px] text-slate-400 truncate max-w-[180px]",children:sk.description})
-                  ]},sk.id);
-                });
-              })()})
+            (0,P.jsxs)("select",{value:selectedSkillIds[0] || "",onChange:ev=>{let val=ev.target.value;setSelectedSkillIds(val ? [val] : []);},className:"w-full bg-white border border-purple-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-purple-500/20",children:[
+              (0,P.jsx)("option",{value:"",children:"Select Skill..."}),
+              (()=>{
+                let curId = selectedSkillIds[0];
+                let curInactive = curId ? allSkillsMaster.find(m => m.id === curId && m.active === !1) : null;
+                let opts = curInactive ? [curInactive, ...activeSkills] : activeSkills;
+                return opts.map(sk => (0,P.jsx)("option",{value:sk.id,children:sk.name + (sk.active === !1 ? " (Inactive)" : "")},sk.id));
+              })()
             ]})
           ]}),
 
@@ -1944,7 +1910,6 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
           (0,P.jsxs)("div",{className:"flex items-center justify-between flex-wrap gap-2 border-b border-slate-100 pb-3",children:[
             (0,P.jsxs)("div",{className:"flex items-center gap-2.5 flex-wrap",children:[
               (0,P.jsxs)("span",{className:"bg-blue-600 text-white font-bold text-xs px-2.5 py-1 rounded-md shadow-sm",children:["Question ", q.number || (qIndex + 1)]}),
-              q._autoSkillName && (0,P.jsxs)("span",{className:"bg-purple-50 text-purple-700 border border-purple-200 font-semibold text-[11px] px-2.5 py-0.5 rounded-full",children:["Skill: ", q._autoSkillName, q._autoSkillLevel ? (" · " + q._autoSkillLevel) : ""]}),
               (0,P.jsxs)("div",{className:"flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-md px-2 py-0.5 text-xs",children:[
                 (0,P.jsxs)("span",{className:"inline-flex items-center gap-1 text-slate-500 font-medium",children:[(0,P.jsx)("span",{children:"Marks:"}),(0,P.jsx)(InfoTip,{text:"Points awarded for answering this question correctly."})]}),
                 (0,P.jsx)("input",{type:"text",inputMode:"numeric",placeholder:"0",value:q.marks,onChange:e=>handleUpdateQuestion(q.id, "marks", e.target.value.replace(/[^0-9]/g,"")),style:{width:"42px"},className:"text-center bg-white border border-slate-300 rounded font-bold text-slate-800 text-xs py-0.5 focus:outline-none focus:ring-1 focus:ring-blue-500"})
@@ -2113,7 +2078,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
               setQuickSkillErr(res.message || "Could not create skill.");
             } else {
               if(res?.skill?.id){
-                setSelectedSkillIds(prev => Array.from(new Set([...prev, res.skill.id])));
+                setSelectedSkillIds([res.skill.id]);
               }
               setShowQuickSkillModal(false);
             }
@@ -2289,6 +2254,24 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
   let currentSafePage = Math.min(currentPage, totalPages);
   let paginated = filtered.slice((currentSafePage - 1) * pageSize, currentSafePage * pageSize);
 
+  let resolveAssignmentRecognition = item => {
+    let tNorm = String(item.training || "").trim().toLowerCase();
+    let matchedProg = (Array.isArray(progs) ? progs : []).find(pr => (item.programmeId && pr.id === item.programmeId) || (tNorm && String(pr.name || "").trim().toLowerCase() === tNorm));
+    if (matchedProg) {
+      let hasCert = Boolean(matchedProg.certificateGeneration);
+      let hasSkill = Boolean(matchedProg.addSkillToProfile);
+      if (hasCert && hasSkill) return { label: "Certificate & Skills", cls: "bg-purple-50 text-purple-700 border-purple-200" };
+      if (hasCert) return { label: "Certificate", cls: "bg-blue-50 text-blue-700 border-blue-200" };
+      if (hasSkill) return { label: "Skills", cls: "bg-emerald-50 text-emerald-700 border-emerald-200" };
+      return { label: "None", cls: "bg-slate-100 text-slate-500 border-slate-200" };
+    }
+    let idNum = parseInt(String(item.id || "0"), 10) || 0;
+    let mod = idNum % 3;
+    if (mod === 0) return { label: "Certificate & Skills", cls: "bg-purple-50 text-purple-700 border-purple-200" };
+    if (mod === 1) return { label: "Certificate", cls: "bg-blue-50 text-blue-700 border-blue-200" };
+    return { label: "Skills", cls: "bg-emerald-50 text-emerald-700 border-emerald-200" };
+  };
+
   let showScopePopover = (ev, item) => {
     let list = item.enrolledEmployees && item.enrolledEmployees.length > 0 ? item.enrolledEmployees : [{ name: item.name, role: item.role, dept: item.dept }];
     let rect = ev.currentTarget.getBoundingClientRect();
@@ -2338,6 +2321,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
               (0, P.jsx)("th", {className: "py-3 px-4", children: "Employee Name"}),
               (0, P.jsx)("th", {className: "py-3 px-4", title: "Employees enrolled in this training assignment", children: "Assigned to"}),
               (0, P.jsx)("th", {className: "py-3 px-4", children: "Assigned Training"}),
+              (0, P.jsx)("th", {className: "py-3 px-4", children: "Recognition"}),
               (0, P.jsx)("th", {className: "py-3 px-4", children: "Assigned Date"}),
               (0, P.jsx)("th", {className: "py-3 px-4", children: "Due Date"}),
               (0, P.jsx)("th", {className: "py-3 px-4", children: "Progress"}),
@@ -2349,6 +2333,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
               let enrolledList = item.enrolledEmployees && item.enrolledEmployees.length > 0 ? item.enrolledEmployees : [{ name: item.name, role: item.role, dept: item.dept }];
               let firstEmp = enrolledList[0];
               let extraCount = enrolledList.length - 1;
+              let recBadge = resolveAssignmentRecognition(item);
               return (0, P.jsxs)("tr", {
                 className: "hover:bg-slate-50/80 transition-colors cursor-pointer",
                 onClick: () => r(item),
@@ -2377,6 +2362,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
                     (0, P.jsx)("div", {className: "font-semibold text-slate-900 text-xs", children: item.training}),
                     (0, P.jsx)("div", {className: "text-[11px] text-slate-500", children: item.level})
                   ]}),
+                  (0, P.jsx)("td", {className: "py-3 px-4 whitespace-nowrap", children: (0, P.jsx)("span", {className: `inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${recBadge.cls}`, children: recBadge.label})}),
                   (0, P.jsx)("td", {className: "py-3 px-4 text-slate-600 text-xs tabular-nums", children: fmtSysDate(item.assigned)}),
                   (0, P.jsx)("td", {className: "py-3 px-4 text-xs tabular-nums font-medium text-slate-700", children: fmtSysDate(item.due)}),
                   (0, P.jsxs)("td", {className: "py-3 px-4 w-36", children: [
@@ -2761,29 +2747,7 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,ca
               ]})
             ]})
           ]})
-        ]}),
-
-        matchedProg && (matchedProg.certificateGeneration || matchedProg.addSkillToProfile || matchedProg.reviewerApprovalRequired || statusText === "Under Review") && (()=>{
-          let masterSkills = Array.isArray(skillsConfig) && skillsConfig.length > 0 ? skillsConfig : DEFAULT_SKILLS_SEED;
-          let awardedList = (Array.isArray(matchedProg.selectedSkillIds) ? matchedProg.selectedSkillIds : []).map(sid => masterSkills.find(m => m.id === sid)?.name || sid);
-          return (0,P.jsxs)("div",{className:"bg-white border border-purple-200 rounded-xl shadow-sm p-5 space-y-3",style:{borderLeft:"4px solid #7c3aed"},children:[
-            (0,P.jsxs)("div",{className:"flex items-center justify-between flex-wrap gap-2",children:[
-              (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
-                (0,P.jsx)("span",{className:"w-2 h-2 rounded-full",style:{backgroundColor:"#7c3aed"}}),
-                (0,P.jsx)("h3",{className:"text-xs font-bold text-purple-700 uppercase tracking-wider",children:"Training Recognition & Approval"})
-              ]}),
-              (statusText === "Under Review" && canApprove !== !1 && onApproveCompletion) && (0,P.jsx)("button",{type:"button",disabled:approvalBusy,onClick:async()=>{
-                setApprovalBusy(true);
-                try{ await onApproveCompletion(matchedProg, r.employeeId || "CO-5039"); } finally { setApprovalBusy(false); }
-              },style:{backgroundColor:"#7c3aed"},className:"px-3.5 py-1.5 rounded-lg text-xs font-bold text-white shadow-xs cursor-pointer hover:opacity-90",children:approvalBusy ? "Approving..." : "Approve Completion & Issue Recognition ✓"})
-            ]}),
-            (0,P.jsxs)("div",{className:"flex flex-wrap items-center gap-2 text-xs",children:[
-              (0,P.jsxs)("span",{className:"px-2.5 py-1 rounded-full bg-purple-50 text-purple-700 border border-purple-200 font-semibold",children:["Certificate: ", matchedProg.certificateGeneration ? (isCompleted ? "Issued ✓" : "ON (On Completion)") : "OFF"]}),
-              (0,P.jsxs)("span",{className:"px-2.5 py-1 rounded-full bg-purple-50 text-purple-700 border border-purple-200 font-semibold",children:["Add Skills: ", matchedProg.addSkillToProfile ? `${awardedList.join(", ")} (${matchedProg.skillLevel || "Beginner"})` : "OFF"]}),
-              (matchedProg.reviewerApprovalRequired || statusText === "Under Review") && (0,P.jsxs)("span",{className:"px-2.5 py-1 rounded-full border font-semibold " + (statusText === "Completed" ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-amber-50 text-amber-800 border-amber-200"),children:["Reviewer Approval: ", cpEntry?.managerApprovalStatus || (statusText === "Completed" ? "Approved" : "Pending")]})
-            ]})
-          ]});
-        })()
+        ]})
       ]})
     ]}),
 
@@ -3955,7 +3919,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
               ]})
             ]})
           ]}),
-          (isCertEnabled || isSkillEnabled || reqManager) && (()=>{
+          (isCertEnabled || isSkillEnabled) && (()=>{
             let masterSkills = Array.isArray(skillsConfig) && skillsConfig.length > 0 ? skillsConfig : DEFAULT_SKILLS_SEED;
             let resolvedSkills = configuredSkillIds.map(sid => masterSkills.find(m => m.id === sid)?.name || sid);
             let recognitionEarned = isSubmitted && allRequiredStepsDone;
@@ -3965,12 +3929,11 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
                   (0,P.jsx)("span",{className:"w-2 h-2 rounded-full",style:{backgroundColor:"#7c3aed"}}),
                   (0,P.jsx)("h3",{className:"text-xs font-bold text-purple-700 uppercase tracking-wider",children:"Training Recognition"})
                 ]}),
-                (0,P.jsx)("span",{className:"px-2.5 py-0.5 rounded-full text-[11px] font-bold border " + (recognitionEarned ? "bg-purple-600 text-white border-purple-600" : (reqManager && preManagerStepsDone && !stepManagerDone) ? "bg-amber-50 text-amber-800 border-amber-200" : "bg-purple-50 text-purple-700 border-purple-200"),children:recognitionEarned ? "Recognition Awarded ✓" : (reqManager && preManagerStepsDone && !stepManagerDone) ? "Pending Reviewer Approval" : "Awarded Upon Completion"})
+                (0,P.jsx)("span",{className:"px-2.5 py-0.5 rounded-full text-[11px] font-bold border " + (recognitionEarned ? "bg-purple-600 text-white border-purple-600" : "bg-purple-50 text-purple-700 border-purple-200"),children:recognitionEarned ? "Recognition Awarded ✓" : "Awarded Upon Completion"})
               ]}),
               (0,P.jsxs)("div",{className:"flex flex-wrap items-center gap-2 text-xs",children:[
                 isCertEnabled && (0,P.jsx)("span",{className:"px-2.5 py-1 rounded-full bg-purple-50 text-purple-700 border border-purple-200 font-semibold",children:recognitionEarned ? "🎓 Official Certificate Issued ✓" : "🎓 Official Certificate on Completion"}),
-                isSkillEnabled && resolvedSkills.map((sName, i) => (0,P.jsx)("span",{className:"px-2.5 py-1 rounded-full bg-purple-50 text-purple-700 border border-purple-200 font-semibold",children:`${sName} (${configuredSkillLevel || "Beginner"})`},i)),
-                reqManager && !stepManagerDone && (0,P.jsx)("span",{className:"px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-200 font-semibold",children:"⏳ Reviewer Approval Required Before Recognition"})
+                isSkillEnabled && resolvedSkills.map((sName, i) => (0,P.jsx)("span",{className:"px-2.5 py-1 rounded-full bg-purple-50 text-purple-700 border border-purple-200 font-semibold",children:`${sName} (${configuredSkillLevel || "Beginner"})`},i))
               ]})
             ]});
           })(),
