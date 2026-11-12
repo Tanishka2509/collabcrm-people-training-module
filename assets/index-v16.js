@@ -1791,10 +1791,9 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
     // 3. Learning Resources (Cleaned per Image 5: Type select, Title input with placeholder, URL input with placeholder, delete button. No mandatory checkbox.)
     (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4",children:[
       (0,P.jsxs)("div",{className:"flex items-center justify-between flex-wrap gap-2",children:[
-        (0,P.jsxs)("div",{children:[
-          (0,P.jsxs)("h2",{className:"text-sm font-bold text-slate-900 uppercase tracking-wide inline-flex items-center gap-1.5",children:[(0,P.jsx)("span",{children:"2. Learning Resources (YouTube, External Courses, Websites, Videos, PDFs, Docs) *"}),(0,P.jsx)(InfoTip,{text:"Add study materials, videos, documents, or external links for employees."})]}),
-          (0,P.jsx)("p",{className:"text-[11px] text-slate-500",children:"Add curriculum resources, video lectures, playbooks, and course links for employees."})
-        ]}),
+        (0,P.jsx)("div",{children:
+          (0,P.jsxs)("h2",{className:"text-sm font-bold text-slate-900 uppercase tracking-wide inline-flex items-center gap-1.5",children:[(0,P.jsx)("span",{children:"2. Learning Resources *"}),(0,P.jsx)(InfoTip,{text:"Add curriculum resources, video lectures, playbooks, and course links for employees (YouTube, External Courses, Websites, Videos, PDFs, Docs)."})]})
+        }),
         (0,P.jsx)("button",{onClick:oe,type:"button",className:"text-xs font-semibold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg border border-blue-200 shadow-sm transition-colors",children:"+ Add Learning Resource"})
       ]}),
       (0,P.jsx)("div",{className:"space-y-3",children:ie.map((res, idx)=>(0,P.jsxs)("div",{className:"flex flex-col md:flex-row items-center gap-3 bg-slate-50 p-3 rounded-lg border border-slate-200",children:[
