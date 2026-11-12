@@ -1343,129 +1343,64 @@ function processTrainingRecognitionOnCompletion({ store, employeeId, programme, 
     const skillLevels = Array.isArray(store.skillLevels) && store.skillLevels.length > 0
       ? store.skillLevels
       : getDefaultSkillLevelsSeed();
-    const awardedLevel = String(programme.skillLevel || '').trim() || (skillLevels[0]?.name || 'Beginner');
-    const awardedRank = getSkillLevelRank(awardedLevel, skillLevels);
+    const awardedLevelRaw = String(programme.skillLevel || '').trim() || (skillLevels[0]?.name || 'Beginner');
+    const validLevelEntry = skillLevels.find(l => String(l.name || '').trim().toLowerCase() === awardedLevelRaw.toLowerCase());
+    const awardedLevel = validLevelEntry ? validLevelEntry.name : '';
+    const awardedRank = validLevelEntry ? getSkillLevelRank(awardedLevel, skillLevels) : 0;
     const selectedIds = Array.isArray(programme.selectedSkillIds)
       ? Array.from(new Set(programme.selectedSkillIds.map(s => String(s || '').trim()).filter(Boolean)))
       : [];
 
-    for (const skillId of selectedIds) {
-      const skillMaster = masterSkills.find(s => s.id === skillId || String(s.name || '').trim().toLowerCase() === skillId.toLowerCase());
-      const resolvedSkillId = skillMaster ? skillMaster.id : skillId;
-      const skillName = skillMaster ? skillMaster.name : skillId;
-      const empSkillList = store.employeeSkills[empKey];
-      const existingIdx = empSkillList.findIndex(
-        es => es.skillId === resolvedSkillId || String(es.skillName || '').trim().toLowerCase() === skillName.trim().toLowerCase()
-      );
-
-      if (existingIdx === -1) {
-        const tsFormatted = formatSkillTimestamp(now);
-        const actorLabel = actorName || 'Training System';
-        const newSkillRecord = {
-          id: `es-${empKey}-${resolvedSkillId}-${Date.now()}`,
-          employeeId: empKey,
-          skillId: resolvedSkillId,
-          skillName,
-          skillLevel: awardedLevel,
-          sourceTrainingId: programme.id,
-          sourceTrainingName: programme.name,
-          latestSourceTrainingId: programme.id,
-          latestSourceTrainingName: programme.name,
-          sourceTrainingIds: [programme.id],
-          sources: [{
-            trainingId: programme.id,
-            trainingName: programme.name,
-            level: awardedLevel,
-            awardedDate: todayStr
-          }],
-          remarks: `Earned via Training: ${programme.name}`,
-          createdBy: actorLabel,
-          createdAt: tsFormatted,
-          updatedBy: actorLabel,
-          updatedAt: tsFormatted,
-          awardedDate: todayStr,
-          createdDate: nowIso,
-          updatedDate: nowIso
-        };
-        empSkillList.push(newSkillRecord);
-        const histEntry = {
-          id: `sah-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
-          employeeId: empKey,
-          skillId: resolvedSkillId,
-          skillName,
-          awardedSkillLevel: awardedLevel,
-          previousLevel: null,
-          finalLevel: awardedLevel,
-          outcome: 'added',
-          sourceTrainingId: programme.id,
-          sourceTrainingName: programme.name,
-          awardedDate: todayStr,
-          createdDate: nowIso,
-          updatedDate: nowIso
-        };
-        store.skillAwardHistory.unshift(histEntry);
-        skillsAwarded.push({ skillId: resolvedSkillId, skillName, awardedLevel, previousLevel: null, finalLevel: awardedLevel, outcome: 'added' });
-      } else {
-        const existingRec = empSkillList[existingIdx];
-        const existingLevel = existingRec.skillLevel || existingRec.level || 'Beginner';
-        const existingRank = getSkillLevelRank(existingLevel, skillLevels);
-        const prevSourceIds = Array.isArray(existingRec.sourceTrainingIds) ? [...existingRec.sourceTrainingIds] : (existingRec.sourceTrainingId ? [existingRec.sourceTrainingId] : []);
-        const prevSources = Array.isArray(existingRec.sources) ? [...existingRec.sources] : (existingRec.sourceTrainingId ? [{
-          trainingId: existingRec.sourceTrainingId,
-          trainingName: existingRec.sourceTrainingName || existingRec.sourceTrainingId,
-          level: existingLevel,
-          awardedDate: existingRec.awardedDate || todayStr
-        }] : []);
-        const alreadyRecordedFromSameTraining = store.skillAwardHistory.some(
-          h => canonicalEmployeeSkillKey(h.employeeId) === empKey &&
-               h.skillId === resolvedSkillId &&
-               h.sourceTrainingId === programme.id &&
-               h.awardedSkillLevel === awardedLevel
+    if (awardedLevel && awardedRank > 0) {
+      for (const skillId of selectedIds) {
+        const skillMaster = masterSkills.find(s => s.id === skillId || normSkillKey(s.name) === normSkillKey(skillId));
+        if (!skillMaster) continue;
+        const resolvedSkillId = skillMaster.id;
+        const skillName = skillMaster.name;
+        const empSkillList = store.employeeSkills[empKey];
+        const existingIdx = empSkillList.findIndex(
+          es => es.skillId === resolvedSkillId || normSkillKey(es.skillName) === normSkillKey(skillName)
         );
 
-        let finalLevel = existingLevel;
-        let outcome = 'retained';
-        if (awardedRank > existingRank) {
-          finalLevel = awardedLevel;
-          outcome = 'upgraded';
-          existingRec.skillLevel = awardedLevel;
-          existingRec.level = awardedLevel;
-          existingRec.awardedDate = todayStr;
-        } else if (!existingRec.skillLevel) {
-          existingRec.skillLevel = existingLevel;
-        }
-        if (!prevSourceIds.includes(programme.id)) {
-          prevSourceIds.push(programme.id);
-        }
-        if (!prevSources.some(src => src.trainingId === programme.id && src.level === awardedLevel)) {
-          prevSources.push({
-            trainingId: programme.id,
-            trainingName: programme.name,
-            level: awardedLevel,
-            awardedDate: todayStr
-          });
-        }
-        existingRec.sourceTrainingId = existingRec.sourceTrainingId || programme.id;
-        existingRec.sourceTrainingName = existingRec.sourceTrainingName || programme.name;
-        existingRec.latestSourceTrainingId = programme.id;
-        existingRec.latestSourceTrainingName = programme.name;
-        existingRec.sourceTrainingIds = prevSourceIds;
-        existingRec.sources = prevSources;
-        existingRec.remarks = `Earned via Training: ${programme.name}`;
-        existingRec.updatedBy = actorName || 'Training System';
-        existingRec.updatedAt = formatSkillTimestamp(now);
-        existingRec.updatedDate = nowIso;
-
-        if (!alreadyRecordedFromSameTraining) {
+        if (existingIdx === -1) {
+          const tsFormatted = formatSkillTimestamp(now);
+          const actorLabel = actorName || 'Training System';
+          const newSkillRecord = {
+            id: `es-${empKey}-${resolvedSkillId}-${Date.now()}`,
+            employeeId: empKey,
+            skillId: resolvedSkillId,
+            skillName,
+            skillLevel: awardedLevel,
+            sourceTrainingId: programme.id,
+            sourceTrainingName: programme.name,
+            latestSourceTrainingId: programme.id,
+            latestSourceTrainingName: programme.name,
+            sourceTrainingIds: [programme.id],
+            sources: [{
+              trainingId: programme.id,
+              trainingName: programme.name,
+              level: awardedLevel,
+              awardedDate: todayStr
+            }],
+            remarks: `Earned via Training: ${programme.name}`,
+            createdBy: actorLabel,
+            createdAt: tsFormatted,
+            updatedBy: actorLabel,
+            updatedAt: tsFormatted,
+            awardedDate: todayStr,
+            createdDate: nowIso,
+            updatedDate: nowIso
+          };
+          empSkillList.push(newSkillRecord);
           const histEntry = {
             id: `sah-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
             employeeId: empKey,
             skillId: resolvedSkillId,
             skillName,
             awardedSkillLevel: awardedLevel,
-            previousLevel: existingLevel,
-            finalLevel,
-            outcome,
+            previousLevel: null,
+            finalLevel: awardedLevel,
+            outcome: 'added',
             sourceTrainingId: programme.id,
             sourceTrainingName: programme.name,
             awardedDate: todayStr,
@@ -1473,7 +1408,82 @@ function processTrainingRecognitionOnCompletion({ store, employeeId, programme, 
             updatedDate: nowIso
           };
           store.skillAwardHistory.unshift(histEntry);
-          skillsAwarded.push({ skillId: resolvedSkillId, skillName, awardedLevel, previousLevel: existingLevel, finalLevel, outcome });
+          skillsAwarded.push({ skillId: resolvedSkillId, skillName, awardedLevel, previousLevel: null, finalLevel: awardedLevel, outcome: 'added' });
+        } else {
+          const existingRec = empSkillList[existingIdx];
+          const existingLevel = existingRec.skillLevel || existingRec.level || (skillLevels[0]?.name || 'Beginner');
+          const existingRank = getSkillLevelRank(existingLevel, skillLevels);
+          const alreadyRecordedFromSameTraining = store.skillAwardHistory.some(
+            h => canonicalEmployeeSkillKey(h.employeeId) === empKey &&
+                 (h.skillId === resolvedSkillId || normSkillKey(h.skillName) === normSkillKey(skillName)) &&
+                 h.sourceTrainingId === programme.id &&
+                 String(h.awardedSkillLevel || '').trim().toLowerCase() === awardedLevel.toLowerCase()
+          );
+
+          if (alreadyRecordedFromSameTraining && awardedRank <= existingRank) {
+            continue;
+          }
+
+          const prevSourceIds = Array.isArray(existingRec.sourceTrainingIds) ? [...existingRec.sourceTrainingIds] : (existingRec.sourceTrainingId ? [existingRec.sourceTrainingId] : []);
+          const prevSources = Array.isArray(existingRec.sources) ? [...existingRec.sources] : (existingRec.sourceTrainingId ? [{
+            trainingId: existingRec.sourceTrainingId,
+            trainingName: existingRec.sourceTrainingName || existingRec.sourceTrainingId,
+            level: existingLevel,
+            awardedDate: existingRec.awardedDate || todayStr
+          }] : []);
+
+          let finalLevel = existingLevel;
+          let outcome = 'retained';
+          if (awardedRank > existingRank) {
+            finalLevel = awardedLevel;
+            outcome = 'upgraded';
+            existingRec.skillLevel = awardedLevel;
+            existingRec.level = awardedLevel;
+            existingRec.awardedDate = todayStr;
+            existingRec.remarks = `Earned via Training: ${programme.name}`;
+          } else if (!existingRec.skillLevel) {
+            existingRec.skillLevel = existingLevel;
+          }
+          if (!prevSourceIds.includes(programme.id)) {
+            prevSourceIds.push(programme.id);
+          }
+          if (!prevSources.some(src => src.trainingId === programme.id && String(src.level || '').toLowerCase() === awardedLevel.toLowerCase())) {
+            prevSources.push({
+              trainingId: programme.id,
+              trainingName: programme.name,
+              level: awardedLevel,
+              awardedDate: todayStr
+            });
+          }
+          existingRec.sourceTrainingId = existingRec.sourceTrainingId || programme.id;
+          existingRec.sourceTrainingName = existingRec.sourceTrainingName || programme.name;
+          existingRec.latestSourceTrainingId = programme.id;
+          existingRec.latestSourceTrainingName = programme.name;
+          existingRec.sourceTrainingIds = prevSourceIds;
+          existingRec.sources = prevSources;
+          existingRec.updatedBy = actorName || 'Training System';
+          existingRec.updatedAt = formatSkillTimestamp(now);
+          existingRec.updatedDate = nowIso;
+
+          if (!alreadyRecordedFromSameTraining) {
+            const histEntry = {
+              id: `sah-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+              employeeId: empKey,
+              skillId: resolvedSkillId,
+              skillName,
+              awardedSkillLevel: awardedLevel,
+              previousLevel: existingLevel,
+              finalLevel,
+              outcome,
+              sourceTrainingId: programme.id,
+              sourceTrainingName: programme.name,
+              awardedDate: todayStr,
+              createdDate: nowIso,
+              updatedDate: nowIso
+            };
+            store.skillAwardHistory.unshift(histEntry);
+            skillsAwarded.push({ skillId: resolvedSkillId, skillName, awardedLevel, previousLevel: existingLevel, finalLevel, outcome });
+          }
         }
       }
     }
@@ -7910,6 +7920,35 @@ export async function handleApi(req, res) {
       status: 'Not Started'
     }));
 
+    // Read-only informational Employee Skill Check (Section 2: never modifies employee skills during assignment)
+    const skillCheckSummary = [];
+    if (Boolean(prog.addSkillToProfile) && Array.isArray(prog.selectedSkillIds) && prog.selectedSkillIds.length > 0) {
+      const masterSkills = Array.isArray(store.skills) ? store.skills : getDefaultSkillsSeed();
+      const skillLevels = Array.isArray(store.skillLevels) && store.skillLevels.length > 0 ? store.skillLevels : getDefaultSkillLevelsSeed();
+      const empSkillMap = store.employeeSkills || getDefaultEmployeeSkillsSeed();
+      const awardedLevel = String(prog.skillLevel || '').trim() || (skillLevels[0]?.name || 'Beginner');
+      const awardedRank = getSkillLevelRank(awardedLevel, skillLevels);
+      for (const emp of targetEmployees) {
+        const empKey = canonicalEmployeeSkillKey(emp.id || emp.code);
+        const existingSkills = Array.isArray(empSkillMap[empKey]) ? empSkillMap[empKey] : [];
+        const checks = prog.selectedSkillIds.map(sid => {
+          const sm = masterSkills.find(m => m.id === sid || normSkillKey(m.name) === normSkillKey(sid));
+          const skillName = sm ? sm.name : sid;
+          const resolvedId = sm ? sm.id : sid;
+          const cur = existingSkills.find(es => es.skillId === resolvedId || normSkillKey(es.skillName) === normSkillKey(skillName));
+          const curLevel = cur ? (cur.skillLevel || cur.level || null) : null;
+          const curRank = curLevel ? getSkillLevelRank(curLevel, skillLevels) : 0;
+          const plannedOutcome = !cur ? 'add' : (awardedRank > curRank ? 'upgrade' : 'retain');
+          return { skillId: resolvedId, skillName, existingLevel: curLevel, awardedLevel, plannedOutcome };
+        });
+        skillCheckSummary.push({
+          employeeId: empKey,
+          employeeName: emp.name || `${emp.firstName || ''} ${emp.lastName || ''}`.trim(),
+          checks
+        });
+      }
+    }
+
     store.assignments.unshift(...createdAssignments);
     store.programmes[idx] = {
       ...prog,
@@ -7921,6 +7960,7 @@ export async function handleApi(req, res) {
       success: true,
       message: `Training assigned to ${createdAssignments.length} employee(s).`,
       assignments: createdAssignments,
+      skillCheckSummary,
       programme: store.programmes[idx],
       programmes: store.programmes
     });
