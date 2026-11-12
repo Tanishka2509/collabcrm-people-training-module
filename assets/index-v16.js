@@ -1196,7 +1196,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
   let[showDraftDropdown, setShowDraftDropdown] = (0,l.useState)(false);
   let[validationError, setValidationError] = (0,l.useState)("");
   // Section 4: Training Recognition (Certificate Generation + Add Skill to Employee Profile, both default OFF on new Trainings)
-  let[certificateGeneration, setCertificateGeneration] = (0,l.useState)(Boolean(n?.certificateGeneration));
+  let[certificateGeneration, setCertificateGeneration] = (0,l.useState)(n ? Boolean(n.certificateGeneration) : !0);
   let[addSkillToProfile, setAddSkillToProfile] = (0,l.useState)(Boolean(n?.addSkillToProfile));
   let[selectedSkillIds, setSelectedSkillIds] = (0,l.useState)(Array.isArray(n?.selectedSkillIds) ? n.selectedSkillIds.filter(Boolean) : []);
   let[awardSkillLevel, setAwardSkillLevel] = (0,l.useState)(n?.skillLevel || (configuredSkillLevels[0]?.name || "Beginner"));
@@ -1775,8 +1775,8 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
     (0,P.jsxs)("div",{className:"bg-white border border-purple-200 rounded-xl p-6 shadow-sm space-y-5",style:{borderLeft:"4px solid #7c3aed"},children:[
       (0,P.jsxs)("div",{className:"flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-purple-200 pb-3",children:[
         (0,P.jsxs)("div",{className:"flex items-center gap-1.5",children:[
-          (0,P.jsx)("h2",{className:"text-sm font-bold text-slate-900",children:"3. Training Recognition"}),
-          (0,P.jsx)(InfoTip,{text:"Choose how employees are recognised upon verified completion of this Training."})
+          (0,P.jsx)("h2",{className:"text-sm font-bold text-slate-900",children:"3. Training Recognition *"}),
+          (0,P.jsx)(InfoTip,{text:"Choose how employees are recognised upon verified completion of this Training. Selection of at least one option is compulsory."})
         ]})
       ]}),
 
@@ -1790,7 +1790,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
             ]}),
             (0,P.jsx)("p",{className:"text-[11px] text-slate-500 leading-relaxed",children:certificateGeneration ? "ON — Employees will receive a verified certificate upon completion." : "OFF — No certificate will be generated upon completion."})
           ]}),
-          (0,P.jsx)("button",{type:"button",role:"switch","aria-checked":certificateGeneration,"aria-label":"Certificate Generation",onClick:()=>setCertificateGeneration(!certificateGeneration),style:{width:"40px",height:"22px",padding:"2px",border:"none",backgroundColor:certificateGeneration?"#7c3aed":"#cbd5e1"},className:"relative inline-flex shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 focus:outline-none mt-0.5",children:(0,P.jsx)("span",{style:{width:"18px",height:"18px",transform:certificateGeneration?"translateX(18px)":"translateX(0px)"},className:"pointer-events-none inline-block rounded-full bg-white shadow transition-transform duration-200"})})
+          (0,P.jsx)("button",{type:"button",role:"switch","aria-checked":certificateGeneration,"aria-label":"Certificate Generation",onClick:()=>{if(certificateGeneration&&!addSkillToProfile){setValidationError("Training Recognition: At least one option (Certificate Generation or Skills) is compulsory.");return;}setCertificateGeneration(!certificateGeneration);},style:{width:"40px",height:"22px",padding:"2px",border:"none",backgroundColor:certificateGeneration?"#7c3aed":"#cbd5e1"},className:"relative inline-flex shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 focus:outline-none mt-0.5",children:(0,P.jsx)("span",{style:{width:"18px",height:"18px",transform:certificateGeneration?"translateX(18px)":"translateX(0px)"},className:"pointer-events-none inline-block rounded-full bg-white shadow transition-transform duration-200"})})
         ]}),
 
         // B. Skills Toggle (Default OFF)
@@ -1802,7 +1802,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
             ]}),
             (0,P.jsx)("p",{className:"text-[11px] text-slate-500 leading-relaxed",children:addSkillToProfile ? "ON — Selected skills will be awarded upon verified Training completion." : "OFF — No skills will be added to employee profiles."})
           ]}),
-          (0,P.jsx)("button",{type:"button",role:"switch","aria-checked":addSkillToProfile,"aria-label":"Skills",onClick:()=>setAddSkillToProfile(!addSkillToProfile),style:{width:"40px",height:"22px",padding:"2px",border:"none",backgroundColor:addSkillToProfile?"#7c3aed":"#cbd5e1"},className:"relative inline-flex shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 focus:outline-none mt-0.5",children:(0,P.jsx)("span",{style:{width:"18px",height:"18px",transform:addSkillToProfile?"translateX(18px)":"translateX(0px)"},className:"pointer-events-none inline-block rounded-full bg-white shadow transition-transform duration-200"})})
+          (0,P.jsx)("button",{type:"button",role:"switch","aria-checked":addSkillToProfile,"aria-label":"Skills",onClick:()=>{if(addSkillToProfile&&!certificateGeneration){setValidationError("Training Recognition: At least one option (Certificate Generation or Skills) is compulsory.");return;}setAddSkillToProfile(!addSkillToProfile);},style:{width:"40px",height:"22px",padding:"2px",border:"none",backgroundColor:addSkillToProfile?"#7c3aed":"#cbd5e1"},className:"relative inline-flex shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 focus:outline-none mt-0.5",children:(0,P.jsx)("span",{style:{width:"18px",height:"18px",transform:addSkillToProfile?"translateX(18px)":"translateX(0px)"},className:"pointer-events-none inline-block rounded-full bg-white shadow transition-transform duration-200"})})
         ]})
       ]}),
 
@@ -2354,7 +2354,6 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
           (0, P.jsx)("thead", {children: 
             (0, P.jsxs)("tr", {className: "border-b border-slate-200 text-[11px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50", children: [
               (0, P.jsx)("th", {className: "py-3 px-4", children: "Employee Name"}),
-              (0, P.jsx)("th", {className: "py-3 px-4", title: "Employees enrolled in this training assignment", children: "Assigned to"}),
               (0, P.jsx)("th", {className: "py-3 px-4", children: "Assigned Training"}),
               (0, P.jsx)("th", {className: "py-3 px-4", children: "Recognition"}),
               (0, P.jsx)("th", {className: "py-3 px-4", children: "Assigned Date"}),
@@ -2381,17 +2380,6 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
                         (0, P.jsx)("div", {className: "text-xs text-slate-500", children: item.role})
                       ]})
                     ]})
-                  }),
-                  (0, P.jsx)("td", {className: "py-3 px-4 text-xs", children: 
-                    (0, P.jsxs)("div", {
-                      onMouseEnter: ev => showScopePopover(ev, item),
-                      onMouseLeave: () => setHoveredScope(null),
-                      className: "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200 hover:border-blue-300 hover:bg-blue-50/50 transition-colors cursor-default whitespace-nowrap",
-                      children: [
-                        (0, P.jsx)("span", {children: firstEmp.name}),
-                        extraCount > 0 && (0, P.jsxs)("span", {className: "inline-flex items-center justify-center px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 text-[11px] font-bold", children: ["+", extraCount]})
-                      ]
-                    })
                   }),
                   (0, P.jsxs)("td", {className: "py-3 px-4", children: [
                     (0, P.jsx)("div", {className: "font-semibold text-slate-900 text-xs", children: item.training}),
