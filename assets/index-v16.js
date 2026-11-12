@@ -4184,8 +4184,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
         (0,P.jsxs)("button",{onClick:t,className:"flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-300 px-3 py-1.5 rounded-lg shadow-sm hover:bg-slate-50 transition-colors",children:[
           (0,P.jsx)("span",{children:"←"}),
           (0,P.jsx)("span",{children:"Back to My Training"})
-        ]}),
-        (0,P.jsx)("span",{className:"text-xs text-slate-500 font-medium",children:"Employee Learning Portal"})
+        ]})
       ]}),
       (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-10 text-center space-y-3 shadow-sm",children:[
         (0,P.jsx)("h2",{className:"text-base font-bold text-slate-900",children:"Training Archived"}),
@@ -4200,8 +4199,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
       (0,P.jsxs)("button",{onClick:t,className:"flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-300 px-3 py-1.5 rounded-lg shadow-sm hover:bg-slate-50 transition-colors",children:[
         (0,P.jsx)("span",{children:"←"}),
         (0,P.jsx)("span",{children:"Back to My Training"})
-      ]}),
-      (0,P.jsx)("span",{className:"text-xs text-slate-500 font-medium",children:"Employee Learning Portal"})
+      ]})
     ]}),
 
     isCourseInactive && (0,P.jsx)("div",{className:"bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-xs font-semibold text-amber-800",children:isSubmitted ? "This training is Completed and currently Inactive. You can view it, but no actions can be performed inside." : "This training is currently Inactive. Viewing only — no actions can be performed inside."}),
@@ -4211,9 +4209,8 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
       // Left Sidebar Card (lg:col-span-1, Screenshot 4 Layout)
       (0,P.jsxs)("div",{className:"lg:col-span-1 bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden",children:[
         (0,P.jsxs)("div",{className:"p-6 text-center",children:[
-          (0,P.jsxs)("div",{className:"flex items-center justify-between gap-1.5 mb-3",children:[
-            (0,P.jsx)("span",{className:"inline-block border border-slate-300 text-slate-600 text-[10px] font-bold uppercase tracking-wide px-2.5 py-0.5 rounded bg-white",children:String(courseStatusLabel||"Not Started").toUpperCase()}),
-            isCourseInactive && (0,P.jsx)("span",{className:"bg-slate-100 text-slate-600 border border-slate-200 text-[10px] font-bold uppercase px-2 py-0.5 rounded",children:"INACTIVE"})
+          isCourseInactive && (0,P.jsx)("div",{className:"flex items-center justify-end gap-1.5 mb-3",children:[
+            (0,P.jsx)("span",{className:"bg-slate-100 text-slate-600 border border-slate-200 text-[10px] font-bold uppercase px-2 py-0.5 rounded",children:"INACTIVE"})
           ]}),
           (0,P.jsx)("div",{className:"w-24 h-24 bg-slate-100 rounded-full mx-auto flex items-center justify-center text-slate-300",children:
             (0,P.jsxs)("svg",{viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"1.8",className:"w-12 h-12",children:[
@@ -4229,12 +4226,12 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
           (0,P.jsx)("div",{className:"mt-4",children:
             !isAssessmentEnabled ? (
               (allRequiredStepsDone || isSubmitted) ? (0,P.jsx)("div",{className:"w-full bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-lg py-2 text-xs font-semibold text-center",children:"Training Completed ✓"}):
-              (reqManager && preManagerStepsDone && !stepManagerDone) ? (0,P.jsx)("div",{className:"w-full bg-amber-50 border border-amber-200 text-amber-800 rounded-lg py-2 text-xs font-semibold text-center",children:"Pending Manager Approval"}):
+              (reqManager && preManagerStepsDone && !stepManagerDone) ? null :
               (0,P.jsx)("button",{type:"button",disabled:isCourseInactive,onClick:()=>!isCourseInactive&&r(allResourcesDone?"overview":"resources"),style:isCourseInactive?{opacity:0.5}:undefined,className:"w-full bg-white text-blue-600 border border-blue-200 rounded-lg py-2 text-xs font-semibold transition-colors " + (isCourseInactive?"cursor-not-allowed":"hover:bg-blue-50"),children:allResourcesDone?"Complete Remaining Steps →":"Start Learning Modules →"})
             ) : (
               (latestResult?.isPassed && allRequiredStepsDone && isCertEnabled) ? (0,P.jsx)("button",{type:"button",disabled:isCourseInactive,onClick:()=>!isCourseInactive&&alert("Downloading Certificate PDF for " + c.name + "..."),style:isCourseInactive?{opacity:0.5}:undefined,className:"w-full bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg py-2 text-xs font-semibold transition-colors " + (isCourseInactive?"cursor-not-allowed":"hover:bg-emerald-100"),children:"Download Certificate 🎓"}):
               (latestResult?.isPassed && allRequiredStepsDone) ? (0,P.jsx)("div",{className:"w-full bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-lg py-2 text-xs font-semibold text-center",children:"Training Completed ✓"}):
-              (reqManager && preManagerStepsDone && !stepManagerDone) ? (0,P.jsx)("div",{className:"w-full bg-amber-50 border border-amber-200 text-amber-800 rounded-lg py-2 text-xs font-semibold text-center",children:"Pending Manager Approval"}):
+              (reqManager && preManagerStepsDone && !stepManagerDone) ? null :
               latestResult?.isPassed ? (0,P.jsx)("button",{type:"button",disabled:isCourseInactive,onClick:()=>!isCourseInactive&&r("overview"),style:isCourseInactive?{opacity:0.5}:undefined,className:"w-full bg-white text-blue-600 border border-blue-200 rounded-lg py-2 text-xs font-semibold transition-colors " + (isCourseInactive?"cursor-not-allowed":"hover:bg-blue-50"),children:"Complete Remaining Steps →"}):
               attemptsExhausted ? (0,P.jsx)("button",{type:"button",disabled:isCourseInactive,onClick:restartProgramme,style:isCourseInactive?{opacity:0.5}:undefined,className:"w-full bg-rose-50 text-rose-700 border border-rose-200 rounded-lg py-2 text-xs font-semibold transition-colors " + (isCourseInactive?"cursor-not-allowed":"hover:bg-rose-100"),children:"Go Through Training Again ↺"}):
               (0,P.jsx)("button",{type:"button",disabled:isCourseInactive,onClick:()=>!isCourseInactive&&r("assessment"),style:isCourseInactive?{opacity:0.5}:undefined,className:"w-full bg-white text-blue-600 border border-blue-200 rounded-lg py-2 text-xs font-semibold transition-colors " + (isCourseInactive?"cursor-not-allowed":"hover:bg-blue-50"),children:"Take Assessment →"})
