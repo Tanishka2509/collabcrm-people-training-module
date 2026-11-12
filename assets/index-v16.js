@@ -1986,11 +1986,11 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
             // Short Text Answer setup
             q.type==="short_text" && (0,P.jsxs)("div",{className:"space-y-2.5",children:[
               (0,P.jsxs)("div",{className:"flex items-center justify-between",children:[
-                (0,P.jsxs)("span",{className:"inline-flex items-center gap-1.5 font-semibold text-slate-700",children:[(0,P.jsx)("span",{children:"Configured Accepted Answers:"}),(0,P.jsx)(InfoTip,{text:"Exact short-text answers automatically marked as correct."})]}),
-                (0,P.jsx)("button",{type:"button",onClick:()=>handleAddAcceptedAnswer(q.id),className:"text-blue-600 hover:text-blue-700 font-semibold text-xs",children:"+ Add Accepted Answer"})
+                (0,P.jsxs)("span",{className:"inline-flex items-center gap-1.5 font-semibold text-slate-700",children:[(0,P.jsx)("span",{children:"Expected Answer"}),(0,P.jsx)(InfoTip,{text:"Exact short-text answers automatically marked as correct."})]}),
+                (0,P.jsx)("button",{type:"button",onClick:()=>handleAddAcceptedAnswer(q.id),className:"text-blue-600 hover:text-blue-700 font-semibold text-xs",children:"+ Add Expected Answer"})
               ]}),
               (0,P.jsx)("div",{className:"space-y-2",children:(q.acceptedAnswers||[""]).map((ans, aIdx)=>(0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
-                (0,P.jsx)("input",{type:"text",value:ans,onChange:e=>handleUpdateAcceptedAnswer(q.id, aIdx, e.target.value),placeholder:"Enter accepted correct answer...",className:"flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:ring-1 focus:ring-blue-500"}),
+                (0,P.jsx)("input",{type:"text",value:ans,onChange:e=>handleUpdateAcceptedAnswer(q.id, aIdx, e.target.value),placeholder:"Enter expected answer...",className:"flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:ring-1 focus:ring-blue-500"}),
                 (q.acceptedAnswers||[]).length > 1 && (0,P.jsx)("button",{type:"button",onClick:()=>handleRemoveAcceptedAnswer(q.id, aIdx),className:"text-slate-400 hover:text-rose-600 p-1.5 rounded hover:bg-slate-100 text-xs",title:"Remove",children:"✕"})
               ]},aIdx))})
             ]}),
