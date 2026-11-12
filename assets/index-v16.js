@@ -2088,12 +2088,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
           (0,P.jsxs)("label",{className:"font-bold text-slate-700",children:["Skill Name ",(0,P.jsx)("span",{className:"text-rose-500",children:"*"})]}),
           (0,P.jsx)("input",{type:"text",value:quickSkillName,onKeyDown:ev=>{if(ev.key==="Enter")ev.preventDefault();},onChange:ev=>{setQuickSkillErr("");setQuickSkillName(ev.target.value)},placeholder:"e.g. Prompt Engineering",className:"w-full bg-white border rounded-lg px-3 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 "+(dupMatch?"border-rose-400 focus:ring-rose-500/20":"border-slate-300 focus:ring-purple-500/20")}),
           dupMatch && (0,P.jsx)("div",{className:"text-[11px] font-semibold text-rose-600",children:'"'+dupMatch.name+'" already exists in Administration > Master Data > Skills'+(dupMatch.active===!1?" (Inactive)":"")+". Duplicate skills (including case-insensitive matches) cannot be added."})
-        ]}),
-        (0,P.jsxs)("div",{className:"space-y-1.5",children:[
-          (0,P.jsx)("label",{className:"font-bold text-slate-700",children:"Description"}),
-          (0,P.jsx)("textarea",{rows:2,value:quickSkillDesc,onChange:ev=>setQuickSkillDesc(ev.target.value),placeholder:"Brief summary of this skill...",className:"w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-purple-500/20 resize-none"})
-        ]}),
-        (0,P.jsx)("div",{className:"text-[11px] text-slate-500",children:"New skills added here are automatically saved to Administration > Master Data > Skills."})
+        ]})
       ]}),
       (0,P.jsxs)("div",{className:"px-5 py-3.5 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-2.5",children:[
         (0,P.jsx)("button",{type:"button",onClick:()=>setShowQuickSkillModal(false),className:"px-4 py-1.5 rounded-lg border border-slate-300 bg-white text-slate-700 font-semibold text-xs",children:"Cancel"}),
