@@ -1772,8 +1772,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
             (0,P.jsx)("span",{className:"px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200",children:"Certificate & Skills"})
           ]}),
           (0,P.jsx)("p",{className:"text-xs text-slate-500",children:"Choose how employees are recognised upon verified completion of this Training."})
-        ]}),
-        (0,P.jsx)("div",{className:"text-[11px] font-semibold text-purple-700 bg-purple-50 border border-purple-200 px-3 py-1 rounded-full self-start sm:self-auto",children:(certificateGeneration && addSkillToProfile) ? "Certificate + Skills" : certificateGeneration ? "Certificate Only" : addSkillToProfile ? "Skill Assignment Only" : "Both Toggles OFF (Default)"})
+        ]})
       ]}),
 
       (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-2 gap-4",children:[
