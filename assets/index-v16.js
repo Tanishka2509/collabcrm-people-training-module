@@ -1890,18 +1890,10 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
     // 4. Assessment & Questions (Positioned after Skills Selection; auto-syncs questions based on selected skills)
     (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-5",children:[
       (0,P.jsxs)("div",{className:"flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3",children:[
-        (0,P.jsxs)("div",{children:[
-          (0,P.jsx)("h2",{className:"text-sm font-bold text-slate-900 uppercase tracking-wide",children:"4. Assessment & Questions"}),
-          (0,P.jsx)("p",{className:"text-[11px] text-slate-500",children:"Configure test parameters, question builder, scoring criteria, and passing thresholds."})
-        ]}),
-        (0,P.jsxs)("div",{className:"flex items-center gap-3",children:[
-          (0,P.jsxs)("label",{className:"flex items-center gap-2 cursor-pointer",children:[
-            (0,P.jsxs)("span",{className:"inline-flex items-center gap-1.5 text-xs font-bold text-slate-700",children:[(0,P.jsx)("span",{children:"Enable Assessment"}),(0,P.jsx)(InfoTip,{text:"Toggle on to include a graded quiz or test at the end of this training."})]}),
-            (0,P.jsx)("button",{type:"button",onClick:()=>setAssessmentEnabled(!assessmentEnabled),className:"relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none " + (assessmentEnabled?"bg-blue-600":"bg-slate-300"),children:(0,P.jsx)("span",{className:"pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out " + (assessmentEnabled?"translate-x-5":"translate-x-0")})})
-          ]}),
-          (0,P.jsxs)("button",{type:"button",onClick:()=>setShowPreviewModal(true),className:"bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 px-3 py-1.5 rounded-lg text-xs font-semibold shadow-sm flex items-center gap-1.5 transition-colors",children:[
-            (0,P.jsx)("span",{children:"Preview Assessment"})
-          ]})
+        (0,P.jsx)("h2",{className:"text-sm font-bold text-slate-900 uppercase tracking-wide",children:"4. Assessment & Questions"}),
+        (0,P.jsxs)("label",{className:"flex items-center gap-2 cursor-pointer",children:[
+          (0,P.jsxs)("span",{className:"inline-flex items-center gap-1.5 text-xs font-bold text-slate-700",children:[(0,P.jsx)("span",{children:"Enable Assessment"}),(0,P.jsx)(InfoTip,{text:"Toggle on to include a graded quiz or test at the end of this training."})]}),
+          (0,P.jsx)("button",{type:"button",onClick:()=>setAssessmentEnabled(!assessmentEnabled),className:"relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none " + (assessmentEnabled?"bg-blue-600":"bg-slate-300"),children:(0,P.jsx)("span",{className:"pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out " + (assessmentEnabled?"translate-x-5":"translate-x-0")})})
         ]})
       ]}),
 
