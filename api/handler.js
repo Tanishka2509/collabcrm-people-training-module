@@ -1011,32 +1011,38 @@ function getDefaultSkillLevelsSeed() {
   ];
 }
 
+function formatSkillTimestamp(date = new Date()) {
+  const datePart = formatSystemDate(date);
+  const timePart = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+  return `${datePart}, ${timePart}`;
+}
+
 function getDefaultSkillsSeed() {
   return [
-    { id: 'skill-1', name: 'Data Mining', description: 'Extracting structured patterns and insights from enterprise datasets.', active: true, createdBy: 'Ishdeep Anand', createdAt: '15-Jan-2026', modifiedAt: 'Ishdeep Anand (15-Jan-2026)' },
-    { id: 'skill-2', name: 'UI/UX Research and Testing', description: 'Usability testing, heuristic evaluations, and Figma prototype validation.', active: true, createdBy: 'Ishdeep Anand', createdAt: '15-Jan-2026', modifiedAt: 'Ishdeep Anand (15-Jan-2026)' },
-    { id: 'skill-3', name: 'Account Management', description: 'Enterprise client relationship retention and SLA governance.', active: true, createdBy: 'Isha Patel', createdAt: '18-Jan-2026', modifiedAt: 'Isha Patel (18-Jan-2026)' },
-    { id: 'skill-4', name: 'Analytics', description: 'Product telemetry, funnel metrics, and executive KPI reporting.', active: true, createdBy: 'Isha Patel', createdAt: '20-Jan-2026', modifiedAt: 'Isha Patel (20-Jan-2026)' },
-    { id: 'skill-5', name: 'Project Management (Agile/Scrum)', description: 'Sprint execution, backlog prioritization, and stakeholder delivery.', active: true, createdBy: 'Isha Patel', createdAt: '22-Jan-2026', modifiedAt: 'Isha Patel (22-Jan-2026)' },
-    { id: 'skill-6', name: 'JAVA Kotlin', description: 'JVM backend services and modern Kotlin Android/server development.', active: true, createdBy: 'Ashish Kumar', createdAt: '25-Jan-2026', modifiedAt: 'Ashish Kumar (25-Jan-2026)' },
-    { id: 'skill-7', name: 'React', description: 'Component architecture, hooks, and modern frontend state flows.', active: true, createdBy: 'Ashish Kumar', createdAt: '01-Feb-2026', modifiedAt: 'Ashish Kumar (01-Feb-2026)' },
-    { id: 'skill-8', name: 'TypeScript', description: 'Static typing, API contracts, and scalable JavaScript architectures.', active: true, createdBy: 'Ashish Kumar', createdAt: '01-Feb-2026', modifiedAt: 'Ashish Kumar (01-Feb-2026)' },
-    { id: 'skill-9', name: 'Node.js', description: 'Event-driven backend APIs, microservices, and performance profiling.', active: true, createdBy: 'Ashish Kumar', createdAt: '02-Feb-2026', modifiedAt: 'Ashish Kumar (02-Feb-2026)' },
-    { id: 'skill-10', name: 'Business Analysis', description: 'Requirement elicitation, BRDs, workflow modeling, and UAT planning.', active: true, createdBy: 'Isha Patel', createdAt: '05-Feb-2026', modifiedAt: 'Isha Patel (05-Feb-2026)' },
-    { id: 'skill-11', name: 'SQL', description: 'Relational query optimization, schema modeling, and reporting.', active: true, createdBy: 'Isha Patel', createdAt: '05-Feb-2026', modifiedAt: 'Isha Patel (05-Feb-2026)' },
-    { id: 'skill-12', name: 'Figma', description: 'Design systems, interactive flows, and developer handoff specs.', active: true, createdBy: 'Shivam Sharma', createdAt: '10-Feb-2026', modifiedAt: 'Shivam Sharma (10-Feb-2026)' },
-    { id: 'skill-13', name: 'Architecture', description: 'Distributed systems topology, multi-tenancy, and API gateways.', active: true, createdBy: 'Ashish Kumar', createdAt: '15-Feb-2026', modifiedAt: 'Ashish Kumar (15-Feb-2026)' },
-    { id: 'skill-14', name: 'PostgreSQL', description: 'Transactional indexing, query tuning, and replication.', active: true, createdBy: 'Ashish Kumar', createdAt: '15-Feb-2026', modifiedAt: 'Ashish Kumar (15-Feb-2026)' },
-    { id: 'skill-15', name: 'Leadership', description: 'People coaching, conflict resolution, and team alignment.', active: true, createdBy: 'Isha Patel', createdAt: '20-Feb-2026', modifiedAt: 'Isha Patel (20-Feb-2026)' },
-    { id: 'skill-16', name: 'System Architecture', description: 'Scalable fault-tolerant platform blueprints and event buses.', active: true, createdBy: 'Ashish Kumar', createdAt: '25-Feb-2026', modifiedAt: 'Ashish Kumar (25-Feb-2026)' },
-    { id: 'skill-17', name: 'Engineering Management', description: 'Delivery governance, mentorship, and technical roadmaps.', active: true, createdBy: 'Isha Patel', createdAt: '01-Mar-2026', modifiedAt: 'Isha Patel (01-Mar-2026)' },
-    { id: 'skill-18', name: 'Strategy', description: 'Long-term product and organizational capability planning.', active: true, createdBy: 'Isha Patel', createdAt: '05-Mar-2026', modifiedAt: 'Isha Patel (05-Mar-2026)' },
-    { id: 'skill-19', name: 'Executive Leadership', description: 'Cross-department vision, governance, and strategic oversight.', active: true, createdBy: 'Isha Patel', createdAt: '10-Mar-2026', modifiedAt: 'Isha Patel (10-Mar-2026)' },
-    { id: 'skill-20', name: 'Cloud Infrastructure', description: 'Kubernetes orchestration, cloud networking, and CI/CD.', active: true, createdBy: 'Ashish Kumar', createdAt: '15-Mar-2026', modifiedAt: 'Ashish Kumar (15-Mar-2026)' },
-    { id: 'skill-21', name: 'GDPR & Data Privacy', description: 'Global data protection compliance, retention, and incident response.', active: true, createdBy: 'Isha Patel', createdAt: '20-Mar-2026', modifiedAt: 'Isha Patel (20-Mar-2026)' },
-    { id: 'skill-22', name: 'API Security & OAuth2', description: 'Token validation, RBAC claims, OAuth2/PKCE, and CORS policies.', active: true, createdBy: 'Megha Salunkhe', createdAt: '25-Mar-2026', modifiedAt: 'Megha Salunkhe (25-Mar-2026)' },
-    { id: 'skill-23', name: 'Kubernetes Security', description: 'Multi-tenant RBAC hardening and zero-trust workloads.', active: true, createdBy: 'Megha Salunkhe', createdAt: '01-Apr-2026', modifiedAt: 'Megha Salunkhe (01-Apr-2026)' },
-    { id: 'skill-24', name: 'Client Portal Operations', description: 'End-to-end CollabCRM candidate vetting and portal access workflows.', active: true, createdBy: 'Ishdeep Anand', createdAt: '05-Apr-2026', modifiedAt: 'Ishdeep Anand (05-Apr-2026)' }
+    { id: 'skill-6', name: 'JAVA Kotlin', description: 'JVM backend services and modern Kotlin Android/server development.', active: true, createdBy: 'Isha Patel', createdAt: '10-Feb-2026, 02:50 PM', lastModifiedBy: null, lastModifiedAt: null },
+    { id: 'skill-1', name: 'Data Mining', description: 'Extracting structured patterns and insights from enterprise datasets.', active: true, createdBy: 'Isha Patel', createdAt: '19-Sep-2025, 03:17 PM', lastModifiedBy: null, lastModifiedAt: null },
+    { id: 'skill-2', name: 'UI/UX Research and Testing', description: 'Usability testing, heuristic evaluations, and Figma prototype validation.', active: true, createdBy: 'Isha Patel', createdAt: '18-Sep-2025, 03:17 PM', lastModifiedBy: null, lastModifiedAt: null },
+    { id: 'skill-3', name: 'Account Management', description: 'Enterprise client relationship retention and SLA governance.', active: true, createdBy: 'Isha Patel', createdAt: '18-Sep-2025, 03:17 PM', lastModifiedBy: null, lastModifiedAt: null },
+    { id: 'skill-4', name: 'Analytics', description: 'Product telemetry, funnel metrics, and executive KPI reporting.', active: true, createdBy: 'Isha Patel', createdAt: '21-Aug-2025, 07:29 PM', lastModifiedBy: null, lastModifiedAt: null },
+    { id: 'skill-5', name: 'Project Management (Agile/Scrum)', description: 'Sprint execution, backlog prioritization, and stakeholder delivery.', active: true, createdBy: 'Isha Patel', createdAt: '21-Aug-2025, 07:29 PM', lastModifiedBy: null, lastModifiedAt: null },
+    { id: 'skill-7', name: 'React', description: 'Component architecture, hooks, and modern frontend state flows.', active: true, createdBy: 'Isha Patel', createdAt: '21-Aug-2025, 07:29 PM', lastModifiedBy: null, lastModifiedAt: null },
+    { id: 'skill-8', name: 'TypeScript', description: 'Static typing, API contracts, and scalable JavaScript architectures.', active: true, createdBy: 'Isha Patel', createdAt: '21-Aug-2025, 07:29 PM', lastModifiedBy: null, lastModifiedAt: null },
+    { id: 'skill-9', name: 'Node.js', description: 'Event-driven backend APIs, microservices, and performance profiling.', active: true, createdBy: 'Isha Patel', createdAt: '21-Aug-2025, 07:29 PM', lastModifiedBy: null, lastModifiedAt: null },
+    { id: 'skill-10', name: 'Business Analysis', description: 'Requirement elicitation, BRDs, workflow modeling, and UAT planning.', active: true, createdBy: 'Isha Patel', createdAt: '21-Aug-2025, 07:29 PM', lastModifiedBy: null, lastModifiedAt: null },
+    { id: 'skill-11', name: 'SQL', description: 'Relational query optimization, schema modeling, and reporting.', active: true, createdBy: 'Isha Patel', createdAt: '05-Feb-2026, 11:15 AM', lastModifiedBy: null, lastModifiedAt: null },
+    { id: 'skill-12', name: 'Figma', description: 'Design systems, interactive flows, and developer handoff specs.', active: true, createdBy: 'Shivam Sharma', createdAt: '10-Feb-2026, 04:05 PM', lastModifiedBy: null, lastModifiedAt: null },
+    { id: 'skill-13', name: 'Architecture', description: 'Distributed systems topology, multi-tenancy, and API gateways.', active: true, createdBy: 'Ashish Kumar', createdAt: '15-Feb-2026, 01:40 PM', lastModifiedBy: null, lastModifiedAt: null },
+    { id: 'skill-14', name: 'PostgreSQL', description: 'Transactional indexing, query tuning, and replication.', active: true, createdBy: 'Ashish Kumar', createdAt: '15-Feb-2026, 01:45 PM', lastModifiedBy: null, lastModifiedAt: null },
+    { id: 'skill-15', name: 'Leadership', description: 'People coaching, conflict resolution, and team alignment.', active: true, createdBy: 'Isha Patel', createdAt: '20-Feb-2026, 10:20 AM', lastModifiedBy: null, lastModifiedAt: null },
+    { id: 'skill-16', name: 'System Architecture', description: 'Scalable fault-tolerant platform blueprints and event buses.', active: true, createdBy: 'Ashish Kumar', createdAt: '25-Feb-2026, 05:10 PM', lastModifiedBy: null, lastModifiedAt: null },
+    { id: 'skill-17', name: 'Engineering Management', description: 'Delivery governance, mentorship, and technical roadmaps.', active: true, createdBy: 'Isha Patel', createdAt: '01-Mar-2026, 09:30 AM', lastModifiedBy: null, lastModifiedAt: null },
+    { id: 'skill-18', name: 'Strategy', description: 'Long-term product and organizational capability planning.', active: true, createdBy: 'Isha Patel', createdAt: '05-Mar-2026, 03:45 PM', lastModifiedBy: null, lastModifiedAt: null },
+    { id: 'skill-19', name: 'Executive Leadership', description: 'Cross-department vision, governance, and strategic oversight.', active: true, createdBy: 'Isha Patel', createdAt: '10-Mar-2026, 11:00 AM', lastModifiedBy: null, lastModifiedAt: null },
+    { id: 'skill-20', name: 'Cloud Infrastructure', description: 'Kubernetes orchestration, cloud networking, and CI/CD.', active: true, createdBy: 'Ashish Kumar', createdAt: '15-Mar-2026, 04:12 PM', lastModifiedBy: null, lastModifiedAt: null },
+    { id: 'skill-21', name: 'GDPR & Data Privacy', description: 'Global data protection compliance, retention, and incident response.', active: true, createdBy: 'Isha Patel', createdAt: '20-Mar-2026, 02:30 PM', lastModifiedBy: null, lastModifiedAt: null },
+    { id: 'skill-22', name: 'API Security & OAuth2', description: 'Token validation, RBAC claims, OAuth2/PKCE, and CORS policies.', active: true, createdBy: 'Megha Salunkhe', createdAt: '25-Mar-2026, 06:05 PM', lastModifiedBy: null, lastModifiedAt: null },
+    { id: 'skill-23', name: 'Kubernetes Security', description: 'Multi-tenant RBAC hardening and zero-trust workloads.', active: true, createdBy: 'Megha Salunkhe', createdAt: '01-Apr-2026, 12:15 PM', lastModifiedBy: null, lastModifiedAt: null },
+    { id: 'skill-24', name: 'Client Portal Operations', description: 'End-to-end CollabCRM candidate vetting and portal access workflows.', active: true, createdBy: 'Ishdeep Anand', createdAt: '05-Apr-2026, 04:50 PM', lastModifiedBy: null, lastModifiedAt: null }
   ];
 }
 
@@ -7134,15 +7140,41 @@ export async function handleApi(req, res) {
       }
       const cur = skills[idx];
       const nextActive = cur.active === false;
+      const nowStamp = formatSkillTimestamp();
       skills[idx] = {
         ...cur,
         active: nextActive,
+        lastModifiedBy: actor,
+        lastModifiedAt: nowStamp,
         modifiedBy: actor,
         modifiedAt: `${actor} (${todayStr})`
       };
       store.skills = skills;
       saveProgrammeStore(store);
       return sendJson(res, 200, { success: true, skill: skills[idx], skills, skillLevels });
+    }
+
+    if (action === 'delete') {
+      const targetId = skillId || (skill && skill.id);
+      const idx = skills.findIndex(s => s.id === targetId);
+      if (idx === -1) {
+        return sendJson(res, 404, { success: false, message: 'Skill not found.', skills, skillLevels });
+      }
+      const inUse = (store.programmes || []).some(
+        pr => Boolean(pr.addSkillToProfile) && Array.isArray(pr.selectedSkillIds) && pr.selectedSkillIds.includes(targetId)
+      );
+      if (inUse) {
+        return sendJson(res, 400, {
+          success: false,
+          message: `Cannot delete "${skills[idx].name}" because it is linked to an existing Training.`,
+          skills,
+          skillLevels
+        });
+      }
+      skills.splice(idx, 1);
+      store.skills = skills;
+      saveProgrammeStore(store);
+      return sendJson(res, 200, { success: true, skills, skillLevels });
     }
 
     if (action === 'add' || action === 'edit') {
@@ -7161,6 +7193,7 @@ export async function handleApi(req, res) {
           skillLevels
         });
       }
+      const nowStamp = formatSkillTimestamp();
       if (action === 'edit') {
         const targetId = skillId || sObj.id;
         const idx = skills.findIndex(s => s.id === targetId);
@@ -7172,6 +7205,8 @@ export async function handleApi(req, res) {
           name: nextName,
           description: String(sObj.description || '').trim(),
           active: sObj.active !== false,
+          lastModifiedBy: actor,
+          lastModifiedAt: nowStamp,
           modifiedBy: actor,
           modifiedAt: `${actor} (${todayStr})`
         };
@@ -7185,9 +7220,9 @@ export async function handleApi(req, res) {
         description: String(sObj.description || '').trim(),
         active: sObj.active !== false,
         createdBy: actor,
-        createdAt: todayStr,
-        modifiedBy: actor,
-        modifiedAt: `${actor} (${todayStr})`
+        createdAt: nowStamp,
+        lastModifiedBy: null,
+        lastModifiedAt: null
       };
       skills.unshift(createdSkill);
       store.skills = skills;
