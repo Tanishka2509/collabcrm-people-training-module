@@ -4214,8 +4214,11 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
 
     isCourseInactive && (0,P.jsx)("div",{className:"bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-xs font-semibold text-amber-800",children:isSubmitted ? "This training is Completed and currently Inactive. You can view it, but no actions can be performed inside." : "This training is currently Inactive. Viewing only — no actions can be performed inside."}),
 
-    // Full-Width Training Detail Content
-    (0,P.jsxs)("div",{className:"space-y-6",children:[
+    // Training Detail Content (2-column with Employee Profile Sidebar when opened from My Profile > Training History)
+    (()=>{
+      let profileEmp = e?.employee || currentEmp;
+      let profileSkillRecs = resolveEmpSkillRecords(profileEmp, empSkillsMap, skillsConfig);
+      let mainRight = (0,P.jsxs)("div",{className:(isProfileHistoryView?"lg:col-span-3 ":"")+"space-y-6",children:[
         // Top Tab Bar
         (0,P.jsx)("div",{className:"bg-white border border-slate-200 rounded-xl px-6 shadow-sm overflow-x-auto",children:[
           (0,P.jsxs)("div",{className:"flex items-center gap-8 text-xs font-bold border-b border-transparent",children:[
@@ -4571,7 +4574,57 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
             ]})
           ]});
         })())
-    ]}),
+    ]});
+      if(!isProfileHistoryView) return mainRight;
+      let leftCard = (0,P.jsxs)("div",{className:"lg:col-span-1 bg-white border border-slate-200 rounded-xl p-6 space-y-6 shadow-sm",children:[
+        (0,P.jsxs)("div",{className:"text-center relative",children:[
+          (0,P.jsx)("span",{className:"absolute top-0 left-0 bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs px-2 py-0.5 rounded font-medium",children:"IN"}),
+          (0,P.jsxs)("div",{className:"w-24 h-24 bg-slate-100 rounded-full mx-auto flex items-center justify-center text-3xl font-bold text-slate-700 shadow-inner mt-2",children:[profileEmp.firstName?.[0]||"T",profileEmp.lastName?.[0]||"K"]}),
+          (0,P.jsxs)("h2",{className:"text-lg font-bold text-slate-900 mt-4",children:[profileEmp.firstName," ",profileEmp.lastName]}),
+          (0,P.jsx)("div",{className:"text-xs text-slate-500",children:profileEmp.designation||"Business Analyst"}),
+          (0,P.jsx)("div",{className:"inline-block mt-1 bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded text-xs font-semibold",children:profileEmp.employeeRole||"Analyst"}),
+          (0,P.jsx)("button",{type:"button",onClick:()=>alert(`Password reset instructions sent to ${profileEmp.email||"employee"}`),className:"mt-4 w-full bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-200 rounded-lg py-2 text-xs font-bold transition-colors",children:"Send Password to Employee"})
+        ]}),
+        (0,P.jsxs)("div",{className:"border-t border-slate-100 pt-4 space-y-4 text-xs",children:[
+          (0,P.jsxs)("div",{children:[
+            (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"About Me"}),
+            (0,P.jsx)("div",{className:"font-semibold text-slate-800 mt-0.5",children:profileEmp.about||"Detail-oriented business analyst."})
+          ]}),
+          (0,P.jsxs)("div",{children:[
+            (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Business Unit"}),
+            (0,P.jsx)("div",{className:"font-semibold text-slate-800 mt-0.5",children:profileEmp.businessUnit||"Enterprise Solutions"})
+          ]}),
+          (0,P.jsxs)("div",{children:[
+            (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Experience"}),
+            (0,P.jsxs)("div",{className:"space-y-1 mt-1",children:[
+              (0,P.jsxs)("div",{className:"flex justify-between",children:[(0,P.jsx)("span",{className:"text-slate-600",children:"Previous"}),(0,P.jsx)("span",{className:"font-semibold text-slate-900",children:profileEmp.experience||"3Y 11M"})]}),
+              (0,P.jsxs)("div",{className:"flex justify-between",children:[(0,P.jsx)("span",{className:"text-slate-600",children:"At CollabCRM Demo Account"}),(0,P.jsx)("span",{className:"font-semibold text-slate-900",children:"20D"})]})
+            ]})
+          ]}),
+          (0,P.jsxs)("div",{children:[
+            (0,P.jsxs)("div",{className:"flex items-center gap-1.5",children:[
+              (0,P.jsx)("span",{className:"text-slate-400 font-medium",children:"Skills"}),
+              (0,P.jsx)("span",{className:"text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200",children:profileSkillRecs.length})
+            ]}),
+            (0,P.jsx)("div",{className:"flex flex-wrap gap-1.5 mt-2",children:profileSkillRecs.length===0?(0,P.jsx)("span",{className:"text-slate-400 italic text-[11px]",children:"No skills assigned yet."}):profileSkillRecs.map((sk,idx)=>(
+              (0,P.jsxs)("span",{className:"inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium border bg-slate-50 text-slate-700 border-slate-200",children:[
+                (0,P.jsx)("span",{className:"font-semibold",children:sk.skillName}),
+                sk.skillLevel&&(0,P.jsx)("span",{className:"px-1.5 py-0 rounded text-[10px] font-bold bg-white text-slate-600 border border-slate-200",children:sk.skillLevel})
+              ]},sk.skillId||idx)
+            ))})
+          ]}),
+          (0,P.jsxs)("div",{children:[
+            (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Badges Received"}),
+            (0,P.jsx)("div",{className:"text-slate-600 mt-1 italic",children:(Array.isArray(profileEmp.badges)&&profileEmp.badges.length>0)?profileEmp.badges.join(", "):"No badges received."})
+          ]}),
+          (0,P.jsxs)("div",{className:"grid grid-cols-2 gap-2 pt-2 border-t border-slate-100 text-[11px]",children:[
+            (0,P.jsxs)("div",{children:[(0,P.jsx)("span",{className:"text-slate-400",children:"Seating Location"}),(0,P.jsx)("div",{className:"font-medium text-slate-800",children:profileEmp.seatingLocation||"Floor 1"})]}),
+            (0,P.jsxs)("div",{children:[(0,P.jsx)("span",{className:"text-slate-400",children:"Extension Number"}),(0,P.jsx)("div",{className:"font-medium text-slate-800",children:profileEmp.extensionNumber||"105"})]})
+          ]})
+        ]})
+      ]});
+      return (0,P.jsxs)("div",{className:"grid grid-cols-1 lg:grid-cols-4 gap-6 items-start",children:[leftCard,mainRight]});
+    })(),
     viewedResource && (()=>{
       let meta = getResourceViewerMeta(viewedResource);
       let isResDone = Boolean(completedResources[viewedResource.id]);
