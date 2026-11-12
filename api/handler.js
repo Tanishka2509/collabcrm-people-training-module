@@ -7295,6 +7295,7 @@ export async function handleApi(req, res) {
         return sendJson(res, 400, { success: false, message: 'Invalid skills payload.' });
       }
       const seenSkillIds = new Set();
+      const seenSkillNames = new Set();
       const nextList = [];
       const tsFormatted = formatSkillTimestamp(now);
       for (let i = 0; i < submittedSkills.length; i++) {
@@ -7306,10 +7307,12 @@ export async function handleApi(req, res) {
         if (!skillMaster) {
           return sendJson(res, 400, { success: false, message: 'Selected skill does not exist in Skills Configuration.' });
         }
-        if (seenSkillIds.has(skillMaster.id)) {
-          return sendJson(res, 400, { success: false, message: `Duplicate skill "${skillMaster.name}" is not allowed.` });
+        const skillNameKey = normSkillKey(skillMaster.name);
+        if (seenSkillIds.has(skillMaster.id) || seenSkillNames.has(skillNameKey)) {
+          return sendJson(res, 400, { success: false, message: `Duplicate skill "${skillMaster.name}" (including case-insensitive matches) is not allowed.` });
         }
         seenSkillIds.add(skillMaster.id);
+        seenSkillNames.add(skillNameKey);
         const chosenLevel = String(row.skillLevel || '').trim();
         const levelObj = skillLevels.find(l => l.name.toLowerCase() === chosenLevel.toLowerCase());
         if (!levelObj) {
@@ -7439,7 +7442,7 @@ export async function handleApi(req, res) {
         return sendJson(res, 400, { success: false, message: 'Please select a valid configured Skill Level.' });
       }
       const resolvedLevelName = skillLevels.find(l => l.name.toLowerCase() === chosenLevel.toLowerCase()).name;
-      const existingIdx = empSkills.findIndex(es => es.skillId === skillMaster.id);
+      const existingIdx = empSkills.findIndex(es => es.skillId === skillMaster.id || normSkillKey(es.skillName) === normSkillKey(skillMaster.name));
       if (existingIdx !== -1) {
         if (action === 'add') {
           return sendJson(res, 400, { success: false, message: `Employee already has "${skillMaster.name}" (duplicate employee skill records are not allowed).` });

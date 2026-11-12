@@ -4501,10 +4501,13 @@ function SkillMatrixPage({employees,employeeSkills,skillAwardHistory,skillsConfi
     for(let i=0;i<draftRows.length;i++){
       if(!draftRows[i].skillId){setFormErr("Please select a Skill for row "+(i+1)+".");return}
     }
-    let seen=new Set();
+    let seen=new Set(),seenNames=new Set();
     for(let i=0;i<draftRows.length;i++){
-      if(seen.has(draftRows[i].skillId)){setFormErr("Duplicate skills cannot be selected.");return}
+      let skObj=masterSkills.find(m=>m.id===draftRows[i].skillId);
+      let nk=normSkillKey(skObj?skObj.name:draftRows[i].skillId);
+      if(seen.has(draftRows[i].skillId)||seenNames.has(nk)){setFormErr("Duplicate skills (including case-insensitive matches) cannot be selected.");return}
       seen.add(draftRows[i].skillId);
+      seenNames.add(nk);
     }
     if(!onManageEmployeeSkill){setFormErr("Skill update handler unavailable.");return}
     setFormBusy(!0);
