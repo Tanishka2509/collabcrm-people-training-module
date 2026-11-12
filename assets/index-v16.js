@@ -4009,6 +4009,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
   let configuredSkillIds = Array.isArray(liveProg?.selectedSkillIds) ? liveProg.selectedSkillIds : (Array.isArray(c.selectedSkillIds) ? c.selectedSkillIds : []);
   let configuredSkillLevel = (liveProg?.skillLevel ?? c.skillLevel) || "";
   let [awardFeedback, setAwardFeedback] = (0,l.useState)(null);
+  let [activeAssessmentOpen, setActiveAssessmentOpen] = (0,l.useState)(!1);
 
   let doneCount = resources.filter(res => completedResources[res.id]).length;
   let allResourcesDone = resources.length > 0 && doneCount === resources.length;
@@ -4489,7 +4490,45 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
           (0,P.jsx)("div",{className:"w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto text-xl font-bold",children:"📝"}),
           (0,P.jsx)("h3",{className:"text-base font-bold text-slate-800",children:"No Assessment Configured"}),
           (0,P.jsx)("p",{className:"text-xs text-slate-500 max-w-md mx-auto",children:"Assessment is disabled for this training. Employees achieve completion upon reviewing all learning resources."})
+        ]}) : !activeAssessmentOpen ? (0,P.jsxs)("div",{className:"space-y-4 animate-in fade-in",children:[
+          (0,P.jsxs)("div",{
+            onClick:()=>setActiveAssessmentOpen(!0),
+            role:"button",
+            tabIndex:0,
+            onKeyDown:ev=>{if(ev.key==="Enter"||ev.key===" ")setActiveAssessmentOpen(!0)},
+            className:"bg-white border border-slate-200 hover:border-blue-300 rounded-xl p-5 shadow-sm hover:shadow transition-all cursor-pointer space-y-3",
+            children:[
+              (0,P.jsxs)("div",{className:"flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3",children:[
+                (0,P.jsxs)("div",{children:[
+                  (0,P.jsxs)("div",{className:"flex items-center gap-2 flex-wrap",children:[
+                    (0,P.jsx)("h2",{className:"text-base font-bold text-slate-900 tracking-tight",children:assessment.title || "Final Training Assessment"}),
+                    (submittedState && latestResult) ? (
+                      (0,P.jsx)("span",{className:"px-2 py-0.5 rounded-full text-[11px] font-bold border " + (latestResult.isPassed ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-rose-50 text-rose-700 border-rose-200"),children:latestResult.isPassed ? `Passed (${latestResult.scorePercentage}%)` : `Not Passed (${latestResult.scorePercentage}%)`})
+                    ) : attemptsExhausted ? (
+                      (0,P.jsx)("span",{className:"px-2 py-0.5 rounded-full text-[11px] font-bold border bg-rose-50 text-rose-700 border-rose-200",children:"Attempts Exhausted"})
+                    ) : null
+                  ]}),
+                  (0,P.jsx)("p",{className:"text-xs text-slate-500 mt-0.5",children:assessment.description || "Complete the following questions to evaluate your understanding of this training."})
+                ]}),
+                (0,P.jsxs)("div",{className:"flex items-center gap-2 shrink-0",children:[
+                  (0,P.jsxs)("span",{className:"bg-blue-50 text-blue-700 border border-blue-200 font-bold px-2.5 py-1 rounded-lg text-xs",children:[questions.length, " Questions • ", totalAssessmentMarks, " Marks"]}),
+                  (0,P.jsx)("button",{type:"button",onClick:ev=>{ev.stopPropagation();setActiveAssessmentOpen(!0)},className:"bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold shadow-xs transition-colors cursor-pointer",children:(submittedState && latestResult) ? "View Result →" : "Open Assessment →"})
+                ]})
+              ]}),
+              (0,P.jsxs)("div",{className:"flex flex-wrap items-center gap-4 text-xs text-slate-600",children:[
+                (0,P.jsxs)("span",{children:[(0,P.jsx)("strong",{children:"Passing Criteria:"}), " Strictly > ", passingScore, "% to pass"]}),
+                (0,P.jsx)("span",{children:"•"}),
+                (0,P.jsxs)("span",{children:[(0,P.jsx)("strong",{children:"Attempts:"}), " ", Math.max(0, maxAttempts - attemptsUsed), " of ", maxAttempts, " remaining"]})
+              ]})
+            ]
+          })
         ]}) : (0,P.jsxs)("div",{className:"space-y-6 animate-in fade-in",children:[
+          (0,P.jsx)("div",{className:"flex items-center justify-between",children:[
+            (0,P.jsxs)("button",{type:"button",onClick:()=>setActiveAssessmentOpen(!1),className:"inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-300 px-3 py-1.5 rounded-lg shadow-xs hover:bg-slate-50 transition-colors cursor-pointer",children:[
+              (0,P.jsx)("span",{children:"←"}),
+              (0,P.jsx)("span",{children:"Back to Assessments"})
+            ]})
+          ]}),
           (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-3",children:[
             (0,P.jsxs)("div",{className:"flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3",children:[
               (0,P.jsxs)("div",{children:[
