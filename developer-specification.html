@@ -297,12 +297,12 @@
 <li class="nested-li">Users can switch between the <strong>Admin / HR Operations View</strong> and the <strong>Employee Learning Portal</strong>.</li>
 <li class="nested-li">Selecting Employee View navigates directly to <strong>My Training</strong>, where learners open the <strong>3-Tab Course Learning Portal</strong> (<strong>1. Overview</strong>, <strong>2. Learning Resources</strong>, <strong>3. Assessment &amp; Questions</strong>).</li>
 <div class="step-item"><span class="step-num">3.</span><span><strong>Left Navigation Drawer Flow</strong>:</span></div>
-<li class="nested-li"><strong>Employees</strong>: Opens the Employee Directory, Employee Profile (with Training History tab), and the Add Employee modal.</li>
-<li class="nested-li"><strong>Training Hub</strong>: Provides access to Dashboard, Training Management (Training Programmes Catalogue), Assignments, Progress Tracker, and Certificates.</li>
-<li class="nested-li">From <strong>Training Programmes</strong>: Users can open <strong>Create / Edit Programme</strong> or click View to open <strong>Programme Detail</strong> (General Info, Curriculum &amp; Modules, Enrolled Employees, Status History).</li>
-<li class="nested-li">From <strong>Assignments</strong>: Users can open the <strong>Assign Training Slideover Modal</strong> or click any record to open <strong>Assignment Details</strong>.</li>
+<li class="nested-li"><strong>Employees</strong>: Opens the Employee Directory, Employee Profile (with <strong>Skills</strong> section showing Training sources &amp; <strong>Skill Award History</strong> modal, <strong>Training History</strong> tab, and <strong>My Certificates</strong> tab), and the Add Employee modal.</li>
+<li class="nested-li"><strong>Training Hub</strong>: Provides access to Dashboard, Training Management (Training Catalogue), Assignments, Training Progress, and Certificates.</li>
+<li class="nested-li">From <strong>Training Management</strong>: Users can open <strong>Create / Edit Training</strong> (including <strong>3. Training Recognition</strong> and <strong>4. Assessment &amp; Questions</strong>) or click View to open <strong>Training Detail</strong> (General Info with <strong>Training Recognition</strong> summary card, Curriculum &amp; Modules, Enrolled Employees, Status History).</li>
+<li class="nested-li">From <strong>Assignments</strong>: Users can open the <strong>Assign Training Slideover Modal</strong> or click any record to open <strong>Assignment Details</strong> (with <strong>View Assessment</strong> review support).</li>
 <li class="nested-li">From <strong>Certificates</strong>: Users can expand employee rows and open the <strong>Verified Certificate Modal</strong> (signed by Khushi Bhatt, Head of HR).</li>
-<li class="nested-li"><strong>Config Hub</strong>: Provides quick navigation to <strong>Training Categories</strong> (master category table &amp; Add Category modal) and <strong>Roles &amp; Permissions</strong> (Roles Table, Add Role modal, and Role Permission Matrix).</li>
+<li class="nested-li"><strong>Config Hub</strong>: Provides quick navigation to <strong>Training Categories</strong> (master category table &amp; Add Category modal), <strong>Skills &amp; Skill Levels</strong> (<strong>Config &gt; Skills</strong> master skills table, <strong>+ Add Skill</strong> modal, active/inactive toggle, and configured skill level hierarchy), and <strong>Roles &amp; Permissions</strong> (Roles Table, Add Role modal, and Role Permission Matrix).</li>
 <hr />
 <h3>Flow 1: Top Navigation &amp; Role Switching</h3>
 <li class=""><strong>Global Header</strong>: Contains company branding (CollabCRM People), global search (Search employees, programmes), notifications bell, and the Active User Profile indicator (<strong>Tanya Kapoor - Business Analyst • Employee</strong> or <strong>Ishdeep Anand - Admin • Management</strong>).</li>
@@ -318,18 +318,20 @@
 <li class="nested-li"><strong>Progress</strong>: Dual-mode tracking (1. Employee-wise Training Completion vs 2. Departmental Compliance Audit), 4 summary cards (Active Learners, Total Assignments, Completed, Avg Score), and CSV export.</li>
 <li class="nested-li"><strong>Certificates</strong>: Expandable master-detail table defaulting to <strong>collapsed</strong> employee rows with expand/collapse chevrons, plain-text earned programmes, clickable certificate preview, and a right-aligned <strong>Actions</strong> column directly under <strong>All Records</strong>.</li>
 <div class="step-item"><span class="step-num">3.</span><span><strong>Config Hub</strong>:</span></div>
-<li class="nested-li"><strong>Config Flyout</strong>: Compact left drawer panel offering quick access to <strong>Training Categories</strong> and <strong>Roles</strong>.</li>
+<li class="nested-li"><strong>Config Flyout</strong>: Compact left drawer panel offering quick access to <strong>Training Categories</strong>, <strong>Skills</strong>, and <strong>Roles</strong>.</li>
 <li class="nested-li"><strong>Training Categories</strong>: Master category table and <strong>Add Category</strong> action button placed directly in the top <strong>Training Config</strong> banner header (without extra sub-tab or duplicate table card header rows).</li>
+<li class="nested-li"><strong>Skills &amp; Skill Levels (<strong>Config &gt; Skills</strong>)</strong>: Master Skills table (<strong>Skill Name</strong>, <strong>Description</strong>, <strong>Status</strong>, <strong>Created By</strong>, <strong>Actions</strong>), <strong>+ Add Skill</strong> drawer/modal (with duplicate-name validation), active/inactive status toggling, and configured ordered <strong>Skill Levels</strong> progression strip (<strong>Beginner (Level 1)</strong>, <strong>Intermediate (Level 2)</strong>, <strong>Advanced (Level 3)</strong>).</li>
 <li class="nested-li"><strong>Roles &amp; Permissions</strong>: 11-role access control table (Sr. Business Analyst, Senior Recruiter, CEO, Project Manager, BDE, Admin/HR, Employee, Team leader, Management, Recruiter, BDM), <strong>+ Add Role</strong> slideover modal, and interactive Role Permission Matrix.</li>
 <p><em>(Note: The legacy Reports drawer item has been removed.)</em></p>
 <hr />
 <h3>Flow 3: Training Management (Create / Edit Programme Flow)</h3>
 <li class="">Accessed via <strong>Training Management &gt; + Add Training</strong> or <strong>Edit Programme</strong>.</li>
 <li class="">Features an <strong>Auto-Fill Demo</strong> button to populate sample data.</li>
-<li class="">Structured across three core sections:</li>
-<div class="step-item nested-step"><span class="step-num">1.</span><span><strong>Core Programme Details</strong>: Training Name, Training Category, Difficulty Level, Duration, Learning Objectives, and <strong>Completion Requirements</strong> (multi-select checkbox dropdown with options <strong>Watch all required videos</strong>, <strong>Pass the assessment</strong>, <strong>Submit any required documents</strong>, and <strong>Get approval from the manager</strong>; checkboxes toggle directly without <strong>Clear</strong>/<strong>Done</strong> buttons and the menu closes on outside click).</span></div>
+<li class="">Structured across four core sections:</li>
+<div class="step-item nested-step"><span class="step-num">1.</span><span><strong>Core Training Details</strong>: Training Name, Training Category, Difficulty Level, Duration, Learning Objectives, and <strong>Completion Requirements</strong> (multi-select checkbox dropdown with options <strong>Watch all required videos</strong>, <strong>Pass the assessment</strong>, <strong>Submit any required documents</strong>, and <strong>Get approval from the manager</strong>; checkboxes toggle directly without <strong>Clear</strong>/<strong>Done</strong> buttons and the menu closes on outside click).</span></div>
 <div class="step-item nested-step"><span class="step-num">2.</span><span><strong>Learning Resources Builder</strong>: Dynamic resource list (Video/YouTube, PDF Document, External Link, Article).</span></div>
-<div class="step-item nested-step"><span class="step-num">3.</span><span><strong>Assessment &amp; Questions Builder</strong>: Enable Assessment toggle, Assessment Title, Passing Score (<strong>Passing Score (%) *</strong> without any <strong>(Strictly &gt; 80% to pass)</strong> text), Max Assessment Attempts, Assessment Description, manual <strong>Total Marks</strong> numeric text field (<strong>Total Marks:</strong>, empty by default), and dynamic multi-format question builder with manual per-question <strong>Marks</strong> (empty by default), live mismatch validation against <strong>Total Marks</strong>, and bordered SVG-icon <strong>Duplicate</strong> / <strong>Delete</strong> buttons.</span></div>
+<div class="step-item nested-step"><span class="step-num">3.</span><span><strong>Training Recognition</strong>: Independent toggles for <strong>Certificate Generation</strong> (default OFF) and <strong>Add Skill to Employee Profile</strong> (default OFF), plus <strong>Require Reviewer / Manager Approval Before Completion</strong> (default OFF). When <strong>Add Skill to Employee Profile</strong> is ON, displays multi-select <strong>Select Skills</strong> (populated live from active <strong>Config &gt; Skills</strong>, displaying the selected skill names directly inside the dropdown box and as removable chips, with an inline <strong>+ Create New Skill in Config</strong> action) and <strong>Skill Level</strong> (populated from configured Skill Levels). Positioned above Section 4 so chosen skills drive the Assessment Question List.</span></div>
+<div class="step-item nested-step"><span class="step-num">4.</span><span><strong>Assessment &amp; Questions Builder</strong>: Enable Assessment toggle, Assessment Title, Passing Score (<strong>Passing Score (%) *</strong>), Max Assessment Attempts, Assessment Description, <strong>Total Marks</strong> numeric text field (<strong>Total Marks:</strong>, auto-synced when questions are generated from selected skills), <strong>↻ Sync Skill Questions</strong> button (when skills are selected), and dynamic multi-format question builder that automatically populates &amp; maintains skill-aligned questions (<strong>Skill: &lt;Name&gt; · &lt;Level&gt;</strong>) from selected Skills &amp; Skill Level while preserving manually added questions and supporting manual marks, live mismatch validation against <strong>Total Marks</strong>, and bordered SVG-icon <strong>Duplicate</strong> / <strong>Delete</strong> buttons.</span></div>
 <li class="">Header Actions: <strong>Auto-Fill Demo</strong>, <strong>Cancel</strong>, <strong>Publish</strong> (or <strong>Update &amp; Publish</strong> / <strong>Save Changes</strong>), and text-only <strong>Save as Draft</strong> dropdown option (no floppy disk icon).</li>
 <hr />
 <h3>Flow 4: Assign Training Slideover Modal Flow</h3>
@@ -361,18 +363,20 @@
 <li class="nested-li">Opening an <strong>Inactive</strong> programme shows an <strong>Inactive warning banner</strong> and disables all actions inside (Start Learning, Mark Complete, external resource links, assessment inputs/selects/checkboxes/radios, Submit Assessment, Retake Assessment, and certificate download).</li>
 <li class=""><strong>Training History (Employee Profile &gt; Training History)</strong>: Displays enrollment metrics (Total Enrolled, Completed &amp; Passed, In Progress, Certificates Earned), a compact <strong>+ Assign New Training</strong> button, and assigned training records.</li>
 <li class=""><strong>3-Tab Course Learning Layout</strong>:</li>
-<li class="nested-li"><strong>Tab 1 — 1. Overview</strong>: Progress bar, completed modules counter, course summary, learning objectives, and configured <strong>Completion Requirements</strong> checklist (e.g., Watch all required videos, Pass the assessment, Submit any required documents, Get approval from the manager — once all required steps are completed, the training is marked <strong>Completed</strong>).</li>
+<li class="nested-li"><strong>Tab 1 — 1. Overview</strong>: Progress bar, completed modules counter, course summary, learning objectives, configured <strong>Completion Requirements</strong> checklist (e.g., Watch all required videos, Pass the assessment, Submit any required documents, Get approval from the manager), and the <strong>Training Recognition</strong> summary card showing configured recognition rewards (Certificate / Awarded Skills + configured Skill Level) and status (<strong>Awarded Upon Completion</strong>, <strong>Pending Reviewer Approval</strong>, or <strong>Recognition Awarded ✓</strong>). Once all required steps and optional reviewer approval are satisfied, the training is marked <strong>Completed</strong>.</li>
 <li class="nested-li"><strong>Tab 2 — 2. Learning Resources</strong>: Resource checklist with external link openers and completion toggles (disabled if programme is Inactive).</li>
 <li class="nested-li"><strong>Tab 3 — 3. Assessment &amp; Questions</strong>:</li>
 <li class="nested-li"><strong>Header</strong>: Clean title <strong>3. Assessment &amp; Questions</strong> (without any Unlocked tag).</li>
 <li class="nested-li"><strong>When Assessment Toggle is OFF</strong>:</li>
 <li class="nested-li">Inside Tab 3: Renders a clean empty container ("No Assessment Configured — Assessment is disabled for this training programme. Learners achieve completion upon completing all configured requirements"). No questions, no scoring inputs, and no submit button are shown.</li>
-<li class="nested-li">Left Sidebar: Passing Assessment Score displays <strong>N/A (Assessment Disabled)</strong>. Action button displays <strong>Start Learning Modules →</strong> or <strong>Programme Completed ✓</strong> (never prompts to take an assessment).</li>
+<li class="nested-li">Left Sidebar: Passing Assessment Score displays <strong>N/A (Assessment Disabled)</strong>. Action button displays <strong>Start Learning Modules →</strong> or <strong>Training Completed ✓</strong> (never prompts to take an assessment).</li>
 <li class="nested-li">Tab 2 Navigation: Bottom button displays <strong>All Modules Completed ✓</strong>.</li>
 <li class="nested-li"><strong>When Assessment Toggle is ON</strong>:</li>
 <li class="nested-li">Inside Tab 3: Renders the exact question types, marks, and options configured by Admin/HR (without per-question Mandatory checkboxes or labels).</li>
-<li class="nested-li">Left Sidebar: Passing Assessment Score displays <strong>80%</strong> (clean percentage without extra strictly-greater-than hint). Action button displays <strong>Take Assessment →</strong> (or <strong>Download Certificate</strong> upon passing and completing all required steps).</li>
-<li class="nested-li">Result Status: Displays unified <strong>Completed</strong> badge when assessment passes and programme completes.</li>
+<li class="nested-li">Left Sidebar: Passing Assessment Score displays <strong>80%</strong> (clean percentage without extra strictly-greater-than hint). Action button displays <strong>Take Assessment →</strong> (or <strong>Download Certificate</strong> when Certificate Generation is enabled and all required steps are complete; hidden when Certificate Generation is OFF).</li>
+<li class="nested-li">Result &amp; Recognition Cards: Displays unified <strong>Completed</strong> badge when passed, plus <strong>Skills Added to Your Profile</strong> purple summary card when skills are awarded.</li>
+<li class="nested-li"><strong>View Assessment (HR / Manager Assignment Detail)</strong>: Even when an employee completes or fails an assessment (after attempts are submitted or exhausted), HR and Reporting Managers can open <strong>View Assignment &gt; View Assessment</strong> to inspect submitted answers and evaluation status.</li>
+<li class="nested-li"><strong>Employee Profile &gt; Skills Section</strong>: Reuses the existing <strong>Skills</strong> block inside the Employee Profile left sidebar card (no separate Training Skills tab). Displays skill name, current Skill Level badge, Training source tag (when acquired via Training), clickable <strong>Skill Award History</strong> modal showing progression &amp; Training sources, and authorized-only <strong>+ Manage</strong> skill modal (Admin/HR/Reporting Manager only; Employees cannot self-award or modify skills).</li>
 <hr />
 <h2>SECTION 2: FORM FIELD VALUES &amp; VALIDATION SPECIFICATIONS</h2>
 <h3>1. Create Training Programme Form (Training Management &gt; Create Programme)</h3>
@@ -445,36 +449,68 @@
 <li class="nested-li">Default value: Empty in newly added rows (Placeholder: <strong>https://...</strong>)</li>
 <li class="nested-li">Validation: Must be a valid web link starting with http:// or https://.</li>
 <hr />
-<h4>Section 3: Assessment &amp; Questions Builder</h4>
+<h4>Section 3: Training Recognition (Create / Edit Training)</h4>
+<li class=""><strong>Certificate Generation:</strong></li>
+<li class="nested-li">Mandatory: No</li>
+<li class="nested-li">Type: Toggle Switch (<strong>ON</strong> / <strong>OFF</strong>)</li>
+<li class="nested-li">Default value: <strong>OFF</strong> (<strong>false</strong>)</li>
+<li class="nested-li">Behavior: Independent toggle allowing Admin/HR/Reporting Managers to enable or disable automatic certificate generation per Training. When <strong>OFF</strong>, no certificate is issued and certificate download prompts are hidden upon completion. When <strong>ON</strong>, uses the verified certificate issuance workflow (<strong>TRN-YYYY-Serial</strong>) upon verified completion.</li>
+<li class=""><strong>Add Skill to Employee Profile:</strong></li>
+<li class="nested-li">Mandatory: No</li>
+<li class="nested-li">Type: Toggle Switch (<strong>ON</strong> / <strong>OFF</strong>)</li>
+<li class="nested-li">Default value: <strong>OFF</strong> (<strong>false</strong>)</li>
+<li class="nested-li">Behavior: Independent toggle. When <strong>OFF</strong>, skill configuration fields remain hidden and no skills are awarded on completion. When <strong>ON</strong>, renders <strong>Select Skills \</strong><em> and <strong>Skill Level \</strong></em>. Both Certificate Generation and Add Skill to Employee Profile work independently (Certificate Only, Skill Only, Both, or Neither). Positioned directly above <strong>Section 4: Assessment &amp; Questions</strong> so selected skills drive automatic question generation.</li>
+<li class=""><strong>Select Skills (Displayed when <strong>Add Skill to Employee Profile</strong> is ON):</strong></li>
+<li class="nested-li">Mandatory: Yes (<strong>*</strong>, when <strong>Add Skill to Employee Profile</strong> is <strong>ON</strong>)</li>
+<li class="nested-li">Type: Searchable Multi-select Checkbox Dropdown (with removable skill chips &amp; <strong>Done</strong> close button)</li>
+<li class="nested-li">Display Format: Trigger input directly renders the selected skill chips with individual <strong>×</strong> remove buttons inside the dropdown box itself (no duplicate chip strip below) when 1 or more skills are selected, and <strong>"Select Skills from Config &gt; Skills..."</strong> when empty.</li>
+<li class="nested-li">Data Source: Loaded dynamically from <strong>active</strong> skills in <strong>Config &gt; Skills</strong> (<strong>GET /api/config/skills</strong>); never hardcoded.</li>
+<li class="nested-li">Inline Creation: Authorised users can click <strong>+ Create New Skill in Config</strong> directly inside Section 3 to add a new skill via <strong>Config &gt; Skills</strong>; saving automatically selects and makes the skill available in the Training skill dropdown without leaving the form.</li>
+<li class="nested-li">Validation: At least 1 active skill must be selected; duplicate selections within the same Training are prevented; inactive skills from <strong>Config &gt; Skills</strong> are rejected on new configurations.</li>
+<li class=""><strong>Skill Level (Displayed when <strong>Add Skill to Employee Profile</strong> is ON):</strong></li>
+<li class="nested-li">Mandatory: Yes (<strong>*</strong>, when <strong>Add Skill to Employee Profile</strong> is <strong>ON</strong>)</li>
+<li class="nested-li">Type: Dropdown (Single Select)</li>
+<li class="nested-li">Allowed Values: Loaded dynamically from configured Skill Levels in <strong>Config &gt; Skills</strong> (<strong>Beginner</strong>, <strong>Intermediate</strong>, <strong>Advanced</strong> with ordering <strong>1 &lt; 2 &lt; 3</strong>). No separate skill-level master is created. Changing the selected <strong>Skill Level</strong> dynamically updates auto-generated skill questions in Section 4 to match the chosen proficiency level.</li>
+<li class="nested-li">Validation: Must select a valid configured skill level.</li>
+<li class=""><strong>Require Reviewer / Manager Approval Before Completion:</strong></li>
+<li class="nested-li">Mandatory: No</li>
+<li class="nested-li">Type: Toggle Switch (<strong>ON</strong> / <strong>OFF</strong>)</li>
+<li class="nested-li">Default value: <strong>OFF</strong> (<strong>false</strong>)</li>
+<li class="nested-li">Behavior: When <strong>ON</strong> (or when <strong>Get approval from the manager</strong> is selected in Completion Requirements), verified completion enters <strong>Under Review</strong> (<strong>managerApprovalStatus: Pending Approval</strong>) and holds Certificate Generation &amp; Skill Assignment until an authorised Admin, HR, or Reporting Manager approves via <strong>Approve Completion &amp; Issue Recognition</strong> (<strong>POST /api/training/approve-completion</strong>). Employees cannot approve their own completion (<strong>HTTP 403</strong>).</li>
+<hr />
+<h4>Section 4: Assessment &amp; Questions Builder</h4>
 <li class=""><strong>Enable Assessment Toggle:</strong></li>
 <li class="nested-li">Mandatory: Yes</li>
 <li class="nested-li">Type: Toggle Switch (Active / Inactive)</li>
 <li class="nested-li">Default value: Active</li>
+<li class=""><strong>Skill-Based Automatic Question Generation &amp; Sync (<strong>buildSkillBasedQuestions</strong>):</strong></li>
+<li class="nested-li">When <strong>Add Skill to Employee Profile</strong> is <strong>ON</strong> and skills are selected in <strong>Section 3: Training Recognition</strong>, <strong>Questions List</strong> automatically populates skill-aligned graded questions tailored to each selected skill (<strong>Skill: &lt;Name&gt; · &lt;Level&gt;</strong>) and the chosen <strong>Skill Level</strong> (<strong>Beginner</strong>, <strong>Intermediate</strong>, <strong>Advanced</strong>), setting clean assessment defaults (<strong>Final Training Assessment</strong>, Passing Score <strong>80</strong>, Max Attempts <strong>3</strong>) when blank.</li>
+<li class="nested-li">Supports curated question banks for all configured domain skills as well as dynamic contextual question generation for any newly created custom skill in <strong>Config &gt; Skills</strong>.</li>
+<li class="nested-li">Removing or adding skills updates only auto-generated skill questions while preserving manually added or duplicated custom questions (<strong>+ Add Question</strong> / <strong>Duplicate</strong>). Users can also click <strong>↻ Sync Skill Questions</strong> anytime to refresh skill-aligned questions.</li>
 <li class=""><strong>Assessment Title:</strong></li>
 <li class="nested-li">Mandatory: Yes (<strong>*</strong>, when Enable Assessment is Active)</li>
 <li class="nested-li">Type: Alphanumeric Text Input</li>
 <li class="nested-li">Max. Length: 120</li>
 <li class="nested-li">Min. Length: 3</li>
-<li class="nested-li">Default value: Final Training Assessment</li>
+<li class="nested-li">Default value: Final Training Assessment (auto-populated if blank when skill questions sync)</li>
 <li class=""><strong>Passing Score (%):</strong></li>
 <li class="nested-li">Mandatory: Yes (<strong>*</strong>, when Enable Assessment is Active)</li>
 <li class="nested-li">Type: Numeric (Integer)</li>
 <li class="nested-li">Max. Value: 100</li>
 <li class="nested-li">Min. Value: 1</li>
-<li class="nested-li">Default value: Empty on create (<strong>Auto-Fill Demo</strong> populates <strong>80</strong>)</li>
+<li class="nested-li">Default value: Empty on create (<strong>Auto-Fill Demo</strong> or skill-based sync populates <strong>80</strong> when blank)</li>
 <li class="nested-li">Validation: Benchmark passing percentage (clean label <strong>Passing Score (%) *</strong> without extra <strong>(Strictly &gt; 80% to pass)</strong> helper text).</li>
 <li class=""><strong>Total Marks (<strong>Questions List</strong> Header):</strong></li>
 <li class="nested-li">Mandatory: Yes (when Enable Assessment is Active)</li>
 <li class="nested-li">Type: Numeric Text Input (<strong>inputMode: numeric</strong>)</li>
-<li class="nested-li">Default value: Empty (<strong>""</strong>, placeholder: <strong>e.g. 100</strong>; never auto-calculated or auto-filled from question marks)</li>
-<li class="nested-li">Validation: Must be greater than <strong>0</strong>; user enters target Total Marks manually. Once all added questions have marks <strong>&gt; 0</strong> and <strong>questionsMarksSum !== Number(Total Marks)</strong>, an inline error (<strong>Total question marks (X) do not match Total Marks (Y).</strong>) is displayed and save/publish is blocked. When equal, a <strong>Matched ✓</strong> pill is displayed.</li>
+<li class="nested-li">Default value: Empty (<strong>""</strong>, placeholder: <strong>e.g. 100</strong>; automatically synchronized to the sum of question marks whenever skill-based questions are auto-generated/synced, displaying <strong>Matched ✓</strong>, while preserving manual overrides)</li>
+<li class="nested-li">Validation: Must be greater than <strong>0</strong>; if all added questions have marks <strong>&gt; 0</strong> and <strong>questionsMarksSum !== Number(Total Marks)</strong>, an inline error (<strong>Total question marks (X) do not match Total Marks (Y).</strong>) is displayed and save/publish is blocked. When equal, a <strong>Matched ✓</strong> pill is displayed.</li>
 <li class=""><strong>Max Assessment Attempts:</strong></li>
 <li class="nested-li">Mandatory: Yes (<strong>*</strong>, when Enable Assessment is Active)</li>
 <li class="nested-li">Type: Numeric (Integer)</li>
 <li class="nested-li">Max. Value: 10</li>
 <li class="nested-li">Min. Value: 1</li>
 <li class="nested-li">Default value: 3</li>
-<li class="nested-li">Validation: Maximum attempts permitted before supervisor intervention.</li>
 <li class=""><strong>Assessment Description:</strong></li>
 <li class="nested-li">Mandatory: No (Optional)</li>
 <li class="nested-li">Type: Multi-line Textarea</li>
@@ -485,11 +521,11 @@
 <li class="nested-li">Type: Alphanumeric / Multi-line Textarea</li>
 <li class="nested-li">Max. Length: 1000</li>
 <li class="nested-li">Min. Length: 5</li>
-<li class="nested-li">Default value: Empty</li>
+<li class="nested-li">Default value: Empty for manual questions; populated contextually for skill-based questions</li>
 <li class=""><strong>Question Type:</strong></li>
 <li class="nested-li">Mandatory: Yes (<strong>*</strong>)</li>
 <li class="nested-li">Type: Dropdown (Single Select)</li>
-<li class="nested-li">Default value: Single Selection (Radio) for newly added questions (default starter assessment includes 6 questions covering all 6 formats)</li>
+<li class="nested-li">Default value: Single Selection (Radio) for newly added questions</li>
 <li class="nested-li">Allowed Values:</li>
 <div class="step-item nested-step"><span class="step-num">1.</span><span>Short Text Answer</span></div>
 <div class="step-item nested-step"><span class="step-num">2.</span><span>Long Text Answer</span></div>
@@ -501,7 +537,7 @@
 <li class="nested-li">Mandatory: Yes</li>
 <li class="nested-li">Type: Numeric Text Input (<strong>inputMode: numeric</strong>)</li>
 <li class="nested-li">Min. Value: 1</li>
-<li class="nested-li">Default value: Empty (<strong>""</strong>, placeholder: <strong>0</strong> — marks are entered manually per question and never auto-filled or auto-distributed)</li>
+<li class="nested-li">Default value: <strong>5</strong> per auto-generated skill question; empty (<strong>""</strong>, placeholder: <strong>0</strong>) for manual <strong>+ Add Question</strong> entries</li>
 <li class="nested-li">Validation: Must be greater than 0; sum of all question marks must equal configured <strong>Total Marks</strong>.</li>
 <li class=""><strong>Mandatory Question:</strong></li>
 <li class="nested-li">Mandatory: Yes</li>
@@ -512,7 +548,9 @@
 <li class="nested-li"><strong>Short Text Answer (<strong>Configured Accepted Answers (Evaluated case-insensitively with trimmed whitespace):</strong>)</strong>: Minimum 1 accepted keyword/phrase required (<strong>Enter accepted correct answer...</strong>, without extra example hints).</li>
 <li class="nested-li"><strong>True / False</strong>: Clean <strong>Answer Option:</strong> / Correct Answer selection (<strong>True</strong> or <strong>False</strong>).</li>
 <li class="nested-li"><strong>Long Text Answer</strong>: Expected Answer / Evaluation Reference summary for manual reviewer grading.</li>
-<li class="nested-li"><strong>Question Actions</strong>: Clean bordered <strong>Duplicate</strong> and <strong>Delete</strong> pill buttons with SVG icons (<strong>8px</strong> gap). (Question reorder buttons are removed.)</li>
+<li class="nested-li"><strong>Question Actions</strong>: Clean bordered <strong>Duplicate</strong> and <strong>Delete</strong> pill buttons with SVG icons (<strong>8px</strong> gap). Duplicating a skill-generated question creates a custom copy preserved across skill updates. (Question reorder buttons are removed.)</li>
+<li class=""><strong>Persistence:</strong></li>
+<li class="nested-li">Persists <strong>certificateGeneration</strong>, <strong>addSkillToProfile</strong>, <strong>selectedSkillIds</strong>, <strong>skillLevel</strong>, and <strong>reviewerApprovalRequired</strong> across Create, Edit, Save as Draft, Publish, and full page reload (<strong>POST /api/training/programmes</strong> &amp; <strong>GET /api/training/programmes</strong>).</li>
 <hr />
 <h3>2. Assign Training Form (Assignments &gt; + Assign Training)</h3>
 <li class=""><strong>Training Programme:</strong></li>
@@ -625,6 +663,18 @@
 <li class="nested-li"><strong>Description:</strong> Optional Multi-line Textarea. Default value on save if blank: "New training category description."</li>
 <li class="nested-li"><strong>Status:</strong> Mandatory, Toggle Switch, default Active.</li>
 <li class="nested-li"><strong>Quick Action:</strong> Auto-Fill button populates sample category details.</li>
+<h4>Skills &amp; Skill Levels Configuration (<strong>Config &gt; Skills</strong>)</h4>
+<li class=""><strong>Configured Skill Levels (Ordered Progression Hierarchy):</strong></li>
+<li class="nested-li">Stored centrally (<strong>skillLevels</strong> in <strong>GET /api/config/skills</strong>) and reused across Training Recognition and Employee Profiles without creating duplicate level masters:</li>
+<div class="step-item nested-step"><span class="step-num">1.</span><span><strong>Beginner</strong> (Order: <strong>1</strong>)</span></div>
+<div class="step-item nested-step"><span class="step-num">2.</span><span><strong>Intermediate</strong> (Order: <strong>2</strong>)</span></div>
+<div class="step-item nested-step"><span class="step-num">3.</span><span><strong>Advanced</strong> (Order: <strong>3</strong>)</span></div>
+<li class=""><strong>Skills Table Columns:</strong> <strong>Skill Name</strong>, <strong>Description</strong>, <strong>Status</strong> (<strong>Active</strong> / <strong>Inactive</strong> toggle pill), <strong>Created By</strong>, <strong>Actions</strong> (<strong>Edit</strong>).</li>
+<li class=""><strong>Add / Edit Skill Modal (<strong>+ Add Skill</strong>):</strong></li>
+<li class="nested-li"><strong>Skill Name:</strong> Mandatory (<strong>*</strong>), Text Input. Validation: Case-insensitive uniqueness across master skills; duplicates rejected (<strong>HTTP 400</strong>).</li>
+<li class="nested-li"><strong>Description:</strong> Optional Multi-line Textarea.</li>
+<li class="nested-li"><strong>Status:</strong> Active / Inactive toggle (default Active). Only <strong>Active</strong> skills appear for selection in new Training configurations; deactivating a skill prevents future selection without affecting already-awarded Employee Profile skills.</li>
+<li class=""><strong>Authorization:</strong> Restricted to Admin, HR, and authorised Reporting Managers (<strong>403 Forbidden</strong> for Employee role).</li>
 <hr />
 <h3>5. Role-Based Access Control (Config &gt; Roles)</h3>
 <li class=""><strong>Roles Table Columns:</strong> No., Role, Status, Employees, Remarks, Created By &amp; Date, Modified By, Actions (View, Edit, Delete).</li>
@@ -659,14 +709,18 @@
 <li class="nested-li">Far-right column: Actions header and eye icon buttons aligned to the right directly beneath All Records.</li>
 <hr />
 <h2>SECTION 3: TRAINING LIFECYCLE &amp; STATE TRANSITION FLOW</h2>
-<div class="step-item"><span class="step-num">1.</span><span><strong>Assigned</strong>: Training is assigned to an Employee, Department, or Designation.</span></div>
+<div class="step-item"><span class="step-num">1.</span><span><strong>Assigned</strong>: Training is assigned to an Employee, Department, Designation, or Business Unit.</span></div>
 <div class="step-item"><span class="step-num">2.</span><span><strong>In Progress</strong>: Learner opens the assigned course and begins reviewing the learning resources.</span></div>
-<div class="step-item"><span class="step-num">3.</span><span><strong>Completion Path (Assessment Disabled)</strong>: Once 100% of mandatory learning modules are marked complete, status transitions directly to <strong>Completed</strong>.</span></div>
+<div class="step-item"><span class="step-num">3.</span><span><strong>Completion Path (Assessment Disabled)</strong>: Once 100% of mandatory learning modules (and any required document uploads) are completed, status transitions directly to <strong>Completed</strong> (or <strong>Under Review</strong> if <strong>Require Reviewer / Manager Approval</strong> is ON).</span></div>
 <div class="step-item"><span class="step-num">4.</span><span><strong>Completion Path (Assessment Enabled)</strong>: Learner submits the assessment (<strong>Assessment Taken</strong>).</span></div>
-<li class="nested-li"><strong>Pass</strong>: When score is strictly greater than 80% passing threshold, status transitions to <strong>Completed</strong>.</li>
-<li class="nested-li"><strong>Retake</strong>: When score is 80% or less and attempts remain, status returns to <strong>In Progress</strong> for another attempt.</li>
-<div class="step-item"><span class="step-num">5.</span><span><strong>Certificate Issued</strong>: Upon reaching <strong>Completed</strong>, the system generates the authenticated certificate signed by <strong>Khushi Bhatt, Head of HR</strong>.</span></div>
-<div class="step-item"><span class="step-num">6.</span><span><strong>Overdue</strong>: If the target due date passes without completing modules or passing the assessment, status becomes <strong>Overdue</strong>.</span></div>
+<li class="nested-li"><strong>Pass</strong>: When score meets/exceeds passing threshold and all other configured requirements are met, status transitions to <strong>Completed</strong> (or <strong>Under Review</strong> if reviewer approval is pending).</li>
+<li class="nested-li"><strong>Retake</strong>: When score fails and attempts remain, status returns to <strong>In Progress</strong> for another attempt (no certificate or skill is awarded on fail).</li>
+<div class="step-item"><span class="step-num">5.</span><span><strong>Reviewer / Manager Approval (<strong>Under Review -&gt; Approved</strong>)</strong>: When <strong>reviewerApprovalRequired</strong> is ON (or <strong>Get approval from the manager</strong> is configured), an authorised Admin, HR, or Reporting Manager reviews and clicks <strong>Approve Completion &amp; Issue Recognition</strong> (<strong>POST /api/training/approve-completion</strong>). Employees cannot approve their own completion (<strong>HTTP 403</strong>).</span></div>
+<div class="step-item"><span class="step-num">6.</span><span><strong>Training Recognition Execution (Verified Completion Only)</strong>: Once <strong>verifyTrainingCompletionEligibility()</strong> confirms all mandatory resources, assessment pass (if enabled), documents, and reviewer approval (if enabled) are complete:</span></div>
+<li class="nested-li">If <strong>Certificate Generation</strong> is <strong>ON</strong>: generates authenticated certificate (<strong>TRN-YYYY-Serial</strong>) signed by <strong>Khushi Bhatt, Head of HR</strong>.</li>
+<li class="nested-li">If <strong>Add Skill to Employee Profile</strong> is <strong>ON</strong>: assigns configured <strong>selectedSkillIds</strong> at configured <strong>skillLevel</strong> to the employee profile via duplicate-safe &amp; level-upgrade logic and writes <strong>skillAwardHistory</strong>.</li>
+<li class="nested-li">Both recognition mechanisms run completely independently (<strong>Neither</strong>, <strong>Certificate Only</strong>, <strong>Skills Only</strong>, or <strong>Both</strong>).</li>
+<div class="step-item"><span class="step-num">7.</span><span><strong>Overdue</strong>: If the target due date passes without completing modules or passing the assessment, status becomes <strong>Overdue</strong>.</span></div>
 <hr />
 <h2>SECTION 4: ASSESSMENT &amp; PORTAL BEHAVIORAL SPECIFICATIONS</h2>
 <h3>4.1 Assessment Toggle Behavior Matrix</h3>
@@ -742,12 +796,96 @@
 <div class="step-item nested-step"><span class="step-num">7.</span><span><strong>Actions</strong> (Right-aligned View and Edit action buttons)</span></div>
 <li class=""><strong>Programme Detail View (Management)</strong>:</li>
 <li class="nested-li"><strong>Left Sidebar</strong>: Displays publication badge (<strong>Published</strong> / <strong>Draft</strong>) on the top-left and the <strong>Active / Inactive</strong> toggle switch on the top-right, followed by Programme Title, Category, Difficulty Level, <strong>Assign Programme</strong> button, and core summary metrics (<strong>Expected Duration</strong>, <strong>Passing Assessment Score</strong> as clean <strong>80%</strong>, <strong>Department</strong>, <strong>Enrolled Learners</strong>).</li>
-<li class="nested-li"><strong>General Info Tab (Right Panel)</strong>: Displays all programme details not shown on the left sidebar — <strong>Learning Objectives</strong>, <strong>Completion Requirements &amp; Assessment Criteria</strong>, and the <strong>Assessment &amp; Questions</strong> section (Assessment Enabled/Disabled state, Assessment Title, Description, Total Marks, Max Attempts, and the full Questions List with question type, marks, and configured options/answers when present) cleanly without duplicating the sidebar summary details.</li>
+<li class="nested-li"><strong>General Info Tab (Right Panel)</strong>: Displays all programme details not shown on the left sidebar — <strong>Learning Objectives</strong>, <strong>Completion Requirements &amp; Assessment Criteria</strong>, the <strong>Training Recognition</strong> summary card (Certificate Generation state, Add Skill to Employee Profile state, Reviewer Approval requirement, Awarded Skill Level, and configured Skills chips), and the <strong>Assessment &amp; Questions</strong> section (Assessment Enabled/Disabled state, Assessment Title, Description, Total Marks, Max Attempts, and the full Questions List with question type, marks, and configured options/answers when present) cleanly without duplicating the sidebar summary details.</li>
 <li class="nested-li"><strong>Curriculum &amp; Modules Tab</strong>: Displays learning resources in a structured table (heading <strong>Curriculum &amp; Modules</strong>, <strong>+ Add Resource</strong> button, and columns Module, Resource Title, Type, Resource URL, Action with eye View icon linking directly to the resource).</li>
 <li class="nested-li"><strong>Enrolled Employees &amp; Status History Tabs</strong>: Tracks enrolled learners (clean full-width learner search bar without extra <strong>ENROLLED EMPLOYEES</strong> count heading) with exact count consistency against the Training Management listing, plus audit history for <strong>Active</strong> / <strong>Inactive</strong> availability transitions (clean full-width status history search bar without redundant <strong>Availability Status Audit History</strong> title or <strong>Programme ID</strong> header).</li>
 <li class="nested-li"><strong>Uniform Employee Column Standard</strong>: Across all employee-centric tables (Employees Directory, Assignments, Programme Detail &gt; Enrolled Employees, Progress, and Certificates), the employee identity column uses the uniform <strong>Employee Name</strong> label (<strong>Employee Name ↕</strong> where sortable).</li>
 <h3>4.5 System Typography Standard</h3>
 <li class=""><strong>Uniform Sans-Serif Typography</strong>: Every text element across the entire system (headings, tables, labels, duration metrics, version badges, IDs, percentages, URLs, modals, and certificates) consistently uses the exact same <strong>Sans-Serif</strong> font family (<strong>--font-sans</strong>), with no monospace or serif font overrides.</li>
+<hr />
+<h3>4.6 Training Recognition, Automatic Skill Assignment &amp; Skill History Specifications</h3>
+<h4>Recognition Combination Matrix</h4>
+<div class="table-responsive"><table>
+<thead><tr>
+<th>Certificate Generation</th>
+<th>Add Skill to Employee Profile</th>
+<th>Outcome on Verified Completion</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>OFF</strong></td>
+<td><strong>OFF</strong></td>
+<td>Training marked Completed; <strong>neither</strong> certificate nor skills awarded</td>
+</tr>
+<tr>
+<td><strong>ON</strong></td>
+<td><strong>OFF</strong></td>
+<td>Only <strong>Certificate</strong> issued; no skills added</td>
+</tr>
+<tr>
+<td><strong>OFF</strong></td>
+<td><strong>ON</strong></td>
+<td>Only configured <strong>Skills</strong> added/upgraded on Employee Profile; no certificate issued</td>
+</tr>
+<tr>
+<td><strong>ON</strong></td>
+<td><strong>ON</strong></td>
+<td><strong>Both</strong> Certificate issuance and Skill assignment execute independently</td>
+</tr>
+</tbody></table></div>
+<h4>Existing Skill Duplicate Handling &amp; Level Progression Matrix</h4>
+<p>Before awarding any skill (<strong>processTrainingRecognitionOnCompletion</strong>), the backend checks the employee's canonical skill records (<strong>canonicalEmployeeSkillKey</strong>) and compares rank via <strong>getSkillLevelRank</strong> (<strong>Beginner=1 &lt; Intermediate=2 &lt; Advanced=3</strong>):</p>
+<div class="table-responsive"><table>
+<thead><tr>
+<th>Existing Employee Level</th>
+<th>Newly Awarded Level</th>
+<th>Final Profile Level</th>
+<th>Outcome &amp; Record Behavior</th>
+</tr></thead><tbody>
+<tr>
+<td><em>(Not Present)</em></td>
+<td>Any (e.g. <strong>Beginner</strong>)</td>
+<td><strong>Beginner</strong></td>
+<td>Creates single new skill record linked to source Training</td>
+</tr>
+<tr>
+<td><strong>Beginner</strong></td>
+<td><strong>Intermediate</strong></td>
+<td><strong>Intermediate</strong></td>
+<td>Updates existing record (<strong>upgraded</strong>); no duplicate created</td>
+</tr>
+<tr>
+<td><strong>Intermediate</strong></td>
+<td><strong>Advanced</strong></td>
+<td><strong>Advanced</strong></td>
+<td>Updates existing record (<strong>upgraded</strong>); no duplicate created</td>
+</tr>
+<tr>
+<td><strong>Advanced</strong></td>
+<td><strong>Beginner</strong></td>
+<td><strong>Advanced</strong></td>
+<td>Retains higher existing level (<strong>retained</strong>); <strong>no downgrade</strong></td>
+</tr>
+<tr>
+<td><strong>Intermediate</strong></td>
+<td><strong>Intermediate</strong></td>
+<td><strong>Intermediate</strong></td>
+<td>Retains existing level (<strong>retained</strong>) and appends Training source</td>
+</tr>
+</tbody></table></div>
+<h4>Skill Award History Audit Schema (<strong>skillAwardHistory</strong>)</h4>
+<p>Every skill award or level evaluation stores an immutable audit entry with:</p>
+<div class="step-item"><span class="step-num">1.</span><span><strong>employeeId</strong> (Canonical Employee Identifier, e.g. <strong>CO-5039</strong>)</span></div>
+<div class="step-item"><span class="step-num">2.</span><span><strong>skillId</strong> &amp; <strong>skillName</strong></span></div>
+<div class="step-item"><span class="step-num">3.</span><span><strong>awardedSkillLevel</strong>, <strong>previousLevel</strong>, <strong>finalLevel</strong>, <strong>outcome</strong> (<strong>added</strong> / <strong>upgraded</strong> / <strong>retained</strong>)</span></div>
+<div class="step-item"><span class="step-num">4.</span><span><strong>sourceTrainingId</strong> &amp; <strong>sourceTrainingName</strong></span></div>
+<div class="step-item"><span class="step-num">5.</span><span><strong>awardedDate</strong>, <strong>createdDate</strong>, <strong>updatedDate</strong></span></div>
+<h4>Training Deactivation, Archive, Edit &amp; Authorization Safeguards</h4>
+<li class=""><strong>Draft Progress Visibility</strong>: Trainings with <strong>Draft</strong> publication status hide progress percentages on Progress/Training listings until published.</li>
+<li class=""><strong>Preservation on Deactivation / Archival / Edit</strong>: Deactivating, archiving, or editing a Training's recognition configuration after skills have been awarded <strong>never</strong> removes or downgrades previously awarded Employee Profile skills or <strong>skillAwardHistory</strong>.</li>
+<li class=""><strong>Server-Side RBAC &amp; Eligibility Enforcement</strong>:</li>
+<li class="nested-li"><strong>POST /api/training/employee-course-progress</strong>: Validates completion eligibility server-side (<strong>verifyTrainingCompletionEligibility</strong>) before issuing certificates or skills; rejects Employee self-approval (<strong>managerApprovalStatus: Approved</strong>) with <strong>HTTP 403</strong>.</li>
+<li class="nested-li"><strong>POST /api/training/approve-completion</strong>: Authorised for Admin, HR, and Reporting Managers only (<strong>HTTP 403</strong> for Employees).</li>
+<li class="nested-li"><strong>POST /api/config/skills</strong> &amp; <strong>POST /api/employee/skills</strong>: Authorised for Admin, HR, and Reporting Managers only (<strong>HTTP 403</strong> for Employees — employees cannot manually award or modify skills).</li>
   </main>
 </body>
 </html>
