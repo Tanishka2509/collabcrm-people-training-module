@@ -4010,7 +4010,8 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
   let configuredSkillLevel = (liveProg?.skillLevel ?? c.skillLevel) || "";
   let [awardFeedback, setAwardFeedback] = (0,l.useState)(null);
   let [activeAssessmentOpen, setActiveAssessmentOpen] = (0,l.useState)(!1);
-  let [isEditingAssessment, setIsEditingAssessment] = (0,l.useState)(!1);
+  let isProfileHistoryView = Boolean(e?.fromProfile);
+  let [isEditingAssessment, setIsEditingAssessment] = (0,l.useState)(!isProfileHistoryView);
 
   let doneCount = resources.filter(res => completedResources[res.id]).length;
   let allResourcesDone = resources.length > 0 && doneCount === resources.length;
@@ -4376,10 +4377,10 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
           (0,P.jsx)("p",{className:"text-xs text-slate-500 max-w-md mx-auto",children:"Assessment is disabled for this training. Employees achieve completion upon reviewing all learning resources."})
         ]}) : !activeAssessmentOpen ? (0,P.jsxs)("div",{className:"space-y-4 animate-in fade-in",children:[
           (0,P.jsxs)("div",{
-            onClick:()=>{setIsEditingAssessment(!1);setActiveAssessmentOpen(!0)},
+            onClick:()=>{setIsEditingAssessment(!isProfileHistoryView);setActiveAssessmentOpen(!0)},
             role:"button",
             tabIndex:0,
-            onKeyDown:ev=>{if(ev.key==="Enter"||ev.key===" "){setIsEditingAssessment(!1);setActiveAssessmentOpen(!0)}},
+            onKeyDown:ev=>{if(ev.key==="Enter"||ev.key===" "){setIsEditingAssessment(!isProfileHistoryView);setActiveAssessmentOpen(!0)}},
             className:"bg-white border border-slate-200 hover:border-blue-300 rounded-xl p-5 shadow-sm hover:shadow transition-all cursor-pointer space-y-3",
             children:[
               (0,P.jsxs)("div",{className:"flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3",children:[
@@ -4396,7 +4397,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
                 ]}),
                 (0,P.jsxs)("div",{className:"flex items-center gap-2 shrink-0",children:[
                   (0,P.jsxs)("span",{className:"bg-blue-50 text-blue-700 border border-blue-200 font-bold px-2.5 py-1 rounded-lg text-xs",children:[questions.length, " Questions • ", totalAssessmentMarks, " Marks"]}),
-                  (0,P.jsx)("button",{type:"button",onClick:ev=>{ev.stopPropagation();setIsEditingAssessment(!1);setActiveAssessmentOpen(!0)},className:"bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold shadow-xs transition-colors cursor-pointer",children:(submittedState && latestResult) ? "View Result →" : "Open Assessment →"})
+                  (0,P.jsx)("button",{type:"button",onClick:ev=>{ev.stopPropagation();setIsEditingAssessment(!isProfileHistoryView);setActiveAssessmentOpen(!0)},className:"bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold shadow-xs transition-colors cursor-pointer",children:(submittedState && latestResult) ? "View Result →" : "Open Assessment →"})
                 ]})
               ]}),
               (0,P.jsxs)("div",{className:"flex flex-wrap items-center gap-4 text-xs text-slate-600",children:[
@@ -4455,11 +4456,11 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
           let markedAnswers=(submittedState && latestResult)?deriveMarkedAnswers():userAnswers;
           return(0,P.jsxs)("div",{className:"space-y-6 animate-in fade-in",children:[
             (0,P.jsxs)("div",{className:"flex items-center justify-between gap-3 flex-wrap",children:[
-              (0,P.jsxs)("button",{type:"button",onClick:()=>{setIsEditingAssessment(!1);setActiveAssessmentOpen(!1)},className:"inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-300 px-3 py-1.5 rounded-lg shadow-xs hover:bg-slate-50 transition-colors cursor-pointer",children:[
+              (0,P.jsxs)("button",{type:"button",onClick:()=>{setIsEditingAssessment(!isProfileHistoryView);setActiveAssessmentOpen(!1)},className:"inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-300 px-3 py-1.5 rounded-lg shadow-xs hover:bg-slate-50 transition-colors cursor-pointer",children:[
                 (0,P.jsx)("span",{children:"←"}),
                 (0,P.jsx)("span",{children:"Back to Assessments"})
               ]}),
-              !(submittedState && latestResult) && !attemptsExhausted && !isCourseInactive && (
+              isProfileHistoryView && !(submittedState && latestResult) && !attemptsExhausted && !isCourseInactive && (
                 !isEditingAssessment
                   ? (0,P.jsx)("button",{type:"button",onClick:()=>setIsEditingAssessment(!0),className:"inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 px-4 py-1.5 rounded-lg shadow-xs transition-colors cursor-pointer",children:"Edit"})
                   : (0,P.jsx)("button",{type:"button",onClick:()=>setIsEditingAssessment(!1),className:"inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 px-3.5 py-1.5 rounded-lg shadow-xs transition-colors cursor-pointer",children:"Cancel Edit"})
