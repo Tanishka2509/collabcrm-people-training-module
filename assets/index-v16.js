@@ -1214,6 +1214,27 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
     });
     return base;
   });
+  let defaultSkillLv = n?.skillLevel || (configuredSkillLevels[0]?.name || "Beginner");
+  let[skillRows, setSkillRows] = (0,l.useState)(() => {
+    let ids = Array.isArray(n?.selectedSkillIds) ? n.selectedSkillIds.filter(Boolean) : [];
+    let lvMap = n?.skillLevels && typeof n.skillLevels === "object" ? n.skillLevels : {};
+    if (ids.length === 0) return [{ skillId: "", skillLevel: defaultSkillLv }];
+    return ids.map(sid => ({ skillId: sid, skillLevel: lvMap[sid] || defaultSkillLv }));
+  });
+  let syncSkillRows = (nextRows) => {
+    let normalized = nextRows.length > 0 ? nextRows : [{ skillId: "", skillLevel: defaultSkillLv }];
+    setSkillRows(normalized);
+    let ids = [];
+    let map = {};
+    normalized.forEach(r => {
+      if (r.skillId && !ids.includes(r.skillId)) {
+        ids.push(r.skillId);
+        map[r.skillId] = r.skillLevel || defaultSkillLv;
+      }
+    });
+    setSelectedSkillIds(ids);
+    setSkillLevelsMap(map);
+  };
   let[reviewerApprovalRequired, setReviewerApprovalRequired] = (0,l.useState)(Boolean(n?.reviewerApprovalRequired));
   let[skillDropdownOpen, setSkillDropdownOpen] = (0,l.useState)(false);
   let[skillSearch, setSkillSearch] = (0,l.useState)("");
@@ -1833,53 +1854,59 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
           (canManageSkills !== !1 && onSaveSkill) && (0,P.jsx)("button",{type:"button",onClick:()=>{setQuickSkillErr("");setQuickSkillName("");setQuickSkillDesc("");setShowQuickSkillModal(true);},className:"text-xs font-bold px-3 py-1.5 rounded-lg border border-purple-200 bg-white text-purple-700 hover:bg-purple-50 transition-colors cursor-pointer",children:"Add New Skill"})
         ]}),
 
-        (0,P.jsxs)("div",{className:"grid grid-cols-1 gap-4 items-start text-xs",children:[
-          // Select Skills (Multi-select dropdown populated from Administration > Master Data > Skills)
-          (0,P.jsxs)("div",{className:"space-y-2 relative",children:[
-            (0,P.jsxs)("label",{className:"inline-flex items-center gap-1.5 font-semibold text-slate-700",children:[
-              (0,P.jsx)("span",{children:"Select Skills"}),
-              (0,P.jsx)("span",{className:"text-rose-500",children:"*"}),
-              (0,P.jsx)(InfoTip,{text:"Choose one or more skills from Administration > Master Data > Skills."})
-            ]}),
-            (0,P.jsxs)("button",{type:"button",onClick:()=>setSkillDropdownOpen(!skillDropdownOpen),className:"w-full bg-white border border-purple-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-800 flex items-center justify-between gap-2 focus:outline-none focus:ring-2 focus:ring-purple-500/20 cursor-pointer text-left",children:[
-              (0,P.jsx)("span",{className:"truncate "+(selectedSkillIds.length===0?"text-slate-400 font-normal":"text-slate-800"),children:selectedSkillIds.length===0?"Select Skills...":selectedSkillNames.length<=2?selectedSkillNames.join(", "):(selectedSkillNames.slice(0,2).join(", ")+" (+"+(selectedSkillNames.length-2)+" more)")}),
-              (0,P.jsx)(re,{className:"w-4 h-4 text-purple-500 shrink-0 transition-transform "+(skillDropdownOpen?"rotate-180":"")})
-            ]}),
-            skillDropdownOpen && (0,P.jsxs)("div",{className:"absolute left-0 right-0 top-full mt-1 bg-white border border-purple-200 rounded-xl shadow-xl z-30 overflow-hidden",children:[
-              (0,P.jsx)("div",{className:"p-2 border-b border-purple-100 bg-purple-50/40",children:
-                (0,P.jsx)("input",{type:"text",value:skillSearch,onChange:ev=>setSkillSearch(ev.target.value),placeholder:"Search skills...",className:"w-full bg-white border border-purple-200 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-purple-500/20"})
-              }),
-              (0,P.jsx)("div",{className:"max-h-48 overflow-y-auto divide-y divide-slate-100",children:(()=>{
-                let inactiveSelected = selectedSkillIds.map(sid => allSkillsMaster.find(m => m.id === sid && m.active === !1)).filter(Boolean);
-                let combined = [...inactiveSelected, ...activeSkills];
-                let q = skillSearch.trim().toLowerCase();
-                let list = q ? combined.filter(sk => sk.name.toLowerCase().includes(q)) : combined;
-                if(list.length===0) return (0,P.jsx)("div",{className:"p-3 text-center text-slate-400 text-xs",children:"No matching skills found."});
-                return list.map(sk => {
-                  let checked = selectedSkillIds.includes(sk.id);
-                  return (0,P.jsxs)("div",{onClick:()=>{setSelectedSkillIds(prev => {if(prev.includes(sk.id)) return prev.filter(id => id !== sk.id); setSkillLevelsMap(m => m[sk.id] ? m : {...m, [sk.id]: awardSkillLevel || (configuredSkillLevels[0]?.name || "Beginner")}); return [...prev, sk.id];});},className:"px-3 py-2 flex items-center justify-between hover:bg-purple-50/50 cursor-pointer text-xs",children:[
-                    (0,P.jsx)("span",{className:checked?"font-bold text-purple-700":"font-medium text-slate-700",children:sk.name + (sk.active === !1 ? " (Inactive)" : "")}),
-                    (0,P.jsx)("span",{className:"w-4 h-4 rounded border flex items-center justify-center text-[10px] font-bold "+(checked?"bg-purple-600 border-purple-600 text-white":"border-slate-300 bg-white"),children:checked?"✓":""})
-                  ]},sk.id);
-                });
-              })()}),
-              (0,P.jsxs)("div",{className:"px-3 py-2 border-t border-purple-100 bg-slate-50 flex items-center justify-between text-[11px]",children:[
-                (0,P.jsx)("button",{type:"button",onClick:()=>setSelectedSkillIds([]),className:"text-slate-500 hover:text-rose-600 font-semibold cursor-pointer",children:"Clear"}),
-                (0,P.jsx)("button",{type:"button",onClick:()=>setSkillDropdownOpen(false),className:"text-purple-700 font-bold hover:underline cursor-pointer",children:"Done"})
+        (0,P.jsx)("div",{className:"space-y-3 text-xs",children:
+          skillRows.map((row, rowIdx) => {
+            let takenByOthers = new Set(skillRows.filter((_, i) => i !== rowIdx).map(r => r.skillId).filter(Boolean));
+            let rowAvailableSkills = activeMasterSkills.filter(sk => sk.id === row.skillId || !takenByOthers.has(sk.id));
+            let isLastRow = rowIdx === skillRows.length - 1;
+            return (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-12 gap-3 items-end",children:[
+              (0,P.jsxs)("div",{className:"md:col-span-5",children:[
+                (0,P.jsxs)("label",{className:"flex items-center gap-1.5 text-xs font-semibold text-slate-700 mb-1.5",children:["Select Skill ",(0,P.jsx)("span",{className:"text-rose-500",children:"*"}),(0,P.jsx)(InfoTip,{text:"Choose one skill to award when the employee completes this training."})]}),
+                (0,P.jsxs)("select",{
+                  value:row.skillId,
+                  onChange:e => {
+                    let nextId = e.target.value;
+                    let next = skillRows.map((r, i) => i === rowIdx ? { ...r, skillId: nextId } : r);
+                    syncSkillRows(next);
+                  },
+                  className:"w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs bg-white font-medium text-slate-800",
+                  children:[
+                    (0,P.jsx)("option",{value:"",children:"Select a skill..."}),
+                    rowAvailableSkills.map(sk => (0,P.jsx)("option",{value:sk.id,children:sk.name},sk.id))
+                  ]
+                })
+              ]}),
+              (0,P.jsxs)("div",{className:"md:col-span-5",children:[
+                (0,P.jsxs)("label",{className:"flex items-center gap-1.5 text-xs font-semibold text-slate-700 mb-1.5",children:["Skill Level ",(0,P.jsx)("span",{className:"text-rose-500",children:"*"}),(0,P.jsx)(InfoTip,{text:"Select the proficiency level awarded for this skill."})]}),
+                (0,P.jsx)("select",{
+                  value:row.skillLevel || defaultSkillLv,
+                  onChange:e => {
+                    let nextLv = e.target.value;
+                    let next = skillRows.map((r, i) => i === rowIdx ? { ...r, skillLevel: nextLv } : r);
+                    syncSkillRows(next);
+                  },
+                  className:"w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs bg-white font-medium text-slate-800",
+                  children:configuredSkillLevels.map(lv => (0,P.jsx)("option",{value:lv.name,children:lv.name},lv.id || lv.name))
+                })
+              ]}),
+              (0,P.jsxs)("div",{className:"md:col-span-2 flex items-center gap-2",children:[
+                isLastRow && (0,P.jsx)("button",{
+                  type:"button",
+                  onClick:() => syncSkillRows([...skillRows, { skillId: "", skillLevel: defaultSkillLv }]),
+                  className:"flex-1 px-3 py-2.5 rounded-xl bg-purple-600 text-white hover:bg-purple-700 text-xs font-semibold transition-colors whitespace-nowrap",
+                  children:"+ Add"
+                }),
+                skillRows.length > 1 && (0,P.jsx)("button",{
+                  type:"button",
+                  title:"Remove skill row",
+                  onClick:() => syncSkillRows(skillRows.filter((_, i) => i !== rowIdx)),
+                  className:"px-3 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-500 hover:text-rose-600 hover:border-rose-200 text-xs font-semibold transition-colors",
+                  children:"✕"
+                })
               ]})
-            ]}),
-            selectedSkillIds.length>0 && (0,P.jsx)("div",{className:"flex flex-wrap gap-2 pt-1",children:selectedSkillIds.map(sid => {
-              let skObj = allSkillsMaster.find(m => m.id === sid);
-              let label = skObj ? skObj.name : sid;
-              let curLv = skillLevelsMap[sid] || awardSkillLevel || (configuredSkillLevels[0]?.name || "Beginner");
-              return (0,P.jsxs)("div",{className:"inline-flex items-center gap-2 px-2.5 py-1 rounded-lg bg-white border border-purple-200 text-purple-800 text-xs font-semibold shadow-sm",children:[
-                (0,P.jsx)("span",{children:label}),
-                (0,P.jsx)("select",{value:curLv,"aria-label":"Skill level for "+label,onChange:ev=>setSkillLevelsMap(prev=>({...prev,[sid]:ev.target.value})),className:"bg-purple-50 border border-purple-200 rounded px-2 py-0.5 text-[11px] font-bold text-purple-700 focus:outline-none focus:ring-1 focus:ring-purple-500 cursor-pointer",children:configuredSkillLevels.map(lv=>(0,P.jsx)("option",{value:lv.name,children:lv.name},lv.id||lv.name))}),
-                (0,P.jsx)("button",{type:"button",onClick:()=>setSelectedSkillIds(prev => prev.filter(id => id !== sid)),className:"text-purple-400 hover:text-rose-600 font-bold cursor-pointer",title:"Remove "+label,children:"×"})
-              ]},sid);
-            })})
-          ]})
-        ]})
+            ]},"skill-row-" + rowIdx);
+          })
+        })
       ]})
     ]}),
 
@@ -2105,7 +2132,17 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
               setQuickSkillErr(res.message || "Could not create skill.");
             } else {
               if(res?.skill?.id){
-                setSelectedSkillIds(prev => prev.includes(res.skill.id) ? prev : [...prev, res.skill.id]);
+                let newId = res.skill.id;
+                let emptyIdx = skillRows.findIndex(r => !r.skillId);
+                let nextRows;
+                if (skillRows.some(r => r.skillId === newId)) {
+                  nextRows = skillRows;
+                } else if (emptyIdx !== -1) {
+                  nextRows = skillRows.map((r, i) => i === emptyIdx ? { ...r, skillId: newId } : r);
+                } else {
+                  nextRows = [...skillRows, { skillId: newId, skillLevel: defaultSkillLv }];
+                }
+                syncSkillRows(nextRows);
               }
               setShowQuickSkillModal(false);
             }
