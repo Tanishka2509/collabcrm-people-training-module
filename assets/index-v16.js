@@ -1856,7 +1856,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
         (0,P.jsx)("div",{className:"space-y-3 text-xs",children:
           skillRows.map((row, rowIdx) => {
             let takenByOthers = new Set(skillRows.filter((_, i) => i !== rowIdx).map(r => r.skillId).filter(Boolean));
-            let rowAvailableSkills = activeMasterSkills.filter(sk => sk.id === row.skillId || !takenByOthers.has(sk.id));
+            let rowAvailableSkills = activeSkills.filter(sk => sk.id === row.skillId || !takenByOthers.has(sk.id));
             let isLastRow = rowIdx === skillRows.length - 1;
             return (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-12 gap-3 items-end",children:[
               (0,P.jsxs)("div",{className:"md:col-span-5",children:[
