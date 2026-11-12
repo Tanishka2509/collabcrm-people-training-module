@@ -7259,11 +7259,14 @@ export async function handleApi(req, res) {
     return sendJson(res, 400, { success: false, message: 'Unsupported skill configuration action.', skills, skillLevels });
   }
 
-  // 18d. POST Authorized Employee Skill Management (Admin/HR/Manager only; blocks employee self-award)
+  // 18d. POST Authorized Employee Skill Management (Admin/HR/Manager, plus self-service sync in Skill Matrix)
   if (pathname === '/api/employee/skills' && req.method === 'POST') {
     const body = await parseJsonBody(req);
-    const { action, employeeId, skillId, skillLevel, remarks, userRole, userName, userPermissions } = body;
-    if (!canManageProgrammeAvailability(userRole, userPermissions)) {
+    const { action, employeeId, skillId, skillLevel, remarks, skills: submittedSkills, source, userRole, userName, userPermissions } = body;
+    const empKey = canonicalEmployeeSkillKey(employeeId);
+    const targetOwnerName = resolveEmployeeDisplayName(empKey);
+    const isSelfSkillMatrix = source === 'skill-matrix' && action === 'sync' && String(userName || '').trim().toLowerCase() === String(targetOwnerName || '').trim().toLowerCase();
+    if (!canManageProgrammeAvailability(userRole, userPermissions) && !isSelfSkillMatrix) {
       return sendJson(res, 403, {
         success: false,
         message: 'Permission Denied: Employees cannot manually award or modify skills. Only authorized Admin, HR, or Reporting Managers can manage employee skills.'
@@ -7276,7 +7279,6 @@ export async function handleApi(req, res) {
     if (!Array.isArray(store.skillAwardHistory)) {
       store.skillAwardHistory = [];
     }
-    const empKey = canonicalEmployeeSkillKey(employeeId);
     if (!Array.isArray(store.employeeSkills[empKey])) {
       store.employeeSkills[empKey] = [];
     }
@@ -7287,6 +7289,131 @@ export async function handleApi(req, res) {
     const now = new Date();
     const todayStr = formatSystemDate(now);
     const nowIso = now.toISOString();
+
+    if (action === 'sync') {
+      if (!Array.isArray(submittedSkills)) {
+        return sendJson(res, 400, { success: false, message: 'Invalid skills payload.' });
+      }
+      const seenSkillIds = new Set();
+      const nextList = [];
+      const tsFormatted = formatSkillTimestamp(now);
+      for (let i = 0; i < submittedSkills.length; i++) {
+        const row = submittedSkills[i] || {};
+        if (!row.skillId) {
+          return sendJson(res, 400, { success: false, message: 'Please select a Skill for every row.' });
+        }
+        const skillMaster = masterSkills.find(s => s.id === row.skillId || normSkillKey(s.name) === normSkillKey(row.skillId));
+        if (!skillMaster) {
+          return sendJson(res, 400, { success: false, message: 'Selected skill does not exist in Skills Configuration.' });
+        }
+        if (seenSkillIds.has(skillMaster.id)) {
+          return sendJson(res, 400, { success: false, message: `Duplicate skill "${skillMaster.name}" is not allowed.` });
+        }
+        seenSkillIds.add(skillMaster.id);
+        const chosenLevel = String(row.skillLevel || '').trim();
+        const levelObj = skillLevels.find(l => l.name.toLowerCase() === chosenLevel.toLowerCase());
+        if (!levelObj) {
+          return sendJson(res, 400, { success: false, message: 'Please select a valid configured Skill Level.' });
+        }
+        const resolvedLevelName = levelObj.name;
+        const cleanRemarks = String(row.remarks || '').trim();
+        const existing = empSkills.find(es => es.skillId === skillMaster.id);
+        if (existing) {
+          const levelChanged = String(existing.skillLevel || '').toLowerCase() !== resolvedLevelName.toLowerCase();
+          const remarksChanged = String(existing.remarks || '') !== cleanRemarks;
+          nextList.push({
+            ...existing,
+            skillName: skillMaster.name,
+            skillLevel: resolvedLevelName,
+            remarks: cleanRemarks,
+            updatedBy: (levelChanged || remarksChanged) ? actor : existing.updatedBy,
+            updatedAt: (levelChanged || remarksChanged) ? tsFormatted : existing.updatedAt,
+            updatedDate: (levelChanged || remarksChanged) ? nowIso : existing.updatedDate
+          });
+          if (levelChanged) {
+            store.skillAwardHistory.unshift({
+              id: `sah-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+              employeeId: empKey,
+              skillId: skillMaster.id,
+              skillName: skillMaster.name,
+              awardedSkillLevel: resolvedLevelName,
+              previousLevel: existing.skillLevel,
+              finalLevel: resolvedLevelName,
+              outcome: 'manual_update',
+              actorName: actor,
+              sourceTrainingId: null,
+              sourceTrainingName: null,
+              awardedDate: todayStr,
+              createdDate: nowIso,
+              updatedDate: nowIso
+            });
+          }
+        } else {
+          nextList.push({
+            id: `es-${empKey}-${skillMaster.id}-${Date.now()}-${i}`,
+            employeeId: empKey,
+            skillId: skillMaster.id,
+            skillName: skillMaster.name,
+            skillLevel: resolvedLevelName,
+            sourceTrainingId: null,
+            sourceTrainingName: null,
+            sourceTrainingIds: [],
+            sources: [],
+            remarks: cleanRemarks,
+            createdBy: actor,
+            createdAt: tsFormatted,
+            updatedBy: null,
+            updatedAt: null,
+            awardedDate: todayStr,
+            createdDate: nowIso,
+            updatedDate: nowIso
+          });
+          store.skillAwardHistory.unshift({
+            id: `sah-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+            employeeId: empKey,
+            skillId: skillMaster.id,
+            skillName: skillMaster.name,
+            awardedSkillLevel: resolvedLevelName,
+            previousLevel: null,
+            finalLevel: resolvedLevelName,
+            outcome: 'manual_add',
+            actorName: actor,
+            sourceTrainingId: null,
+            sourceTrainingName: null,
+            awardedDate: todayStr,
+            createdDate: nowIso,
+            updatedDate: nowIso
+          });
+        }
+      }
+      empSkills.forEach(old => {
+        if (!seenSkillIds.has(old.skillId)) {
+          store.skillAwardHistory.unshift({
+            id: `sah-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+            employeeId: empKey,
+            skillId: old.skillId,
+            skillName: old.skillName,
+            awardedSkillLevel: old.skillLevel,
+            previousLevel: old.skillLevel,
+            finalLevel: old.skillLevel,
+            outcome: 'removed',
+            actorName: actor,
+            sourceTrainingId: null,
+            sourceTrainingName: null,
+            awardedDate: todayStr,
+            createdDate: nowIso,
+            updatedDate: nowIso
+          });
+        }
+      });
+      store.employeeSkills[empKey] = nextList;
+      saveProgrammeStore(store);
+      return sendJson(res, 200, {
+        success: true,
+        employeeSkills: store.employeeSkills,
+        skillAwardHistory: store.skillAwardHistory
+      });
+    }
 
     if (action === 'remove') {
       const nextList = empSkills.filter(es => es.skillId !== skillId && es.id !== skillId);

@@ -4336,6 +4336,7 @@ function SkillMatrixPage({employees,employeeSkills,skillAwardHistory,skillsConfi
   let[sortCol,setSortCol]=(0,l.useState)(null);
   let[sortDir,setSortDir]=(0,l.useState)("asc");
   let[showModal,setShowModal]=(0,l.useState)(!1);
+  let[draftRows,setDraftRows]=(0,l.useState)([]);
   let[modalMode,setModalMode]=(0,l.useState)("add");
   let[formSkillId,setFormSkillId]=(0,l.useState)("");
   let[formLevel,setFormLevel]=(0,l.useState)((skillLevels&&skillLevels[0]?.name)||"Beginner");
@@ -4386,6 +4387,15 @@ function SkillMatrixPage({employees,employeeSkills,skillAwardHistory,skillsConfi
     return"bg-rose-50 text-rose-600 border-rose-200";
   };
 
+  let getLevelDotCls=lvl=>{
+    let s=String(lvl||"").toLowerCase();
+    if(s.includes("expert")||s.includes("advanced"))return"bg-emerald-500";
+    if(s.includes("inter"))return"bg-amber-500";
+    return"bg-rose-500";
+  };
+
+  let canEditCurrentEmp=canManageSkills!==!1||(scopeMode==="self"&&canonicalEmpSkillKey(activeEmp.id)===canonicalEmpSkillKey(selfEmp.id));
+
   let getLevelRank=lvl=>{
     let idx=levelsCfg.findIndex(l=>String(l.name||"").toLowerCase()===String(lvl||"").toLowerCase());
     if(idx!==-1)return idx+1;
@@ -4430,40 +4440,85 @@ function SkillMatrixPage({employees,employeeSkills,skillAwardHistory,skillsConfi
     return{name:"Ishdeep Anand",date:"15-Jan-2026, 11:23 AM"};
   })();
 
+  let buildInitialDraftRows=recs=>{
+    let defaultLvl=(levelsCfg[0]?.name)||"Beginner";
+    if(!Array.isArray(recs)||recs.length===0){
+      return[{rowKey:"row-0",skillId:"",skillLevel:defaultLvl,remarks:""}];
+    }
+    return recs.map((r,idx)=>({
+      rowKey:"row-"+(r.skillId||idx)+"-"+idx,
+      skillId:r.skillId||"",
+      skillLevel:r.skillLevel||r.level||defaultLvl,
+      remarks:r.remarks||""
+    }));
+  };
+
   let openAddModal=()=>{
     setFormErr("");
-    setModalMode("add");
-    setFormSkillId("");
-    setFormLevel((levelsCfg[0]?.name)||"Beginner");
-    setFormRemarks("");
+    setModalMode("sync");
+    setDraftRows(buildInitialDraftRows(empSkillRecs));
     setShowModal(!0);
   };
 
   let openEditModal=sk=>{
     setFormErr("");
-    setModalMode("update");
-    setFormSkillId(sk.skillId||sk.skillName);
-    setFormLevel(sk.skillLevel||sk.level||(levelsCfg[0]?.name)||"Beginner");
-    setFormRemarks(sk.remarks||"");
+    setModalMode("sync");
+    setDraftRows(buildInitialDraftRows(empSkillRecs));
     setShowModal(!0);
+  };
+
+  let handleAddDraftRow=()=>{
+    setFormErr("");
+    let used=new Set(draftRows.map(r=>r.skillId).filter(Boolean));
+    let nextMaster=activeMasterSkills.find(ms=>!used.has(ms.id));
+    let defaultLvl=(levelsCfg[0]?.name)||"Beginner";
+    setDraftRows(prev=>[...prev,{rowKey:"row-"+Date.now()+"-"+prev.length,skillId:nextMaster?nextMaster.id:"",skillLevel:defaultLvl,remarks:""}]);
+  };
+
+  let handleUpdateDraftRow=(rowKey,patch)=>{
+    setFormErr("");
+    setDraftRows(prev=>prev.map(r=>r.rowKey===rowKey?{...r,...patch}:r));
+  };
+
+  let handleRemoveDraftRow=rowKey=>{
+    setFormErr("");
+    setDraftRows(prev=>prev.filter(r=>r.rowKey!==rowKey));
+  };
+
+  let handleClearDraftRows=()=>{
+    setFormErr("");
+    setDraftRows([]);
   };
 
   let handleSaveSkill=async ev=>{
     ev.preventDefault();
     setFormErr("");
-    if(!formSkillId){setFormErr("Please select a skill.");return}
+    for(let i=0;i<draftRows.length;i++){
+      if(!draftRows[i].skillId){setFormErr("Please select a Skill for row "+(i+1)+".");return}
+    }
+    let seen=new Set();
+    for(let i=0;i<draftRows.length;i++){
+      if(seen.has(draftRows[i].skillId)){setFormErr("Duplicate skills cannot be selected.");return}
+      seen.add(draftRows[i].skillId);
+    }
     if(!onManageEmployeeSkill){setFormErr("Skill update handler unavailable.");return}
     setFormBusy(!0);
     try{
-      let res=await onManageEmployeeSkill({action:modalMode,employeeId:empKey,skillId:formSkillId,skillLevel:formLevel,remarks:formRemarks});
-      if(res&&res.success===!1){setFormErr(res.message||"Unable to update skill.");return}
-      if(detailSkill&&detailSkill.skillId===formSkillId){
-        let updated=resolveEmpSkillRecords(activeEmp,res?.employeeSkills||employeeSkills,skillsConfig).find(x=>x.skillId===formSkillId);
-        if(updated)setDetailSkill(updated);
+      let res=await onManageEmployeeSkill({
+        action:"sync",
+        source:"skill-matrix",
+        employeeId:empKey,
+        skills:draftRows.map(r=>({skillId:r.skillId,skillLevel:r.skillLevel,remarks:r.remarks||""}))
+      });
+      if(res&&res.success===!1){setFormErr(res.message||"Unable to update skills.");return}
+      if(detailSkill){
+        let updatedList=resolveEmpSkillRecords(activeEmp,res?.employeeSkills||employeeSkills,skillsConfig);
+        let updated=updatedList.find(x=>x.skillId===detailSkill.skillId);
+        setDetailSkill(updated||null);
       }
       setShowModal(!1);
     }catch(err){
-      setFormErr(err?.message||"Unable to save skill.");
+      setFormErr(err?.message||"Unable to save skills.");
     }finally{
       setFormBusy(!1);
     }
@@ -4541,13 +4596,13 @@ function SkillMatrixPage({employees,employeeSkills,skillAwardHistory,skillsConfi
           (0,P.jsxs)("div",{className:"flex items-center gap-3 flex-wrap",children:[
             (0,P.jsx)("h1",{className:"text-xl font-bold text-slate-900",children:activeDetailSkill.skillName}),
             (0,P.jsx)("span",{className:"px-3 py-0.5 rounded-full text-xs font-bold border "+getLevelPillCls(activeDetailSkill.skillLevel||activeDetailSkill.level),children:activeDetailSkill.skillLevel||activeDetailSkill.level||"Beginner"}),
-            Boolean(activeDetailSkill.sourceTrainingName||(Array.isArray(activeDetailSkill.sources)&&activeDetailSkill.sources.some(s=>s.trainingId)))&&(0,P.jsx)("span",{className:"px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200",children:"Earned via Training Program"})
+            Boolean(activeDetailSkill.sourceTrainingId||(Array.isArray(activeDetailSkill.sources)&&activeDetailSkill.sources.some(s=>Boolean(s.trainingId))))&&(0,P.jsx)("span",{className:"px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200",children:"Earned via Training Program"})
           ]}),
           (0,P.jsx)("p",{className:"text-xs text-slate-500",children:(masterSkills.find(m=>m.id===activeDetailSkill.skillId||normSkillKey(m.name)===normSkillKey(activeDetailSkill.skillName))?.description)||"Skill competency tracked across employee development and completed trainings."}),
           (0,P.jsxs)("div",{className:"text-xs text-slate-600 pt-1",children:["Employee: ",(0,P.jsx)("span",{className:"font-bold text-slate-900",children:activeEmp.firstName+" "+activeEmp.lastName})," • ",activeEmp.department]})
         ]}),
         (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
-          canManageSkills!==!1&&(0,P.jsx)("button",{type:"button",onClick:()=>openEditModal(activeDetailSkill),className:"bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs font-semibold shadow-xs cursor-pointer",children:"Edit Skill Level"})
+          canEditCurrentEmp&&(0,P.jsx)("button",{type:"button",onClick:()=>openEditModal(activeDetailSkill),className:"bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs font-semibold shadow-xs cursor-pointer",children:"Add/Edit Skills"})
         ]})
       ]}),
 
@@ -4732,8 +4787,8 @@ function SkillMatrixPage({employees,employeeSkills,skillAwardHistory,skillsConfi
           let outc=String(h.outcome||"added").toLowerCase();
           let finalLvl=h.finalLevel||h.awardedSkillLevel||"Beginner";
           let prevLvl=h.previousLevel;
-          let isUpdate=(outc==="upgraded"||outc==="updated");
-          let heading=isUpdate?("Skill Updated ("+h.skillName+")"):outc==="retained"?("Skill Retained ("+h.skillName+")"):"Skill Added";
+          let isUpdate=(outc==="upgraded"||outc==="updated"||outc==="manual_update");
+          let heading=isUpdate?("Skill Updated ("+h.skillName+")"):outc==="retained"?("Skill Retained ("+h.skillName+")"):outc==="removed"?("Skill Removed ("+h.skillName+")"):"Skill Added";
           let actorLabel=h.actorName||(h.sourceTrainingName?"Training Recognition":(activeEmp.firstName+" "+activeEmp.lastName));
           let tsLabel=fmtHistDT(h.updatedDate||h.awardedDate||h.createdDate);
           return(0,P.jsxs)("div",{className:"px-6 py-4 flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-5 hover:bg-slate-50/50 transition-colors",children:[
@@ -4828,7 +4883,7 @@ function SkillMatrixPage({employees,employeeSkills,skillAwardHistory,skillsConfi
             (0,P.jsx)("h2",{className:"text-base font-bold text-slate-900",children:"Skills"}),
             (0,P.jsx)("span",{className:"text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-600 border border-blue-200",children:empSkillRecs.length+" Skills"})
           ]}),
-          canManageSkills!==!1&&(0,P.jsx)("button",{type:"button",onClick:openAddModal,className:"bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs font-semibold shadow-xs transition-colors cursor-pointer",children:"Add/Edit Skills"})
+          canEditCurrentEmp&&(0,P.jsx)("button",{type:"button",onClick:openAddModal,className:"bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs font-semibold shadow-xs transition-colors cursor-pointer",children:"Add/Edit Skills"})
         ]}),
         (0,P.jsx)("div",{className:"overflow-x-auto",children:(0,P.jsxs)("table",{className:"w-full text-left border-collapse text-xs",children:[
           (0,P.jsx)("thead",{children:(0,P.jsxs)("tr",{className:"border-b border-slate-200 text-slate-500 font-semibold bg-slate-50/50",children:[
@@ -4836,37 +4891,42 @@ function SkillMatrixPage({employees,employeeSkills,skillAwardHistory,skillsConfi
             (0,P.jsx)("th",{className:"py-3 px-4 cursor-pointer select-none hover:text-slate-800",onClick:()=>toggleSort("skill"),children:"Skill ⇅"}),
             (0,P.jsx)("th",{className:"py-3 px-4 cursor-pointer select-none hover:text-slate-800",onClick:()=>toggleSort("level"),children:"Level ⇅"}),
             (0,P.jsx)("th",{className:"py-3 px-4",children:"Roadmap"}),
+            (0,P.jsx)("th",{className:"py-3 px-4",children:"Earned From Training"}),
             (0,P.jsx)("th",{className:"py-3 px-4",children:"Remarks"}),
             (0,P.jsx)("th",{className:"py-3 px-4 cursor-pointer select-none hover:text-slate-800",onClick:()=>toggleSort("created"),children:"Created by ⇅"}),
             (0,P.jsx)("th",{className:"py-3 px-4 cursor-pointer select-none hover:text-slate-800",onClick:()=>toggleSort("updated"),children:"Updated by ⇅"}),
             (0,P.jsx)("th",{className:"py-3 px-4 text-center",children:"Action"})
           ]})}),
-          (0,P.jsx)("tbody",{className:"divide-y divide-slate-100",children:sortedSkills.length===0?(0,P.jsx)("tr",{children:(0,P.jsx)("td",{colSpan:8,className:"py-10 text-center text-slate-400 italic",children:"No skills added yet."})}):sortedSkills.map((sk,idx)=>{
-            let hasTrainSrc=Boolean(sk.sourceTrainingName||(Array.isArray(sk.sources)&&sk.sources.some(s=>s.trainingId)));
+          (0,P.jsx)("tbody",{className:"divide-y divide-slate-100",children:sortedSkills.length===0?(0,P.jsx)("tr",{children:(0,P.jsx)("td",{colSpan:9,className:"py-10 text-center text-slate-400 italic",children:"No skills added yet."})}):sortedSkills.map((sk,idx)=>{
+            let trainSources=(Array.isArray(sk.sources)?sk.sources:[]).filter(s=>Boolean(s.trainingId));
+            if(trainSources.length===0&&sk.sourceTrainingId&&sk.sourceTrainingName){
+              trainSources=[{trainingId:sk.sourceTrainingId,trainingName:sk.sourceTrainingName,level:sk.skillLevel,awardedDate:sk.awardedDate}];
+            }
+            let hasTrainSrc=trainSources.length>0;
+            let primaryTrainName=sk.latestSourceTrainingName||trainSources[trainSources.length-1]?.trainingName||sk.sourceTrainingName;
             let rank=getLevelRank(sk.skillLevel||sk.level);
-            let totalLvls=levelsCfg.length||3;
             let creator=formatActorDate(sk.createdBy||"Ishdeep Anand",sk.createdAt||sk.createdDate||"15-Jan-2026, 11:23 AM");
             let hasUpdater=Boolean(sk.updatedBy||(sk.updatedAt&&sk.updatedAt!==sk.createdAt));
             let updater=hasUpdater?formatActorDate(sk.updatedBy||"Ishdeep Anand",sk.updatedAt||sk.updatedDate):null;
-            let trainSrcName=sk.latestSourceTrainingName||sk.sourceTrainingName;
-            let remarkText=sk.remarks||(hasTrainSrc&&trainSrcName?("Earned via Training: "+trainSrcName):"-");
+            let remarkText=sk.remarks||"-";
             return(0,P.jsxs)("tr",{className:"hover:bg-slate-50/70 transition-colors",children:[
               (0,P.jsx)("td",{className:"py-3.5 px-4 text-slate-500 font-medium",children:idx+1}),
-              (0,P.jsxs)("td",{className:"py-3.5 px-4 font-medium text-slate-900",children:[
-                (0,P.jsx)("button",{type:"button",onClick:()=>setDetailSkill(sk),className:"hover:text-blue-600 text-left font-medium cursor-pointer",children:sk.skillName}),
-                hasTrainSrc&&(0,P.jsx)("span",{className:"ml-2 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-purple-50 text-purple-700 border border-purple-200",children:"Earned"})
-              ]}),
+              (0,P.jsx)("td",{className:"py-3.5 px-4 font-medium text-slate-900",children:(0,P.jsx)("button",{type:"button",onClick:()=>setDetailSkill(sk),className:"hover:text-blue-600 text-left font-medium cursor-pointer",children:sk.skillName})}),
               (0,P.jsx)("td",{className:"py-3.5 px-4",children:(0,P.jsx)("span",{className:"inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold border "+getLevelPillCls(sk.skillLevel||sk.level),children:sk.skillLevel||sk.level||"Beginner"})}),
-              (0,P.jsx)("td",{className:"py-3.5 px-4",children:(hasTrainSrc||rank>0)?(0,P.jsx)("div",{className:"space-y-1 min-w-[140px]",children:levelsCfg.map((lv,li)=>{
+              (0,P.jsx)("td",{className:"py-3.5 px-4",children:rank>0?(0,P.jsx)("div",{className:"space-y-1 min-w-[140px]",children:levelsCfg.map((lv,li)=>{
                 let reached=(li+1)<=rank;
                 return(0,P.jsxs)("div",{className:"flex items-center gap-2 text-[10px]",children:[
                   (0,P.jsx)("span",{className:"w-16 truncate "+(reached?"font-semibold text-slate-800":"text-slate-400"),children:lv.name}),
                   (0,P.jsx)("div",{className:"w-12 h-1.5 bg-slate-200 rounded-full overflow-hidden",children:(0,P.jsx)("div",{className:"h-full rounded-full "+(reached?"bg-blue-600":"bg-transparent"),style:{width:reached?"100%":"0%"}})}),
                   (0,P.jsx)("span",{className:"text-[10px] tabular-nums "+(reached?"text-blue-600 font-semibold":"text-slate-400"),children:reached?"1 of 1":"0 of 1"}),
-                  (li+1)===rank&&(0,P.jsx)("span",{className:"px-1.5 py-0 rounded-full text-[9px] font-semibold bg-blue-50 text-blue-600 border border-blue-200",children:hasTrainSrc?"Earned":"Achieved"})
+                  (li+1)===rank&&(0,P.jsx)("span",{className:"px-1.5 py-0 rounded-full text-[9px] font-semibold bg-blue-50 text-blue-600 border border-blue-200",children:"Achieved"})
                 ]},lv.id||li);
               })}):(0,P.jsx)("span",{className:"text-slate-400",children:"-"})}),
-              (0,P.jsx)("td",{className:"py-3.5 px-4 text-slate-600 max-w-[200px]",children:remarkText}),
+              (0,P.jsx)("td",{className:"py-3.5 px-4",children:hasTrainSrc?(0,P.jsxs)("div",{className:"flex flex-col items-start gap-1",children:[
+                (0,P.jsx)("button",{type:"button",onClick:()=>setDetailSkill(sk),className:"inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-purple-50 text-purple-700 border border-purple-200 hover:bg-purple-100 transition-colors text-left cursor-pointer",children:primaryTrainName}),
+                trainSources.length>1&&(0,P.jsx)("span",{className:"text-[10px] font-medium text-slate-500 pl-0.5",children:"+"+(trainSources.length-1)+" more training"+(trainSources.length>2?"s":"")})
+              ]}):(0,P.jsx)("span",{className:"text-slate-400",children:"-"})}),
+              (0,P.jsx)("td",{className:"py-3.5 px-4 text-slate-600 max-w-[180px]",children:remarkText}),
               (0,P.jsxs)("td",{className:"py-3.5 px-4 text-slate-600",children:[
                 (0,P.jsx)("div",{className:"font-medium text-slate-700",children:creator.actor}),
                 (0,P.jsx)("div",{className:"text-[11px] text-slate-400 tabular-nums",children:creator.date})
@@ -4887,46 +4947,58 @@ function SkillMatrixPage({employees,employeeSkills,skillAwardHistory,skillsConfi
       ]})
     ]}),
 
-    // Add/Edit Skills Modal
-    showModal&&(0,P.jsx)("div",{className:"fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-4 animate-in fade-in duration-150",children:(0,P.jsxs)("div",{className:"bg-white w-full max-w-lg rounded-2xl shadow-2xl border border-slate-200 overflow-hidden",children:[
-      (0,P.jsxs)("div",{className:"px-6 py-4 border-b border-slate-200 flex items-center justify-between",children:[
-        (0,P.jsx)("h3",{className:"text-base font-bold text-slate-900",children:"Add/Edit Skills — "+activeEmp.firstName+" "+activeEmp.lastName}),
-        (0,P.jsx)("button",{type:"button",onClick:()=>setShowModal(!1),className:"p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer",children:(0,P.jsx)(N,{className:"w-5 h-5"})})
-      ]}),
-      (0,P.jsxs)("form",{onSubmit:handleSaveSkill,className:"p-6 space-y-4 text-xs",children:[
-        formErr&&(0,P.jsx)("div",{className:"bg-rose-50 border border-rose-200 rounded-lg px-3 py-2 text-rose-700 font-semibold",children:formErr}),
-        (0,P.jsxs)("div",{className:"flex gap-2",children:[
-          (0,P.jsx)("button",{type:"button",onClick:()=>{setModalMode("add");setFormSkillId("");setFormRemarks("");setFormErr("")},className:"flex-1 py-2 rounded-lg font-semibold border cursor-pointer "+(modalMode==="add"?"bg-blue-600 text-white border-blue-600":"bg-slate-50 text-slate-700 border-slate-200"),children:"Add New Skill"}),
-          (0,P.jsx)("button",{type:"button",onClick:()=>{setModalMode("update");setFormSkillId(empSkillRecs[0]?.skillId||"");setFormLevel(empSkillRecs[0]?.skillLevel||(levelsCfg[0]?.name)||"Beginner");setFormRemarks(empSkillRecs[0]?.remarks||"");setFormErr("")},className:"flex-1 py-2 rounded-lg font-semibold border cursor-pointer "+(modalMode==="update"?"bg-blue-600 text-white border-blue-600":"bg-slate-50 text-slate-700 border-slate-200"),children:"Edit Existing Skill"})
+    // Add/Edit Skills Modal (matches Screenshot layout, typography & spacing)
+    showModal&&(0,P.jsx)("div",{className:"fixed inset-0 bg-slate-900/50 backdrop-blur-[1px] z-50 flex items-center justify-center p-4 animate-in fade-in duration-150",children:(0,P.jsxs)("div",{className:"bg-white w-full max-w-[780px] rounded-xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]",children:[
+      (0,P.jsxs)("div",{className:"px-6 pt-5 pb-3 flex items-center justify-between",children:[
+        (0,P.jsxs)("h3",{className:"text-[15px] font-semibold text-slate-900 tracking-tight",children:[
+          "Add/Edit Skills - ",
+          (0,P.jsx)("span",{className:"text-blue-600 font-semibold",children:activeEmp.firstName+" "+activeEmp.lastName})
         ]}),
-        (0,P.jsxs)("div",{children:[
-          (0,P.jsxs)("label",{className:"block font-semibold text-slate-700 mb-1.5",children:["Skill ",(0,P.jsx)("span",{className:"text-rose-500",children:"*"})]}),
-          modalMode==="add"?(0,P.jsxs)("select",{value:formSkillId,onChange:ev=>setFormSkillId(ev.target.value),className:"w-full border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20",children:[
-            (0,P.jsx)("option",{value:"",children:"Select Skill..."}),
-            activeMasterSkills.filter(ms=>!empSkillRecs.some(es=>es.skillId===ms.id)).map(ms=>(0,P.jsx)("option",{value:ms.id,children:ms.name},ms.id))
-          ]}):(0,P.jsxs)("select",{value:formSkillId,onChange:ev=>{let id=ev.target.value;setFormSkillId(id);let found=empSkillRecs.find(x=>x.skillId===id);if(found){setFormLevel(found.skillLevel||"Beginner");setFormRemarks(found.remarks||"")}},className:"w-full border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20",children:[
-            (0,P.jsx)("option",{value:"",children:"Select Existing Skill..."}),
-            empSkillRecs.map(es=>(0,P.jsx)("option",{value:es.skillId,children:es.skillName},es.skillId))
+        (0,P.jsx)("button",{type:"button",onClick:()=>setShowModal(!1),className:"p-1 rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer",children:(0,P.jsx)(N,{className:"w-4 h-4"})})
+      ]}),
+      (0,P.jsxs)("form",{onSubmit:handleSaveSkill,className:"flex flex-col flex-1 min-h-0",children:[
+        (0,P.jsxs)("div",{className:"px-6 pt-2 pb-5 overflow-y-auto flex-1",children:[
+          formErr&&(0,P.jsx)("div",{className:"mb-3 bg-rose-50 border border-rose-200 rounded-lg px-3 py-2 text-xs text-rose-700 font-medium",children:formErr}),
+          (0,P.jsxs)("div",{className:"grid grid-cols-[195px_185px_1fr_36px] gap-3 mb-2 text-xs font-medium text-slate-500",children:[
+            (0,P.jsxs)("div",{children:["Skill ",(0,P.jsx)("span",{className:"text-rose-500",children:"*"})]}),
+            (0,P.jsxs)("div",{children:["Level ",(0,P.jsx)("span",{className:"text-rose-500",children:"*"})]}),
+            (0,P.jsx)("div",{children:"Remarks"}),
+            (0,P.jsx)("div",{})
+          ]}),
+          draftRows.length===0?(0,P.jsx)("div",{className:"py-6 text-center text-xs text-slate-400 border border-dashed border-slate-200 rounded-lg",children:"No skills selected. Click + Add below to add a skill."}):(0,P.jsx)("div",{className:"space-y-3",children:draftRows.map((row)=>{
+            let usedElsewhere=new Set(draftRows.filter(x=>x.rowKey!==row.rowKey).map(x=>x.skillId).filter(Boolean));
+            let rowMasterList=activeMasterSkills.filter(ms=>ms.id===row.skillId||!usedElsewhere.has(ms.id));
+            return(0,P.jsxs)("div",{className:"grid grid-cols-[195px_185px_1fr_36px] gap-3 items-start",children:[
+              (0,P.jsxs)("div",{className:"relative",children:[
+                (0,P.jsxs)("select",{value:row.skillId,onChange:ev=>handleUpdateDraftRow(row.rowKey,{skillId:ev.target.value}),className:"w-full h-10 appearance-none rounded-lg border border-slate-300 bg-white pl-3 pr-8 text-[13px] font-normal text-slate-800 truncate focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-indigo-500/20 cursor-pointer",children:[
+                  (0,P.jsx)("option",{value:"",children:"Select Skill..."}),
+                  rowMasterList.map(ms=>(0,P.jsx)("option",{value:ms.id,children:ms.name},ms.id))
+                ]}),
+                (0,P.jsx)("svg",{viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"1.8",className:"pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400",children:(0,P.jsx)("path",{strokeLinecap:"round",strokeLinejoin:"round",d:"m6 9 6 6 6-6"})})
+              ]}),
+              (0,P.jsxs)("div",{className:"relative",children:[
+                (0,P.jsx)("span",{className:"pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full "+getLevelDotCls(row.skillLevel)}),
+                (0,P.jsx)("select",{value:row.skillLevel,onChange:ev=>handleUpdateDraftRow(row.rowKey,{skillLevel:ev.target.value}),className:"w-full h-10 appearance-none rounded-lg border border-slate-300 bg-white pl-7 pr-8 text-[13px] font-normal text-slate-800 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-indigo-500/25 cursor-pointer",children:levelsCfg.map(lv=>(0,P.jsx)("option",{value:lv.name,children:lv.name},lv.id||lv.name))}),
+                (0,P.jsx)("svg",{viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"1.8",className:"pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400",children:(0,P.jsx)("path",{strokeLinecap:"round",strokeLinejoin:"round",d:"m6 9 6 6 6-6"})})
+              ]}),
+              (0,P.jsx)("textarea",{rows:2,value:row.remarks,onChange:ev=>handleUpdateDraftRow(row.rowKey,{remarks:ev.target.value}),className:"w-full min-h-[54px] rounded-lg border border-slate-300 bg-white px-3 py-2 text-[13px] text-slate-800 resize focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-indigo-500/20"}),
+              (0,P.jsx)("button",{type:"button",onClick:()=>handleRemoveDraftRow(row.rowKey),title:"Remove row",className:"w-9 h-9 mt-0.5 rounded-lg border border-slate-200 hover:border-rose-300 hover:bg-rose-50 flex items-center justify-center text-rose-500 transition-colors cursor-pointer",children:(0,P.jsxs)("svg",{viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"1.8",className:"w-4 h-4",children:[(0,P.jsx)("circle",{cx:"12",cy:"12",r:"9"}),(0,P.jsx)("line",{x1:"8",y1:"12",x2:"16",y2:"12"})]})})
+            ]},row.rowKey);
+          })}),
+          (0,P.jsxs)("div",{className:"flex items-center gap-2.5 mt-4",children:[
+            (0,P.jsxs)("button",{type:"button",onClick:handleAddDraftRow,className:"inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border border-blue-200 bg-blue-50/70 hover:bg-blue-100/70 text-blue-600 text-xs font-semibold transition-colors cursor-pointer",children:[
+              (0,P.jsx)("span",{className:"text-sm leading-none",children:"+"}),
+              (0,P.jsx)("span",{children:"Add"})
+            ]}),
+            (0,P.jsxs)("button",{type:"button",onClick:handleClearDraftRows,className:"inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border border-rose-200 bg-rose-50/70 hover:bg-rose-100/70 text-rose-500 text-xs font-semibold transition-colors cursor-pointer",children:[
+              (0,P.jsxs)("svg",{viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"1.8",className:"w-3.5 h-3.5",children:[(0,P.jsx)("circle",{cx:"12",cy:"12",r:"9"}),(0,P.jsx)("line",{x1:"8",y1:"12",x2:"16",y2:"12"})]}),
+              (0,P.jsx)("span",{children:"Clear All"})
+            ]})
           ]})
         ]}),
-        (0,P.jsxs)("div",{children:[
-          (0,P.jsxs)("label",{className:"block font-semibold text-slate-700 mb-1.5",children:["Level ",(0,P.jsx)("span",{className:"text-rose-500",children:"*"})]}),
-          (0,P.jsx)("select",{value:formLevel,onChange:ev=>setFormLevel(ev.target.value),className:"w-full border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20",children:levelsCfg.map(lv=>(0,P.jsx)("option",{value:lv.name,children:lv.name},lv.id||lv.name))})
-        ]}),
-        (0,P.jsxs)("div",{children:[
-          (0,P.jsx)("label",{className:"block font-semibold text-slate-700 mb-1.5",children:"Remarks"}),
-          (0,P.jsx)("input",{type:"text",value:formRemarks,onChange:ev=>setFormRemarks(ev.target.value),placeholder:"Optional remarks...",className:"w-full border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"})
-        ]}),
-        empSkillRecs.length>0&&(0,P.jsxs)("div",{className:"pt-2 border-t border-slate-100",children:[
-          (0,P.jsx)("div",{className:"font-semibold text-slate-500 mb-1.5",children:"Current Skills (click Remove to delete)"}),
-          (0,P.jsx)("div",{className:"flex flex-wrap gap-1.5 max-h-28 overflow-y-auto",children:empSkillRecs.map(es=>(0,P.jsxs)("span",{className:"inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200 text-[11px] font-medium",children:[
-            (0,P.jsx)("span",{children:es.skillName+" ("+(es.skillLevel||"Beginner")+")"}),
-            (0,P.jsx)("button",{type:"button",onClick:()=>handleRemoveSkill(es.skillId),className:"text-rose-500 hover:text-rose-700 font-bold cursor-pointer",children:"✕"})
-          ]},es.skillId))})
-        ]}),
-        (0,P.jsxs)("div",{className:"flex justify-end gap-2 pt-3 border-t border-slate-100",children:[
-          (0,P.jsx)("button",{type:"button",onClick:()=>setShowModal(!1),className:"px-4 py-2 rounded-lg border border-slate-300 text-slate-700 font-semibold bg-white hover:bg-slate-50 cursor-pointer",children:"Cancel"}),
-          (0,P.jsx)("button",{type:"submit",disabled:formBusy,className:"px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-xs cursor-pointer disabled:opacity-50",children:formBusy?"Saving...":(modalMode==="add"?"Add Skill":"Save Changes")})
+        (0,P.jsxs)("div",{className:"px-6 py-4 border-t border-slate-100 flex items-center justify-end gap-2.5 bg-white",children:[
+          (0,P.jsx)("button",{type:"button",onClick:()=>setShowModal(!1),className:"px-5 py-2 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold transition-colors cursor-pointer",children:"Cancel"}),
+          (0,P.jsx)("button",{type:"submit",disabled:formBusy,className:"px-6 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs transition-colors cursor-pointer disabled:opacity-50",children:formBusy?"Saving...":"Save"})
         ]})
       ]})
     ]})})
