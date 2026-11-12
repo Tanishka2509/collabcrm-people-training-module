@@ -1668,13 +1668,6 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
     // Header Bar
     (0,P.jsxs)("div",{className:"flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-3",children:[
       (0,P.jsxs)("div",{children:[
-        (0,P.jsxs)("div",{className:"flex items-center gap-1.5 text-xs text-slate-500 font-medium mb-1",children:[
-          (0,P.jsx)("button",{type:"button",onClick:()=>onNavigate&&onNavigate("training-dashboard"),className:"hover:text-blue-600 transition-colors cursor-pointer",children:"Training"}),
-          (0,P.jsx)("span",{children:"›"}),
-          (0,P.jsx)("button",{type:"button",onClick:e,className:"hover:text-blue-600 transition-colors cursor-pointer",children:"Training Management"}),
-          (0,P.jsx)("span",{children:"›"}),
-          (0,P.jsx)("span",{className:"text-blue-600 font-semibold",children:n?"Edit Training":"Create Training"})
-        ]}),
         (0,P.jsx)("h1",{className:"text-xl font-bold text-slate-900 tracking-tight",children:n?"Edit Training":"Create Training"}),
         (0,P.jsx)("p",{className:"text-xs text-slate-500 mt-0.5",children:"Configure curriculum details, learning resources, and assessment builder."})
       ]}),
@@ -2086,10 +2079,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
     // Quick Create Skill Modal (saves to Administration > Master Data > Skills without leaving Create/Edit Training)
     showQuickSkillModal && (()=>{let cleanQ=quickSkillName.trim().replace(/\s+/g," "),dupMatch=cleanQ?allSkillsMaster.find(sk=>normSkillKey(sk.name)===normSkillKey(cleanQ)):null;return(0,P.jsx)("div",{className:"fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4",children:(0,P.jsxs)("div",{className:"bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-purple-200",children:[
       (0,P.jsxs)("div",{className:"px-5 py-4 border-b border-purple-200 flex items-center justify-between",style:{backgroundColor:"#faf5ff"},children:[
-        (0,P.jsxs)("div",{children:[
-          (0,P.jsx)("span",{className:"text-[10px] font-bold uppercase tracking-wider text-purple-700",children:"Administration > Master Data > Skills"}),
-          (0,P.jsx)("h3",{className:"text-sm font-bold text-slate-900",children:"Add New Skill"})
-        ]}),
+        (0,P.jsx)("h3",{className:"text-sm font-bold text-slate-900",children:"Add New Skill"}),
         (0,P.jsx)("button",{type:"button",onClick:()=>setShowQuickSkillModal(false),className:"text-slate-400 hover:text-slate-700 text-sm font-bold px-2 py-1",children:"✕"})
       ]}),
       (0,P.jsxs)("div",{className:"p-5 space-y-4 text-xs",children:[
@@ -2124,7 +2114,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
           }finally{
             setQuickSkillBusy(false);
           }
-        },style:{backgroundColor:(quickSkillBusy||dupMatch)?"#c4b5fd":"#7c3aed"},className:"px-4 py-1.5 rounded-lg text-white font-bold text-xs shadow-sm "+(dupMatch?"cursor-not-allowed":"cursor-pointer"),children:quickSkillBusy?"Saving...":"Save & Select Skill"})
+        },style:{backgroundColor:(quickSkillBusy||dupMatch)?"#c4b5fd":"#7c3aed"},className:"px-4 py-1.5 rounded-lg text-white font-bold text-xs shadow-sm "+(dupMatch?"cursor-not-allowed":"cursor-pointer"),children:quickSkillBusy?"Saving...":"Save"})
       ]})
     ]})})})(),
 
