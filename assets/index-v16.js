@@ -518,9 +518,12 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){let r=e.
                 (0,P.jsx)("span",{className:"font-bold text-slate-900",children:res.title})
               ]})}),
               (0,P.jsx)("td",{className:"py-3 px-4 text-slate-600 whitespace-nowrap",children:res.type}),
-              (0,P.jsx)("td",{className:"py-3 px-4 text-slate-400 font-mono text-[11px] max-w-xs truncate",children:res.url}),
+              (0,P.jsx)("td",{className:"py-3 px-4 text-slate-400 font-mono text-[11px] max-w-xs truncate",children:res.fileName?("📄 "+res.fileName+(res.url?" • "+res.url:"")):res.url}),
               
-              (0,P.jsx)("td",{className:"py-3 px-4 text-right whitespace-nowrap",children:isLockedInactive?(0,P.jsx)("button",{type:"button",disabled:!0,style:{opacity:0.5},className:"p-1.5 rounded-lg text-slate-400 cursor-not-allowed",title:"Inactive — resource disabled",children:(0,P.jsx)(pe,{className:"w-4 h-4"})}):(0,P.jsx)("a",{href:res.url&&res.url.startsWith("http")?res.url:"https://" + res.url,target:"_blank",rel:"noreferrer",className:"inline-flex items-center justify-center p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors",title:"Open Resource",children:(0,P.jsx)(pe,{className:"w-4 h-4"})})})
+              (0,P.jsx)("td",{className:"py-3 px-4 text-right whitespace-nowrap",children:isLockedInactive?(0,P.jsx)("button",{type:"button",disabled:!0,style:{opacity:0.5},className:"p-1.5 rounded-lg text-slate-400 cursor-not-allowed",title:"Inactive — resource disabled",children:(0,P.jsx)(pe,{className:"w-4 h-4"})}):res.fileDataUrl?(0,P.jsxs)("div",{className:"inline-flex items-center gap-1.5",children:[
+                (0,P.jsx)("button",{type:"button",onClick:()=>{try{let b64=res.fileDataUrl.split(",")[1]||"";let bin=atob(b64);let arr=new Uint8Array(bin.length);for(let k=0;k<bin.length;k++)arr[k]=bin.charCodeAt(k);let blob=new Blob([arr],{type:"application/pdf"});window.open(URL.createObjectURL(blob),"_blank");}catch{window.open(res.fileDataUrl,"_blank");}},className:"inline-flex items-center justify-center p-1.5 rounded-lg text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer",title:"Open Uploaded PDF",children:(0,P.jsx)(pe,{className:"w-4 h-4"})}),
+                res.url&&(0,P.jsx)("a",{href:res.url.startsWith("http")?res.url:"https://" + res.url,target:"_blank",rel:"noreferrer",className:"inline-flex items-center justify-center p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors",title:"Open Link",children:(0,P.jsx)(pe,{className:"w-4 h-4"})})
+              ]}):(0,P.jsx)("a",{href:res.url&&res.url.startsWith("http")?res.url:"https://" + res.url,target:"_blank",rel:"noreferrer",className:"inline-flex items-center justify-center p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors",title:"Open Resource",children:(0,P.jsx)(pe,{className:"w-4 h-4"})})})
             ]}, res.id || idx))})
           ]})})
         ]}),
@@ -1311,6 +1314,25 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
   let se=(id)=>{
     E(ie.filter(res=>res.id!==id));
   };
+  let handlePdfResourceUpload=(resId, file)=>{
+    if(!file)return;
+    let isPdf = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
+    if(!isPdf){
+      setValidationError("Please upload a valid PDF document (.pdf).");
+      return;
+    }
+    if(file.size > 3 * 1024 * 1024){
+      setValidationError("PDF file size must be 3 MB or less.");
+      return;
+    }
+    setValidationError("");
+    let reader = new FileReader();
+    reader.onload = ev => {
+      let dataUrl = String(ev?.target?.result || "");
+      E(prev => prev.map(r => r.id === resId ? { ...r, fileName: file.name, fileSize: file.size, fileDataUrl: dataUrl } : r));
+    };
+    reader.readAsDataURL(file);
+  };
 
   // Question operations
   let handleAddQuestion=()=>{
@@ -1577,7 +1599,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
           : "Active");
 
     try{
-      let cleanedResources = (ie || []).filter(r => r && (String(r.title||"").trim() || String(r.url||"").trim() || String(r.type||"").trim()));
+      let cleanedResources = (ie || []).filter(r => r && (String(r.title||"").trim() || String(r.url||"").trim() || String(r.fileDataUrl||"").trim() || String(r.type||"").trim()));
       let effectivePassScore = Number(assessPassScore) || Number(g) || 80;
       let effectiveMaxAtt = Number(assessMaxAttempts) || Number(v) || 3;
       let res = await t({
@@ -1734,7 +1756,19 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
           (0,P.jsx)("option",{value:"Article",children:"Article"})
         ]}),
         (0,P.jsx)("input",{type:"text",value:res.title,onChange:e=>{let val=e.target.value;E(ie.map(r=>r.id===res.id?{...r,title:val}:r))},placeholder:"Module title (e.g. Architecture Lecture)...",className:"flex-1 w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-800 placeholder-slate-400"}),
-        (0,P.jsx)("input",{type:"text",value:res.url,onChange:e=>{let val=e.target.value;E(ie.map(r=>r.id===res.id?{...r,url:val}:r))},placeholder:"URL / link (https://...)",className:"flex-1 w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-800 placeholder-slate-400"}),
+        res.type==="PDF Document"?(0,P.jsxs)("div",{className:"flex-1 w-full flex flex-col gap-1.5",children:[
+          (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
+            (0,P.jsx)("input",{type:"text",value:res.url,onChange:e=>{let val=e.target.value;E(ie.map(r=>r.id===res.id?{...r,url:val}:r))},placeholder:"PDF link (https://...) or upload below",className:"flex-1 min-w-0 bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-800 placeholder-slate-400"}),
+            (0,P.jsxs)("label",{className:"inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-semibold cursor-pointer shrink-0 whitespace-nowrap transition-colors",children:[
+              (0,P.jsx)("span",{children:res.fileName?"Replace PDF":"Upload PDF"}),
+              (0,P.jsx)("input",{type:"file",accept:"application/pdf,.pdf",style:{display:"none"},onChange:e=>{let f=e.target.files?.[0];if(f)handlePdfResourceUpload(res.id,f);e.target.value="";}})
+            ]})
+          ]}),
+          res.fileName&&(0,P.jsxs)("div",{className:"inline-flex items-center justify-between gap-2 px-2.5 py-1 rounded-md bg-blue-50/70 border border-blue-200 text-[11px] text-blue-800",children:[
+            (0,P.jsx)("span",{className:"truncate font-medium",children:"📄 "+res.fileName}),
+            (0,P.jsx)("button",{type:"button",onClick:()=>E(ie.map(r=>r.id===res.id?{...r,fileName:undefined,fileSize:undefined,fileDataUrl:undefined}:r)),className:"text-rose-500 hover:text-rose-700 font-bold cursor-pointer",title:"Remove uploaded PDF",children:"✕"})
+          ]})
+        ]}):(0,P.jsx)("input",{type:"text",value:res.url,onChange:e=>{let val=e.target.value;E(ie.map(r=>r.id===res.id?{...r,url:val}:r))},placeholder:"URL / link (https://...)",className:"flex-1 w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-800 placeholder-slate-400"}),
         (0,P.jsx)("button",{onClick:()=>se(res.id),type:"button",className:"p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors",title:"Delete Resource",children:"✕"})
       ]},res.id || idx))})
     ]}),
