@@ -1748,7 +1748,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
         (0,P.jsx)("button",{onClick:oe,type:"button",className:"text-xs font-semibold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg border border-blue-200 shadow-sm transition-colors",children:"+ Add Learning Resource"})
       ]}),
       (0,P.jsx)("div",{className:"space-y-3",children:ie.map((res, idx)=>(0,P.jsxs)("div",{className:"flex flex-col md:flex-row items-center gap-3 bg-slate-50 p-3 rounded-lg border border-slate-200",children:[
-        (0,P.jsxs)("select",{value:res.type,onChange:e=>{let val=e.target.value;E(ie.map(r=>r.id===res.id?{...r,type:val}:r))},className:"w-full md:w-44 bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium " + (res.type?"text-slate-800":"text-slate-400"),children:[
+        (0,P.jsxs)("select",{value:res.type,onChange:e=>{let val=e.target.value;E(ie.map(r=>r.id===res.id?{...r,type:val}:r))},style:{minWidth:"185px",paddingRight:"28px"},className:"w-full md:w-44 shrink-0 bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium " + (res.type?"text-slate-800":"text-slate-400"),children:[
           (0,P.jsx)("option",{value:"",children:"Select resource type..."}),
           (0,P.jsx)("option",{value:"Video / YouTube",children:"Video / YouTube"}),
           (0,P.jsx)("option",{value:"PDF Document",children:"PDF Document"})
