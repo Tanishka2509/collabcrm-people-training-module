@@ -4693,6 +4693,9 @@ function SkillMatrixPage({employees,employeeSkills,skillAwardHistory,skillsConfi
   let[scopeMode,setScopeMode]=(0,l.useState)("self");
   let[selectedEmpId,setSelectedEmpId]=(0,l.useState)("emp-3");
   let[detailSkill,setDetailSkill]=(0,l.useState)(null);
+  let[detailTab,setDetailTab]=(0,l.useState)("roadmap");
+  let[roadmapLevel,setRoadmapLevel]=(0,l.useState)("");
+  let[roadmapFilter,setRoadmapFilter]=(0,l.useState)("all");
   let[sortCol,setSortCol]=(0,l.useState)(null);
   let[sortDir,setSortDir]=(0,l.useState)("asc");
   let[showModal,setShowModal]=(0,l.useState)(!1);
@@ -5095,7 +5098,7 @@ function SkillMatrixPage({employees,employeeSkills,skillAwardHistory,skillsConfi
           let remarkText=sk.remarks||"-";
           return(0,P.jsxs)("tr",{className:"hover:bg-slate-50 transition-colors",children:[
             (0,P.jsx)("td",{className:"py-3.5 px-4 text-slate-500 font-medium",children:idx+1}),
-            (0,P.jsx)("td",{className:"py-3.5 px-4 font-medium text-slate-900",children:(0,P.jsx)("button",{type:"button",onClick:()=>setDetailSkill(sk),className:"hover:text-blue-600 text-left font-medium cursor-pointer",children:sk.skillName})}),
+            (0,P.jsx)("td",{className:"py-3.5 px-4 font-medium text-slate-900",children:(0,P.jsx)("button",{type:"button",onClick:()=>{setDetailSkill(sk);setDetailTab("roadmap");setRoadmapLevel(sk.skillLevel||sk.level||levelsCfg[0]?.name||"Beginner");setRoadmapFilter("all")},className:"hover:text-blue-600 text-left font-medium cursor-pointer",children:sk.skillName})}),
             (0,P.jsx)("td",{className:"py-3.5 px-4",children:(0,P.jsx)("span",{style:getLevelPillStyle(sk.skillLevel||sk.level),className:"inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold border",children:sk.skillLevel||sk.level||"Beginner"})}),
             (0,P.jsx)("td",{className:"py-3.5 px-4",children:hasTrainSrc&&rank>0?(0,P.jsx)("div",{style:{minWidth:"145px"},className:"space-y-1",children:levelsCfg.map((lv,li)=>{
               let reached=(li+1)<=rank;
@@ -5107,7 +5110,7 @@ function SkillMatrixPage({employees,employeeSkills,skillAwardHistory,skillsConfi
               ]},lv.id||li);
             })}):(0,P.jsx)("span",{className:"text-slate-400",children:"-"})}),
             (0,P.jsx)("td",{className:"py-3.5 px-4",children:hasTrainSrc?(0,P.jsxs)("div",{className:"flex flex-col items-start gap-1",children:[
-              (0,P.jsx)("button",{type:"button",onClick:()=>setDetailSkill(sk),className:"inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-purple-50 text-purple-700 border border-purple-200 text-left cursor-pointer",children:primaryTrainName}),
+              (0,P.jsx)("button",{type:"button",onClick:()=>{setDetailSkill(sk);setDetailTab("roadmap");setRoadmapLevel(sk.skillLevel||sk.level||levelsCfg[0]?.name||"Beginner");setRoadmapFilter("all")},className:"inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-purple-50 text-purple-700 border border-purple-200 text-left cursor-pointer",children:primaryTrainName}),
               trainSources.length>1&&(0,P.jsx)("span",{style:{paddingLeft:"2px"},className:"text-[10px] font-medium text-slate-500",children:"+"+(trainSources.length-1)+" more training"+(trainSources.length>2?"s":"")})
             ]}):(0,P.jsx)("span",{className:"text-slate-400",children:"-"})}),
             (0,P.jsx)("td",{style:{maxWidth:"180px"},className:"py-3.5 px-4 text-slate-600",children:remarkText}),
@@ -5119,7 +5122,7 @@ function SkillMatrixPage({employees,employeeSkills,skillAwardHistory,skillsConfi
               (0,P.jsx)("div",{className:"font-medium text-slate-700",children:updater.actor}),
               (0,P.jsx)("div",{className:"text-[11px] text-slate-400 tabular-nums",children:updater.date})
             ]}):(0,P.jsx)("span",{className:"text-slate-400",children:"-"})}),
-            (0,P.jsx)("td",{className:"py-3.5 px-4 text-center",children:(0,P.jsx)("button",{type:"button",onClick:()=>setDetailSkill(sk),title:"View Skill Detail",className:"p-1.5 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer inline-flex items-center justify-center",children:
+            (0,P.jsx)("td",{className:"py-3.5 px-4 text-center",children:(0,P.jsx)("button",{type:"button",onClick:()=>{setDetailSkill(sk);setDetailTab("roadmap");setRoadmapLevel(sk.skillLevel||sk.level||levelsCfg[0]?.name||"Beginner");setRoadmapFilter("all")},title:"View Skill Detail",className:"p-1.5 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer inline-flex items-center justify-center",children:
               (0,P.jsxs)("svg",{viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2",className:"w-4 h-4",children:[
                 (0,P.jsx)("path",{d:"M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"}),
                 (0,P.jsx)("circle",{cx:"12",cy:"12",r:"3"})
@@ -5147,103 +5150,99 @@ function SkillMatrixPage({employees,employeeSkills,skillAwardHistory,skillsConfi
       ]}):(0,P.jsx)("span",{className:"font-semibold text-blue-600",children:subTab==="history"?"History":"Overview"})
     ]}),
 
-    activeDetailSkill?(0,P.jsxs)("div",{className:"p-6 space-y-5 max-w-[1600px] w-full mx-auto",children:[
-      (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-6 shadow-sm flex items-start justify-between flex-wrap gap-4",children:[
-        (0,P.jsxs)("div",{className:"space-y-2",children:[
-          (0,P.jsxs)("button",{type:"button",onClick:()=>setDetailSkill(null),className:"text-xs font-semibold text-slate-600 hover:text-blue-600 flex items-center gap-1 cursor-pointer mb-1",children:[
-            (0,P.jsx)("span",{children:"←"}),
-            (0,P.jsx)("span",{children:"Back to Overview"})
+    activeDetailSkill?(()=>{
+      let curSkillLvl=activeDetailSkill.skillLevel||activeDetailSkill.level||(levelsCfg[0]?.name)||"Beginner";
+      let activeLvl=roadmapLevel||curSkillLvl;
+      let trainSources=(Array.isArray(activeDetailSkill.sources)?activeDetailSkill.sources:[]).filter(s=>Boolean(s.trainingId));
+      if(trainSources.length===0&&activeDetailSkill.sourceTrainingId&&activeDetailSkill.sourceTrainingName){
+        trainSources=[{trainingId:activeDetailSkill.sourceTrainingId,trainingName:activeDetailSkill.sourceTrainingName,level:curSkillLvl,awardedDate:activeDetailSkill.awardedDate}];
+      }
+      let levelItems=trainSources.filter(src=>String(src.level||curSkillLvl).toLowerCase()===String(activeLvl).toLowerCase()).map((src,idx)=>({
+        id:src.trainingId||("src-"+idx),
+        title:src.trainingName||"Training Program",
+        status:"completed",
+        awardedDate:src.awardedDate,
+        level:src.level||activeLvl,
+        programme:src.trainingId?(Array.isArray(programmes)?programmes:[]).find(pr=>pr.id===src.trainingId):null
+      }));
+      let totalCount=levelItems.length;
+      let completedCount=levelItems.filter(it=>it.status==="completed").length;
+      let pct=totalCount>0?Math.round((completedCount/totalCount)*100):0;
+      let visibleItems=roadmapFilter==="completed"?levelItems.filter(it=>it.status==="completed"):roadmapFilter==="pending"?levelItems.filter(it=>it.status!=="completed"):levelItems;
+      let skillHist=empHistRecs.filter(h=>h.skillId===activeDetailSkill.skillId||normSkillKey(h.skillName)===normSkillKey(activeDetailSkill.skillName));
+      return(0,P.jsxs)("div",{style:{display:"flex",flex:1,alignItems:"stretch",minHeight:"calc(100vh - 110px)"},children:[
+        renderLeftSidebar(),
+        (0,P.jsxs)("div",{style:{flex:1,minWidth:0,padding:"18px 24px"},className:"space-y-4",children:[
+          (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
+            (0,P.jsx)("button",{type:"button",onClick:()=>setDetailTab("roadmap"),className:"px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer "+(detailTab==="roadmap"?"bg-blue-50 text-blue-600":"text-slate-600 hover:bg-slate-100"),children:"Roadmap"}),
+            (0,P.jsx)("button",{type:"button",onClick:()=>setDetailTab("notes"),className:"px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer "+(detailTab==="notes"?"bg-blue-50 text-blue-600":"text-slate-600 hover:bg-slate-100"),children:"Notes"})
           ]}),
-          (0,P.jsxs)("div",{className:"flex items-center gap-3 flex-wrap",children:[
-            (0,P.jsx)("h1",{className:"text-xl font-bold text-slate-900",children:activeDetailSkill.skillName}),
-            (0,P.jsx)("span",{style:getLevelPillStyle(activeDetailSkill.skillLevel||activeDetailSkill.level),className:"px-3 py-0.5 rounded-full text-xs font-bold border",children:activeDetailSkill.skillLevel||activeDetailSkill.level||"Beginner"}),
-            Boolean(activeDetailSkill.sourceTrainingId||(Array.isArray(activeDetailSkill.sources)&&activeDetailSkill.sources.some(s=>Boolean(s.trainingId))))&&(0,P.jsx)("span",{className:"px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200",children:"Earned via Training Program"})
-          ]}),
-          (0,P.jsx)("p",{className:"text-xs text-slate-500",children:(masterSkills.find(m=>m.id===activeDetailSkill.skillId||normSkillKey(m.name)===normSkillKey(activeDetailSkill.skillName))?.description)||"Skill competency tracked across employee development and completed trainings."}),
-          (0,P.jsxs)("div",{className:"text-xs text-slate-600 pt-1",children:["Employee: ",(0,P.jsx)("span",{className:"font-bold text-slate-900",children:activeEmp.firstName+" "+activeEmp.lastName})," • ",activeEmp.department]})
-        ]}),
-        (0,P.jsx)("div",{className:"flex items-center gap-2",children:canEditCurrentEmp&&(0,P.jsx)("button",{type:"button",onClick:openEditModal,className:"bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs font-semibold shadow-xs cursor-pointer",children:"Add/Edit Skills"})})
-      ]}),
-
-      (0,P.jsxs)("div",{className:"grid grid-cols-1 lg:grid-cols-3 gap-5",children:[
-        (0,P.jsxs)("div",{className:"lg:col-span-2 bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-4",children:[
-          (0,P.jsxs)("div",{className:"flex items-center justify-between border-b border-slate-100 pb-3",children:[
-            (0,P.jsx)("h2",{className:"text-sm font-bold text-slate-900",children:"Skill Roadmap & Progression"}),
-            (0,P.jsx)("span",{className:"text-xs font-semibold text-blue-600 bg-blue-50 border border-blue-200 px-2.5 py-0.5 rounded-full",children:getLevelRank(activeDetailSkill.skillLevel||activeDetailSkill.level)+" of "+levelsCfg.length+" Achieved"})
-          ]}),
-          (0,P.jsx)("div",{className:"space-y-3",children:levelsCfg.map((lvl,li)=>{
-            let curRank=getLevelRank(activeDetailSkill.skillLevel||activeDetailSkill.level);
-            let reached=(li+1)<=curRank;
-            let isCurrent=(li+1)===curRank;
-            return(0,P.jsxs)("div",{className:"p-3.5 rounded-xl border "+(reached?"bg-blue-50/40 border-blue-200":"bg-slate-50 border-slate-200"),children:[
-              (0,P.jsxs)("div",{className:"flex items-center justify-between text-xs mb-2",children:[
-                (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
-                  (0,P.jsx)("span",{className:"font-bold "+(reached?"text-slate-900":"text-slate-500"),children:lvl.name}),
-                  isCurrent&&(0,P.jsx)("span",{className:"px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-600 text-white",children:"Current Level"})
-                ]}),
-                (0,P.jsx)("span",{className:"text-[11px] font-semibold "+(reached?"text-emerald-700":"text-slate-400"),children:reached?"Completed ✓":"Pending"})
-              ]}),
-              (0,P.jsx)("div",{className:"w-full bg-slate-200 h-2 rounded-full overflow-hidden",children:(0,P.jsx)("div",{className:"h-full rounded-full transition-all "+(reached?"bg-blue-600":"bg-transparent"),style:{width:reached?"100%":"0%"}})})
-            ]},lvl.id||li);
-          })}),
-          (0,P.jsxs)("div",{className:"pt-2 border-t border-slate-100 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs",children:[
-            (0,P.jsxs)("div",{children:[(0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Remarks"}),(0,P.jsx)("div",{className:"font-semibold text-slate-800 mt-0.5",children:activeDetailSkill.remarks||(activeDetailSkill.sourceTrainingId?("Earned via Training: "+activeDetailSkill.sourceTrainingName):"-")})]}),
-            (0,P.jsxs)("div",{children:[(0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Created by"}),(0,P.jsx)("div",{className:"font-semibold text-slate-800 mt-0.5",children:activeDetailSkill.createdBy||"Ishdeep Anand"}),(0,P.jsx)("div",{className:"text-[11px] text-slate-500",children:fmtDateTime(activeDetailSkill.createdAt||activeDetailSkill.createdDate)})]}),
-            (0,P.jsxs)("div",{children:[(0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Updated by"}),(0,P.jsx)("div",{className:"font-semibold text-slate-800 mt-0.5",children:activeDetailSkill.updatedBy||"-"}),(0,P.jsx)("div",{className:"text-[11px] text-slate-500",children:activeDetailSkill.updatedBy?fmtDateTime(activeDetailSkill.updatedAt||activeDetailSkill.updatedDate):""})]})
-          ]})
-        ]}),
-        (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-4",children:[
-          (0,P.jsx)("h2",{className:"text-sm font-bold text-slate-900 border-b border-slate-100 pb-3",children:"Training & Acquisition Sources"}),
-          (()=>{
-            let srcs=(Array.isArray(activeDetailSkill.sources)?activeDetailSkill.sources:[]).filter(s=>Boolean(s.trainingId));
-            if(srcs.length===0&&activeDetailSkill.sourceTrainingId&&activeDetailSkill.sourceTrainingName){
-              srcs=[{trainingId:activeDetailSkill.sourceTrainingId,trainingName:activeDetailSkill.sourceTrainingName,level:activeDetailSkill.skillLevel,awardedDate:activeDetailSkill.awardedDate}];
-            }
-            if(srcs.length===0)return(0,P.jsx)("div",{className:"text-xs text-slate-500 italic",children:"Assigned in employee skill profile."});
-            return(0,P.jsx)("div",{className:"space-y-2.5",children:srcs.map((src,si)=>{
-              let matchedProg=src.trainingId?(Array.isArray(programmes)?programmes:[]).find(pr=>pr.id===src.trainingId):null;
-              return(0,P.jsxs)("div",{className:"p-3 rounded-lg border bg-purple-50/50 border-purple-200 text-xs space-y-1",children:[
-                (0,P.jsxs)("div",{className:"flex items-center justify-between gap-2",children:[
-                  (0,P.jsx)("span",{className:"font-bold text-slate-900",children:src.trainingName||"Training Program"}),
-                  src.level&&(0,P.jsx)("span",{style:getLevelPillStyle(src.level),className:"px-2 py-0.5 rounded-full text-[10px] font-bold border",children:src.level})
-                ]}),
-                (0,P.jsxs)("div",{className:"text-[11px] text-slate-500 flex items-center justify-between",children:[
-                  (0,P.jsx)("span",{children:"Training Program Completion"}),
-                  (0,P.jsx)("span",{children:fmtSysDate(src.awardedDate)||"-"})
-                ]}),
-                matchedProg&&onNavigateToProgramme&&(0,P.jsx)("button",{type:"button",onClick:()=>onNavigateToProgramme(matchedProg),className:"text-[11px] font-semibold text-blue-600 hover:underline pt-1 cursor-pointer",children:"View Training Program →"})
-              ]},si);
-            })});
-          })()
-        ]})
-      ]}),
-
-      (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-3",children:[
-        (0,P.jsx)("h2",{className:"text-sm font-bold text-slate-900",children:"Skill Change History"}),
-        (()=>{
-          let skillHist=empHistRecs.filter(h=>h.skillId===activeDetailSkill.skillId||normSkillKey(h.skillName)===normSkillKey(activeDetailSkill.skillName));
-          if(skillHist.length===0)return(0,P.jsx)("div",{className:"text-xs text-slate-500 italic py-2",children:"No recorded history changes for this skill yet."});
-          return(0,P.jsx)("div",{className:"overflow-x-auto",children:(0,P.jsxs)("table",{className:"w-full text-left border-collapse text-xs",children:[
-            (0,P.jsx)("thead",{children:(0,P.jsxs)("tr",{className:"border-b border-slate-200 text-slate-400 font-semibold bg-slate-50/50",children:[
-              (0,P.jsx)("th",{className:"py-2.5 px-3",children:"Date"}),
-              (0,P.jsx)("th",{className:"py-2.5 px-3",children:"Outcome"}),
-              (0,P.jsx)("th",{className:"py-2.5 px-3",children:"Previous Level"}),
-              (0,P.jsx)("th",{className:"py-2.5 px-3",children:"Awarded Level"}),
-              (0,P.jsx)("th",{className:"py-2.5 px-3",children:"Source Training / Action"})
+          detailTab==="roadmap"?(0,P.jsxs)(P.Fragment,{children:[
+            (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl px-3 py-2.5 shadow-xs flex items-center justify-between flex-wrap gap-3",children:[
+              (0,P.jsx)("div",{className:"inline-flex items-center p-1 bg-slate-50 border border-slate-200 rounded-lg gap-1 flex-wrap",children:levelsCfg.map((lvl,li)=>{
+                let isSel=String(lvl.name).toLowerCase()===String(activeLvl).toLowerCase();
+                let isCur=String(lvl.name).toLowerCase()===String(curSkillLvl).toLowerCase();
+                return(0,P.jsxs)("button",{type:"button",onClick:()=>setRoadmapLevel(lvl.name),className:"px-3 py-1.5 rounded-md text-xs font-semibold transition-colors cursor-pointer inline-flex items-center gap-1.5 "+(isSel?"bg-blue-600 text-white shadow-xs":"text-slate-600 hover:bg-white"),children:[
+                  (0,P.jsx)("span",{className:"w-2 h-2 rounded-full shrink-0",style:{backgroundColor:getLevelDotColor(lvl.name)}}),
+                  (0,P.jsx)("span",{children:lvl.name}),
+                  isCur&&(0,P.jsx)("span",{className:"text-[10px] font-medium "+(isSel?"text-blue-100":"text-slate-400"),children:"(Current)"})
+                ]},lvl.id||li);
+              })}),
+              (0,P.jsxs)("div",{className:"flex items-center gap-3",children:[
+                (0,P.jsx)("span",{className:"px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 text-blue-600 border border-blue-200 tabular-nums",children:completedCount+" of "+totalCount+" Completed"}),
+                (0,P.jsx)("div",{className:"w-28 h-1.5 bg-slate-200 rounded-full overflow-hidden",children:(0,P.jsx)("div",{className:"h-full rounded-full bg-blue-600 transition-all",style:{width:pct+"%"}})}),
+                (0,P.jsx)("span",{className:"text-xs font-bold text-slate-700 tabular-nums",children:pct+"%"})
+              ]})
+            ]}),
+            (0,P.jsx)("div",{className:"flex justify-end",children:(0,P.jsxs)("select",{value:roadmapFilter,onChange:ev=>setRoadmapFilter(ev.target.value),className:"bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-medium text-slate-700 shadow-xs focus:outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer",children:[
+              (0,P.jsx)("option",{value:"all",children:"All Items"}),
+              (0,P.jsx)("option",{value:"completed",children:"Completed"}),
+              (0,P.jsx)("option",{value:"pending",children:"Pending"})
             ]})}),
-            (0,P.jsx)("tbody",{className:"divide-y divide-slate-100",children:skillHist.map((h,hi)=>(
-              (0,P.jsxs)("tr",{children:[
-                (0,P.jsx)("td",{className:"py-2.5 px-3 text-slate-600 tabular-nums",children:fmtDateTime(h.awardedDate||h.createdDate)}),
-                (0,P.jsx)("td",{style:{textTransform:"capitalize"},className:"py-2.5 px-3 font-semibold text-slate-800",children:String(h.outcome||"added").replace(/_/g," ")}),
-                (0,P.jsx)("td",{className:"py-2.5 px-3 text-slate-500",children:h.previousLevel||"-"}),
-                (0,P.jsx)("td",{className:"py-2.5 px-3",children:(0,P.jsx)("span",{style:getLevelPillStyle(h.finalLevel||h.awardedSkillLevel),className:"px-2 py-0.5 rounded-full text-[11px] font-semibold border",children:h.finalLevel||h.awardedSkillLevel})}),
-                (0,P.jsx)("td",{className:"py-2.5 px-3 text-slate-700",children:h.sourceTrainingName||"-"})
-              ]},h.id||hi)
-            ))})
-          ]})});
-        })()
-      ]})
-    ]}):(0,P.jsxs)("div",{style:{display:"flex",flex:1,alignItems:"stretch",minHeight:"calc(100vh - 110px)"},children:[
+            (0,P.jsx)("div",{style:{minHeight:"420px"},className:"bg-white border border-slate-200 rounded-xl shadow-xs flex flex-col",children:visibleItems.length===0?(0,P.jsxs)("div",{className:"flex-1 flex flex-col items-center justify-center p-12 text-center",children:[
+              (0,P.jsx)("div",{className:"w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center mb-3",children:
+                (0,P.jsxs)("svg",{viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"1.6",className:"w-7 h-7 text-slate-400",children:[
+                  (0,P.jsx)("path",{strokeLinecap:"round",strokeLinejoin:"round",d:"M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.87c.58.42.98 1.07 1.08 1.78L9.75 17h4.5l.17-1.35c.1-.71.5-1.36 1.08-1.78A6 6 0 0 0 12 3Z"})
+                ]})
+              }),
+              (0,P.jsx)("div",{className:"text-xs font-bold text-slate-800",children:"No roadmap defined for this level."})
+            ]}):(0,P.jsx)("div",{className:"p-5 space-y-3",children:visibleItems.map((it,idx)=>(
+              (0,P.jsxs)("div",{className:"p-4 rounded-xl border border-slate-200 bg-slate-50/50 flex items-center justify-between gap-4 flex-wrap",children:[
+                (0,P.jsxs)("div",{className:"space-y-1",children:[
+                  (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
+                    (0,P.jsx)("span",{className:"text-xs font-bold text-slate-900",children:it.title}),
+                    (0,P.jsx)("span",{className:"px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200",children:"Completed"})
+                  ]}),
+                  (0,P.jsx)("div",{className:"text-[11px] text-slate-500",children:"Earned via Training Completion"+(it.awardedDate?" • "+fmtSysDate(it.awardedDate):"")})
+                ]}),
+                it.programme&&onNavigateToProgramme&&(0,P.jsx)("button",{type:"button",onClick:()=>onNavigateToProgramme(it.programme),className:"text-xs font-semibold text-blue-600 hover:underline cursor-pointer",children:"View Training Program →"})
+              ]},it.id||idx)
+            ))})})
+          ]}):(0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl shadow-xs p-5 space-y-4",children:[
+            (0,P.jsxs)("div",{className:"flex items-center justify-between border-b border-slate-100 pb-3",children:[
+              (0,P.jsx)("h3",{className:"text-sm font-bold text-slate-900",children:"Skill Notes & History — "+activeDetailSkill.skillName}),
+              (0,P.jsx)("span",{style:getLevelPillStyle(curSkillLvl),className:"px-2.5 py-0.5 rounded-full text-[11px] font-semibold border",children:curSkillLvl})
+            ]}),
+            (0,P.jsxs)("div",{className:"text-xs space-y-1",children:[
+              (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Remarks / Notes"}),
+              (0,P.jsx)("div",{className:"text-slate-800 font-medium",children:activeDetailSkill.remarks||"No notes added for this skill yet."})
+            ]}),
+            skillHist.length>0&&(0,P.jsxs)("div",{className:"pt-3 border-t border-slate-100 space-y-2",children:[
+              (0,P.jsx)("div",{className:"text-xs font-bold text-slate-700",children:"Activity Log"}),
+              (0,P.jsx)("div",{className:"divide-y divide-slate-100",children:skillHist.map((h,hi)=>(
+                (0,P.jsxs)("div",{className:"py-2 text-xs flex items-center justify-between gap-3",children:[
+                  (0,P.jsxs)("div",{children:[
+                    (0,P.jsx)("span",{className:"font-semibold text-slate-800 capitalize",children:String(h.outcome||"added").replace(/_/g," ")}),
+                    h.sourceTrainingName&&(0,P.jsx)("span",{className:"text-slate-500 ml-1.5",children:"• "+h.sourceTrainingName})
+                  ]}),
+                  (0,P.jsx)("span",{className:"text-[11px] text-slate-400 tabular-nums",children:fmtDateTime(h.awardedDate||h.createdDate)})
+                ]},h.id||hi)
+              ))})
+            ]})
+          ]})
+        ]})
+      ]});
+    })():(0,P.jsxs)("div",{style:{display:"flex",flex:1,alignItems:"stretch",minHeight:"calc(100vh - 110px)"},children:[
       // Full-height Left Summary Sidebar (attached cleanly like CollabCRM screenshot)
       renderLeftSidebar(),
       // Right Main Workspace
