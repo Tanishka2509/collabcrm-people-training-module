@@ -360,7 +360,7 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){let r=e.
         (0,P.jsx)("div",{className:"bg-white border border-slate-200 rounded-xl px-6 shadow-sm overflow-x-auto",children:[
           (0,P.jsxs)("div",{className:"flex items-center gap-8 text-xs font-bold border-b border-transparent",children:[
             (0,P.jsx)("button",{onClick:()=>setActiveTab("general"),className:"py-4 border-b-2 transition-colors whitespace-nowrap " + (activeTab==="general"?"border-blue-600 text-blue-600":"border-transparent text-slate-500 hover:text-slate-800"),children:"General Info"}),
-            (0,P.jsx)("button",{onClick:()=>setActiveTab("curriculum"),className:"py-4 border-b-2 transition-colors whitespace-nowrap " + (activeTab==="curriculum"?"border-blue-600 text-blue-600":"border-transparent text-slate-500 hover:text-slate-800"),children:"Curriculum & Modules"}),
+            (0,P.jsx)("button",{onClick:()=>setActiveTab("curriculum"),className:"py-4 border-b-2 transition-colors whitespace-nowrap " + (activeTab==="curriculum"?"border-blue-600 text-blue-600":"border-transparent text-slate-500 hover:text-slate-800"),children:"Module"}),
             (0,P.jsxs)("button",{onClick:()=>setActiveTab("enrolled"),className:"py-4 border-b-2 transition-colors whitespace-nowrap flex items-center gap-1.5 " + (activeTab==="enrolled"?"border-blue-600 text-blue-600":"border-transparent text-slate-500 hover:text-slate-800"),children:[
               (0,P.jsx)("span",{children:"Enrolled Employees"}),
               (0,P.jsxs)("span",{className:"bg-slate-100 text-slate-600 text-[10px] px-1.5 py-0.5 rounded-full font-bold",children:[o.length]})
@@ -497,7 +497,7 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){let r=e.
         // Tab 2: Curriculum & Modules
         activeTab==="curriculum" && (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-4",children:[
           (0,P.jsxs)("div",{className:"flex items-center justify-between border-b border-slate-100 pb-3",children:[
-            (0,P.jsx)("h2",{className:"text-xs font-bold text-slate-400 uppercase tracking-wider",children:"Curriculum & Modules"}),
+            (0,P.jsx)("h2",{className:"text-xs font-bold text-slate-400 uppercase tracking-wider",children:"Module"}),
             (0,P.jsx)("button",{type:"button",disabled:isLockedInactive,onClick:()=>!isLockedInactive&&a&&a(),style:isLockedInactive?{opacity:0.5}:undefined,className:"text-xs font-semibold text-blue-600 " + (isLockedInactive?"cursor-not-allowed":"hover:underline"),children:"+ Add Resource"})
           ]}),
           (0,P.jsx)("div",{className:"overflow-x-auto",children:(0,P.jsxs)("table",{className:"w-full text-left border-collapse",children:[
