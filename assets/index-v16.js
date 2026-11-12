@@ -1698,8 +1698,18 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
           ]})
         ]})
       ]}),
-      (0,P.jsxs)("div",{className:"grid grid-cols-1 gap-4 text-xs pt-2 border-t border-slate-100",children:[
+      (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-3 gap-4 text-xs pt-2 border-t border-slate-100",children:[
         (0,P.jsxs)("div",{className:"space-y-1.5",children:[
+          (0,P.jsxs)("label",{className:"inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 mb-1.5",children:[(0,P.jsx)("span",{children:"Difficulty Level *"}),(0,P.jsx)(InfoTip,{text:"Overall complexity level of this training program."})]}),
+          (0,P.jsxs)("div",{className:"relative",children:[
+            (0,P.jsxs)("select",{value:f,onChange:e=>p(e.target.value),style:{appearance:"none",WebkitAppearance:"none",MozAppearance:"none",paddingRight:"32px"},className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 " + (f?"text-slate-900":"text-slate-400"),children:[
+              (0,P.jsx)("option",{value:"",children:"Select difficulty level..."}),
+              ["Beginner","Intermediate","Expert"].map(lvl=>(0,P.jsx)("option",{value:lvl,children:lvl},lvl))
+            ]}),
+            (0,P.jsx)(re,{style:{position:"absolute",right:"10px",top:"50%",transform:"translateY(-50%)"},className:"w-4 h-4 text-slate-400 pointer-events-none"})
+          ]})
+        ]}),
+        (0,P.jsxs)("div",{className:"md:col-span-2 space-y-1.5",children:[
           (0,P.jsxs)("label",{className:"inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 mb-1.5",children:[(0,P.jsx)("span",{children:"Learning Objectives"}),(0,P.jsx)(InfoTip,{text:"Key skills and outcomes employees will gain upon completion."})]}),
           (0,P.jsx)("input",{type:"text",value:learnObj,onChange:e=>setLearnObj(e.target.value),placeholder:"Key skills and learning outcomes...",className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"})
         ]})
