@@ -398,8 +398,7 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){let r=e.
                 (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
                   (0,P.jsx)("span",{className:"w-2 h-2 rounded-full",style:{backgroundColor:"#7c3aed"}}),
                   (0,P.jsx)("h2",{className:"text-xs font-bold uppercase tracking-wider text-purple-700",children:"Training Recognition"})
-                ]}),
-                (0,P.jsx)("span",{className:"text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200",children:(isCertOn && isSkillOn) ? "Certificate & Skills" : isCertOn ? "Certificate" : "Skills"})
+                ]})
               ]}),
               isCertOn && (0,P.jsx)("div",{className:"grid grid-cols-1 gap-4 text-xs",children:(0,P.jsxs)("div",{className:"p-3 rounded-lg border border-purple-200",style:{backgroundColor:"#faf5ff"},children:[
                 (0,P.jsx)("div",{className:"text-[11px] font-medium text-slate-500",children:"Certificate Generation"}),
@@ -1774,12 +1773,9 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
     // 3. Training Recognition (Placed before Assessment so selected skills automatically drive Assessment & Questions)
     (0,P.jsxs)("div",{className:"bg-white border border-purple-200 rounded-xl p-6 shadow-sm space-y-5",style:{borderLeft:"4px solid #7c3aed"},children:[
       (0,P.jsxs)("div",{className:"flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-purple-200 pb-3",children:[
-        (0,P.jsxs)("div",{className:"space-y-0.5",children:[
-          (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
-            (0,P.jsx)("h2",{className:"text-sm font-bold text-slate-900",children:"3. Training Recognition"}),
-            (0,P.jsx)("span",{className:"px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200",children:"Certificate & Skills"})
-          ]}),
-          (0,P.jsx)("p",{className:"text-xs text-slate-500",children:"Choose how employees are recognised upon verified completion of this Training."})
+        (0,P.jsxs)("div",{className:"flex items-center gap-1.5",children:[
+          (0,P.jsx)("h2",{className:"text-sm font-bold text-slate-900",children:"3. Training Recognition"}),
+          (0,P.jsx)(InfoTip,{text:"Choose how employees are recognised upon verified completion of this Training."})
         ]})
       ]}),
 
@@ -1963,7 +1959,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
 
           // Question Statement (Full Width)
           (0,P.jsxs)("div",{className:"space-y-1 text-xs",children:[
-            (0,P.jsxs)("label",{className:"inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 mb-1.5",children:[(0,P.jsx)("span",{children:"Question Statement *"}),(0,P.jsx)(InfoTip,{text:"The prompt or question text shown to the employee."})]}),
+            (0,P.jsxs)("label",{className:"inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 mb-1.5",children:[(0,P.jsx)("span",{children:"Question *"}),(0,P.jsx)(InfoTip,{text:"The prompt or question text shown to the employee."})]}),
             (0,P.jsx)("textarea",{rows:2,value:q.text,onChange:e=>handleUpdateQuestion(q.id, "text", e.target.value),placeholder:"Enter your question statement here...",className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"})
           ]}),
 
@@ -1996,7 +1992,7 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
 
             // Long Text Answer setup (Cleaned per Image 4: No "Requires Manual Review" checkbox)
             q.type==="long_text" && (0,P.jsxs)("div",{className:"space-y-2",children:[
-              (0,P.jsxs)("label",{className:"inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 mb-1.5",children:[(0,P.jsx)("span",{children:"Expected Answer / Evaluation Reference for Reviewer:"}),(0,P.jsx)(InfoTip,{text:"Sample solution or grading rubric for manual reviewer evaluation."})]}),
+              (0,P.jsxs)("label",{className:"inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 mb-1.5",children:[(0,P.jsx)("span",{children:"Expected Answer"}),(0,P.jsx)(InfoTip,{text:"Evaluation reference for reviewer. Sample solution or grading rubric for manual reviewer evaluation."})]}),
               (0,P.jsx)("textarea",{rows:2,value:q.expectedAnswer||"",onChange:e=>handleUpdateQuestion(q.id, "expectedAnswer", e.target.value),placeholder:"Enter key points, rubric, or sample solution for the evaluator...",className:"w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:ring-1 focus:ring-blue-500"})
             ]}),
 
