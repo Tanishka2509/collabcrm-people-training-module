@@ -4395,8 +4395,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
                 (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
                   (0,P.jsx)("span",{className:"w-2 h-2 rounded-full",style:{backgroundColor:"#7c3aed"}}),
                   (0,P.jsx)("h3",{className:"text-xs font-bold text-purple-700 uppercase tracking-wider",children:"Training Recognition"})
-                ]}),
-                (0,P.jsx)("span",{className:"px-2.5 py-0.5 rounded-full text-[11px] font-bold border " + (recognitionEarned ? "bg-purple-600 text-white border-purple-600" : "bg-purple-50 text-purple-700 border-purple-200"),children:recognitionEarned ? "Recognition Awarded ✓" : "Awarded Upon Completion"})
+                ]})
               ]}),
               (0,P.jsxs)("div",{className:"flex flex-wrap items-center gap-2 text-xs",children:[
                 isCertEnabled && (0,P.jsx)("span",{className:"px-2.5 py-1 rounded-full bg-purple-50 text-purple-700 border border-purple-200 font-semibold",children:recognitionEarned ? "🎓 Official Certificate Issued ✓" : "🎓 Official Certificate on Completion"}),
