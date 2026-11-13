@@ -4024,10 +4024,10 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
   let allRequiredStepsDone = hasChecklist ? (preManagerStepsDone && stepManagerDone) : preManagerStepsDone;
 
   let attemptsUsed = attemptHistory.length;
-  let hasAttemptsRemaining = attemptsUsed < maxAttempts;
-  let attemptsExhausted = isAssessmentEnabled && !latestResult?.isPassed && attemptsUsed >= maxAttempts;
+  let hasAttemptsRemaining = !latestResult?.isPassed && c.status !== "Completed" && c.status !== "Failed" && attemptsUsed < maxAttempts;
+  let attemptsExhausted = isAssessmentEnabled && !latestResult?.isPassed && (attemptsUsed >= maxAttempts || c.status === "Failed");
   let expectedHoursLabel = fmtDurationHM(c.expectedDurationHours || c.expectedDuration || c.hours || 4);
-  let courseStatusLabel = isSubmitted ? "Completed ✓" : ((reqManager && preManagerStepsDone && !stepManagerDone) ? "Pending Approval" : (latestResult?.isPassed ? "Assessment Passed ✓" : (attemptsExhausted ? "Re-learning Required" : ((allResourcesDone && isAssessmentEnabled) ? "Ready for Assessment" : (doneCount > 0 || attemptHistory.length > 0 || submittedDocs.length > 0 || c.status === "In Progress" ? "In Progress" : "Not Started")))));
+  let courseStatusLabel = isSubmitted ? "Completed ✓" : ((reqManager && preManagerStepsDone && !stepManagerDone) ? "Pending Approval" : (latestResult?.isPassed ? "Assessment Passed ✓" : (attemptsExhausted ? "Failed" : ((allResourcesDone && isAssessmentEnabled) ? "Ready for Assessment" : (doneCount > 0 || attemptHistory.length > 0 || submittedDocs.length > 0 || c.status === "In Progress" ? "In Progress" : "Not Started")))));
 
   let resolveCourseState=(nextComp, nextRes, nextDocs, nextAppr, nextHistLen)=>{
     let dc = resources.filter(item => nextComp[item.id]).length;
@@ -4147,7 +4147,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
   };
 
   let evaluateAssessment=()=>{
-    if(isCourseInactive || isCourseArchived || attemptsUsed >= maxAttempts) return;
+    if(isCourseInactive || isCourseArchived || attemptsUsed >= maxAttempts || latestResult?.isPassed || c.status === "Completed" || c.status === "Failed") return;
     let resultRecord = gradeAssessmentSubmission(questions, userAnswers, passingScore, attemptHistory.length + 1);
 
     let nextHist = [resultRecord, ...attemptHistory];
@@ -4162,7 +4162,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
   };
 
   let retakeAssessment=()=>{
-    if(isCourseInactive || isCourseArchived || !hasAttemptsRemaining) return;
+    if(isCourseInactive || isCourseArchived || !hasAttemptsRemaining || latestResult?.isPassed || c.status === "Completed" || c.status === "Failed") return;
     setUserAnswers({});
     setSubmittedState(false);
     setLatestResult(null);
@@ -4170,7 +4170,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
   };
 
   let restartProgramme=()=>{
-    if(isCourseInactive || isCourseArchived) return;
+    if(isCourseInactive || isCourseArchived || latestResult?.isPassed || attemptsExhausted || c.status === "Completed" || c.status === "Failed") return;
     setCompletedResources({});
     setViewedResource(null);
     setUserAnswers({});
@@ -4538,9 +4538,8 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
                   (0,P.jsxs)("p",{className:"text-xs text-slate-600",children:["You have ", maxAttempts - attemptsUsed, " attempt(s) remaining."]}),
                   (0,P.jsx)("button",{type:"button",disabled:isCourseInactive,onClick:retakeAssessment,style:isCourseInactive?{opacity:0.5}:undefined,className:"bg-blue-600 text-white px-5 py-2.5 rounded-lg text-xs font-bold shadow-sm transition-colors " + (isCourseInactive?"cursor-not-allowed":"hover:bg-blue-700"),children:"Retake Assessment ↺"})
                 ]}):
-                (0,P.jsxs)("div",{className:"pt-3 space-y-3",children:[
-                  (0,P.jsxs)("p",{className:"text-xs text-rose-700 font-bold max-w-md mx-auto leading-relaxed",children:["All ", maxAttempts, " assessment attempt(s) used without passing. You are not considered as Pass and must go through the training again before retaking the assessment."]}),
-                  (0,P.jsx)("button",{type:"button",disabled:isCourseInactive,onClick:restartProgramme,style:isCourseInactive?{opacity:0.5}:undefined,className:"bg-rose-600 text-white px-5 py-2.5 rounded-lg text-xs font-bold shadow-sm transition-colors " + (isCourseInactive?"cursor-not-allowed":"hover:bg-rose-700"),children:"Go Through Training Again ↺"})
+                (0,P.jsxs)("div",{className:"pt-3 space-y-2",children:[
+                  (0,P.jsxs)("p",{className:"text-xs text-rose-700 font-bold max-w-md mx-auto leading-relaxed",children:["All ", maxAttempts, " assessment attempt(s) have been completed without passing. Status: Failed. No further attempts or retakes are allowed."]})
                 ]})
               ]})}),
               (0,P.jsxs)("div",{className:"space-y-3",children:[
@@ -4550,10 +4549,9 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
             ]}) :
             attemptsExhausted ? (0,P.jsxs)("div",{className:"space-y-6",children:[
               (0,P.jsx)("div",{className:"bg-white border border-slate-200 rounded-xl p-6 shadow-sm",children:(0,P.jsxs)("div",{className:"bg-rose-50 border border-rose-200 rounded-xl p-6 text-center space-y-3",children:[
-                (0,P.jsx)("div",{className:"text-4xl",children:"🔄"}),
-                (0,P.jsx)("h2",{className:"text-lg font-bold text-rose-900",children:"Assessment Not Passed — Training Re-run Required"}),
-                (0,P.jsxs)("p",{className:"text-xs text-rose-700 font-medium max-w-md mx-auto leading-relaxed",children:["All ", maxAttempts, " assessment attempt(s) have been used without passing. You are not considered as Pass and must go through the training again."]}),
-                (0,P.jsx)("button",{type:"button",disabled:isCourseInactive,onClick:restartProgramme,style:isCourseInactive?{opacity:0.5}:undefined,className:"bg-rose-600 text-white px-5 py-2.5 rounded-lg text-xs font-bold shadow-sm transition-colors " + (isCourseInactive?"cursor-not-allowed":"hover:bg-rose-700"),children:"Go Through Training Again ↺"})
+                (0,P.jsx)("div",{className:"text-4xl",children:"❌"}),
+                (0,P.jsx)("h2",{className:"text-lg font-bold text-rose-900",children:"Assessment Failed — No More Attempts Allowed"}),
+                (0,P.jsxs)("p",{className:"text-xs text-rose-700 font-medium max-w-md mx-auto leading-relaxed",children:["All ", maxAttempts, " assessment attempt(s) have been completed without passing. Status is marked as Failed and no further retakes are permitted."]})
               ]})}),
               (0,P.jsxs)("div",{className:"space-y-3",children:[
                 (0,P.jsx)("h3",{className:"text-xs font-bold text-slate-500 uppercase tracking-wider",children:"Submitted Answers (View Only)"}),
