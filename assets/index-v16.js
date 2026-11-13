@@ -3706,12 +3706,11 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,is
               (0,P.jsx)("th", {className: "py-3 px-4 w-20", children: "No."}),
               (0,P.jsx)("th", {className: "py-3 px-4", children: "Training Name"}),
               (0,P.jsx)("th", {className: "py-3 px-4 w-56", children: "Training Category"}),
-              (0,P.jsx)("th", {className: "py-3 px-4 w-48", children: "Certificates Issued"}),
-              (0,P.jsx)("th", {className: "py-3 px-6 w-32 text-center", children: "Actions"})
+              (0,P.jsx)("th", {className: "py-3 px-4 w-48", children: "Certificates Issued"})
             ]})
           }),
           (0,P.jsx)("tbody", {className: "divide-y divide-slate-100 text-sm", children: 
-            groupedTrainings.length === 0 ? (0,P.jsx)("tr", {children: (0,P.jsx)("td", {colSpan: 5, className: "py-10 text-center text-xs text-slate-400", children: "No certificates match the selected filters."})}) :
+            groupedTrainings.length === 0 ? (0,P.jsx)("tr", {children: (0,P.jsx)("td", {colSpan: 4, className: "py-10 text-center text-xs text-slate-400", children: "No certificates match the selected filters."})}) :
             groupedTrainings.map((tr, idx) => {
               let isExpanded = !!expandedMap[tr.id];
               return (0,P.jsxs)(P.Fragment, {key: tr.id, children: [
@@ -3739,22 +3738,13 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,is
                     }),
                     (0,P.jsx)("td", {className: "py-3 px-4", children: 
                       (0,P.jsx)("span", {className: "px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-50 text-blue-700 border border-blue-200", children: tr.records.length + (tr.records.length === 1 ? " Certificate" : " Certificates")})
-                    }),
-                    (0,P.jsx)("td", {className: "py-3 px-6 w-32 text-center", children: 
-                      (0,P.jsx)("button", {
-                        type: "button",
-                        onClick: ev => { ev.stopPropagation(); toggleExpand(tr.id); },
-                        className: "p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer inline-flex items-center justify-center",
-                        title: isExpanded ? "Hide certificate records" : "View certificate records",
-                        children: (0,P.jsx)(pe, {className: "w-4 h-4"})
-                      })
                     })
                   ]
                 }),
                 isExpanded && (0,P.jsx)("tr", {
                   className: "bg-slate-50/50",
                   children: (0,P.jsx)("td", {
-                    colSpan: 5,
+                    colSpan: 4,
                     className: "p-4",
                     children: (0,P.jsxs)("div", {
                       className: "bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs",
