@@ -5471,34 +5471,36 @@ function NotificationsPage({notifications:notifs,onMarkRead,onMarkAllRead,onOpen
 function vt(){let[e,t]=(0,l.useState)(`employees`),[n,r]=(0,l.useState)(d),[i,a]=(0,l.useState)(null),[o,s]=(0,l.useState)(f),[c,u]=(0,l.useState)(null),[m,h]=(0,l.useState)(null),[g,_]=(0,l.useState)(null),[v,y]=(0,l.useState)(p),[b,x]=(0,l.useState)({name:`Ishdeep Anand`,role:`Admin / HR / Reporting Manager`,initials:`IA`,canChangeAvailability:!0}),[S,ee]=(0,l.useState)(!1),[C,w]=(0,l.useState)(!1),[admFlyout,setAdmFlyout]=(0,l.useState)(!1),[te,T]=(0,l.useState)(!1),[ne,re]=(0,l.useState)(``),[ie,E]=(0,l.useState)(!1),[ae,oe]=(0,l.useState)(!1),[se,D]=(0,l.useState)(null),[courseProgress,setCourseProgress]=(0,l.useState)({}),[categories,setCategories]=(0,l.useState)(DEFAULT_CATEGORIES_SEED),[skills,setSkills]=(0,l.useState)(DEFAULT_SKILLS_SEED),[skillLevels,setSkillLevels]=(0,l.useState)(DEFAULT_SKILL_LEVELS_SEED),[employeeSkills,setEmployeeSkills]=(0,l.useState)({}),[skillAwardHistory,setSkillAwardHistory]=(0,l.useState)([]),[issuedCertificates,setIssuedCertificates]=(0,l.useState)([]);
 let[empNotifs,setEmpNotifs]=(0,l.useState)(()=>{
   try{
-    let raw=localStorage.getItem("collabcrm_emp_notifications_v2");
+    let raw=localStorage.getItem("collabcrm_emp_notifications_v3");
     if(raw){let parsed=JSON.parse(raw);if(Array.isArray(parsed)&&parsed.length>0)return parsed;}
   }catch{}
   return [
-    {id:"n-1",sender:"Ishdeep Anand",category:"Training",message:"New training assigned: \"CollabCRM Recruitment & Client Portal Workflows\" (Due: 25-Nov-2026).",date:"1 day ago",unread:!0,programmeId:"prog-1",programmeName:"CollabCRM Recruitment & Client Portal Workflows"},
-    {id:"n-2",sender:"Ishdeep Anand",category:"Assessment",message:"Assessment due reminder for \"AWS Cloud Practitioner Fundamentals\" (Passing Score: 80%).",date:"10-Nov-2026",unread:!0,programmeId:"prog-2",programmeName:"AWS Cloud Practitioner Fundamentals"},
-    {id:"n-3",sender:"System",category:"Certificates",message:"Certificate issued for completing \"GDPR & Data Privacy Compliance\".",date:"07-Nov-2026",unread:!1,programmeId:"prog-3",programmeName:"GDPR & Data Privacy Compliance"},
-    {id:"n-4",sender:"Kushal Khandwala",category:"Skill Matrix",message:"Skill level updated: \"Client Communication\" upgraded to Intermediate.",date:"05-Nov-2026",unread:!1,targetTab:"skill-matrix"},
-    {id:"n-5",sender:"System",category:"Employee",message:"Your profile training history has been synced with completed and in-progress courses.",date:"02-Nov-2026",unread:!1,targetTab:"employee-profile"},
-    {id:"n-6",sender:"System",category:"System",message:"All training dates and assessment records are standardized to DD-MMM-YYYY format.",date:"28-Oct-2026",unread:!1}
+    {id:"n-1",sender:"Ishdeep Anand",category:"Training",message:"New Training assigned: \"CollabCRM Recruitment & Client Portal Workflows\" has been assigned to you (Due: 25-Nov-2026).",date:"1 day ago",unread:!0,programmeId:"prog-1",programmeName:"CollabCRM Recruitment & Client Portal Workflows"},
+    {id:"n-2",sender:"System",category:"Assessment",message:"Assessment available: You can now attempt the \"AWS Cloud Practitioner Fundamentals\" assessment.",date:"11-Nov-2026",unread:!0,programmeId:"prog-2",programmeName:"AWS Cloud Practitioner Fundamentals"},
+    {id:"n-3",sender:"System",category:"Assessment",message:"Assessment passed: Congratulations! You have successfully passed the \"GDPR & Data Privacy Compliance\" assessment.",date:"10-Nov-2026",unread:!1,programmeId:"prog-3",programmeName:"GDPR & Data Privacy Compliance"},
+    {id:"n-4",sender:"System",category:"Assessment",message:"Assessment failed: You did not pass the \"API Security & OAuth2\" assessment. Review the learning material and try again.",date:"08-Nov-2026",unread:!1,programmeId:"prog-4",programmeName:"API Security & OAuth2"},
+    {id:"n-5",sender:"System",category:"Assessment",message:"Retake available: You can retake the \"API Security & OAuth2\" assessment.",date:"08-Nov-2026",unread:!1,programmeId:"prog-4",programmeName:"API Security & OAuth2"},
+    {id:"n-6",sender:"System",category:"Assessment",message:"Maximum attempts reached: You have reached the maximum assessment attempts (3/3) for \"Enterprise Data Governance\". Status: Failed.",date:"06-Nov-2026",unread:!1,programmeId:"prog-5",programmeName:"Enterprise Data Governance"},
+    {id:"n-7",sender:"System",category:"Certificates",message:"Certificate generated: Your Training certificate for \"GDPR & Data Privacy Compliance\" is now available.",date:"05-Nov-2026",unread:!1,programmeId:"prog-3",programmeName:"GDPR & Data Privacy Compliance"},
+    {id:"n-8",sender:"Kushal Khandwala",category:"Skill Matrix",message:"Skill added: A new skill \"Data Privacy & Compliance\" has been added to your Employee Profile.",date:"04-Nov-2026",unread:!1,targetTab:"employee-profile"},
+    {id:"n-9",sender:"Kushal Khandwala",category:"Skill Matrix",message:"Skill upgraded: Your existing skill level for \"Client Communication\" has been upgraded to Intermediate.",date:"02-Nov-2026",unread:!1,targetTab:"skill-matrix"}
   ];
 });
 let[admNotifs,setAdmNotifs]=(0,l.useState)(()=>{
   try{
-    let raw=localStorage.getItem("collabcrm_adm_notifications_v2");
+    let raw=localStorage.getItem("collabcrm_adm_notifications_v3");
     if(raw){let parsed=JSON.parse(raw);if(Array.isArray(parsed)&&parsed.length>0)return parsed;}
   }catch{}
   return [
-    {id:"an-1",sender:"Tanya Kapoor",category:"Assessment",message:"Assessment submitted for \"CollabCRM Recruitment & Client Portal Workflows\" (Passed).",date:"1 day ago",unread:!0,targetTab:"training-assignments"},
-    {id:"an-2",sender:"System",category:"Training",message:"Training program \"AWS Cloud Practitioner Fundamentals\" has active learners in progress.",date:"11-Nov-2026",unread:!0,targetTab:"training-programmes"},
-    {id:"an-3",sender:"System",category:"Certificates",message:"Certificate issued to Tanya Kapoor for \"GDPR & Data Privacy Compliance\".",date:"07-Nov-2026",unread:!1,targetTab:"certificates"},
-    {id:"an-4",sender:"Kushal Khandwala",category:"Skill Matrix",message:"Master skill catalog updated under Administration > Master Data > Skills.",date:"05-Nov-2026",unread:!1,targetTab:"employees"},
-    {id:"an-5",sender:"System",category:"Employee",message:"Employee skill profiles and training history records updated.",date:"02-Nov-2026",unread:!1,targetTab:"employees"},
-    {id:"an-6",sender:"System",category:"System",message:"Training category \"Compliance & Security\" is Active and linked to training programs.",date:"28-Oct-2026",unread:!1,targetTab:"config"}
+    {id:"an-1",sender:"System",category:"Skill Matrix",message:"Skill awarded: Tanya Kapoor's skills have been updated after completing \"CollabCRM Recruitment & Client Portal Workflows\".",date:"1 day ago",unread:!0,targetTab:"employees"},
+    {id:"an-2",sender:"System",category:"Training",message:"Training overdue: Lavanya Swaminathan's assigned Training \"ISO 27001 ISMS Implementation & Internal Audit\" is overdue (Due: 05-Nov-2026).",date:"11-Nov-2026",unread:!0,targetTab:"training-assignments"},
+    {id:"an-3",sender:"System",category:"Certificates",message:"Certificate generated: A certificate has been generated for Tanya Kapoor for completing \"GDPR & Data Privacy Compliance\".",date:"07-Nov-2026",unread:!1,targetTab:"certificates"},
+    {id:"an-4",sender:"Rohan Mehta",category:"Assessment",message:"Assessment failed: Employee failed the \"AWS Cloud Practitioner Fundamentals\" Training assessment.",date:"05-Nov-2026",unread:!1,targetTab:"training-assignments"},
+    {id:"an-5",sender:"Tanya Kapoor",category:"Assessment",message:"Assessment passed: Employee has successfully completed the \"CollabCRM Recruitment & Client Portal Workflows\" Training assessment.",date:"02-Nov-2026",unread:!1,targetTab:"training-assignments"}
   ];
 });
-let saveNotifs=next=>{setEmpNotifs(next);try{localStorage.setItem("collabcrm_emp_notifications_v2",JSON.stringify(next));}catch{}};
-let saveAdmNotifs=next=>{setAdmNotifs(next);try{localStorage.setItem("collabcrm_adm_notifications_v2",JSON.stringify(next));}catch{}};
+let saveNotifs=next=>{setEmpNotifs(next);try{localStorage.setItem("collabcrm_emp_notifications_v3",JSON.stringify(next));}catch{}};
+let saveAdmNotifs=next=>{setAdmNotifs(next);try{localStorage.setItem("collabcrm_adm_notifications_v3",JSON.stringify(next));}catch{}};
 let markNotifRead=id=>{saveNotifs(empNotifs.map(x=>x.id===id?{...x,unread:!1}:x));};
 let markAllNotifsRead=()=>{saveNotifs(empNotifs.map(x=>({...x,unread:!1})));};
 let markAdmNotifRead=id=>{saveAdmNotifs(admNotifs.map(x=>x.id===id?{...x,unread:!1}:x));};
