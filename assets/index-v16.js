@@ -3042,6 +3042,93 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,is
     return matchesQuery && matchesCat && matchesStatus;
   });
 
+  if(selectedLearner){
+    let matchedProg=(Array.isArray(progList)?progList:[]).find(p=>p.name&&selectedLearner.training&&p.name.trim().toLowerCase()===selectedLearner.training.trim().toLowerCase());
+    let rawMods=Array.isArray(matchedProg?.resources)&&matchedProg.resources.length>0?matchedProg.resources:[
+      {id:'m-1',title:`Introduction & Core Concepts (${selectedLearner.training})`,type:'Video'},
+      {id:'m-2',title:'Workflows, Policies & Best Practices',type:'PDF Document'},
+      {id:'m-3',title:'Practical Scenarios & Implementation',type:'Video'},
+      {id:'m-4',title:'Summary & Knowledge Check',type:'PDF Document'}
+    ];
+    let cpKey=matchedProg?Object.keys(cpMap||{}).find(k=>k.endsWith('::'+matchedProg.id)||k===matchedProg.id):null;
+    let cpRec=cpKey&&cpMap?cpMap[cpKey]:null;
+    let compMap=cpRec&&cpRec.completedResources&&typeof cpRec.completedResources==='object'&&selectedLearner.name==='Tanya Kapoor'?cpRec.completedResources:null;
+    let pct=Number(selectedLearner.completion)||0;
+    let completedTarget=compMap?rawMods.filter(m=>compMap[m.id]).length:(pct===100?rawMods.length:Math.floor((pct/100)*rawMods.length));
+    let modsWithStatus=rawMods.map((m,idx)=>{
+      let isDone=compMap?Boolean(compMap[m.id]):(pct===100||idx<completedTarget);
+      let isCurr=!isDone&&pct>0&&idx===completedTarget;
+      return{...m,modStatus:isDone?'Completed':(isCurr?'In Progress':'Pending'),modPct:isDone?100:(isCurr?50:0)};
+    });
+    let doneCount=modsWithStatus.filter(m=>m.modStatus==='Completed').length;
+    return (0,P.jsxs)('div',{className:'p-6 space-y-6 max-w-[1600px] mx-auto w-full',children:[
+      (0,P.jsxs)('div',{className:'flex items-center justify-between gap-4 flex-wrap',children:[
+        (0,P.jsxs)('div',{className:'flex items-center gap-2 text-xs text-slate-500 flex-wrap',children:[
+          (0,P.jsx)('button',{type:'button',onClick:()=>setSelectedLearner(null),className:'hover:text-slate-900 font-medium cursor-pointer',children:'Training Progress'}),
+          (0,P.jsx)('span',{children:'›'}),
+          (0,P.jsx)('span',{className:'font-medium text-slate-700',children:selectedLearner.name}),
+          (0,P.jsx)('span',{children:'›'}),
+          (0,P.jsx)('span',{className:'font-semibold text-blue-600',children:selectedLearner.training})
+        ]}),
+        (0,P.jsxs)('button',{type:'button',onClick:()=>setSelectedLearner(null),className:'inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-300 px-3.5 py-1.5 rounded-lg shadow-xs hover:bg-slate-50 transition-colors cursor-pointer',children:[
+          (0,P.jsx)('span',{children:'←'}),
+          (0,P.jsx)('span',{children:'Back to Training Progress'})
+        ]})
+      ]}),
+      (0,P.jsxs)('div',{className:'bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-5',children:[
+        (0,P.jsxs)('div',{className:'flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-5',children:[
+          (0,P.jsxs)('div',{className:'flex items-center gap-4',children:[
+            (0,P.jsx)('div',{className:'w-12 h-12 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-base shrink-0',children:selectedLearner.name[0]}),
+            (0,P.jsxs)('div',{children:[
+              (0,P.jsx)('h1',{className:'text-base font-bold text-slate-900',children:selectedLearner.training}),
+              (0,P.jsxs)('div',{className:'text-xs text-slate-500 mt-0.5',children:[selectedLearner.name,' • ',selectedLearner.email,' • Department: ',selectedLearner.dept]})
+            ]})
+          ]}),
+          (0,P.jsx)('span',{className:`px-3 py-1 rounded-full text-xs font-semibold border self-start md:self-center whitespace-nowrap ${selectedLearner.trainingStatus==='Completed'?'bg-emerald-50 text-emerald-700 border-emerald-200':selectedLearner.trainingStatus==='Overdue'?'bg-rose-50 text-rose-700 border-rose-200':selectedLearner.trainingStatus==='In Progress'?'bg-blue-50 text-blue-700 border-blue-200':'bg-slate-100 text-slate-600 border-slate-200'}`,children:selectedLearner.trainingStatus})
+        ]}),
+        (0,P.jsxs)('div',{className:'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs',children:[
+          (0,P.jsxs)('div',{className:'p-3.5 bg-slate-50 rounded-lg border border-slate-200',children:[(0,P.jsx)('div',{className:'text-[10px] font-bold text-slate-400 uppercase',children:'START DATE'}),(0,P.jsx)('div',{className:'font-bold text-slate-800 text-xs mt-1 tabular-nums',children:fmtSysDate(selectedLearner.assigned)})]}),
+          (0,P.jsxs)('div',{className:'p-3.5 bg-slate-50 rounded-lg border border-slate-200',children:[(0,P.jsx)('div',{className:'text-[10px] font-bold text-slate-400 uppercase',children:'DUE DATE'}),(0,P.jsx)('div',{className:'font-bold text-slate-800 text-xs mt-1 tabular-nums',children:fmtSysDate(selectedLearner.due)})]}),
+          (0,P.jsxs)('div',{className:'p-3.5 bg-slate-50 rounded-lg border border-slate-200',children:[(0,P.jsx)('div',{className:'text-[10px] font-bold text-slate-400 uppercase',children:'MODULES COMPLETED'}),(0,P.jsxs)('div',{className:'font-bold text-slate-800 text-xs mt-1 tabular-nums',children:[doneCount,' / ',modsWithStatus.length]})]}),
+          (0,P.jsxs)('div',{className:'p-3.5 bg-slate-50 rounded-lg border border-slate-200',children:[
+            (0,P.jsxs)('div',{className:'flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase',children:[(0,P.jsx)('span',{children:'TRAINING PROGRESS'}),(0,P.jsxs)('span',{className:'text-slate-900 font-mono',children:[pct,'%']})]}),
+            (0,P.jsx)('div',{className:'w-full bg-slate-200 h-2 rounded-full overflow-hidden mt-2',children:(0,P.jsx)('div',{className:`h-full rounded-full ${pct===100?'bg-emerald-500':pct>0?'bg-blue-600':'bg-slate-300'}`,style:{width:`${pct}%`}})})
+          ]})
+        ]})
+      ]}),
+      (0,P.jsxs)('div',{className:'bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden',children:[
+        (0,P.jsxs)('div',{className:'p-4 border-b border-slate-200 flex items-center justify-between',children:[
+          (0,P.jsxs)('div',{children:[
+            (0,P.jsx)('h2',{className:'font-bold text-slate-900 text-sm',children:'Training Modules & Completion Breakdown'}),
+            (0,P.jsx)('p',{className:'text-xs text-slate-500 mt-0.5',children:'Detailed module-by-module progress for this employee in the assigned training.'})
+          ]}),
+          (0,P.jsxs)('span',{className:'text-xs font-bold px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200',children:[doneCount,' / ',modsWithStatus.length,' Completed']})
+        ]}),
+        (0,P.jsx)('div',{className:'overflow-x-auto',children:(0,P.jsxs)('table',{className:'w-full text-left border-collapse',children:[
+          (0,P.jsx)('thead',{children:(0,P.jsxs)('tr',{className:'border-b border-slate-200 text-[11px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50',children:[
+            (0,P.jsx)('th',{className:'py-3 px-4 w-16',children:'No.'}),
+            (0,P.jsx)('th',{className:'py-3 px-4',children:'Module Name'}),
+            (0,P.jsx)('th',{className:'py-3 px-4',children:'Resource Type'}),
+            (0,P.jsx)('th',{className:'py-3 px-4 w-44',children:'Module Progress'}),
+            (0,P.jsx)('th',{className:'py-3 px-4 text-right',children:'Status'})
+          ]})}),
+          (0,P.jsx)('tbody',{className:'divide-y divide-slate-100 text-xs',children:modsWithStatus.map((m,idx)=>(0,P.jsxs)('tr',{className:'hover:bg-slate-50/80 transition-colors',children:[
+            (0,P.jsx)('td',{className:'py-3.5 px-4 text-slate-500 font-mono',children:idx+1}),
+            (0,P.jsx)('td',{className:'py-3.5 px-4 font-semibold text-slate-900',children:m.title||`Module ${idx+1}`}),
+            (0,P.jsx)('td',{className:'py-3.5 px-4 text-slate-600',children:m.type||'Resource'}),
+            (0,P.jsxs)('td',{className:'py-3.5 px-4',children:[
+              (0,P.jsx)('div',{className:'flex items-center gap-2',children:[
+                (0,P.jsx)('div',{className:'flex-1 bg-slate-100 h-2 rounded-full overflow-hidden',children:(0,P.jsx)('div',{className:`h-full rounded-full ${m.modStatus==='Completed'?'bg-emerald-500':m.modStatus==='In Progress'?'bg-blue-600':'bg-slate-300'}`,style:{width:`${m.modPct}%`}})}),
+                (0,P.jsxs)('span',{className:'font-mono font-bold text-slate-700 w-9 text-right',children:[m.modPct,'%']})
+              ]})
+            ]}),
+            (0,P.jsx)('td',{className:'py-3.5 px-4 text-right',children:(0,P.jsx)('span',{className:'inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold border '+(m.modStatus==='Completed'?'bg-emerald-50 text-emerald-700 border-emerald-200':m.modStatus==='In Progress'?'bg-blue-50 text-blue-700 border-blue-200':'bg-slate-100 text-slate-500 border-slate-200'),children:m.modStatus==='Completed'?'Completed ✓':m.modStatus})})
+          ]},m.id||idx))})
+        ]})})
+      ]})
+    ]});
+  }
+
   return (0,P.jsxs)('div',{className:'p-6 space-y-6 max-w-[1600px] mx-auto w-full',children:[
     // Screen Title & Dual-Mode View Switcher
     (0,P.jsxs)('div',{className:'flex flex-col md:flex-row md:items-center justify-between gap-4',children:[
@@ -3159,73 +3246,6 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,is
         ]},idx);})})
       ]})})
     ]}),
-
-    // Slide-over Modal for Employee Learner Details
-    selectedLearner && (0,P.jsx)('div',{className:'fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 flex justify-center animate-in fade-in duration-150',children:(0,P.jsxs)('div',{className:'bg-white w-full max-w-lg h-full shadow-2xl flex flex-col justify-between border-l border-slate-200',children:[
-      (0,P.jsxs)('div',{className:'p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50',children:[
-        (0,P.jsxs)('div',{className:'flex items-center gap-3',children:[
-          (0,P.jsx)('div',{className:'w-9 h-9 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-sm',children:selectedLearner.name[0]}),
-          (0,P.jsxs)('div',{children:[
-            (0,P.jsx)('h3',{className:'font-bold text-slate-900 text-sm',children:selectedLearner.name}),
-            (0,P.jsx)('div',{className:'text-xs text-slate-500',children:selectedLearner.email})
-          ]})
-        ]}),
-        (0,P.jsx)('button',{onClick:()=>setSelectedLearner(null),className:'p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/60',children:'✕'})
-      ]}),
-      (0,P.jsxs)('div',{className:'p-6 space-y-5 flex-1 overflow-y-auto text-xs',children:[
-        (0,P.jsxs)('div',{className:'p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2',children:[
-          (0,P.jsx)('div',{className:'text-[10px] font-bold text-slate-400 uppercase tracking-wider',children:'ASSIGNMENT SUMMARY'}),
-          (0,P.jsx)('div',{className:'text-sm font-bold text-slate-900',children:selectedLearner.training}),
-          (0,P.jsxs)('div',{className:'text-slate-600',children:['Department: ',selectedLearner.dept]}),
-          (0,P.jsxs)('div',{className:'text-slate-600',children:['Start Date: ',fmtSysDate(selectedLearner.assigned),' • Due: ',fmtSysDate(selectedLearner.due)]})
-        ]}),
-        (0,P.jsxs)('div',{className:'space-y-2',children:[
-          (0,P.jsxs)('div',{className:'flex justify-between font-semibold',children:[(0,P.jsx)('span',{children:'Course Completion Progress'}),(0,P.jsxs)('span',{className:'font-bold text-slate-900 font-mono',children:[selectedLearner.completion,'%']})]}),
-          (0,P.jsx)('div',{className:'w-full bg-slate-100 h-2.5 rounded-full overflow-hidden',children:(0,P.jsx)('div',{className:`h-full rounded-full ${selectedLearner.completion===100?'bg-emerald-500':'bg-blue-600'}`,style:{width:`${selectedLearner.completion}%`}})})
-        ]}),
-        (0,P.jsxs)('div',{className:'grid grid-cols-2 gap-3',children:[
-          (0,P.jsxs)('div',{className:'p-3 bg-slate-50 rounded-lg border border-slate-200',children:[(0,P.jsx)('div',{className:'text-[10px] font-bold text-slate-400 uppercase',children:'TRAINING STATUS'}),(0,P.jsx)('div',{className:'font-bold text-slate-800 text-xs mt-1',children:selectedLearner.trainingStatus})]}),
-          (0,P.jsxs)('div',{className:'p-3 bg-slate-50 rounded-lg border border-slate-200',children:[(0,P.jsx)('div',{className:'text-[10px] font-bold text-slate-400 uppercase',children:'DUE DATE'}),(0,P.jsx)('div',{className:'font-bold text-slate-800 text-xs mt-1',children:fmtSysDate(selectedLearner.due)})]})
-        ]}),
-        (()=>{
-          let matchedProg=(Array.isArray(progList)?progList:[]).find(p=>p.name&&selectedLearner.training&&p.name.trim().toLowerCase()===selectedLearner.training.trim().toLowerCase());
-          let rawMods=Array.isArray(matchedProg?.resources)&&matchedProg.resources.length>0?matchedProg.resources:[
-            {id:'m-1',title:`Introduction & Core Concepts (${selectedLearner.training})`,type:'Video'},
-            {id:'m-2',title:'Workflows, Policies & Best Practices',type:'PDF Document'},
-            {id:'m-3',title:'Practical Scenarios & Implementation',type:'Video'},
-            {id:'m-4',title:'Summary & Knowledge Check',type:'PDF Document'}
-          ];
-          let cpKey=matchedProg?Object.keys(cpMap||{}).find(k=>k.endsWith('::'+matchedProg.id)||k===matchedProg.id):null;
-          let cpRec=cpKey&&cpMap?cpMap[cpKey]:null;
-          let compMap=cpRec&&cpRec.completedResources&&typeof cpRec.completedResources==='object'&&selectedLearner.name==='Tanya Kapoor'?cpRec.completedResources:null;
-          let pct=Number(selectedLearner.completion)||0;
-          let completedTarget=compMap?rawMods.filter(m=>compMap[m.id]).length:(pct===100?rawMods.length:Math.floor((pct/100)*rawMods.length));
-          let modsWithStatus=rawMods.map((m,idx)=>{
-            let isDone=compMap?Boolean(compMap[m.id]):(pct===100||idx<completedTarget);
-            let isCurr=!isDone&&pct>0&&idx===completedTarget;
-            return{...m,modStatus:isDone?'Completed':(isCurr?'In Progress':'Pending')};
-          });
-          let doneCount=modsWithStatus.filter(m=>m.modStatus==='Completed').length;
-          return (0,P.jsxs)('div',{className:'space-y-3 pt-2 border-t border-slate-200',children:[
-            (0,P.jsxs)('div',{className:'flex items-center justify-between',children:[
-              (0,P.jsx)('div',{className:'text-[11px] font-bold text-slate-700 uppercase tracking-wider',children:'Training Modules'}),
-              (0,P.jsxs)('span',{className:'text-[11px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200',children:[doneCount,' / ',modsWithStatus.length,' Completed']})
-            ]}),
-            (0,P.jsx)('div',{className:'space-y-2',children:modsWithStatus.map((m,idx)=>(0,P.jsxs)('div',{className:'p-3 rounded-lg border flex items-center justify-between gap-3 '+(m.modStatus==='Completed'?'bg-emerald-50/40 border-emerald-200':m.modStatus==='In Progress'?'bg-blue-50/40 border-blue-200':'bg-white border-slate-200'),children:[
-              (0,P.jsxs)('div',{className:'flex items-start gap-2.5 min-w-0',children:[
-                (0,P.jsx)('span',{className:'w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5 '+(m.modStatus==='Completed'?'bg-emerald-600 text-white':m.modStatus==='In Progress'?'bg-blue-600 text-white':'bg-slate-200 text-slate-600'),children:m.modStatus==='Completed'?'✓':(idx+1)}),
-                (0,P.jsxs)('div',{className:'min-w-0',children:[
-                  (0,P.jsx)('div',{className:'text-xs font-semibold text-slate-900 leading-snug',children:m.title||`Module ${idx+1}`}),
-                  m.type&&(0,P.jsx)('div',{className:'text-[11px] text-slate-500 mt-0.5',children:m.type})
-                ]})
-              ]}),
-              (0,P.jsx)('span',{className:'px-2 py-0.5 rounded-full text-[10px] font-bold border shrink-0 whitespace-nowrap '+(m.modStatus==='Completed'?'bg-emerald-50 text-emerald-700 border-emerald-200':m.modStatus==='In Progress'?'bg-blue-50 text-blue-700 border-blue-200':'bg-slate-100 text-slate-500 border-slate-200'),children:m.modStatus})
-            ]},m.id||idx))})
-          ]});
-        })()
-      ]}),
-      (0,P.jsx)('div',{className:'p-4 border-t border-slate-200 bg-slate-50 flex justify-end',children:(0,P.jsx)('button',{onClick:()=>setSelectedLearner(null),className:'px-4 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-100',children:'Close'})})
-    ]})}),
 
     // Slide-over Modal for Programme Enrolled Learners
     selectedProg && (0,P.jsx)('div',{className:'fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 flex justify-end animate-in fade-in duration-150',children:(0,P.jsxs)('div',{className:'bg-white w-full max-w-xl h-full shadow-2xl flex flex-col justify-between border-l border-slate-200',children:[
