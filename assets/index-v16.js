@@ -1574,6 +1574,10 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
         setValidationError("Total Marks is required and must be greater than 0.");
         return;
       }
+      if(Number(assessTotalMarks) > 300){
+        setValidationError("Total Marks cannot exceed 300.");
+        return;
+      }
       if(!allQuestionsHaveMarks){
         setValidationError("Please enter marks greater than 0 for every question.");
         return;
@@ -1957,8 +1961,8 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
             (0,P.jsx)("span",{className:"text-xs font-bold text-slate-900 uppercase tracking-wide",children:"Questions List"}),
             (0,P.jsxs)("span",{className:"bg-blue-50 text-blue-700 border border-blue-200 text-xs font-bold px-2.5 py-0.5 rounded-full",children:[totalQuestions," Questions"]}),
             (0,P.jsxs)("div",{style:{display:"inline-flex",alignItems:"center",gap:"8px"},children:[
-              (0,P.jsxs)("label",{className:"inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 whitespace-nowrap",children:[(0,P.jsx)("span",{children:"Total Marks:"}),(0,P.jsx)(InfoTip,{text:"Total marks for this assessment; should equal the sum of question marks."})]}),
-              (0,P.jsx)("input",{type:"text",inputMode:"numeric",value:assessTotalMarks,onChange:e=>setAssessTotalMarks(e.target.value.replace(/[^0-9]/g,"")),placeholder:"e.g. 100",title:"Enter total marks for this assessment",style:{width:"74px"},className:"bg-white border border-slate-300 rounded-lg px-2.5 py-1 text-center font-bold text-slate-800 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500"})
+              (0,P.jsxs)("label",{className:"inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 whitespace-nowrap",children:[(0,P.jsx)("span",{children:"Total Marks:"}),(0,P.jsx)(InfoTip,{text:"Total marks for this assessment (maximum limit is 300); should equal the sum of question marks."})]}),
+              (0,P.jsx)("input",{type:"text",inputMode:"numeric",value:assessTotalMarks,onChange:e=>{let digits=e.target.value.replace(/[^0-9]/g,"");if(digits!==""&&Number(digits)>300)digits="300";setAssessTotalMarks(digits);},placeholder:"e.g. 100",title:"Enter total marks for this assessment (max 300)",style:{width:"74px"},className:"bg-white border border-slate-300 rounded-lg px-2.5 py-1 text-center font-bold text-slate-800 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500"})
             ]}),
             assessTotalMarks !== "" && Number(assessTotalMarks) > 0 && allQuestionsHaveMarks && questionsMarksSum === Number(assessTotalMarks) && (0,P.jsx)("span",{className:"bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-semibold px-2.5 py-0.5 rounded-full",children:"Matched ✓"})
           ]}),
