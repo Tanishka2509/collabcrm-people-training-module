@@ -3211,11 +3211,11 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,is
         return{...m,modStatus:isDone?'Completed':(isCurr?'In Progress':'Pending'),modPct:isDone?100:(isCurr?50:0)};
       });
       let doneCount=modsWithStatus.filter(m=>m.modStatus==='Completed').length;
-      return (0,P.jsx)('div',{onClick:()=>setSelectedLearner(null),className:'fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 flex justify-end animate-in fade-in duration-150',children:(0,P.jsxs)('div',{onClick:ev=>ev.stopPropagation(),className:'bg-white w-full max-w-2xl h-full shadow-2xl flex flex-col justify-between border-l border-slate-200 animate-in slide-in-from-right duration-200',children:[
-        (0,P.jsxs)('div',{className:'p-5 border-b border-slate-200 flex items-center justify-between gap-3 bg-slate-50',children:[
-          (0,P.jsxs)('div',{className:'flex items-center gap-3 min-w-0',children:[
+      return (0,P.jsx)('div',{onClick:()=>setSelectedLearner(null),className:'fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 flex justify-end',children:(0,P.jsxs)('div',{onClick:ev=>ev.stopPropagation(),style:{width:'100%',maxWidth:'640px',boxSizing:'border-box',overflowX:'hidden'},className:'bg-white h-full shadow-2xl flex flex-col justify-between border-l border-slate-200',children:[
+        (0,P.jsxs)('div',{className:'p-5 border-b border-slate-200 flex items-center justify-between gap-3 bg-slate-50 shrink-0',children:[
+          (0,P.jsxs)('div',{className:'flex items-center gap-3 min-w-0',style:{minWidth:0,flex:'1 1 0%'},children:[
             (0,P.jsx)('div',{className:'w-10 h-10 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-sm shrink-0',children:selectedLearner.name[0]}),
-            (0,P.jsxs)('div',{className:'min-w-0',children:[
+            (0,P.jsxs)('div',{className:'min-w-0',style:{minWidth:0},children:[
               (0,P.jsx)('h3',{className:'font-bold text-slate-900 text-sm truncate',children:selectedLearner.training}),
               (0,P.jsxs)('div',{className:'text-xs text-slate-500 mt-0.5 truncate',children:[selectedLearner.name,' • ',selectedLearner.email,' • Department: ',selectedLearner.dept]})
             ]})
@@ -3225,48 +3225,48 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,is
             (0,P.jsx)('button',{type:'button',onClick:()=>setSelectedLearner(null),className:'p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 cursor-pointer',title:'Close',children:'✕'})
           ]})
         ]}),
-        (0,P.jsxs)('div',{className:'p-6 space-y-5 flex-1 overflow-y-auto',children:[
+        (0,P.jsxs)('div',{className:'p-5 space-y-5 flex-1 overflow-y-auto',style:{minWidth:0,overflowX:'hidden'},children:[
           (0,P.jsxs)('div',{className:'grid grid-cols-2 gap-3 text-xs',children:[
-            (0,P.jsxs)('div',{className:'p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-1',children:[(0,P.jsx)('div',{className:'text-[10px] font-bold text-slate-400 uppercase tracking-wider',children:'START DATE'}),(0,P.jsx)('div',{className:'font-bold text-slate-900 text-sm tabular-nums',children:fmtSysDate(selectedLearner.assigned)})]}),
-            (0,P.jsxs)('div',{className:'p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-1',children:[(0,P.jsx)('div',{className:'text-[10px] font-bold text-slate-400 uppercase tracking-wider',children:'DUE DATE'}),(0,P.jsx)('div',{className:'font-bold text-slate-900 text-sm tabular-nums',children:fmtSysDate(selectedLearner.due)})]}),
-            (0,P.jsxs)('div',{className:'p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-1',children:[(0,P.jsx)('div',{className:'text-[10px] font-bold text-slate-400 uppercase tracking-wider',children:'MODULES COMPLETED'}),(0,P.jsxs)('div',{className:'font-bold text-slate-900 text-sm tabular-nums',children:[doneCount,' / ',modsWithStatus.length]})]}),
-            (0,P.jsxs)('div',{className:'p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-2',children:[
+            (0,P.jsxs)('div',{className:'p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1',children:[(0,P.jsx)('div',{className:'text-[10px] font-bold text-slate-400 uppercase tracking-wider',children:'START DATE'}),(0,P.jsx)('div',{className:'font-bold text-slate-900 text-sm tabular-nums',children:fmtSysDate(selectedLearner.assigned)})]}),
+            (0,P.jsxs)('div',{className:'p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1',children:[(0,P.jsx)('div',{className:'text-[10px] font-bold text-slate-400 uppercase tracking-wider',children:'DUE DATE'}),(0,P.jsx)('div',{className:'font-bold text-slate-900 text-sm tabular-nums',children:fmtSysDate(selectedLearner.due)})]}),
+            (0,P.jsxs)('div',{className:'p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1',children:[(0,P.jsx)('div',{className:'text-[10px] font-bold text-slate-400 uppercase tracking-wider',children:'MODULES COMPLETED'}),(0,P.jsxs)('div',{className:'font-bold text-slate-900 text-sm tabular-nums',children:[doneCount,' / ',modsWithStatus.length]})]}),
+            (0,P.jsxs)('div',{className:'p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2',children:[
               (0,P.jsxs)('div',{className:'flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wider',children:[(0,P.jsx)('span',{children:'TRAINING PROGRESS'}),(0,P.jsxs)('span',{className:'text-slate-900 font-mono text-xs',children:[pct,'%']})]}),
               (0,P.jsx)('div',{className:'w-full bg-slate-200 h-2 rounded-full overflow-hidden',children:(0,P.jsx)('div',{className:`h-full rounded-full ${pct===100?'bg-emerald-500':pct>0?'bg-blue-600':'bg-slate-300'}`,style:{width:`${pct}%`}})})
             ]})
           ]}),
           (0,P.jsxs)('div',{className:'bg-white border border-slate-200 rounded-xl shadow-xs overflow-hidden',children:[
             (0,P.jsxs)('div',{className:'p-4 border-b border-slate-200 flex items-center justify-between gap-3',children:[
-              (0,P.jsxs)('div',{children:[
+              (0,P.jsxs)('div',{className:'min-w-0',children:[
                 (0,P.jsx)('h2',{className:'font-bold text-slate-900 text-sm',children:'Module Progress'}),
-                (0,P.jsx)('p',{className:'text-xs text-slate-500 mt-0.5',children:'Detailed module-by-module progress for this employee in the assigned training.'})
+                (0,P.jsx)('p',{className:'text-xs text-slate-500 mt-0.5',children:'Detailed module-by-module progress for this employee.'})
               ]}),
-              (0,P.jsxs)('span',{className:'text-xs font-bold px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 whitespace-nowrap',children:[doneCount,' / ',modsWithStatus.length,' Completed']})
+              (0,P.jsxs)('span',{className:'text-xs font-bold px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 whitespace-nowrap shrink-0',children:[doneCount,' / ',modsWithStatus.length,' Completed']})
             ]}),
             (0,P.jsx)('div',{className:'overflow-x-auto',children:(0,P.jsxs)('table',{className:'w-full text-left border-collapse',children:[
               (0,P.jsx)('thead',{children:(0,P.jsxs)('tr',{className:'border-b border-slate-200 text-[11px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50',children:[
-                (0,P.jsx)('th',{className:'py-2.5 px-3 w-12',children:'No.'}),
-                (0,P.jsx)('th',{className:'py-2.5 px-3',children:'Module Name'}),
-                (0,P.jsx)('th',{className:'py-2.5 px-3',children:'Resource Type'}),
-                (0,P.jsx)('th',{className:'py-2.5 px-3 w-36',children:'Module Progress'}),
-                (0,P.jsx)('th',{className:'py-2.5 px-3 text-right',children:'Status'})
+                (0,P.jsx)('th',{className:'py-3 px-3 whitespace-nowrap',children:'No.'}),
+                (0,P.jsx)('th',{className:'py-3 px-3 whitespace-nowrap',children:'Module Name'}),
+                (0,P.jsx)('th',{className:'py-3 px-3 whitespace-nowrap',children:'Resource Type'}),
+                (0,P.jsx)('th',{className:'py-3 px-3 whitespace-nowrap',children:'Module Progress'}),
+                (0,P.jsx)('th',{className:'py-3 px-3 text-right whitespace-nowrap',children:'Status'})
               ]})}),
               (0,P.jsx)('tbody',{className:'divide-y divide-slate-100 text-xs',children:modsWithStatus.map((m,idx)=>(0,P.jsxs)('tr',{className:'hover:bg-slate-50/80 transition-colors',children:[
-                (0,P.jsx)('td',{className:'py-2.5 px-3 text-slate-500 font-mono',children:idx+1}),
-                (0,P.jsx)('td',{className:'py-2.5 px-3 font-semibold text-slate-900',children:m.title||`Module ${idx+1}`}),
-                (0,P.jsx)('td',{className:'py-2.5 px-3 text-slate-600 whitespace-nowrap',children:m.type||'Resource'}),
-                (0,P.jsxs)('td',{className:'py-2.5 px-3',children:[
-                  (0,P.jsx)('div',{className:'flex items-center gap-2',children:[
+                (0,P.jsx)('td',{className:'py-3 px-3 text-slate-500 font-mono',children:idx+1}),
+                (0,P.jsx)('td',{className:'py-3 px-3 font-semibold text-slate-900',children:m.title||`Module ${idx+1}`}),
+                (0,P.jsx)('td',{className:'py-3 px-3 text-slate-600 whitespace-nowrap',children:m.type||'Resource'}),
+                (0,P.jsxs)('td',{className:'py-3 px-3 whitespace-nowrap',children:[
+                  (0,P.jsxs)('div',{className:'flex items-center gap-2',style:{minWidth:'100px'},children:[
                     (0,P.jsx)('div',{className:'flex-1 bg-slate-100 h-2 rounded-full overflow-hidden',children:(0,P.jsx)('div',{className:`h-full rounded-full ${m.modStatus==='Completed'?'bg-emerald-500':m.modStatus==='In Progress'?'bg-blue-600':'bg-slate-300'}`,style:{width:`${m.modPct}%`}})}),
-                    (0,P.jsxs)('span',{className:'font-mono font-bold text-slate-700 w-9 text-right',children:[m.modPct,'%']})
+                    (0,P.jsxs)('span',{className:'font-mono font-bold text-slate-700 text-right',children:[m.modPct,'%']})
                   ]})
                 ]}),
-                (0,P.jsx)('td',{className:'py-2.5 px-3 text-right',children:(0,P.jsx)('span',{className:'inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold border whitespace-nowrap '+(m.modStatus==='Completed'?'bg-emerald-50 text-emerald-700 border-emerald-200':m.modStatus==='In Progress'?'bg-blue-50 text-blue-700 border-blue-200':'bg-slate-100 text-slate-500 border-slate-200'),children:m.modStatus==='Completed'?'Completed ✓':m.modStatus})})
+                (0,P.jsx)('td',{className:'py-3 px-3 text-right whitespace-nowrap',children:(0,P.jsx)('span',{className:'inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold border whitespace-nowrap '+(m.modStatus==='Completed'?'bg-emerald-50 text-emerald-700 border-emerald-200':m.modStatus==='In Progress'?'bg-blue-50 text-blue-700 border-blue-200':'bg-slate-100 text-slate-500 border-slate-200'),children:m.modStatus==='Completed'?'Completed ✓':m.modStatus})})
               ]},m.id||idx))})
             ]})})
           ]})
         ]}),
-        (0,P.jsx)('div',{className:'p-4 border-t border-slate-200 bg-slate-50 flex justify-end',children:(0,P.jsx)('button',{type:'button',onClick:()=>setSelectedLearner(null),className:'px-4 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-100 cursor-pointer',children:'Close'})})
+        (0,P.jsx)('div',{className:'p-4 border-t border-slate-200 bg-slate-50 flex justify-end shrink-0',children:(0,P.jsx)('button',{type:'button',onClick:()=>setSelectedLearner(null),className:'px-4 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-100 cursor-pointer',children:'Close'})})
       ]})});
     })(),
 
