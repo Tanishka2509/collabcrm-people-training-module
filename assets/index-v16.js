@@ -4924,7 +4924,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
                 (0,P.jsxs)("div",{className:"text-3xl font-black text-emerald-700 tabular-nums",children:[latestResult.scorePercentage, "%"]}),
                 (0,P.jsxs)("p",{className:"text-xs text-emerald-800 leading-relaxed",children:[
                   "You scored ", (0,P.jsx)("strong",{children:[latestResult.earnedMarks, " / ", latestResult.totalMarks, " marks"]}),
-                  " (Passing requirement is strictly above ", passingScore, "%). ",
+                  " (Passing requirement is above ", passingScore, "%). ",
                   (reqManager && !stepManagerDone)
                     ? "Your assessment is passed and is currently awaiting required Reviewer / Manager approval before completion recognition is awarded."
                     : isCertEnabled
@@ -4962,10 +4962,10 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
                 ]})
               ]}):(0,P.jsxs)("div",{className:"bg-rose-50 border border-rose-200 rounded-xl p-6 text-center space-y-3",children:[
                 (0,P.jsx)("div",{className:"text-4xl",children:"❌"}),
-                (0,P.jsx)("h2",{className:"text-lg font-bold text-rose-900",children:"Assessment Not Passed"}),
+                (0,P.jsx)("h2",{className:"text-lg font-bold text-rose-900",children:"Assessment Failed"}),
                 (0,P.jsxs)("div",{className:"text-3xl font-black text-rose-700 tabular-nums",children:[latestResult.scorePercentage, "%"]}),
                 (0,P.jsxs)("p",{className:"text-xs text-rose-800",children:[
-                  "You scored ", latestResult.earnedMarks, " out of ", latestResult.totalMarks, " marks. The passing threshold is strictly greater than ", passingScore, "%."
+                  "You scored ", latestResult.earnedMarks, " out of ", latestResult.totalMarks, " marks. The passing threshold is greater than ", passingScore, "%."
                 ]}),
                 hasAttemptsRemaining ? (0,P.jsxs)("div",{className:"pt-3 space-y-2",children:[
                   (0,P.jsxs)("p",{className:"text-xs text-slate-600",children:["You have ", maxAttempts - attemptsUsed, " attempt(s) remaining."]}),
