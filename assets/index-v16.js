@@ -4472,7 +4472,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
                 ]})
               ]}),
               (0,P.jsxs)("div",{className:"flex flex-wrap items-center gap-4 text-xs text-slate-600",children:[
-                (0,P.jsxs)("span",{children:[(0,P.jsx)("strong",{children:"Passing Criteria:"}), " Strictly > ", passingScore, "% to pass"]}),
+                (0,P.jsxs)("span",{children:[(0,P.jsx)("strong",{children:"Passing Criteria:"}), " > ", passingScore, "% to pass"]}),
                 (0,P.jsx)("span",{children:"•"}),
                 (0,P.jsxs)("span",{children:[(0,P.jsx)("strong",{children:"Attempts:"}), " ", Math.max(0, maxAttempts - attemptsUsed), " of ", maxAttempts, " remaining"]})
               ]})
@@ -4492,13 +4492,12 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
             return out;
           };
           let renderQuestionsList=(ansMap, editable)=>(0,P.jsx)("div",{className:"space-y-4",children:questions.map((q, idx)=>(0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-3.5",children:[
-            (0,P.jsxs)("div",{className:"flex items-center justify-between border-b border-slate-100 pb-2.5",children:[
+            (0,P.jsx)("div",{className:"flex items-center justify-between border-b border-slate-100 pb-2.5",children:
               (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
                 (0,P.jsx)("span",{className:"bg-blue-50 text-blue-700 text-xs font-bold px-2 py-0.5 rounded",children:"Question " + (idx+1)}),
                 (0,P.jsx)("span",{className:"text-[11px] font-semibold text-slate-500",children:q.marks + " Marks"})
-              ]}),
-              (0,P.jsx)("span",{className:"text-[11px] text-slate-400 capitalize",children:q.type.replace(/_/g, " ")})
-            ]}),
+              ]})
+            }),
             (0,P.jsx)("div",{className:"text-xs font-bold text-slate-900 leading-snug",children:q.text}),
             (0,P.jsx)("div",{className:"pt-1 text-xs",children:
               q.type==="short_text" ? (0,P.jsx)("input",{type:"text",disabled:!editable||isCourseInactive,value:ansMap[q.id]||"",onChange:e=>handleSelectAnswer(q.id, e.target.value),placeholder:editable?"Type your answer here...":"No answer marked",className:"w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-xs text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 disabled:opacity-80"}):
@@ -4546,7 +4545,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
                 (0,P.jsxs)("span",{className:"bg-blue-50 text-blue-700 border border-blue-200 font-bold px-2.5 py-1 rounded-lg text-xs self-start",children:[questions.length, " Questions • ", totalAssessmentMarks, " Marks"]})
               ]}),
               (0,P.jsxs)("div",{className:"flex flex-wrap items-center gap-4 text-xs text-slate-600",children:[
-                (0,P.jsxs)("span",{children:[(0,P.jsx)("strong",{children:"Passing Criteria:"}), " Strictly > ", passingScore, "% to pass"]}),
+                (0,P.jsxs)("span",{children:[(0,P.jsx)("strong",{children:"Passing Criteria:"}), " > ", passingScore, "% to pass"]}),
                 (0,P.jsx)("span",{children:"•"}),
                 (0,P.jsxs)("span",{children:[(0,P.jsx)("strong",{children:"Attempts:"}), " ", Math.max(0, maxAttempts - attemptsUsed), " of ", maxAttempts, " remaining"]})
               ]})
