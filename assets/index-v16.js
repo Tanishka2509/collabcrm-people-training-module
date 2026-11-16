@@ -1800,20 +1800,23 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
         }),
         (0,P.jsx)("button",{onClick:oe,type:"button",className:"text-xs font-semibold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg border border-blue-200 shadow-sm transition-colors",children:"+ Add Learning Resource"})
       ]}),
-      (0,P.jsx)("div",{className:"space-y-3",children:ie.map((res, idx)=>(0,P.jsxs)("div",{className:"flex flex-col md:flex-row items-stretch md:items-end gap-3 bg-slate-50 p-3 rounded-lg border border-slate-200",children:[
-        (0,P.jsxs)("div",{className:"w-full md:w-44 shrink-0 space-y-1.5",style:{minWidth:"185px"},children:[
+      (0,P.jsx)("div",{className:"space-y-3",children:ie.map((res, idx)=>(0,P.jsxs)("div",{className:"bg-slate-50 p-3.5 rounded-lg border border-slate-200",style:{display:"flex",flexWrap:"wrap",alignItems:"flex-end",gap:"14px"},children:[
+        (0,P.jsxs)("div",{className:"space-y-1.5",style:{flex:"0 0 210px",minWidth:"210px"},children:[
           (0,P.jsx)("label",{className:"block text-xs font-semibold text-slate-700",children:"Resource Type"}),
-          (0,P.jsxs)("select",{value:res.type,onChange:e=>{let val=e.target.value;E(ie.map(r=>r.id===res.id?{...r,type:val}:r))},style:{paddingRight:"28px"},className:"w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium " + (res.type?"text-slate-800":"text-slate-400"),children:[
-            (0,P.jsx)("option",{value:"",children:"Select resource type..."}),
-            (0,P.jsx)("option",{value:"Video / YouTube",children:"Video / YouTube"}),
-            (0,P.jsx)("option",{value:"PDF Document",children:"PDF Document"})
+          (0,P.jsxs)("div",{className:"relative",children:[
+            (0,P.jsxs)("select",{value:res.type,onChange:e=>{let val=e.target.value;E(ie.map(r=>r.id===res.id?{...r,type:val}:r))},style:{appearance:"none",WebkitAppearance:"none",MozAppearance:"none",paddingRight:"32px"},className:"w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium focus:outline-none focus:ring-1 focus:ring-blue-500 " + (res.type?"text-slate-800":"text-slate-400"),children:[
+              (0,P.jsx)("option",{value:"",children:"Select resource type..."}),
+              (0,P.jsx)("option",{value:"Video / YouTube",children:"Video / YouTube"}),
+              (0,P.jsx)("option",{value:"PDF Document",children:"PDF Document"})
+            ]}),
+            (0,P.jsx)(re,{style:{position:"absolute",right:"10px",top:"50%",transform:"translateY(-50%)"},className:"w-4 h-4 text-slate-400 pointer-events-none"})
           ]})
         ]}),
-        (0,P.jsxs)("div",{className:"flex-1 w-full space-y-1.5",children:[
+        (0,P.jsxs)("div",{className:"space-y-1.5",style:{flex:"1 1 220px",minWidth:0},children:[
           (0,P.jsx)("label",{className:"block text-xs font-semibold text-slate-700",children:"Module Title"}),
-          (0,P.jsx)("input",{type:"text",value:res.title,onChange:e=>{let val=e.target.value;E(ie.map(r=>r.id===res.id?{...r,title:val}:r))},placeholder:"Module title (e.g. Architecture Lecture)...",className:"w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-800 placeholder-slate-400"})
+          (0,P.jsx)("input",{type:"text",value:res.title,onChange:e=>{let val=e.target.value;E(ie.map(r=>r.id===res.id?{...r,title:val}:r))},placeholder:"Module title (e.g. Architecture Lecture)...",className:"w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500"})
         ]}),
-        (0,P.jsxs)("div",{className:"flex-1 w-full space-y-1.5",children:[
+        (0,P.jsxs)("div",{className:"space-y-1.5",style:{flex:"1 1 260px",minWidth:0},children:[
           (0,P.jsx)("label",{className:"block text-xs font-semibold text-slate-700",children:"Resource URL"}),
           res.type==="PDF Document"?(0,P.jsxs)("div",{className:"w-full flex items-center gap-2",children:[
             res.fileName?(0,P.jsxs)("div",{className:"flex-1 min-w-0 inline-flex items-center justify-between gap-2 px-3 py-2 rounded-lg bg-blue-50/70 border border-blue-200 text-xs text-blue-800",children:[
