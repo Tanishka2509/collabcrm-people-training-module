@@ -816,10 +816,6 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){let r=e.
                   (0,P.jsx)("span",{className:"line-through text-slate-400",children:log.previousValue || showFrom}),
                   (0,P.jsx)("span",{className:"text-slate-400",children:"›"}),
                   (0,P.jsx)("span",{className:"text-slate-600",children:log.newValue || showTo})
-                ]}),
-                log.reason && (0,P.jsxs)("div",{className:"flex flex-wrap items-center gap-1.5 text-slate-500",children:[
-                  (0,P.jsx)("span",{className:"font-bold text-slate-700",children:"Reason:"}),
-                  (0,P.jsx)("span",{className:"text-slate-500",children:log.reason})
                 ]})
               ]})
             ]},log.id || idx);
