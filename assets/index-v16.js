@@ -4642,10 +4642,11 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
               (0,P.jsx)("span",{children:"Learning Resources"}),
               (0,P.jsxs)("span",{className:"bg-slate-100 text-slate-600 text-[10px] px-1.5 py-0.5 rounded-full font-semibold",children:[doneCount, "/", resources.length]})
             ]}),
-            (0,P.jsxs)("button",{onClick:()=>r("assessment"),className:"py-4 border-b-2 transition-colors whitespace-nowrap flex items-center gap-1.5 " + (n==="assessment"?"border-blue-600 text-blue-600":"border-transparent text-slate-500 hover:text-slate-800"),children:[
+            (()=>{let assessTabLocked=isAssessmentEnabled&&!allResourcesDone&&!(submittedState&&latestResult);return (0,P.jsxs)("button",{type:"button",disabled:assessTabLocked,title:assessTabLocked?"Complete all learning modules first":undefined,onClick:()=>{if(!assessTabLocked)r("assessment");},className:"py-4 border-b-2 transition-colors whitespace-nowrap flex items-center gap-1.5 " + (assessTabLocked?"border-transparent text-slate-300 cursor-not-allowed opacity-60":(n==="assessment"?"border-blue-600 text-blue-600":"border-transparent text-slate-500 hover:text-slate-800 cursor-pointer")),children:[
+              assessTabLocked && (0,P.jsx)("span",{className:"text-[11px]",children:"🔒"}),
               (0,P.jsx)("span",{children:"Assessment & Questions"}),
               latestResult?.isPassed ? (0,P.jsx)("span",{className:"bg-emerald-100 text-emerald-800 text-[10px] px-1.5 py-0.5 rounded font-bold",children:"Passed"}): null
-            ]})
+            ]})})()
           ]})
         ]}),
 
@@ -4784,7 +4785,13 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
                 (0,P.jsx)("span",{className:"px-2.5 py-1 text-[11px] font-medium rounded-md bg-slate-100 text-slate-400 border border-slate-200",children:"Pending"})
               ]})})
             ]},res.id || idx))})
-          ]})})
+          ]})}),
+          allResourcesDone && isAssessmentEnabled && (0,P.jsx)("div",{className:"flex items-center justify-end pt-3 border-t border-slate-100",children:
+            (0,P.jsxs)("button",{type:"button",onClick:()=>r("assessment"),className:"px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold shadow-sm transition-colors flex items-center gap-1.5 cursor-pointer",children:[
+              (0,P.jsx)("span",{children:"Go for Assessment"}),
+              (0,P.jsx)("span",{children:"→"})
+            ]})
+          })
         ]}),
 
         // Tab 3: Assessment & Questions
