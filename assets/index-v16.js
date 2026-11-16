@@ -4525,9 +4525,8 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
     if(resolved.status === "Completed") setIsSubmitted(true);
     if(resolved.managerApprovalStatus !== managerApprovalStatus) setManagerApprovalStatus(resolved.managerApprovalStatus);
     syncCourseState(resolved.status, resolved.progress, next, latestResult, attemptHistory, { submittedDocs, managerApprovalStatus: resolved.managerApprovalStatus });
-    if(allDone && isAssessmentEnabled){
+    if(allDone){
       setViewedResource(null);
-      r("assessment");
     }
   };
 
@@ -5107,7 +5106,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
             meta.url ? (0,P.jsx)("a",{href:meta.url,target:"_blank",rel:"noreferrer",className:"px-4 py-2 text-xs font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg transition-colors",children:"Open Original Resource ↗"}) : (0,P.jsx)("span",{}),
             (0,P.jsxs)("div",{className:"flex items-center gap-2.5",children:[
               (0,P.jsx)("button",{type:"button",onClick:()=>setViewedResource(null),className:"px-4 py-2 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-100 border border-slate-300 rounded-lg transition-colors",children:"Close"}),
-              !isResDone && resources.findIndex(item=>item.id===viewedResource.id)===firstIncompleteIdx && (0,P.jsx)("button",{type:"button",disabled:isCourseInactive,onClick:()=>handleToggleResource(viewedResource.id),className:"px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition-colors",children:(resources.filter(item=>!completedResources[item.id]).length===1 && isAssessmentEnabled)?"Mark Done & Go to Assessment →":"Mark Done ✓"})
+              !isResDone && resources.findIndex(item=>item.id===viewedResource.id)===firstIncompleteIdx && (0,P.jsx)("button",{type:"button",disabled:isCourseInactive,onClick:()=>handleToggleResource(viewedResource.id),className:"px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition-colors",children:"Mark Done ✓"})
             ]})
           ]})
         ]})
