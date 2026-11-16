@@ -4861,21 +4861,28 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
           };
           let renderQuestionsList=(ansMap, editable)=>{
             let list=questions.map((q, idx)=>({q, idx})).filter(item=>editable || isAnsEntered(ansMap, item.q.id));
-            return (0,P.jsx)("div",{className:"space-y-4",children:list.map(({q, idx})=>(0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-3.5",children:[
-            (0,P.jsx)("div",{className:"flex items-center justify-between border-b border-slate-100 pb-2.5",children:
+            return (0,P.jsx)("div",{className:"space-y-4",children:list.map(({q, idx})=>{
+              let qr=!editable ? ((latestResult?.questionResponses||[]).find(x=>x.questionId===q.id) || formatQuestionResponse(q, idx, ansMap[q.id])) : null;
+              let optTone=selected=>!selected ? "border-slate-200 text-slate-700" : (!editable && qr ? (qr.isCorrect ? "border-emerald-500 bg-emerald-50/40 font-semibold text-emerald-900" : "border-rose-400 bg-rose-50/40 font-semibold text-rose-900") : "border-blue-500 bg-blue-50/40 font-semibold text-blue-900");
+              return (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-3.5",children:[
+            (0,P.jsxs)("div",{className:"flex items-center justify-between border-b border-slate-100 pb-2.5 gap-2 flex-wrap",children:[
               (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
                 (0,P.jsx)("span",{className:"bg-blue-50 text-blue-700 text-xs font-bold px-2 py-0.5 rounded",children:"Question " + (idx+1)}),
                 (0,P.jsx)("span",{className:"text-[11px] font-semibold text-slate-500",children:q.marks + " Marks"})
+              ]}),
+              !editable && qr && (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
+                (0,P.jsxs)("span",{className:"px-2 py-0.5 rounded text-[11px] font-bold tabular-nums border " + (qr.isCorrect?"bg-emerald-50 text-emerald-700 border-emerald-200":"bg-rose-50 text-rose-700 border-rose-200"),children:[qr.earnedMarks, " / ", qr.marks, " Marks"]}),
+                (0,P.jsx)("span",{className:"px-2.5 py-0.5 rounded-full text-[11px] font-bold border " + (qr.isCorrect?"bg-emerald-50 text-emerald-700 border-emerald-200":"bg-rose-50 text-rose-700 border-rose-200"),children:qr.isCorrect?"✓ Correct":"✕ Incorrect"})
               ]})
-            }),
+            ]}),
             (0,P.jsx)("div",{className:"text-xs font-bold text-slate-900 leading-snug",children:q.text}),
             (0,P.jsx)("div",{className:"pt-1 text-xs",children:
               q.type==="short_text" ? (0,P.jsx)("input",{type:"text",disabled:!editable||isCourseInactive,value:ansMap[q.id]||"",onChange:e=>handleSelectAnswer(q.id, e.target.value),placeholder:editable?"Type your answer here...":"No answer marked",className:"w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-xs text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 disabled:opacity-80"}):
-              q.type==="single_choice" ? (0,P.jsx)("div",{className:"space-y-2",children:(q.options||[]).map(opt=>(0,P.jsxs)("label",{className:"flex items-center gap-2.5 p-2.5 bg-slate-50 border rounded-lg transition-colors " + (editable?"cursor-pointer hover:bg-slate-100/70":"cursor-default") + " " + (ansMap[q.id]===opt.id?"border-blue-500 bg-blue-50/40 font-semibold text-blue-900":"border-slate-200 text-slate-700"),children:[
+              q.type==="single_choice" ? (0,P.jsx)("div",{className:"space-y-2",children:(q.options||[]).map(opt=>(0,P.jsxs)("label",{className:"flex items-center gap-2.5 p-2.5 bg-slate-50 border rounded-lg transition-colors " + (editable?"cursor-pointer hover:bg-slate-100/70":"cursor-default") + " " + optTone(ansMap[q.id]===opt.id),children:[
                 (0,P.jsx)("input",{type:"radio",disabled:!editable||isCourseInactive,name:"q-"+q.id+(editable?"-edit":"-view"),checked:ansMap[q.id]===opt.id,onChange:()=>handleSelectAnswer(q.id, opt.id),className:"w-4 h-4 text-blue-600 focus:ring-blue-500"}),
                 (0,P.jsx)("span",{className:"text-xs",children:opt.text})
               ]},opt.id))}):
-              q.type==="multiple_choice" ? (0,P.jsx)("div",{className:"space-y-2",children:(q.options||[]).map(opt=>(0,P.jsxs)("label",{className:"flex items-center gap-2.5 p-2.5 bg-slate-50 border rounded-lg transition-colors " + (editable?"cursor-pointer hover:bg-slate-100/70":"cursor-default") + " " + ((Array.isArray(ansMap[q.id])&&ansMap[q.id].includes(opt.id))?"border-blue-500 bg-blue-50/40 font-semibold text-blue-900":"border-slate-200 text-slate-700"),children:[
+              q.type==="multiple_choice" ? (0,P.jsx)("div",{className:"space-y-2",children:(q.options||[]).map(opt=>(0,P.jsxs)("label",{className:"flex items-center gap-2.5 p-2.5 bg-slate-50 border rounded-lg transition-colors " + (editable?"cursor-pointer hover:bg-slate-100/70":"cursor-default") + " " + optTone(Array.isArray(ansMap[q.id])&&ansMap[q.id].includes(opt.id)),children:[
                 (0,P.jsx)("input",{type:"checkbox",disabled:!editable||isCourseInactive,checked:Array.isArray(ansMap[q.id])&&ansMap[q.id].includes(opt.id),onChange:()=>handleToggleMultiChoice(q.id, opt.id),className:"w-4 h-4 text-blue-600 rounded focus:ring-blue-500"}),
                 (0,P.jsx)("span",{className:"text-xs",children:opt.text})
               ]},opt.id))}):
@@ -4884,7 +4891,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
                 (q.options||[]).map(opt=>(0,P.jsx)("option",{value:opt.id,children:opt.text},opt.id))
               ]}):
               q.type==="true_false" ? (0,P.jsxs)("div",{className:"flex items-center gap-3",children:[
-                ["True", "False"].map(tf=>(0,P.jsxs)("label",{className:"flex-1 flex items-center justify-center gap-2 p-3 bg-slate-50 border rounded-lg transition-colors " + (editable?"cursor-pointer hover:bg-slate-100/70":"cursor-default") + " " + (ansMap[q.id]===tf?"border-blue-500 bg-blue-50/50 font-bold text-blue-900":"border-slate-200 text-slate-700"),children:[
+                ["True", "False"].map(tf=>(0,P.jsxs)("label",{className:"flex-1 flex items-center justify-center gap-2 p-3 bg-slate-50 border rounded-lg transition-colors " + (editable?"cursor-pointer hover:bg-slate-100/70":"cursor-default") + " " + optTone(ansMap[q.id]===tf),children:[
                   (0,P.jsx)("input",{type:"radio",disabled:!editable||isCourseInactive,name:"q-"+q.id+(editable?"-edit":"-view"),checked:ansMap[q.id]===tf,onChange:()=>handleSelectAnswer(q.id, tf),className:"w-4 h-4 text-blue-600"}),
                   (0,P.jsx)("span",{children:tf})
                 ]},tf))
@@ -4892,9 +4899,15 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
               q.type==="long_text" ? (0,P.jsx)("textarea",{rows:3,disabled:!editable||isCourseInactive,value:ansMap[q.id]||"",onChange:e=>handleSelectAnswer(q.id, e.target.value),placeholder:editable?"Type your detailed explanation here...":"No answer marked",className:"w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-xs text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 disabled:opacity-80"}):
               null
             })
-          ]},q.id))});};
+          ]},q.id);})});};
           let markedAnswers=(submittedState && latestResult)?deriveMarkedAnswers():userAnswers;
           let hasAnyEnteredAnswer=questions.some(q=>isAnsEntered(markedAnswers, q.id));
+          let answeredQuestionCount=questions.filter(q=>isAnsEntered(markedAnswers, q.id)).length;
+          let correctQuestionCount=questions.filter(q=>{
+            if(!isAnsEntered(markedAnswers, q.id)) return !1;
+            let qr=(latestResult?.questionResponses||[]).find(x=>x.questionId===q.id) || formatQuestionResponse(q, 0, markedAnswers[q.id]);
+            return qr.isCorrect;
+          }).length;
           return(0,P.jsxs)("div",{className:"space-y-6 animate-in fade-in",children:[
             isProfileHistoryView && !(submittedState && latestResult) && !attemptsExhausted && !isCourseInactive && (0,P.jsx)("div",{className:"flex items-center justify-end gap-3 flex-wrap",children:
               !isEditingAssessment
@@ -4964,7 +4977,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
                 (0,P.jsx)("h2",{className:"text-lg font-bold text-rose-900",children:"Assessment Failed"}),
                 (0,P.jsxs)("div",{className:"text-3xl font-black text-rose-700 tabular-nums",children:[latestResult.scorePercentage, "%"]}),
                 (0,P.jsxs)("p",{className:"text-xs text-rose-800",children:[
-                  "You scored ", latestResult.earnedMarks, " out of ", latestResult.totalMarks, " marks. The passing threshold is greater than ", passingScore, "%."
+                  "You answered ", answeredQuestionCount, " of ", questions.length, " questions (", correctQuestionCount, " correct) and scored ", latestResult.earnedMarks, " out of ", latestResult.totalMarks, " marks. The passing threshold is greater than ", passingScore, "%."
                 ]}),
                 hasAttemptsRemaining ? (0,P.jsxs)("div",{className:"pt-3 space-y-2",children:[
                   (0,P.jsxs)("p",{className:"text-xs text-slate-600",children:["You have ", maxAttempts - attemptsUsed, " attempt(s) remaining."]}),
