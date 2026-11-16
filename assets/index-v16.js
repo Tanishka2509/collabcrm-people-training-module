@@ -3183,7 +3183,7 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,is
     // Content Container
     viewMode === 'employee' ? (0,P.jsxs)('div',{className:'bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden',children:[
       (0,P.jsxs)('div',{className:'p-4 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4',children:[
-        (0,P.jsx)('input',{type:'text',value:searchQuery,onChange:e=>setSearchQuery(e.target.value),placeholder:'Search employee or training...',className:'bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-800 placeholder-slate-400 w-52 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500'}),
+        (0,P.jsx)('input',{type:'text',value:searchQuery,onChange:e=>setSearchQuery(e.target.value),placeholder:'Search employee or training...',style:{width:'100%',maxWidth:'420px'},className:'bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-xs text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500'}),
         (0,P.jsxs)('div',{className:'flex items-center gap-3 flex-wrap',children:[
           (0,P.jsxs)('select',{value:trainingStatusFilter,onChange:e=>setTrainingStatusFilter(e.target.value),className:'bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-700 font-medium',children:[
             (0,P.jsx)('option',{value:'All Training Statuses',children:'All Training Statuses'}),
@@ -3227,7 +3227,7 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,is
       ]})})
     ]}) : (0,P.jsxs)('div',{className:'bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden',children:[
       (0,P.jsxs)('div',{className:'p-4 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4',children:[
-        (0,P.jsx)('input',{type:'text',value:searchQuery,onChange:e=>setSearchQuery(e.target.value),placeholder:'Search training name or category...',className:'bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-800 placeholder-slate-400 w-60 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500'}),
+        (0,P.jsx)('input',{type:'text',value:searchQuery,onChange:e=>setSearchQuery(e.target.value),placeholder:'Search training name or category...',style:{width:'100%',maxWidth:'420px'},className:'bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-xs text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500'}),
         (0,P.jsxs)('div',{className:'flex items-center gap-3 flex-wrap',children:[
           (0,P.jsxs)('select',{value:progCatFilter,onChange:e=>setProgCatFilter(e.target.value),className:'bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-700 font-medium',children:[
             (0,P.jsx)('option',{value:'All Categories',children:'All Categories'}),
