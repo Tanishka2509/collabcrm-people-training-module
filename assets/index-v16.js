@@ -3314,9 +3314,24 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,is
   let [statusFilter, setStatusFilter] = (0,l.useState)("All Statuses");
   let [issueDateFilter, setIssueDateFilter] = (0,l.useState)("All Dates");
   let [expandedMap, setExpandedMap] = (0,l.useState)({});
-  let [showFilterMenu, setShowFilterMenu] = (0,l.useState)(false);
-  let [openLookup, setOpenLookup] = (0,l.useState)(null);
-  let [lookupQuery, setLookupQuery] = (0,l.useState)("");
+  let [filterMode, setFilterMode] = (0,l.useState)("lookup");
+  let [showModeMenu, setShowModeMenu] = (0,l.useState)(false);
+  let [lookupTokens, setLookupTokens] = (0,l.useState)([]);
+  let [draftField, setDraftField] = (0,l.useState)(null);
+  let [draftOperator, setDraftOperator] = (0,l.useState)(null);
+  let [draftValue, setDraftValue] = (0,l.useState)("");
+  let [lookupStep, setLookupStep] = (0,l.useState)(null);
+  let lookupRef = (0,l.useRef)(null);
+  (0,l.useEffect)(() => {
+    let onDocClick = ev => {
+      if (lookupRef.current && !lookupRef.current.contains(ev.target)) {
+        setShowModeMenu(false);
+        setLookupStep(null);
+      }
+    };
+    document.addEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener("mousedown", onDocClick);
+  }, []);
 
   let toggleExpand = (key) => {
     setExpandedMap(prev => ({...prev, [key]: !prev[key]}));
@@ -3563,15 +3578,30 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,is
   let statusOptions = (0,l.useMemo)(() => Array.from(new Set(allRecords.map(r => r.status).filter(Boolean))).sort(), [allRecords]);
   let dateOptions = (0,l.useMemo)(() => Array.from(new Set(allRecords.map(r => r.date).filter(Boolean))), [allRecords]);
 
+  let catOptions = (0,l.useMemo)(() => Array.from(new Set(allRecords.map(r => r.category).filter(Boolean))).sort(), [allRecords]);
+  let lookupFields = [
+    { key: "trainingName", label: "Training Name", options: trainingOptions },
+    { key: "empName", label: "Employee Name", options: employeeOptions },
+    { key: "dept", label: "Department", options: deptOptions },
+    { key: "status", label: "Certificate Status", options: statusOptions },
+    { key: "date", label: "Issue Date", options: dateOptions },
+    { key: "category", label: "Training Category", options: catOptions }
+  ];
+
   let filteredRecords = allRecords.filter(rec => {
-    let q = searchQuery.trim().toLowerCase();
-    if (q && !rec.trainingName.toLowerCase().includes(q) && !rec.empName.toLowerCase().includes(q) && !rec.certNum.toLowerCase().includes(q)) return false;
     if (categoryFilter !== "All Records" && !rec.trainingName.toLowerCase().includes(categoryFilter.toLowerCase()) && !rec.category.toLowerCase().includes(categoryFilter.toLowerCase())) return false;
-    if (trainingFilter !== "All Trainings" && rec.trainingName !== trainingFilter) return false;
-    if (employeeFilter !== "All Employees" && rec.empName !== employeeFilter) return false;
-    if (deptFilter !== "All Departments" && rec.dept !== deptFilter) return false;
-    if (statusFilter !== "All Statuses" && rec.status !== statusFilter) return false;
-    if (issueDateFilter !== "All Dates" && rec.date !== issueDateFilter) return false;
+    if (filterMode === "quick") {
+      let q = searchQuery.trim().toLowerCase();
+      if (q && !rec.trainingName.toLowerCase().includes(q) && !rec.empName.toLowerCase().includes(q) && !rec.certNum.toLowerCase().includes(q) && !rec.dept.toLowerCase().includes(q) && !rec.category.toLowerCase().includes(q)) return false;
+    } else if (lookupTokens.length > 0) {
+      let getRecFieldVal = k => k === "trainingName" ? rec.trainingName : k === "empName" ? rec.empName : k === "dept" ? rec.dept : k === "status" ? rec.status : k === "date" ? rec.date : k === "category" ? rec.category : "";
+      for (let tk of lookupTokens) {
+        let cell = String(getRecFieldVal(tk.fieldKey) || "").toLowerCase();
+        let target = String(tk.value || "").trim().toLowerCase();
+        if (!target) continue;
+        if (tk.operator === "Is" ? cell !== target : !cell.includes(target)) return false;
+      }
+    }
     return true;
   });
 
@@ -3593,7 +3623,16 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,is
   }, [filteredRecords]);
 
   let totalCertCount = filteredRecords.length;
-  let hasActiveFilters = searchQuery || categoryFilter !== "All Records" || trainingFilter !== "All Trainings" || employeeFilter !== "All Employees" || deptFilter !== "All Departments" || statusFilter !== "All Statuses" || issueDateFilter !== "All Dates";
+  let hasActiveFilters = (filterMode === "quick" ? Boolean(searchQuery) : lookupTokens.length > 0) || categoryFilter !== "All Records";
+  let commitLookupToken = val => {
+    let clean = String(val || "").trim();
+    if (!draftField || !draftOperator || !clean) return;
+    setLookupTokens(prev => [...prev, { id: "tk-" + Date.now(), fieldKey: draftField.key, fieldLabel: draftField.label, operator: draftOperator, value: clean }]);
+    setDraftField(null);
+    setDraftOperator(null);
+    setDraftValue("");
+    setLookupStep(null);
+  };
 
   return (0,P.jsxs)("div", {className: "p-6 space-y-4 max-w-[1600px] mx-auto w-full", children: [
     (0,P.jsxs)("div", {className: "flex items-center gap-1.5 text-xs font-medium text-slate-500", children: [
@@ -3608,18 +3647,160 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,is
             (0,P.jsx)("h2", {className: "font-bold text-slate-900 text-base", children: "Certificates"}),
             (0,P.jsx)("span", {className: "bg-blue-50 text-blue-700 text-xs font-bold px-2.5 py-0.5 rounded-full", children: totalCertCount + (totalCertCount === 1 ? " Certificate" : " Certificates")})
           ]}),
-          (0,P.jsxs)("div", {className: "flex flex-wrap items-center gap-2 relative", children: [
-            (0,P.jsx)("input", {
-              type: "text",
-              value: searchQuery,
-              onChange: ev => setSearchQuery(ev.target.value),
-              placeholder: "Search training or employee...",
-              className: "bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-800 placeholder-slate-400 w-56 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-            }),
+          (0,P.jsxs)("div", {ref: lookupRef, className: "flex flex-wrap items-center gap-2 relative", children: [
+            (0,P.jsxs)("div", {className: "relative", children: [
+              (0,P.jsxs)("button", {
+                type: "button",
+                onClick: () => { setShowModeMenu(v => !v); setLookupStep(null); },
+                title: filterMode === "lookup" ? "Look-up Filter" : "Quick Search",
+                className: "h-8 px-2.5 bg-white border border-slate-200 hover:bg-slate-50 rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors",
+                children: [
+                  filterMode === "lookup"
+                    ? (0,P.jsx)("span", {className: "text-blue-600 text-sm font-bold leading-none", children: "Σ"})
+                    : (0,P.jsx)(ke, {className: "w-3.5 h-3.5 text-slate-600"}),
+                  (0,P.jsx)(re, {className: "w-3.5 h-3.5 text-slate-400"})
+                ]
+              }),
+              showModeMenu && (0,P.jsxs)("div", {
+                style: {position: "absolute", left: 0, top: "100%", marginTop: "6px", width: "160px", zIndex: 50},
+                className: "bg-white border border-slate-200 rounded-xl shadow-xl overflow-hidden py-1",
+                children: [
+                  (0,P.jsxs)("button", {
+                    type: "button",
+                    onClick: () => { setFilterMode("lookup"); setShowModeMenu(false); setSearchQuery(""); },
+                    className: "w-full text-left px-3 py-2 text-xs font-semibold flex items-center gap-2 cursor-pointer " + (filterMode === "lookup" ? "bg-blue-600 text-white" : "text-slate-700 hover:bg-slate-50"),
+                    children: [
+                      (0,P.jsx)("span", {className: "font-bold text-sm leading-none", children: "Σ"}),
+                      (0,P.jsx)("span", {children: "Look-up Filter"})
+                    ]
+                  }),
+                  (0,P.jsxs)("button", {
+                    type: "button",
+                    onClick: () => { setFilterMode("quick"); setShowModeMenu(false); setLookupStep(null); setDraftField(null); setDraftOperator(null); setDraftValue(""); },
+                    className: "w-full text-left px-3 py-2 text-xs font-semibold flex items-center gap-2 cursor-pointer " + (filterMode === "quick" ? "bg-blue-600 text-white" : "text-slate-700 hover:bg-slate-50"),
+                    children: [
+                      (0,P.jsx)(ke, {className: "w-3.5 h-3.5"}),
+                      (0,P.jsx)("span", {children: "Quick Search"})
+                    ]
+                  })
+                ]
+              })
+            ]}),
+            filterMode === "quick" ? (0,P.jsxs)("div", {className: "relative flex items-center", children: [
+              (0,P.jsx)(ke, {className: "w-3.5 h-3.5 text-slate-400 absolute left-2.5 pointer-events-none"}),
+              (0,P.jsx)("input", {
+                type: "text",
+                value: searchQuery,
+                onChange: ev => setSearchQuery(ev.target.value),
+                placeholder: "Filter Results...",
+                style: {width: "280px"},
+                className: "h-8 bg-white border border-slate-200 rounded-lg pl-8 pr-7 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+              }),
+              searchQuery && (0,P.jsx)("button", {
+                type: "button",
+                onClick: () => setSearchQuery(""),
+                className: "absolute right-2 text-slate-400 hover:text-slate-600 text-xs cursor-pointer",
+                children: "✕"
+              })
+            ]}) : (0,P.jsxs)("div", {className: "relative", children: [
+              (0,P.jsxs)("div", {
+                onClick: () => { if (!draftField && !lookupStep) setLookupStep("field"); },
+                style: {minWidth: "300px", maxWidth: "560px"},
+                className: "min-h-8 bg-white border border-slate-200 rounded-lg px-2 py-1 flex flex-wrap items-center gap-1.5 cursor-text focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20",
+                children: [
+                  lookupTokens.length === 0 && !draftField && (0,P.jsx)(ke, {className: "w-3.5 h-3.5 text-slate-400 ml-1 shrink-0"}),
+                  lookupTokens.map(tk => (0,P.jsxs)("span", {
+                    className: "inline-flex items-center gap-1 bg-slate-100 border border-slate-200 rounded-md px-1.5 py-0.5 text-[11px] text-slate-700 font-medium",
+                    children: [
+                      (0,P.jsx)("span", {className: "bg-white border border-slate-200 rounded px-1.5 py-0.2 font-semibold text-slate-800", children: tk.fieldLabel}),
+                      (0,P.jsx)("span", {className: "bg-white border border-slate-200 rounded px-1.5 py-0.2 text-slate-600", children: tk.operator}),
+                      (0,P.jsx)("span", {className: "bg-white border border-slate-200 rounded px-1.5 py-0.2 font-semibold text-slate-900 max-w-[120px] truncate", children: tk.value}),
+                      (0,P.jsx)("button", {
+                        type: "button",
+                        onClick: ev => { ev.stopPropagation(); setLookupTokens(prev => prev.filter(x => x.id !== tk.id)); },
+                        className: "text-slate-400 hover:text-rose-600 font-bold ml-0.5 cursor-pointer",
+                        title: "Remove filter",
+                        children: "✕"
+                      })
+                    ]
+                  }, tk.id)),
+                  draftField && (0,P.jsx)("span", {
+                    className: "inline-flex items-center bg-white border border-slate-200 rounded px-2 py-0.5 text-[11px] font-semibold text-slate-800",
+                    children: draftField.label
+                  }),
+                  draftOperator && (0,P.jsx)("span", {
+                    className: "inline-flex items-center bg-white border border-slate-200 rounded px-2 py-0.5 text-[11px] text-slate-600 font-medium",
+                    children: draftOperator
+                  }),
+                  draftOperator ? (0,P.jsx)("input", {
+                    type: "text",
+                    autoFocus: true,
+                    value: draftValue,
+                    onChange: ev => { setDraftValue(ev.target.value); setLookupStep("value"); },
+                    onKeyDown: ev => {
+                      if (ev.key === "Enter" && draftValue.trim()) { ev.preventDefault(); commitLookupToken(draftValue); }
+                      else if (ev.key === "Backspace" && !draftValue) { setDraftOperator(null); setLookupStep("operator"); }
+                      else if (ev.key === "Escape") { setDraftField(null); setDraftOperator(null); setDraftValue(""); setLookupStep(null); }
+                    },
+                    placeholder: "Type value...",
+                    style: {width: "110px"},
+                    className: "text-xs text-slate-800 placeholder-slate-400 focus:outline-none bg-transparent py-0.5"
+                  }) : !draftField && lookupTokens.length === 0 ? (0,P.jsx)("span", {
+                    className: "text-xs text-slate-400 select-none px-1",
+                    children: "Filter Results..."
+                  }) : null,
+                  !draftField && (0,P.jsx)("button", {
+                    type: "button",
+                    onClick: ev => { ev.stopPropagation(); setLookupStep(lookupStep === "field" ? null : "field"); },
+                    title: "Add Look-up Filter",
+                    className: "w-6 h-6 rounded-md bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-200 font-bold text-xs flex items-center justify-center cursor-pointer ml-auto shrink-0",
+                    children: "+"
+                  })
+                ]
+              }),
+              lookupStep === "field" && (0,P.jsx)("div", {
+                style: {position: "absolute", left: 0, top: "100%", marginTop: "6px", width: "220px", zIndex: 50},
+                className: "bg-white border border-slate-200 rounded-xl shadow-xl py-1.5",
+                children: lookupFields.map(fd => (0,P.jsxs)("button", {
+                  type: "button",
+                  onClick: () => { setDraftField(fd); setDraftOperator(null); setDraftValue(""); setLookupStep("operator"); },
+                  className: "w-full text-left px-3.5 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 hover:text-blue-700 flex items-center gap-2.5 cursor-pointer",
+                  children: [
+                    (0,P.jsx)("span", {className: "text-slate-400 text-[11px]", children: "○"}),
+                    (0,P.jsx)("span", {children: fd.label})
+                  ]
+                }, fd.key))
+              }),
+              lookupStep === "operator" && draftField && (0,P.jsx)("div", {
+                style: {position: "absolute", left: 0, top: "100%", marginTop: "6px", width: "170px", zIndex: 50},
+                className: "bg-white border border-slate-200 rounded-xl shadow-xl py-1",
+                children: ["Contains", "Is"].map(op => (0,P.jsx)("button", {
+                  type: "button",
+                  onClick: () => { setDraftOperator(op); setDraftValue(""); setLookupStep("value"); },
+                  className: "w-full text-left px-3.5 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 cursor-pointer",
+                  children: op
+                }, op))
+              }),
+              lookupStep === "value" && draftField && draftOperator && (() => {
+                let q = draftValue.trim().toLowerCase();
+                let sugg = (draftField.options || []).filter(o => !q || String(o).toLowerCase().includes(q)).slice(0, 8);
+                if (sugg.length === 0) return null;
+                return (0,P.jsx)("div", {
+                  style: {position: "absolute", left: 0, top: "100%", marginTop: "6px", width: "250px", maxHeight: "190px", zIndex: 50},
+                  className: "bg-white border border-slate-200 rounded-xl shadow-xl py-1 overflow-y-auto divide-y divide-slate-50",
+                  children: sugg.map(opt => (0,P.jsx)("button", {
+                    type: "button",
+                    onClick: () => commitLookupToken(opt),
+                    className: "w-full text-left px-3 py-2 text-xs text-slate-700 hover:bg-blue-50 hover:text-blue-700 truncate cursor-pointer",
+                    children: opt
+                  }, opt))
+                });
+              })()
+            ]}),
             (0,P.jsxs)("select", {
               value: categoryFilter,
               onChange: ev => setCategoryFilter(ev.target.value),
-              className: "text-xs border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white text-slate-700 font-medium focus:outline-none focus:ring-1 focus:ring-blue-500",
+              className: "h-8 text-xs border border-slate-200 rounded-lg px-2.5 bg-white text-slate-700 font-medium focus:outline-none focus:ring-1 focus:ring-blue-500",
               children: [
                 (0,P.jsx)("option", {value: "All Records", children: "All Records"}),
                 (0,P.jsx)("option", {value: "Security", children: "Security Trainings"}),
@@ -3627,117 +3808,12 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,is
                 (0,P.jsx)("option", {value: "Leadership", children: "Leadership Trainings"})
               ]
             }),
-            (0,P.jsxs)("button", {
+            hasActiveFilters && (0,P.jsx)("button", {
               type: "button",
-              onClick: () => setShowFilterMenu(v => !v),
-              className: "inline-flex items-center gap-1.5 text-xs border rounded-lg px-3 py-1.5 font-semibold transition-colors cursor-pointer " + ((trainingFilter !== "All Trainings" || employeeFilter !== "All Employees" || deptFilter !== "All Departments" || statusFilter !== "All Statuses" || issueDateFilter !== "All Dates") ? "border-blue-300 bg-blue-50 text-blue-700" : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"),
-              children: [
-                (0,P.jsx)("span", {children: "Filters"}),
-                (0,P.jsx)(re, {className: "w-3.5 h-3.5 transition-transform " + (showFilterMenu ? "rotate-180" : "")})
-              ]
-            }),
-            showFilterMenu && (() => {
-              let renderLookupField = (key, label, value, allLabel, options, onSelect) => {
-                let isOpen = openLookup === key;
-                let isFiltered = value !== allLabel;
-                let q = isOpen ? lookupQuery.trim().toLowerCase() : "";
-                let matched = options.filter(opt => !q || String(opt).toLowerCase().includes(q));
-                return (0,P.jsxs)("div", {className: "space-y-1 relative", children: [
-                  (0,P.jsx)("label", {className: "text-[11px] font-semibold text-slate-500", children: label}),
-                  (0,P.jsxs)("div", {
-                    role: "button",
-                    tabIndex: 0,
-                    onClick: () => { setOpenLookup(isOpen ? null : key); setLookupQuery(""); },
-                    onKeyDown: ev => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); setOpenLookup(isOpen ? null : key); setLookupQuery(""); } },
-                    className: "w-full text-xs border rounded-lg px-2.5 py-1.5 flex items-center justify-between gap-1.5 cursor-pointer transition-colors " + (isOpen ? "border-blue-500 bg-white ring-1 ring-blue-500/20" : isFiltered ? "border-blue-300 bg-blue-50/50 text-blue-800 font-semibold" : "border-slate-200 bg-slate-50 text-slate-700 font-medium hover:bg-white"),
-                    children: [
-                      (0,P.jsx)("span", {className: "truncate", children: value}),
-                      (0,P.jsxs)("div", {className: "flex items-center gap-1 shrink-0", children: [
-                        isFiltered && (0,P.jsx)("button", {
-                          type: "button",
-                          title: "Clear " + label,
-                          onClick: ev => { ev.stopPropagation(); onSelect(allLabel); setOpenLookup(null); setLookupQuery(""); },
-                          className: "text-slate-400 hover:text-rose-600 font-bold px-0.5 cursor-pointer",
-                          children: "✕"
-                        }),
-                        (0,P.jsx)(re, {className: "w-3.5 h-3.5 text-slate-400 transition-transform " + (isOpen ? "rotate-180 text-blue-600" : "")})
-                      ]})
-                    ]
-                  }),
-                  isOpen && (0,P.jsxs)("div", {
-                    style: {position: "absolute", left: 0, right: 0, top: "100%", marginTop: "4px", zIndex: 50},
-                    className: "bg-white border border-slate-200 rounded-xl shadow-xl overflow-hidden",
-                    children: [
-                      (0,P.jsxs)("div", {className: "p-1.5 border-b border-slate-100 bg-slate-50 flex items-center gap-1.5", children: [
-                        (0,P.jsx)(ke, {className: "w-3.5 h-3.5 text-slate-400 shrink-0 ml-1"}),
-                        (0,P.jsx)("input", {
-                          type: "text",
-                          autoFocus: true,
-                          value: lookupQuery,
-                          onChange: ev => setLookupQuery(ev.target.value),
-                          placeholder: "Search " + label.toLowerCase() + "...",
-                          className: "w-full bg-transparent text-xs text-slate-800 placeholder-slate-400 focus:outline-none py-0.5"
-                        })
-                      ]}),
-                      (0,P.jsxs)("div", {style: {maxHeight: "150px"}, className: "overflow-y-auto divide-y divide-slate-50", children: [
-                        (0,P.jsxs)("button", {
-                          type: "button",
-                          onClick: () => { onSelect(allLabel); setOpenLookup(null); setLookupQuery(""); },
-                          className: "w-full text-left px-2.5 py-1.5 text-xs flex items-center justify-between cursor-pointer " + (!isFiltered ? "bg-blue-50 text-blue-700 font-semibold" : "text-slate-600 hover:bg-slate-50"),
-                          children: [
-                            (0,P.jsx)("span", {children: allLabel}),
-                            !isFiltered && (0,P.jsx)("span", {className: "text-blue-600 font-bold", children: "✓"})
-                          ]
-                        }),
-                        matched.length === 0 ? (0,P.jsx)("div", {className: "px-2.5 py-2 text-[11px] text-slate-400 text-center", children: "No matching options"}) :
-                        matched.map(opt => {
-                          let active = value === opt;
-                          return (0,P.jsxs)("button", {
-                            type: "button",
-                            onClick: () => { onSelect(opt); setOpenLookup(null); setLookupQuery(""); },
-                            className: "w-full text-left px-2.5 py-1.5 text-xs flex items-center justify-between gap-2 cursor-pointer " + (active ? "bg-blue-50 text-blue-700 font-semibold" : "text-slate-700 hover:bg-slate-50"),
-                            children: [
-                              (0,P.jsx)("span", {className: "truncate", children: opt}),
-                              active && (0,P.jsx)("span", {className: "text-blue-600 font-bold shrink-0", children: "✓"})
-                            ]
-                          }, opt);
-                        })
-                      ]})
-                    ]
-                  })
-                ]});
-              };
-              return (0,P.jsxs)("div", {
-                style: {position: "absolute", right: 0, top: "100%", marginTop: "8px", width: "340px", zIndex: 40},
-                className: "bg-white border border-slate-200 rounded-xl shadow-xl p-4 space-y-3",
-                children: [
-                  (0,P.jsxs)("div", {className: "flex items-center justify-between border-b border-slate-100 pb-2", children: [
-                    (0,P.jsx)("span", {className: "text-xs font-bold text-slate-800", children: "Filter Certificates (Lookup)"}),
-                    hasActiveFilters && (0,P.jsx)("button", {
-                      type: "button",
-                      onClick: () => { setSearchQuery(""); setCategoryFilter("All Records"); setTrainingFilter("All Trainings"); setEmployeeFilter("All Employees"); setDeptFilter("All Departments"); setStatusFilter("All Statuses"); setIssueDateFilter("All Dates"); setOpenLookup(null); setLookupQuery(""); },
-                      className: "text-[11px] font-semibold text-blue-600 hover:underline cursor-pointer",
-                      children: "Reset All"
-                    })
-                  ]}),
-                  renderLookupField("training", "Training Name", trainingFilter, "All Trainings", trainingOptions, setTrainingFilter),
-                  renderLookupField("employee", "Employee Name", employeeFilter, "All Employees", employeeOptions, setEmployeeFilter),
-                  (0,P.jsxs)("div", {style: {display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px"}, children: [
-                    renderLookupField("dept", "Department", deptFilter, "All Departments", deptOptions, setDeptFilter),
-                    renderLookupField("status", "Certificate Status", statusFilter, "All Statuses", statusOptions, setStatusFilter)
-                  ]}),
-                  renderLookupField("date", "Issue Date", issueDateFilter, "All Dates", dateOptions, setIssueDateFilter),
-                  (0,P.jsx)("div", {className: "pt-1 flex justify-end", children: 
-                    (0,P.jsx)("button", {
-                      type: "button",
-                      onClick: () => { setOpenLookup(null); setShowFilterMenu(false); },
-                      className: "px-3 py-1 rounded-lg bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 cursor-pointer",
-                      children: "Done"
-                    })
-                  })
-                ]
-              });
-            })()
+              onClick: () => { setSearchQuery(""); setCategoryFilter("All Records"); setLookupTokens([]); setDraftField(null); setDraftOperator(null); setDraftValue(""); setLookupStep(null); },
+              className: "text-xs font-semibold text-blue-600 hover:underline px-1 cursor-pointer",
+              children: "Clear"
+            })
           ]})
         ]})
       ]}),
