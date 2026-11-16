@@ -1874,32 +1874,40 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
             return (0,P.jsxs)("div",{className:"flex items-end gap-3",style:{display:"flex",alignItems:"flex-end",gap:"12px"},children:[
               (0,P.jsxs)("div",{className:"flex-1 min-w-0",style:{flex:"1 1 0%",minWidth:0},children:[
                 (0,P.jsxs)("label",{className:"flex items-center gap-1.5 text-xs font-semibold text-slate-700 mb-1.5",children:["Select Skill ",(0,P.jsx)("span",{className:"text-rose-500",children:"*"}),(0,P.jsx)(InfoTip,{text:"Choose one skill to award when the employee completes this training."})]}),
-                (0,P.jsxs)("select",{
-                  value:row.skillId,
-                  onChange:e => {
-                    let nextId = e.target.value;
-                    let next = skillRows.map((r, i) => i === rowIdx ? { ...r, skillId: nextId } : r);
-                    syncSkillRows(next);
-                  },
-                  className:"w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs bg-white font-medium text-slate-800",
-                  children:[
-                    (0,P.jsx)("option",{value:"",children:"Select a skill..."}),
-                    rowAvailableSkills.map(sk => (0,P.jsx)("option",{value:sk.id,children:sk.name},sk.id))
-                  ]
-                })
+                (0,P.jsxs)("div",{className:"relative",children:[
+                  (0,P.jsxs)("select",{
+                    value:row.skillId,
+                    onChange:e => {
+                      let nextId = e.target.value;
+                      let next = skillRows.map((r, i) => i === rowIdx ? { ...r, skillId: nextId } : r);
+                      syncSkillRows(next);
+                    },
+                    style:{appearance:"none",WebkitAppearance:"none",MozAppearance:"none",paddingRight:"36px"},
+                    className:"w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs bg-white font-medium text-slate-800 focus:outline-none focus:ring-1 focus:ring-purple-500",
+                    children:[
+                      (0,P.jsx)("option",{value:"",children:"Select a skill..."}),
+                      rowAvailableSkills.map(sk => (0,P.jsx)("option",{value:sk.id,children:sk.name},sk.id))
+                    ]
+                  }),
+                  (0,P.jsx)(re,{style:{position:"absolute",right:"12px",top:"50%",transform:"translateY(-50%)"},className:"w-4 h-4 text-slate-400 pointer-events-none"})
+                ]})
               ]}),
               (0,P.jsxs)("div",{className:"flex-1 min-w-0",style:{flex:"1 1 0%",minWidth:0},children:[
                 (0,P.jsxs)("label",{className:"flex items-center gap-1.5 text-xs font-semibold text-slate-700 mb-1.5",children:["Skill Level ",(0,P.jsx)("span",{className:"text-rose-500",children:"*"}),(0,P.jsx)(InfoTip,{text:"Select the proficiency level awarded for this skill."})]}),
-                (0,P.jsx)("select",{
-                  value:row.skillLevel || defaultSkillLv,
-                  onChange:e => {
-                    let nextLv = e.target.value;
-                    let next = skillRows.map((r, i) => i === rowIdx ? { ...r, skillLevel: nextLv } : r);
-                    syncSkillRows(next);
-                  },
-                  className:"w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs bg-white font-medium text-slate-800",
-                  children:configuredSkillLevels.map(lv => (0,P.jsx)("option",{value:lv.name,children:lv.name},lv.id || lv.name))
-                })
+                (0,P.jsxs)("div",{className:"relative",children:[
+                  (0,P.jsx)("select",{
+                    value:row.skillLevel || defaultSkillLv,
+                    onChange:e => {
+                      let nextLv = e.target.value;
+                      let next = skillRows.map((r, i) => i === rowIdx ? { ...r, skillLevel: nextLv } : r);
+                      syncSkillRows(next);
+                    },
+                    style:{appearance:"none",WebkitAppearance:"none",MozAppearance:"none",paddingRight:"36px"},
+                    className:"w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs bg-white font-medium text-slate-800 focus:outline-none focus:ring-1 focus:ring-purple-500",
+                    children:configuredSkillLevels.map(lv => (0,P.jsx)("option",{value:lv.name,children:lv.name},lv.id || lv.name))
+                  }),
+                  (0,P.jsx)(re,{style:{position:"absolute",right:"12px",top:"50%",transform:"translateY(-50%)"},className:"w-4 h-4 text-slate-400 pointer-events-none"})
+                ]})
               ]}),
               (0,P.jsxs)("div",{className:"flex items-center gap-2 shrink-0",style:{display:"flex",alignItems:"center",gap:"8px",flexShrink:0},children:[
                 isLastRow && (0,P.jsx)("button",{
