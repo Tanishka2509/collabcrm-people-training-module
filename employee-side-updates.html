@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CollabCRM Training Portal — Employee-Side Updates Document</title>
+  <title>Employee-Side Prototype Updates — CollabCRM Training Portal</title>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -11,112 +11,102 @@
       background: #f8fafc;
       color: #0f172a;
       margin: 0;
-      padding: 32px 20px;
-      line-height: 1.6;
+      padding: 24px 16px;
+      line-height: 1.45;
     }
-    .container {
-      max-width: 980px;
+    .doc {
+      max-width: 880px;
       margin: 0 auto;
       background: #ffffff;
       border: 1px solid #e2e8f0;
-      border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+      border-radius: 14px;
       overflow: hidden;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
     }
-    .header {
-      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    .hdr {
+      background: #0f172a;
       color: #ffffff;
-      padding: 28px 32px;
+      padding: 20px 26px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
     }
-    .header h1 {
-      margin: 0 0 6px;
-      font-size: 22px;
-      font-weight: 800;
-    }
-    .header p {
-      margin: 0;
-      font-size: 13px;
-      color: #dbeafe;
-    }
+    .hdr h1 { margin: 0; font-size: 18px; font-weight: 800; }
+    .hdr span { font-size: 12px; color: #94a3b8; font-weight: 600; }
     .legend {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
-      padding: 16px 32px;
+      gap: 8px;
+      padding: 12px 26px;
       background: #f1f5f9;
       border-bottom: 1px solid #e2e8f0;
-      font-size: 12px;
-      font-weight: 600;
+      font-size: 11px;
+      font-weight: 700;
     }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
+    .tag {
+      padding: 3px 10px;
       border-radius: 999px;
       border: 1px solid;
       font-size: 11px;
       font-weight: 700;
+      white-space: nowrap;
     }
-    .b-blue { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
-    .b-green { background: #ecfdf5; color: #047857; border-color: #a7f3d0; }
-    .b-purple { background: #f5f3ff; color: #6d28d9; border-color: #ddd6fe; }
-    .b-amber { background: #fffbeb; color: #b45309; border-color: #fde68a; }
+    .t-teal   { background: #f0fdfa; color: #0f766e; border-color: #99f6e4; }
+    .t-indigo { background: #eef2ff; color: #4338ca; border-color: #c7d2fe; }
+    .t-orange { background: #fff7ed; color: #c2410c; border-color: #fed7aa; }
+    .t-violet { background: #f5f3ff; color: #6d28d9; border-color: #ddd6fe; }
 
-    .content { padding: 28px 32px; display: grid; gap: 20px; }
-    .card {
-      border-radius: 12px;
-      padding: 18px 20px;
-      border: 1px solid #e2e8f0;
+    .body { padding: 20px 26px; display: grid; gap: 14px; }
+    .sec {
+      border-radius: 10px;
+      padding: 14px 16px;
+      border: 1px solid;
       border-left-width: 5px;
     }
-    .card-blue { background: #eff6ff66; border-color: #bfdbfe; border-left-color: #2563eb; }
-    .card-green { background: #ecfdf566; border-color: #a7f3d0; border-left-color: #059669; }
-    .card-purple { background: #f5f3ff66; border-color: #ddd6fe; border-left-color: #7c3aed; }
-    .card-amber { background: #fffbeb66; border-color: #fde68a; border-left-color: #d97706; }
+    .s-teal   { background: #f0fdfa99; border-color: #99f6e4; border-left-color: #0d9488; }
+    .s-indigo { background: #eef2ff99; border-color: #c7d2fe; border-left-color: #4f46e5; }
+    .s-orange { background: #fff7ed99; border-color: #fed7aa; border-left-color: #ea580c; }
+    .s-violet { background: #f5f3ff99; border-color: #ddd6fe; border-left-color: #7c3aed; }
 
-    .card-title {
+    .sec-h {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 10px;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
     }
-    .card-title h2 {
-      margin: 0;
-      font-size: 15px;
-      font-weight: 800;
-      color: #0f172a;
-    }
-    ul { margin: 8px 0 0; padding-left: 20px; }
-    li { margin-bottom: 6px; font-size: 13.5px; color: #334155; }
+    .sec-h h2 { margin: 0; font-size: 14px; font-weight: 800; color: #0f172a; }
+    ul { margin: 0; padding-left: 18px; }
+    li { font-size: 13px; color: #1e293b; margin-bottom: 4px; }
+    li:last-child { margin-bottom: 0; }
     code {
-      background: #f1f5f9;
-      border: 1px solid #e2e8f0;
-      padding: 1px 6px;
-      border-radius: 5px;
-      font-size: 12px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 11.5px;
       color: #0f172a;
     }
-    .flow-box {
+    .flow {
+      margin-top: 10px;
+      padding: 10px 12px;
+      background: #ffffff;
+      border: 1px dashed #cbd5e1;
+      border-radius: 8px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 8px;
-      margin-top: 12px;
-      padding: 12px;
-      background: #ffffff;
-      border: 1px dashed #cbd5e1;
-      border-radius: 10px;
-      font-size: 12px;
+      gap: 6px;
+      font-size: 11.5px;
       font-weight: 700;
     }
-    .arrow { color: #64748b; }
-    .footer {
-      padding: 16px 32px;
-      border-top: 1px solid #e2e8f0;
+    .ftr {
+      padding: 12px 26px;
       background: #f8fafc;
-      font-size: 12px;
+      border-top: 1px solid #e2e8f0;
+      font-size: 11.5px;
       color: #64748b;
       display: flex;
       justify-content: space-between;
@@ -126,82 +116,77 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1>Employee-Side Training Portal — Updated Add-Ons &amp; Workflow</h1>
-      <p>CollabCRM People &amp; Training Module &bull; Color-coded summary of all Employee-side UI, Filter, and Workflow updates</p>
+  <div class="doc">
+    <div class="hdr">
+      <h1>Employee Side — Prototype Updates</h1>
+      <span>CollabCRM Training Portal</span>
     </div>
 
     <div class="legend">
-      <span>Color Legend:</span>
-      <span class="badge b-blue">UI &amp; Navigation</span>
-      <span class="badge b-amber">KPI &amp; Look-up Filtering</span>
-      <span class="badge b-green">Modules-First &amp; Go for Assessment</span>
-      <span class="badge b-purple">Assessment (&ge; Passing %), Auto-Complete &amp; Recognition</span>
+      <span class="tag t-teal">KPI &amp; Look-up Filter</span>
+      <span class="tag t-indigo">Tabs &amp; Breadcrumbs</span>
+      <span class="tag t-orange">Modules-First &amp; Assessment Gate</span>
+      <span class="tag t-violet">Auto-Complete &amp; Recognition</span>
     </div>
 
-    <div class="content">
-      <div class="card card-amber">
-        <div class="card-title">
-          <h2>1. Interactive KPI Card Filtering &amp; Look-up Filter Bar (My Training)</h2>
-          <span class="badge b-amber">KPI &amp; Look-up Filtering</span>
+    <div class="body">
+      <div class="sec s-teal">
+        <div class="sec-h">
+          <h2>1. My Training — KPI Filtering &amp; Look-up Filter</h2>
+          <span class="tag t-teal">Teal</span>
         </div>
         <ul>
-          <li>Clicking any KPI summary card (<code>Total Assigned</code>, <code>Not Started</code>, <code>In Progress</code>, <code>Overdue</code>, <code>Completed</code>) highlights the active card and filters the <strong>My Training</strong> table below to matching records; clicking again resets to <code>All</code>.</li>
-          <li>Added the CollabCRM <strong>Look-up Filter</strong> (<code>&Sigma; &#x2304;</code>) &amp; <strong>Quick Search</strong> (<code>&#128269; &#x2304;</code>) bar in a dedicated full-width filter row directly above the table.</li>
-          <li>Look-up fields for Employee view: <code>Training Name</code>, <code>Category</code>, <code>Assigned By</code>, <code>Status</code>, <code>Assigned Date</code>, and <code>Due Date</code>, supporting <code>Contains</code> / <code>Is</code> operators, live value suggestions, multi-token <code>AND</code> pills, and <code>+</code> / <code>Clear</code>.</li>
+          <li>Clicking any KPI card (<code>Total Assigned</code>, <code>Not Started</code>, <code>In Progress</code>, <code>Overdue</code>, <code>Completed</code>) filters the table below; click again to reset.</li>
+          <li>Full-width <code>Look-up Filter</code> (<code>&Sigma; &#x2304;</code>) &amp; <code>Quick Search</code> (<code>&#128269; &#x2304;</code>) bar above the table.</li>
+          <li>Fields: <code>Training Name</code>, <code>Category</code>, <code>Assigned By</code>, <code>Status</code>, <code>Assigned Date</code>, <code>Due Date</code> with <code>Contains</code> / <code>Is</code> operators, live suggestions, and <code>+</code> multi-filter pills.</li>
         </ul>
       </div>
 
-      <div class="card card-blue">
-        <div class="card-title">
-          <h2>2. Clean Course Tabs &amp; Label Refinements</h2>
-          <span class="badge b-blue">UI &amp; Navigation</span>
+      <div class="sec s-indigo">
+        <div class="sec-h">
+          <h2>2. Course Tabs, Labels &amp; Breadcrumb Navigation</h2>
+          <span class="tag t-indigo">Indigo</span>
         </div>
         <ul>
-          <li>Removed numeric prefixes from Employee course tabs: <code>Overview</code>, <code>Learning Resources</code>, and <code>Assessment &amp; Questions</code>.</li>
-          <li>Removed the word <code>Strictly</code> from passing criteria text (now displays <code>&gt; 80% to pass</code> / configured passing score).</li>
-          <li>Removed redundant type labels where requested and aligned Learning Resources rows cleanly with <code>Module</code>, <code>Resource Title</code>, <code>Type</code>, <code>Resource URL</code>, and <code>Action</code>.</li>
+          <li>Removed tab numbers: <code>Overview</code>, <code>Learning Resources</code>, <code>Assessment &amp; Questions</code>.</li>
+          <li>Removed <code>Strictly</code> from passing criteria and redundant type labels.</li>
+          <li>Removed <code>&larr; Back to Assessments</code> button; top breadcrumbs (<code>Training &rsaquo; Course Name &rsaquo; Assessment</code>) handle back navigation.</li>
         </ul>
       </div>
 
-      <div class="card card-green">
-        <div class="card-title">
-          <h2>3. Modules-First Sequential Flow &amp; "Go for Assessment" CTA</h2>
-          <span class="badge b-green">Modules-First &amp; Go for Assessment</span>
+      <div class="sec s-orange">
+        <div class="sec-h">
+          <h2>3. Modules-First Flow &amp; Go for Assessment</h2>
+          <span class="tag t-orange">Orange</span>
         </div>
         <ul>
-          <li><strong>Disabled Assessment Tab Until Modules Finish:</strong> The <code>Assessment &amp; Questions</code> tab is disabled (non-clickable) until all learning modules in <code>Learning Resources</code> are marked completed.</li>
-          <li><strong>Sequential Module Completion:</strong> Only the next pending module shows <code>Mark Done</code>; subsequent modules show <code>Pending</code>; finished modules show <code>Completed &#10003;</code>.</li>
-          <li><strong>Go for Assessment Button:</strong> As soon as all learning modules are completed (e.g., <code>2/2 Modules Finished</code>), a right-aligned <code>Go for Assessment &rarr;</code> button appears below the Action column in <code>Learning Resources</code> and navigates directly to the unlocked assessment.</li>
+          <li><code>Assessment &amp; Questions</code> tab stays disabled (no lock icon) until all learning modules are completed.</li>
+          <li>Modules unlock sequentially: <code>Mark Done</code> &rarr; <code>Completed &#10003;</code> (remaining modules show <code>Pending</code>).</li>
+          <li>No auto-redirect after the final <code>Mark Done</code>; instead, a right-aligned <code>Go for Assessment &rarr;</code> button appears below <code>Learning Resources</code>.</li>
         </ul>
-        <div class="flow-box">
-          <span class="badge b-green">1. Complete All Learning Modules</span>
-          <span class="arrow">&rarr;</span>
-          <span class="badge b-green">2. Click "Go for Assessment &rarr;"</span>
-          <span class="arrow">&rarr;</span>
-          <span class="badge b-purple">3. Attempt &amp; Score &ge; Passing % (80%+)</span>
-          <span class="arrow">&rarr;</span>
-          <span class="badge b-purple">4. Auto-Completed + Certificate &amp; Skills Awarded</span>
+        <div class="flow">
+          <span class="tag t-orange">Complete Modules</span> &rarr;
+          <span class="tag t-orange">Click "Go for Assessment &rarr;"</span> &rarr;
+          <span class="tag t-violet">Score &ge; 80%</span> &rarr;
+          <span class="tag t-violet">Completed + Certificate &amp; Skills</span>
         </div>
       </div>
 
-      <div class="card card-purple">
-        <div class="card-title">
-          <h2>4. Assessment Passing (&ge; 80%), Auto-Completion &amp; Recognition</h2>
-          <span class="badge b-purple">Auto-Complete &amp; Recognition</span>
+      <div class="sec s-violet">
+        <div class="sec-h">
+          <h2>4. Auto-Completion (&ge; 80%) &amp; Recognition</h2>
+          <span class="tag t-violet">Violet</span>
         </div>
         <ul>
-          <li>When the employee submits the assessment and achieves the passing score (default <code>80%</code> or configured passing %), the training is <strong>automatically marked as <code>Completed</code></strong> (<code>100%</code> progress).</li>
-          <li>If the training has an associated <strong>Certificate</strong> and/or <strong>Skills</strong> configured in Training Recognition, they are <strong>automatically issued and credited</strong> to that employee's profile, Skill Matrix, and Certificates list.</li>
-          <li>If the employee fails below the passing threshold and attempts remain, a retake option is available; once passed, <code>Assessment &amp; Questions</code> displays the <code>Passed</code> badge.</li>
+          <li>Passing the assessment (<code>&ge; passingScore</code>, default <code>80%</code>) automatically marks the training <code>Completed</code> (<code>100%</code>).</li>
+          <li>Linked <strong>Certificate</strong> and <strong>Skills</strong> are automatically awarded to the employee's profile, Skill Matrix, and Certificates.</li>
         </ul>
       </div>
     </div>
 
-    <div class="footer">
-      <span>CollabCRM People &amp; Training Portal &bull; Employee Module</span>
-      <span>Live URL: https://collabcrm-people-training-module.vercel.app</span>
+    <div class="ftr">
+      <span>Employee Module Specification</span>
+      <span>https://collabcrm-people-training-module.vercel.app</span>
     </div>
   </div>
 </body>
