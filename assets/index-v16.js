@@ -5000,7 +5000,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
                   if(window.confirm("Are you sure you want to submit your assessment?")){
                     evaluateAssessment();
                   }
-                },style:isCourseInactive?{opacity:0.5}:undefined,className:"bg-blue-600 text-white font-bold px-6 py-2.5 rounded-lg text-xs shadow-sm transition-colors " + (isCourseInactive?"cursor-not-allowed":"hover:bg-blue-700"),children:"Submit Assessment for Grading →"})
+                },style:isCourseInactive?{opacity:0.5}:undefined,className:"bg-blue-600 text-white font-bold px-6 py-2.5 rounded-lg text-xs shadow-sm transition-colors " + (isCourseInactive?"cursor-not-allowed":"hover:bg-blue-700"),children:"Submit Assessment"})
               ]})
             ]})
           ]});
