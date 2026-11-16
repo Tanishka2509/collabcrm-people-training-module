@@ -4291,13 +4291,13 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
         // Top Tab Bar
         (0,P.jsx)("div",{className:"bg-white border border-slate-200 rounded-xl px-6 shadow-sm overflow-x-auto",children:[
           (0,P.jsxs)("div",{className:"flex items-center gap-8 text-xs font-bold border-b border-transparent",children:[
-            (0,P.jsx)("button",{onClick:()=>r("overview"),className:"py-4 border-b-2 transition-colors whitespace-nowrap " + (n==="overview"?"border-blue-600 text-blue-600":"border-transparent text-slate-500 hover:text-slate-800"),children:"1. Overview"}),
+            (0,P.jsx)("button",{onClick:()=>r("overview"),className:"py-4 border-b-2 transition-colors whitespace-nowrap " + (n==="overview"?"border-blue-600 text-blue-600":"border-transparent text-slate-500 hover:text-slate-800"),children:"Overview"}),
             (0,P.jsxs)("button",{onClick:()=>r("resources"),className:"py-4 border-b-2 transition-colors whitespace-nowrap flex items-center gap-1.5 " + (n==="resources"?"border-blue-600 text-blue-600":"border-transparent text-slate-500 hover:text-slate-800"),children:[
-              (0,P.jsx)("span",{children:"2. Learning Resources"}),
+              (0,P.jsx)("span",{children:"Learning Resources"}),
               (0,P.jsxs)("span",{className:"bg-slate-100 text-slate-600 text-[10px] px-1.5 py-0.5 rounded-full font-semibold",children:[doneCount, "/", resources.length]})
             ]}),
             (0,P.jsxs)("button",{onClick:()=>r("assessment"),className:"py-4 border-b-2 transition-colors whitespace-nowrap flex items-center gap-1.5 " + (n==="assessment"?"border-blue-600 text-blue-600":"border-transparent text-slate-500 hover:text-slate-800"),children:[
-              (0,P.jsx)("span",{children:"3. Assessment & Questions"}),
+              (0,P.jsx)("span",{children:"Assessment & Questions"}),
               latestResult?.isPassed ? (0,P.jsx)("span",{className:"bg-emerald-100 text-emerald-800 text-[10px] px-1.5 py-0.5 rounded font-bold",children:"Passed"}): null
             ]})
           ]})
