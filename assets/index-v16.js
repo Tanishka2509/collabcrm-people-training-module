@@ -4651,7 +4651,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
               (0,P.jsxs)("span",{className:"bg-slate-100 text-slate-600 text-[10px] px-1.5 py-0.5 rounded-full font-semibold",children:[doneCount, "/", resources.length]})
             ]}),
             (()=>{let assessTabLocked=isAssessmentEnabled&&!allResourcesDone&&!(submittedState&&latestResult);return (0,P.jsxs)("div",{className:"relative",onMouseEnter:()=>assessTabLocked&&setAssessHover(!0),onMouseLeave:()=>setAssessHover(!1),children:[
-              (0,P.jsxs)("button",{type:"button",title:assessTabLocked?"Complete all learning modules before accessing Assessment & Questions":undefined,onClick:()=>{if(!assessTabLocked)r("assessment");},className:"py-4 border-b-2 transition-colors whitespace-nowrap flex items-center gap-1.5 cursor-pointer " + (n==="assessment"?"border-blue-600 text-blue-600":"border-transparent text-slate-500 hover:text-slate-800"),children:[
+              (0,P.jsxs)("button",{type:"button",onClick:()=>{if(!assessTabLocked)r("assessment");},className:"py-4 border-b-2 transition-colors whitespace-nowrap flex items-center gap-1.5 cursor-pointer " + (n==="assessment"?"border-blue-600 text-blue-600":"border-transparent text-slate-500 hover:text-slate-800"),children:[
                 (0,P.jsx)("span",{children:"Assessment & Questions"}),
                 latestResult?.isPassed ? (0,P.jsx)("span",{className:"bg-emerald-100 text-emerald-800 text-[10px] px-1.5 py-0.5 rounded font-bold",children:"Passed"}): null
               ]}),
