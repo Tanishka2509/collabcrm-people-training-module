@@ -4852,18 +4852,16 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
           })
         ]});})() : (()=>{
           let deriveMarkedAnswers=()=>{
-            let raw=(latestResult && latestResult.answers) || userAnswers || {};
-            if(Object.keys(raw).length>0)return raw;
-            let out={};
-            questions.forEach(q=>{
-              if(q.type==="short_text"||q.type==="long_text")out[q.id]=q.expectedAnswer||q.correctAnswer||"Submitted response";
-              else if(q.type==="single_choice"||q.type==="dropdown")out[q.id]=q.correctOptionId||(q.options&&q.options[0]?.id)||"";
-              else if(q.type==="multiple_choice")out[q.id]=Array.isArray(q.correctOptionIds)&&q.correctOptionIds.length>0?q.correctOptionIds:(q.options&&q.options[0]?[q.options[0].id]:[]);
-              else if(q.type==="true_false")out[q.id]=q.correctAnswer||"True";
-            });
-            return out;
+            if(latestResult && latestResult.answers && typeof latestResult.answers==="object") return latestResult.answers;
+            return userAnswers || {};
           };
-          let renderQuestionsList=(ansMap, editable)=>(0,P.jsx)("div",{className:"space-y-4",children:questions.map((q, idx)=>(0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-3.5",children:[
+          let isAnsEntered=(ansMap, qId)=>{
+            let v=ansMap ? ansMap[qId] : undefined;
+            return Array.isArray(v) ? v.length>0 : Boolean(v!=null && String(v).trim()!=="");
+          };
+          let renderQuestionsList=(ansMap, editable)=>{
+            let list=questions.map((q, idx)=>({q, idx})).filter(item=>editable || isAnsEntered(ansMap, item.q.id));
+            return (0,P.jsx)("div",{className:"space-y-4",children:list.map(({q, idx})=>(0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-3.5",children:[
             (0,P.jsx)("div",{className:"flex items-center justify-between border-b border-slate-100 pb-2.5",children:
               (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
                 (0,P.jsx)("span",{className:"bg-blue-50 text-blue-700 text-xs font-bold px-2 py-0.5 rounded",children:"Question " + (idx+1)}),
@@ -4894,8 +4892,9 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
               q.type==="long_text" ? (0,P.jsx)("textarea",{rows:3,disabled:!editable||isCourseInactive,value:ansMap[q.id]||"",onChange:e=>handleSelectAnswer(q.id, e.target.value),placeholder:editable?"Type your detailed explanation here...":"No answer marked",className:"w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-xs text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 disabled:opacity-80"}):
               null
             })
-          ]},q.id))});
+          ]},q.id))});};
           let markedAnswers=(submittedState && latestResult)?deriveMarkedAnswers():userAnswers;
+          let hasAnyEnteredAnswer=questions.some(q=>isAnsEntered(markedAnswers, q.id));
           return(0,P.jsxs)("div",{className:"space-y-6 animate-in fade-in",children:[
             isProfileHistoryView && !(submittedState && latestResult) && !attemptsExhausted && !isCourseInactive && (0,P.jsx)("div",{className:"flex items-center justify-end gap-3 flex-wrap",children:
               !isEditingAssessment
@@ -4975,7 +4974,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
                   (0,P.jsxs)("p",{className:"text-xs text-rose-700 font-bold max-w-md mx-auto leading-relaxed",children:["All ", maxAttempts, " assessment attempt(s) have been completed without passing. Status: Failed. No further attempts or retakes are allowed."]})
                 ]})
               ]})}),
-              (0,P.jsxs)("div",{className:"space-y-3",children:[
+              hasAnyEnteredAnswer && (0,P.jsxs)("div",{className:"space-y-3",children:[
                 (0,P.jsx)("h3",{className:"text-xs font-bold text-slate-500 uppercase tracking-wider",children:"Submitted Answers (View Only)"}),
                 renderQuestionsList(markedAnswers, false)
               ]})
@@ -4986,7 +4985,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
                 (0,P.jsx)("h2",{className:"text-lg font-bold text-rose-900",children:"Assessment Failed — No More Attempts Allowed"}),
                 (0,P.jsxs)("p",{className:"text-xs text-rose-700 font-medium max-w-md mx-auto leading-relaxed",children:["All ", maxAttempts, " assessment attempt(s) have been completed without passing. Status is marked as Failed and no further retakes are permitted."]})
               ]})}),
-              (0,P.jsxs)("div",{className:"space-y-3",children:[
+              hasAnyEnteredAnswer && (0,P.jsxs)("div",{className:"space-y-3",children:[
                 (0,P.jsx)("h3",{className:"text-xs font-bold text-slate-500 uppercase tracking-wider",children:"Submitted Answers (View Only)"}),
                 renderQuestionsList(markedAnswers, false)
               ]})
