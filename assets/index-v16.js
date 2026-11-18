@@ -4739,21 +4739,27 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
               level: configuredSkillLevelsMap[sid] || configuredSkillLevel || "Beginner"
             }));
             let recognitionEarned = isSubmitted && allRequiredStepsDone;
-            return (0,P.jsxs)("div",{className:"bg-white border border-purple-200 rounded-xl p-5 shadow-sm space-y-3",style:{borderLeft:"4px solid #7c3aed"},children:[
-              (0,P.jsxs)("div",{className:"flex items-center justify-between flex-wrap gap-2",children:[
-                (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
-                  (0,P.jsx)("span",{className:"w-2 h-2 rounded-full",style:{backgroundColor:"#7c3aed"}}),
-                  (0,P.jsx)("h3",{className:"text-xs font-bold text-purple-700 uppercase tracking-wider",children:"Training Recognition"})
-                ]})
+            let uniqueLevels = Array.from(new Set(resolvedSkills.map(sk => sk.level).filter(Boolean)));
+            let levelDisplay = uniqueLevels.length === 1 ? uniqueLevels[0] : resolvedSkills.map(sk => `${sk.name}: ${sk.level}`).join(", ");
+            return (0,P.jsxs)("div",{className:"bg-white border border-purple-200 rounded-xl p-6 shadow-sm space-y-4",style:{borderLeft:"4px solid #7c3aed"},children:[
+              (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
+                (0,P.jsx)("span",{className:"w-2 h-2 rounded-full",style:{backgroundColor:"#7c3aed"}}),
+                (0,P.jsx)("h3",{className:"text-xs font-bold text-purple-700 uppercase tracking-wider",children:"Training Recognition"})
               ]}),
-              (0,P.jsxs)("div",{className:"flex flex-wrap items-center gap-3 text-xs",children:[
-                isCertEnabled && (0,P.jsx)("span",{className:"px-2.5 py-1 rounded-full bg-purple-50 text-purple-700 border border-purple-200 font-semibold",children:recognitionEarned ? "🎓 Official Certificate Issued ✓" : "🎓 Official Certificate on Completion"}),
-                isSkillEnabled && resolvedSkills.length > 0 && (0,P.jsxs)("div",{className:"flex flex-wrap items-center gap-2",children:[
-                  (0,P.jsx)("span",{className:"text-slate-500 font-semibold",children:recognitionEarned ? "Skills Awarded:" : "Skills & Levels Awarded on Completion:"}),
-                  resolvedSkills.map((sk, i) => (0,P.jsxs)("span",{className:"inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-purple-50 text-purple-700 border border-purple-200 font-semibold",children:[
-                    (0,P.jsxs)("span",{children:["🏅 ", sk.name]}),
-                    (0,P.jsx)("span",{className:"px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-white text-purple-700 border border-purple-200",children:sk.level})
-                  ]},sk.id || i))
+              (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-3 gap-6 text-xs",children:[
+                isCertEnabled && (0,P.jsxs)("div",{children:[
+                  (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Certificate"}),
+                  (0,P.jsx)("div",{className:"font-bold text-slate-900 mt-1",children:recognitionEarned ? "Official Certificate Issued ✓" : "Official Certificate on Completion"})
+                ]}),
+                isSkillEnabled && resolvedSkills.length > 0 && (0,P.jsxs)(P.Fragment,{children:[
+                  (0,P.jsxs)("div",{children:[
+                    (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:recognitionEarned ? "Skills Awarded" : "Skills Awarded on Completion"}),
+                    (0,P.jsx)("div",{className:"font-bold text-slate-900 mt-1",children:resolvedSkills.map(sk => sk.name).join(", ")})
+                  ]}),
+                  (0,P.jsxs)("div",{children:[
+                    (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Skill Level"}),
+                    (0,P.jsx)("div",{className:"font-bold text-slate-900 mt-1",children:levelDisplay || (configuredSkillLevel || "Beginner")})
+                  ]})
                 ]})
               ]})
             ]});
