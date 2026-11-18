@@ -4645,6 +4645,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
   let configuredSkillLevel = (liveProg?.skillLevel ?? c.skillLevel) || "";
   let configuredSkillLevelsMap = (liveProg?.skillLevels && typeof liveProg.skillLevels === "object" ? liveProg.skillLevels : (c.skillLevels && typeof c.skillLevels === "object" ? c.skillLevels : {}));
   let [awardFeedback, setAwardFeedback] = (0,l.useState)(null);
+  let [showRecogCertModal, setShowRecogCertModal] = (0,l.useState)(!1);
   let [activeAssessmentOpen, setActiveAssessmentOpen] = (0,l.useState)(!1);
   let isProfileHistoryView = Boolean(e?.fromProfile);
   let [isEditingAssessment, setIsEditingAssessment] = (0,l.useState)(!isProfileHistoryView);
@@ -4970,30 +4971,43 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
               name: masterSkills.find(m => m.id === sid)?.name || sid,
               level: configuredSkillLevelsMap[sid] || configuredSkillLevel || "Beginner"
             }));
-            let recognitionEarned = isSubmitted && allRequiredStepsDone;
+            let recognitionEarned = Boolean((isSubmitted && allRequiredStepsDone) || (latestResult?.isPassed && allResourcesDone) || c.status === "Completed");
+            let matchedCert = awardFeedback?.certificateIssued || (Array.isArray(dynCerts) ? dynCerts.find(dc => dc && canonicalEmpSkillKey(dc.employeeId) === "CO-5039" && ((dc.trainingId && dc.trainingId === c.id) || (dc.trainingName && c.name && dc.trainingName.trim().toLowerCase() === c.name.trim().toLowerCase()))) : null);
+            let certIdLabel = matchedCert?.id || `CERT-2026-${String(c.id || "001").replace(/\D/g, "").padStart(4, "0")}`;
+            let certDateLabel = matchedCert?.issueDate || fmtDate(new Date());
             let uniqueLevels = Array.from(new Set(resolvedSkills.map(sk => sk.level).filter(Boolean)));
             let levelDisplay = uniqueLevels.length === 1 ? uniqueLevels[0] : resolvedSkills.map(sk => `${sk.name}: ${sk.level}`).join(", ");
             return (0,P.jsxs)("div",{className:"bg-white border border-purple-200 rounded-xl p-6 shadow-sm space-y-4",style:{borderLeft:"4px solid #7c3aed"},children:[
-              (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
-                (0,P.jsx)("span",{className:"w-2 h-2 rounded-full",style:{backgroundColor:"#7c3aed"}}),
-                (0,P.jsx)("h3",{className:"text-xs font-bold text-purple-700 uppercase tracking-wider",children:"Training Recognition"})
+              (0,P.jsxs)("div",{className:"flex items-center justify-between flex-wrap gap-2",children:[
+                (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
+                  (0,P.jsx)("span",{className:"w-2 h-2 rounded-full",style:{backgroundColor:"#7c3aed"}}),
+                  (0,P.jsx)("h3",{className:"text-xs font-bold text-purple-700 uppercase tracking-wider",children:"Training Recognition"})
+                ]}),
+                recognitionEarned && (0,P.jsx)("span",{className:"px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200",children:"Earned ✓"})
               ]}),
               (0,P.jsxs)("div",{className:"grid grid-cols-1 md:grid-cols-3 gap-6 text-xs",children:[
                 isCertEnabled && (0,P.jsxs)("div",{children:[
-                  (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Certificate"}),
-                  (0,P.jsx)("div",{className:"font-bold text-slate-900 mt-1",children:recognitionEarned ? "Official Certificate Issued ✓" : "Official Certificate on Completion"})
+                  (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:recognitionEarned ? "Certificate Earned" : "Certificate"}),
+                  (0,P.jsx)("div",{className:"font-bold mt-1 " + (recognitionEarned ? "text-emerald-700" : "text-slate-900"),children:recognitionEarned ? "Official Certificate Issued ✓" : "Official Certificate on Completion"}),
+                  recognitionEarned && (0,P.jsxs)("div",{className:"mt-1.5 space-y-1 text-[11px] text-slate-600",children:[
+                    (0,P.jsxs)("div",{className:"font-mono font-semibold text-slate-700",children:[certIdLabel, " • ", certDateLabel]}),
+                    (0,P.jsx)("button",{type:"button",onClick:()=>setShowRecogCertModal(!0),className:"text-blue-600 hover:underline font-semibold cursor-pointer",children:"View Certificate →"})
+                  ]})
                 ]}),
                 isSkillEnabled && (0,P.jsxs)(P.Fragment,{children:[
                   (0,P.jsxs)("div",{children:[
-                    (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:recognitionEarned ? "Skills Awarded" : "Skills Awarded on Completion"}),
-                    (0,P.jsx)("div",{className:"font-bold text-slate-900 mt-1",children:resolvedSkills.length > 0 ? resolvedSkills.map(sk => sk.name).join(", ") : "Configured on Completion"})
+                    (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:recognitionEarned ? "Skills Received" : "Skills Awarded on Completion"}),
+                    (0,P.jsx)("div",{className:"font-bold mt-1 " + (recognitionEarned ? "text-emerald-700" : "text-slate-900"),children:(resolvedSkills.length > 0 ? resolvedSkills.map(sk => sk.name).join(", ") : "Configured on Completion") + (recognitionEarned ? " ✓" : "")}),
+                    recognitionEarned && (0,P.jsx)("div",{className:"mt-1 text-[11px] text-slate-500",children:"Added to Employee Profile & Skill Matrix"})
                   ]}),
                   (0,P.jsxs)("div",{children:[
-                    (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Skill Level"}),
-                    (0,P.jsx)("div",{className:"font-bold text-slate-900 mt-1",children:levelDisplay || (configuredSkillLevel || "Beginner")})
+                    (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:recognitionEarned ? "Skill Level Received" : "Skill Level"}),
+                    (0,P.jsx)("div",{className:"font-bold text-slate-900 mt-1",children:levelDisplay || (configuredSkillLevel || "Beginner")}),
+                    recognitionEarned && (0,P.jsx)("div",{className:"mt-1 text-[11px] text-slate-500",children:"Awarded on Assessment Pass"})
                   ]})
                 ]})
-              ]})
+              ]}),
+              showRecogCertModal && (0,P.jsx)(Ze,{certificateId:certIdLabel,programmeName:c.name,employeeName:"Tanya Kapoor",employeeCode:"CO-5039",issueDate:certDateLabel,signatory:"Khushi Bhatt, Head of HR",earnedSkills:resolvedSkills.map(sk=>({skillId:sk.id,skillName:sk.name,level:sk.level})),onClose:()=>setShowRecogCertModal(!1)})
             ]});
           })(),
 
