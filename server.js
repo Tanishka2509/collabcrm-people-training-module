@@ -57,7 +57,11 @@ const server = http.createServer(async (req, res) => {
       res.writeHead(500, { 'Content-Type': 'text/plain' });
       res.end(`Internal Server Error: ${err.code}`);
     } else {
-      res.writeHead(200, { 'Content-Type': contentType });
+      const headers = { 'Content-Type': contentType };
+      if (ext === '.html') {
+        headers['Cache-Control'] = 'no-store, no-cache, must-revalidate';
+      }
+      res.writeHead(200, headers);
       res.end(content, 'utf-8');
     }
   });
