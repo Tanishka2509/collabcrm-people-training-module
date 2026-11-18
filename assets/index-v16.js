@@ -4420,7 +4420,16 @@ function lt(){return(0,P.jsxs)(`div`,{className:`p-6 space-y-6 max-w-[1600px] mx
     let sMatch = staticList.find(s => item.name && s.name.toLowerCase() === item.name.toLowerCase());
     let baseStatus = cp ? cp.status : (sMatch ? sMatch.status : (item.status || "Not Started"));
     let baseProgress = cp ? Number(cp.progress) || 0 : (sMatch ? sMatch.progress : (Number(item.progress) || 0));
-    if (baseStatus === "Completed") baseProgress = 100;
+    let isAssessPassed = Boolean(cp?.latestResult?.isPassed);
+    if (baseStatus === "Completed" || baseProgress >= 100 || (isAssessPassed && baseProgress >= 90)) {
+      baseStatus = "Completed";
+      baseProgress = 100;
+    } else if (!["Completed", "In Progress", "Overdue", "Not Started"].includes(baseStatus)) {
+      baseStatus = baseProgress > 0 ? "In Progress" : "Not Started";
+    }
+    if (baseStatus !== "Completed") {
+      baseStatus = resolveOverdueStatus(baseStatus, fmtEmpDate(item.dueDate), baseProgress);
+    }
     let avail = m ? ((m.publicationStatus || m.status) === "Draft" ? "Inactive" : (m.availabilityStatus || (m.isActive === !1 ? "Inactive" : "Active"))) : (item.availabilityStatus || "Active");
     let hoursVal = fmtDurationHM(m || item || 4);
     return {
