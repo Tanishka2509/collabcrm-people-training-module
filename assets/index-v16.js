@@ -3768,7 +3768,6 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,is
   let trainingOptions = (0,l.useMemo)(() => Array.from(new Set(allRecords.map(r => r.trainingName).filter(Boolean))).sort(), [allRecords]);
   let employeeOptions = (0,l.useMemo)(() => Array.from(new Set(allRecords.map(r => r.empName).filter(Boolean))).sort(), [allRecords]);
   let deptOptions = (0,l.useMemo)(() => Array.from(new Set(allRecords.map(r => r.dept).filter(Boolean))).sort(), [allRecords]);
-  let statusOptions = (0,l.useMemo)(() => Array.from(new Set(allRecords.map(r => r.status).filter(Boolean))).sort(), [allRecords]);
   let dateOptions = (0,l.useMemo)(() => Array.from(new Set(allRecords.map(r => r.date).filter(Boolean))), [allRecords]);
 
   let catOptions = (0,l.useMemo)(() => Array.from(new Set(allRecords.map(r => r.category).filter(Boolean))).sort(), [allRecords]);
@@ -3776,7 +3775,6 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,is
     { key: "trainingName", label: "Training Name", options: trainingOptions },
     { key: "empName", label: "Employee Name", options: employeeOptions },
     { key: "dept", label: "Department", options: deptOptions },
-    { key: "status", label: "Certificate Status", options: statusOptions },
     { key: "date", label: "Issue Date", options: dateOptions },
     { key: "category", label: "Training Category", options: catOptions }
   ];
@@ -3787,7 +3785,7 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,is
       let q = searchQuery.trim().toLowerCase();
       if (q && !rec.trainingName.toLowerCase().includes(q) && !rec.empName.toLowerCase().includes(q) && !rec.certNum.toLowerCase().includes(q) && !rec.dept.toLowerCase().includes(q) && !rec.category.toLowerCase().includes(q)) return false;
     } else if (lookupTokens.length > 0) {
-      let getRecFieldVal = k => k === "trainingName" ? rec.trainingName : k === "empName" ? rec.empName : k === "dept" ? rec.dept : k === "status" ? rec.status : k === "date" ? rec.date : k === "category" ? rec.category : "";
+      let getRecFieldVal = k => k === "trainingName" ? rec.trainingName : k === "empName" ? rec.empName : k === "dept" ? rec.dept : k === "date" ? rec.date : k === "category" ? rec.category : "";
       for (let tk of lookupTokens) {
         let cell = String(getRecFieldVal(tk.fieldKey) || "").toLowerCase();
         let target = String(tk.value || "").trim().toLowerCase();
