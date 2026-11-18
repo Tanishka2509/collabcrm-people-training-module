@@ -5149,10 +5149,37 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
                 ]}),
                 (0,P.jsxs)("span",{className:"bg-blue-50 text-blue-700 border border-blue-200 font-bold px-2.5 py-1 rounded-lg text-xs self-start",children:[questions.length, " Questions • ", totalAssessmentMarks, " Marks"]})
               ]}),
-              (0,P.jsxs)("div",{className:"flex flex-wrap items-center gap-4 text-xs text-slate-600",children:[
-                (0,P.jsxs)("span",{children:[(0,P.jsx)("strong",{children:"Passing Criteria:"}), " > ", passingScore, "% to pass"]}),
-                (0,P.jsx)("span",{children:"•"}),
-                (0,P.jsxs)("span",{children:[(0,P.jsx)("strong",{children:"Attempts:"}), " ", Math.max(0, maxAttempts - attemptsUsed), " of ", maxAttempts, " remaining"]})
+              (0,P.jsxs)("div",{className:"flex flex-wrap items-center justify-between gap-3 text-xs text-slate-600",children:[
+                (0,P.jsxs)("div",{className:"flex flex-wrap items-center gap-4",children:[
+                  (0,P.jsxs)("span",{children:[(0,P.jsx)("strong",{children:"Passing Criteria:"}), " > ", passingScore, "% to pass"]}),
+                  (0,P.jsx)("span",{children:"•"}),
+                  (0,P.jsxs)("span",{children:[(0,P.jsx)("strong",{children:"Attempts:"}), " ", Math.max(0, maxAttempts - attemptsUsed), " of ", maxAttempts, " remaining"]})
+                ]}),
+                !(submittedState && latestResult) && !attemptsExhausted && !isCourseInactive && (!isProfileHistoryView || isEditingAssessment) && (0,P.jsx)("button",{
+                  type:"button",
+                  onClick:()=>{
+                    let filled={};
+                    questions.forEach(q=>{
+                      let qt=q.type||"short_text";
+                      if(qt==="short_text"){
+                        let acc=Array.isArray(q.acceptedAnswers)?q.acceptedAnswers.map(a=>String(a||"").trim()).filter(Boolean):[];
+                        filled[q.id]=acc[0]||"Customer Relationship Management";
+                      }else if(qt==="single_choice"||qt==="dropdown"){
+                        filled[q.id]=q.correctAnswer||(q.options&&q.options[0]?q.options[0].id:"");
+                      }else if(qt==="multiple_choice"){
+                        filled[q.id]=Array.isArray(q.correctAnswers)?[...q.correctAnswers]:[];
+                      }else if(qt==="true_false"){
+                        filled[q.id]=q.correctAnswer||"True";
+                      }else if(qt==="long_text"){
+                        let exp=String(q.expectedAnswer||"").trim();
+                        filled[q.id]=exp.length>10?exp:"Detailed explanation covering key workflows, standards, and compliance requirements.";
+                      }
+                    });
+                    setUserAnswers(filled);
+                  },
+                  className:"px-3 py-1 rounded-lg text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200 hover:bg-purple-100 transition-colors cursor-pointer shrink-0",
+                  children:"Auto-Fill"
+                })
               ]})
             ]}),
 
