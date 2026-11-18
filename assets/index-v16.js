@@ -774,8 +774,8 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){let r=e.
 
           (()=>{
             let isCertOn = Boolean(e.certificateGeneration);
-            let isSkillOn = Boolean(e.addSkillToProfile);
-            if(!isCertOn && !isSkillOn) return null;
+            let isSkillOn = Boolean(e.addSkillToProfile ?? e.addSkillToEmployeeProfile);
+            if(!isCertOn && !isSkillOn) isCertOn = !0;
             let skillIds = Array.isArray(e.selectedSkillIds) ? e.selectedSkillIds : [];
             let masterSkills = Array.isArray(skillsConfig) && skillsConfig.length > 0 ? skillsConfig : DEFAULT_SKILLS_SEED;
             let resolvedSkills = skillIds.map(sid => masterSkills.find(m => m.id === sid) || { id: sid, name: sid });
@@ -4641,6 +4641,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
   let reqManager = reqList.includes("Get approval from the manager") || Boolean(c.reviewerApprovalRequired || liveProg?.reviewerApprovalRequired);
   let isCertEnabled = Boolean(liveProg ? liveProg.certificateGeneration : c.certificateGeneration);
   let isSkillEnabled = Boolean(liveProg ? (liveProg.addSkillToProfile ?? liveProg.addSkillToEmployeeProfile) : (c.addSkillToProfile ?? c.addSkillToEmployeeProfile));
+  if (!isCertEnabled && !isSkillEnabled) isCertEnabled = !0;
   let configuredSkillIds = Array.isArray(liveProg?.selectedSkillIds) ? liveProg.selectedSkillIds : (Array.isArray(c.selectedSkillIds) ? c.selectedSkillIds : []);
   let configuredSkillLevel = (liveProg?.skillLevel ?? c.skillLevel) || "";
   let configuredSkillLevelsMap = (liveProg?.skillLevels && typeof liveProg.skillLevels === "object" ? liveProg.skillLevels : (c.skillLevels && typeof c.skillLevels === "object" ? c.skillLevels : {}));
