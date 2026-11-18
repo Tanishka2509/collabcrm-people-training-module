@@ -4417,6 +4417,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
   let isSkillEnabled = Boolean(liveProg ? liveProg.addSkillToProfile : c.addSkillToProfile);
   let configuredSkillIds = Array.isArray(liveProg?.selectedSkillIds) ? liveProg.selectedSkillIds : (Array.isArray(c.selectedSkillIds) ? c.selectedSkillIds : []);
   let configuredSkillLevel = (liveProg?.skillLevel ?? c.skillLevel) || "";
+  let configuredSkillLevelsMap = (liveProg?.skillLevels && typeof liveProg.skillLevels === "object" ? liveProg.skillLevels : (c.skillLevels && typeof c.skillLevels === "object" ? c.skillLevels : {}));
   let [awardFeedback, setAwardFeedback] = (0,l.useState)(null);
   let [activeAssessmentOpen, setActiveAssessmentOpen] = (0,l.useState)(!1);
   let isProfileHistoryView = Boolean(e?.fromProfile);
@@ -4741,7 +4742,11 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
           ]}),
           (isCertEnabled || isSkillEnabled) && (()=>{
             let masterSkills = Array.isArray(skillsConfig) && skillsConfig.length > 0 ? skillsConfig : DEFAULT_SKILLS_SEED;
-            let resolvedSkills = configuredSkillIds.map(sid => masterSkills.find(m => m.id === sid)?.name || sid);
+            let resolvedSkills = configuredSkillIds.map(sid => ({
+              id: sid,
+              name: masterSkills.find(m => m.id === sid)?.name || sid,
+              level: configuredSkillLevelsMap[sid] || configuredSkillLevel || "Beginner"
+            }));
             let recognitionEarned = isSubmitted && allRequiredStepsDone;
             return (0,P.jsxs)("div",{className:"bg-white border border-purple-200 rounded-xl p-5 shadow-sm space-y-3",style:{borderLeft:"4px solid #7c3aed"},children:[
               (0,P.jsxs)("div",{className:"flex items-center justify-between flex-wrap gap-2",children:[
@@ -4750,9 +4755,15 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
                   (0,P.jsx)("h3",{className:"text-xs font-bold text-purple-700 uppercase tracking-wider",children:"Training Recognition"})
                 ]})
               ]}),
-              (0,P.jsxs)("div",{className:"flex flex-wrap items-center gap-2 text-xs",children:[
+              (0,P.jsxs)("div",{className:"flex flex-wrap items-center gap-3 text-xs",children:[
                 isCertEnabled && (0,P.jsx)("span",{className:"px-2.5 py-1 rounded-full bg-purple-50 text-purple-700 border border-purple-200 font-semibold",children:recognitionEarned ? "🎓 Official Certificate Issued ✓" : "🎓 Official Certificate on Completion"}),
-                isSkillEnabled && resolvedSkills.map((sName, i) => (0,P.jsx)("span",{className:"px-2.5 py-1 rounded-full bg-purple-50 text-purple-700 border border-purple-200 font-semibold",children:`${sName} (${configuredSkillLevel || "Beginner"})`},i))
+                isSkillEnabled && resolvedSkills.length > 0 && (0,P.jsxs)("div",{className:"flex flex-wrap items-center gap-2",children:[
+                  (0,P.jsx)("span",{className:"text-slate-500 font-semibold",children:recognitionEarned ? "Skills Awarded:" : "Skills & Levels Awarded on Completion:"}),
+                  resolvedSkills.map((sk, i) => (0,P.jsxs)("span",{className:"inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-purple-50 text-purple-700 border border-purple-200 font-semibold",children:[
+                    (0,P.jsxs)("span",{children:["🏅 ", sk.name]}),
+                    (0,P.jsx)("span",{className:"px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-white text-purple-700 border border-purple-200",children:sk.level})
+                  ]},sk.id || i))
+                ]})
               ]})
             ]});
           })(),
@@ -4948,8 +4959,8 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
                   ]}),
                   (0,P.jsxs)("div",{className:"flex flex-wrap gap-1.5",children:(awardFeedback?.skillsAwarded && awardFeedback.skillsAwarded.length > 0 ? awardFeedback.skillsAwarded : configuredSkillIds.map(sid => {
                     let sk = (Array.isArray(skillsConfig) ? skillsConfig : DEFAULT_SKILLS_SEED).find(m => m.id === sid);
-                    return { skillId: sid, skillName: sk ? sk.name : sid, finalLevel: configuredSkillLevel };
-                  })).map(sk => (0,P.jsx)("span",{className:"px-2 py-0.5 rounded text-[11px] font-semibold bg-white text-purple-700 border border-purple-200",children:`${sk.skillName} (${sk.finalLevel || configuredSkillLevel})`},sk.skillId || sk.skillName))})
+                    return { skillId: sid, skillName: sk ? sk.name : sid, finalLevel: configuredSkillLevelsMap[sid] || configuredSkillLevel || "Beginner" };
+                  })).map(sk => (0,P.jsx)("span",{className:"px-2 py-0.5 rounded text-[11px] font-semibold bg-white text-purple-700 border border-purple-200",children:`${sk.skillName} (${sk.finalLevel || configuredSkillLevel || "Beginner"})`},sk.skillId || sk.skillName))})
                 ]}),
                 (0,P.jsxs)("div",{className:"flex items-center justify-center gap-3 pt-3 flex-wrap",children:[
                   allRequiredStepsDone ? (0,P.jsxs)(P.Fragment,{children:[
