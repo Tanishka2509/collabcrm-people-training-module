@@ -3461,9 +3461,7 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,is
   });
 
   let filteredProgrammes = publishedProgrammes.filter(p => {
-    let matchesQuery = evalLookupFilter(p, tpMode, tpProgTokens, searchQuery, ['name', 'cat', 'level']);
-    let matchesCat = progCatFilter === 'All Categories' || doesProgUseCategory({category:p.cat}, progCatFilter);
-    return matchesQuery && matchesCat;
+    return evalLookupFilter(p, tpMode, tpProgTokens, searchQuery, ['name', 'cat', 'level']);
   });
 
   return (0,P.jsxs)('div',{className:'p-6 space-y-6 max-w-[1600px] mx-auto w-full',children:[
@@ -3547,12 +3545,6 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,is
         (0,P.jsxs)('div',{className:'flex items-center gap-2.5',children:[
           (0,P.jsx)('h2',{className:'font-bold text-slate-900 text-base',children:'Training-wise Progress'}),
           (0,P.jsx)('span',{className:'bg-blue-50 text-blue-700 text-xs font-bold px-2 py-0.5 rounded-full',children:filteredProgrammes.length+' Trainings'})
-        ]}),
-        (0,P.jsxs)('div',{className:'flex items-center gap-3 flex-wrap',children:[
-          (0,P.jsxs)('select',{value:progCatFilter,onChange:e=>setProgCatFilter(e.target.value),className:'bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-700 font-medium',children:[
-            (0,P.jsx)('option',{value:'All Categories',children:'All Categories'}),
-            activeCats.map(cat=>(0,P.jsx)('option',{value:cat.name,children:cat.name},cat.name))
-          ]})
         ]})
       ]}),
       (0,P.jsx)('div',{className:'px-4 py-2.5 bg-slate-50/70 border-b border-slate-200 flex items-center gap-2.5 flex-wrap',children:
