@@ -1093,7 +1093,13 @@ function getDefaultEmployeeSkillsSeed() {
       mk('emp-2', 'skill-9', 'Node.js', 'Beginner')
     ],
     'CO-5039': [
-      mk('CO-5039', 'skill-10', 'Business Analysis', 'Intermediate'),
+      {
+        ...mk('CO-5039', 'skill-10', 'Business Analysis', 'Intermediate'),
+        sourceTrainingId: 'TRN-ASSIGN-106',
+        sourceTrainingName: 'Client Onboarding & Requirement Intake Playbook',
+        latestSourceTrainingName: 'Client Onboarding & Requirement Intake Playbook',
+        sources: [{ trainingId: 'TRN-ASSIGN-106', trainingName: 'Client Onboarding & Requirement Intake Playbook', level: 'Intermediate', awardedDate: '28-Jan-2026' }]
+      },
       mk('CO-5039', 'skill-11', 'SQL', 'Beginner'),
       mk('CO-5039', 'skill-12', 'Figma', 'Advanced')
     ],
@@ -1224,6 +1230,16 @@ function loadProgrammeStore() {
           assignments: Array.isArray(parsed.assignments) ? parsed.assignments : [],
           courseProgress: parsed.courseProgress && typeof parsed.courseProgress === 'object' ? parsed.courseProgress : {}
         };
+        const co5039Skills = PROGRAMME_STORE_CACHE.employeeSkills['CO-5039'];
+        if (Array.isArray(co5039Skills) && co5039Skills.length > 0 && !co5039Skills.some(s => (Array.isArray(s.sources) && s.sources.some(src => src.trainingId)) || s.sourceTrainingId)) {
+          const ba = co5039Skills.find(s => s.skillName === 'Business Analysis' || s.skillId === 'skill-10');
+          if (ba) {
+            ba.sourceTrainingId = 'TRN-ASSIGN-106';
+            ba.sourceTrainingName = 'Client Onboarding & Requirement Intake Playbook';
+            ba.latestSourceTrainingName = 'Client Onboarding & Requirement Intake Playbook';
+            ba.sources = [{ trainingId: 'TRN-ASSIGN-106', trainingName: 'Client Onboarding & Requirement Intake Playbook', level: ba.skillLevel || 'Intermediate', awardedDate: '28-Jan-2026' }];
+          }
+        }
         return PROGRAMME_STORE_CACHE;
       }
     }

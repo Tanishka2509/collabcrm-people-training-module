@@ -5973,9 +5973,9 @@ function SkillMatrixPage({employees,employeeSkills,skillAwardHistory,skillsConfi
               ]},lv.id||li);
             })}):(0,P.jsx)("span",{className:"text-slate-400",children:"-"})}),
             (0,P.jsx)("td",{className:"py-3.5 px-4",children:hasTrainSrc?(0,P.jsxs)("div",{className:"flex flex-col items-start gap-1",children:[
-              (0,P.jsx)("button",{type:"button",onClick:()=>{setDetailSkill(sk);setDetailTab("roadmap");setRoadmapLevel(sk.skillLevel||sk.level||levelsCfg[0]?.name||"Beginner");setRoadmapFilter("all")},className:"inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-purple-50 text-purple-700 border border-purple-200 text-left cursor-pointer",children:primaryTrainName}),
-              trainSources.length>1&&(0,P.jsx)("span",{style:{paddingLeft:"2px"},className:"text-[10px] font-medium text-slate-500",children:"+"+(trainSources.length-1)+" more training"+(trainSources.length>2?"s":"")})
-            ]}):(0,P.jsx)("span",{className:"text-slate-400",children:"-"})}),
+              (0,P.jsx)("button",{type:"button",onClick:()=>{setDetailSkill(sk);setDetailTab("roadmap");setRoadmapLevel(sk.skillLevel||sk.level||levelsCfg[0]?.name||"Beginner");setRoadmapFilter("all")},title:primaryTrainName,className:"inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 cursor-pointer",children:"Yes"}),
+              primaryTrainName&&(0,P.jsx)("span",{className:"text-[11px] text-slate-500",children:primaryTrainName+(trainSources.length>1?` (+${trainSources.length-1} more)`:``)})
+            ]}):(0,P.jsx)("span",{className:"inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-600 border border-slate-200",children:"No"})}),
             (0,P.jsx)("td",{style:{maxWidth:"180px"},className:"py-3.5 px-4 text-slate-600",children:remarkText}),
             (0,P.jsxs)("td",{className:"py-3.5 px-4 text-slate-600",children:[
               (0,P.jsx)("div",{className:"font-medium text-slate-700",children:creator.actor}),
