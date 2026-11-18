@@ -5602,6 +5602,8 @@ function SkillMatrixPage({employees,employeeSkills,skillAwardHistory,skillsConfi
   let[roadmapChecks,setRoadmapChecks]=(0,l.useState)({});
   let[submittedRoadmapLevels,setSubmittedRoadmapLevels]=(0,l.useState)({});
   let[collapsedTopics,setCollapsedTopics]=(0,l.useState)({});
+  let[noteDraft,setNoteDraft]=(0,l.useState)("");
+  let[skillNotesMap,setSkillNotesMap]=(0,l.useState)({});
   let[sortCol,setSortCol]=(0,l.useState)(null);
   let[sortDir,setSortDir]=(0,l.useState)("asc");
   let[showModal,setShowModal]=(0,l.useState)(!1);
@@ -6084,6 +6086,23 @@ function SkillMatrixPage({employees,employeeSkills,skillAwardHistory,skillsConfi
       let lvlSubmitKey=`${empRmKey}::${activeDetailSkill.skillName}::${activeLvl}`;
       let isLvlSubmitted=Boolean(submittedRoadmapLevels[lvlSubmitKey]);
       let skillHist=empHistRecs.filter(h=>h.skillId===activeDetailSkill.skillId||normSkillKey(h.skillName)===normSkillKey(activeDetailSkill.skillName));
+      let noteStoreKey=`${empRmKey}::${activeDetailSkill.skillName}`;
+      let customNotes=Array.isArray(skillNotesMap[noteStoreKey])?skillNotesMap[noteStoreKey]:[];
+      let histNotes=skillHist.map((h,hi)=>({
+        id:h.id||("hist-"+hi),
+        author:"System",
+        timestamp:fmtDateTime(h.awardedDate||h.createdDate||"15-Jan-2026, 11:23 AM"),
+        text:h.sourceTrainingName?`${h.actor||"System"} ${String(h.outcome||"updated").replace(/_/g," ")} ${activeDetailSkill.skillName} via ${h.sourceTrainingName}.`:`${h.actor||"System"} ${String(h.outcome||"updated").replace(/_/g," ")} ${activeDetailSkill.skillName}.`,
+        isSystem:!0
+      }));
+      let defaultSysNote=customNotes.length===0&&histNotes.length===0?[{
+        id:"sys-init",
+        author:"System",
+        timestamp:fmtDateTime(activeDetailSkill.createdAt||activeDetailSkill.createdDate||"15-Jan-2026, 11:23 AM"),
+        text:activeDetailSkill.latestSourceTrainingName||activeDetailSkill.sourceTrainingName?`${activeDetailSkill.createdBy||"Ishdeep Anand"} recorded ${activeDetailSkill.skillName} (${curSkillLvl}) via ${activeDetailSkill.latestSourceTrainingName||activeDetailSkill.sourceTrainingName}.`:`${activeDetailSkill.createdBy||"Ishdeep Anand"} added ${activeDetailSkill.skillName} (${curSkillLvl}) to skill profile.`,
+        isSystem:!0
+      }]:[];
+      let allNotes=[...customNotes,...histNotes,...defaultSysNote];
       return(0,P.jsxs)("div",{style:{display:"flex",flex:1,alignItems:"stretch",minHeight:"calc(100vh - 110px)"},children:[
         renderLeftSidebar(),
         (0,P.jsxs)("div",{style:{flex:1,minWidth:0,padding:"18px 24px"},className:"space-y-4",children:[
@@ -6091,7 +6110,7 @@ function SkillMatrixPage({employees,employeeSkills,skillAwardHistory,skillsConfi
             (0,P.jsx)("button",{type:"button",onClick:()=>setDetailTab("roadmap"),className:"px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer "+(detailTab==="roadmap"?"bg-blue-50 text-blue-600":"text-slate-600 hover:bg-slate-100"),children:"Roadmap"}),
             (0,P.jsxs)("button",{type:"button",onClick:()=>setDetailTab("notes"),className:"px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer inline-flex items-center gap-1.5 "+(detailTab==="notes"?"bg-blue-50 text-blue-600":"text-slate-600 hover:bg-slate-100"),children:[
               (0,P.jsx)("span",{children:"Notes"}),
-              skillHist.length>0&&(0,P.jsx)("span",{className:"px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-200 text-slate-700 leading-none",children:skillHist.length})
+              allNotes.length>0&&(0,P.jsx)("span",{className:"px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-200 text-slate-700 leading-none",children:allNotes.length})
             ]})
           ]}),
           detailTab==="roadmap"?(0,P.jsxs)(P.Fragment,{children:[
@@ -6152,25 +6171,34 @@ function SkillMatrixPage({employees,employeeSkills,skillAwardHistory,skillsConfi
                 })})
               ]},tp.id);
             })})
-          ]}):(0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl shadow-xs p-5 space-y-4",children:[
-            (0,P.jsxs)("div",{className:"flex items-center justify-between border-b border-slate-100 pb-3",children:[
-              (0,P.jsx)("h3",{className:"text-sm font-bold text-slate-900",children:"Skill Notes & History — "+activeDetailSkill.skillName}),
-              (0,P.jsx)("span",{style:getLevelPillStyle(curSkillLvl),className:"px-2.5 py-0.5 rounded-full text-[11px] font-semibold border",children:curSkillLvl})
-            ]}),
-            (0,P.jsxs)("div",{className:"text-xs space-y-1",children:[
-              (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Remarks / Notes"}),
-              (0,P.jsx)("div",{className:"text-slate-800 font-medium",children:activeDetailSkill.remarks||"No notes added for this skill yet."})
-            ]}),
-            skillHist.length>0&&(0,P.jsxs)("div",{className:"pt-3 border-t border-slate-100 space-y-2",children:[
-              (0,P.jsx)("div",{className:"text-xs font-bold text-slate-700",children:"Activity Log"}),
-              (0,P.jsx)("div",{className:"divide-y divide-slate-100",children:skillHist.map((h,hi)=>(
-                (0,P.jsxs)("div",{className:"py-2 text-xs flex items-center justify-between gap-3",children:[
-                  (0,P.jsxs)("div",{children:[
-                    (0,P.jsx)("span",{className:"font-semibold text-slate-800 capitalize",children:String(h.outcome||"added").replace(/_/g," ")}),
-                    h.sourceTrainingName&&(0,P.jsx)("span",{className:"text-slate-500 ml-1.5",children:"• "+h.sourceTrainingName})
+          ]}):(0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl shadow-xs overflow-hidden",children:[
+            (0,P.jsx)("div",{className:"px-5 py-3.5 border-b border-slate-100",children:(0,P.jsx)("h3",{className:"text-sm font-bold text-slate-900",children:"Notes"})}),
+            (0,P.jsxs)("div",{className:"p-4 space-y-3",children:[
+              (0,P.jsxs)("div",{className:"space-y-1.5",children:[
+                (0,P.jsxs)("div",{className:"flex items-center gap-2.5",children:[
+                  (0,P.jsx)("input",{type:"text",value:noteDraft,onChange:ev=>setNoteDraft(ev.target.value),onKeyDown:ev=>{if(ev.key==="Enter"&&noteDraft.trim()){let txt=noteDraft.trim();let newNote={id:"note-"+Date.now(),author:currentUser?.name||"Tanya Kapoor",timestamp:fmtDateTime(new Date()),text:txt,isSystem:!1};setSkillNotesMap(prev=>({...prev,[noteStoreKey]:[newNote,...(prev[noteStoreKey]||[])]}));setNoteDraft("");}},placeholder:"Write a note here....",className:"flex-1 h-9 px-3 text-xs text-slate-800 placeholder-slate-400 bg-white border border-blue-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20"}),
+                  (0,P.jsx)("button",{type:"button",disabled:!noteDraft.trim(),onClick:()=>{if(!noteDraft.trim())return;let txt=noteDraft.trim();let newNote={id:"note-"+Date.now(),author:currentUser?.name||"Tanya Kapoor",timestamp:fmtDateTime(new Date()),text:txt,isSystem:!1};setSkillNotesMap(prev=>({...prev,[noteStoreKey]:[newNote,...(prev[noteStoreKey]||[])]}));setNoteDraft("");},className:"h-9 px-4 rounded-lg text-xs font-semibold transition-colors "+(noteDraft.trim()?"bg-blue-600 hover:bg-blue-700 text-white cursor-pointer":"bg-blue-100 text-blue-400 cursor-not-allowed"),children:"Submit"})
+                ]}),
+                (0,P.jsxs)("div",{className:"flex items-center justify-between text-[10px] px-0.5",children:[
+                  (0,P.jsxs)("div",{className:"flex items-center gap-3 text-slate-400",children:[
+                    (0,P.jsxs)("span",{children:[(0,P.jsx)("span",{className:"text-blue-600 font-semibold",children:"Ctrl/⌘ B"})," Bold"]}),
+                    (0,P.jsxs)("span",{children:[(0,P.jsx)("span",{className:"text-blue-600 font-semibold",children:"Ctrl/⌘ I"})," Italic"]}),
+                    (0,P.jsxs)("span",{children:[(0,P.jsx)("span",{className:"text-blue-600 font-semibold",children:"Ctrl/⌘ U"})," Underline"]})
                   ]}),
-                  (0,P.jsx)("span",{className:"text-[11px] text-slate-400 tabular-nums",children:fmtDateTime(h.awardedDate||h.createdDate)})
-                ]},h.id||hi)
+                  noteDraft&&(0,P.jsx)("button",{type:"button",onClick:()=>setNoteDraft(""),className:"text-slate-400 hover:text-slate-600 cursor-pointer font-bold",title:"Clear note",children:"×"})
+                ]})
+              ]}),
+              (0,P.jsx)("div",{className:"space-y-2 pt-1",children:allNotes.map((nt,ni)=>(
+                (0,P.jsxs)("div",{className:"border border-slate-200 rounded-xl px-4 py-3 flex items-start gap-3 bg-white",children:[
+                  nt.isSystem?(0,P.jsx)("div",{className:"w-7 h-7 rounded-full bg-blue-50 border border-blue-200 flex items-center justify-center shrink-0 mt-0.5",children:(0,P.jsx)("span",{className:"text-[11px] font-bold text-blue-600",children:"⚙"})}):(0,P.jsx)("div",{className:"w-7 h-7 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-[11px] font-bold shrink-0 mt-0.5",children:String(nt.author||"U").slice(0,2).toUpperCase()}),
+                  (0,P.jsxs)("div",{className:"min-w-0 flex-1 space-y-0.5",children:[
+                    (0,P.jsxs)("div",{className:"text-xs",children:[
+                      (0,P.jsx)("span",{className:"font-bold text-slate-900",children:nt.author}),
+                      (0,P.jsxs)("span",{className:"text-[11px] italic text-slate-400 ml-1.5",children:["(",nt.timestamp,")"]})
+                    ]}),
+                    (0,P.jsx)("div",{className:"text-xs text-slate-600 leading-relaxed",children:nt.text})
+                  ]})
+                ]},nt.id||ni)
               ))})
             ]})
           ]})
