@@ -165,7 +165,7 @@ function evalLookupFilter(item, mode, tokens, quickQuery, quickKeys) {
   }
   if (!Array.isArray(tokens) || tokens.length === 0) return !0;
   return tokens.every(tk => {
-    if (tk.operator === "Is between" || tk.operator === "Is ≥" || tk.operator === "Is ≤" || (/date/i.test(tk.fieldKey || "") && parseLookupDateMs(tk.value) !== null)) {
+    if (tk.operator === "Is between" || tk.operator === "Is ≥" || tk.operator === "Is ≤" || ((/date/i.test(tk.fieldKey || "") || /date/i.test(tk.fieldLabel || "")) && parseLookupDateMs(tk.value) !== null)) {
       return evalLookupDateOp(item?.[tk.fieldKey], tk.operator, tk.value);
     }
     let raw = String(item?.[tk.fieldKey] ?? "").toLowerCase();
@@ -2531,6 +2531,8 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
 }function it({assignments:e,employees:empList,programmes:progs,courseProgress,onOpenAssignTraining:t,onEvaluate:n,onSelectAssignment:r,onNavigate}){
   let rawList = [{"id": "132", "name": "Tanya Kapoor", "role": "Business Analyst", "dept": "Collab", "training": "API Security & OAuth2 Best Practices", "level": "Intermediate \u2022 4 hrs", "assigned": "01-Jan-2026", "due": "20-Jan-2026", "progress": 100, "status": "Completed", "scope": "Department: Collab"}, {"id": "133", "name": "Rihan R.", "role": "Software Engineer", "dept": "Web", "training": "CollabCRM Recruitment & Client Portal Workflows", "level": "Intermediate \u2022 18 hrs", "assigned": "01-Oct-2026", "due": "15-Nov-2026", "progress": 75, "status": "In Progress", "scope": "Department: Web"}, {"id": "134", "name": "Priya Nair", "role": "Frontend Developer", "dept": "Web", "training": "Cloud Infrastructure & High-Performance Node Services", "level": "Advanced \u2022 16 hrs", "assigned": "10-Oct-2026", "due": "20-Nov-2026", "progress": 80, "status": "Failed", "scope": "Designation: Frontend Developer"}, {"id": "135", "name": "Suresh Prasad", "role": "Senior Talent Partner", "dept": "Business Analysis", "training": "CollabCRM Recruitment & Client Portal Workflows", "level": "Intermediate \u2022 18 hrs", "assigned": "05-Oct-2026", "due": "25-Oct-2026", "progress": 0, "status": "Not Started", "scope": "Department: Business Analysis"}, {"id": "136", "name": "Ashish Kumar", "role": "Technical Lead & Reporting Manager", "dept": "Web", "training": "Cloud Infrastructure & High-Performance Node Services", "level": "Advanced \u2022 16 hrs", "assigned": "15-Sep-2026", "due": "20-Oct-2026", "progress": 100, "status": "Completed", "scope": "Designation: Technical Lead"}, {"id": "137", "name": "Vikram Malhotra", "role": "Enterprise Account Executive", "dept": "Collab", "training": "Enterprise CRM Communication & Client Delight", "level": "Intermediate \u2022 12 hrs", "assigned": "01-Oct-2026", "due": "30-Nov-2026", "progress": 0, "status": "Not Started", "scope": "Department: Collab"}, {"id": "138", "name": "Ishdeep Anand", "role": "Admin", "dept": "Business Analysis", "training": "Enterprise Security & Data Protection Compliance", "level": "Advanced \u2022 20 hrs", "assigned": "01-Sep-2026", "due": "15-Oct-2026", "progress": 100, "status": "Completed", "scope": "Employee: Ishdeep Anand"}, {"id": "139", "name": "Sanjana Ghosh", "role": "Executive", "dept": "Collab", "training": "Agile Project Delivery & Sprint Planning", "level": "Intermediate \u2022 8 hrs", "assigned": "01-Oct-2026", "due": "10-Nov-2026", "progress": 65, "status": "In Progress", "scope": "Department: Collab"}, {"id": "140", "name": "Megha Salunkhe", "role": "Sr. Executive", "dept": "Collab", "training": "Client Stakeholder Relationship Management", "level": "Intermediate \u2022 6 hrs", "assigned": "20-Sep-2026", "due": "30-Oct-2026", "progress": 90, "status": "In Progress", "scope": "Department: Collab"}, {"id": "141", "name": "Kunal Barve", "role": "Team leader", "dept": "Collab", "training": "Incident Response & SLA Management", "level": "Advanced \u2022 10 hrs", "assigned": "15-Oct-2026", "due": "25-Nov-2026", "progress": 50, "status": "In Progress", "scope": "Designation: Team Leader"}, {"id": "142", "name": "Ananya Sridhar", "role": "Manager", "dept": "Collab", "training": "Executive Leadership & Strategic Governance", "level": "Advanced \u2022 14 hrs", "assigned": "10-Sep-2026", "due": "20-Oct-2026", "progress": 100, "status": "Completed", "scope": "Designation: Manager"}, {"id": "143", "name": "Vikram Anand", "role": "AVP", "dept": "Collab", "training": "Enterprise Resource Scaling & Budgeting", "level": "Advanced \u2022 12 hrs", "assigned": "15-Aug-2026", "due": "30-Sep-2026", "progress": 100, "status": "Completed", "scope": "Employee: Vikram Anand"}, {"id": "144", "name": "Rahul Khanna", "role": "Executive", "dept": "Game", "training": "Automated End-to-End Regression Testing", "level": "Intermediate \u2022 15 hrs", "assigned": "01-Oct-2026", "due": "15-Nov-2026", "progress": 80, "status": "In Progress", "scope": "Department: Game"}, {"id": "145", "name": "Deepa Ramaswamy", "role": "Executive", "dept": "Web", "training": "Kubernetes Multi-Cluster Orchestration", "level": "Advanced \u2022 18 hrs", "assigned": "10-Oct-2026", "due": "20-Nov-2026", "progress": 30, "status": "In Progress", "scope": "Department: Web"}, {"id": "146", "name": "Trevor Lindqvist", "role": "Sr. Executive", "dept": "Data analytics", "training": "Zero Trust Architecture & Threat Mitigation", "level": "Advanced \u2022 22 hrs", "assigned": "25-Sep-2026", "due": "05-Nov-2026", "progress": 100, "status": "Completed", "scope": "Department: Data analytics"}, {"id": "147", "name": "Devin Patel", "role": "Backend Architect", "dept": "Web", "training": "High-Throughput Microservices in Go", "level": "Advanced \u2022 16 hrs", "assigned": "05-Oct-2026", "due": "25-Nov-2026", "progress": 45, "status": "In Progress", "scope": "Designation: Backend Architect"}, {"id": "148", "name": "Sneha Verma", "role": "Talent Acquisition Specialist", "dept": "Business Analysis", "training": "Interview Compliance & Bias Mitigation", "level": "Intermediate \u2022 6 hrs", "assigned": "12-Oct-2026", "due": "18-Nov-2026", "progress": 20, "status": "In Progress", "scope": "Department: Business Analysis"}, {"id": "149", "name": "Aarav Shah", "role": "Business Development Representative", "dept": "Collab", "training": "Cold Outreach & Objection Mastery", "level": "Beginner \u2022 8 hrs", "assigned": "08-Oct-2026", "due": "12-Nov-2026", "progress": 95, "status": "In Progress", "scope": "Department: Collab"}, {"id": "150", "name": "Maya Krishnan", "role": "Systems Administrator", "dept": "Business Analysis", "training": "Linux Kernel Hardening & Audit Logging", "level": "Advanced \u2022 14 hrs", "assigned": "18-Sep-2026", "due": "28-Oct-2026", "progress": 100, "status": "Completed", "scope": "Department: Business Analysis"}, {"id": "151", "name": "Rohan Desai", "role": "QA Automation Engineer", "dept": "Game", "training": "Performance & Load Testing with k6", "level": "Intermediate \u2022 10 hrs", "assigned": "14-Oct-2026", "due": "22-Nov-2026", "progress": 60, "status": "In Progress", "scope": "Designation: QA Automation Engineer"}, {"id": "152", "name": "Zara Haddad", "role": "Executive", "dept": "Collab", "training": "Risk Management & Change Control Procedures", "level": "Intermediate \u2022 7 hrs", "assigned": "02-Oct-2026", "due": "14-Nov-2026", "progress": 85, "status": "In Progress", "scope": "Department: Collab"}, {"id": "153", "name": "Caleb Nguyen", "role": "Business Analyst", "dept": "Collab", "training": "Business Requirements Document (BRD) Standards", "level": "Intermediate \u2022 9 hrs", "assigned": "28-Sep-2026", "due": "02-Nov-2026", "progress": 100, "status": "Completed", "scope": "Designation: Business Analyst"}, {"id": "154", "name": "Naomi Tanaka", "role": "Sr. Executive", "dept": "Collab", "training": "Agile Kanban Optimization & Velocity Tracking", "level": "Intermediate \u2022 5 hrs", "assigned": "16-Oct-2026", "due": "28-Nov-2026", "progress": 15, "status": "In Progress", "scope": "Department: Collab"}, {"id": "155", "name": "Jordan Ellis", "role": "Team leader", "dept": "Collab", "training": "Team Velocity & Burn-Down Chart Diagnostics", "level": "Intermediate \u2022 8 hrs", "assigned": "04-Oct-2026", "due": "16-Nov-2026", "progress": 70, "status": "In Progress", "scope": "Designation: Team Leader"}, {"id": "156", "name": "Sasha Petrov", "role": "Manager", "dept": "Collab", "training": "Cross-Functional Dependency Governance", "level": "Advanced \u2022 11 hrs", "assigned": "12-Sep-2026", "due": "22-Oct-2026", "progress": 100, "status": "Completed", "scope": "Employee: Sasha Petrov"}, {"id": "157", "name": "Elliot Sharpe", "role": "Executive", "dept": "Game", "training": "API Contract Testing with Postman & Pact", "level": "Intermediate \u2022 12 hrs", "assigned": "11-Oct-2026", "due": "21-Nov-2026", "progress": 55, "status": "In Progress", "scope": "Department: Game"}, {"id": "158", "name": "Bianca Moreau", "role": "Executive", "dept": "Web", "training": "Terraform Cloud & GitOps Pipelines", "level": "Advanced \u2022 16 hrs", "assigned": "07-Oct-2026", "due": "19-Nov-2026", "progress": 90, "status": "In Progress", "scope": "Department: Web"}, {"id": "159", "name": "Aditya Joshi", "role": "Security Analyst", "dept": "Data analytics", "training": "Penetration Testing & Vulnerability Assessment", "level": "Advanced \u2022 20 hrs", "assigned": "30-Sep-2026", "due": "10-Nov-2026", "progress": 65, "status": "In Progress", "scope": "Department: Data analytics"}, {"id": "160", "name": "Kavita Rao", "role": "Full-Stack Engineer", "dept": "Web", "training": "React 19 Server Components & State Management", "level": "Advanced \u2022 14 hrs", "assigned": "03-Oct-2026", "due": "17-Nov-2026", "progress": 80, "status": "In Progress", "scope": "Designation: Full-Stack Engineer"}, {"id": "161", "name": "Manish Gupta", "role": "HR Generalist", "dept": "Business Analysis", "training": "Payroll Compliance & Labor Law Fundamentals", "level": "Intermediate \u2022 10 hrs", "assigned": "22-Sep-2026", "due": "25-Oct-2026", "progress": 100, "status": "Completed", "scope": "Department: Business Analysis"}, {"id": "162", "name": "Pooja Hegde", "role": "Account Manager", "dept": "Collab", "training": "SaaS Customer Retention & Upselling Frameworks", "level": "Intermediate \u2022 8 hrs", "assigned": "09-Oct-2026", "due": "23-Nov-2026", "progress": 40, "status": "In Progress", "scope": "Department: Collab"}, {"id": "163", "name": "Karan Mehra", "role": "Network Engineer", "dept": "Business Analysis", "training": "Software Defined Networking (SDN) & BGP", "level": "Advanced \u2022 16 hrs", "assigned": "14-Sep-2026", "due": "24-Oct-2026", "progress": 100, "status": "Completed", "scope": "Designation: Network Engineer"}, {"id": "164", "name": "Simran Kaur", "role": "QA Lead", "dept": "Game", "training": "Test Strategy Design & QA Metrics Reporting", "level": "Advanced \u2022 10 hrs", "assigned": "06-Oct-2026", "due": "18-Nov-2026", "progress": 75, "status": "In Progress", "scope": "Designation: QA Lead"}, {"id": "165", "name": "Farhan Akhtar", "role": "DevOps Engineer", "dept": "Web", "training": "Docker Container Hardening & CIS Benchmarks", "level": "Intermediate \u2022 12 hrs", "assigned": "13-Oct-2026", "due": "26-Nov-2026", "progress": 35, "status": "In Progress", "scope": "Department: Web"}, {"id": "166", "name": "Nisha Singhania", "role": "SOC Lead", "dept": "Data analytics", "training": "SIEM Alert Triage & Incident Escalation", "level": "Advanced \u2022 18 hrs", "assigned": "19-Sep-2026", "due": "29-Oct-2026", "progress": 100, "status": "Completed", "scope": "Designation: SOC Lead"}, {"id": "167", "name": "Tarun Roy", "role": "Data Engineer", "dept": "Web", "training": "Apache Kafka Event Streaming at Scale", "level": "Advanced \u2022 18 hrs", "assigned": "02-Oct-2026", "due": "16-Nov-2026", "progress": 50, "status": "In Progress", "scope": "Department: Web"}, {"id": "168", "name": "Geeta Nair", "role": "People Partner", "dept": "Business Analysis", "training": "Employee Engagement & Retention Strategies", "level": "Intermediate \u2022 6 hrs", "assigned": "15-Oct-2026", "due": "30-Nov-2026", "progress": 10, "status": "In Progress", "scope": "Department: Business Analysis"}, {"id": "169", "name": "Harsh Vardhan", "role": "Sales Director", "dept": "Collab", "training": "Enterprise Revenue Forecasting & Sales Leadership", "level": "Advanced \u2022 12 hrs", "assigned": "08-Sep-2026", "due": "18-Oct-2026", "progress": 100, "status": "Completed", "scope": "Designation: Sales Director"}, {"id": "170", "name": "Isha Roy", "role": "Cloud Architect", "dept": "Business Analysis", "training": "Multi-Region Disaster Recovery on AWS/GCP", "level": "Advanced \u2022 20 hrs", "assigned": "16-Sep-2026", "due": "26-Oct-2026", "progress": 100, "status": "Completed", "scope": "Employee: Isha Roy"}, {"id": "171", "name": "Jayesh Tiwari", "role": "Automation Engineer", "dept": "Game", "training": "Cypress & Playwright Modern Web Automation", "level": "Intermediate \u2022 14 hrs", "assigned": "08-Oct-2026", "due": "20-Nov-2026", "progress": 70, "status": "In Progress", "scope": "Department: Game"}, {"id": "172", "name": "Lavanya Swaminathan", "role": "Compliance Officer", "dept": "Data analytics", "training": "ISO 27001 ISMS Implementation & Internal Audit", "level": "Advanced \u2022 16 hrs", "assigned": "25-Sep-2026", "due": "05-Nov-2026", "progress": 95, "status": "In Progress", "scope": "Employee: Lavanya Swaminathan"}];
   let [searchQuery, setSearchQuery] = (0, l.useState)("");
+  let [asgMode, setAsgMode] = (0, l.useState)("lookup");
+  let [asgTokens, setAsgTokens] = (0, l.useState)([]);
   let [selectedDept, setSelectedDept] = (0, l.useState)("All Departments");
   let [selectedBU, setSelectedBU] = (0, l.useState)("All Business Units");
   let [currentPage, setCurrentPage] = (0, l.useState)(1);
@@ -2658,22 +2660,6 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
       });
   }, [e, empList, progs, courseProgress]);
 
-  let assignedDepts = (0, l.useMemo)(() => Array.from(new Set(allList.map(i => i.dept).filter(Boolean))).sort(), [allList]);
-  let assignedBUs = (0, l.useMemo)(() => Array.from(new Set(allList.map(i => i.businessUnit).filter(Boolean))).sort(), [allList]);
-
-  let filtered = allList.filter(item => {
-    let q = searchQuery.toLowerCase().trim();
-    let matchesSearch = !q || item.name.toLowerCase().includes(q) || item.training.toLowerCase().includes(q) || (item.role||"").toLowerCase().includes(q) || (item.enrolledEmployees||[]).some(emp => emp.name.toLowerCase().includes(q));
-    let matchesDept = selectedDept === "All Departments" || item.dept === selectedDept;
-    let matchesBU = selectedBU === "All Business Units" || item.businessUnit === selectedBU;
-    return matchesSearch && matchesDept && matchesBU;
-  });
-
-  let totalCount = filtered.length;
-  let totalPages = Math.ceil(totalCount / pageSize) || 1;
-  let currentSafePage = Math.min(currentPage, totalPages);
-  let paginated = filtered.slice((currentSafePage - 1) * pageSize, currentSafePage * pageSize);
-
   let resolveAssignmentRecognition = item => {
     let tNorm = String(item.training || "").trim().toLowerCase();
     let matchedProg = (Array.isArray(progs) ? progs : []).find(pr => (item.programmeId && pr.id === item.programmeId) || (tNorm && String(pr.name || "").trim().toLowerCase() === tNorm));
@@ -2692,6 +2678,44 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
     return { label: "Skills", cls: "bg-emerald-50 text-emerald-700 border-emerald-200" };
   };
 
+  let assignedDepts = (0, l.useMemo)(() => Array.from(new Set(allList.map(i => i.dept).filter(Boolean))).sort(), [allList]);
+  let assignedBUs = (0, l.useMemo)(() => Array.from(new Set(allList.map(i => i.businessUnit).filter(Boolean))).sort(), [allList]);
+
+  let enrichedAllList = (0, l.useMemo)(() => allList.map(item => ({
+    ...item,
+    recognition: resolveAssignmentRecognition(item).label,
+    progressStr: `${item.progress ?? 0}%`
+  })), [allList, progs]);
+
+  let asgUniq = k => Array.from(new Set(enrichedAllList.map(x => x?.[k]).filter(Boolean)));
+  let asgLookupFields = [
+    { key: "name", label: "Employee Name", icon: "👤", options: asgUniq("name") },
+    { key: "training", label: "Assigned Training", icon: "📘", options: asgUniq("training") },
+    { key: "recognition", label: "Recognition", icon: "🏅", options: asgUniq("recognition") },
+    { key: "assigned", label: "Assigned Date", type: "date", icon: "📅", options: asgUniq("assigned") },
+    { key: "progressStr", label: "Progress", icon: "📊", options: asgUniq("progressStr") }
+  ];
+
+  let filtered = enrichedAllList.filter(item => {
+    let matchesLookup = evalLookupFilter(item, asgMode, asgTokens, searchQuery, [
+      "name",
+      "training",
+      "role",
+      "recognition",
+      "assigned",
+      "progressStr",
+      it => (it.enrolledEmployees || []).map(emp => emp.name).join(" ")
+    ]);
+    let matchesDept = selectedDept === "All Departments" || item.dept === selectedDept;
+    let matchesBU = selectedBU === "All Business Units" || item.businessUnit === selectedBU;
+    return matchesLookup && matchesDept && matchesBU;
+  });
+
+  let totalCount = filtered.length;
+  let totalPages = Math.ceil(totalCount / pageSize) || 1;
+  let currentSafePage = Math.min(currentPage, totalPages);
+  let paginated = filtered.slice((currentSafePage - 1) * pageSize, currentSafePage * pageSize);
+
   let showScopePopover = (ev, item) => {
     let list = item.enrolledEmployees && item.enrolledEmployees.length > 0 ? item.enrolledEmployees : [{ name: item.name, role: item.role, dept: item.dept }];
     let rect = ev.currentTarget.getBoundingClientRect();
@@ -2709,20 +2733,13 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
       (0, P.jsx)("span", {className: "text-slate-400", children: "›"}),
       (0, P.jsx)("span", {className: "text-blue-600 font-semibold", children: "Assessments"})
     ]}),
-    (0, P.jsxs)("div", {className: "bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden", children: [
+    (0, P.jsxs)("div", {className: "bg-white border border-slate-200 rounded-xl shadow-sm", children: [
       (0, P.jsxs)("div", {className: "p-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-4", children: [
         (0, P.jsxs)("div", {className: "flex items-center gap-3", children: [
           (0, P.jsx)("h2", {className: "font-bold text-slate-900 text-base", children: "Assessments"}),
           (0, P.jsxs)("span", {className: "bg-blue-50 text-blue-700 text-xs font-bold px-2 py-0.5 rounded-full", children: [totalCount, " Total"]})
         ]}),
         (0, P.jsxs)("div", {className: "flex items-center gap-3", children: [
-          (0, P.jsx)("input", {
-            type: "text",
-            value: searchQuery,
-            onChange: ev => { setSearchQuery(ev.target.value); setCurrentPage(1); },
-            placeholder: "Filter employee or training...",
-            className: "bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-800 placeholder-slate-400 w-64 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-          }),
           (0, P.jsxs)("select", {
             value: selectedDept,
             onChange: ev => { setSelectedDept(ev.target.value); setCurrentPage(1); },
@@ -2743,6 +2760,9 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
           })
         ]})
       ]}),
+      (0, P.jsx)("div", {className: "px-4 py-2.5 bg-slate-50/70 border-b border-slate-200 flex items-center gap-2.5 flex-wrap", children:
+        (0, P.jsx)(CollabLookupFilter, {fields: asgLookupFields, mode: asgMode, onModeChange: setAsgMode, tokens: asgTokens, onTokensChange: tks => { setAsgTokens(tks); setCurrentPage(1); }, quickQuery: searchQuery, onQuickQueryChange: q => { setSearchQuery(q); setCurrentPage(1); }, minWidth: "320px"})
+      }),
       (0, P.jsx)("div", {className: "overflow-x-auto", children: 
         (0, P.jsxs)("table", {className: "w-full text-left border-collapse", children: [
           (0, P.jsx)("thead", {children: 
