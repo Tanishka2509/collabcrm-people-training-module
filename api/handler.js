@@ -8162,7 +8162,7 @@ export async function handleApi(req, res) {
     const existingCp = store.courseProgress[key] || null;
 
     const reqList = matched ? parseCompletionRequirementsList(matched) : [];
-    const reqManager = Boolean(matched && (reqList.includes('Get approval from the manager') || matched.reviewerApprovalRequired));
+    const reqManager = false;
     const incomingApproval = managerApprovalStatus || existingCp?.managerApprovalStatus || '';
     if (
       reqManager &&

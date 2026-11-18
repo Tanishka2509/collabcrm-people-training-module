@@ -4646,7 +4646,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
   let reqVideos = reqList.includes("Watch all required videos");
   let reqAssess = reqList.includes("Pass the assessment");
   let reqDocs = reqList.includes("Submit any required documents");
-  let reqManager = reqList.includes("Get approval from the manager") || Boolean(c.reviewerApprovalRequired || liveProg?.reviewerApprovalRequired);
+  let reqManager = !1;
   let isCertEnabled = Boolean(liveProg ? liveProg.certificateGeneration : c.certificateGeneration);
   let isSkillEnabled = Boolean(liveProg ? (liveProg.addSkillToProfile ?? liveProg.addSkillToEmployeeProfile) : (c.addSkillToProfile ?? c.addSkillToEmployeeProfile));
   if (!isCertEnabled && !isSkillEnabled) isCertEnabled = !0;
