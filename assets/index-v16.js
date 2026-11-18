@@ -5551,6 +5551,46 @@ function ht({onClose:e,onAddEmployee:t}){let[n,r]=(0,l.useState)(``),[i,a]=(0,l.
   ]})});
 }
 
+function getSkillRoadmapTopics(skillName,levelName){
+  let sk=String(skillName||"").trim();
+  let skLow=sk.toLowerCase();
+  let lvLow=String(levelName||"Beginner").trim().toLowerCase();
+  let bucket=lvLow.includes("inter")?"intermediate":(lvLow.includes("adv")||lvLow.includes("exp"))?"advanced":"beginner";
+  let presets={
+    "business analysis":{
+      beginner:[{id:"ba-b1",title:"BA Foundations & Requirements",items:[{id:"1",text:"Stakeholder identification, business case framing, and scope definition"},{id:"2",text:"Elicitation techniques: interviews, workshops, observation, and surveys"},{id:"3",text:"Requirement documentation: BRD, FRD, user stories, and acceptance criteria"}]}],
+      intermediate:[{id:"ba-i1",title:"Process Modeling & Client Intake",items:[{id:"1",text:"BPMN process flow diagrams, swimlanes, and gap analysis"},{id:"2",text:"Client onboarding requirement intake and CRM field mapping"},{id:"3",text:"Prioritization frameworks: MoSCoW, Kano, and backlog grooming"}]}],
+      advanced:[{id:"ba-a1",title:"Enterprise Strategy & Governance",items:[{id:"1",text:"Enterprise architecture alignment and cross-system impact assessment"},{id:"2",text:"ROI modeling, KPI definition, and executive stakeholder sign-off"},{id:"3",text:"Change management governance and post-implementation audit"}]}]
+    },
+    "sql":{
+      beginner:[{id:"sql-b1",title:"SQL Fundamentals",items:[{id:"1",text:"SELECT, WHERE, ORDER BY, DISTINCT, and basic filtering"},{id:"2",text:"Aggregate functions: COUNT, SUM, AVG, GROUP BY, and HAVING"},{id:"3",text:"Basic table joins: INNER JOIN and LEFT JOIN"}]}],
+      intermediate:[{id:"sql-i1",title:"Querying & Data Modeling",items:[{id:"1",text:"Subqueries, CTEs (WITH), and multi-table joins"},{id:"2",text:"Window functions: ROW_NUMBER, RANK, DENSE_RANK, and PARTITION BY"},{id:"3",text:"Constraints, indexes, views, and database normalization (1NF–3NF)"}]}],
+      advanced:[{id:"sql-a1",title:"Performance & Administration",items:[{id:"1",text:"Execution plan analysis (EXPLAIN) and index tuning"},{id:"2",text:"Stored procedures, triggers, and transaction isolation levels"},{id:"3",text:"Partitioning, query optimization at scale, and data warehousing"}]}]
+    },
+    "figma":{
+      beginner:[{id:"fig-b1",title:"Figma Core Workspace",items:[{id:"1",text:"Frames, shapes, typography, color styles, and layout grids"},{id:"2",text:"Auto Layout fundamentals, constraints, and responsive resizing"},{id:"3",text:"Exporting assets, sharing files, and developer inspect mode"}]}],
+      intermediate:[{id:"fig-i1",title:"Components & Prototyping",items:[{id:"1",text:"Reusable components, variants, and component properties"},{id:"2",text:"Interactive prototypes, smart animate, and micro-interactions"},{id:"3",text:"Design tokens, shared libraries, and team handoff workflows"}]}],
+      advanced:[{id:"fig-a1",title:"Design Systems & Governance",items:[{id:"1",text:"Multi-brand design system architecture and variable modes"},{id:"2",text:"Accessibility (WCAG 2.1 AA) auditing and contrast validation"},{id:"3",text:"DesignOps governance, versioning, and cross-squad adoption"}]}]
+    }
+  };
+  if(presets[skLow]&&presets[skLow][bucket])return presets[skLow][bucket];
+  let prefix=bucket==="beginner"?"Core ":bucket==="intermediate"?"Applied ":"Advanced ";
+  let items=bucket==="beginner"?[
+    {id:"1",text:`Foundations, core terminology, and key concepts of ${sk}`},
+    {id:"2",text:`Standard workflows, tooling setup, and guided exercises in ${sk}`},
+    {id:"3",text:`Practical application: complete foundational ${sk} checklist`}
+  ]:bucket==="intermediate"?[
+    {id:"1",text:`Real-world implementation patterns and best practices in ${sk}`},
+    {id:"2",text:`Debugging, edge-case handling, and cross-team collaboration using ${sk}`},
+    {id:"3",text:`Deliver an end-to-end intermediate ${sk} project`}
+  ]:[
+    {id:"1",text:`Architecture, optimization, and scalability patterns for ${sk}`},
+    {id:"2",text:`Mentoring peers, code/design reviews, and quality standards in ${sk}`},
+    {id:"3",text:`Strategic governance and enterprise-level ${sk} ownership`}
+  ];
+  return [{id:`${skLow}-${bucket}`,title:`${prefix}${sk}`,items}];
+}
+
 function SkillMatrixPage({employees,employeeSkills,skillAwardHistory,skillsConfig,skillLevels,currentUser,programmes,onManageEmployeeSkill,canManageSkills,onNavigateToProgramme}){
   let[subTab,setSubTab]=(0,l.useState)("overview");
   let[scopeMode,setScopeMode]=(0,l.useState)("self");
@@ -5559,6 +5599,9 @@ function SkillMatrixPage({employees,employeeSkills,skillAwardHistory,skillsConfi
   let[detailTab,setDetailTab]=(0,l.useState)("roadmap");
   let[roadmapLevel,setRoadmapLevel]=(0,l.useState)("");
   let[roadmapFilter,setRoadmapFilter]=(0,l.useState)("all");
+  let[roadmapChecks,setRoadmapChecks]=(0,l.useState)({});
+  let[submittedRoadmapLevels,setSubmittedRoadmapLevels]=(0,l.useState)({});
+  let[collapsedTopics,setCollapsedTopics]=(0,l.useState)({});
   let[sortCol,setSortCol]=(0,l.useState)(null);
   let[sortDir,setSortDir]=(0,l.useState)("asc");
   let[showModal,setShowModal]=(0,l.useState)(!1);
@@ -6016,39 +6059,52 @@ function SkillMatrixPage({employees,employeeSkills,skillAwardHistory,skillsConfi
     activeDetailSkill?(()=>{
       let curSkillLvl=activeDetailSkill.skillLevel||activeDetailSkill.level||(levelsCfg[0]?.name)||"Beginner";
       let activeLvl=roadmapLevel||curSkillLvl;
+      let empRmKey=canonicalEmpSkillKey(activeEmp.id||activeEmp.code||"CO-5039");
       let trainSources=(Array.isArray(activeDetailSkill.sources)?activeDetailSkill.sources:[]).filter(s=>Boolean(s.trainingId));
       if(trainSources.length===0&&activeDetailSkill.sourceTrainingId&&activeDetailSkill.sourceTrainingName){
         trainSources=[{trainingId:activeDetailSkill.sourceTrainingId,trainingName:activeDetailSkill.sourceTrainingName,level:curSkillLvl,awardedDate:activeDetailSkill.awardedDate}];
       }
-      let levelItems=trainSources.filter(src=>String(src.level||curSkillLvl).toLowerCase()===String(activeLvl).toLowerCase()).map((src,idx)=>({
-        id:src.trainingId||("src-"+idx),
-        title:src.trainingName||"Training Program",
-        status:"completed",
-        awardedDate:src.awardedDate,
-        level:src.level||activeLvl,
-        programme:src.trainingId?(Array.isArray(programmes)?programmes:[]).find(pr=>pr.id===src.trainingId):null
-      }));
-      let totalCount=levelItems.length;
-      let completedCount=levelItems.filter(it=>it.status==="completed").length;
+      let isItemDone=(lvlName,itemId,idx)=>{
+        let k=`${empRmKey}::${activeDetailSkill.skillName}::${lvlName}::${itemId}`;
+        if(k in roadmapChecks)return Boolean(roadmapChecks[k]);
+        let hasLvlTrain=trainSources.some(src=>String(src.level||curSkillLvl).toLowerCase()===String(lvlName).toLowerCase());
+        if(hasLvlTrain)return !0;
+        if(String(lvlName).toLowerCase()===String(curSkillLvl).toLowerCase()&&idx===0)return !0;
+        return !1;
+      };
+      let getLevelCounts=lvlName=>{
+        let topics=getSkillRoadmapTopics(activeDetailSkill.skillName,lvlName);
+        let flat=topics.flatMap(tp=>tp.items.map((it,idx)=>({tpId:tp.id,item:it,done:isItemDone(lvlName,`${tp.id}-${it.id}`,idx)})));
+        return {topics,total:flat.length,done:flat.filter(x=>x.done).length};
+      };
+      let activeCounts=getLevelCounts(activeLvl);
+      let totalCount=activeCounts.total;
+      let completedCount=activeCounts.done;
       let pct=totalCount>0?Math.round((completedCount/totalCount)*100):0;
-      let visibleItems=roadmapFilter==="completed"?levelItems.filter(it=>it.status==="completed"):roadmapFilter==="pending"?levelItems.filter(it=>it.status!=="completed"):levelItems;
+      let lvlSubmitKey=`${empRmKey}::${activeDetailSkill.skillName}::${activeLvl}`;
+      let isLvlSubmitted=Boolean(submittedRoadmapLevels[lvlSubmitKey]);
       let skillHist=empHistRecs.filter(h=>h.skillId===activeDetailSkill.skillId||normSkillKey(h.skillName)===normSkillKey(activeDetailSkill.skillName));
       return(0,P.jsxs)("div",{style:{display:"flex",flex:1,alignItems:"stretch",minHeight:"calc(100vh - 110px)"},children:[
         renderLeftSidebar(),
         (0,P.jsxs)("div",{style:{flex:1,minWidth:0,padding:"18px 24px"},className:"space-y-4",children:[
           (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
             (0,P.jsx)("button",{type:"button",onClick:()=>setDetailTab("roadmap"),className:"px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer "+(detailTab==="roadmap"?"bg-blue-50 text-blue-600":"text-slate-600 hover:bg-slate-100"),children:"Roadmap"}),
-            (0,P.jsx)("button",{type:"button",onClick:()=>setDetailTab("notes"),className:"px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer "+(detailTab==="notes"?"bg-blue-50 text-blue-600":"text-slate-600 hover:bg-slate-100"),children:"Notes"})
+            (0,P.jsxs)("button",{type:"button",onClick:()=>setDetailTab("notes"),className:"px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer inline-flex items-center gap-1.5 "+(detailTab==="notes"?"bg-blue-50 text-blue-600":"text-slate-600 hover:bg-slate-100"),children:[
+              (0,P.jsx)("span",{children:"Notes"}),
+              skillHist.length>0&&(0,P.jsx)("span",{className:"px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-200 text-slate-700 leading-none",children:skillHist.length})
+            ]})
           ]}),
           detailTab==="roadmap"?(0,P.jsxs)(P.Fragment,{children:[
             (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl px-3 py-2.5 shadow-xs flex items-center justify-between flex-wrap gap-3",children:[
               (0,P.jsx)("div",{className:"inline-flex items-center p-1 bg-slate-50 border border-slate-200 rounded-lg gap-1 flex-wrap",children:levelsCfg.map((lvl,li)=>{
                 let isSel=String(lvl.name).toLowerCase()===String(activeLvl).toLowerCase();
                 let isCur=String(lvl.name).toLowerCase()===String(curSkillLvl).toLowerCase();
+                let lc=getLevelCounts(lvl.name);
                 return(0,P.jsxs)("button",{type:"button",onClick:()=>setRoadmapLevel(lvl.name),className:"px-3 py-1.5 rounded-md text-xs font-semibold transition-colors cursor-pointer inline-flex items-center gap-1.5 "+(isSel?"bg-blue-600 text-white shadow-xs":"text-slate-600 hover:bg-white"),children:[
                   (0,P.jsx)("span",{className:"w-2 h-2 rounded-full shrink-0",style:{backgroundColor:getLevelDotColor(lvl.name)}}),
                   (0,P.jsx)("span",{children:lvl.name}),
-                  isCur&&(0,P.jsx)("span",{className:"text-[10px] font-medium "+(isSel?"text-blue-100":"text-slate-400"),children:"(Current)"})
+                  isCur&&(0,P.jsx)("span",{className:"text-[10px] font-medium "+(isSel?"text-blue-100":"text-slate-400"),children:"(Current)"}),
+                  (0,P.jsx)("span",{className:"text-[10px] font-bold tabular-nums "+(isSel?"text-blue-100":"text-slate-400"),children:lc.done+"/"+lc.total})
                 ]},lvl.id||li);
               })}),
               (0,P.jsxs)("div",{className:"flex items-center gap-3",children:[
@@ -6057,30 +6113,45 @@ function SkillMatrixPage({employees,employeeSkills,skillAwardHistory,skillsConfi
                 (0,P.jsx)("span",{className:"text-xs font-bold text-slate-700 tabular-nums",children:pct+"%"})
               ]})
             ]}),
-            (0,P.jsx)("div",{className:"flex justify-end",children:(0,P.jsxs)("select",{value:roadmapFilter,onChange:ev=>setRoadmapFilter(ev.target.value),className:"bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-medium text-slate-700 shadow-xs focus:outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer",children:[
-              (0,P.jsx)("option",{value:"all",children:"All Items"}),
-              (0,P.jsx)("option",{value:"completed",children:"Completed"}),
-              (0,P.jsx)("option",{value:"pending",children:"Pending"})
-            ]})}),
-            (0,P.jsx)("div",{style:{minHeight:"420px"},className:"bg-white border border-slate-200 rounded-xl shadow-xs flex flex-col",children:visibleItems.length===0?(0,P.jsxs)("div",{className:"flex-1 flex flex-col items-center justify-center p-12 text-center",children:[
-              (0,P.jsx)("div",{className:"w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center mb-3",children:
-                (0,P.jsxs)("svg",{viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"1.6",className:"w-7 h-7 text-slate-400",children:[
-                  (0,P.jsx)("path",{strokeLinecap:"round",strokeLinejoin:"round",d:"M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.87c.58.42.98 1.07 1.08 1.78L9.75 17h4.5l.17-1.35c.1-.71.5-1.36 1.08-1.78A6 6 0 0 0 12 3Z"})
+            (0,P.jsxs)("div",{className:"flex items-center justify-between gap-3 flex-wrap",children:[
+              isLvlSubmitted?(0,P.jsx)("div",{className:"flex-1 min-w-[260px] bg-amber-50 border border-amber-200 rounded-xl px-4 py-2.5 text-xs text-amber-800 font-medium",children:"This level has been submitted and is now awaiting review from your reporting manager. Progress updates are locked while it is being reviewed."}):(0,P.jsx)("div",{className:"flex-1"}),
+              (0,P.jsxs)("div",{className:"flex items-center gap-2 shrink-0",children:[
+                isLvlSubmitted?(0,P.jsx)("button",{type:"button",onClick:()=>setSubmittedRoadmapLevels(prev=>({...prev,[lvlSubmitKey]:!1})),className:"bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-3.5 py-1.5 rounded-lg text-xs font-semibold shadow-xs cursor-pointer transition-colors",children:"Withdraw"}):(
+                  completedCount>0&&(0,P.jsx)("button",{type:"button",onClick:()=>setSubmittedRoadmapLevels(prev=>({...prev,[lvlSubmitKey]:!0})),className:"bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold shadow-xs cursor-pointer transition-colors",children:"Submit for Review"})
+                ),
+                (0,P.jsxs)("select",{value:roadmapFilter,onChange:ev=>setRoadmapFilter(ev.target.value),className:"bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-medium text-slate-700 shadow-xs focus:outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer",children:[
+                  (0,P.jsx)("option",{value:"all",children:"All items"}),
+                  (0,P.jsx)("option",{value:"completed",children:"Completed"}),
+                  (0,P.jsx)("option",{value:"pending",children:"Pending"})
                 ]})
-              }),
-              (0,P.jsx)("div",{className:"text-xs font-bold text-slate-800",children:"No roadmap defined for this level."})
-            ]}):(0,P.jsx)("div",{className:"p-5 space-y-3",children:visibleItems.map((it,idx)=>(
-              (0,P.jsxs)("div",{className:"p-4 rounded-xl border border-slate-200 bg-slate-50/50 flex items-center justify-between gap-4 flex-wrap",children:[
-                (0,P.jsxs)("div",{className:"space-y-1",children:[
-                  (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
-                    (0,P.jsx)("span",{className:"text-xs font-bold text-slate-900",children:it.title}),
-                    (0,P.jsx)("span",{className:"px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200",children:"Completed"})
+              ]})
+            ]}),
+            (0,P.jsx)("div",{className:"space-y-3",children:activeCounts.topics.map(tp=>{
+              let tpItems=tp.items.map((it,idx)=>({...it,done:isItemDone(activeLvl,`${tp.id}-${it.id}`,idx),idx}));
+              let tpDone=tpItems.filter(x=>x.done).length;
+              let tpTotal=tpItems.length;
+              let tpPct=tpTotal>0?Math.round((tpDone/tpTotal)*100):0;
+              let visItems=roadmapFilter==="completed"?tpItems.filter(x=>x.done):roadmapFilter==="pending"?tpItems.filter(x=>!x.done):tpItems;
+              let isCollapsed=Boolean(collapsedTopics[tp.id]);
+              return(0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl shadow-xs overflow-hidden",children:[
+                (0,P.jsxs)("button",{type:"button",onClick:()=>setCollapsedTopics(prev=>({...prev,[tp.id]:!prev[tp.id]})),className:"w-full px-5 py-3.5 flex items-center justify-between gap-4 hover:bg-slate-50/70 transition-colors cursor-pointer text-left",children:[
+                  (0,P.jsxs)("div",{className:"flex items-center gap-2.5",children:[
+                    (0,P.jsx)("span",{className:"text-slate-400 text-xs font-bold transition-transform "+(isCollapsed?"-rotate-90":""),children:"⌄"}),
+                    (0,P.jsx)("span",{className:"text-sm font-bold text-slate-900",children:tp.title}),
+                    (0,P.jsx)("span",{className:"px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 text-blue-600 border border-blue-200 tabular-nums",children:tpDone+" of "+tpTotal+" Completed"})
                   ]}),
-                  (0,P.jsx)("div",{className:"text-[11px] text-slate-500",children:"Earned via Training Completion"+(it.awardedDate?" • "+fmtSysDate(it.awardedDate):"")})
+                  (0,P.jsx)("div",{className:"w-24 h-1.5 bg-slate-200 rounded-full overflow-hidden shrink-0",children:(0,P.jsx)("div",{className:"h-full rounded-full bg-blue-600 transition-all",style:{width:tpPct+"%"}})})
                 ]}),
-                it.programme&&onNavigateToProgramme&&(0,P.jsx)("button",{type:"button",onClick:()=>onNavigateToProgramme(it.programme),className:"text-xs font-semibold text-blue-600 hover:underline cursor-pointer",children:"View Training Program →"})
-              ]},it.id||idx)
-            ))})})
+                !isCollapsed&&(0,P.jsx)("div",{className:"divide-y divide-slate-100 border-t border-slate-100",children:visItems.length===0?(0,P.jsx)("div",{className:"px-5 py-6 text-center text-xs text-slate-400",children:"No items match this filter."}):visItems.map(it=>{
+                  let itemKey=`${empRmKey}::${activeDetailSkill.skillName}::${activeLvl}::${tp.id}-${it.id}`;
+                  return(0,P.jsxs)("div",{onClick:()=>{if(!isLvlSubmitted){setRoadmapChecks(prev=>({...prev,[itemKey]:!it.done}));}},className:"px-5 py-3 flex items-center gap-3 text-xs transition-colors "+(isLvlSubmitted?"cursor-default bg-slate-50/30":"cursor-pointer hover:bg-slate-50/80"),children:[
+                    (0,P.jsx)("span",{className:"w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 "+(it.done?"bg-emerald-50 text-emerald-700 border border-emerald-200":"bg-slate-100 text-slate-500 border border-slate-200"),children:it.idx+1}),
+                    (0,P.jsx)("span",{className:"w-4 h-4 rounded flex items-center justify-center border shrink-0 transition-colors "+(it.done?"bg-emerald-500 border-emerald-500 text-white":"bg-white border-slate-300"),children:it.done?"✓":""}),
+                    (0,P.jsx)("span",{className:"flex-1 "+(it.done?"line-through text-slate-400":"text-slate-800 font-medium"),children:it.text})
+                  ]},it.id);
+                })})
+              ]},tp.id);
+            })})
           ]}):(0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl shadow-xs p-5 space-y-4",children:[
             (0,P.jsxs)("div",{className:"flex items-center justify-between border-b border-slate-100 pb-3",children:[
               (0,P.jsx)("h3",{className:"text-sm font-bold text-slate-900",children:"Skill Notes & History — "+activeDetailSkill.skillName}),
