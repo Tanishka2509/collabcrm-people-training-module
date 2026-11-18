@@ -4974,7 +4974,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
             let recognitionEarned = Boolean((isSubmitted && allRequiredStepsDone) || (latestResult?.isPassed && allResourcesDone) || c.status === "Completed");
             let matchedCert = awardFeedback?.certificateIssued || (Array.isArray(dynCerts) ? dynCerts.find(dc => dc && canonicalEmpSkillKey(dc.employeeId) === "CO-5039" && ((dc.trainingId && dc.trainingId === c.id) || (dc.trainingName && c.name && dc.trainingName.trim().toLowerCase() === c.name.trim().toLowerCase()))) : null);
             let certIdLabel = matchedCert?.id || `CERT-2026-${String(c.id || "001").replace(/\D/g, "").padStart(4, "0")}`;
-            let certDateLabel = matchedCert?.issueDate || fmtDate(new Date());
+            let certDateLabel = String(matchedCert?.issueDate || fmtSysDate(new Date()));
             let uniqueLevels = Array.from(new Set(resolvedSkills.map(sk => sk.level).filter(Boolean)));
             let levelDisplay = uniqueLevels.length === 1 ? uniqueLevels[0] : resolvedSkills.map(sk => `${sk.name}: ${sk.level}`).join(", ");
             return (0,P.jsxs)("div",{className:"bg-white border border-purple-200 rounded-xl p-6 shadow-sm space-y-4",style:{borderLeft:"4px solid #7c3aed"},children:[
