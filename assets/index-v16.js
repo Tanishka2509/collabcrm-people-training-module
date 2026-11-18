@@ -3196,7 +3196,6 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,is
   let [searchQuery, setSearchQuery] = (0,l.useState)("");
   let [trainingStatusFilter, setTrainingStatusFilter] = (0,l.useState)("All Training Statuses");
   let [progCatFilter, setProgCatFilter] = (0,l.useState)("All Categories");
-  let [progStatusFilter, setProgStatusFilter] = (0,l.useState)("All Statuses");
   let [selectedLearner, setSelectedLearner] = (0,l.useState)(null);
   let [selectedProg, setSelectedProg] = (0,l.useState)(null);
 
@@ -3229,6 +3228,8 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,is
     {name:'Data Protection, GDPR & Employee Privacy 2026',version:'v2.1',cat:'Governance & Compliance',level:'Intermediate',duration:'3h 0mins',enrolled:10,completed:8,inProgress:1,overdue:1,pending:0,avgProgress:88,status:'Published',learners:[{name:'Tanya Kapoor',dept:'Collab',progress:100,status:'Completed'}]}
   ];
 
+  let publishedProgrammes = programmeRecords.filter(p => String(p.status || '').toLowerCase() === 'published');
+
   let [tpMode, setTpMode] = (0, l.useState)('lookup');
   let [tpEmpTokens, setTpEmpTokens] = (0, l.useState)([]);
   let [tpProgTokens, setTpProgTokens] = (0, l.useState)([]);
@@ -3242,10 +3243,9 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,is
     { key: 'due', label: 'Due Date', icon: '📅', options: tpUniq(employeeRecords, 'due') }
   ];
   let tpProgFields = [
-    { key: 'name', label: 'Training Name', icon: '📘', options: tpUniq(programmeRecords, 'name') },
-    { key: 'cat', label: 'Category', icon: '🏷', options: tpUniq(programmeRecords, 'cat') },
-    { key: 'level', label: 'Difficulty Level', icon: '📊', options: tpUniq(programmeRecords, 'level') },
-    { key: 'status', label: 'Status', icon: '●', options: tpUniq(programmeRecords, 'status') }
+    { key: 'name', label: 'Training Name', icon: '📘', options: tpUniq(publishedProgrammes, 'name') },
+    { key: 'cat', label: 'Category', icon: '🏷', options: tpUniq(publishedProgrammes, 'cat') },
+    { key: 'level', label: 'Difficulty Level', icon: '📊', options: tpUniq(publishedProgrammes, 'level') }
   ];
 
   let filteredEmployees = employeeRecords.filter(e => {
@@ -3254,11 +3254,10 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,is
     return matchesQuery && matchesTraining;
   });
 
-  let filteredProgrammes = programmeRecords.filter(p => {
-    let matchesQuery = evalLookupFilter(p, tpMode, tpProgTokens, searchQuery, ['name', 'cat', 'level', 'status']);
+  let filteredProgrammes = publishedProgrammes.filter(p => {
+    let matchesQuery = evalLookupFilter(p, tpMode, tpProgTokens, searchQuery, ['name', 'cat', 'level']);
     let matchesCat = progCatFilter === 'All Categories' || doesProgUseCategory({category:p.cat}, progCatFilter);
-    let matchesStatus = progStatusFilter === 'All Statuses' || p.status === progStatusFilter;
-    return matchesQuery && matchesCat && matchesStatus;
+    return matchesQuery && matchesCat;
   });
 
   return (0,P.jsxs)('div',{className:'p-6 space-y-6 max-w-[1600px] mx-auto w-full',children:[
@@ -3347,11 +3346,6 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,is
           (0,P.jsxs)('select',{value:progCatFilter,onChange:e=>setProgCatFilter(e.target.value),className:'bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-700 font-medium',children:[
             (0,P.jsx)('option',{value:'All Categories',children:'All Categories'}),
             activeCats.map(cat=>(0,P.jsx)('option',{value:cat.name,children:cat.name},cat.name))
-          ]}),
-          (0,P.jsxs)('select',{value:progStatusFilter,onChange:e=>setProgStatusFilter(e.target.value),className:'bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-700 font-medium',children:[
-            (0,P.jsx)('option',{value:'All Statuses',children:'All Statuses'}),
-            (0,P.jsx)('option',{value:'Published',children:'Published'}),
-            (0,P.jsx)('option',{value:'Draft',children:'Draft'})
           ]})
         ]})
       ]}),
@@ -3370,7 +3364,6 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,is
           (0,P.jsx)('th',{className:'py-3 px-4 whitespace-nowrap',children:'Overdue'}),
           (0,P.jsx)('th',{className:'py-3 px-4 whitespace-nowrap',children:'Pending'}),
           (0,P.jsx)('th',{className:'py-3 px-4 whitespace-nowrap',children:'Avg Progress'}),
-          (0,P.jsx)('th',{className:'py-3 px-4 whitespace-nowrap',children:'Status'}),
           (0,P.jsx)('th',{className:'py-3 px-4 text-center whitespace-nowrap',children:'Action'})
         ]})}),
         (0,P.jsx)('tbody',{className:'divide-y divide-slate-100 text-sm',children:filteredProgrammes.map((p,idx)=>{
@@ -3392,7 +3385,6 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,is
             (0,P.jsx)('div',{className:'flex justify-between text-xs font-mono font-bold mb-1 text-slate-700',children:(0,P.jsxs)('span',{children:[p.avgProgress,'%']})}),
             (0,P.jsx)('div',{className:'w-full bg-slate-100 h-2 rounded-full overflow-hidden',children:(0,P.jsx)('div',{className:`h-full rounded-full ${p.avgProgress>75?'bg-emerald-500':'bg-blue-600'}`,style:{width:`${p.avgProgress}%`}})})
           ]})}),
-          (0,P.jsx)('td',{className:'py-3 px-4',children:(0,P.jsx)('span',{className:`px-2.5 py-1 rounded-full text-xs font-medium border ${p.status==='Published'?'bg-emerald-50 text-emerald-700 border-emerald-200':'bg-amber-50 text-amber-700 border-amber-200'}`,children:p.status})}),
           (0,P.jsx)('td',{className:'py-3 px-4 text-center',onClick:e=>e.stopPropagation(),children:(0,P.jsx)('button',{onClick:()=>setSelectedProg(p),className:'p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 cursor-pointer',title:'View Enrolled Employees',children:(0,P.jsx)(pe,{className:'w-4 h-4'})})})
         ]},idx);})})
       ]})})
