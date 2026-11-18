@@ -4408,7 +4408,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
   let reqDocs = reqList.includes("Submit any required documents");
   let reqManager = reqList.includes("Get approval from the manager") || Boolean(c.reviewerApprovalRequired || liveProg?.reviewerApprovalRequired);
   let isCertEnabled = Boolean(liveProg ? liveProg.certificateGeneration : c.certificateGeneration);
-  let isSkillEnabled = Boolean(liveProg ? liveProg.addSkillToProfile : c.addSkillToProfile);
+  let isSkillEnabled = Boolean(liveProg ? (liveProg.addSkillToProfile ?? liveProg.addSkillToEmployeeProfile) : (c.addSkillToProfile ?? c.addSkillToEmployeeProfile));
   let configuredSkillIds = Array.isArray(liveProg?.selectedSkillIds) ? liveProg.selectedSkillIds : (Array.isArray(c.selectedSkillIds) ? c.selectedSkillIds : []);
   let configuredSkillLevel = (liveProg?.skillLevel ?? c.skillLevel) || "";
   let configuredSkillLevelsMap = (liveProg?.skillLevels && typeof liveProg.skillLevels === "object" ? liveProg.skillLevels : (c.skillLevels && typeof c.skillLevels === "object" ? c.skillLevels : {}));
@@ -4751,10 +4751,10 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
                   (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Certificate"}),
                   (0,P.jsx)("div",{className:"font-bold text-slate-900 mt-1",children:recognitionEarned ? "Official Certificate Issued ✓" : "Official Certificate on Completion"})
                 ]}),
-                isSkillEnabled && resolvedSkills.length > 0 && (0,P.jsxs)(P.Fragment,{children:[
+                isSkillEnabled && (0,P.jsxs)(P.Fragment,{children:[
                   (0,P.jsxs)("div",{children:[
                     (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:recognitionEarned ? "Skills Awarded" : "Skills Awarded on Completion"}),
-                    (0,P.jsx)("div",{className:"font-bold text-slate-900 mt-1",children:resolvedSkills.map(sk => sk.name).join(", ")})
+                    (0,P.jsx)("div",{className:"font-bold text-slate-900 mt-1",children:resolvedSkills.length > 0 ? resolvedSkills.map(sk => sk.name).join(", ") : "Configured on Completion"})
                   ]}),
                   (0,P.jsxs)("div",{children:[
                     (0,P.jsx)("div",{className:"text-slate-400 font-medium",children:"Skill Level"}),
