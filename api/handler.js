@@ -1155,6 +1155,41 @@ function getDefaultCategoriesSeed() {
   ];
 }
 
+function getDefaultIssuedCertificatesSeed() {
+  return [
+    {
+      id: 'CERT-2026-0018',
+      employeeId: 'CO-5039',
+      recipientName: 'Tanya Kapoor',
+      trainingId: 'TRN-ASSIGN-102',
+      trainingName: 'Data Protection, GDPR & Employee Privacy 2026',
+      name: 'Data Protection, GDPR & Employee Privacy 2026 Certificate',
+      issueDate: '26-Jan-2026',
+      expiryDate: '26-Jan-2028',
+      status: 'issued',
+      signatoryName: 'Isha Patel',
+      signatoryTitle: 'Head of People & Org Development',
+      score: 94,
+      issuedBy: 'System'
+    },
+    {
+      id: 'CERT-2026-0023',
+      employeeId: 'CO-5039',
+      recipientName: 'Tanya Kapoor',
+      trainingId: 'TRN-ASSIGN-106',
+      trainingName: 'Client Onboarding & Requirement Intake Playbook',
+      name: 'Client Onboarding & Requirement Intake Playbook Certificate',
+      issueDate: '28-Jan-2026',
+      expiryDate: '28-Jan-2028',
+      status: 'issued',
+      signatoryName: 'Megha Salunkhe',
+      signatoryTitle: 'Sr. Executive',
+      score: 92,
+      issuedBy: 'System'
+    }
+  ];
+}
+
 let PROGRAMME_STORE_CACHE = null;
 
 function loadProgrammeStore() {
@@ -1182,7 +1217,9 @@ function loadProgrammeStore() {
             ? parsed.employeeSkills
             : getDefaultEmployeeSkillsSeed(),
           skillAwardHistory: Array.isArray(parsed.skillAwardHistory) ? parsed.skillAwardHistory : [],
-          issuedCertificates: Array.isArray(parsed.issuedCertificates) ? parsed.issuedCertificates : [],
+          issuedCertificates: Array.isArray(parsed.issuedCertificates) && parsed.issuedCertificates.length > 0
+            ? parsed.issuedCertificates
+            : getDefaultIssuedCertificatesSeed(),
           auditLogs: Array.isArray(parsed.auditLogs) ? parsed.auditLogs : [],
           assignments: Array.isArray(parsed.assignments) ? parsed.assignments : [],
           courseProgress: parsed.courseProgress && typeof parsed.courseProgress === 'object' ? parsed.courseProgress : {}
@@ -1199,7 +1236,7 @@ function loadProgrammeStore() {
     skillLevels: getDefaultSkillLevelsSeed(),
     employeeSkills: getDefaultEmployeeSkillsSeed(),
     skillAwardHistory: [],
-    issuedCertificates: [],
+    issuedCertificates: getDefaultIssuedCertificatesSeed(),
     auditLogs: [],
     assignments: [],
     courseProgress: {}
