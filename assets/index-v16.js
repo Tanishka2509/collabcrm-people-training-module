@@ -541,14 +541,8 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){let r=e.
           (0,P.jsxs)("div",{className:"flex items-center gap-8 text-xs font-bold border-b border-transparent",children:[
             (0,P.jsx)("button",{onClick:()=>setActiveTab("general"),className:"py-4 border-b-2 transition-colors whitespace-nowrap " + (activeTab==="general"?"border-blue-600 text-blue-600":"border-transparent text-slate-500 hover:text-slate-800"),children:"General Info"}),
             (0,P.jsx)("button",{onClick:()=>setActiveTab("curriculum"),className:"py-4 border-b-2 transition-colors whitespace-nowrap " + (activeTab==="curriculum"?"border-blue-600 text-blue-600":"border-transparent text-slate-500 hover:text-slate-800"),children:"Module"}),
-            !isEmpView && (0,P.jsxs)("button",{onClick:()=>setActiveTab("enrolled"),className:"py-4 border-b-2 transition-colors whitespace-nowrap flex items-center gap-1.5 " + (activeTab==="enrolled"?"border-blue-600 text-blue-600":"border-transparent text-slate-500 hover:text-slate-800"),children:[
-              (0,P.jsx)("span",{children:"Enrolled Employees"}),
-              (0,P.jsxs)("span",{className:"bg-slate-100 text-slate-600 text-[10px] px-1.5 py-0.5 rounded-full font-bold",children:[o.length]})
-            ]}),
-            !isEmpView && (0,P.jsxs)("button",{onClick:()=>setActiveTab("history"),className:"py-4 border-b-2 transition-colors whitespace-nowrap flex items-center gap-1.5 " + (activeTab==="history"?"border-blue-600 text-blue-600":"border-transparent text-slate-500 hover:text-slate-800"),children:[
-              (0,P.jsx)("span",{children:"History"}),
-              (0,P.jsxs)("span",{className:"bg-slate-100 text-slate-600 text-[10px] px-1.5 py-0.5 rounded-full font-bold",children:[statusHistory.length]})
-            ]})
+            !isEmpView && (0,P.jsx)("button",{onClick:()=>setActiveTab("enrolled"),className:"py-4 border-b-2 transition-colors whitespace-nowrap " + (activeTab==="enrolled"?"border-blue-600 text-blue-600":"border-transparent text-slate-500 hover:text-slate-800"),children:"Enrolled Employees"}),
+            !isEmpView && (0,P.jsx)("button",{onClick:()=>setActiveTab("history"),className:"py-4 border-b-2 transition-colors whitespace-nowrap " + (activeTab==="history"?"border-blue-600 text-blue-600":"border-transparent text-slate-500 hover:text-slate-800"),children:"History"})
           ]})
         ]}),
 
@@ -4640,10 +4634,7 @@ function mt({course:e,programmes:progList,courseProgress:cpMap,skills:skillsConf
         (0,P.jsx)("div",{className:"bg-white border border-slate-200 rounded-xl px-6 shadow-sm",children:[
           (0,P.jsxs)("div",{className:"flex items-center gap-8 text-xs font-bold border-b border-transparent flex-wrap",children:[
             (0,P.jsx)("button",{onClick:()=>r("overview"),className:"py-4 border-b-2 transition-colors whitespace-nowrap " + (n==="overview"?"border-blue-600 text-blue-600":"border-transparent text-slate-500 hover:text-slate-800"),children:"Overview"}),
-            (0,P.jsxs)("button",{onClick:()=>r("resources"),className:"py-4 border-b-2 transition-colors whitespace-nowrap flex items-center gap-1.5 " + (n==="resources"?"border-blue-600 text-blue-600":"border-transparent text-slate-500 hover:text-slate-800"),children:[
-              (0,P.jsx)("span",{children:"Learning Resources"}),
-              (0,P.jsxs)("span",{className:"bg-slate-100 text-slate-600 text-[10px] px-1.5 py-0.5 rounded-full font-semibold",children:[doneCount, "/", resources.length]})
-            ]}),
+            (0,P.jsx)("button",{onClick:()=>r("resources"),className:"py-4 border-b-2 transition-colors whitespace-nowrap " + (n==="resources"?"border-blue-600 text-blue-600":"border-transparent text-slate-500 hover:text-slate-800"),children:"Learning Resources"}),
             (()=>{let assessTabLocked=isAssessmentEnabled&&!allResourcesDone&&!(submittedState&&latestResult);return (0,P.jsxs)("div",{className:"relative",onMouseEnter:()=>assessTabLocked&&setAssessHover(!0),onMouseLeave:()=>setAssessHover(!1),children:[
               (0,P.jsxs)("button",{type:"button",onClick:()=>{if(!assessTabLocked)r("assessment");},className:"py-4 border-b-2 transition-colors whitespace-nowrap flex items-center gap-1.5 cursor-pointer " + (n==="assessment"?"border-blue-600 text-blue-600":"border-transparent text-slate-500 hover:text-slate-800"),children:[
                 (0,P.jsx)("span",{children:"Assessment & Questions"}),
