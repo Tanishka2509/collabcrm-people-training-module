@@ -171,6 +171,7 @@ function evalLookupFilter(item, mode, tokens, quickQuery, quickKeys) {
     let raw = String(item?.[tk.fieldKey] ?? "").toLowerCase();
     let target = String(tk.value || "").trim().toLowerCase();
     if (!target) return !0;
+    if (tk.operator === "Is Not") return raw !== target;
     return tk.operator === "Is" ? raw === target : raw.includes(target);
   });
 }
@@ -315,7 +316,7 @@ function CollabLookupFilter({ fields, mode, onModeChange, tokens, onTokensChange
       step === "operator" && draftField && (0, P.jsx)("div", {
         style: { position: "absolute", left: 0, top: "100%", marginTop: "6px", width: "170px", zIndex: 60 },
         className: "bg-white border border-slate-200 rounded-xl shadow-xl py-1",
-        children: (isLookupDateField(draftField) ? ["Is", "Is between", "Is ≥", "Is ≤"] : ["Contains", "Is"]).map(op => (0, P.jsx)("button", {
+        children: (Array.isArray(draftField.operators) ? draftField.operators : (isLookupDateField(draftField) ? ["Is", "Is between", "Is ≥", "Is ≤"] : ["Contains", "Is"])).map(op => (0, P.jsx)("button", {
           type: "button",
           onClick: () => { setDraftOperator(op); setDraftValue(""); setStep("value"); },
           className: "w-full text-left px-3.5 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 cursor-pointer",
@@ -2533,8 +2534,6 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
   let [searchQuery, setSearchQuery] = (0, l.useState)("");
   let [asgMode, setAsgMode] = (0, l.useState)("lookup");
   let [asgTokens, setAsgTokens] = (0, l.useState)([]);
-  let [selectedDept, setSelectedDept] = (0, l.useState)("All Departments");
-  let [selectedBU, setSelectedBU] = (0, l.useState)("All Business Units");
   let [currentPage, setCurrentPage] = (0, l.useState)(1);
   let [hoveredScope, setHoveredScope] = (0, l.useState)(null);
   let pageSize = 10;
@@ -2691,24 +2690,25 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
   let asgLookupFields = [
     { key: "name", label: "Employee Name", icon: "👤", options: asgUniq("name") },
     { key: "training", label: "Assigned Training", icon: "📘", options: asgUniq("training") },
+    { key: "dept", label: "Department", icon: "⑂", operators: ["Is", "Is Not"], options: assignedDepts },
+    { key: "businessUnit", label: "Business Unit", icon: "🏢", operators: ["Is", "Is Not"], options: assignedBUs },
     { key: "recognition", label: "Recognition", icon: "🏅", options: asgUniq("recognition") },
     { key: "assigned", label: "Assigned Date", type: "date", icon: "📅", options: asgUniq("assigned") },
     { key: "progressStr", label: "Progress", icon: "📊", options: asgUniq("progressStr") }
   ];
 
   let filtered = enrichedAllList.filter(item => {
-    let matchesLookup = evalLookupFilter(item, asgMode, asgTokens, searchQuery, [
+    return evalLookupFilter(item, asgMode, asgTokens, searchQuery, [
       "name",
       "training",
+      "dept",
+      "businessUnit",
       "role",
       "recognition",
       "assigned",
       "progressStr",
       it => (it.enrolledEmployees || []).map(emp => emp.name).join(" ")
     ]);
-    let matchesDept = selectedDept === "All Departments" || item.dept === selectedDept;
-    let matchesBU = selectedBU === "All Business Units" || item.businessUnit === selectedBU;
-    return matchesLookup && matchesDept && matchesBU;
   });
 
   let totalCount = filtered.length;
@@ -2738,26 +2738,6 @@ function rt({onCancel:e,onSaveProgramme:t,programmeToEdit:n,categories:catList,s
         (0, P.jsxs)("div", {className: "flex items-center gap-3", children: [
           (0, P.jsx)("h2", {className: "font-bold text-slate-900 text-base", children: "Assessments"}),
           (0, P.jsxs)("span", {className: "bg-blue-50 text-blue-700 text-xs font-bold px-2 py-0.5 rounded-full", children: [totalCount, " Total"]})
-        ]}),
-        (0, P.jsxs)("div", {className: "flex items-center gap-3", children: [
-          (0, P.jsxs)("select", {
-            value: selectedDept,
-            onChange: ev => { setSelectedDept(ev.target.value); setCurrentPage(1); },
-            className: "bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20",
-            children: [
-              (0, P.jsx)("option", {value: "All Departments", children: "All Departments"}),
-              assignedDepts.map(d => (0, P.jsx)("option", {value: d, children: d}, d))
-            ]
-          }),
-          (0, P.jsxs)("select", {
-            value: selectedBU,
-            onChange: ev => { setSelectedBU(ev.target.value); setCurrentPage(1); },
-            className: "bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20",
-            children: [
-              (0, P.jsx)("option", {value: "All Business Units", children: "All Business Units"}),
-              assignedBUs.map(bu => (0, P.jsx)("option", {value: bu, children: bu}, bu))
-            ]
-          })
         ]})
       ]}),
       (0, P.jsx)("div", {className: "px-4 py-2.5 bg-slate-50/70 border-b border-slate-200 flex items-center gap-2.5 flex-wrap", children:
