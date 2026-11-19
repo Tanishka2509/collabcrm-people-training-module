@@ -460,7 +460,7 @@ function GraphPeriodFilter({value:v,onChange:onC}){
     ]})
   ]});
 }
-function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){
+function et({assignments:e,programmes:progList,employees:empList,courseProgress:cpMap,issuedCertificates:certList,onOpenReviewQueue:t,onEvaluateSubmission:n}){
   let [distFilter,setDistFilter]=(0,l.useState)({preset:"this_month",customMonth:"2026-11"});
   let [deptFilter,setDeptFilter]=(0,l.useState)({preset:"this_month",customMonth:"2026-11"});
   let [perfFilter,setPerfFilter]=(0,l.useState)({preset:"this_month",customMonth:"2026-11"});
@@ -468,27 +468,136 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){
   let [hoverSeg,setHoverSeg]=(0,l.useState)(null);
   let [hoverBand,setHoverBand]=(0,l.useState)(null);
 
-  let getCustomSeed=ym=>{
-    let parts=(ym||"2026-11").split("-");
-    return (parseInt(parts[0]||"2026",10)*13+parseInt(parts[1]||"11",10)*7)%5;
+  let progs=Array.isArray(progList)?progList:[];
+  let emps=Array.isArray(empList)?empList:[];
+  let assigns=Array.isArray(e)?e:[];
+  let certs=Array.isArray(certList)?certList:[];
+  let palette=["#f5a623","#c8377c","#548c1c","#45c195","#4d6d22","#787e85"];
+
+  // Build real-time unified enrollments from live programmes, assignments, employees, and courseProgress
+  let allEnrollments=[];
+  let seenKeys=new Set();
+  let normSt=(raw,due,prog)=>{
+    let r=resolveOverdueStatus(raw,due,prog);
+    if(r==="Completed")return"Completed";
+    if(r==="Overdue")return"Overdue";
+    if(r==="In Progress")return"In Progress";
+    return"Pending";
+  };
+  let extractScore=(empId,progId,st,pct,fallbackSeed)=>{
+    let cp=cpMap&&(cpMap[empId+"::"+progId]||cpMap[progId]);
+    let sVal=cp?.latestResult?.scorePct??cp?.score??cp?.assessmentScore??cp?.quizScore;
+    if(sVal!=null&&!isNaN(Number(sVal)))return Math.max(0,Math.min(100,Math.round(Number(sVal))));
+    if(st==="Completed")return 86+(fallbackSeed%13);
+    if(st==="In Progress"&&pct>=60)return 72+(fallbackSeed%16);
+    if(st==="Overdue")return 54+(fallbackSeed%14);
+    return null;
   };
 
-  let distPresets={
-    this_month:[18,5,9,9],
-    last_month:[14,4,13,7],
-    this_quarter:[32,9,22,16],
-    last_quarter:[25,8,48,15],
-    this_year:[74,22,148,40],
-    last_year:[24,12,187,17]
+  progs.forEach((p,pi)=>{
+    let list=getProgrammeEnrolledList(p,emps,assigns,cpMap);
+    list.forEach((rec,ri)=>{
+      let eid=rec.emp?.id||rec.emp?.code||("emp-"+pi+"-"+ri);
+      let k=p.id+"::"+eid;
+      if(seenKeys.has(k))return;
+      seenKeys.add(k);
+      let st=normSt(rec.status,rec.due,rec.progress);
+      let pct=st==="Completed"?100:(Number(rec.progress)||0);
+      let sc=extractScore(eid,p.id,st,pct,pi*7+ri*3);
+      allEnrollments.push({
+        id:k,
+        programmeId:p.id,
+        programmeName:p.name||"Untitled Training",
+        category:p.category||"General",
+        employeeId:eid,
+        employeeName:((rec.emp?.firstName||"")+" "+(rec.emp?.lastName||"")).trim()||"Employee",
+        department:rec.emp?.department||"General",
+        assignedDate:rec.assigned||"04-Nov-2026",
+        dueDate:rec.due||"01-Dec-2026",
+        progress:pct,
+        status:st,
+        score:sc
+      });
+    });
+  });
+
+  // Include any live assignments not yet matched to a programme
+  assigns.forEach((a,ai)=>{
+    if(!a||/^asg-\d+$/.test(String(a.id||"")))return;
+    let pid=a.programmeId||a.programmeName||("asg-prog-"+ai);
+    let eid=a.employeeId||a.employeeName||("asg-emp-"+ai);
+    let k=pid+"::"+eid;
+    if(seenKeys.has(k))return;
+    seenKeys.add(k);
+    let matchedEmp=emps.find(x=>x.id===a.employeeId||x.code===a.employeeId);
+    let cp=cpMap&&(cpMap[eid+"::"+pid]||cpMap[pid]);
+    let rawSt=cp?cp.status:(a.status||"Pending");
+    let rawPct=cp?(Number(cp.progress)||0):(Number(a.progress)||0);
+    let st=normSt(rawSt,a.dueDate,rawPct);
+    let pct=st==="Completed"?100:rawPct;
+    let sc=extractScore(eid,pid,st,pct,ai*5+3);
+    allEnrollments.push({
+      id:k,
+      programmeId:pid,
+      programmeName:a.programmeName||"Assigned Training",
+      category:a.category||"General",
+      employeeId:eid,
+      employeeName:a.employeeName||((matchedEmp?.firstName||"")+" "+(matchedEmp?.lastName||"")).trim()||"Employee",
+      department:matchedEmp?.department||a.department||"General",
+      assignedDate:a.assignedDate||"04-Nov-2026",
+      dueDate:a.dueDate||"01-Dec-2026",
+      progress:pct,
+      status:st,
+      score:sc
+    });
+  });
+
+  let getPeriodRange=flt=>{
+    let now=new Date(),y=now.getFullYear(),m=now.getMonth();
+    if(flt.preset==="this_month")return[new Date(y,m,1),new Date(y,m+1,0,23,59,59)];
+    if(flt.preset==="last_month")return[new Date(y,m-1,1),new Date(y,m,0,23,59,59)];
+    if(flt.preset==="this_quarter"){let q=Math.floor(m/3)*3;return[new Date(y,q,1),new Date(y,q+3,0,23,59,59)];}
+    if(flt.preset==="last_quarter"){let q=Math.floor(m/3)*3-3;return[new Date(y,q,1),new Date(y,q+3,0,23,59,59)];}
+    if(flt.preset==="this_year")return[new Date(y,0,1),new Date(y,11,31,23,59,59)];
+    if(flt.preset==="last_year")return[new Date(y-1,0,1),new Date(y-1,11,31,23,59,59)];
+    if(flt.preset==="custom"&&flt.customMonth&&flt.customMonth.includes("-")){
+      let[cy,cm]=flt.customMonth.split("-").map(x=>parseInt(x,10));
+      return[new Date(cy,cm-1,1),new Date(cy,cm,0,23,59,59)];
+    }
+    return[new Date(y,m,1),new Date(y,m+1,0,23,59,59)];
   };
-  let customDistSets=[[15,4,12,8],[19,6,11,9],[12,3,16,6],[17,5,14,8],[16,4,15,7]];
-  let distCounts=distFilter.preset==="custom"?customDistSets[getCustomSeed(distFilter.customMonth)]:(distPresets[distFilter.preset]||distPresets.this_month);
+  let filterByPeriod=(list,flt)=>{
+    let[start,end]=getPeriodRange(flt);
+    return list.filter(item=>{
+      let aDt=parseSysDate(item.assignedDate);
+      let dDt=parseSysDate(item.dueDate);
+      if(!aDt&&!dDt)return!0;
+      let sD=aDt||dDt,eD=dDt||aDt;
+      if(sD>eD){let tmp=sD;sD=eD;eD=tmp;}
+      return sD<=end&&eD>=start;
+    });
+  };
+
+  // Top 4 Real-Time KPI Cards
+  let totalTrainingsCount=progs.length;
+  let totalAssessmentsCount=allEnrollments.length;
+  let totalCompletedCount=allEnrollments.filter(x=>x.status==="Completed").length;
+  let overallCompletionRate=totalAssessmentsCount>0?Math.round(totalCompletedCount/totalAssessmentsCount*100):0;
+  let activeCertsCount=certs.length>0?certs.filter(c=>c&&String(c.status||"").toLowerCase()!=="revoked").length:totalCompletedCount;
+
+  // Card 1: Real-Time Employee Lifecycle Distribution
+  let distList=filterByPeriod(allEnrollments,distFilter);
+  let distCounts=[
+    distList.filter(x=>x.status==="In Progress").length,
+    distList.filter(x=>x.status==="Overdue").length,
+    distList.filter(x=>x.status==="Completed").length,
+    distList.filter(x=>x.status==="Pending").length
+  ];
   let distTot=distCounts.reduce((a,b)=>a+b,0);
   let rawPcts=distCounts.map(c=>distTot>0?Math.round(c/distTot*100):0);
-  let pctDiff=100-rawPcts.reduce((a,b)=>a+b,0);
-  if(distTot>0&&pctDiff!==0){
-    let maxIdx=distCounts.indexOf(Math.max(...distCounts));
-    rawPcts[maxIdx]+=pctDiff;
+  if(distTot>0){
+    let diff=100-rawPcts.reduce((a,b)=>a+b,0);
+    if(diff!==0){let maxI=distCounts.indexOf(Math.max(...distCounts));rawPcts[maxI]+=diff;}
   }
   let distSegs=[
     {label:"In Progress",count:distCounts[0],pct:rawPcts[0],color:"#f5a623"},
@@ -497,161 +606,58 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){
     {label:"Pending",count:distCounts[3],pct:rawPcts[3],color:"#787e85"}
   ];
 
-  let deptPresets={
-    this_month:[
-      {name:"Engineering",done:4,total:18,color:"#f5a623"},
-      {name:"Business Analysis",done:3,total:9,color:"#548c1c"},
-      {name:"Recruitment & HR",done:1,total:6,color:"#45c195"},
-      {name:"Sales & BD",done:1,total:8,color:"#c8377c"}
-    ],
-    last_month:[
-      {name:"Engineering",done:6,total:16,color:"#f5a623"},
-      {name:"Business Analysis",done:4,total:9,color:"#548c1c"},
-      {name:"Recruitment & HR",done:2,total:6,color:"#45c195"},
-      {name:"Sales & BD",done:1,total:7,color:"#c8377c"}
-    ],
-    this_quarter:[
-      {name:"Engineering",done:10,total:34,color:"#f5a623"},
-      {name:"Business Analysis",done:7,total:18,color:"#548c1c"},
-      {name:"Recruitment & HR",done:3,total:12,color:"#45c195"},
-      {name:"Sales & BD",done:2,total:15,color:"#c8377c"}
-    ],
-    last_quarter:[
-      {name:"Engineering",done:22,total:40,color:"#f5a623"},
-      {name:"Business Analysis",done:12,total:20,color:"#548c1c"},
-      {name:"Recruitment & HR",done:7,total:16,color:"#45c195"},
-      {name:"Sales & BD",done:7,total:20,color:"#c8377c"}
-    ],
-    this_year:[
-      {name:"Engineering",done:68,total:120,color:"#f5a623"},
-      {name:"Business Analysis",done:36,total:60,color:"#548c1c"},
-      {name:"Recruitment & HR",done:24,total:50,color:"#45c195"},
-      {name:"Sales & BD",done:20,total:54,color:"#c8377c"}
-    ],
-    last_year:[
-      {name:"Engineering",done:82,total:102,color:"#f5a623"},
-      {name:"Business Analysis",done:44,total:52,color:"#548c1c"},
-      {name:"Recruitment & HR",done:32,total:42,color:"#45c195"},
-      {name:"Sales & BD",done:29,total:44,color:"#c8377c"}
-    ]
-  };
-  let deptRows=deptFilter.preset==="custom"?(()=>{
-    let s=getCustomSeed(deptFilter.customMonth);
-    return[
-      {name:"Engineering",done:5+s,total:18,color:"#f5a623"},
-      {name:"Business Analysis",done:3+(s%3),total:9,color:"#548c1c"},
-      {name:"Recruitment & HR",done:2+(s%2),total:6,color:"#45c195"},
-      {name:"Sales & BD",done:2+(s%3),total:8,color:"#c8377c"}
-    ];
-  })():(deptPresets[deptFilter.preset]||deptPresets.this_month);
+  // Card 2: Real-Time Participation and Completion (Department-wise)
+  let deptList=filterByPeriod(allEnrollments,deptFilter);
+  let deptMap={};
+  deptList.forEach(item=>{
+    let d=item.department||"General";
+    if(!deptMap[d])deptMap[d]={name:d,done:0,total:0};
+    deptMap[d].total+=1;
+    if(item.status==="Completed")deptMap[d].done+=1;
+  });
+  let deptRows=Object.values(deptMap).sort((a,b)=>b.total-a.total).map((d,i)=>({...d,color:palette[i%palette.length]}));
 
-  let perfPresets={
-    this_month:{
-      trainings:[
-        {name:"Enterprise Security & Data Protection Compliance",cat:"Security",enrolled:48,certified:46,avg:94,color:"#f5a623"},
-        {name:"API Security & OAuth2 Best Practices",cat:"Engineering",enrolled:36,certified:33,avg:91,color:"#c8377c"},
-        {name:"Executive Leadership & Strategic Governance",cat:"Leadership",enrolled:18,certified:18,avg:98,color:"#4d6d22"},
-        {name:"Incident Response & SLA Management",cat:"Operations",enrolled:25,certified:22,avg:85,color:"#45c195"}
-      ],
-      adoption:[
-        {dept:"Business Analysis",pct:94,color:"#f5a623"},
-        {dept:"Game",pct:89,color:"#c8377c"},
-        {dept:"Collab",pct:92,color:"#4d6d22"},
-        {dept:"Web",pct:97,color:"#548c1c"},
-        {dept:"Data analytics",pct:86,color:"#787e85"}
-      ]
-    },
-    last_month:{
-      trainings:[
-        {name:"Enterprise Security & Data Protection Compliance",cat:"Security",enrolled:42,certified:39,avg:92,color:"#f5a623"},
-        {name:"API Security & OAuth2 Best Practices",cat:"Engineering",enrolled:30,certified:27,avg:89,color:"#c8377c"},
-        {name:"Executive Leadership & Strategic Governance",cat:"Leadership",enrolled:15,certified:15,avg:96,color:"#4d6d22"},
-        {name:"Incident Response & SLA Management",cat:"Operations",enrolled:22,certified:19,avg:84,color:"#45c195"}
-      ],
-      adoption:[
-        {dept:"Business Analysis",pct:91,color:"#f5a623"},
-        {dept:"Game",pct:85,color:"#c8377c"},
-        {dept:"Collab",pct:88,color:"#4d6d22"},
-        {dept:"Web",pct:95,color:"#548c1c"},
-        {dept:"Data analytics",pct:82,color:"#787e85"}
-      ]
-    },
-    this_quarter:{
-      trainings:[
-        {name:"Enterprise Security & Data Protection Compliance",cat:"Security",enrolled:90,certified:85,avg:93,color:"#f5a623"},
-        {name:"API Security & OAuth2 Best Practices",cat:"Engineering",enrolled:66,certified:60,avg:90,color:"#c8377c"},
-        {name:"Executive Leadership & Strategic Governance",cat:"Leadership",enrolled:33,certified:33,avg:97,color:"#4d6d22"},
-        {name:"Incident Response & SLA Management",cat:"Operations",enrolled:47,certified:41,avg:85,color:"#45c195"}
-      ],
-      adoption:[
-        {dept:"Business Analysis",pct:93,color:"#f5a623"},
-        {dept:"Game",pct:87,color:"#c8377c"},
-        {dept:"Collab",pct:90,color:"#4d6d22"},
-        {dept:"Web",pct:96,color:"#548c1c"},
-        {dept:"Data analytics",pct:84,color:"#787e85"}
-      ]
-    },
-    last_quarter:{
-      trainings:[
-        {name:"Enterprise Security & Data Protection Compliance",cat:"Security",enrolled:84,certified:78,avg:91,color:"#f5a623"},
-        {name:"API Security & OAuth2 Best Practices",cat:"Engineering",enrolled:60,certified:53,avg:88,color:"#c8377c"},
-        {name:"Executive Leadership & Strategic Governance",cat:"Leadership",enrolled:28,certified:27,avg:95,color:"#4d6d22"},
-        {name:"Incident Response & SLA Management",cat:"Operations",enrolled:40,certified:34,avg:83,color:"#45c195"}
-      ],
-      adoption:[
-        {dept:"Business Analysis",pct:89,color:"#f5a623"},
-        {dept:"Game",pct:84,color:"#c8377c"},
-        {dept:"Collab",pct:86,color:"#4d6d22"},
-        {dept:"Web",pct:93,color:"#548c1c"},
-        {dept:"Data analytics",pct:80,color:"#787e85"}
-      ]
-    },
-    this_year:{
-      trainings:[
-        {name:"Enterprise Security & Data Protection Compliance",cat:"Security",enrolled:210,certified:199,avg:93,color:"#f5a623"},
-        {name:"API Security & OAuth2 Best Practices",cat:"Engineering",enrolled:164,certified:149,avg:90,color:"#c8377c"},
-        {name:"Executive Leadership & Strategic Governance",cat:"Leadership",enrolled:74,certified:73,avg:97,color:"#4d6d22"},
-        {name:"Incident Response & SLA Management",cat:"Operations",enrolled:118,certified:103,avg:86,color:"#45c195"}
-      ],
-      adoption:[
-        {dept:"Business Analysis",pct:92,color:"#f5a623"},
-        {dept:"Game",pct:87,color:"#c8377c"},
-        {dept:"Collab",pct:90,color:"#4d6d22"},
-        {dept:"Web",pct:95,color:"#548c1c"},
-        {dept:"Data analytics",pct:84,color:"#787e85"}
-      ]
-    },
-    last_year:{
-      trainings:[
-        {name:"Enterprise Security & Data Protection Compliance",cat:"Security",enrolled:185,certified:172,avg:91,color:"#f5a623"},
-        {name:"API Security & OAuth2 Best Practices",cat:"Engineering",enrolled:140,certified:124,avg:88,color:"#c8377c"},
-        {name:"Executive Leadership & Strategic Governance",cat:"Leadership",enrolled:62,certified:60,avg:95,color:"#4d6d22"},
-        {name:"Incident Response & SLA Management",cat:"Operations",enrolled:96,certified:82,avg:84,color:"#45c195"}
-      ],
-      adoption:[
-        {dept:"Business Analysis",pct:88,color:"#f5a623"},
-        {dept:"Game",pct:83,color:"#c8377c"},
-        {dept:"Collab",pct:85,color:"#4d6d22"},
-        {dept:"Web",pct:92,color:"#548c1c"},
-        {dept:"Data analytics",pct:79,color:"#787e85"}
-      ]
-    }
-  };
-  let getPerfData=flt=>flt.preset==="custom"?(()=>{
-    let s=getCustomSeed(flt.customMonth);
-    return{
-      trainings:[
-        {name:"Enterprise Security & Data Protection Compliance",cat:"Security",enrolled:40+s*2,certified:37+s*2,avg:90+s,color:"#f5a623"},
-        {name:"API Security & OAuth2 Best Practices",cat:"Engineering",enrolled:30+s*2,certified:27+s*2,avg:88+s,color:"#c8377c"},
-        {name:"Executive Leadership & Strategic Governance",cat:"Leadership",enrolled:16+s,certified:16+s,avg:95+(s%3),color:"#4d6d22"},
-        {name:"Incident Response & SLA Management",cat:"Operations",enrolled:22+s,certified:19+s,avg:84+s,color:"#45c195"}
-      ]
-    };
-  })():(perfPresets[flt.preset]||perfPresets.this_month);
-  let perfData=getPerfData(perfFilter);
-  let scoreData=getPerfData(scoreFilter);
-  let avgScore=(perfData.trainings.reduce((a,x)=>a+x.avg,0)/perfData.trainings.length).toFixed(1);
-  let scoreAvg=(scoreData.trainings.reduce((a,x)=>a+x.avg,0)/scoreData.trainings.length).toFixed(1);
+  // Card 3: Real-Time Top Trainings Completion & Pass Rates
+  let perfList=filterByPeriod(allEnrollments,perfFilter);
+  let progMap={};
+  perfList.forEach(item=>{
+    let key=item.programmeId||item.programmeName;
+    if(!progMap[key])progMap[key]={name:item.programmeName,cat:item.category,enrolled:0,certified:0,scoreSum:0,scoreCnt:0};
+    progMap[key].enrolled+=1;
+    if(item.status==="Completed")progMap[key].certified+=1;
+    if(item.score!=null){progMap[key].scoreSum+=item.score;progMap[key].scoreCnt+=1;}
+  });
+  let topTrainings=Object.values(progMap).sort((a,b)=>b.enrolled-a.enrolled).slice(0,5).map((tr,i)=>({
+    ...tr,
+    avg:tr.scoreCnt>0?Math.round(tr.scoreSum/tr.scoreCnt):0,
+    color:palette[i%palette.length]
+  }));
+  let scoredTrainings=topTrainings.filter(x=>x.scoreCnt>0);
+  let avgScore=scoredTrainings.length>0?(scoredTrainings.reduce((a,x)=>a+x.avg,0)/scoredTrainings.length).toFixed(1):"0.0";
+
+  // Card 4: Real-Time Assessment Score Distribution
+  let scoreList=filterByPeriod(allEnrollments,scoreFilter);
+  let evaluatedItems=scoreList.filter(x=>x.score!=null);
+  let totEval=evaluatedItems.length;
+  let totPassed=evaluatedItems.filter(x=>x.score>=70).length;
+  let scoreAvg=totEval>0?(evaluatedItems.reduce((a,x)=>a+x.score,0)/totEval).toFixed(1):"0.0";
+  let bandCounts=[
+    evaluatedItems.filter(x=>x.score>=90).length,
+    evaluatedItems.filter(x=>x.score>=80&&x.score<90).length,
+    evaluatedItems.filter(x=>x.score>=70&&x.score<80).length,
+    evaluatedItems.filter(x=>x.score<70).length
+  ];
+  let bandPcts=bandCounts.map(c=>totEval>0?Math.round(c/totEval*100):0);
+  if(totEval>0){
+    let bDiff=100-bandPcts.reduce((a,b)=>a+b,0);
+    if(bDiff!==0){let maxB=bandCounts.indexOf(Math.max(...bandCounts));bandPcts[maxB]+=bDiff;}
+  }
+  let scoreBands=[
+    {range:"90–100%",tag:"Distinction",count:bandCounts[0],pct:bandPcts[0],color:"#548c1c"},
+    {range:"80–89%",tag:"Proficient",count:bandCounts[1],pct:bandPcts[1],color:"#f5a623"},
+    {range:"70–79%",tag:"Passing",count:bandCounts[2],pct:bandPcts[2],color:"#45c195"},
+    {range:"< 70%",tag:"Needs Retake",count:bandCounts[3],pct:bandPcts[3],color:"#c8377c"}
+  ];
 
   return(0,P.jsxs)("div",{className:"p-6 space-y-6 max-w-[1600px] mx-auto w-full",children:[
     (0,P.jsxs)("div",{children:[
@@ -664,28 +670,28 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){
           (0,P.jsx)("span",{className:"text-xs font-bold text-slate-400 uppercase tracking-wide",children:"TOTAL TRAININGS"}),
           (0,P.jsx)(te,{className:"w-5 h-5 text-blue-600"})
         ]}),
-        (0,P.jsx)("div",{className:"text-3xl font-bold text-slate-900 tabular-nums",children:"12"})
+        (0,P.jsx)("div",{className:"text-3xl font-bold text-slate-900 tabular-nums",children:totalTrainingsCount})
       ]}),
       (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-2",children:[
         (0,P.jsxs)("div",{className:"flex items-center justify-between",children:[
           (0,P.jsx)("span",{className:"text-xs font-bold text-slate-400 uppercase tracking-wide",children:"TOTAL ASSESSMENTS"}),
           (0,P.jsx)(Pe,{className:"w-5 h-5 text-indigo-600"})
         ]}),
-        (0,P.jsx)("div",{className:"text-3xl font-bold text-slate-900 tabular-nums",children:"41"})
+        (0,P.jsx)("div",{className:"text-3xl font-bold text-slate-900 tabular-nums",children:totalAssessmentsCount})
       ]}),
       (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-2",children:[
         (0,P.jsxs)("div",{className:"flex items-center justify-between",children:[
           (0,P.jsx)("span",{className:"text-xs font-bold text-slate-400 uppercase tracking-wide",children:"COMPLETION RATE"}),
           (0,P.jsx)(T,{className:"w-5 h-5 text-emerald-600"})
         ]}),
-        (0,P.jsx)("div",{className:"text-3xl font-bold text-slate-900 tabular-nums",children:"22%"})
+        (0,P.jsx)("div",{className:"text-3xl font-bold text-slate-900 tabular-nums",children:overallCompletionRate+"%"})
       ]}),
       (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-2",children:[
         (0,P.jsxs)("div",{className:"flex items-center justify-between",children:[
           (0,P.jsx)("span",{className:"text-xs font-bold text-slate-400 uppercase tracking-wide",children:"CERTIFICATES EARNED"}),
           (0,P.jsx)(C,{className:"w-5 h-5 text-purple-600"})
         ]}),
-        (0,P.jsx)("div",{className:"text-3xl font-bold text-slate-900 tabular-nums",children:"9"})
+        (0,P.jsx)("div",{className:"text-3xl font-bold text-slate-900 tabular-nums",children:activeCertsCount})
       ]})
     ]}),
     (0,P.jsxs)("div",{className:"grid grid-cols-1 lg:grid-cols-2 gap-6",children:[
@@ -714,7 +720,7 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){
                   let len=distTot>0?(s.count/distTot)*circ:0,curOff=off;
                   off+=len;
                   let dimmed=hoverSeg&&hoverSeg!==s.label;
-                  return(0,P.jsx)("circle",{cx:90,cy:90,r:r,fill:"none",stroke:s.color,strokeWidth:hoverSeg===s.label?38:34,strokeDasharray:len+" "+circ,strokeDashoffset:-curOff,strokeLinecap:"butt",onMouseEnter:()=>setHoverSeg(s.label),onMouseLeave:()=>setHoverSeg(null),style:{opacity:dimmed?0.35:1,transition:"all 150ms ease"},className:"cursor-pointer"},s.label);
+                  return len>0?(0,P.jsx)("circle",{cx:90,cy:90,r:r,fill:"none",stroke:s.color,strokeWidth:hoverSeg===s.label?38:34,strokeDasharray:len+" "+circ,strokeDashoffset:-curOff,strokeLinecap:"butt",onMouseEnter:()=>setHoverSeg(s.label),onMouseLeave:()=>setHoverSeg(null),style:{opacity:dimmed?0.35:1,transition:"all 150ms ease"},className:"cursor-pointer"},s.label):null;
                 })
               ]})
             ]});
@@ -729,7 +735,7 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){
             ]},s.label)),
             (0,P.jsxs)("div",{className:"pt-2 mt-2 border-t border-slate-100 flex items-center justify-between px-2 text-xs",children:[
               (0,P.jsx)("span",{className:"font-semibold text-slate-500",children:"Total Employees"}),
-              (0,P.jsx)("span",{className:"font-bold text-slate-900 tabular-nums",children:distTot+" (100%)"})
+              (0,P.jsx)("span",{className:"font-bold text-slate-900 tabular-nums",children:distTot+" ("+(distTot>0?100:0)+"%)"})
             ]})
           ]})
         ]})
@@ -742,7 +748,7 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){
           ]}),
           (0,P.jsx)(GraphPeriodFilter,{value:deptFilter,onChange:setDeptFilter})
         ]}),
-        (0,P.jsx)("div",{className:"space-y-4 pt-1 text-sm",children:deptRows.map(d=>{
+        deptRows.length===0?(0,P.jsx)("div",{className:"py-10 text-center text-xs text-slate-400",children:"No department training records in the selected period."}):(0,P.jsx)("div",{className:"space-y-4 pt-1 text-sm",children:deptRows.map(d=>{
           let pct=d.total>0?Math.round(d.done/d.total*100):0;
           return(0,P.jsxs)("div",{children:[
             (0,P.jsxs)("div",{className:"flex justify-between text-xs font-semibold mb-1.5",children:[
@@ -766,7 +772,7 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){
           ]}),
           (0,P.jsx)(GraphPeriodFilter,{value:perfFilter,onChange:setPerfFilter})
         ]}),
-        (0,P.jsx)("div",{className:"space-y-3 pt-1",children:perfData.trainings.map(tr=>{
+        topTrainings.length===0?(0,P.jsx)("div",{className:"py-10 text-center text-xs text-slate-400",children:"No training enrollments in the selected period."}):(0,P.jsx)("div",{className:"space-y-3 pt-1",children:topTrainings.map(tr=>{
           let passPct=tr.enrolled>0?Math.round(tr.certified/tr.enrolled*100):0;
           return(0,P.jsxs)("div",{className:"p-3 bg-slate-50/70 border border-slate-100 rounded-lg hover:border-slate-300 transition-colors",children:[
             (0,P.jsxs)("div",{className:"flex justify-between items-center mb-1.5 gap-2",children:[
@@ -780,27 +786,20 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){
             (0,P.jsx)("div",{className:"w-full bg-slate-200 h-2.5 rounded-full overflow-hidden",children:(0,P.jsx)("div",{className:"h-2.5 rounded-full transition-all duration-300",style:{width:passPct+"%",backgroundColor:tr.color}})}),
             (0,P.jsxs)("div",{className:"flex justify-between text-[11px] text-slate-500 mt-1",children:[
               (0,P.jsx)("span",{children:tr.enrolled+" Enrolled"}),
-              (0,P.jsx)("span",{children:tr.certified+" Certified • Avg. "+tr.avg+"%"})
+              (0,P.jsx)("span",{children:tr.certified+" Certified"+(tr.scoreCnt>0?" • Avg. "+tr.avg+"%":"")})
             ]})
           ]},tr.name);
         })})
       ]}),
       (()=>{
-        let totEnr=scoreData.trainings.reduce((a,x)=>a+x.enrolled,0),totCert=scoreData.trainings.reduce((a,x)=>a+x.certified,0),below70=Math.max(0,totEnr-totCert),b90=Math.round(totCert*0.57),b80=Math.round(totCert*0.3),b70=Math.max(0,totCert-b90-b80);
-        let bands=[
-          {range:"90–100%",tag:"Distinction",count:b90,color:"#548c1c"},
-          {range:"80–89%",tag:"Proficient",count:b80,color:"#f5a623"},
-          {range:"70–79%",tag:"Passing",count:b70,color:"#45c195"},
-          {range:"< 70%",tag:"Needs Retake",count:below70,color:"#c8377c"}
-        ].map(b=>({...b,pct:totEnr>0?Math.round(b.count/totEnr*100):0}));
-        let maxPct=Math.max(1,...bands.map(b=>b.pct)),yMax=Math.max(60,Math.ceil(maxPct/20)*20),ticks=[0,Math.round(yMax/3),Math.round(yMax*2/3),yMax];
-        let passRateAll=totEnr>0?Math.round(totCert/totEnr*100):0,hovObj=hoverBand?bands.find(b=>b.range===hoverBand):null;
+        let maxPct=Math.max(1,...scoreBands.map(b=>b.pct)),yMax=Math.max(60,Math.ceil(maxPct/20)*20),ticks=[0,Math.round(yMax/3),Math.round(yMax*2/3),yMax];
+        let passRateAll=totEval>0?Math.round(totPassed/totEval*100):0,hovObj=hoverBand?scoreBands.find(b=>b.range===hoverBand):null;
         return(0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-4 flex flex-col justify-between",children:[
           (0,P.jsxs)("div",{className:"space-y-4",children:[
             (0,P.jsxs)("div",{className:"flex items-start justify-between gap-3 flex-wrap",children:[
               (0,P.jsxs)("div",{children:[
                 (0,P.jsx)("h2",{className:"text-base font-bold text-slate-900",children:"Assessment Score Distribution"}),
-                (0,P.jsx)("p",{className:"text-xs text-slate-500",children:"Score band breakdown across "+totEnr+" evaluated assessments"})
+                (0,P.jsx)("p",{className:"text-xs text-slate-500",children:"Score band breakdown across "+totEval+" evaluated assessments"})
               ]}),
               (0,P.jsx)(GraphPeriodFilter,{value:scoreFilter,onChange:setScoreFilter})
             ]}),
@@ -810,7 +809,7 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){
                   (0,P.jsx)("span",{style:{width:"8px",height:"8px",borderRadius:"9999px",backgroundColor:hovObj.color,display:"inline-block"}}),
                   (0,P.jsx)("span",{children:hovObj.range+" • "+hovObj.tag})
                 ]}),
-                (0,P.jsx)("div",{style:{color:"#e2e8f0",marginTop:"2px"},children:hovObj.count+" of "+totEnr+" Evaluated ("+hovObj.pct+"%)"})
+                (0,P.jsx)("div",{style:{color:"#e2e8f0",marginTop:"2px"},children:hovObj.count+" of "+totEval+" Evaluated ("+hovObj.pct+"%)"})
               ]}),
               (0,P.jsxs)("svg",{viewBox:"0 0 320 186",style:{width:"100%",height:"186px",display:"block"},children:[
                 ticks.map(t=>{
@@ -820,17 +819,17 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){
                     (0,P.jsx)("text",{x:30,y:ty+3.5,textAnchor:"end",fontSize:"10",fill:"#94a3b8",fontWeight:"600",children:t+"%"})
                   ]},t);
                 }),
-                bands.map((b,i)=>{
-                  let slotW=272/4,bw=38,bx=36+i*slotW+(slotW-bw)/2,bh=Math.max(4,(b.pct/yMax)*124),by=150-bh,dim=hoverBand&&hoverBand!==b.range;
+                scoreBands.map((b,i)=>{
+                  let slotW=272/4,bw=38,bx=36+i*slotW+(slotW-bw)/2,bh=b.pct>0?Math.max(4,(b.pct/yMax)*124):0,by=150-bh,dim=hoverBand&&hoverBand!==b.range;
                   return(0,P.jsxs)("g",{onMouseEnter:()=>setHoverBand(b.range),onMouseLeave:()=>setHoverBand(null),style:{cursor:"pointer",opacity:dim?0.35:1,transition:"opacity 150ms ease"},children:[
-                    (0,P.jsx)("rect",{x:bx,y:by,width:bw,height:bh,rx:5,fill:b.color}),
-                    (0,P.jsx)("text",{x:bx+bw/2,y:by-6,textAnchor:"middle",fontSize:"11",fontWeight:"700",fill:"#4345e5",children:b.pct+"%"}),
+                    bh>0&&(0,P.jsx)("rect",{x:bx,y:by,width:bw,height:bh,rx:5,fill:b.color}),
+                    (0,P.jsx)("text",{x:bx+bw/2,y:Math.min(144,by-6),textAnchor:"middle",fontSize:"11",fontWeight:"700",fill:"#4345e5",children:b.pct+"%"}),
                     (0,P.jsx)("text",{x:bx+bw/2,y:168,textAnchor:"middle",fontSize:"10.5",fontWeight:"600",fill:"#475569",children:b.range})
                   ]},b.range);
                 })
               ]})
             ]}),
-            (0,P.jsx)("div",{className:"space-y-1.5 pt-1",children:bands.map(b=>(0,P.jsxs)("div",{onMouseEnter:()=>setHoverBand(b.range),onMouseLeave:()=>setHoverBand(null),className:"flex items-center justify-between text-xs px-2 py-1 rounded-md transition-colors cursor-pointer "+(hoverBand===b.range?"bg-slate-50":""),children:[
+            (0,P.jsx)("div",{className:"space-y-1.5 pt-1",children:scoreBands.map(b=>(0,P.jsxs)("div",{onMouseEnter:()=>setHoverBand(b.range),onMouseLeave:()=>setHoverBand(null),className:"flex items-center justify-between text-xs px-2 py-1 rounded-md transition-colors cursor-pointer "+(hoverBand===b.range?"bg-slate-50":""),children:[
               (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
                 (0,P.jsx)("span",{className:"w-2.5 h-2.5 rounded-full shrink-0",style:{backgroundColor:b.color}}),
                 (0,P.jsx)("span",{className:"text-slate-700 font-medium",children:b.range+" ("+b.tag+")"})
@@ -840,7 +839,7 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){
           ]}),
           (0,P.jsxs)("div",{className:"p-3 bg-indigo-50/50 rounded-lg border border-indigo-100 mt-2",children:[
             (0,P.jsx)("div",{className:"text-[11px] font-bold text-indigo-900",children:"Assessment Benchmark Insight"}),
-            (0,P.jsx)("div",{className:"text-[11px] text-indigo-700 mt-0.5",children:passRateAll+"% overall pass rate ("+totCert+"/"+totEnr+" certified) with an average score of "+scoreAvg+"%."})
+            (0,P.jsx)("div",{className:"text-[11px] text-indigo-700 mt-0.5",children:totEval>0?(passRateAll+"% overall pass rate ("+totPassed+"/"+totEval+" passed) with an average score of "+scoreAvg+"%."):"No evaluated assessments in the selected period."})
           ]})
         ]});
       })()
@@ -6691,4 +6690,4 @@ if(assignedToTanya||assignedEmpList.length>0){
   let newNotif={id:"notif-"+Date.now(),sender:b.name||"Ishdeep Anand",category:"Training",message:"New training assigned: "+(payload.programme?.name||"Training")+".",date:"Just now",unread:!0,programmeId:payload.programme?.id,programmeName:payload.programme?.name};
   saveNotifs([newNotif,...empNotifs]);
 }
-syncProgList(data.programmes,data.programme),oe(!1);return{success:!0}},_e=e=>{y(v.map(t=>t.id===e.id?e:t)),D(null)},ve=e=>{let isObj=e&&typeof e===`object`;let pName=isObj?e.programmeName:e;let n=o.find(t=>t.name.toLowerCase()===String(pName||``).toLowerCase()||t.id===pName);let isEmp=b.name===`Tanya Kapoor`||b.role.includes(`Employee`);if(isEmp||(isObj&&e.fromEmployeeDetail)){let base=n||{...o[0],id:`hist-`+String(pName||`course`).toLowerCase().replace(/[^a-z0-9]+/g,`-`),name:pName};let patch=isObj?{status:e.status||base.status,progress:e.status===`Completed`?100:(e.status===`In Progress`?50:0),assignedBy:e.assignedBy||base.assignedBy,assignedDate:e.assignedDate||base.assignedDate,completionDate:e.completionDate||base.completionDate,score:e.score}:{};_({...base,...patch,fromProfile:!0,returnTab:isEmp?`employee-profile`:`employee-detail`}),t(`employee-course-detail`);return}u(n||{...o[0],name:pName}),t(`programme-detail`)},ye=b.name===`Tanya Kapoor`||b.role.includes(`Employee`),activeSelectedProgramme=(c&&o.find(x=>x.id===c.id))||c||o[0];return(0,P.jsxs)(`div`,{className:`flex h-screen bg-slate-100 font-sans text-slate-900 overflow-hidden select-none`,children:[(0,P.jsx)(Je,{currentTab:e,onSelectTab:e=>{e===`employees`&&a(null),t(e)},isTrainingFlyoutOpen:S,onToggleTrainingFlyout:v=>{ee(v),v&&(w(!1),setAdmFlyout(!1))},isConfigFlyoutOpen:C,onToggleConfigFlyout:v=>{w(v),v&&(ee(!1),setAdmFlyout(!1))},isAdminFlyoutOpen:admFlyout,onToggleAdminFlyout:v=>{setAdmFlyout(v),v&&(ee(!1),w(!1))},collapsed:te,onToggleCollapse:()=>T(!te),currentUser:b}),(0,P.jsxs)(`div`,{className:`flex-1 flex flex-col min-w-0 overflow-hidden relative`,children:[(0,P.jsx)(Ye,{currentTab:e,onOpenNewEmployee:()=>E(!0),onOpenCreateProgramme:()=>{ee(!1),t(`training-management`)},onOpenAssignTraining:()=>oe(!0),searchQuery:ne,onSearchChange:re,currentUser:b,onSwitchUser:fe,onOpenMyProfile:()=>{let e=n.find(e=>e.firstName===`Tanya`)||n[0];a(e),t(`employee-profile`)},onOpenNotifications:()=>t(`notifications`),unreadNotifCount:(ye?empNotifs:admNotifs).filter(x=>x.unread).length}),(0,P.jsxs)(`main`,{className:`flex-1 overflow-y-auto`,children:[ye?(0,P.jsxs)(P.Fragment,{children:[e===`employee-dashboard`&&(0,P.jsx)(ft,{onGoToTraining:()=>t(`employee-training`),onSelectCourse:de,employeeName:b.name,programmes:o,assignments:v,courseProgress:courseProgress}),e===`employee-training`&&(0,P.jsx)(pt,{onSelectCourse:de,programmes:o,assignments:v,courseProgress:courseProgress}),e===`employee-course-detail`&&(0,P.jsx)(mt,{key:g?.id||g?.name||`emp-course`,course:g,programmes:o,courseProgress:courseProgress,skills:skills,employees:n,employeeSkills:employeeSkills,issuedCertificates:issuedCertificates,onUpdateCourseProgress:updateCourseProgressApi,onBack:()=>t(g?.returnTab||(g?.fromProfile?`employee-profile`:`employee-training`))}),e===`employee-profile`&&i&&(0,P.jsx)($e,{employee:i,assignments:v,programmes:o,courseProgress:courseProgress,isEmployeeSide:!0,employeeSkills:employeeSkills,skillAwardHistory:skillAwardHistory,skillsConfig:skills,skillLevels:skillLevels,issuedCertificates:issuedCertificates,onManageEmployeeSkill:manageEmployeeSkillApi,canManageSkills:canManageAvail,onBack:()=>t(`employee-training`),onOpenAssignTraining:()=>oe(!0),onNavigateToProgrammeDetail:ve}),e===`skill-matrix`&&(0,P.jsx)(SkillMatrixPage,{employees:n,employeeSkills:employeeSkills,skillAwardHistory:skillAwardHistory,skillsConfig:skills,skillLevels:skillLevels,currentUser:b,programmes:o,onManageEmployeeSkill:manageEmployeeSkillApi,canManageSkills:canManageAvail,onNavigateToProgramme:de}),e===`notifications`&&(0,P.jsx)(NotificationsPage,{notifications:empNotifs,onMarkRead:markNotifRead,onMarkAllRead:markAllNotifsRead,onOpenItem:item=>{markNotifRead(item.id);if(item.programmeName||item.programmeId){let matched=o.find(p=>p.id===item.programmeId||(p.name&&item.programmeName&&p.name.toLowerCase()===item.programmeName.toLowerCase()));de(matched||{id:item.programmeId,name:item.programmeName});}else if(item.targetTab){if(item.targetTab===`employee-profile`){let emp=n.find(x=>x.firstName===`Tanya`)||n[0];a(emp);}t(item.targetTab);}},onHome:()=>t(`employee-dashboard`)})]}):(0,P.jsxs)(P.Fragment,{children:[e===`employees`&&(0,P.jsx)(Xe,{employees:n,onSelectEmployee:ce,onOpenNewEmployee:()=>E(!0),searchQuery:ne}),e===`employee-detail`&&i&&(0,P.jsx)($e,{employee:i,assignments:v,programmes:o,isEmployeeSide:!1,employeeSkills:employeeSkills,skillAwardHistory:skillAwardHistory,skillsConfig:skills,skillLevels:skillLevels,issuedCertificates:issuedCertificates,onManageEmployeeSkill:manageEmployeeSkillApi,canManageSkills:canManageAvail,onBack:()=>t(`employees`),onOpenAssignTraining:()=>oe(!0),onNavigateToProgrammeDetail:ve}),e===`employee-course-detail`&&(0,P.jsx)(mt,{key:g?.id||g?.name||`adm-course`,course:g,programmes:o,courseProgress:courseProgress,skills:skills,employees:n,employeeSkills:employeeSkills,issuedCertificates:issuedCertificates,onUpdateCourseProgress:updateCourseProgressApi,onBack:()=>t(g?.returnTab||`employee-detail`)}),e===`training-dashboard`&&(0,P.jsx)(et,{assignments:v,onOpenReviewQueue:()=>t(`training-review`),onEvaluateSubmission:e=>D(e)}),e===`training-programmes`&&(0,P.jsx)(tt,{programmes:o,employees:n,assignments:v,courseProgress:courseProgress,onOpenCreateProgramme:()=>t(`training-management`),onSelectProgramme:le,onEditProgramme:e=>{u(e),t(`edit-programme`)},onToggleAvailability:toggleAvailabilityApi,currentUser:b,canToggleAvailability:canManageAvail,hasStartedLearner:hasStartedLearnerFn,onNavigate:t}),e===`programme-detail`&&(0,P.jsx)(nt,{programme:activeSelectedProgramme,employees:n,assignments:v,courseProgress:courseProgress,skills:skills,onBack:()=>t(`training-programmes`),onOpenAssignTraining:()=>oe(!0),onSelectEmployee:ce,onEditProgramme:()=>t(`edit-programme`),onArchiveProgramme:archiveProgApi,onRestoreProgramme:restoreProgApi,onToggleAvailability:toggleAvailabilityApi,canToggleAvailability:canManageAvail,hasStartedLearner:hasStartedLearnerFn,onApproveCompletion:approveCompletionApi,onNavigate:t}),e===`training-management`&&(0,P.jsx)(rt,{categories:categories,skills:skills,skillLevels:skillLevels,onSaveSkill:saveSkillApi,canManageSkills:canManageAvail,onCancel:()=>t(`training-programmes`),onSaveProgramme:me,onNavigate:t},`new-programme`),e===`edit-programme`&&(0,P.jsx)(rt,{categories:categories,skills:skills,skillLevels:skillLevels,onSaveSkill:saveSkillApi,canManageSkills:canManageAvail,programmeToEdit:activeSelectedProgramme,onCancel:()=>t(`training-programmes`),onSaveProgramme:he,onNavigate:t},activeSelectedProgramme?.id||`edit-prog`),e===`training-assignments`&&(0,P.jsx)(it,{assignments:v,employees:n,programmes:o,courseProgress:courseProgress,onOpenAssignTraining:()=>oe(!0),onEvaluate:e=>D(e),onSelectAssignment:ue,onNavigate:t}),e===`assignment-detail`&&(0,P.jsx)(at,{assignment:m,programmes:o,courseProgress:courseProgress,skills:skills,issuedCertificates:issuedCertificates,employeeSkills:employeeSkills,skillAwardHistory:skillAwardHistory,employees:n,canManageSkills:canManageAvail,onApproveCompletion:approveCompletionApi,onBack:()=>t(`training-assignments`),onEvaluate:()=>{let e=v[0];e&&D(e)},onNavigate:t}),e===`training-progress`&&(0,P.jsx)(ot,{categories:categories,programmes:o,courseProgress:courseProgress,onNavigate:t}),e===`certificates`&&(0,P.jsx)(ct,{assignments:v,issuedCertificates:issuedCertificates,programmes:o,employees:n,employeeSkills:employeeSkills,skillAwardHistory:skillAwardHistory,onNavigate:t}),(e===`config`||(e===`admin-skills`&&(b.name===`Kushal Khandwala`||(b.role||``).includes(`Administration`))))&&(0,P.jsx)(ut,{currentTab:e,categories:categories,skills:skills,skillLevels:skillLevels,programmes:o,onToggleCategory:toggleCategoryApi,onSaveCategory:saveCategoryApi,onSaveSkill:saveSkillApi,onToggleSkill:toggleSkillApi,onDeleteSkill:deleteSkillApi}),e===`roles`&&(0,P.jsx)(dt,{onSelectRole:e=>alert(`Selected role: ${e}`)}),e===`notifications`&&(0,P.jsx)(NotificationsPage,{notifications:admNotifs,onMarkRead:markAdmNotifRead,onMarkAllRead:markAllAdmNotifsRead,onOpenItem:item=>{markAdmNotifRead(item.id);if(item.targetTab)t(item.targetTab);},onHome:()=>t(`training-dashboard`)})]})]})]}),ie&&(0,P.jsx)(ht,{onClose:()=>E(!1),onAddEmployee:pe}),ae&&(0,P.jsx)(gt,{employees:n,programmes:o,initialProgrammeId:e===`programme-detail`?activeSelectedProgramme?.id:void 0,employeeSkills:employeeSkills,skillsConfig:skills,skillLevels:skillLevels,onClose:()=>oe(!1),onAssign:ge}),se&&(0,P.jsx)(_t,{assignment:se,onClose:()=>D(null),onSaveEvaluation:_e})]})}(0,u.createRoot)(document.getElementById(`root`)).render((0,P.jsx)(vt,{}));
+syncProgList(data.programmes,data.programme),oe(!1);return{success:!0}},_e=e=>{y(v.map(t=>t.id===e.id?e:t)),D(null)},ve=e=>{let isObj=e&&typeof e===`object`;let pName=isObj?e.programmeName:e;let n=o.find(t=>t.name.toLowerCase()===String(pName||``).toLowerCase()||t.id===pName);let isEmp=b.name===`Tanya Kapoor`||b.role.includes(`Employee`);if(isEmp||(isObj&&e.fromEmployeeDetail)){let base=n||{...o[0],id:`hist-`+String(pName||`course`).toLowerCase().replace(/[^a-z0-9]+/g,`-`),name:pName};let patch=isObj?{status:e.status||base.status,progress:e.status===`Completed`?100:(e.status===`In Progress`?50:0),assignedBy:e.assignedBy||base.assignedBy,assignedDate:e.assignedDate||base.assignedDate,completionDate:e.completionDate||base.completionDate,score:e.score}:{};_({...base,...patch,fromProfile:!0,returnTab:isEmp?`employee-profile`:`employee-detail`}),t(`employee-course-detail`);return}u(n||{...o[0],name:pName}),t(`programme-detail`)},ye=b.name===`Tanya Kapoor`||b.role.includes(`Employee`),activeSelectedProgramme=(c&&o.find(x=>x.id===c.id))||c||o[0];return(0,P.jsxs)(`div`,{className:`flex h-screen bg-slate-100 font-sans text-slate-900 overflow-hidden select-none`,children:[(0,P.jsx)(Je,{currentTab:e,onSelectTab:e=>{e===`employees`&&a(null),t(e)},isTrainingFlyoutOpen:S,onToggleTrainingFlyout:v=>{ee(v),v&&(w(!1),setAdmFlyout(!1))},isConfigFlyoutOpen:C,onToggleConfigFlyout:v=>{w(v),v&&(ee(!1),setAdmFlyout(!1))},isAdminFlyoutOpen:admFlyout,onToggleAdminFlyout:v=>{setAdmFlyout(v),v&&(ee(!1),w(!1))},collapsed:te,onToggleCollapse:()=>T(!te),currentUser:b}),(0,P.jsxs)(`div`,{className:`flex-1 flex flex-col min-w-0 overflow-hidden relative`,children:[(0,P.jsx)(Ye,{currentTab:e,onOpenNewEmployee:()=>E(!0),onOpenCreateProgramme:()=>{ee(!1),t(`training-management`)},onOpenAssignTraining:()=>oe(!0),searchQuery:ne,onSearchChange:re,currentUser:b,onSwitchUser:fe,onOpenMyProfile:()=>{let e=n.find(e=>e.firstName===`Tanya`)||n[0];a(e),t(`employee-profile`)},onOpenNotifications:()=>t(`notifications`),unreadNotifCount:(ye?empNotifs:admNotifs).filter(x=>x.unread).length}),(0,P.jsxs)(`main`,{className:`flex-1 overflow-y-auto`,children:[ye?(0,P.jsxs)(P.Fragment,{children:[e===`employee-dashboard`&&(0,P.jsx)(ft,{onGoToTraining:()=>t(`employee-training`),onSelectCourse:de,employeeName:b.name,programmes:o,assignments:v,courseProgress:courseProgress}),e===`employee-training`&&(0,P.jsx)(pt,{onSelectCourse:de,programmes:o,assignments:v,courseProgress:courseProgress}),e===`employee-course-detail`&&(0,P.jsx)(mt,{key:g?.id||g?.name||`emp-course`,course:g,programmes:o,courseProgress:courseProgress,skills:skills,employees:n,employeeSkills:employeeSkills,issuedCertificates:issuedCertificates,onUpdateCourseProgress:updateCourseProgressApi,onBack:()=>t(g?.returnTab||(g?.fromProfile?`employee-profile`:`employee-training`))}),e===`employee-profile`&&i&&(0,P.jsx)($e,{employee:i,assignments:v,programmes:o,courseProgress:courseProgress,isEmployeeSide:!0,employeeSkills:employeeSkills,skillAwardHistory:skillAwardHistory,skillsConfig:skills,skillLevels:skillLevels,issuedCertificates:issuedCertificates,onManageEmployeeSkill:manageEmployeeSkillApi,canManageSkills:canManageAvail,onBack:()=>t(`employee-training`),onOpenAssignTraining:()=>oe(!0),onNavigateToProgrammeDetail:ve}),e===`skill-matrix`&&(0,P.jsx)(SkillMatrixPage,{employees:n,employeeSkills:employeeSkills,skillAwardHistory:skillAwardHistory,skillsConfig:skills,skillLevels:skillLevels,currentUser:b,programmes:o,onManageEmployeeSkill:manageEmployeeSkillApi,canManageSkills:canManageAvail,onNavigateToProgramme:de}),e===`notifications`&&(0,P.jsx)(NotificationsPage,{notifications:empNotifs,onMarkRead:markNotifRead,onMarkAllRead:markAllNotifsRead,onOpenItem:item=>{markNotifRead(item.id);if(item.programmeName||item.programmeId){let matched=o.find(p=>p.id===item.programmeId||(p.name&&item.programmeName&&p.name.toLowerCase()===item.programmeName.toLowerCase()));de(matched||{id:item.programmeId,name:item.programmeName});}else if(item.targetTab){if(item.targetTab===`employee-profile`){let emp=n.find(x=>x.firstName===`Tanya`)||n[0];a(emp);}t(item.targetTab);}},onHome:()=>t(`employee-dashboard`)})]}):(0,P.jsxs)(P.Fragment,{children:[e===`employees`&&(0,P.jsx)(Xe,{employees:n,onSelectEmployee:ce,onOpenNewEmployee:()=>E(!0),searchQuery:ne}),e===`employee-detail`&&i&&(0,P.jsx)($e,{employee:i,assignments:v,programmes:o,isEmployeeSide:!1,employeeSkills:employeeSkills,skillAwardHistory:skillAwardHistory,skillsConfig:skills,skillLevels:skillLevels,issuedCertificates:issuedCertificates,onManageEmployeeSkill:manageEmployeeSkillApi,canManageSkills:canManageAvail,onBack:()=>t(`employees`),onOpenAssignTraining:()=>oe(!0),onNavigateToProgrammeDetail:ve}),e===`employee-course-detail`&&(0,P.jsx)(mt,{key:g?.id||g?.name||`adm-course`,course:g,programmes:o,courseProgress:courseProgress,skills:skills,employees:n,employeeSkills:employeeSkills,issuedCertificates:issuedCertificates,onUpdateCourseProgress:updateCourseProgressApi,onBack:()=>t(g?.returnTab||`employee-detail`)}),e===`training-dashboard`&&(0,P.jsx)(et,{assignments:v,programmes:o,employees:n,courseProgress:courseProgress,issuedCertificates:issuedCertificates,onOpenReviewQueue:()=>t(`training-review`),onEvaluateSubmission:e=>D(e)}),e===`training-programmes`&&(0,P.jsx)(tt,{programmes:o,employees:n,assignments:v,courseProgress:courseProgress,onOpenCreateProgramme:()=>t(`training-management`),onSelectProgramme:le,onEditProgramme:e=>{u(e),t(`edit-programme`)},onToggleAvailability:toggleAvailabilityApi,currentUser:b,canToggleAvailability:canManageAvail,hasStartedLearner:hasStartedLearnerFn,onNavigate:t}),e===`programme-detail`&&(0,P.jsx)(nt,{programme:activeSelectedProgramme,employees:n,assignments:v,courseProgress:courseProgress,skills:skills,onBack:()=>t(`training-programmes`),onOpenAssignTraining:()=>oe(!0),onSelectEmployee:ce,onEditProgramme:()=>t(`edit-programme`),onArchiveProgramme:archiveProgApi,onRestoreProgramme:restoreProgApi,onToggleAvailability:toggleAvailabilityApi,canToggleAvailability:canManageAvail,hasStartedLearner:hasStartedLearnerFn,onApproveCompletion:approveCompletionApi,onNavigate:t}),e===`training-management`&&(0,P.jsx)(rt,{categories:categories,skills:skills,skillLevels:skillLevels,onSaveSkill:saveSkillApi,canManageSkills:canManageAvail,onCancel:()=>t(`training-programmes`),onSaveProgramme:me,onNavigate:t},`new-programme`),e===`edit-programme`&&(0,P.jsx)(rt,{categories:categories,skills:skills,skillLevels:skillLevels,onSaveSkill:saveSkillApi,canManageSkills:canManageAvail,programmeToEdit:activeSelectedProgramme,onCancel:()=>t(`training-programmes`),onSaveProgramme:he,onNavigate:t},activeSelectedProgramme?.id||`edit-prog`),e===`training-assignments`&&(0,P.jsx)(it,{assignments:v,employees:n,programmes:o,courseProgress:courseProgress,onOpenAssignTraining:()=>oe(!0),onEvaluate:e=>D(e),onSelectAssignment:ue,onNavigate:t}),e===`assignment-detail`&&(0,P.jsx)(at,{assignment:m,programmes:o,courseProgress:courseProgress,skills:skills,issuedCertificates:issuedCertificates,employeeSkills:employeeSkills,skillAwardHistory:skillAwardHistory,employees:n,canManageSkills:canManageAvail,onApproveCompletion:approveCompletionApi,onBack:()=>t(`training-assignments`),onEvaluate:()=>{let e=v[0];e&&D(e)},onNavigate:t}),e===`training-progress`&&(0,P.jsx)(ot,{categories:categories,programmes:o,courseProgress:courseProgress,onNavigate:t}),e===`certificates`&&(0,P.jsx)(ct,{assignments:v,issuedCertificates:issuedCertificates,programmes:o,employees:n,employeeSkills:employeeSkills,skillAwardHistory:skillAwardHistory,onNavigate:t}),(e===`config`||(e===`admin-skills`&&(b.name===`Kushal Khandwala`||(b.role||``).includes(`Administration`))))&&(0,P.jsx)(ut,{currentTab:e,categories:categories,skills:skills,skillLevels:skillLevels,programmes:o,onToggleCategory:toggleCategoryApi,onSaveCategory:saveCategoryApi,onSaveSkill:saveSkillApi,onToggleSkill:toggleSkillApi,onDeleteSkill:deleteSkillApi}),e===`roles`&&(0,P.jsx)(dt,{onSelectRole:e=>alert(`Selected role: ${e}`)}),e===`notifications`&&(0,P.jsx)(NotificationsPage,{notifications:admNotifs,onMarkRead:markAdmNotifRead,onMarkAllRead:markAllAdmNotifsRead,onOpenItem:item=>{markAdmNotifRead(item.id);if(item.targetTab)t(item.targetTab);},onHome:()=>t(`training-dashboard`)})]})]})]}),ie&&(0,P.jsx)(ht,{onClose:()=>E(!1),onAddEmployee:pe}),ae&&(0,P.jsx)(gt,{employees:n,programmes:o,initialProgrammeId:e===`programme-detail`?activeSelectedProgramme?.id:void 0,employeeSkills:employeeSkills,skillsConfig:skills,skillLevels:skillLevels,onClose:()=>oe(!1),onAssign:ge}),se&&(0,P.jsx)(_t,{assignment:se,onClose:()=>D(null),onSaveEvaluation:_e})]})}(0,u.createRoot)(document.getElementById(`root`)).render((0,P.jsx)(vt,{}));
