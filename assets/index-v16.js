@@ -706,13 +706,13 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){
           (()=>{
             let r=60,circ=2*Math.PI*r,off=0,activeSeg=hoverSeg?distSegs.find(x=>x.label===hoverSeg):null;
             return(0,P.jsxs)("div",{className:"relative w-44 h-44 flex items-center justify-center shrink-0",children:[
-              activeSeg&&(0,P.jsxs)("div",{className:"absolute -top-2 left-1/2 -translate-x-1/2 -translate-y-full z-30 bg-slate-900 text-white rounded-lg shadow-xl px-3 py-2 text-xs pointer-events-none whitespace-nowrap",children:[
-                (0,P.jsxs)("div",{className:"flex items-center gap-2 font-bold",children:[
-                  (0,P.jsx)("span",{className:"w-2.5 h-2.5 rounded-full shrink-0",style:{backgroundColor:activeSeg.color}}),
+              activeSeg&&(0,P.jsxs)("div",{style:{position:"absolute",top:"-6px",left:"50%",transform:"translate(-50%, -100%)",zIndex:30,background:"#0f172a",color:"#ffffff",borderRadius:"8px",padding:"8px 12px",fontSize:"12px",lineHeight:"1.35",pointerEvents:"none",whiteSpace:"nowrap",boxShadow:"0 10px 25px -5px rgba(15,23,42,0.3)"},children:[
+                (0,P.jsxs)("div",{style:{display:"flex",alignItems:"center",gap:"8px",fontWeight:700},children:[
+                  (0,P.jsx)("span",{style:{width:"10px",height:"10px",borderRadius:"9999px",backgroundColor:activeSeg.color,display:"inline-block"}}),
                   (0,P.jsx)("span",{children:activeSeg.label})
                 ]}),
-                (0,P.jsx)("div",{className:"text-slate-200 mt-0.5 tabular-nums font-semibold",children:activeSeg.count+" Trainings ("+activeSeg.pct+"%)"}),
-                (0,P.jsx)("div",{className:"text-[10px] text-slate-400 tabular-nums",children:activeSeg.count+" of "+distTot+" Total Trainings"})
+                (0,P.jsx)("div",{style:{color:"#e2e8f0",marginTop:"2px",fontWeight:600},children:activeSeg.count+" Trainings ("+activeSeg.pct+"%)"}),
+                (0,P.jsx)("div",{style:{color:"#94a3b8",fontSize:"10px"},children:activeSeg.count+" of "+distTot+" Total Trainings"})
               ]}),
               (0,P.jsxs)("svg",{viewBox:"0 0 180 180",className:"w-44 h-44 -rotate-90",children:[
                 (0,P.jsx)("circle",{cx:90,cy:90,r:r,fill:"none",stroke:"#f1f5f9",strokeWidth:34}),
@@ -807,29 +807,40 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){
             {range:"70–79%",tag:"Passing",count:b70,color:"#45c195"},
             {range:"< 70%",tag:"Needs Retake",count:below70,color:"#c8377c"}
           ].map(b=>({...b,pct:totEnr>0?Math.round(b.count/totEnr*100):0}));
-          let maxCount=Math.max(1,...bands.map(b=>b.count));
-          let passRateAll=totEnr>0?Math.round(totCert/totEnr*100):0;
+          let maxPct=Math.max(1,...bands.map(b=>b.pct)),yMax=Math.max(60,Math.ceil(maxPct/20)*20),ticks=[0,Math.round(yMax/3),Math.round(yMax*2/3),yMax];
+          let passRateAll=totEnr>0?Math.round(totCert/totEnr*100):0,hovObj=hoverBand?bands.find(b=>b.range===hoverBand):null;
           return(0,P.jsxs)("div",{className:"space-y-4 border-t lg:border-t-0 lg:border-l border-slate-100 lg:pl-6 flex flex-col justify-between",children:[
-            (0,P.jsxs)("div",{className:"space-y-4",children:[
+            (0,P.jsxs)("div",{className:"space-y-3",children:[
               (0,P.jsxs)("div",{className:"flex items-center justify-between",children:[
                 (0,P.jsx)("h3",{className:"text-xs font-bold text-slate-600 uppercase tracking-wider",children:"Assessment Score Distribution"}),
                 (0,P.jsx)("span",{className:"text-[11px] font-semibold text-slate-500 tabular-nums",children:totEnr+" Evaluated"})
               ]}),
-              (0,P.jsx)("div",{className:"pt-4 pb-1 px-2 bg-slate-50/60 border border-slate-100 rounded-xl",children:(0,P.jsx)("div",{className:"grid grid-cols-4 gap-3 items-end h-44 pt-6",children:bands.map(b=>{
-                let barH=Math.max(10,Math.round(b.count/maxCount*100)),isHov=hoverBand===b.range,dim=hoverBand&&!isHov;
-                return(0,P.jsxs)("div",{onMouseEnter:()=>setHoverBand(b.range),onMouseLeave:()=>setHoverBand(null),className:"relative flex flex-col items-center justify-end h-full cursor-pointer group",children:[
-                  isHov&&(0,P.jsxs)("div",{className:"absolute -top-2 left-1/2 -translate-x-1/2 -translate-y-full z-30 bg-slate-900 text-white rounded-lg shadow-xl px-2.5 py-1.5 text-[11px] pointer-events-none whitespace-nowrap",children:[
-                    (0,P.jsxs)("div",{className:"flex items-center gap-1.5 font-bold",children:[
-                      (0,P.jsx)("span",{className:"w-2 h-2 rounded-full shrink-0",style:{backgroundColor:b.color}}),
-                      (0,P.jsx)("span",{children:b.range+" • "+b.tag})
-                    ]}),
-                    (0,P.jsx)("div",{className:"text-slate-200 tabular-nums mt-0.5",children:b.count+" Evaluated ("+b.pct+"%)"})
+              (0,P.jsxs)("div",{style:{position:"relative",background:"#f8fafc",border:"1px solid #e2e8f0",borderRadius:"12px",padding:"10px 8px 6px 8px"},children:[
+                hovObj&&(0,P.jsxs)("div",{style:{position:"absolute",top:"8px",right:"10px",zIndex:30,background:"#0f172a",color:"#ffffff",borderRadius:"8px",padding:"6px 10px",fontSize:"11px",lineHeight:"1.35",pointerEvents:"none",boxShadow:"0 10px 25px -5px rgba(15,23,42,0.25)"},children:[
+                  (0,P.jsxs)("div",{style:{display:"flex",alignItems:"center",gap:"6px",fontWeight:700},children:[
+                    (0,P.jsx)("span",{style:{width:"8px",height:"8px",borderRadius:"9999px",backgroundColor:hovObj.color,display:"inline-block"}}),
+                    (0,P.jsx)("span",{children:hovObj.range+" • "+hovObj.tag})
                   ]}),
-                  (0,P.jsx)("span",{className:"text-[11px] font-bold text-[#4345e5] tabular-nums mb-1.5",children:b.pct+"%"}),
-                  (0,P.jsx)("div",{className:"w-full max-w-[38px] rounded-t-md transition-all duration-200",style:{height:barH+"%",backgroundColor:b.color,opacity:dim?0.35:1}}),
-                  (0,P.jsx)("span",{className:"text-[10px] font-semibold text-slate-600 mt-2 whitespace-nowrap",children:b.range})
-                ]},b.range);
-              })})}),
+                  (0,P.jsx)("div",{style:{color:"#e2e8f0",marginTop:"2px"},children:hovObj.count+" of "+totEnr+" Evaluated ("+hovObj.pct+"%)"})
+                ]}),
+                (0,P.jsxs)("svg",{viewBox:"0 0 320 186",style:{width:"100%",height:"186px",display:"block"},children:[
+                  ticks.map(t=>{
+                    let ty=150-(t/yMax)*124;
+                    return(0,P.jsxs)("g",{children:[
+                      (0,P.jsx)("line",{x1:36,y1:ty,x2:308,y2:ty,stroke:t===0?"#cbd5e1":"#e2e8f0",strokeWidth:1,strokeDasharray:t===0?void 0:"3 3"}),
+                      (0,P.jsx)("text",{x:30,y:ty+3.5,textAnchor:"end",fontSize:"10",fill:"#94a3b8",fontWeight:"600",children:t+"%"})
+                    ]},t);
+                  }),
+                  bands.map((b,i)=>{
+                    let slotW=272/4,bw=38,bx=36+i*slotW+(slotW-bw)/2,bh=Math.max(4,(b.pct/yMax)*124),by=150-bh,dim=hoverBand&&hoverBand!==b.range;
+                    return(0,P.jsxs)("g",{onMouseEnter:()=>setHoverBand(b.range),onMouseLeave:()=>setHoverBand(null),style:{cursor:"pointer",opacity:dim?0.35:1,transition:"opacity 150ms ease"},children:[
+                      (0,P.jsx)("rect",{x:bx,y:by,width:bw,height:bh,rx:5,fill:b.color}),
+                      (0,P.jsx)("text",{x:bx+bw/2,y:by-6,textAnchor:"middle",fontSize:"11",fontWeight:"700",fill:"#4345e5",children:b.pct+"%"}),
+                      (0,P.jsx)("text",{x:bx+bw/2,y:168,textAnchor:"middle",fontSize:"10.5",fontWeight:"600",fill:"#475569",children:b.range})
+                    ]},b.range);
+                  })
+                ]})
+              ]}),
               (0,P.jsx)("div",{className:"space-y-1.5 pt-1",children:bands.map(b=>(0,P.jsxs)("div",{onMouseEnter:()=>setHoverBand(b.range),onMouseLeave:()=>setHoverBand(null),className:"flex items-center justify-between text-xs px-2 py-1 rounded-md transition-colors cursor-pointer "+(hoverBand===b.range?"bg-slate-50":""),children:[
                 (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
                   (0,P.jsx)("span",{className:"w-2.5 h-2.5 rounded-full shrink-0",style:{backgroundColor:b.color}}),
