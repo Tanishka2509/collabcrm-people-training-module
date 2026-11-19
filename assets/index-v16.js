@@ -439,15 +439,15 @@ function GraphPeriodFilter({value:v,onChange:onC}){
     return (ms[Math.max(0,Math.min(11,parseInt(m,10)-1))]||"Nov")+" "+y;
   };
   let curShort=v.preset==="custom"?fmtCustom(v.customMonth):(presets.find(p=>p.id===v.preset)?.short||"Nov 2026");
-  return(0,P.jsxs)("div",{ref:boxRef,className:"relative flex items-center gap-2 shrink-0",children:[
+  return(0,P.jsxs)("div",{ref:boxRef,style:{position:"relative",display:"flex",alignItems:"center",gap:"8px",flexShrink:0},children:[
     (0,P.jsx)("span",{className:"text-xs font-semibold text-slate-600 tabular-nums",children:curShort}),
-    (0,P.jsx)("button",{type:"button",onClick:()=>setOpen(o=>!o),title:"Filter period",className:"w-8 h-8 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 flex items-center justify-center text-slate-600 shadow-2xs transition-colors cursor-pointer",children:(0,P.jsx)("svg",{viewBox:"0 0 24 24",width:15,height:15,fill:"none",stroke:"currentColor",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round",children:(0,P.jsx)("polygon",{points:"22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"})})}),
-    open&&(0,P.jsxs)("div",{className:"absolute right-0 top-full mt-2 w-[312px] bg-white border border-slate-200 rounded-xl shadow-xl p-3 z-40",children:[
-      (0,P.jsx)("div",{className:"grid grid-cols-3 gap-2",children:presets.map(p=>{
+    (0,P.jsx)("button",{type:"button",onClick:()=>setOpen(o=>!o),"aria-label":"Filter period",style:{width:"32px",height:"32px",borderRadius:"8px",border:"1px solid #e2e8f0",background:"#ffffff",display:"flex",alignItems:"center",justifyContent:"center",color:"#475569",cursor:"pointer"},children:(0,P.jsx)("svg",{viewBox:"0 0 24 24",width:15,height:15,fill:"none",stroke:"currentColor",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round",children:(0,P.jsx)("polygon",{points:"22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"})})}),
+    open&&(0,P.jsxs)("div",{style:{position:"absolute",right:0,top:"calc(100% + 8px)",width:"332px",background:"#ffffff",border:"1px solid #e2e8f0",borderRadius:"12px",boxShadow:"0 12px 30px -6px rgba(15,23,42,0.16)",padding:"12px",zIndex:50},children:[
+      (0,P.jsx)("div",{style:{display:"grid",gridTemplateColumns:"repeat(3, 1fr)",gap:"8px"},children:presets.map(p=>{
         let active=v.preset===p.id;
-        return(0,P.jsx)("button",{type:"button",onClick:()=>{onC({preset:p.id,customMonth:v.customMonth||"2026-11"});setShowCustom(!1);setOpen(!1);},className:"px-2.5 py-2 rounded-lg text-xs border transition-colors cursor-pointer whitespace-nowrap "+(active?"bg-[#4345e5] text-white border-[#4345e5] font-semibold shadow-2xs":"bg-white text-slate-700 border-slate-200 hover:bg-slate-50 font-medium"),children:p.label},p.id);
+        return(0,P.jsx)("button",{type:"button",onClick:()=>{onC({preset:p.id,customMonth:v.customMonth||"2026-11"});setShowCustom(!1);setOpen(!1);},style:{padding:"8px 6px",borderRadius:"8px",fontSize:"12px",fontWeight:active?600:500,background:active?"#4345e5":"#ffffff",color:active?"#ffffff":"#334155",border:active?"1px solid #4345e5":"1px solid #e2e8f0",cursor:"pointer",whiteSpace:"nowrap",textAlign:"center",transition:"all 120ms ease"},children:p.label},p.id);
       })}),
-      (0,P.jsxs)("button",{type:"button",onClick:()=>setShowCustom(c=>!c),className:"mt-2 w-full flex items-center gap-2 px-3 py-2 rounded-lg border text-xs font-medium transition-colors cursor-pointer "+(v.preset==="custom"||showCustom?"border-[#4345e5] text-[#4345e5] bg-indigo-50/40":"border-slate-200 text-slate-700 bg-white hover:bg-slate-50"),children:[
+      (0,P.jsxs)("button",{type:"button",onClick:()=>setShowCustom(c=>!c),style:{marginTop:"8px",width:"100%",display:"flex",alignItems:"center",gap:"8px",padding:"8px 12px",borderRadius:"8px",fontSize:"12px",fontWeight:500,background:v.preset==="custom"||showCustom?"#eef2ff":"#ffffff",color:v.preset==="custom"||showCustom?"#4345e5":"#334155",border:v.preset==="custom"||showCustom?"1px solid #4345e5":"1px solid #e2e8f0",cursor:"pointer"},children:[
         (0,P.jsxs)("svg",{viewBox:"0 0 24 24",width:14,height:14,fill:"none",stroke:"currentColor",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round",children:[
           (0,P.jsx)("rect",{x:3,y:4,width:18,height:18,rx:2,ry:2}),
           (0,P.jsx)("line",{x1:16,y1:2,x2:16,y2:6}),
@@ -456,9 +456,7 @@ function GraphPeriodFilter({value:v,onChange:onC}){
         ]}),
         (0,P.jsx)("span",{children:"Custom Month"})
       ]}),
-      showCustom&&(0,P.jsxs)("div",{className:"mt-2 flex items-center gap-2 pt-2 border-t border-slate-100",children:[
-        (0,P.jsx)("input",{type:"month",value:v.customMonth||"2026-11",onChange:ev=>{if(ev.target.value){onC({preset:"custom",customMonth:ev.target.value});setOpen(!1);setShowCustom(!1);}},className:"flex-1 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-700 focus:outline-none focus:border-[#4345e5]"})
-      ]})
+      showCustom&&(0,P.jsx)("div",{style:{marginTop:"8px",paddingTop:"8px",borderTop:"1px solid #f1f5f9",display:"flex",alignItems:"center"},children:(0,P.jsx)("input",{type:"month",value:v.customMonth||"2026-11",onChange:ev=>{if(ev.target.value){onC({preset:"custom",customMonth:ev.target.value});setOpen(!1);setShowCustom(!1);}},style:{width:"100%",border:"1px solid #cbd5e1",borderRadius:"8px",padding:"6px 10px",fontSize:"12px",color:"#334155",outline:"none"}})})
     ]})
   ]});
 }
@@ -496,7 +494,7 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){
     {label:"In Progress",count:distCounts[0],pct:rawPcts[0],color:"#f5a623"},
     {label:"Overdue",count:distCounts[1],pct:rawPcts[1],color:"#c8377c"},
     {label:"Completed",count:distCounts[2],pct:rawPcts[2],color:"#548c1c"},
-    {label:"Not Started",count:distCounts[3],pct:rawPcts[3],color:"#787e85"}
+    {label:"Pending",count:distCounts[3],pct:rawPcts[3],color:"#787e85"}
   ];
 
   let deptPresets={
@@ -694,8 +692,8 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){
       (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-4",children:[
         (0,P.jsxs)("div",{className:"flex items-start justify-between gap-3",children:[
           (0,P.jsxs)("div",{children:[
-            (0,P.jsx)("h2",{className:"text-base font-bold text-slate-900",children:"Assessment Lifecycle Distribution"}),
-            (0,P.jsx)("p",{className:"text-xs text-slate-500",children:"Breakdown of training assessments by lifecycle status"})
+            (0,P.jsx)("h2",{className:"text-base font-bold text-slate-900",children:"Employee Lifecycle Distribution"}),
+            (0,P.jsx)("p",{className:"text-xs text-slate-500",children:"Real-time breakdown of employees by training lifecycle status"})
           ]}),
           (0,P.jsx)(GraphPeriodFilter,{value:distFilter,onChange:setDistFilter})
         ]}),
@@ -708,8 +706,8 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){
                   (0,P.jsx)("span",{style:{width:"10px",height:"10px",borderRadius:"9999px",backgroundColor:activeSeg.color,display:"inline-block"}}),
                   (0,P.jsx)("span",{children:activeSeg.label})
                 ]}),
-                (0,P.jsx)("div",{style:{color:"#e2e8f0",marginTop:"2px",fontWeight:600},children:activeSeg.count+" Trainings ("+activeSeg.pct+"%)"}),
-                (0,P.jsx)("div",{style:{color:"#94a3b8",fontSize:"10px"},children:activeSeg.count+" of "+distTot+" Total Trainings"})
+                (0,P.jsx)("div",{style:{color:"#e2e8f0",marginTop:"2px",fontWeight:600},children:activeSeg.count+" Employees ("+activeSeg.pct+"%)"}),
+                (0,P.jsx)("div",{style:{color:"#94a3b8",fontSize:"10px"},children:activeSeg.count+" of "+distTot+" Total Employees"})
               ]}),
               (0,P.jsxs)("svg",{viewBox:"0 0 180 180",className:"w-44 h-44 -rotate-90",children:[
                 (0,P.jsx)("circle",{cx:90,cy:90,r:r,fill:"none",stroke:"#f1f5f9",strokeWidth:34}),
@@ -728,10 +726,10 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){
                 (0,P.jsx)("span",{className:"w-2.5 h-2.5 rounded-full shrink-0",style:{backgroundColor:s.color}}),
                 (0,P.jsx)("span",{className:"text-slate-700 font-medium text-xs sm:text-sm",children:s.label})
               ]}),
-              (0,P.jsx)("span",{className:"font-bold text-[#4345e5] tabular-nums text-xs sm:text-sm",children:s.count+" ("+s.pct+"%)"})
+              (0,P.jsx)("span",{className:"font-bold tabular-nums text-xs sm:text-sm",style:{color:"#4345e5"},children:s.count+" ("+s.pct+"%)"})
             ]},s.label)),
             (0,P.jsxs)("div",{className:"pt-2 mt-2 border-t border-slate-100 flex items-center justify-between px-2 text-xs",children:[
-              (0,P.jsx)("span",{className:"font-semibold text-slate-500",children:"Total Trainings"}),
+              (0,P.jsx)("span",{className:"font-semibold text-slate-500",children:"Total Employees"}),
               (0,P.jsx)("span",{className:"font-bold text-slate-900 tabular-nums",children:distTot+" (100%)"})
             ]})
           ]})
@@ -753,7 +751,7 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){
                 (0,P.jsx)("span",{className:"w-2.5 h-2.5 rounded-full shrink-0",style:{backgroundColor:d.color}}),
                 (0,P.jsx)("span",{className:"text-slate-800",children:d.name})
               ]}),
-              (0,P.jsx)("span",{className:"text-[#4345e5] font-bold tabular-nums",children:d.done+"/"+d.total+" Completed ("+pct+"%)"})
+              (0,P.jsx)("span",{className:"font-bold tabular-nums",style:{color:"#4345e5"},children:d.done+"/"+d.total+" Completed ("+pct+"%)"})
             ]}),
             (0,P.jsx)("div",{className:"w-full bg-slate-100 h-2.5 rounded-full overflow-hidden",children:(0,P.jsx)("div",{className:"h-full rounded-full transition-all duration-300",style:{width:pct+"%",backgroundColor:d.color}})})
           ]},d.name);
@@ -778,7 +776,7 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){
                 (0,P.jsx)("span",{className:"font-semibold text-xs text-slate-800 truncate",children:tr.name}),
                 (0,P.jsx)("span",{className:"text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 shrink-0",children:tr.cat})
               ]}),
-              (0,P.jsx)("span",{className:"text-xs font-bold text-[#4345e5] tabular-nums shrink-0",children:passPct+"% Pass Rate"})
+              (0,P.jsx)("span",{className:"text-xs font-bold tabular-nums shrink-0",style:{color:"#4345e5"},children:passPct+"% Pass Rate"})
             ]}),
             (0,P.jsx)("div",{className:"w-full bg-slate-200 h-2.5 rounded-full overflow-hidden",children:(0,P.jsx)("div",{className:"h-2.5 rounded-full transition-all duration-300",style:{width:passPct+"%",backgroundColor:tr.color}})}),
             (0,P.jsxs)("div",{className:"flex justify-between text-[11px] text-slate-500 mt-1",children:[
@@ -838,7 +836,7 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){
                 (0,P.jsx)("span",{className:"w-2.5 h-2.5 rounded-full shrink-0",style:{backgroundColor:b.color}}),
                 (0,P.jsx)("span",{className:"text-slate-700 font-medium",children:b.range+" ("+b.tag+")"})
               ]}),
-              (0,P.jsx)("span",{className:"font-bold text-[#4345e5] tabular-nums",children:b.count+" ("+b.pct+"%)"})
+              (0,P.jsx)("span",{className:"font-bold tabular-nums",style:{color:"#4345e5"},children:b.count+" ("+b.pct+"%)"})
             ]},b.range))})
           ]}),
           (0,P.jsxs)("div",{className:"p-3 bg-indigo-50/50 rounded-lg border border-indigo-100 mt-2",children:[
