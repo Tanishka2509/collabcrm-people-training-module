@@ -733,12 +733,9 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){
         (0,P.jsxs)("div",{className:"flex items-start justify-between gap-3 flex-wrap",children:[
           (0,P.jsxs)("div",{children:[
             (0,P.jsx)("h2",{className:"text-base font-bold text-slate-900",children:"Participation and Completion"}),
-            (0,P.jsx)("p",{className:"text-xs text-slate-500",children:"Assessment completion rate by department"})
+            (0,P.jsx)("p",{className:"text-xs text-slate-500",children:"Department-wise employee training completion overview"})
           ]}),
-          (0,P.jsxs)("div",{className:"flex items-center gap-2.5",children:[
-            (0,P.jsx)("span",{className:"text-xs font-bold text-[#4d6d22] bg-[#548c1c]/10 border border-[#548c1c]/25 px-2.5 py-1 rounded",children:"Target: 80%"}),
-            (0,P.jsx)(GraphPeriodFilter,{value:deptFilter,onChange:setDeptFilter})
-          ]})
+          (0,P.jsx)(GraphPeriodFilter,{value:deptFilter,onChange:setDeptFilter})
         ]}),
         (0,P.jsx)("div",{className:"space-y-4 pt-1 text-sm",children:deptRows.map(d=>{
           let pct=d.total>0?Math.round(d.done/d.total*100):0;
