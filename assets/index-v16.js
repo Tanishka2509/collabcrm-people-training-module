@@ -418,45 +418,109 @@ function CollabLookupFilter({ fields, mode, onModeChange, tokens, onTokensChange
 skillHistModal&&(0,P.jsx)("div",{className:"fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4",onClick:()=>setSkillHistModal(null),children:(0,P.jsxs)("div",{className:"bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden border border-purple-200",onClick:ev=>ev.stopPropagation(),children:[(0,P.jsxs)("div",{className:"px-5 py-4 border-b border-purple-200 flex items-center justify-between",style:{backgroundColor:"#faf5ff"},children:[(0,P.jsxs)("div",{children:[(0,P.jsx)("span",{className:"text-[10px] font-bold uppercase tracking-wider text-purple-700",children:"Skill Award History"}),(0,P.jsxs)("h3",{className:"text-sm font-bold text-slate-900",children:[e.firstName," ",e.lastName," — Skill Progression & Sources"]})]}),(0,P.jsx)("button",{type:"button",onClick:()=>setSkillHistModal(null),className:"text-slate-400 hover:text-slate-700 text-sm font-bold px-2 py-1",children:"✕"})]}),(0,P.jsx)("div",{className:"p-5 overflow-y-auto space-y-3 text-xs",style:{maxHeight:"65vh"},children:(()=>{let filtered=skillHistModal.skillFilter?empHistRecs.filter(h=>h.skillId===skillHistModal.skillFilter||h.skillName===skillHistModal.skillFilter):empHistRecs;let matchedSkills=empSkillRecs.filter(sk=>!skillHistModal.skillFilter||sk.skillId===skillHistModal.skillFilter||sk.skillName===skillHistModal.skillFilter);return(0,P.jsxs)(P.Fragment,{children:[matchedSkills.map((sk,i)=>(0,P.jsxs)("div",{className:"p-3 rounded-xl border border-purple-200 bg-purple-50/40 space-y-1.5",children:[(0,P.jsxs)("div",{className:"flex items-center justify-between",children:[(0,P.jsx)("span",{className:"font-bold text-slate-900",children:sk.skillName}),(0,P.jsxs)("span",{className:"px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-purple-700 border border-purple-200",children:["Current Level: ",sk.skillLevel]})]}),sk.sourceTrainingName&&(0,P.jsxs)("div",{className:"text-[11px] text-purple-700",children:["Source Training(s): ",Array.isArray(sk.sources)&&sk.sources.length>0?sk.sources.map(s=>s.trainingName+" ("+s.level+")").join(", "):sk.sourceTrainingName]})]},sk.skillId||i)),filtered.length===0?(0,P.jsx)("div",{className:"p-6 text-center text-slate-500 bg-slate-50 rounded-xl border border-slate-200",children:"No training skill award history recorded for this filter yet."}):filtered.map((h,i)=>(0,P.jsxs)("div",{className:"p-3 rounded-xl border border-slate-200 bg-white space-y-1",children:[(0,P.jsxs)("div",{className:"flex items-center justify-between gap-2",children:[(0,P.jsxs)("span",{className:"font-bold text-slate-900",children:[h.skillName," • ",h.awardedSkillLevel]}),(0,P.jsx)("span",{className:"px-2 py-0.5 rounded-full text-[10px] font-bold border "+(h.outcome==="upgraded"?"bg-purple-50 text-purple-700 border-purple-200":h.outcome==="retained"?"bg-amber-50 text-amber-800 border-amber-200":"bg-emerald-50 text-emerald-700 border-emerald-200"),children:h.outcome==="upgraded"?("Upgraded ("+h.previousLevel+" → "+h.finalLevel+")"):h.outcome==="retained"?("Retained Higher Level ("+h.finalLevel+")"):h.outcome==="added"?("Added ("+h.finalLevel+")"):h.finalLevel})]}),(0,P.jsxs)("div",{className:"text-[11px] text-slate-600",children:["Source Training: ",(0,P.jsx)("strong",{children:h.sourceTrainingName||"Manual Update"})]}),(0,P.jsxs)("div",{className:"text-[10px] text-slate-400 flex flex-wrap gap-3",children:[(0,P.jsxs)("span",{children:["Awarded: ",h.awardedDate]}),(0,P.jsxs)("span",{children:["Created: ",String(h.createdDate||h.awardedDate).slice(0,10)]}),(0,P.jsxs)("span",{children:["Updated: ",String(h.updatedDate||h.awardedDate).slice(0,10)]})]})]},h.id||i))]})})()}),(0,P.jsx)("div",{className:"px-5 py-3 bg-slate-50 border-t border-slate-100 flex justify-end",children:(0,P.jsx)("button",{type:"button",onClick:()=>setSkillHistModal(null),className:"px-4 py-1.5 rounded-lg border border-slate-300 bg-white text-slate-700 font-semibold text-xs",children:"Close"})})]})}),
 showManageSkillModal&&(!isEmpSide&&canManageSkills!==!1)&&(0,P.jsx)("div",{className:"fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4",onClick:()=>setShowManageSkillModal(!1),children:(0,P.jsxs)("div",{className:"bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-purple-200",onClick:ev=>ev.stopPropagation(),children:[(0,P.jsxs)("div",{className:"px-5 py-4 border-b border-purple-200 flex items-center justify-between",style:{backgroundColor:"#faf5ff"},children:[(0,P.jsx)("h3",{className:"text-sm font-bold text-slate-900",children:"Manage Employee Skills — "+e.firstName+" "+e.lastName}),(0,P.jsx)("button",{type:"button",onClick:()=>setShowManageSkillModal(!1),className:"text-slate-400 hover:text-slate-700 text-sm font-bold px-2",children:"✕"})]}),(0,P.jsxs)("div",{className:"p-5 space-y-4 text-xs",children:[mgrSkillErr&&(0,P.jsx)("div",{className:"bg-rose-50 border border-rose-200 text-rose-700 font-semibold px-3 py-2 rounded-lg",children:mgrSkillErr}),(0,P.jsxs)("div",{className:"grid grid-cols-1 sm:grid-cols-2 gap-3",children:[(0,P.jsxs)("select",{value:mgrSkillId,onChange:ev=>setMgrSkillId(ev.target.value),className:"bg-white border border-purple-200 rounded-lg px-3 py-2 text-xs",children:[(0,P.jsx)("option",{value:"",children:"Select Skill..."}),(Array.isArray(skillsConfig)?skillsConfig:DEFAULT_SKILLS_SEED).filter(sk=>sk.active!==!1).map(sk=>(0,P.jsx)("option",{value:sk.id,children:sk.name},sk.id))]}),(0,P.jsxs)("select",{value:mgrSkillLevel,onChange:ev=>setMgrSkillLevel(ev.target.value),className:"bg-white border border-purple-200 rounded-lg px-3 py-2 text-xs",children:(Array.isArray(skillLevels)&&skillLevels.length>0?skillLevels:DEFAULT_SKILL_LEVELS_SEED).map(lv=>(0,P.jsx)("option",{value:lv.name,children:lv.name},lv.id||lv.name))})]}),(0,P.jsx)("div",{className:"flex justify-end",children:(0,P.jsx)("button",{type:"button",onClick:async()=>{setMgrSkillErr("");if(!mgrSkillId){setMgrSkillErr("Please select a skill.");return;}let res=await onManageEmployeeSkill({action:"add",employeeId:empKey,skillId:mgrSkillId,skillLevel:mgrSkillLevel});if(res&&res.success===!1){setMgrSkillErr(res.message||"Could not add skill.")}else{setMgrSkillId("");}},style:{backgroundColor:"#7c3aed"},className:"px-4 py-1.5 rounded-lg text-white font-bold text-xs cursor-pointer",children:"Add Skill to Profile"})}),(0,P.jsx)("div",{className:"border-t border-slate-100 pt-3 space-y-2 max-h-56 overflow-y-auto",children:empSkillRecs.map((sk,idx)=>(0,P.jsxs)("div",{className:"flex items-center justify-between gap-2 p-2.5 bg-slate-50 rounded-lg border border-slate-200",children:[(0,P.jsxs)("div",{children:[(0,P.jsx)("div",{className:"font-bold text-slate-900",children:sk.skillName}),sk.sourceTrainingName&&(0,P.jsxs)("div",{className:"text-[10px] text-purple-700",children:["Source: ",sk.sourceTrainingName]})]}),(0,P.jsxs)("div",{className:"flex items-center gap-2",children:[(0,P.jsx)("select",{value:sk.skillLevel,onChange:async ev=>{await onManageEmployeeSkill({action:"update",employeeId:empKey,skillId:sk.skillId,skillLevel:ev.target.value})},className:"bg-white border border-slate-300 rounded px-2 py-1 text-[11px]",children:(Array.isArray(skillLevels)&&skillLevels.length>0?skillLevels:DEFAULT_SKILL_LEVELS_SEED).map(lv=>(0,P.jsx)("option",{value:lv.name,children:lv.name},lv.id||lv.name))}),(0,P.jsx)("button",{type:"button",onClick:async()=>{await onManageEmployeeSkill({action:"remove",employeeId:empKey,skillId:sk.skillId})},className:"text-rose-600 hover:bg-rose-50 px-2 py-1 rounded text-[11px] font-semibold cursor-pointer",children:"Remove"})]})]},sk.skillId||idx))})]}),(0,P.jsx)("div",{className:"px-5 py-3 bg-slate-50 border-t border-slate-100 flex justify-end",children:(0,P.jsx)("button",{type:"button",onClick:()=>setShowManageSkillModal(!1),className:"px-4 py-1.5 rounded-lg border border-slate-300 bg-white text-slate-700 font-semibold text-xs",children:"Done"})})]})})]})}
 function GraphPeriodFilter({value:v,onChange:onC}){
-  let [open,setOpen]=(0,l.useState)(!1),[showCustom,setShowCustom]=(0,l.useState)(!1),boxRef=(0,l.useRef)(null);
+  let now=new Date(),todayY=now.getFullYear(),todayM=now.getMonth(),todayD=now.getDate();
+  let pad2=n=>String(n).padStart(2,"0");
+  let toIso=(y,m,d)=>y+"-"+pad2(m+1)+"-"+pad2(d);
+  let todayIso=toIso(todayY,todayM,todayD);
+  let [open,setOpen]=(0,l.useState)(!1);
+  let [showCal,setShowCal]=(0,l.useState)(!1);
+  let [viewY,setViewY]=(0,l.useState)(todayY);
+  let [viewM,setViewM]=(0,l.useState)(todayM);
+  let [draftStart,setDraftStart]=(0,l.useState)(v.customStart||"");
+  let [draftEnd,setDraftEnd]=(0,l.useState)(v.customEnd||"");
+  let boxRef=(0,l.useRef)(null);
   (0,l.useEffect)(()=>{
     if(!open)return;
-    let onDoc=ev=>{if(boxRef.current&&!boxRef.current.contains(ev.target)){setOpen(!1);setShowCustom(!1);}};
+    let onDoc=ev=>{if(boxRef.current&&!boxRef.current.contains(ev.target)){setOpen(!1);setShowCal(!1);}};
     document.addEventListener("mousedown",onDoc);
     return()=>document.removeEventListener("mousedown",onDoc);
   },[open]);
+  let fullMonths=["January","February","March","April","May","June","July","August","September","October","November","December"];
+  let shortMonths=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   let presets=[
-    {id:"this_month",label:"This Month",short:"Nov 2026"},
-    {id:"last_month",label:"Last Month",short:"Oct 2026"},
-    {id:"this_quarter",label:"This Quarter",short:"Q4 2026"},
-    {id:"last_quarter",label:"Last Quarter",short:"Q3 2026"},
-    {id:"this_year",label:"This Year",short:"2026"},
-    {id:"last_year",label:"Last Year",short:"2025"}
+    {id:"this_month",label:"This Month",short:shortMonths[todayM]+" "+todayY},
+    {id:"last_month",label:"Last Month",short:shortMonths[(todayM+11)%12]+" "+(todayM===0?todayY-1:todayY)},
+    {id:"this_quarter",label:"This Quarter",short:"Q"+(Math.floor(todayM/3)+1)+" "+todayY},
+    {id:"last_quarter",label:"Last Quarter",short:"Q"+(Math.floor(todayM/3)===0?4:Math.floor(todayM/3))+" "+(Math.floor(todayM/3)===0?todayY-1:todayY)},
+    {id:"this_year",label:"This Year",short:String(todayY)},
+    {id:"last_year",label:"Last Year",short:String(todayY-1)}
   ];
-  let fmtCustom=ym=>{
-    if(!ym||!ym.includes("-"))return"Nov 2026";
-    let [y,m]=ym.split("-"),ms=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-    return (ms[Math.max(0,Math.min(11,parseInt(m,10)-1))]||"Nov")+" "+y;
+  let fmtIsoShort=iso=>{
+    if(!iso||!iso.includes("-"))return"";
+    let[y,m,d]=iso.split("-").map(x=>parseInt(x,10));
+    return pad2(d)+" "+(shortMonths[m-1]||"")+" "+y;
   };
-  let curShort=v.preset==="custom"?fmtCustom(v.customMonth):(presets.find(p=>p.id===v.preset)?.short||"Nov 2026");
+  let fmtRangeLabel=(s,e)=>{
+    if(!s)return"";
+    if(!e||s===e)return fmtIsoShort(s);
+    let[sy,sm,sd]=s.split("-").map(x=>parseInt(x,10));
+    let[ey,em,ed]=e.split("-").map(x=>parseInt(x,10));
+    if(sy===ey)return pad2(sd)+" "+shortMonths[sm-1]+" - "+pad2(ed)+" "+shortMonths[em-1]+" "+ey;
+    return fmtIsoShort(s)+" - "+fmtIsoShort(e);
+  };
+  let curShort=v.preset==="custom"&&v.customStart?fmtRangeLabel(v.customStart,v.customEnd||v.customStart):(presets.find(p=>p.id===v.preset)?.short||shortMonths[todayM]+" "+todayY);
+  let draftLabel=fmtRangeLabel(draftStart,draftEnd);
+  let canGoNext=viewY<todayY||(viewY===todayY&&viewM<todayM);
+  let goPrev=()=>{if(viewM===0){setViewM(11);setViewY(y=>y-1);}else setViewM(m=>m-1);};
+  let goNext=()=>{if(!canGoNext)return;if(viewM===11){setViewM(0);setViewY(y=>y+1);}else setViewM(m=>m+1);};
+  let firstDow=new Date(viewY,viewM,1).getDay();
+  let daysInCur=new Date(viewY,viewM+1,0).getDate();
+  let daysInPrev=new Date(viewY,viewM,0).getDate();
+  let cells=[];
+  for(let i=firstDow-1;i>=0;i--)cells.push({d:daysInPrev-i,inMonth:!1,iso:""});
+  for(let d=1;d<=daysInCur;d++){let iso=toIso(viewY,viewM,d);cells.push({d,inMonth:!0,iso,isFuture:iso>todayIso,isToday:iso===todayIso});}
+  let rem=42-cells.length;
+  for(let d=1;d<=rem;d++)cells.push({d,inMonth:!1,iso:""});
+  let onPickDay=iso=>{
+    if(!iso||iso>todayIso)return;
+    if(!draftStart||(draftStart&&draftEnd)){setDraftStart(iso);setDraftEnd("");}
+    else if(iso<draftStart){setDraftEnd(draftStart);setDraftStart(iso);}
+    else{setDraftEnd(iso);}
+  };
+  let canApply=Boolean(draftStart);
+  let years=[];
+  for(let y=todayY-3;y<=todayY;y++)years.push(y);
   return(0,P.jsxs)("div",{ref:boxRef,style:{position:"relative",display:"flex",alignItems:"center",gap:"8px",flexShrink:0},children:[
     (0,P.jsx)("span",{className:"text-xs font-semibold text-slate-600 tabular-nums",children:curShort}),
-    (0,P.jsx)("button",{type:"button",onClick:()=>setOpen(o=>!o),"aria-label":"Filter period",style:{width:"32px",height:"32px",borderRadius:"8px",border:"1px solid #e2e8f0",background:"#ffffff",display:"flex",alignItems:"center",justifyContent:"center",color:"#475569",cursor:"pointer"},children:(0,P.jsx)("svg",{viewBox:"0 0 24 24",width:15,height:15,fill:"none",stroke:"currentColor",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round",children:(0,P.jsx)("polygon",{points:"22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"})})}),
-    open&&(0,P.jsxs)("div",{style:{position:"absolute",right:0,top:"calc(100% + 8px)",width:"332px",background:"#ffffff",border:"1px solid #e2e8f0",borderRadius:"12px",boxShadow:"0 12px 30px -6px rgba(15,23,42,0.16)",padding:"12px",zIndex:50},children:[
+    (0,P.jsx)("button",{type:"button",onClick:()=>{setOpen(o=>{let next=!o;if(next){setDraftStart(v.customStart||"");setDraftEnd(v.customEnd||"");setShowCal(!1);}return next;});},"aria-label":"Filter period",style:{width:"32px",height:"32px",borderRadius:"8px",border:"1px solid #e2e8f0",background:"#ffffff",display:"flex",alignItems:"center",justifyContent:"center",color:"#475569",cursor:"pointer"},children:(0,P.jsx)("svg",{viewBox:"0 0 24 24",width:15,height:15,fill:"none",stroke:"currentColor",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round",children:(0,P.jsx)("polygon",{points:"22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"})})}),
+    open&&(0,P.jsxs)("div",{style:{position:"absolute",right:0,top:"calc(100% + 8px)",width:"336px",background:"#ffffff",border:"1px solid #e2e8f0",borderRadius:"12px",boxShadow:"0 12px 30px -6px rgba(15,23,42,0.16)",padding:"14px",zIndex:50},children:[
+      (0,P.jsx)("div",{style:{fontSize:"13px",fontWeight:600,color:"#1e293b",marginBottom:"10px"},children:"Date Range"}),
       (0,P.jsx)("div",{style:{display:"grid",gridTemplateColumns:"repeat(3, 1fr)",gap:"8px"},children:presets.map(p=>{
         let active=v.preset===p.id;
-        return(0,P.jsx)("button",{type:"button",onClick:()=>{onC({preset:p.id,customMonth:v.customMonth||"2026-11"});setShowCustom(!1);setOpen(!1);},style:{padding:"8px 6px",borderRadius:"8px",fontSize:"12px",fontWeight:active?600:500,background:active?"#4345e5":"#ffffff",color:active?"#ffffff":"#334155",border:active?"1px solid #4345e5":"1px solid #e2e8f0",cursor:"pointer",whiteSpace:"nowrap",textAlign:"center",transition:"all 120ms ease"},children:p.label},p.id);
+        return(0,P.jsx)("button",{type:"button",onClick:()=>{onC({preset:p.id,customStart:"",customEnd:""});setShowCal(!1);setOpen(!1);},style:{padding:"8px 6px",borderRadius:"8px",fontSize:"12px",fontWeight:active?600:500,background:active?"#4345e5":"#ffffff",color:active?"#ffffff":"#334155",border:active?"1px solid #4345e5":"1px solid #e2e8f0",cursor:"pointer",whiteSpace:"nowrap",textAlign:"center",transition:"all 120ms ease"},children:p.label},p.id);
       })}),
-      (0,P.jsxs)("button",{type:"button",onClick:()=>setShowCustom(c=>!c),style:{marginTop:"8px",width:"100%",display:"flex",alignItems:"center",gap:"8px",padding:"8px 12px",borderRadius:"8px",fontSize:"12px",fontWeight:500,background:v.preset==="custom"||showCustom?"#eef2ff":"#ffffff",color:v.preset==="custom"||showCustom?"#4345e5":"#334155",border:v.preset==="custom"||showCustom?"1px solid #4345e5":"1px solid #e2e8f0",cursor:"pointer"},children:[
-        (0,P.jsxs)("svg",{viewBox:"0 0 24 24",width:14,height:14,fill:"none",stroke:"currentColor",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round",children:[
-          (0,P.jsx)("rect",{x:3,y:4,width:18,height:18,rx:2,ry:2}),
-          (0,P.jsx)("line",{x1:16,y1:2,x2:16,y2:6}),
-          (0,P.jsx)("line",{x1:8,y1:2,x2:8,y2:6}),
-          (0,P.jsx)("line",{x1:3,y1:10,x2:21,y2:10})
+      (0,P.jsxs)("div",{style:{display:"flex",alignItems:"center",gap:"8px",marginTop:"10px"},children:[
+        (0,P.jsxs)("button",{type:"button",onClick:()=>setShowCal(c=>!c),style:{flex:1,height:"36px",padding:"0 10px",borderRadius:"8px",border:showCal?"1px solid #4345e5":"1px solid #cbd5e1",background:"#ffffff",display:"flex",alignItems:"center",justifyContent:"space-between",gap:"6px",cursor:"pointer",fontSize:"12px",color:draftLabel?"#334155":"#94a3b8",overflow:"hidden"},children:[
+          (0,P.jsx)("span",{style:{overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"},children:draftLabel||"Select custom range"}),
+          (0,P.jsxs)("svg",{viewBox:"0 0 24 24",width:15,height:15,fill:"none",stroke:"#94a3b8",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round",style:{flexShrink:0},children:[
+            (0,P.jsx)("rect",{x:3,y:4,width:18,height:18,rx:2,ry:2}),
+            (0,P.jsx)("line",{x1:16,y1:2,x2:16,y2:6}),
+            (0,P.jsx)("line",{x1:8,y1:2,x2:8,y2:6}),
+            (0,P.jsx)("line",{x1:3,y1:10,x2:21,y2:10})
+          ]})
         ]}),
-        (0,P.jsx)("span",{children:"Custom Month"})
+        (0,P.jsx)("button",{type:"button",disabled:!canApply,onClick:()=>{if(!canApply)return;onC({preset:"custom",customStart:draftStart,customEnd:draftEnd||draftStart});setShowCal(!1);setOpen(!1);},style:{width:"84px",height:"36px",borderRadius:"8px",border:"none",background:canApply?"#4345e5":"#c7d2fe",color:"#ffffff",fontSize:"12px",fontWeight:600,cursor:canApply?"pointer":"not-allowed",flexShrink:0},children:"Apply"})
       ]}),
-      showCustom&&(0,P.jsx)("div",{style:{marginTop:"8px",paddingTop:"8px",borderTop:"1px solid #f1f5f9",display:"flex",alignItems:"center"},children:(0,P.jsx)("input",{type:"month",value:v.customMonth||"2026-11",onChange:ev=>{if(ev.target.value){onC({preset:"custom",customMonth:ev.target.value});setOpen(!1);setShowCustom(!1);}},style:{width:"100%",border:"1px solid #cbd5e1",borderRadius:"8px",padding:"6px 10px",fontSize:"12px",color:"#334155",outline:"none"}})})
+      showCal&&(0,P.jsxs)("div",{style:{position:"absolute",left:"14px",top:"calc(100% + 4px)",width:"264px",background:"#ffffff",border:"1px solid #e2e8f0",borderRadius:"12px",boxShadow:"0 14px 32px -6px rgba(15,23,42,0.18)",padding:"12px",zIndex:60},children:[
+        (0,P.jsxs)("div",{style:{display:"flex",alignItems:"center",justifyContent:"space-between",gap:"6px",marginBottom:"10px"},children:[
+          (0,P.jsx)("button",{type:"button",onClick:goPrev,style:{width:"24px",height:"24px",borderRadius:"6px",border:"none",background:"transparent",color:"#334155",fontWeight:700,fontSize:"15px",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"},children:"‹"}),
+          (0,P.jsxs)("div",{style:{display:"flex",alignItems:"center",gap:"6px",flex:1,justifyContent:"center"},children:[
+            (0,P.jsx)("select",{value:viewM,onChange:ev=>setViewM(parseInt(ev.target.value,10)),style:{border:"1px solid #cbd5e1",borderRadius:"6px",padding:"3px 6px",fontSize:"12px",fontWeight:600,color:"#1e293b",background:"#ffffff",cursor:"pointer"},children:fullMonths.map((mn,mi)=>(0,P.jsx)("option",{value:mi,disabled:viewY===todayY&&mi>todayM,children:mn},mn))}),
+            (0,P.jsx)("select",{value:viewY,onChange:ev=>{let ny=parseInt(ev.target.value,10);setViewY(ny);if(ny===todayY&&viewM>todayM)setViewM(todayM);},style:{border:"1px solid #cbd5e1",borderRadius:"6px",padding:"3px 6px",fontSize:"12px",fontWeight:600,color:"#1e293b",background:"#ffffff",cursor:"pointer"},children:years.map(yr=>(0,P.jsx)("option",{value:yr,children:yr},yr))})
+          ]}),
+          (0,P.jsx)("button",{type:"button",disabled:!canGoNext,onClick:goNext,style:{width:"24px",height:"24px",borderRadius:"6px",border:"none",background:"transparent",color:canGoNext?"#334155":"#cbd5e1",fontWeight:700,fontSize:"15px",cursor:canGoNext?"pointer":"default",display:"flex",alignItems:"center",justifyContent:"center"},children:"›"})
+        ]}),
+        (0,P.jsx)("div",{style:{display:"grid",gridTemplateColumns:"repeat(7, 1fr)",gap:"2px",marginBottom:"6px"},children:["Su","Mo","Tu","We","Th","Fr","Sa"].map(w=>(0,P.jsx)("div",{style:{textAlign:"center",fontSize:"11px",fontWeight:600,color:"#64748b",padding:"2px 0"},children:w},w))}),
+        (0,P.jsx)("div",{style:{display:"grid",gridTemplateColumns:"repeat(7, 1fr)",gap:"2px"},children:cells.map((c,ci)=>{
+          let disabled=!c.inMonth||c.isFuture;
+          let isStart=c.inMonth&&draftStart&&c.iso===draftStart;
+          let isEnd=c.inMonth&&draftEnd&&c.iso===draftEnd;
+          let inBetween=c.inMonth&&draftStart&&draftEnd&&c.iso>draftStart&&c.iso<draftEnd;
+          let bg=isStart||isEnd?"#4345e5":inBetween?"#eef2ff":"transparent";
+          let col=disabled?"#cbd5e1":(isStart||isEnd?"#ffffff":inBetween?"#4345e5":"#1e293b");
+          return(0,P.jsx)("button",{type:"button",disabled:disabled,onClick:()=>onPickDay(c.iso),style:{height:"28px",border:"none",borderRadius:isStart||isEnd?"6px":"4px",background:bg,color:col,fontSize:"12px",fontWeight:isStart||isEnd||c.isToday?700:500,cursor:disabled?"default":"pointer",display:"flex",alignItems:"center",justifyContent:"center"},children:c.d},ci);
+        })})
+      ]})
     ]})
   ]});
 }
@@ -560,9 +624,11 @@ function et({assignments:e,programmes:progList,employees:empList,courseProgress:
     if(flt.preset==="last_quarter"){let q=Math.floor(m/3)*3-3;return[new Date(y,q,1),new Date(y,q+3,0,23,59,59)];}
     if(flt.preset==="this_year")return[new Date(y,0,1),new Date(y,11,31,23,59,59)];
     if(flt.preset==="last_year")return[new Date(y-1,0,1),new Date(y-1,11,31,23,59,59)];
-    if(flt.preset==="custom"&&flt.customMonth&&flt.customMonth.includes("-")){
-      let[cy,cm]=flt.customMonth.split("-").map(x=>parseInt(x,10));
-      return[new Date(cy,cm-1,1),new Date(cy,cm,0,23,59,59)];
+    if(flt.preset==="custom"&&flt.customStart&&flt.customStart.includes("-")){
+      let[sy,sm,sd]=flt.customStart.split("-").map(x=>parseInt(x,10));
+      let endIso=flt.customEnd&&flt.customEnd.includes("-")?flt.customEnd:flt.customStart;
+      let[ey,em,ed]=endIso.split("-").map(x=>parseInt(x,10));
+      return[new Date(sy,sm-1,sd,0,0,0),new Date(ey,em-1,ed,23,59,59)];
     }
     return[new Date(y,m,1),new Date(y,m+1,0,23,59,59)];
   };
