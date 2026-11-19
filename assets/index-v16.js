@@ -706,8 +706,7 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){
                   (0,P.jsx)("span",{style:{width:"10px",height:"10px",borderRadius:"9999px",backgroundColor:activeSeg.color,display:"inline-block"}}),
                   (0,P.jsx)("span",{children:activeSeg.label})
                 ]}),
-                (0,P.jsx)("div",{style:{color:"#e2e8f0",marginTop:"2px",fontWeight:600},children:activeSeg.count+" Employees ("+activeSeg.pct+"%)"}),
-                (0,P.jsx)("div",{style:{color:"#94a3b8",fontSize:"10px"},children:activeSeg.count+" of "+distTot+" Total Employees"})
+                (0,P.jsx)("div",{style:{color:"#e2e8f0",marginTop:"2px",fontWeight:600},children:activeSeg.count+" Employees ("+activeSeg.pct+"%)"})
               ]}),
               (0,P.jsxs)("svg",{viewBox:"0 0 180 180",className:"w-44 h-44 -rotate-90",children:[
                 (0,P.jsx)("circle",{cx:90,cy:90,r:r,fill:"none",stroke:"#f1f5f9",strokeWidth:34}),
