@@ -467,6 +467,7 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){
   let [deptFilter,setDeptFilter]=(0,l.useState)({preset:"this_month",customMonth:"2026-11"});
   let [perfFilter,setPerfFilter]=(0,l.useState)({preset:"this_month",customMonth:"2026-11"});
   let [hoverSeg,setHoverSeg]=(0,l.useState)(null);
+  let [hoverBand,setHoverBand]=(0,l.useState)(null);
 
   let getCustomSeed=ym=>{
     let parts=(ym||"2026-11").split("-");
@@ -798,23 +799,51 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){
             ]},tr.name);
           })})
         ]}),
-        (0,P.jsxs)("div",{className:"space-y-4 border-t lg:border-t-0 lg:border-l border-slate-100 lg:pl-6",children:[
-          (0,P.jsx)("h3",{className:"text-xs font-bold text-slate-600 uppercase tracking-wider",children:"Departmental Training Adoption"}),
-          (0,P.jsx)("div",{className:"space-y-3.5",children:perfData.adoption.map(ad=>(0,P.jsxs)("div",{children:[
-            (0,P.jsxs)("div",{className:"flex justify-between text-xs font-medium text-slate-700 mb-1",children:[
-              (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
-                (0,P.jsx)("span",{className:"w-2.5 h-2.5 rounded-full shrink-0",style:{backgroundColor:ad.color}}),
-                (0,P.jsx)("span",{children:ad.dept})
+        (()=>{
+          let totEnr=perfData.trainings.reduce((a,x)=>a+x.enrolled,0),totCert=perfData.trainings.reduce((a,x)=>a+x.certified,0),below70=Math.max(0,totEnr-totCert),b90=Math.round(totCert*0.57),b80=Math.round(totCert*0.3),b70=Math.max(0,totCert-b90-b80);
+          let bands=[
+            {range:"90–100%",tag:"Distinction",count:b90,color:"#548c1c"},
+            {range:"80–89%",tag:"Proficient",count:b80,color:"#f5a623"},
+            {range:"70–79%",tag:"Passing",count:b70,color:"#45c195"},
+            {range:"< 70%",tag:"Needs Retake",count:below70,color:"#c8377c"}
+          ].map(b=>({...b,pct:totEnr>0?Math.round(b.count/totEnr*100):0}));
+          let maxCount=Math.max(1,...bands.map(b=>b.count));
+          let passRateAll=totEnr>0?Math.round(totCert/totEnr*100):0;
+          return(0,P.jsxs)("div",{className:"space-y-4 border-t lg:border-t-0 lg:border-l border-slate-100 lg:pl-6 flex flex-col justify-between",children:[
+            (0,P.jsxs)("div",{className:"space-y-4",children:[
+              (0,P.jsxs)("div",{className:"flex items-center justify-between",children:[
+                (0,P.jsx)("h3",{className:"text-xs font-bold text-slate-600 uppercase tracking-wider",children:"Assessment Score Distribution"}),
+                (0,P.jsx)("span",{className:"text-[11px] font-semibold text-slate-500 tabular-nums",children:totEnr+" Evaluated"})
               ]}),
-              (0,P.jsx)("span",{className:"font-bold text-[#4345e5] tabular-nums",children:ad.pct+"%"})
+              (0,P.jsx)("div",{className:"pt-4 pb-1 px-2 bg-slate-50/60 border border-slate-100 rounded-xl",children:(0,P.jsx)("div",{className:"grid grid-cols-4 gap-3 items-end h-44 pt-6",children:bands.map(b=>{
+                let barH=Math.max(10,Math.round(b.count/maxCount*100)),isHov=hoverBand===b.range,dim=hoverBand&&!isHov;
+                return(0,P.jsxs)("div",{onMouseEnter:()=>setHoverBand(b.range),onMouseLeave:()=>setHoverBand(null),className:"relative flex flex-col items-center justify-end h-full cursor-pointer group",children:[
+                  isHov&&(0,P.jsxs)("div",{className:"absolute -top-2 left-1/2 -translate-x-1/2 -translate-y-full z-30 bg-slate-900 text-white rounded-lg shadow-xl px-2.5 py-1.5 text-[11px] pointer-events-none whitespace-nowrap",children:[
+                    (0,P.jsxs)("div",{className:"flex items-center gap-1.5 font-bold",children:[
+                      (0,P.jsx)("span",{className:"w-2 h-2 rounded-full shrink-0",style:{backgroundColor:b.color}}),
+                      (0,P.jsx)("span",{children:b.range+" • "+b.tag})
+                    ]}),
+                    (0,P.jsx)("div",{className:"text-slate-200 tabular-nums mt-0.5",children:b.count+" Evaluated ("+b.pct+"%)"})
+                  ]}),
+                  (0,P.jsx)("span",{className:"text-[11px] font-bold text-[#4345e5] tabular-nums mb-1.5",children:b.pct+"%"}),
+                  (0,P.jsx)("div",{className:"w-full max-w-[38px] rounded-t-md transition-all duration-200",style:{height:barH+"%",backgroundColor:b.color,opacity:dim?0.35:1}}),
+                  (0,P.jsx)("span",{className:"text-[10px] font-semibold text-slate-600 mt-2 whitespace-nowrap",children:b.range})
+                ]},b.range);
+              })})}),
+              (0,P.jsx)("div",{className:"space-y-1.5 pt-1",children:bands.map(b=>(0,P.jsxs)("div",{onMouseEnter:()=>setHoverBand(b.range),onMouseLeave:()=>setHoverBand(null),className:"flex items-center justify-between text-xs px-2 py-1 rounded-md transition-colors cursor-pointer "+(hoverBand===b.range?"bg-slate-50":""),children:[
+                (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
+                  (0,P.jsx)("span",{className:"w-2.5 h-2.5 rounded-full shrink-0",style:{backgroundColor:b.color}}),
+                  (0,P.jsx)("span",{className:"text-slate-700 font-medium",children:b.range+" ("+b.tag+")"})
+                ]}),
+                (0,P.jsx)("span",{className:"font-bold text-[#4345e5] tabular-nums",children:b.count+" ("+b.pct+"%)"})
+              ]},b.range))})
             ]}),
-            (0,P.jsx)("div",{className:"w-full bg-slate-100 h-2 rounded-full overflow-hidden",children:(0,P.jsx)("div",{className:"h-2 rounded-full transition-all duration-300",style:{width:ad.pct+"%",backgroundColor:ad.color}})})
-          ]},ad.dept))}),
-          (0,P.jsxs)("div",{className:"p-3 bg-indigo-50/50 rounded-lg border border-indigo-100 mt-4",children:[
-            (0,P.jsx)("div",{className:"text-[11px] font-bold text-indigo-900",children:"Assessment Benchmark Insight"}),
-            (0,P.jsx)("div",{className:"text-[11px] text-indigo-700 mt-0.5",children:"91% of assessments are cleared on the first attempt with an average score of "+avgScore+"%."})
-          ]})
-        ]})
+            (0,P.jsxs)("div",{className:"p-3 bg-indigo-50/50 rounded-lg border border-indigo-100 mt-2",children:[
+              (0,P.jsx)("div",{className:"text-[11px] font-bold text-indigo-900",children:"Assessment Benchmark Insight"}),
+              (0,P.jsx)("div",{className:"text-[11px] text-indigo-700 mt-0.5",children:passRateAll+"% overall pass rate ("+totCert+"/"+totEnr+" certified) with an average score of "+avgScore+"%."})
+            ]})
+          ]});
+        })()
       ]})
     ]})
   ]});
