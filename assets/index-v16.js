@@ -3688,20 +3688,20 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,is
 
   let employeeRecords = [
     {name:'Tanya Kapoor',email:'calebnguyen@maildrop.cc',dept:'Collab',training:'API Security & OAuth2 Best Practices',assigned:'01-Jan-2026',due:'20-Jan-2026',completion:100,trainingStatus:'Completed',subStatus:'Approved'},
-    {name:'Tanya Kapoor',email:'calebnguyen@maildrop.cc',dept:'Collab',training:'API Security & OAuth2 Best Practices',assigned:'26-Jan-2026',due:'15-Jun-2026',completion:0,trainingStatus:'Not Started',subStatus:'Pending Sub'},
+    {name:'Tanya Kapoor',email:'calebnguyen@maildrop.cc',dept:'Collab',training:'API Security & OAuth2 Best Practices',assigned:'26-Jan-2026',due:'15-Jun-2026',completion:0,trainingStatus:'Pending',subStatus:'Pending Sub'},
     {name:'Tanya Kapoor',email:'calebnguyen@maildrop.cc',dept:'Collab',training:'API Security & OAuth2 Best Practices',assigned:'05-Dec-2025',due:'12-Jan-2026',completion:25,trainingStatus:'Overdue',subStatus:'Pending Sub'},
     {name:'Tanya Kapoor',email:'calebnguyen@maildrop.cc',dept:'Collab',training:'API Security & OAuth2 Best Practices',assigned:'10-Jan-2026',due:'15-Mar-2026',completion:70,trainingStatus:'In Progress',subStatus:'Pending Sub'},
-    {name:'Tanya Kapoor',email:'calebnguyen@maildrop.cc',dept:'Collab',training:'API Security & OAuth2 Best Practices',assigned:'28-Jan-2026',due:'20-May-2026',completion:0,trainingStatus:'Not Started',subStatus:'Pending Sub'},
+    {name:'Tanya Kapoor',email:'calebnguyen@maildrop.cc',dept:'Collab',training:'API Security & OAuth2 Best Practices',assigned:'28-Jan-2026',due:'20-May-2026',completion:0,trainingStatus:'Pending',subStatus:'Pending Sub'},
     {name:'Tanya Kapoor',email:'calebnguyen@maildrop.cc',dept:'Collab',training:'API Security & OAuth2 Best Practices',assigned:'01-Jan-2026',due:'08-Feb-2026',completion:100,trainingStatus:'Completed',subStatus:'Approved'},
     {name:'Tanya Kapoor',email:'calebnguyen@maildrop.cc',dept:'Collab',training:'API Security & OAuth2 Best Practices',assigned:'12-Jan-2026',due:'10-Apr-2026',completion:55,trainingStatus:'In Progress',subStatus:'Pending Sub'},
-    {name:'Tanya Kapoor',email:'calebnguyen@maildrop.cc',dept:'Collab',training:'API Security & OAuth2 Best Practices',assigned:'25-Jan-2026',due:'30-May-2026',completion:0,trainingStatus:'Not Started',subStatus:'Pending Sub'},
+    {name:'Tanya Kapoor',email:'calebnguyen@maildrop.cc',dept:'Collab',training:'API Security & OAuth2 Best Practices',assigned:'25-Jan-2026',due:'30-May-2026',completion:0,trainingStatus:'Pending',subStatus:'Pending Sub'},
     {name:'Tanya Kapoor',email:'calebnguyen@maildrop.cc',dept:'Collab',training:'API Security & OAuth2 Best Practices',assigned:'16-Jan-2026',due:'25-Apr-2026',completion:35,trainingStatus:'In Progress',subStatus:'Pending Sub'},
     {name:'Tanya Kapoor',email:'calebnguyen@maildrop.cc',dept:'Collab',training:'API Security & OAuth2 Best Practices',assigned:'04-Jan-2026',due:'02-Feb-2026',completion:100,trainingStatus:'Completed',subStatus:'Approved'},
     {name:'Rihan R.',email:'rihan.r@collabcrm.com',dept:'Web',training:'CollabCRM Recruitment & Client Portal Workflows',assigned:'01-Oct-2026',due:'15-Nov-2026',completion:75,trainingStatus:'In Progress',subStatus:'Pending Sub'},
     {name:'Priya Nair',email:'priya.nair@collabcrm.com',dept:'Web',training:'Cloud Infrastructure & High-Performance Node Services',assigned:'10-Oct-2026',due:'20-Nov-2026',completion:40,trainingStatus:'In Progress',subStatus:'Pending Sub'},
-    {name:'Suresh Prasad',email:'suresh.p@collabcrm.com',dept:'Business Analysis',training:'CollabCRM Recruitment & Client Portal Workflows',assigned:'05-Oct-2026',due:'25-Oct-2026',completion:0,trainingStatus:'Not Started',subStatus:'Pending Sub'},
+    {name:'Suresh Prasad',email:'suresh.p@collabcrm.com',dept:'Business Analysis',training:'CollabCRM Recruitment & Client Portal Workflows',assigned:'05-Oct-2026',due:'25-Oct-2026',completion:0,trainingStatus:'Pending',subStatus:'Pending Sub'},
     {name:'Ashish Kumar',email:'ashish.k@collabcrm.com',dept:'Web',training:'Cloud Infrastructure & High-Performance Node Services',assigned:'15-Sep-2026',due:'20-Oct-2026',completion:100,trainingStatus:'Completed',subStatus:'Approved'},
-    {name:'Vikram Malhotra',email:'vikram.m@collabcrm.com',dept:'Collab',training:'Enterprise CRM Communication & Client Delight',assigned:'01-Oct-2026',due:'30-Nov-2026',completion:0,trainingStatus:'Not Started',subStatus:'Pending Sub'}
+    {name:'Vikram Malhotra',email:'vikram.m@collabcrm.com',dept:'Collab',training:'Enterprise CRM Communication & Client Delight',assigned:'01-Oct-2026',due:'30-Nov-2026',completion:0,trainingStatus:'Pending',subStatus:'Pending Sub'}
   ].map(rec=>({...rec,trainingStatus:resolveOverdueStatus(rec.trainingStatus,rec.due,rec.completion)}));
 
   let programmeRecords = [
@@ -3779,7 +3779,7 @@ function at({assignment:e,programmes:progs,courseProgress,skills:skillsConfig,is
             (0,P.jsx)('option',{value:'Completed',children:'Completed'}),
             (0,P.jsx)('option',{value:'In Progress',children:'In Progress'}),
             (0,P.jsx)('option',{value:'Overdue',children:'Overdue'}),
-            (0,P.jsx)('option',{value:'Not Started',children:'Not Started'})
+            (0,P.jsx)('option',{value:'Pending',children:'Pending'})
           ]})
         ]})
       ]}),
