@@ -466,6 +466,7 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){
   let [distFilter,setDistFilter]=(0,l.useState)({preset:"this_month",customMonth:"2026-11"});
   let [deptFilter,setDeptFilter]=(0,l.useState)({preset:"this_month",customMonth:"2026-11"});
   let [perfFilter,setPerfFilter]=(0,l.useState)({preset:"this_month",customMonth:"2026-11"});
+  let [scoreFilter,setScoreFilter]=(0,l.useState)({preset:"this_month",customMonth:"2026-11"});
   let [hoverSeg,setHoverSeg]=(0,l.useState)(null);
   let [hoverBand,setHoverBand]=(0,l.useState)(null);
 
@@ -638,25 +639,21 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){
       ]
     }
   };
-  let perfData=perfFilter.preset==="custom"?(()=>{
-    let s=getCustomSeed(perfFilter.customMonth);
+  let getPerfData=flt=>flt.preset==="custom"?(()=>{
+    let s=getCustomSeed(flt.customMonth);
     return{
       trainings:[
         {name:"Enterprise Security & Data Protection Compliance",cat:"Security",enrolled:40+s*2,certified:37+s*2,avg:90+s,color:"#f5a623"},
         {name:"API Security & OAuth2 Best Practices",cat:"Engineering",enrolled:30+s*2,certified:27+s*2,avg:88+s,color:"#c8377c"},
         {name:"Executive Leadership & Strategic Governance",cat:"Leadership",enrolled:16+s,certified:16+s,avg:95+(s%3),color:"#4d6d22"},
         {name:"Incident Response & SLA Management",cat:"Operations",enrolled:22+s,certified:19+s,avg:84+s,color:"#45c195"}
-      ],
-      adoption:[
-        {dept:"Business Analysis",pct:88+s,color:"#f5a623"},
-        {dept:"Game",pct:83+s,color:"#c8377c"},
-        {dept:"Collab",pct:86+s,color:"#4d6d22"},
-        {dept:"Web",pct:92+s,color:"#548c1c"},
-        {dept:"Data analytics",pct:80+s,color:"#787e85"}
       ]
     };
-  })():(perfPresets[perfFilter.preset]||perfPresets.this_month);
+  })():(perfPresets[flt.preset]||perfPresets.this_month);
+  let perfData=getPerfData(perfFilter);
+  let scoreData=getPerfData(scoreFilter);
   let avgScore=(perfData.trainings.reduce((a,x)=>a+x.avg,0)/perfData.trainings.length).toFixed(1);
+  let scoreAvg=(scoreData.trainings.reduce((a,x)=>a+x.avg,0)/scoreData.trainings.length).toFixed(1);
 
   return(0,P.jsxs)("div",{className:"p-6 space-y-6 max-w-[1600px] mx-auto w-full",children:[
     (0,P.jsxs)("div",{children:[
@@ -763,99 +760,93 @@ function et({assignments:e,onOpenReviewQueue:t,onEvaluateSubmission:n}){
         })})
       ]})
     ]}),
-    (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl shadow-sm",children:[
-      (0,P.jsxs)("div",{className:"p-5 border-b border-slate-200 flex flex-wrap items-center justify-between gap-4 bg-gradient-to-r from-slate-50 to-white rounded-t-xl",children:[
-        (0,P.jsxs)("div",{children:[
-          (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
-            (0,P.jsx)("div",{className:"w-2.5 h-2.5 rounded-full",style:{backgroundColor:"#f5a623"}}),
-            (0,P.jsx)("h2",{className:"font-bold text-slate-900 text-base",children:"Training Performance & Assessment Analytics"})
+    (0,P.jsxs)("div",{className:"grid grid-cols-1 lg:grid-cols-2 gap-6",children:[
+      (0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-4",children:[
+        (0,P.jsxs)("div",{className:"flex items-start justify-between gap-3 flex-wrap",children:[
+          (0,P.jsxs)("div",{children:[
+            (0,P.jsx)("h2",{className:"text-base font-bold text-slate-900",children:"Top Trainings Completion & Pass Rates"}),
+            (0,P.jsx)("p",{className:"text-xs text-slate-500",children:"Completion velocity and pass rates • Average Score: "+avgScore+"%"})
           ]}),
-          (0,P.jsx)("p",{className:"text-xs text-slate-500 mt-0.5",children:"Employee mastery, completion velocity, and assessment benchmark distribution"})
+          (0,P.jsx)(GraphPeriodFilter,{value:perfFilter,onChange:setPerfFilter})
         ]}),
-        (0,P.jsx)(GraphPeriodFilter,{value:perfFilter,onChange:setPerfFilter})
-      ]}),
-      (0,P.jsxs)("div",{className:"p-6 grid grid-cols-1 lg:grid-cols-3 gap-6",children:[
-        (0,P.jsxs)("div",{className:"lg:col-span-2 space-y-4",children:[
-          (0,P.jsxs)("div",{className:"flex items-center justify-between",children:[
-            (0,P.jsx)("h3",{className:"text-xs font-bold text-slate-600 uppercase tracking-wider",children:"Top Trainings Completion & Pass Rates"}),
-            (0,P.jsx)("span",{className:"text-xs text-[#4345e5] font-semibold tabular-nums",children:"Average Score: "+avgScore+"%"})
-          ]}),
-          (0,P.jsx)("div",{className:"space-y-3",children:perfData.trainings.map(tr=>{
-            let passPct=tr.enrolled>0?Math.round(tr.certified/tr.enrolled*100):0;
-            return(0,P.jsxs)("div",{className:"p-3 bg-slate-50/70 border border-slate-100 rounded-lg hover:border-slate-300 transition-colors",children:[
-              (0,P.jsxs)("div",{className:"flex justify-between items-center mb-1.5 gap-2",children:[
-                (0,P.jsxs)("div",{className:"flex items-center gap-2 min-w-0",children:[
-                  (0,P.jsx)("span",{className:"w-2.5 h-2.5 rounded-full shrink-0",style:{backgroundColor:tr.color}}),
-                  (0,P.jsx)("span",{className:"font-semibold text-xs text-slate-800 truncate",children:tr.name}),
-                  (0,P.jsx)("span",{className:"text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 shrink-0",children:tr.cat})
-                ]}),
-                (0,P.jsx)("span",{className:"text-xs font-bold text-[#4345e5] tabular-nums shrink-0",children:passPct+"% Pass Rate"})
+        (0,P.jsx)("div",{className:"space-y-3 pt-1",children:perfData.trainings.map(tr=>{
+          let passPct=tr.enrolled>0?Math.round(tr.certified/tr.enrolled*100):0;
+          return(0,P.jsxs)("div",{className:"p-3 bg-slate-50/70 border border-slate-100 rounded-lg hover:border-slate-300 transition-colors",children:[
+            (0,P.jsxs)("div",{className:"flex justify-between items-center mb-1.5 gap-2",children:[
+              (0,P.jsxs)("div",{className:"flex items-center gap-2 min-w-0",children:[
+                (0,P.jsx)("span",{className:"w-2.5 h-2.5 rounded-full shrink-0",style:{backgroundColor:tr.color}}),
+                (0,P.jsx)("span",{className:"font-semibold text-xs text-slate-800 truncate",children:tr.name}),
+                (0,P.jsx)("span",{className:"text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 shrink-0",children:tr.cat})
               ]}),
-              (0,P.jsx)("div",{className:"w-full bg-slate-200 h-2.5 rounded-full overflow-hidden",children:(0,P.jsx)("div",{className:"h-2.5 rounded-full transition-all duration-300",style:{width:passPct+"%",backgroundColor:tr.color}})}),
-              (0,P.jsxs)("div",{className:"flex justify-between text-[11px] text-slate-500 mt-1",children:[
-                (0,P.jsx)("span",{children:tr.enrolled+" Enrolled"}),
-                (0,P.jsx)("span",{children:tr.certified+" Certified • Avg. "+tr.avg+"%"})
-              ]})
-            ]},tr.name);
-          })})
-        ]}),
-        (()=>{
-          let totEnr=perfData.trainings.reduce((a,x)=>a+x.enrolled,0),totCert=perfData.trainings.reduce((a,x)=>a+x.certified,0),below70=Math.max(0,totEnr-totCert),b90=Math.round(totCert*0.57),b80=Math.round(totCert*0.3),b70=Math.max(0,totCert-b90-b80);
-          let bands=[
-            {range:"90–100%",tag:"Distinction",count:b90,color:"#548c1c"},
-            {range:"80–89%",tag:"Proficient",count:b80,color:"#f5a623"},
-            {range:"70–79%",tag:"Passing",count:b70,color:"#45c195"},
-            {range:"< 70%",tag:"Needs Retake",count:below70,color:"#c8377c"}
-          ].map(b=>({...b,pct:totEnr>0?Math.round(b.count/totEnr*100):0}));
-          let maxPct=Math.max(1,...bands.map(b=>b.pct)),yMax=Math.max(60,Math.ceil(maxPct/20)*20),ticks=[0,Math.round(yMax/3),Math.round(yMax*2/3),yMax];
-          let passRateAll=totEnr>0?Math.round(totCert/totEnr*100):0,hovObj=hoverBand?bands.find(b=>b.range===hoverBand):null;
-          return(0,P.jsxs)("div",{className:"space-y-4 border-t lg:border-t-0 lg:border-l border-slate-100 lg:pl-6 flex flex-col justify-between",children:[
-            (0,P.jsxs)("div",{className:"space-y-3",children:[
-              (0,P.jsxs)("div",{className:"flex items-center justify-between",children:[
-                (0,P.jsx)("h3",{className:"text-xs font-bold text-slate-600 uppercase tracking-wider",children:"Assessment Score Distribution"}),
-                (0,P.jsx)("span",{className:"text-[11px] font-semibold text-slate-500 tabular-nums",children:totEnr+" Evaluated"})
-              ]}),
-              (0,P.jsxs)("div",{style:{position:"relative",background:"#f8fafc",border:"1px solid #e2e8f0",borderRadius:"12px",padding:"10px 8px 6px 8px"},children:[
-                hovObj&&(0,P.jsxs)("div",{style:{position:"absolute",top:"8px",right:"10px",zIndex:30,background:"#0f172a",color:"#ffffff",borderRadius:"8px",padding:"6px 10px",fontSize:"11px",lineHeight:"1.35",pointerEvents:"none",boxShadow:"0 10px 25px -5px rgba(15,23,42,0.25)"},children:[
-                  (0,P.jsxs)("div",{style:{display:"flex",alignItems:"center",gap:"6px",fontWeight:700},children:[
-                    (0,P.jsx)("span",{style:{width:"8px",height:"8px",borderRadius:"9999px",backgroundColor:hovObj.color,display:"inline-block"}}),
-                    (0,P.jsx)("span",{children:hovObj.range+" • "+hovObj.tag})
-                  ]}),
-                  (0,P.jsx)("div",{style:{color:"#e2e8f0",marginTop:"2px"},children:hovObj.count+" of "+totEnr+" Evaluated ("+hovObj.pct+"%)"})
-                ]}),
-                (0,P.jsxs)("svg",{viewBox:"0 0 320 186",style:{width:"100%",height:"186px",display:"block"},children:[
-                  ticks.map(t=>{
-                    let ty=150-(t/yMax)*124;
-                    return(0,P.jsxs)("g",{children:[
-                      (0,P.jsx)("line",{x1:36,y1:ty,x2:308,y2:ty,stroke:t===0?"#cbd5e1":"#e2e8f0",strokeWidth:1,strokeDasharray:t===0?void 0:"3 3"}),
-                      (0,P.jsx)("text",{x:30,y:ty+3.5,textAnchor:"end",fontSize:"10",fill:"#94a3b8",fontWeight:"600",children:t+"%"})
-                    ]},t);
-                  }),
-                  bands.map((b,i)=>{
-                    let slotW=272/4,bw=38,bx=36+i*slotW+(slotW-bw)/2,bh=Math.max(4,(b.pct/yMax)*124),by=150-bh,dim=hoverBand&&hoverBand!==b.range;
-                    return(0,P.jsxs)("g",{onMouseEnter:()=>setHoverBand(b.range),onMouseLeave:()=>setHoverBand(null),style:{cursor:"pointer",opacity:dim?0.35:1,transition:"opacity 150ms ease"},children:[
-                      (0,P.jsx)("rect",{x:bx,y:by,width:bw,height:bh,rx:5,fill:b.color}),
-                      (0,P.jsx)("text",{x:bx+bw/2,y:by-6,textAnchor:"middle",fontSize:"11",fontWeight:"700",fill:"#4345e5",children:b.pct+"%"}),
-                      (0,P.jsx)("text",{x:bx+bw/2,y:168,textAnchor:"middle",fontSize:"10.5",fontWeight:"600",fill:"#475569",children:b.range})
-                    ]},b.range);
-                  })
-                ]})
-              ]}),
-              (0,P.jsx)("div",{className:"space-y-1.5 pt-1",children:bands.map(b=>(0,P.jsxs)("div",{onMouseEnter:()=>setHoverBand(b.range),onMouseLeave:()=>setHoverBand(null),className:"flex items-center justify-between text-xs px-2 py-1 rounded-md transition-colors cursor-pointer "+(hoverBand===b.range?"bg-slate-50":""),children:[
-                (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
-                  (0,P.jsx)("span",{className:"w-2.5 h-2.5 rounded-full shrink-0",style:{backgroundColor:b.color}}),
-                  (0,P.jsx)("span",{className:"text-slate-700 font-medium",children:b.range+" ("+b.tag+")"})
-                ]}),
-                (0,P.jsx)("span",{className:"font-bold text-[#4345e5] tabular-nums",children:b.count+" ("+b.pct+"%)"})
-              ]},b.range))})
+              (0,P.jsx)("span",{className:"text-xs font-bold text-[#4345e5] tabular-nums shrink-0",children:passPct+"% Pass Rate"})
             ]}),
-            (0,P.jsxs)("div",{className:"p-3 bg-indigo-50/50 rounded-lg border border-indigo-100 mt-2",children:[
-              (0,P.jsx)("div",{className:"text-[11px] font-bold text-indigo-900",children:"Assessment Benchmark Insight"}),
-              (0,P.jsx)("div",{className:"text-[11px] text-indigo-700 mt-0.5",children:passRateAll+"% overall pass rate ("+totCert+"/"+totEnr+" certified) with an average score of "+avgScore+"%."})
+            (0,P.jsx)("div",{className:"w-full bg-slate-200 h-2.5 rounded-full overflow-hidden",children:(0,P.jsx)("div",{className:"h-2.5 rounded-full transition-all duration-300",style:{width:passPct+"%",backgroundColor:tr.color}})}),
+            (0,P.jsxs)("div",{className:"flex justify-between text-[11px] text-slate-500 mt-1",children:[
+              (0,P.jsx)("span",{children:tr.enrolled+" Enrolled"}),
+              (0,P.jsx)("span",{children:tr.certified+" Certified • Avg. "+tr.avg+"%"})
             ]})
-          ]});
-        })()
-      ]})
+          ]},tr.name);
+        })})
+      ]}),
+      (()=>{
+        let totEnr=scoreData.trainings.reduce((a,x)=>a+x.enrolled,0),totCert=scoreData.trainings.reduce((a,x)=>a+x.certified,0),below70=Math.max(0,totEnr-totCert),b90=Math.round(totCert*0.57),b80=Math.round(totCert*0.3),b70=Math.max(0,totCert-b90-b80);
+        let bands=[
+          {range:"90–100%",tag:"Distinction",count:b90,color:"#548c1c"},
+          {range:"80–89%",tag:"Proficient",count:b80,color:"#f5a623"},
+          {range:"70–79%",tag:"Passing",count:b70,color:"#45c195"},
+          {range:"< 70%",tag:"Needs Retake",count:below70,color:"#c8377c"}
+        ].map(b=>({...b,pct:totEnr>0?Math.round(b.count/totEnr*100):0}));
+        let maxPct=Math.max(1,...bands.map(b=>b.pct)),yMax=Math.max(60,Math.ceil(maxPct/20)*20),ticks=[0,Math.round(yMax/3),Math.round(yMax*2/3),yMax];
+        let passRateAll=totEnr>0?Math.round(totCert/totEnr*100):0,hovObj=hoverBand?bands.find(b=>b.range===hoverBand):null;
+        return(0,P.jsxs)("div",{className:"bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-4 flex flex-col justify-between",children:[
+          (0,P.jsxs)("div",{className:"space-y-4",children:[
+            (0,P.jsxs)("div",{className:"flex items-start justify-between gap-3 flex-wrap",children:[
+              (0,P.jsxs)("div",{children:[
+                (0,P.jsx)("h2",{className:"text-base font-bold text-slate-900",children:"Assessment Score Distribution"}),
+                (0,P.jsx)("p",{className:"text-xs text-slate-500",children:"Score band breakdown across "+totEnr+" evaluated assessments"})
+              ]}),
+              (0,P.jsx)(GraphPeriodFilter,{value:scoreFilter,onChange:setScoreFilter})
+            ]}),
+            (0,P.jsxs)("div",{style:{position:"relative",background:"#f8fafc",border:"1px solid #e2e8f0",borderRadius:"12px",padding:"10px 8px 6px 8px"},children:[
+              hovObj&&(0,P.jsxs)("div",{style:{position:"absolute",top:"8px",right:"10px",zIndex:30,background:"#0f172a",color:"#ffffff",borderRadius:"8px",padding:"6px 10px",fontSize:"11px",lineHeight:"1.35",pointerEvents:"none",boxShadow:"0 10px 25px -5px rgba(15,23,42,0.25)"},children:[
+                (0,P.jsxs)("div",{style:{display:"flex",alignItems:"center",gap:"6px",fontWeight:700},children:[
+                  (0,P.jsx)("span",{style:{width:"8px",height:"8px",borderRadius:"9999px",backgroundColor:hovObj.color,display:"inline-block"}}),
+                  (0,P.jsx)("span",{children:hovObj.range+" • "+hovObj.tag})
+                ]}),
+                (0,P.jsx)("div",{style:{color:"#e2e8f0",marginTop:"2px"},children:hovObj.count+" of "+totEnr+" Evaluated ("+hovObj.pct+"%)"})
+              ]}),
+              (0,P.jsxs)("svg",{viewBox:"0 0 320 186",style:{width:"100%",height:"186px",display:"block"},children:[
+                ticks.map(t=>{
+                  let ty=150-(t/yMax)*124;
+                  return(0,P.jsxs)("g",{children:[
+                    (0,P.jsx)("line",{x1:36,y1:ty,x2:308,y2:ty,stroke:t===0?"#cbd5e1":"#e2e8f0",strokeWidth:1,strokeDasharray:t===0?void 0:"3 3"}),
+                    (0,P.jsx)("text",{x:30,y:ty+3.5,textAnchor:"end",fontSize:"10",fill:"#94a3b8",fontWeight:"600",children:t+"%"})
+                  ]},t);
+                }),
+                bands.map((b,i)=>{
+                  let slotW=272/4,bw=38,bx=36+i*slotW+(slotW-bw)/2,bh=Math.max(4,(b.pct/yMax)*124),by=150-bh,dim=hoverBand&&hoverBand!==b.range;
+                  return(0,P.jsxs)("g",{onMouseEnter:()=>setHoverBand(b.range),onMouseLeave:()=>setHoverBand(null),style:{cursor:"pointer",opacity:dim?0.35:1,transition:"opacity 150ms ease"},children:[
+                    (0,P.jsx)("rect",{x:bx,y:by,width:bw,height:bh,rx:5,fill:b.color}),
+                    (0,P.jsx)("text",{x:bx+bw/2,y:by-6,textAnchor:"middle",fontSize:"11",fontWeight:"700",fill:"#4345e5",children:b.pct+"%"}),
+                    (0,P.jsx)("text",{x:bx+bw/2,y:168,textAnchor:"middle",fontSize:"10.5",fontWeight:"600",fill:"#475569",children:b.range})
+                  ]},b.range);
+                })
+              ]})
+            ]}),
+            (0,P.jsx)("div",{className:"space-y-1.5 pt-1",children:bands.map(b=>(0,P.jsxs)("div",{onMouseEnter:()=>setHoverBand(b.range),onMouseLeave:()=>setHoverBand(null),className:"flex items-center justify-between text-xs px-2 py-1 rounded-md transition-colors cursor-pointer "+(hoverBand===b.range?"bg-slate-50":""),children:[
+              (0,P.jsxs)("div",{className:"flex items-center gap-2",children:[
+                (0,P.jsx)("span",{className:"w-2.5 h-2.5 rounded-full shrink-0",style:{backgroundColor:b.color}}),
+                (0,P.jsx)("span",{className:"text-slate-700 font-medium",children:b.range+" ("+b.tag+")"})
+              ]}),
+              (0,P.jsx)("span",{className:"font-bold text-[#4345e5] tabular-nums",children:b.count+" ("+b.pct+"%)"})
+            ]},b.range))})
+          ]}),
+          (0,P.jsxs)("div",{className:"p-3 bg-indigo-50/50 rounded-lg border border-indigo-100 mt-2",children:[
+            (0,P.jsx)("div",{className:"text-[11px] font-bold text-indigo-900",children:"Assessment Benchmark Insight"}),
+            (0,P.jsx)("div",{className:"text-[11px] text-indigo-700 mt-0.5",children:passRateAll+"% overall pass rate ("+totCert+"/"+totEnr+" certified) with an average score of "+scoreAvg+"%."})
+          ]})
+        ]});
+      })()
     ]})
   ]});
 }function getProgrammeEnrolledList(e,t,assignList,cpMap){if(!e)return[];let emps=Array.isArray(t)?t:[];let baseEnrolled=e.id===`prog-1`?[{emp:emps[1]||emps[0],assigned:`2026-10-01`,due:`2026-11-15`,progress:75,status:`In Progress`},{emp:emps[2]||emps[1],assigned:`2026-10-05`,due:`2026-10-25`,progress:0,status:`Not Started`},{emp:emps[3]||emps[2],assigned:`2026-10-02`,due:`2026-10-28`,progress:100,status:`Completed`}]:e.id===`prog-2`?[{emp:emps[1]||emps[0],assigned:`2026-10-10`,due:`2026-11-20`,progress:40,status:`In Progress`},{emp:emps[3]||emps[2],assigned:`2026-09-15`,due:`2026-10-20`,progress:100,status:`Completed`}]:e.id===`prog-3`?[{emp:emps[0],assigned:`2026-09-20`,due:`2026-11-10`,progress:80,status:`In Progress`},{emp:emps[2]||emps[0],assigned:`2026-10-01`,due:`2026-11-25`,progress:100,status:`Completed`},{emp:emps[4]||emps[1],assigned:`2026-10-12`,due:`2026-12-01`,progress:35,status:`In Progress`}]:e.id===`prog-4`?[{emp:emps[2]||emps[0],assigned:`2026-10-01`,due:`2026-11-30`,progress:0,status:`Not Started`}]:e.id===`prog-7`?[(()=>{let cp=(cpMap&&(cpMap[`CO-5039::prog-7`]||cpMap[`prog-7`]))||null;return{emp:emps[2]||emps[0],assigned:`2026-01-12`,due:`2026-03-15`,progress:cp?Number(cp.progress)||0:67,status:cp?cp.status:`In Progress`}})()]:e.id===`prog-8`?[{emp:emps[1]||emps[0],assigned:`2026-10-08`,due:`2026-11-22`,progress:50,status:`In Progress`}]:e.id===`prog-9`?[{emp:emps[4]||emps[0],assigned:`2026-10-14`,due:`2026-11-28`,progress:100,status:`Completed`}]:e.id===`prog-10`?[{emp:emps[0],assigned:`2026-10-03`,due:`2026-11-18`,progress:100,status:`Completed`},{emp:emps[5]||emps[1],assigned:`2026-10-11`,due:`2026-11-30`,progress:45,status:`In Progress`}]:e.id===`prog-11`?[{emp:emps[6]||emps[2],assigned:`2026-10-09`,due:`2026-11-24`,progress:60,status:`In Progress`}]:e.id===`prog-12`?[{emp:emps[7]||emps[1],assigned:`2026-10-06`,due:`2026-11-19`,progress:100,status:`Completed`},{emp:emps[8]||emps[3],assigned:`2026-10-15`,due:`2026-12-05`,progress:20,status:`In Progress`}]:[];let seenEmpIds=new Set(baseEnrolled.map(b=>b.emp?.id).filter(Boolean));let extraEnrolled=(assignList||[]).filter(item=>{if(!item||/^asg-\d+$/.test(String(item.id||``)))return!1;let idMatch=item.programmeId&&item.programmeId===e.id,nameMatch=item.programmeName&&e.name&&item.programmeName.trim().toLowerCase()===e.name.trim().toLowerCase();return idMatch||nameMatch}).filter(item=>{let eid=item.employeeId;if(!eid||seenEmpIds.has(eid))return!1;return seenEmpIds.add(eid),!0}).map(item=>{let matchedEmp=emps.find(emp=>emp.id===item.employeeId)||{id:item.employeeId,firstName:(item.employeeName||`Employee`).split(` `)[0],lastName:(item.employeeName||``).split(` `).slice(1).join(` `)||``,designation:`Employee`,department:`Collab`};let cp=cpMap&&(cpMap[(item.employeeId||`CO-5039`)+`::`+e.id]||(matchedEmp.firstName===`Tanya`?cpMap[`CO-5039::`+e.id]:null)||cpMap[e.id]);let st=cp?cp.status:item.status||`Not Started`;let pct=cp?Number(cp.progress)||0:st===`Completed`?100:Number(item.progress)||0;return{emp:matchedEmp,assigned:fmtSysDate(item.assignedDate||`04-Nov-2026`),due:fmtSysDate(item.dueDate||`01-Dec-2026`),progress:pct,status:st,managerApprovalStatus:cp?.managerApprovalStatus||``}});return extraEnrolled.length>0?[...extraEnrolled,...baseEnrolled]:baseEnrolled}function tt({programmes:e,employees:empList,assignments:assignList,courseProgress:cpMap,onOpenCreateProgramme:t,onSelectProgramme:n,onEditProgramme:r,onToggleAvailability:h,currentUser:g,canToggleAvailability:v,hasStartedLearner:hasStartedFn,onNavigate}){let[i,a]=(0,l.useState)(`All`),[o,s]=(0,l.useState)(``),[tmMode,setTmMode]=(0,l.useState)(`lookup`),[tmTokens,setTmTokens]=(0,l.useState)([]),[confirmModal,setConfirmModal]=(0,l.useState)(null),[isSubmitting,setIsSubmitting]=(0,l.useState)(!1),[actionError,setActionError]=(0,l.useState)(``),pubOf=p=>(p.publicationStatus||p.status)===`Draft`?`Draft`:`Published`,availOf=p=>pubOf(p)===`Draft`?`Inactive`:(p.availabilityStatus?p.availabilityStatus:(p.isActive===!1?`Inactive`:`Active`)),tmUniq=fn=>Array.from(new Set((e||[]).map(fn).filter(Boolean))),tmLookupFields=[{key:`name`,label:`Training Name`,icon:`📘`,options:tmUniq(p=>p.name)},{key:`category`,label:`Category`,icon:`🏷`,options:tmUniq(p=>p.category)},{key:`department`,label:`Department`,icon:`🏢`,options:tmUniq(p=>p.department)},{key:`difficultyLevel`,label:`Difficulty Level`,icon:`📊`,options:tmUniq(p=>p.difficultyLevel),operators:[`Is`,`Is Not`]},{key:`publicationStatus`,label:`Status`,icon:`●`,options:[`Published`,`Draft`]},{key:`availabilityStatus`,label:`Availability`,icon:`✓`,options:[`Active`,`Inactive`]}],c=e.filter(p=>{let ps=pubOf(p),av=availOf(p),rowObj={...p,publicationStatus:ps,availabilityStatus:av};if(!evalLookupFilter(rowObj,tmMode,tmTokens,o,[`name`,`category`,`department`,`difficultyLevel`,`publicationStatus`,`availabilityStatus`]))return!1;return i===`Published`?ps===`Published`&&av!==`Inactive`:i===`Draft`?ps===`Draft`:i===`Inactive`?ps!==`Draft`&&av===`Inactive`:!0}),u=s=>{switch(s){case`Published`:return(0,P.jsx)(`span`,{className:`bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-full text-xs font-semibold`,children:`Published`});case`Draft`:return(0,P.jsx)(`span`,{className:`bg-amber-50 text-amber-700 border border-amber-200 px-2.5 py-1 rounded-full text-xs font-semibold`,children:`Draft`});default:return(0,P.jsx)(`span`,{className:`bg-slate-100 text-slate-600 border border-slate-200 px-2.5 py-1 rounded-full text-xs font-semibold`,children:s})}},d=s=>{switch(s){case`Beginner`:return(0,P.jsx)(`span`,{className:`bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded text-xs font-medium`,children:s});case`Intermediate`:return(0,P.jsx)(`span`,{className:`bg-sky-50 text-sky-700 px-2.5 py-1 rounded text-xs font-medium`,children:s});case`Expert`:return(0,P.jsx)(`span`,{className:`bg-rose-50 text-rose-700 px-2.5 py-1 rounded text-xs font-medium`,children:s});default:return(0,P.jsx)(`span`,{className:`bg-slate-100 text-slate-700 px-2.5 py-1 rounded text-xs font-medium`,children:s})}},handleToggleClick=(ev,row)=>{ev.stopPropagation();setActionError(``);let ps=pubOf(row);if(ps===`Draft`){return}if(v===!1){setActionError(`Permission Denied: Only authorized Admin, HR, or Reporting Manager users can change training availability.`);return}let curAvail=availOf(row),targetStatus=curAvail===`Active`?`Inactive`:`Active`;if(targetStatus===`Inactive`&&hasStartedFn&&hasStartedFn(row)){setActionError(`This training cannot be made inactive because an employee has already started working on it.`);return}setConfirmModal({programme:row,targetStatus,reason:``})},handleConfirmToggle=async()=>{if(!confirmModal||isSubmitting)return;setIsSubmitting(!0);setActionError(``);try{let res=h?await h(confirmModal.programme,confirmModal.targetStatus,confirmModal.reason):{success:!0};if(res&&res.success===!1){setActionError(res.message||`Failed to update training availability status. Previous status restored.`)}setConfirmModal(null)}catch(err){setActionError(err?.message||`Failed to update training availability status. Previous status restored.`);setConfirmModal(null)}finally{setIsSubmitting(!1)}};return(0,P.jsxs)(`div`,{className:`p-6 space-y-6 max-w-[1600px] mx-auto w-full`,children:[(0,P.jsxs)(`div`,{className:`flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-1`,children:[(0,P.jsxs)(`div`,{className:`space-y-1`,children:[(0,P.jsxs)(`div`,{className:`flex items-center gap-1.5 text-xs font-medium text-slate-500`,children:[(0,P.jsx)(`button`,{type:`button`,onClick:()=>onNavigate&&onNavigate(`training-dashboard`),className:`hover:text-blue-600 transition-colors cursor-pointer`,children:`Training`}),(0,P.jsx)(`span`,{className:`text-slate-400`,children:`›`}),(0,P.jsx)(`span`,{className:`text-blue-600 font-semibold`,children:`Training Management`})]})]}),(0,P.jsxs)(`button`,{onClick:t,className:`flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-sm transition-colors`,children:[(0,P.jsx)(j,{className:`w-4 h-4`}),(0,P.jsx)(`span`,{children:`Add Training`})]})]}),(0,P.jsxs)(`div`,{className:`bg-white border border-slate-200 rounded-xl shadow-sm mt-1`,children:[(0,P.jsxs)(`div`,{className:`p-4 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4`,children:[(0,P.jsxs)(`div`,{className:`flex items-center gap-2`,children:[(0,P.jsx)(`h1`,{className:`font-bold text-slate-900 text-base`,children:`Training Management`}),(0,P.jsxs)(`span`,{className:`bg-blue-50 text-blue-700 text-xs font-bold px-2 py-0.5 rounded-full`,children:[c.length,` Trainings`]})]}),(0,P.jsx)(`div`,{className:`flex items-center gap-1 bg-slate-100 p-1 rounded-lg text-xs font-medium`,children:[`All`,`Published`,`Draft`,`Inactive`].map(tab=>(0,P.jsx)(`button`,{onClick:()=>a(tab),className:`px-3 py-1.5 rounded-md transition-colors ${i===tab?`bg-white text-slate-900 shadow-sm font-semibold`:`text-slate-600 hover:text-slate-900`}`,children:tab},tab))})]}),(0,P.jsx)(`div`,{className:`px-4 py-2.5 bg-slate-50/70 border-b border-slate-200 flex items-center gap-2.5 flex-wrap`,children:(0,P.jsx)(CollabLookupFilter,{fields:tmLookupFields,mode:tmMode,onModeChange:setTmMode,tokens:tmTokens,onTokensChange:setTmTokens,quickQuery:o,onQuickQueryChange:s,minWidth:`320px`})}),actionError&&(0,P.jsxs)(`div`,{className:`bg-rose-50 border-b border-rose-200 px-4 py-2.5 flex items-center justify-between text-xs font-semibold text-rose-700`,children:[(0,P.jsx)(`span`,{children:actionError}),(0,P.jsx)(`button`,{type:`button`,onClick:()=>setActionError(``),className:`text-rose-500 hover:text-rose-800 ml-3`,children:`✕`})]}),(0,P.jsx)(`div`,{className:`overflow-x-auto`,children:(0,P.jsxs)(`table`,{className:`w-full text-left border-collapse`,children:[(0,P.jsx)(`thead`,{children:(0,P.jsxs)(`tr`,{className:`border-b border-slate-200 text-xs font-semibold text-slate-500 bg-slate-50/50`,children:[(0,P.jsx)(`th`,{className:`py-3 px-4 w-16`,children:`No.`}),(0,P.jsx)(`th`,{className:`py-3 px-4`,children:`Training Name ↕`}),(0,P.jsx)(`th`,{className:`py-3 px-4`,children:`Difficulty Level ↕`}),(0,P.jsx)(`th`,{className:`py-3 px-4`,children:`Duration ↕`}),(0,P.jsx)(`th`,{className:`py-3 px-4`,children:`Enrolled Employees ↕`}),(0,P.jsx)(`th`,{className:`py-3 px-4`,children:`Status ↕`}),(0,P.jsx)(`th`,{className:`py-3 px-4 text-center`,children:`Actions`})]})}),(0,P.jsxs)(`tbody`,{className:`divide-y divide-slate-100 text-sm`,children:[c.map((row,idx)=>{let ps=pubOf(row),avail=availOf(row),isOn=avail===`Active`,isPub=ps!==`Draft`,canChange=v!==!1,toggleTitle=!isPub?`Inactive (Draft training — publish first)`:!canChange?`Only Admin, HR, and Reporting Manager users can change training availability`:(isOn?`Active`:`Inactive`);return(0,P.jsxs)(`tr`,{className:`hover:bg-slate-50/80 transition-colors cursor-pointer`,onClick:()=>n(row),children:[(0,P.jsx)(`td`,{className:`py-3 px-4 text-slate-500 tabular-nums`,children:idx+1}),(0,P.jsx)(`td`,{className:`py-3 px-4 font-semibold text-slate-900`,children:(0,P.jsxs)(`div`,{className:`flex items-center gap-2`,children:[(0,P.jsx)(`span`,{className:`hover:text-blue-600 transition-colors`,children:row.name}),(0,P.jsx)(`span`,{className:`bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded text-[10px] font-mono font-bold`,children:row.version})]})}),(0,P.jsx)(`td`,{className:`py-3 px-4`,children:d(row.difficultyLevel)}),(0,P.jsx)(`td`,{className:`py-3 px-4 text-slate-600 text-xs tabular-nums font-mono`,children:fmtDurationHM(row)}),(0,P.jsx)(`td`,{className:`py-3 px-4 text-slate-800 text-xs font-bold tabular-nums`,children:getProgrammeEnrolledList(row,empList,assignList,cpMap).length}),(0,P.jsx)(`td`,{className:`py-3 px-4`,children:u(ps===`Draft`?`Draft`:(avail===`Inactive`?`Inactive`:`Published`))}),(0,P.jsx)(`td`,{className:`py-3 px-4 text-center`,onClick:ev=>ev.stopPropagation(),children:(0,P.jsxs)(`div`,{className:`flex items-center justify-end gap-2`,children:[(0,P.jsx)(`button`,{type:`button`,onClick:ev=>{ev.stopPropagation(),n(row)},className:`p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer`,title:`View Training`,children:(0,P.jsx)(pe,{className:`w-4 h-4`})}),(0,P.jsx)(`button`,{type:`button`,onClick:ev=>{ev.stopPropagation(),r&&r(row)},className:`p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer`,title:`Edit Training`,children:(0,P.jsx)(Fe,{className:`w-4 h-4`})})]})})]},row.id)}),c.length===0&&(0,P.jsx)(`tr`,{children:(0,P.jsx)(`td`,{colSpan:7,className:`py-12 text-center text-slate-400 text-sm`,children:`No trainings found matching your search.`})})]})]})})]}),confirmModal&&(0,P.jsx)(`div`,{className:`fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-150`,children:(0,P.jsxs)(`div`,{className:`bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200`,children:[(0,P.jsxs)(`div`,{className:`p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50`,children:[(0,P.jsx)(`h3`,{className:`font-bold text-slate-900 text-sm`,children:confirmModal.targetStatus===`Inactive`?`Deactivate Training`:`Activate Training`}),(0,P.jsx)(`button`,{type:`button`,onClick:()=>!isSubmitting&&setConfirmModal(null),className:`p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/60`,children:(0,P.jsx)(N,{className:`w-4 h-4`})})]}),(0,P.jsxs)(`div`,{className:`p-6 space-y-4`,children:[(0,P.jsx)(`div`,{className:`text-sm font-bold text-slate-900`,children:confirmModal.targetStatus===`Inactive`?`Are you sure you want to make this training inactive?`:`Are you sure you want to activate this training?`}),(0,P.jsx)(`p`,{className:`text-xs text-slate-600 leading-relaxed`,children:confirmModal.targetStatus===`Inactive`?`This training will no longer be available for new assignments. Employees who are already assigned this training can continue their training.`:`This training will become available for new assignments.`}),(0,P.jsxs)(`div`,{className:`bg-slate-50 border border-slate-200 rounded-lg p-3 text-xs space-y-1`,children:[(0,P.jsx)(`div`,{className:`font-semibold text-slate-800`,children:confirmModal.programme.name}),(0,P.jsxs)(`div`,{className:`text-slate-500`,children:[`Publication Status: ${pubOf(confirmModal.programme)} • Availability: `,availOf(confirmModal.programme),` → `,confirmModal.targetStatus]})]}),(0,P.jsxs)(`div`,{children:[(0,P.jsxs)(`label`,{className:`inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 mb-1`,children:[(0,P.jsx)(`span`,{children:`Reason (optional)`}),(0,P.jsx)(InfoTip,{text:`Optional note recorded in the audit history for this status change.`})]}),(0,P.jsx)(`input`,{type:`text`,value:confirmModal.reason,onChange:ev=>setConfirmModal({...confirmModal,reason:ev.target.value}),placeholder:`Enter reason for audit history...`,className:`w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20`})]})]}),(0,P.jsxs)(`div`,{className:`px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-3`,children:[(0,P.jsx)(`button`,{type:`button`,disabled:isSubmitting,onClick:()=>setConfirmModal(null),className:`px-4 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors`,children:`Cancel`}),(0,P.jsx)(`button`,{type:`button`,disabled:isSubmitting,onClick:handleConfirmToggle,style:{backgroundColor:confirmModal.targetStatus===`Inactive`?`#e11d48`:`#2563eb`,color:`#ffffff`},className:`px-5 py-2 text-xs font-bold text-white rounded-lg shadow-sm transition-colors cursor-pointer ${confirmModal.targetStatus===`Inactive`?`bg-rose-600 hover:bg-rose-700`:`bg-blue-600 hover:bg-blue-700`}`,children:isSubmitting?`Updating...`:`Confirm`})]})]})})]})}function nt({programme:e,employees:t,assignments:assignList,courseProgress:cpMap,skills:skillsConfig,isEmployeeView:isEmpView,onBack:n,onOpenAssignTraining:r,onSelectEmployee:i,onEditProgramme:a,onArchiveProgramme:archFn,onRestoreProgramme:restFn,onToggleAvailability:togFn,canToggleAvailability:canToggle,hasStartedLearner:hasStartedFn,onApproveCompletion:approveFn}){
